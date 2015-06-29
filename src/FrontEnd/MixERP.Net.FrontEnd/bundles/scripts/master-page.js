@@ -50132,16 +50132,33 @@ function setVisible(targetControl, visible, timeout) {
 
     targetControl.hide(timeout);
 };
+
+function addNotification(message, onclick) {
+    var count = parseInt2($("#NotificationMenu span").addClass("ui red label").html());
+    count++;
+    $("#NotificationMenu span").addClass("ui red label").html(count);
+
+    var item = $("<div />");
+    item.attr("class", "item");
+
+    if (onclick) {
+        item.attr("onclick", onclick);
+    };
+
+    item.html(message);
+
+    $("#Notification").append(item);
+};
 ///#source 1 1 /Scripts/mixerp/core/grid/cell.js
 var sumOfColumn = function (tableSelector, columnIndex) {
     var total = 0;
 
     $(tableSelector).find('tr').each(function () {
-        var value = parseFormattedNumber($('td', this).eq(columnIndex).text());
-        total += parseFloat2(value);
+        var value = parseFloat2($('td', this).eq(columnIndex).text());
+        total += value;
     });
 
-    return $.number(total, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
+    return total;
 };
 
 var getColumnText = function (row, columnIndex) {
@@ -50629,6 +50646,14 @@ $(document).ready(function () {
         }
     });
 });
+///#source 1 1 /Scripts/mixerp/core/browser.js
+function supportsBrowserStorage() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+};
 ///#source 1 1 /Scripts/mixerp/core/flag.js
 jQuery.fn.getTotalColumns = function () {
     var grid = $($(this).selector);
@@ -51219,7 +51244,7 @@ $.extend(true, $.fn.form.settings.rules, {
     }
 });
 ///#source 1 1 /Scripts/mixerp/master-page/menu.js
-var data;
+var menus;
 var depth = 2;
 var sidebar = $('.sidebar');
 var wrapper = $('#page-wrapper');
@@ -51228,13 +51253,18 @@ $(document).ready(function () {
     adjustSidebar();
     var topMenu = $("#top-menu");
     var resetMenu = $("#reset-menu");
+    var menuId = 0;
+
+    if (window.supportsBrowserStorage()) {
+        menuId = parseInt(localStorage["menuId"] || 0);
+    };
 
     var ajaxMenu = getAjaxMenu();
 
     ajaxMenu.success(function (msg) {
-        data = JSON.parse(msg.d);
+        menus = JSON.parse(msg.d);
         loadMenu(topMenu);
-        loadTree(0, createTree);
+        loadTree(menuId, createTree);
     });
 
     resetMenu.click(function () {
@@ -51248,7 +51278,7 @@ $(document).ready(function () {
 function loadMenu(appendTo) {
     var anchors = "";
 
-    $.each(data, function (i, v) {
+    $.each(menus, function (i, v) {
         var anchor = "<a class='item' href='javascript:void(0);' onclick='javascript:loadTree(%s, createTree);'>%s</a>";
         anchor = sprintf(anchor, v.Menu.MenuId, v.Menu.MenuText);
 
@@ -51355,8 +51385,11 @@ function loadTree(menuId, callback) {
     var tree = $("#tree");
     var treeData = tree.find("ul");
 
+    if (window.supportsBrowserStorage()) {
+        localStorage["menuId"] = menuId;
+    };
 
-    $.each(data, function (i, v) {
+    $.each(menus, function (i, v) {
         var items;
         var li;
 
@@ -51474,3 +51507,9 @@ window.onresize = function (event) {
     adjustSidebar();
 };
 
+///#source 1 1 /Scripts/mixerp/master-page/updater.js
+$(document).ready(function() {
+    if (update === "1") {
+        addNotification(updateLocalized, "document.location = \"/Modules/Update.aspx\";");
+    };
+});

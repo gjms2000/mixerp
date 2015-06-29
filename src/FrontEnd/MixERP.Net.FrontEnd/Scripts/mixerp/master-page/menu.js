@@ -1,4 +1,4 @@
-﻿var data;
+﻿var menus;
 var depth = 2;
 var sidebar = $('.sidebar');
 var wrapper = $('#page-wrapper');
@@ -7,13 +7,18 @@ $(document).ready(function () {
     adjustSidebar();
     var topMenu = $("#top-menu");
     var resetMenu = $("#reset-menu");
+    var menuId = 0;
+
+    if (window.supportsBrowserStorage()) {
+        menuId = parseInt(localStorage["menuId"] || 0);
+    };
 
     var ajaxMenu = getAjaxMenu();
 
     ajaxMenu.success(function (msg) {
-        data = JSON.parse(msg.d);
+        menus = JSON.parse(msg.d);
         loadMenu(topMenu);
-        loadTree(0, createTree);
+        loadTree(menuId, createTree);
     });
 
     resetMenu.click(function () {
@@ -27,7 +32,7 @@ $(document).ready(function () {
 function loadMenu(appendTo) {
     var anchors = "";
 
-    $.each(data, function (i, v) {
+    $.each(menus, function (i, v) {
         var anchor = "<a class='item' href='javascript:void(0);' onclick='javascript:loadTree(%s, createTree);'>%s</a>";
         anchor = sprintf(anchor, v.Menu.MenuId, v.Menu.MenuText);
 
@@ -134,8 +139,11 @@ function loadTree(menuId, callback) {
     var tree = $("#tree");
     var treeData = tree.find("ul");
 
+    if (window.supportsBrowserStorage()) {
+        localStorage["menuId"] = menuId;
+    };
 
-    $.each(data, function (i, v) {
+    $.each(menus, function (i, v) {
         var items;
         var li;
 

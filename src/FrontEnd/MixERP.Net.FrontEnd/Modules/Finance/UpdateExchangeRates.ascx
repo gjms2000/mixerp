@@ -31,7 +31,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <div class="ui divider"></div>
 
 <div class="ui form">
-    <div class="inline fields">
+    <div class="fields">
         <div class="field">
             <label for="OfficeInputText">
                 Office
@@ -44,6 +44,18 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
             </label>
             <input type="text" id="CurrencyInputText" readonly="readonly" runat="server" />
         </div>
+
+        <div class="field">
+            <label for="OfficeInputText">
+                Select API
+            </label>
+            <select id="ModuleSelect" class="ui dropdown"></select>
+        </div>
+        <div class="field">
+            <label for="RequestButton">Request</label>
+            <input type="button" id="RequestButton" value="Request" class="ui pink button" />
+        </div>
+
     </div>
 </div>
 
@@ -62,59 +74,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     </tbody>
 </table>
 
-<script type="text/javascript">
-    var exchangeRatesGridView = $("#ExchangeRatesGridView");
-    var currencyInputText = $("#CurrencyInputText");
-    var url;
-    var data;
+<input type="button" id="SaveButton" value="Save" class="ui green button" />
 
-    $(document).ready(function () {
-        GetCurrencies();
-    });
-
-    function BindCurrencies(currencies) {
-
-        $(currencies).each(function () {
-            AddRow(this.CurrencyCode, this.CurrencySymbol, this.CurrencyName, this.HundredthName);
-        });
-    };
-
-    function AddRow(currencyCode, currencySymbol, currencyName, hundredthName) {
-        exchangeRatesGridView.find("tbody").append(String.format("<tr class='ui form'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td><input type='text' id='{0}ExchangRateInputText' class='text-right currency' onblur='displayDescription(this);' /></td><td></td></tr>", currencyCode, currencySymbol, currencyName, hundredthName));
-    };
-
-    function GetCurrencies() {
-        var ajaxGetExchangeCurrencies = GetExchangeCurrencies();
-
-        ajaxGetExchangeCurrencies.success(function (msg) {
-            BindCurrencies(msg.d);
-        });
-
-        ajaxGetExchangeCurrencies.fail(function (xhr) {
-            alert(xhr.responseText);
-        });
-
-    };
-
-    function displayDescription(element) {
-        var exchangeRate = parseFloat2($(element).val());
-
-        if (!exchangeRate) {
-            return;
-        };
-
-        var descriptionCell = $(element).parent().parent().find("td:nth-child(6)");
-        var currencyCode = $(element).parent().parent().find("td:nth-child(1)").html();
-        var exchangeRateReverse = (1.00 / exchangeRate).toFixed(4);
-
-        var description = exchangeRate + " " + currencyInputText.val() + " = 1 " + currencyCode + " (" + exchangeRateReverse + " " + currencyCode + " = 1 " + currencyInputText.val() + ")";
-
-        descriptionCell.html(description);
-    };
-
-    function GetExchangeCurrencies() {
-        url = "/Modules/Finance/Services/CurrencyData.asmx/GetExchangeCurrencies";
-
-        return getAjax(url);
-    };
-</script>
+<script src="Scripts/UpdateExchangeRates.js"></script>

@@ -144,16 +144,33 @@ function setVisible(targetControl, visible, timeout) {
 
     targetControl.hide(timeout);
 };
+
+function addNotification(message, onclick) {
+    var count = parseInt2($("#NotificationMenu span").addClass("ui red label").html());
+    count++;
+    $("#NotificationMenu span").addClass("ui red label").html(count);
+
+    var item = $("<div />");
+    item.attr("class", "item");
+
+    if (onclick) {
+        item.attr("onclick", onclick);
+    };
+
+    item.html(message);
+
+    $("#Notification").append(item);
+};
 ///#source 1 1 /Scripts/mixerp/core/grid/cell.js
 var sumOfColumn = function (tableSelector, columnIndex) {
     var total = 0;
 
     $(tableSelector).find('tr').each(function () {
-        var value = parseFormattedNumber($('td', this).eq(columnIndex).text());
-        total += parseFloat2(value);
+        var value = parseFloat2($('td', this).eq(columnIndex).text());
+        total += value;
     });
 
-    return $.number(total, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
+    return total;
 };
 
 var getColumnText = function (row, columnIndex) {
@@ -641,6 +658,14 @@ $(document).ready(function () {
         }
     });
 });
+///#source 1 1 /Scripts/mixerp/core/browser.js
+function supportsBrowserStorage() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+};
 ///#source 1 1 /Scripts/mixerp/core/flag.js
 jQuery.fn.getTotalColumns = function () {
     var grid = $($(this).selector);
