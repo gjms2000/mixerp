@@ -17,12 +17,13 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Collections.Generic;
+using MixER.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace MixERP.Net.Core.Modules.Inventory.Setup
 {
@@ -54,7 +55,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
         {
             List<string> displayFields = new List<string>();
             ScrudHelper.AddDisplayField(displayFields, "core.parties.party_id",
-                ConfigurationHelper.GetDbParameter("PartyDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "PartyDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "core.countries.country_id", "country_name");
             ScrudHelper.AddDisplayField(displayFields, "core.states.state_id", "state_name");
             return string.Join(",", displayFields);

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MixERP.Net.Entities;
+using PetaPoco;
 
 namespace MixERP.Net.WebControls.Flag.Data
 {

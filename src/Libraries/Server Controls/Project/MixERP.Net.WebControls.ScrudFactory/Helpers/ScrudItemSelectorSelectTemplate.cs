@@ -17,18 +17,25 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.i18n.Resources;
 using System;
 using System.Data;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Helpers
 {
     internal sealed class ScrudItemSelectorSelectTemplate : ITemplate, IDisposable
     {
+        public string Catalog { get; set; }
+
+        public ScrudItemSelectorSelectTemplate(string catalog)
+        {
+            this.Catalog = catalog;
+        }
+
         private HtmlAnchor selectAnchor;
 
         public void InstantiateIn(Control container)
@@ -36,7 +43,8 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
             this.selectAnchor = new HtmlAnchor();
 
             this.selectAnchor.HRef = "#";
-            this.selectAnchor.Attributes.Add("class", ConfigurationHelper.GetScrudParameter("ItemSelectorSelectAnchorCssClass"));
+            this.selectAnchor.Attributes.Add("class",
+                DbConfig.GetScrudParameter(this.Catalog, "ItemSelectorSelectAnchorCssClass"));
             this.selectAnchor.DataBinding += this.BindData;
             this.selectAnchor.InnerText = Titles.Select;
             container.Controls.Add(this.selectAnchor);

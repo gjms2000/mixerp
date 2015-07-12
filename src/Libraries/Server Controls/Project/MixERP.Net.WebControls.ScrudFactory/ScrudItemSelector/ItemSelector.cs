@@ -17,22 +17,22 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.Common;
 using MixERP.Net.WebControls.ScrudFactory.Helpers;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace MixERP.Net.WebControls.ScrudFactory
 {
     public partial class ScrudItemSelector
     {
-        private static TemplateField GetSelectColumnTemplateField()
+        private TemplateField GetSelectColumnTemplateField()
         {
             var selectTemplate = new TemplateField();
             selectTemplate.HeaderText = Titles.Select;
 
-            using (var itemTemplate = new ScrudItemSelectorSelectTemplate())
+            using (var itemTemplate = new ScrudItemSelectorSelectTemplate(this.Catalog))
             {
                 selectTemplate.ItemTemplate = itemTemplate;
             }

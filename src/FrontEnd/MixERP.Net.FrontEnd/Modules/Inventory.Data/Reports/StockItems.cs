@@ -19,8 +19,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
-using MixERP.Net.Entities;
 using MixERP.Net.Entities.Transactions;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Inventory.Data.Reports
 {
@@ -32,7 +32,8 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Reports
             return Factory.Get<DbListClosingStockResult>(catalog, sql, storeId);
         }
 
-        public static IEnumerable<DbGetStockAccountStatementResult> GetAccountStatement(string catalog, DateTime @from, DateTime to, int userId, string itemCode, int storeId)
+        public static IEnumerable<DbGetStockAccountStatementResult> GetAccountStatement(string catalog, DateTime @from,
+            DateTime to, int userId, string itemCode, int storeId)
         {
             const string sql =
                 "SELECT * FROM transactions.get_stock_account_statement(@0::date, @1::date, @2::integer, @3::text, @4::integer);";

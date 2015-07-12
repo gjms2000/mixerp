@@ -17,18 +17,17 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.ScrudFactory.Data;
 using MixERP.Net.WebControls.ScrudFactory.Helpers;
+using System;
+using System.Data;
+using System.Linq;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 {
@@ -47,16 +46,16 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 
                 using (DataTable table = GetTable(catalog, tableSchema, tableName, tableColumn, displayViews, useDisplayViewsAsParent))
                 {
-                    SetDisplayFields(dropDownList, table, tableSchema, tableName, tableColumn, displayFields);
+                    SetDisplayFields(catalog, dropDownList, table, tableSchema, tableName, tableColumn, displayFields);
 
-                    using (HtmlAnchor itemSelectorAnchor = GetItemSelector(dropDownList.ClientID, itemSelectorPath, tableSchema, tableName, tableColumn, displayViews, resourceClassName, label))
+                    using (HtmlAnchor itemSelectorAnchor = GetItemSelector(catalog, dropDownList.ClientID, itemSelectorPath, tableSchema, tableName, tableColumn, displayViews, resourceClassName, label))
                     {
                         if (disabled)
                         {
                             itemSelectorAnchor.Attributes.Add("style", "pointer-events:none;");
                         }
 
-                        SetSelectedValue(dropDownList, tableSchema, tableName, tableColumn, defaultValue, selectedValues);
+                        SetSelectedValue(catalog, dropDownList, tableSchema, tableName, tableColumn, defaultValue, selectedValues);
 
                         if (isNullable)
                         {
@@ -86,7 +85,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
         }
 
 
-        private static string GetExpressionValue(string expressions, string schema, string table, string column)
+        private static string GetExpressionValue(string catalog, string expressions, string schema, string table, string column)
         {
             if (new[] {expressions, schema, table, column}.AnyNullOrWhitespace())
             {
@@ -96,8 +95,8 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
             //Fully qualified relation name (PostgreSQL Terminology).
             string relation = schema + "." + table + "." + column;
 
-            char itemSeparator = char.Parse(ConfigurationHelper.GetScrudParameter("ItemSeparator"));
-            string expressionSeparator = ConfigurationHelper.GetScrudParameter("ExpressionSeparator");
+            char itemSeparator = char.Parse(DbConfig.GetScrudParameter(catalog, "ItemSeparator"));
+            string expressionSeparator = DbConfig.GetScrudParameter(catalog, "ExpressionSeparator");
 
             foreach (string item in expressions.Split(itemSeparator))
             {
@@ -121,6 +120,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
         /// extender is an html image button which, when clicked, will open a popup window which
         /// allows selection, filtering, search, etc. on the target table.
         /// </summary>
+        /// <param name="catalog"></param>
         /// <param name="associatedControlId">ClientID of the DropDownList control to which this control is associated to.</param>
         /// <param name="itemSelectorPath">Item Selector Target Url</param>
         /// <param name="tableSchema">Target Table Schema</param>
@@ -130,7 +130,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
         /// <param name="resourceClassName">The resource class name containing localization.</param>
         /// <param name="columnNameLocalized">Localized name of the column to which item selector is bound to.</param>
         /// <returns></returns>
-        private static HtmlAnchor GetItemSelector(string associatedControlId, string itemSelectorPath, string tableSchema, string tableName, string tableColumn, string displayViews, string resourceClassName, string columnNameLocalized)
+        private static HtmlAnchor GetItemSelector(string catalog, string associatedControlId, string itemSelectorPath, string tableSchema, string tableName, string tableColumn, string displayViews, string resourceClassName, string columnNameLocalized)
         {
             if (string.IsNullOrWhiteSpace(displayViews))
             {
@@ -143,7 +143,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 
                 //Get the expression value of display view from comma separated list of expressions.
                 //The expression must be a valid fully qualified table or view name.
-                string viewRelation = GetExpressionValue(displayViews, tableSchema, tableName, tableColumn);
+                string viewRelation = GetExpressionValue(catalog, displayViews, tableSchema, tableName, tableColumn);
 
                 string schema = viewRelation.Split('.').First();
                 string view = viewRelation.Split('.').Last();
@@ -157,7 +157,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
                     return null;
                 }
 
-                itemSelectorAnchor.Attributes["class"] = ConfigurationHelper.GetScrudParameter("ItemSelectorAnchorCssClass");
+                itemSelectorAnchor.Attributes["class"] = DbConfig.GetScrudParameter(catalog, "ItemSelectorAnchorCssClass");
 
                 itemSelectorAnchor.Attributes.Add("role", "item-selector");
 
@@ -177,7 +177,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
             {
                 //Get the expression value of display view from comma separated list of expressions.
                 //The expression must be a valid fully qualified table or view name.
-                string viewRelation = GetExpressionValue(displayViews, tableSchema, tableName, tableColumn);
+                string viewRelation = GetExpressionValue(catalog, displayViews, tableSchema, tableName, tableColumn);
 
                 string schema = viewRelation.Split('.').First();
                 string view = viewRelation.Split('.').Last();
@@ -197,7 +197,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
             return FormHelper.GetTable(catalog, tableSchema, tableName, "1");
         }
 
-        private static void SetDisplayFields(DropDownList dropDownList, DataTable table, string tableSchema, string tableName, string tableColumn, string displayFields)
+        private static void SetDisplayFields(string catalog, DropDownList dropDownList, DataTable table, string tableSchema, string tableName, string tableColumn, string displayFields)
         {
             //See DisplayFields Property for more information.
 
@@ -205,7 +205,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
             {
                 //Get the expression value of display field from comma separated list of expressions.
                 //The expression can be either the column name or a column expression.
-                string columnOrExpression = GetExpressionValue(displayFields, tableSchema, tableName, tableColumn);
+                string columnOrExpression = GetExpressionValue(catalog, displayFields, tableSchema, tableName, tableColumn);
 
                 //Let's check whether the display field expression really exists.
                 //If it does not exist, it is probably an expression column.
@@ -223,7 +223,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
             }
         }
 
-        private static void SetSelectedValue(DropDownList dropDownList, string schema, string table, string column, string postbackValue, string selectedValueExpressions)
+        private static void SetSelectedValue(string catalog, DropDownList dropDownList, string schema, string table, string column, string postbackValue, string selectedValueExpressions)
         {
             string selectedItemValue = string.Empty;
 
@@ -247,7 +247,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
                 //Find value from expressions.
                 if (!string.IsNullOrWhiteSpace(selectedValueExpressions))
                 {
-                    string value = GetExpressionValue(selectedValueExpressions, schema, table, column);
+                    string value = GetExpressionValue(catalog, selectedValueExpressions, schema, table, column);
 
                     if (value.StartsWith("'", StringComparison.OrdinalIgnoreCase))
                     {

@@ -6,7 +6,11 @@
 };
 
 
-$(document).ready(function() {
+$(document).ready(function () {
+    loadDatePickerLocale();
+});
+
+function loadDatePickerLocale() {
     window.datepickerLanguagePath = window.jqueryUIi18nPath + '/datepicker-' + window.culture + '.js';
 
     if (!urlExists(window.datepickerLanguagePath)) {
@@ -18,12 +22,16 @@ $(document).ready(function() {
     };
 
     if (window.datepickerLanguagePath) {
-        var picker = document.createElement('script');
-        picker.type = 'text/javascript';
-        picker.async = true;
-        picker.src = window.datepickerLanguagePath;
-
-        var element = document.body.getElementsByTagName('script')[0];
-        element.parentNode.insertBefore(picker, element);
+        addScriptReference(window.datepickerLanguagePath);
     };
-});
+};
+
+function addScriptReference(path) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = path;
+
+    var element = document.body.getElementsByTagName('script')[0];
+    element.parentNode.insertBefore(script, element);
+};

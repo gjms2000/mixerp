@@ -17,6 +17,16 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using MixER.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
+using MixERP.Net.Core.Modules.Inventory.Data.Transactions;
+using MixERP.Net.Entities;
+using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Framework;
+using MixERP.Net.i18n.Resources;
+using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,16 +34,6 @@ using System.Globalization;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
 using System.Web.Services;
-using MixERP.Net.Common;
-using MixERP.Net.Common.Base;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
-using MixERP.Net.Core.Modules.Inventory.Data.Transactions;
-using MixERP.Net.Entities;
-using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.FrontEnd.Cache;
-using MixERP.Net.i18n.Resources;
-using Serilog;
 
 namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
 {
@@ -54,20 +54,24 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
                 {
                     if (model.TransferTypeEnum == TransactionTypeEnum.Credit)
                     {
-                        decimal existingQuantity = Items.CountItemInStock(AppUsers.GetCurrentUserDB(), model.ItemCode, model.UnitName, model.StoreName);
+                        decimal existingQuantity = Items.CountItemInStock(AppUsers.GetCurrentUserDB(), model.ItemCode,
+                            model.UnitName, model.StoreName);
 
                         if (existingQuantity < model.Quantity)
                         {
-                            throw new MixERPException(string.Format(CultureInfo.CurrentCulture, Errors.InsufficientStockWarning, Conversion.TryCastInteger(existingQuantity), model.UnitName, model.ItemName));
+                            throw new MixERPException(string.Format(CultureInfo.CurrentCulture,
+                                Errors.InsufficientStockWarning, Conversion.TryCastInteger(existingQuantity),
+                                model.UnitName, model.ItemName));
                         }
                     }
                 }
 
-                int officeId = AppUsers.GetCurrentLogin().View.OfficeId.ToInt();
-                int userId = AppUsers.GetCurrentLogin().View.UserId.ToInt();
-                long loginId = AppUsers.GetCurrentLogin().View.LoginId.ToLong();
+                int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+                int userId = AppUsers.GetCurrent().View.UserId.ToInt();
+                long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                return StockTransfer.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate, referenceNumber, statementReference, stockTransferModels);
+                return StockTransfer.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate,
+                    referenceNumber, statementReference, stockTransferModels);
             }
             catch (Exception ex)
             {
@@ -76,7 +80,6 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
             }
         }
 
-        // ReSharper disable once ReturnTypeCanBeEnumerable.Local
         private static Collection<StockAdjustmentDetail> GetModels(string json)
         {
             Collection<StockAdjustmentDetail> models = new Collection<StockAdjustmentDetail>();

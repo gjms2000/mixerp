@@ -1,6 +1,6 @@
-﻿using System.Web.UI.HtmlControls;
+﻿using MixERP.Net.i18n.Resources;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.StockAdjustmentFactory
 {
@@ -129,7 +129,11 @@ namespace MixERP.Net.WebControls.StockAdjustmentFactory
             {
                 row.Attributes.Add("class", "footer-row ui form");
 
-                this.AddTransactionTypeSelect(row);
+                if (!this.HideSides)
+                {
+                    this.AddTransactionTypeSelect(row);
+                }
+
                 this.AddStoreSelect(row);
                 this.AddItemCodeInputText(row);
                 this.AddItemSelect(row);

@@ -17,11 +17,12 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Globalization;
 using MixERP.Net.Common;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.TransactionChecklist.Helpers;
+using System;
+using System.Globalization;
+using MixERP.Net.TransactionGovernor.Verification;
 
 namespace MixERP.Net.WebControls.TransactionChecklist
 {
@@ -48,7 +49,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 return;
             }
 
-            EmailHelper email = new EmailHelper(emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress);
+            EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress);
             email.SendEmail();
             this.subTitleLiteral.Text = string.Format(CultureInfo.CurrentCulture, Labels.EmailSentConfirmation, this.PartyEmailAddress);
         }
@@ -79,17 +80,17 @@ namespace MixERP.Net.WebControls.TransactionChecklist
             DateTime transactionDate = DateTime.Now;
             long transactionMasterId = Conversion.TryCastLong(tranId);
 
-            Entities.Models.Transactions.Verification model = Verification.GetVerificationStatus(this.Catalog, transactionMasterId);
+            Entities.Models.Transactions.Verification model = VerificationStatus.GetVerificationStatus(this.Catalog, transactionMasterId, this.IsStockTransferRequest);
             if (
                 model.VerificationStatusId.Equals(0) //Awaiting verification
                 ||
-                model.VerificationStatusId.Equals(2) //Automatically Approved by Workflow
+                model.VerificationStatusId.Equals(1) //Automatically Approved by Workflow
                 )
             {
                 //Withdraw this transaction.
                 if (transactionMasterId > 0)
                 {
-                    if (Verification.WithdrawTransaction(this.Catalog, transactionMasterId, this.UserId, this.reasonTextBox.Text))
+                    if (Withdrawal.WithdrawTransaction(this.Catalog, this.IsStockTransferRequest, transactionMasterId, this.UserId, this.reasonTextBox.Text))
                     {
                         this.messageLabel.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionWithdrawnMessage, transactionDate.ToShortDateString());
                         this.messageLabel.CssClass = "ui block message yellow vpad12";

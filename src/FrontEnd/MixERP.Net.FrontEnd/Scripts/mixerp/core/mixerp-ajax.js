@@ -28,12 +28,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
 
 
     if (ajaxData.length === 0) {
-        appendItem(targetControl, "", window.noneLocalized);
+        appendItem(targetControl, "", Resources.Titles.None());
         return;
     };
 
     if (!skipSelect) {
-        appendItem(targetControl, "", window.selectLocalized);
+        appendItem(targetControl, "", Resources.Titles.Select());
     }
    
     if (!dataValueField) {
@@ -168,7 +168,14 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
 var getAjaxErrorMessage = function (xhr) {
     if (xhr) {
-        var err = JSON.parse(xhr.responseText).Message;
+        var err;
+
+        try {
+            err = JSON.parse(xhr.responseText).Message;
+        } catch (e) {
+            err = xhr.responseText.Message;
+        }
+
         if (err) {
             return err;
         };

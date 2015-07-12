@@ -19,10 +19,10 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Linq;
 using System.Web;
-using MixERP.Net.Common.Base;
-using MixERP.Net.Entities;
 using MixERP.Net.Entities.Office;
+using MixERP.Net.Framework;
 using Npgsql;
+using PetaPoco;
 
 namespace MixERP.Net.FrontEnd.Data.Office
 {

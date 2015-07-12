@@ -50086,16 +50086,14 @@ function removeLoader(el) {
 };
 ///#source 1 1 /Scripts/mixerp/core/dom/popunder.js
 function popUnder(div, button) {
-    div.css("position", "fixed");
+    div.removeClass("initially hidden");
+    div.show(500);
 
     div.position({
         my: "left top",
         at: "left bottom",
-        of: button,
-        collision: "fit"
+        of: button
     });
-
-    div.show(500);
 };
 ///#source 1 1 /Scripts/mixerp/core/dom/select.js
 jQuery.fn.getSelectedItem = function () {
@@ -50180,7 +50178,7 @@ var toggleSuccess = function (cell) {
 };
 
 var removeRow = function (cell) {
-    var result = confirm(areYouSureLocalized);
+    var result = confirm(Resources.Questions.AreYouSure());
 
     if (result) {
         cell.closest("tr").remove();
@@ -50440,7 +50438,7 @@ function displayMessage(a, b) {
 };
 
 function displaySucess() {
-    $.notify(taskCompletedSuccessfullyLocalized, "success");
+    $.notify(Resources.Labels.TaskCompletedSuccessfully(), "success");
 };
 
 var logError = function (a, b) {
@@ -50872,12 +50870,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
 
 
     if (ajaxData.length === 0) {
-        appendItem(targetControl, "", window.noneLocalized);
+        appendItem(targetControl, "", Resources.Titles.None());
         return;
     };
 
     if (!skipSelect) {
-        appendItem(targetControl, "", window.selectLocalized);
+        appendItem(targetControl, "", Resources.Titles.Select());
     }
    
     if (!dataValueField) {
@@ -51012,7 +51010,14 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
 var getAjaxErrorMessage = function (xhr) {
     if (xhr) {
-        var err = JSON.parse(xhr.responseText).Message;
+        var err;
+
+        try {
+            err = JSON.parse(xhr.responseText).Message;
+        } catch (e) {
+            err = xhr.responseText.Message;
+        }
+
         if (err) {
             return err;
         };
@@ -51063,6 +51068,6 @@ function isDate(val) {
 };
 ///#source 1 1 /Scripts/mixerp/core/window.js
 var confirmAction = function () {
-    return confirm(areYouSureLocalized);
+    return confirm(Resources.Questions.AreYouSure());
 };
 

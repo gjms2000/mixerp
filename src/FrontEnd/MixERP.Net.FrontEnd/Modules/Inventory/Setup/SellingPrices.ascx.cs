@@ -17,12 +17,13 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Collections.Generic;
+using MixER.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace MixERP.Net.Core.Modules.Inventory.Setup
 {
@@ -51,13 +52,13 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
         {
             List<string> displayFields = new List<string>();
             ScrudHelper.AddDisplayField(displayFields, "core.items.item_id",
-                ConfigurationHelper.GetDbParameter("ItemDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "ItemDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "core.party_types.party_type_id",
-                ConfigurationHelper.GetDbParameter("PartyTypeDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "PartyTypeDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "core.price_types.price_type_id",
-                ConfigurationHelper.GetDbParameter("PriceTypeDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "PriceTypeDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "core.units.unit_id",
-                ConfigurationHelper.GetDbParameter("UnitDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "UnitDisplayField"));
             return string.Join(",", displayFields);
         }
 

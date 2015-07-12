@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System.Web.UI.WebControls;
 using MixERP.Net.Common;
 using MixERP.Net.WebControls.ScrudFactory.Helpers;
+using System.Web.UI.WebControls;
 
 namespace MixERP.Net.WebControls.ScrudFactory
 {
@@ -27,7 +27,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
     {
         private void AddScrudScript()
         {
-            var script = ScrudJavascriptHelper.GetScript(this.KeyColumn, this.CustomFormUrl, this.formGridView.ID, this.gridPanel.ID, this.userIdHidden.ID, this.officeCodeHidden.ID, this.titleLabel.ID, this.formPanel.ID, this.cancelButton.ID);
+            var script = ScrudJavascriptHelper.GetScript(this.Catalog, this.KeyColumn, this.CustomFormUrl, this.formGridView.ID, this.gridPanel.ID, this.userIdHidden.ID, this.officeCodeHidden.ID, this.titleLabel.ID, this.formPanel.ID, this.cancelButton.ID);
             PageUtility.RegisterJavascript("ScrudFormScript", script, this.Page, true);
         }
 

@@ -18,6 +18,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using MixERP.Net.FrontEnd.Base;
+using Serilog;
 /********************************************************************************
 Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
@@ -40,7 +41,6 @@ using System;
 using System.Configuration;
 using System.Text;
 using System.Threading;
-using Serilog;
 
 namespace MixERP.Net.FrontEnd.Site
 {
@@ -83,7 +83,6 @@ namespace MixERP.Net.FrontEnd.Site
 
                 Log.Verbose("Exception displayed to user.");
 
-                s.Append(string.Format(Thread.CurrentThread.CurrentCulture, "<hr class='hr' />"));
                 s.Append(string.Format(Thread.CurrentThread.CurrentCulture, "<h2>{0}</h2>", ex.Message));
 
                 Log.Warning("{Exception}.", ex);

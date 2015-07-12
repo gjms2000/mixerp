@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System.Data;
-using System.Globalization;
-using System.Web.UI.WebControls;
 using MixERP.Net.Common;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.WebControls.ScrudFactory.Data;
+using System.Data;
+using System.Globalization;
+using System.Web.UI.WebControls;
 
 namespace MixERP.Net.WebControls.ScrudFactory
 {
@@ -55,7 +55,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
         {
             if (this.GridViewWidth.Value.Equals(0))
             {
-                var width = Conversion.TryCastUnit(ConfigurationHelper.GetScrudParameter("GridViewDefaultWidth"));
+                var width = Conversion.TryCastUnit(DbConfig.GetScrudParameter(this.Catalog, "GridViewDefaultWidth"));
 
                 return width;
             }

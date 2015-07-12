@@ -18,8 +18,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Linq;
-using MixERP.Net.Entities;
 using MixERP.Net.Entities.Audit;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Data
 {

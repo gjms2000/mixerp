@@ -18,7 +18,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Collections.Generic;
-using MixERP.Net.Entities;
+using PetaPoco;
 
 namespace MixERP.Net.FrontEnd.Data.Core
 {

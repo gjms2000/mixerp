@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MixERP.Net.WebControls.Common;
+using System;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using MixERP.Net.WebControls.Common;
 
 namespace MixERP.Net.WebControls.StockAdjustmentFactory
 {
@@ -18,9 +18,11 @@ namespace MixERP.Net.WebControls.StockAdjustmentFactory
         public string ItemPopupUrl { get; set; }
         public string ItemServiceUrl { get; set; }
         public string StoreServiceUrl { get; set; }
+        public string ShippingCompanyServiceUrl { get; set; }
         public string Text { get; set; }
         public string UnitServiceUrl { get; set; }
         public bool ValidateSides { get; set; }
+        public bool HideSides { get; set; }
 
         protected override void CreateChildControls()
         {

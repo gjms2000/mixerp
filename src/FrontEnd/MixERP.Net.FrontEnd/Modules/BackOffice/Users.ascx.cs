@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using MixERP.Net.Common.Domains;
+using MixER.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
+using MixERP.Net.Framework.Controls;
 using MixERP.Net.FrontEnd.Base;
-using MixERP.Net.FrontEnd.Cache;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace MixERP.Net.Core.Modules.BackOffice
 {
@@ -51,7 +51,7 @@ namespace MixERP.Net.Core.Modules.BackOffice
                 scrud.DisplayViews = GetDisplayViews();
                 scrud.ExcludeEdit = "password, user_name";
 
-                bool denyToNonAdmins = !AppUsers.GetCurrentLogin().View.IsAdmin.ToBool();
+                bool denyToNonAdmins = !AppUsers.GetCurrent().View.IsAdmin.ToBool();
 
                 scrud.DenyAdd = denyToNonAdmins;
                 scrud.DenyEdit = denyToNonAdmins;
@@ -65,11 +65,13 @@ namespace MixERP.Net.Core.Modules.BackOffice
         {
             List<string> displayFields = new List<string>();
             ScrudHelper.AddDisplayField(displayFields, "office.offices.office_id",
-                ConfigurationHelper.GetDbParameter("OfficeDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "OfficeDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "office.roles.role_id",
-                ConfigurationHelper.GetDbParameter("RoleDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "RoleDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "office.departments.department_id",
-                ConfigurationHelper.GetDbParameter("DepartmentDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "DepartmentDisplayField"));
+            ScrudHelper.AddDisplayField(displayFields, "office.stores.store_id",
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "StoreDisplayField"));
             return string.Join(",", displayFields);
         }
 
@@ -79,6 +81,7 @@ namespace MixERP.Net.Core.Modules.BackOffice
             ScrudHelper.AddDisplayView(displayViews, "office.offices.office_id", "office.office_scrud_view");
             ScrudHelper.AddDisplayView(displayViews, "office.roles.role_id", "office.role_scrud_view");
             ScrudHelper.AddDisplayView(displayViews, "office.departments.deparment_id", "office.department_scrud_view");
+            ScrudHelper.AddDisplayView(displayViews, "office.stores.store_id", "office.store_scrud_view");
             return string.Join(",", displayViews);
         }
     }

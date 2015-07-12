@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.FrontEnd.Base;
-using MixERP.Net.FrontEnd.Controls;
-using MixERP.Net.i18n.Resources;
-/********************************************************************************
+﻿/********************************************************************************
 Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This file is part of MixERP.
@@ -22,6 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
+
+using MixER.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.FrontEnd.Base;
+using MixERP.Net.FrontEnd.Controls;
+using MixERP.Net.i18n.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace MixERP.Net.Core.Modules.Sales.Setup
 {
@@ -50,7 +52,7 @@ namespace MixERP.Net.Core.Modules.Sales.Setup
         {
             List<string> displayFields = new List<string>();
             ScrudHelper.AddDisplayField(displayFields, "core.accounts.account_id",
-                ConfigurationHelper.GetDbParameter("AccountDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "AccountDisplayField"));
             return string.Join(",", displayFields);
         }
 

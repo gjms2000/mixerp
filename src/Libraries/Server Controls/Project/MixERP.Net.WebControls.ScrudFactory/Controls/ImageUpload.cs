@@ -17,22 +17,22 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.ScrudFactory.Helpers;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.ScrudFactory.Helpers;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls
 {
     internal static class ScrudFileUpload
     {
-        public static void AddFileUpload(HtmlTable htmlTable, string resourceClassName, string columnName, bool isNullable, string errorCssClass)
+        public static void AddFileUpload(HtmlTable htmlTable, string resourceClassName, string columnName,
+            bool isNullable, string errorCssClass)
         {
             string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
             FileUpload fileUpload = GetFileUpload(columnName + "_fileupload");
@@ -53,14 +53,14 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
             ScrudFactoryHelper.AddRow(htmlTable, label, fileUpload, validator);
         }
 
-        public static string UploadFile(FileUpload fileUpload)
+        public static string UploadFile(string catalog, FileUpload fileUpload)
         {
             if (fileUpload == null)
             {
                 return string.Empty;
             }
 
-            string tempMediaPath = ConfigurationHelper.GetScrudParameter("TempMediaPath");
+            string tempMediaPath = DbConfig.GetScrudParameter(catalog, "TempMediaPath");
             string uploadDirectory = HttpContext.Current.Server.MapPath(tempMediaPath);
 
             if (!Directory.Exists(uploadDirectory))

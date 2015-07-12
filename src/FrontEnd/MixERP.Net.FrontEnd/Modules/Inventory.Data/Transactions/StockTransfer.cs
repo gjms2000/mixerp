@@ -17,15 +17,16 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
 using MixERP.Net.Common;
 using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
 using MixERP.Net.DbFactory;
 using MixERP.Net.Entities.Models.Transactions;
 using Npgsql;
+using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Inventory.Data.Transactions
 {
@@ -49,6 +50,22 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Transactions
                 long tranId = Conversion.TryCastLong(DbOperation.GetScalarValue(catalog, command));
                 return tranId;
             }
+        }
+
+        public static void Authorize(string catalog, int userId, long tranId)
+        {
+            const string sql =
+                "UPDATE transactions.inventory_transfer_requests SET authorization_status_id = 2, authorized_by_user_id=@0, authorized_on=NOW() WHERE inventory_transfer_request_ID=@1";
+
+            Factory.NonQuery(catalog, sql, userId, tranId);
+        }
+
+        public static void Reject(string catalog, int userId, long tranId)
+        {
+            const string sql =
+                "UPDATE transactions.inventory_transfer_requests SET authorization_status_id = -3, authorized_by_user_id=@0, authorized_on=NOW() WHERE inventory_transfer_request_ID=@1";
+
+            Factory.NonQuery(catalog, sql, userId, tranId);
         }
     }
 }

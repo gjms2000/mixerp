@@ -17,23 +17,22 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Configuration;
-using System.IO;
-using System.Threading;
-using System.Web;
-using System.Web.Hosting;
-using System.Web.Routing;
+using MixER.Net.ApplicationState.Cache;
 using MixERP.Net.Common;
-using MixERP.Net.Common.Base;
 using MixERP.Net.Common.Helpers;
-using MixERP.Net.Entities.Office;
+using MixERP.Net.Framework;
 using MixERP.Net.ReportManager;
 using MixERP.Net.Updater;
 using MixERP.Net.Updater.Api;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using System;
+using System.IO;
+using System.Threading;
+using System.Web;
+using System.Web.Routing;
+using GlobalLogin = MixERP.Net.Entities.Office.GlobalLogin;
 
 namespace MixERP.Net.FrontEnd
 {
@@ -73,7 +72,7 @@ namespace MixERP.Net.FrontEnd
             {
                 Log.Verbose("Handling exception.");
 
-                MixERPExceptionManager.HandleException(exception);
+                MixERPException.Handle(exception);
                 return;
             }
 
@@ -83,7 +82,7 @@ namespace MixERP.Net.FrontEnd
 
             if (innerException != null)
             {
-                MixERPExceptionManager.HandleException(innerException);
+                MixERPException.Handle(innerException);
                 return;
             }
 
@@ -107,7 +106,8 @@ namespace MixERP.Net.FrontEnd
 
         private async void CheckForUpdates()
         {
-            bool autoSuggestUpdate = Conversion.TryCastBoolean(ConfigurationHelper.GetUpdaterParameter("AutoSuggestUpdate"));
+            bool autoSuggestUpdate =
+                Conversion.TryCastBoolean(ConfigurationHelper.GetUpdaterParameter("AutoSuggestUpdate"));
 
             if (autoSuggestUpdate)
             {
@@ -123,7 +123,7 @@ namespace MixERP.Net.FrontEnd
 
         private string GetLogDirectory()
         {
-            string path = ConfigurationHelper.GetMixERPParameter("ApplicationLogDirectory");
+            string path = DbConfig.GetMixERPParameter(AppUsers.GetCurrentUserDB(), "ApplicationLogDirectory");
 
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -148,7 +148,7 @@ namespace MixERP.Net.FrontEnd
 
         private LoggerConfiguration GetConfiguration()
         {
-            string minimumLogLevel = ConfigurationHelper.GetMixERPParameter("MinimumLogLevel");
+            string minimumLogLevel = DbConfig.GetMixERPParameter(AppUsers.GetCurrentUserDB(), "MinimumLogLevel");
 
             LoggingLevelSwitch levelSwitch = new LoggingLevelSwitch();
 

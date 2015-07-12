@@ -17,18 +17,17 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using MixERP.Net.Common;
+using MixERP.Net.Common.Helpers;
 using System;
 using System.Globalization;
 using System.Reflection;
-using MixERP.Net.Common;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Helpers
 {
     internal static class ScrudJavascriptHelper
     {
-        internal static string GetScript(string keyColumn, string customFormUrl, string formGridViewId, string gridPanelId, string userIdHiddenId, string officeCodeHiddenId, string titleLabelId, string formPanelId, string cancelButtonId)
+        internal static string GetScript(string catalog, string keyColumn, string customFormUrl, string formGridViewId, string gridPanelId, string userIdHiddenId, string officeCodeHiddenId, string titleLabelId, string formPanelId, string cancelButtonId)
         {
             string resource = JSUtility.GetEmbeddedScript("MixERP.Net.WebControls.ScrudFactory.Scrud.js", Assembly.GetExecutingAssembly());
             string script = string.Empty;
@@ -41,10 +40,8 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
             script += JSUtility.GetVar("formPanelId", formPanelId);
             script += JSUtility.GetVar("cancelButtonId ", cancelButtonId);
 
-            script += JSUtility.GetVar("scrudAreYouSureLocalized", Titles.AreYouSure);
-            script += JSUtility.GetVar("scrudNothingSelectedLocalized", Titles.NothingSelected);
-            script += JSUtility.GetVar("reportTemplatePath", PageUtility.ResolveUrl(ConfigurationHelper.GetScrudParameter("TemplatePath")));
-            script += JSUtility.GetVar("reportHeaderPath", PageUtility.ResolveUrl(ConfigurationHelper.GetScrudParameter("HeaderPath")));
+            script += JSUtility.GetVar("reportTemplatePath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(catalog, "TemplatePath")));
+            script += JSUtility.GetVar("reportHeaderPath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(catalog, "HeaderPath")));
             script += JSUtility.GetVar("date", DateTime.Now.ToString(CultureInfo.InvariantCulture));
             script += JSUtility.GetVar("keyColumn", keyColumn);
             script += JSUtility.GetVar("customFormUrl", customFormUrl);

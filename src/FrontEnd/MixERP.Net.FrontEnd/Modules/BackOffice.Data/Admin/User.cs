@@ -19,8 +19,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
 using System.Data.Common;
-using MixERP.Net.Common.Base;
-using MixERP.Net.Entities;
+using MixERP.Net.Framework;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Data.Admin
 {

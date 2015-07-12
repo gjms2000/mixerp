@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using MixERP.Net.Common.Domains;
+using MixER.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Helpers;
+using MixERP.Net.Framework.Controls;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace MixERP.Net.Core.Modules.BackOffice
 {
@@ -59,9 +59,9 @@ namespace MixERP.Net.Core.Modules.BackOffice
         {
             List<string> displayFields = new List<string>();
             ScrudHelper.AddDisplayField(displayFields, "office.cash_repositories.cash_repository_id",
-                ConfigurationHelper.GetDbParameter("CashRepositoryDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "CashRepositoryDisplayField"));
             ScrudHelper.AddDisplayField(displayFields, "office.offices.office_id",
-                ConfigurationHelper.GetDbParameter("OfficeDisplayField"));
+                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "OfficeDisplayField"));
             return string.Join(",", displayFields);
         }
 

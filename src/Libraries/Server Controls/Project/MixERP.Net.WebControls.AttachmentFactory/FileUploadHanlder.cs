@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MixER.Net.ApplicationState.Cache;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -26,7 +27,7 @@ namespace MixERP.Net.WebControls.AttachmentFactory
 
         public void ProcessRequest(HttpContext context)
         {
-            string attachmentsDirectory = Helpers.ConfigurationHelper.GetAttachmentsDirectory();
+            string attachmentsDirectory = Helpers.ConfigurationHelper.GetAttachmentsDirectory(AppUsers.GetCurrentUserDB());
             Collection<string> uploadedFiles = new Collection<string>();
 
             if (context.Request.Files.Count > 0)
@@ -54,7 +55,7 @@ namespace MixERP.Net.WebControls.AttachmentFactory
 
         private List<string> GetAllowedExtensions()
         {
-            return Helpers.ConfigurationHelper.GetAllowedExtensions().Split(',').ToList();
+            return Helpers.ConfigurationHelper.GetAllowedExtensions(AppUsers.GetCurrentUserDB()).Split(',').ToList();
         }
 
         private int RandomNumber()

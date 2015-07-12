@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Resources;
@@ -96,14 +97,14 @@ namespace MixERP.Net.i18n
 
         private static string GetFallBackResource(ref IDictionary<string, string> cache, CultureInfo culture, string resourceClass, string resourceKey)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
 
         private static void InitializeResources()
         {
             IDictionary<string, string> resources = DbResources.GetLocalizedResources();
-            CacheProvider.AddToDefaultCache("Resources", resources);
+            CacheFactory.AddToDefaultCache("Resources", resources);
         }
     }
 }
