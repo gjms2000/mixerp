@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixER.Net.ApplicationState.Cache;
+using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Framework.Controls;
@@ -46,9 +46,9 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
                 scrud.DenyEdit = denyToNonAdmins;
                 scrud.DenyDelete = denyToNonAdmins;
 
-                scrud.ExcludeEdit = "user_id";
+                scrud.ExcludeEdit = "policy_id";
 
-                scrud.KeyColumn = "user_id";
+                scrud.KeyColumn = "policy_id";
 
                 scrud.TableSchema = "policy";
                 scrud.Table = "voucher_verification_policy";

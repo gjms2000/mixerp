@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixER.Net.ApplicationState.Cache;
+using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Core.Modules.Finance.Data.Helpers;
@@ -62,7 +62,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
         public Collection<ListItem> GetAccounts()
         {
             bool allowParentAccountInGlTransaction = DbConfig.GetSwitch(AppUsers.GetCurrentUserDB(),
-                "AllowParentAccountInGlTransaction");
+                "AllowParentAccountInGLTransaction");
 
             if (allowParentAccountInGlTransaction)
             {
