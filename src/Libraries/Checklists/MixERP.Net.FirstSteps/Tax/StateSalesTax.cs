@@ -16,7 +16,7 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             this.Category = Titles.TaxSetup;
             this.CategoryAlias = "tax-setup";
 
-            this.Description = "";
+            this.Description = "State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.";
             this.Icon = "tasks icon";
             this.NavigateUrl = "/Modules/BackOffice/Tax/StateSalesTaxes.mix";
 

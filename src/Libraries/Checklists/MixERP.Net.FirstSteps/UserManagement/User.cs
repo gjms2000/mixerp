@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
 using MixERP.Net.Framework.Contracts.Checklist;
 using MixERP.Net.i18n.Resources;
 using PetaPoco;
@@ -36,10 +35,9 @@ namespace MixERP.Net.FirstSteps.NewUser.UserManagment
         private int CountUsers()
         {
             string catalog = AppUsers.GetCurrentUserDB();
-            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
 
-            const string sql = "SELECT COUNT(*) FROM office.users WHERE office_id=@0;";
-            return Factory.Scalar<int>(catalog, sql, officeId);
+            const string sql = "SELECT COUNT(*) FROM office.users;";
+            return Factory.Scalar<int>(catalog, sql);
         }
     }
 }

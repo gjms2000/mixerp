@@ -16,7 +16,7 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             this.Category = Titles.TaxSetup;
             this.CategoryAlias = "tax-setup";
 
-            this.Description = "";
+            this.Description = "County sales tax is the direct consumption tax imposed by your county government when you make purchase or sales.";
             this.Icon = "tasks icon";
             this.NavigateUrl = "/Modules/BackOffice/Tax/CountySalesTaxes.mix";
 

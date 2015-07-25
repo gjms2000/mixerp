@@ -5,7 +5,7 @@ using MixERP.Net.Framework.Contracts.Checklist;
 using MixERP.Net.i18n.Resources;
 using PetaPoco;
 
-namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
+namespace MixERP.Net.FirstSteps.FirstTasks
 {
     public class Party : FirstStep
     {
@@ -21,11 +21,18 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             this.NavigateUrl = "/Modules/Inventory/Setup/Parties.mix";
 
             int count = this.CountParties();
+            int supplierCount = this.CountSuppliers();
 
-            if (count > 0)
+            if (count > 0 && supplierCount > 0)
             {
                 this.Status = true;
                 this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NPartiesFound, count);
+                return;
+            }
+
+            if (count > 0)
+            {
+                this.Message = "No supplier found.";
                 return;
             }
 
@@ -35,10 +42,22 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
         private int CountParties()
         {
             string catalog = AppUsers.GetCurrentUserDB();
-            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
 
             const string sql = "SELECT COUNT(*) FROM core.parties;";
-            return Factory.Scalar<int>(catalog, sql, officeId);
+            return Factory.Scalar<int>(catalog, sql);
+        }
+
+        private int CountSuppliers()
+        {
+            string catalog = AppUsers.GetCurrentUserDB();
+
+            const string sql = @"SELECT COUNT(*) FROM core.parties
+                                INNER JOIN core.party_types
+                                ON core.parties.party_type_id = core.party_types.party_type_id
+                                AND core.party_types.is_supplier;
+                                ";
+
+            return Factory.Scalar<int>(catalog, sql);
         }
     }
 }
