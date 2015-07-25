@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FirstTasks\FiscalYear.cs" />
+    <Compile Include="FirstTasks\Frequency.cs" />
+    <Compile Include="Tax\SalesTax.cs" />
+    <Compile Include="Tax\CountySalesTax.cs" />
+    <Compile Include="Tax\StateSalesTax.cs" />
     <Compile Include="Tax\TaxMaster.cs" />
     <Compile Include="Tax\TaxAuthority.cs" />
     <Compile Include="FirstTasks\Party.cs" />

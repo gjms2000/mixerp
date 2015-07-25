@@ -4,15 +4,36 @@
         {{i18n.FirstSteps}}
     </div>
 
-    <div class="ui icon input">
-        <input id="SearchInputText" placeholder="{{i18n.Search}}" type="text" data-ng-model="searchByName" />
-        <i class="search icon"></i>
+    <div class="ui form">
+        <div class="fields">
+            <div class="field">
+                <div class="ui icon input">
+                    <input id="SearchInputText" placeholder="{{i18n.Search}}" type="text" data-ng-model="filters.Name" />
+                    <i class="search icon"></i>
+                </div>
+
+            </div>
+            <div class="field">
+                <div class="ui labeled basic icon buttons">
+                    <div class="ui button" ng-click="filters.Status = false" title="Incomplete Tasks">Incomplete Tasks<i class="help circle icon"></i></div>
+                    <div class="ui button" ng-click="filters.Status = true" title="Complete Tasks">Complete Tasks<i class="checkmark box icon"></i></div>
+                    <div class="ui button" ng-click="filters.Status = ''" title="All Tasks">All Tasks<i class="asterisk icon"></i></div>
+                </div>
+
+
+            </div>
+            <div class="field">
+                <a data-ng-hide="!filters.Category" class="ui right labeled basic icon button" data-ng-click="filters.Category='';">
+                    {{filters.Category}}
+                    <i class="remove icon" title="Remove this Fitler"></i>
+                </a>
+
+            </div>
+        </div>
     </div>
 
-    <a data-ng-hide="!filters.Category" class="ui purple right labeled icon button" data-ng-click="filters.Category='';">
-        {{filters.Category}}
-        <i class="remove icon"></i>
-    </a>
+
+
 
     <h3 class="ui purple sub header">
         {{i18n.TaskCompletedProgress}}
@@ -22,7 +43,7 @@
     </div>
 
     <div class="ui four doubling stackable cards">
-        <div class="card" data-ng-repeat="task in checklist | filter:filters | filter:searchByName">
+        <div class="card" data-ng-repeat="task in checklist | filter:filters">
             <div class="content">
                 <i class="right floated {{task.Status ? 'purple' : 'pink'}}  {{ task.Icon }}"></i>
                 <div class="ui {{task.Status ? 'purple' : 'pink'}} header">

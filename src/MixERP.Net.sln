@@ -150,7 +150,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixERP.Net.Framework", "Lib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetaPoco", "Libraries\Logic\PetaPoco\PetaPoco.csproj", "{969D7960-52E2-40FC-91E5-1393B71E23B0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Checklists", "Checklists", "{34EB5A50-5B29-4868-BDC9-885278295286}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FirstSteps", "FirstSteps", "{34EB5A50-5B29-4868-BDC9-885278295286}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixERP.Net.FirstSteps", "Libraries\Checklists\MixERP.Net.FirstSteps\MixERP.Net.FirstSteps.csproj", "{A17952E5-9497-4013-88AA-BBEFFC2D67F7}"
 EndProject

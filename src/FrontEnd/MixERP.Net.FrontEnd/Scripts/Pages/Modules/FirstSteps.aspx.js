@@ -17,6 +17,7 @@
         $scope.$apply(function () {
             $scope.checklist = msg.d;
             $scope.filters = {};
+            $scope.filters.Status = false;
             $scope.i18n = getResource();
 
 
@@ -30,6 +31,7 @@
 
         $scope.removeNonBreakingSpaces();
     });
+
 
     $scope.remove = function (item) {
         if (!confirmAction()) {
@@ -57,7 +59,11 @@
         $scope.removeNonBreakingSpaces();
     });
 
-    $scope.$watch("searchByName", function () {
+    $scope.$watch("filters.Name", function () {
+        $scope.removeNonBreakingSpaces();
+    });
+
+    $scope.$watch("filters.Status", function () {
         $scope.removeNonBreakingSpaces();
     });
 });

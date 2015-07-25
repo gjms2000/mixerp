@@ -23,8 +23,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 <asp:Content ID="Content2" ContentPlaceHolderID="StyleSheetContentPlaceholder" runat="server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="BodyContentPlaceholder" runat="server">
-    <div data-ng-include="'/Views/Modules/Checklists.aspx.html'"></div>
+    <div data-ng-include="'/Views/Modules/FirstSteps.aspx.html'"></div>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="BottomScriptContentPlaceholder" runat="server">
-    <script src="../Scripts/Pages/Modules/Checklists.aspx.js"></script>
+    <script src="../Scripts/Pages/Modules/FirstSteps.aspx.js"></script>
 </asp:Content>

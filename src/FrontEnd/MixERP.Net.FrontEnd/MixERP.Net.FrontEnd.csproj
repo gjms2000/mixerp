@@ -340,7 +340,7 @@
     <Content Include="Scripts\mixerp\core\browser.js" />
     <Content Include="Scripts\mixerp\master-page\notification.js" />
     <Content Include="Scripts\mixerp\master-page\menu.js" />
-    <Content Include="Scripts\Pages\Modules\Checklists.aspx.js" />
+    <Content Include="Scripts\Pages\Modules\FirstSteps.aspx.js" />
     <Content Include="Scripts\sprintf\sprintf.min.js" />
     <Content Include="Scripts\underscore\.gitignore" />
     <Content Include="Scripts\underscore\docs\docco.css" />
@@ -871,7 +871,7 @@
     <Content Include="App_Themes\MixERP\Skin1.skin" />
     <Content Include="MixERPMaster.Master" />
     <Content Include="Tests\transaction.js" />
-    <Content Include="Views\Modules\Checklists.aspx.html" />
+    <Content Include="Views\Modules\FirstSteps.aspx.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

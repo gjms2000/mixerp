@@ -11,7 +11,7 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
     {
         public Party()
         {
-            this.Order = 101;
+            this.Order = 120;
             this.Name = Titles.CreateParties;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
