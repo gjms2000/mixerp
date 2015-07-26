@@ -19968,6 +19968,45 @@ FROM policy.voucher_verification_policy
 INNER JOIN office.users
 ON policy.voucher_verification_policy.user_id=office.users.user_id;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.discount_received_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.discount_received_account_selector_view;
+
+CREATE VIEW core.discount_received_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+--All income headings
+WHERE account_master_id >= 20100
+AND account_master_id < 20400
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.expenses_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.expenses_account_selector_view;
+
+CREATE VIEW core.expenses_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+WHERE account_master_id > 20400
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.purchase_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.purchase_account_selector_view;
+
+CREATE VIEW core.purchase_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+WHERE account_master_id = 15010
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.sales_return_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.sales_return_account_selector_view;
+
+CREATE VIEW core.sales_return_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+--Current Liabilities, Accounts Payable
+WHERE account_master_id = ANY(ARRAY[15000, 15010])
+ORDER BY account_id;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS core.party_after_insert_trigger() CASCADE;
 

@@ -224,6 +224,16 @@ namespace MixERP.Net.WebControls.ScrudFactory
         public bool UseDisplayViewsAsParents { get; set; }
 
         /// <summary>
+        /// By default, ScrudFactory uses the primary table column name as the identifier.
+        /// When you enable this property, ScrudFactory will now match the display views 
+        /// with the current table foreign keys as identifiers.
+        /// Example: Given that your current table is "office.users" and you are mapping to "office.offices",
+        /// you used to use "office.offices.office_id" before. When you turn this on, you can now use
+        /// "office.users.office_id" as the display view identifier.
+        /// </summary>
+        public bool UseLocalColumnInDisplayViews { get; set; }
+
+        /// <summary>
         ///     The name of the database view or table to select and display the resultset from.
         /// </summary>
         public string View { get; set; }
