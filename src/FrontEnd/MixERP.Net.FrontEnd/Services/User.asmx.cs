@@ -79,11 +79,9 @@ namespace MixERP.Net.FrontEnd.Services
 
                 if (globalLoginId > 0)
                 {
+                    MixERPWebpage.SetAuthenticationTicket(HttpContext.Current.Response, globalLoginId, rememberMe);
+
                     AppUsers.SetCurrentLogin(globalLoginId);
-                    MixERPWebpage.SetAuthenticationTicket(this.Context.Response, globalLoginId, rememberMe);
-
-                    this.Context.Session["FirstStepsPending"] = FirstSteps.CheckIfPending(globalLoginId);
-
 
                     return "OK";
                 }

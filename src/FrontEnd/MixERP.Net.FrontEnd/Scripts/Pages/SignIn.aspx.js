@@ -91,10 +91,11 @@ function getRedirectUrl() {
     var url = getQueryStringByName("ReturnUrl");
 
     if (isNullOrWhiteSpace(url)) {
-        url = "/";
+        url = "/PostSignIn.aspx";
+        return url;
     };
 
-
+    url = "/PostSignIn.aspx?ReturnUrl=" + url;
     return url;
 };
 

@@ -17,31 +17,30 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using System.Collections.Generic;
-using System.Linq;
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Framework.Contracts.Checklist;
+using System;
+using MixERP.Net.FrontEnd.Application;
 
-namespace MixERP.Net.FrontEnd.Application
+namespace MixERP.Net.FrontEnd
 {
-    public static class FirstSteps
+    public partial class PostSignIn : System.Web.UI.Page
     {
-        public static bool CheckIfPending()
+        protected void Page_Load(object sender, EventArgs e)
         {
-            if (!AppUsers.GetCurrent().View.IsAdmin.ToBool())
+            this.Context.Session["FirstStepsPending"] = FirstSteps.CheckIfPending();
+
+            this.Context.Response.Redirect(this.GetReturnUrl());
+        }
+
+        private string GetReturnUrl()
+        {
+            string returnUrl = this.Context.Request.QueryString["ReturnUrl"];
+
+            if (string.IsNullOrWhiteSpace(returnUrl))
             {
-                return false;
+                return "~";
             }
 
-            IEnumerable<FirstStep> list = FirstStep.GetAll().Where(x => !x.Status);
-
-            if (list.Any())
-            {
-                return true;
-            }
-
-            return false;
+            return returnUrl;
         }
     }
 }

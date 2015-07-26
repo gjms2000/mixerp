@@ -102,9 +102,8 @@ namespace MixERP.Net.FrontEnd.Base
                 return;
             }
 
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
-                signInId.ToString(CultureInfo.InvariantCulture), DateTime.Now, DateTime.Now.AddMinutes(30), rememberMe,
-                String.Empty, FormsAuthentication.FormsCookiePath);
+            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, signInId.ToString(CultureInfo.InvariantCulture), DateTime.Now, DateTime.Now.AddMinutes(30), rememberMe, String.Empty, FormsAuthentication.FormsCookiePath);
+
             string encryptedCookie = FormsAuthentication.Encrypt(ticket);
 
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedCookie);
@@ -112,7 +111,6 @@ namespace MixERP.Net.FrontEnd.Base
             cookie.Path = ticket.CookiePath;
 
             response.Cookies.Add(cookie);
-            //response.Redirect(FormsAuthentication.GetRedirectUrl(signInId.ToString(CultureInfo.InvariantCulture), rememberMe));
         }
 
         protected override void InitializeCulture()
