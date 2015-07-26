@@ -1407,6 +1407,61 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for County sales tax is the direct consumption tax imposed by your county government when you make purchase or sales.
+		/// </summary>
+		public static string CreateCountySalesTaxDescription 
+		{
+			get
+			{
+				return Get("CreateCountySalesTaxDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Fiscal year is an accounting period of 12 months, used to prepare financial statements.
+		/// </summary>
+		public static string CreateFiscalYearDescription 
+		{
+			get
+			{
+				return Get("CreateFiscalYearDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for The fiscal year is further divided into 12 frequencies, categorized as months, quarters, fiscal half, and fiscal year.
+		/// </summary>
+		public static string CreateFrequenciesDescription 
+		{
+			get
+			{
+				return Get("CreateFrequenciesDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for An item group allows you to manage similar inventory items into meaningful groups and categories.
+		/// </summary>
+		public static string CreateItemGroupsDescription 
+		{
+			get
+			{
+				return Get("CreateItemGroupsDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Inventory items may refer to the stockable products or nonstockable services that you buy and/or sell.
+		/// </summary>
+		public static string CreateItemOrServiceDescription 
+		{
+			get
+			{
+				return Get("CreateItemOrServiceDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for The term "party" collectively refers to customer, supplier, or agent you have business with.
 		/// </summary>
 		public static string CreatePartiesDescription 
@@ -1414,6 +1469,50 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("CreatePartiesDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.
+		/// </summary>
+		public static string CreateSalesTaxFormDescription 
+		{
+			get
+			{
+				return Get("CreateSalesTaxFormDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salespersons are the sales guys who sell your products and bring business to your company.
+		/// </summary>
+		public static string CreateSalespersonsDescription 
+		{
+			get
+			{
+				return Get("CreateSalespersonsDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Shipping companies transfer the goods through land, sea, and/or air to your customers.
+		/// </summary>
+		public static string CreateShippingCompanyDescription 
+		{
+			get
+			{
+				return Get("CreateShippingCompanyDescription");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.
+		/// </summary>
+		public static string CreateStateSalesTaxDescription 
+		{
+			get
+			{
+				return Get("CreateStateSalesTaxDescription");
 			}
 		}
 		
@@ -1616,6 +1715,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Frequency setup is complete.
+		/// </summary>
+		public static string FrequencySetupIsComplete 
+		{
+			get
+			{
+				return Get("FrequencySetupIsComplete");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Go to checklist window.
 		/// </summary>
 		public static string GoToChecklistWindow 
@@ -1682,6 +1792,50 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for {0} county sales taxes defined.
+		/// </summary>
+		public static string NCountySalesTaxesDefined 
+		{
+			get
+			{
+				return Get("NCountySalesTaxesDefined");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} item group(s) found.
+		/// </summary>
+		public static string NItemGroupsFound 
+		{
+			get
+			{
+				return Get("NItemGroupsFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} item(s) found.
+		/// </summary>
+		public static string NItemsFound 
+		{
+			get
+			{
+				return Get("NItemsFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} out of 12 frequencies defined.
+		/// </summary>
+		public static string NOutOfNFrequenciesDefined 
+		{
+			get
+			{
+				return Get("NOutOfNFrequenciesDefined");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for {0} parties found.
 		/// </summary>
 		public static string NPartiesFound 
@@ -1689,6 +1843,50 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("NPartiesFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} sales tax forms defined.
+		/// </summary>
+		public static string NSalesTaxFormsDefined 
+		{
+			get
+			{
+				return Get("NSalesTaxFormsDefined");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} salespersons found.
+		/// </summary>
+		public static string NSalespersonsFound 
+		{
+			get
+			{
+				return Get("NSalespersonsFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} shippers found.
+		/// </summary>
+		public static string NShippersFound 
+		{
+			get
+			{
+				return Get("NShippersFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for {0} state sales taxes defined.
+		/// </summary>
+		public static string NStateSalesTaxesDefined 
+		{
+			get
+			{
+				return Get("NStateSalesTaxesDefined");
 			}
 		}
 		
@@ -1748,6 +1946,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for No county sales tax defined.
+		/// </summary>
+		public static string NoCountySalesTaxDefined 
+		{
+			get
+			{
+				return Get("NoCountySalesTaxDefined");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No fiscal year defined.
+		/// </summary>
+		public static string NoFiscalYearDefined 
+		{
+			get
+			{
+				return Get("NoFiscalYearDefined");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for No party found.
 		/// </summary>
 		public static string NoPartyFound 
@@ -1759,6 +1979,50 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for No sales tax form defined.
+		/// </summary>
+		public static string NoSalesTaxFormDefined 
+		{
+			get
+			{
+				return Get("NoSalesTaxFormDefined");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No salesperson found.
+		/// </summary>
+		public static string NoSalespersonFound 
+		{
+			get
+			{
+				return Get("NoSalespersonFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No shipper found.
+		/// </summary>
+		public static string NoShipperFound 
+		{
+			get
+			{
+				return Get("NoShipperFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No state sales tax defined.
+		/// </summary>
+		public static string NoStateSalesTaxDefined 
+		{
+			get
+			{
+				return Get("NoStateSalesTaxDefined");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for No store present.
 		/// </summary>
 		public static string NoStorePresent 
@@ -1766,6 +2030,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("NoStorePresent");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No supplier found.
+		/// </summary>
+		public static string NoSupplierFound 
+		{
+			get
+			{
+				return Get("NoSupplierFound");
 			}
 		}
 		
@@ -8090,6 +8365,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for All Tasks
+		/// </summary>
+		public static string AllTasks 
+		{
+			get
+			{
+				return Get("AllTasks");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Amount
 		/// </summary>
 		public static string Amount 
@@ -8717,6 +9003,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Complete Tasks
+		/// </summary>
+		public static string CompleteTasks 
+		{
+			get
+			{
+				return Get("CompleteTasks");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Compound Item Details
 		/// </summary>
 		public static string CompoundItemDetails 
@@ -8893,6 +9190,61 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Create County Sales Tax
+		/// </summary>
+		public static string CreateCountySalesTax 
+		{
+			get
+			{
+				return Get("CreateCountySalesTax");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Fiscal Year
+		/// </summary>
+		public static string CreateFiscalYear 
+		{
+			get
+			{
+				return Get("CreateFiscalYear");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Frequencies
+		/// </summary>
+		public static string CreateFrequencies 
+		{
+			get
+			{
+				return Get("CreateFrequencies");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Item Groups
+		/// </summary>
+		public static string CreateItemGroups 
+		{
+			get
+			{
+				return Get("CreateItemGroups");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Item or Service
+		/// </summary>
+		public static string CreateItemOrService 
+		{
+			get
+			{
+				return Get("CreateItemOrService");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Create Party
 		/// </summary>
 		public static string CreateParties 
@@ -8900,6 +9252,50 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("CreateParties");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Sales Tax Form
+		/// </summary>
+		public static string CreateSalesTaxForm 
+		{
+			get
+			{
+				return Get("CreateSalesTaxForm");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Salespersons
+		/// </summary>
+		public static string CreateSalespersons 
+		{
+			get
+			{
+				return Get("CreateSalespersons");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Shipping Company
+		/// </summary>
+		public static string CreateShippingCompany 
+		{
+			get
+			{
+				return Get("CreateShippingCompany");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create State Sales Tax
+		/// </summary>
+		public static string CreateStateSalesTax 
+		{
+			get
+			{
+				return Get("CreateStateSalesTax");
 			}
 		}
 		
@@ -10253,6 +10649,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("IncludeZeroBalanceAccounts");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Incomplete Tasks
+		/// </summary>
+		public static string IncompleteTasks 
+		{
+			get
+			{
+				return Get("IncompleteTasks");
 			}
 		}
 		

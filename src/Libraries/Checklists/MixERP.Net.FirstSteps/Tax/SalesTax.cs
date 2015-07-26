@@ -12,11 +12,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
         public SalesTax()
         {
             this.Order = 205;
-            this.Name = "Create Sales Tax Form";
+            this.Name = Titles.CreateSalesTaxForm;
             this.Category = Titles.TaxSetup;
             this.CategoryAlias = "tax-setup";
 
-            this.Description = "Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.";
+            this.Description = Labels.CreateSalesTaxFormDescription;
             this.Icon = "tasks icon";
             this.NavigateUrl = "/Modules/BackOffice/Tax/SalesTaxes.mix";
 
@@ -25,11 +25,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} sales taxes form defined.", count);
+                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NSalesTaxFormsDefined, count);
                 return;
             }
 
-            this.Message = "No sales tax form defined.";
+            this.Message = Labels.NoSalesTaxFormDefined;
         }
 
         private int CountSalesTaxes()

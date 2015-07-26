@@ -1,6 +1,6 @@
 ﻿<div data-ng-controller="CheckListController">
     <div class="ui purple large header">
-        <i class="tasks icon"></i>
+        <i class="bug icon"></i>
         {{i18n.FirstSteps}}
     </div>
 
@@ -15,9 +15,9 @@
             </div>
             <div class="field">
                 <div class="ui labeled basic icon buttons">
-                    <div class="ui button" ng-click="filters.Status = false" title="Incomplete Tasks">Incomplete Tasks<i class="help circle icon"></i></div>
-                    <div class="ui button" ng-click="filters.Status = true" title="Complete Tasks">Complete Tasks<i class="checkmark box icon"></i></div>
-                    <div class="ui button" ng-click="filters.Status = ''" title="All Tasks">All Tasks<i class="asterisk icon"></i></div>
+                    <div class="ui button" ng-click="filters.Status = false" title="{{i18n.IncompleteTasks}}">{{i18n.IncompleteTasks}}<i class="help circle icon"></i></div>
+                    <div class="ui button" ng-click="filters.Status = true" title="{{i18n.CompleteTasks}}">{{i18n.CompleteTasks}}<i class="checkmark box icon"></i></div>
+                    <div class="ui button" ng-click="filters.Status = ''" title="{{i18n.AllTasks}}">{{i18n.AllTasks}}<i class="asterisk icon"></i></div>
                 </div>
 
 

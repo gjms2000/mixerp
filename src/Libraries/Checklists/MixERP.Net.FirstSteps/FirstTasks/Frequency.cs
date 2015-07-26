@@ -11,11 +11,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         public Frequency()
         {
             this.Order = 122;
-            this.Name = "Create Frequencies";
+            this.Name = Titles.CreateFrequencies;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description = "The fiscal year is further divided into 12 frequencies, categorized as months, quarters, fiscal half, and fiscal year.";
+            this.Description = Labels.CreateFrequenciesDescription;
             this.Icon = "circle notched icon";
             this.NavigateUrl = "/Modules/BackOffice/Frequency.mix";
 
@@ -24,11 +24,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             if (count == 12)
             {
                 this.Status = true;
-                this.Message = "Frequency setup is complete.";
+                this.Message = Labels.FrequencySetupIsComplete;
                 return;
             }
 
-            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} out of 12 frequencies defined.",
+            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NOutOfNFrequenciesDefined,
                 count);
         }
 

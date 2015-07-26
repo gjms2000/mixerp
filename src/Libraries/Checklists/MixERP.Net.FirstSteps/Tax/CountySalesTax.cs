@@ -12,11 +12,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
         public CountySalesTax()
         {
             this.Order = 204;
-            this.Name = "Create County Sales Tax";
+            this.Name = Titles.CreateCountySalesTax;
             this.Category = Titles.TaxSetup;
             this.CategoryAlias = "tax-setup";
 
-            this.Description = "County sales tax is the direct consumption tax imposed by your county government when you make purchase or sales.";
+            this.Description = Labels.CreateCountySalesTaxDescription;
             this.Icon = "tasks icon";
             this.NavigateUrl = "/Modules/BackOffice/Tax/CountySalesTaxes.mix";
 
@@ -25,11 +25,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} county sales taxes defined.", count);
+                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NCountySalesTaxesDefined, count);
                 return;
             }
 
-            this.Message = "No county sales tax defined.";
+            this.Message = Labels.NoCountySalesTaxDefined;
         }
 
         private int CountCountySalesTaxes()

@@ -9,6 +9,9 @@
         i18n.Start = window.Resources.Titles.Start();
         i18n.Search = window.Resources.Titles.Search();
         i18n.HideForNow = window.Resources.Titles.HideForNow();
+        i18n.IncompleteTasks = Resources.Titles.IncompleteTasks();
+        i18n.AllTasks = Resources.Titles.AllTasks();
+        i18n.CompleteTasks = Resources.Titles.CompleteTasks();
 
         return i18n;
     };

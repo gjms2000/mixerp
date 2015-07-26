@@ -29,12 +29,17 @@ namespace MixERP.Net.FrontEnd.Application
     {
         public static bool CheckIfPending(long globalLoginId)
         {
-            if (!AppUsers.GetCurrent(globalLoginId).View.IsAdmin.ToBool())
+            if (AppUsers.GetCurrent() == null)
+            {
+                AppUsers.SetCurrentLogin(globalLoginId);
+            }
+
+            if (!AppUsers.GetCurrent().View.IsAdmin.ToBool())
             {
                 return false;
             }
 
-            IEnumerable<FirstStep> list = FirstStep.GetAll().Where(x => x.Status);
+            IEnumerable<FirstStep> list = FirstStep.GetAll().Where(x => !x.Status);
 
             if (list.Any())
             {

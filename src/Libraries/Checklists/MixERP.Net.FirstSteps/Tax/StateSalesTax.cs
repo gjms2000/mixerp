@@ -12,11 +12,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
         public StateSalesTax()
         {
             this.Order = 203;
-            this.Name = "Create State Sales Tax";
+            this.Name = Titles.CreateStateSalesTax;
             this.Category = Titles.TaxSetup;
             this.CategoryAlias = "tax-setup";
 
-            this.Description = "State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.";
+            this.Description = Labels.CreateStateSalesTaxDescription;
             this.Icon = "tasks icon";
             this.NavigateUrl = "/Modules/BackOffice/Tax/StateSalesTaxes.mix";
 
@@ -25,11 +25,11 @@ namespace MixERP.Net.FirstSteps.NewUser.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} state sales taxes defined.", count);
+                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NStateSalesTaxesDefined, count);
                 return;
             }
 
-            this.Message = "No state sales tax defined.";
+            this.Message = Labels.NoStateSalesTaxDefined;
         }
 
         private int CountStateSalesTaxes()

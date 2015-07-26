@@ -11,12 +11,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         public Salesperson()
         {
             this.Order = 110;
-            this.Name = "Create Salespersons";
+            this.Name = Titles.CreateSalespersons;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description =
-                "Salespersons are the sales guys who sell your products and bring business to your company.";
+            this.Description = Labels.CreateSalespersonsDescription;
             this.Icon = "users icon";
             this.NavigateUrl = "/Modules/Sales/Setup/Salespersons.mix";
 
@@ -25,11 +24,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} salespersons found.", count);
+                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NSalespersonsFound, count);
                 return;
             }
 
-            this.Message = "No salesperson found.";
+            this.Message = Labels.NoSalespersonFound;
         }
 
         private int CountParties()

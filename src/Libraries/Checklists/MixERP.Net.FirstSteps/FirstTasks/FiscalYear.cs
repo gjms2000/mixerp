@@ -10,11 +10,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         public FiscalYear()
         {
             this.Order = 121;
-            this.Name = "Create Fiscal Year";
+            this.Name = Titles.CreateFiscalYear;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description = "Fiscal year is an accounting period of 12-months, used to prepare financial statements.";
+            this.Description = Labels.CreateFiscalYearDescription;
             this.Icon = "bar chart icon";
             this.NavigateUrl = "/Modules/BackOffice/FiscalYear.mix";
 
@@ -23,11 +23,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = "OK";
+                this.Message = Titles.OK;
                 return;
             }
 
-            this.Message = "No Fiscal Year defined.";
+            this.Message = Labels.NoFiscalYearDefined;
         }
 
         private int CountFrequencySetups()

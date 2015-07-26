@@ -11,11 +11,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         public Shipper()
         {
             this.Order = 110;
-            this.Name = "Create Shipping Company";
+            this.Name = Titles.CreateShippingCompany;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description = "Shipping companies transfer the goods through land, sea, and/or air to your customer.";
+            this.Description = Labels.CreateShippingCompanyDescription;
             this.Icon = "users icon";
             this.NavigateUrl = "/Modules/Inventory/Setup/Shippers.mix";
 
@@ -24,11 +24,11 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} shippers found.", count);
+                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NShippersFound, count);
                 return;
             }
 
-            this.Message = "No shipper found.";
+            this.Message = Labels.NoShipperFound;
         }
 
         private int CountParties()

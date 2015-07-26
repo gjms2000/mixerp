@@ -11,19 +11,17 @@ namespace MixERP.Net.FirstSteps.Office
         public Item()
         {
             this.Order = 410;
-            this.Name = "Create Item or Service";
+            this.Name = Titles.CreateItemOrService;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description =
-                "Inventory items may refer to the stockable products or nonstockable services that you buy and/or sell.";
+            this.Description = Labels.CreateItemOrServiceDescription;
             this.Icon = "shop icon";
             this.NavigateUrl = "/Modules/Inventory/Setup/Items.mix";
 
             int count = this.CountItems();
 
-            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} item(s) found.",
-                count);
+            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NItemsFound, count);
 
             if (count > 2)
             {

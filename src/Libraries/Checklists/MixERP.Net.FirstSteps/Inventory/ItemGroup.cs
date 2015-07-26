@@ -11,19 +11,17 @@ namespace MixERP.Net.FirstSteps.Office
         public ItemGroup()
         {
             this.Order = 400;
-            this.Name = "Create Item Groups";
+            this.Name = Titles.CreateItemGroups;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";
 
-            this.Description =
-                "An item group allows you to manage similar inventory items into meaningful groups and categories.";
+            this.Description = Labels.CreateItemGroupsDescription;
             this.Icon = "shop icon";
             this.NavigateUrl = "/Modules/Inventory/Setup/ItemGroups.mix";
 
             int count = this.CountItemGroups();
 
-            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, "{0} item group(s) found.",
-                count);
+            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NItemGroupsFound, count);
 
             if (count > 2)
             {
