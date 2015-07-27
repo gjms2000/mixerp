@@ -20060,6 +20060,9 @@ AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.refresh-materialized-views.sql --<--<--
+SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/ownership.sql --<--<--
 DO
 $$
