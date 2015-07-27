@@ -4,14 +4,14 @@ SET CLIENT_MIN_MESSAGES TO WARNING;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v1/src/00.db core/1.mixerp.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -217,7 +217,7 @@ COMMENT ON VIEW scrud.mixerp_table_view IS 'Lists all schema, table, and columns
 /********************************************************************************
 The PostgreSQL License
 
-Copyright (c) 2014, Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (c) 2014, MixERP Inc. (http://mixof.org).
 
 Permission to use, copy, modify, and distribute this software and its documentation 
 for any purpose, without fee, and without a written agreement is hereby granted, 
@@ -20368,14 +20368,14 @@ UNION ALL SELECT 'Opening Inventory', '~/Modules/BackOffice/OTS/OpeningInventory
 
 
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
