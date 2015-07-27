@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "mixerp";
                 scrud.ViewSchema = "config";
-                scrud.View = "mixerp";
+                scrud.View = "mixerp_scrud_view";
 
                 scrud.Text = Titles.MixERPParameters;
 

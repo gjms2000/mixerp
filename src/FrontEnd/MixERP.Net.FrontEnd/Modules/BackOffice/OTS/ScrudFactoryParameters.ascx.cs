@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "scrud_factory";
                 scrud.ViewSchema = "config";
-                scrud.View = "scrud_factory";
+                scrud.View = "scrud_factory_scrud_view";
 
                 scrud.Text = Titles.ScrudFactoryParameters;
 

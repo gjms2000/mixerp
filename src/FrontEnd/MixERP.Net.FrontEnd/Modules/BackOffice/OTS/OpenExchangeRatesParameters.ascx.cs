@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "open_exchange_rates";
                 scrud.ViewSchema = "config";
-                scrud.View = "open_exchange_rates";
+                scrud.View = "open_exchange_rate_scrud_view";
 
                 scrud.Text = Titles.OpenExchangeRatesParameters;
 

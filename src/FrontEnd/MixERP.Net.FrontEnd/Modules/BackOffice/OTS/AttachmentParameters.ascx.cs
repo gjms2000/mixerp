@@ -47,7 +47,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "attachment_factory";
                 scrud.ViewSchema = "config";
-                scrud.View = "attachment_factory";
+                scrud.View = "attachment_factory_scrud_view";
 
                 scrud.Text = Titles.AttachmentParameters;
 

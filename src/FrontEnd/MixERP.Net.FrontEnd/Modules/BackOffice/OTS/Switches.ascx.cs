@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "switches";
                 scrud.ViewSchema = "config";
-                scrud.View = "switches";
+                scrud.View = "switch_scrud_view";
 
                 scrud.Text = Titles.Switches;
 
