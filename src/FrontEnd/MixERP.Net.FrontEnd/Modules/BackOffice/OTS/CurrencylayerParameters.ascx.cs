@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "currency_layer";
                 scrud.ViewSchema = "config";
-                scrud.View = "currency_layer";
+                scrud.View = "currency_layer_scrud_view";
 
                 scrud.Text = Titles.CurrencylayerParameters;
 

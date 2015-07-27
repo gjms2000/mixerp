@@ -44,7 +44,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
 
                 scrud.Table = "messaging";
                 scrud.ViewSchema = "config";
-                scrud.View = "messaging";
+                scrud.View = "messaging_scrud_view";
 
                 scrud.Text = Titles.MessagingParameters;
 
