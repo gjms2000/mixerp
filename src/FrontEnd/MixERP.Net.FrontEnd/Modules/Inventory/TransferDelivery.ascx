@@ -96,7 +96,24 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         var href = "Entry/TransferDelivery.mix?RequestId=" + tranId;
         window.location.href = href;
 
-    });</script>
+    });
+
+    var printButton = $("#PrintButton");
+
+    printButton.click(function () {
+        var templatePath = "/Reports/Print.html";
+        var headerPath = "/Reports/Assets/Header.aspx";
+        var title = $("h2").html();
+        var targetControlId = "TransferRequestGridView";
+        var date = now;
+        var windowName = "TransferRequestGridView";
+        var offsetFirst = 2;
+        var offsetLast = 2;
+
+        printGridView(templatePath, headerPath, title, targetControlId, date, user, office, windowName, offsetFirst, offsetLast);
+    });
+
+</script>
 
 
 <script src="Scripts/TransferRequest.js"></script>

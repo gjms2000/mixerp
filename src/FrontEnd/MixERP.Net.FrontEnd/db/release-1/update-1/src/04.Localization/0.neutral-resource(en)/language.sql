@@ -508,6 +508,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'maintain_stock'
 SELECT localization.add_localized_resource('ScrudResource', '', 'maintained_by_user_id', 'Maintained By User Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'maximum_credit_amount', 'Maximum Credit Amount');
 SELECT localization.add_localized_resource('ScrudResource', '', 'maximum_credit_period', 'Maximum Credit Period');
+SELECT localization.add_localized_resource('ScrudResource', '', 'merchant_account', 'Merchant Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'merchant_account_id', 'Merchant Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'merchant_fee_setup_id', 'Merchant Fee Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'middle_name', 'Middle Name');
@@ -546,6 +547,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'party_type_code
 SELECT localization.add_localized_resource('ScrudResource', '', 'party_type_id', 'Party Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'party_type_name', 'Party Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'password', 'Password');
+SELECT localization.add_localized_resource('ScrudResource', '', 'payment_card', 'Payment Card');
 SELECT localization.add_localized_resource('ScrudResource', '', 'payment_card_code', 'Payment Card Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'payment_card_id', 'Payment Card Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'payment_card_name', 'Payment Card Name');

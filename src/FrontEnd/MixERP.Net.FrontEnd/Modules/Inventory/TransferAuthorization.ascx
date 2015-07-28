@@ -33,7 +33,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         <div class="eight fields">
             <div class="field">
                 <label><%=Titles.From %></label>
-                <mixerp:DateTextBox ID="DateFromDateTextBox" runat="server" Mode="MonthStartDate"/>
+                <mixerp:DateTextBox ID="DateFromDateTextBox" runat="server" Mode="MonthStartDate" />
             </div>
             <div class="field">
                 <label><%=Titles.To %></label>
@@ -41,45 +41,45 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="field">
                 <label><%=Titles.Office %></label>
-                <input id="OfficeTextBox" type="text" runat="server"/>
+                <input id="OfficeTextBox" type="text" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.Store %></label>
-                <input id="StoreTextBox" type="text" runat="server"/>
+                <input id="StoreTextBox" type="text" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.Authorized %></label>
-                <input id="AuthorizedTextBox" type="text" value="false" runat="server"/>
+                <input id="AuthorizedTextBox" type="text" value="false" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.Delivered %></label>
-                <input id="DeliveredTextBox" type="text" value="false" runat="server"/>
+                <input id="DeliveredTextBox" type="text" value="false" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.Received %></label>
-                <input id="ReceivedTextBox" type="text" value="false" runat="server"/>
+                <input id="ReceivedTextBox" type="text" value="false" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.User %></label>
-                <input id="UserTextBox" type="text" runat="server"/>
+                <input id="UserTextBox" type="text" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.ReferenceNumberAbbreviated %></label>
-                <input id="ReferenceNumberTextBox" type="text" runat="server"/>
+                <input id="ReferenceNumberTextBox" type="text" runat="server" />
             </div>
             <div class="field">
                 <label><%=Titles.StatementReference %></label>
-                <input id="StatementReferenceTextBox" type="text" runat="server"/>
+                <input id="StatementReferenceTextBox" type="text" runat="server" />
             </div>
             <div class="field">
                 <label>&nbsp;</label>
-                <asp:Button runat="server" ID="ShowButton" CssClass="blue ui button" Text="Show" OnClick="ShowButton_Click"/>
+                <asp:Button runat="server" ID="ShowButton" CssClass="blue ui button" Text="Show" OnClick="ShowButton_Click" />
             </div>
         </div>
     </div>
 </div>
 
-<asp:PlaceHolder ID="GridViewPlaceholder" runat="server"/>
+<asp:PlaceHolder ID="GridViewPlaceholder" runat="server" />
 <script src="Scripts/TransferRequest.js"></script>
 <script type="text/javascript">
     var authorizeButton = $("#AuthorizeButton");
@@ -160,4 +160,19 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
         return getAjax(url, data);
     };
+
+    var printButton = $("#PrintButton");
+
+    printButton.click(function () {
+        var templatePath = "/Reports/Print.html";
+        var headerPath = "/Reports/Assets/Header.aspx";
+        var title = $("h2").html();
+        var targetControlId = "TransferRequestGridView";
+        var date = now;
+        var windowName = "TransferRequestGridView";
+        var offsetFirst = 2;
+        var offsetLast = 2;
+
+        printGridView(templatePath, headerPath, title, targetControlId, date, user, office, windowName, offsetFirst, offsetLast);
+    });
 </script>
