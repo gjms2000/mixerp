@@ -11,18 +11,27 @@ var fiscalYearCodeInputText = $("#FiscalYearCodeInputText");
 var fiscalYearNameInputText = $("#FiscalYearNameInputText");
 var startsFromInputText = $("#StartsFromInputText");
 var endsOnInputText = $("#EndsOnInputText");
+var incomeTaxRateInputText = $("#IncomeTaxRateInputText");
+var weekStartDaySelect = $("#WeekStartDaySelect");
+var transactionStartDateInputText = $("#TransactionStartDateInputText");
 var adminNameInputText = $("#AdminNameInputText");
 var usernameInputText = $("#UsernameInputText");
 var passwordInputPassword = $("#PasswordInputPassword");
 var confirmPasswordInputPassword = $("#ConfirmPasswordInputPassword");
 var saveButton = $("#SaveButton");
 
-$(document).ready(function() {
+$(document).ready(function () {
+    initializeUI();
     var year = new Date().getYear() + 1900;
 
     fiscalYearCodeInputText.val("FY-" + year.toString().slice(-2));
     fiscalYearNameInputText.val("FY-" + year);
 });
+
+function initializeUI() {
+    $(".ui.dropdown").dropdown();
+    $('.activating.element').popup();
+};
 
 var validateFields = function() {
     if (isNullOrWhiteSpace(officeNameInputText.val()) ||
@@ -37,6 +46,9 @@ var validateFields = function() {
         isNullOrWhiteSpace(fiscalYearNameInputText.val()) ||
         isNullOrWhiteSpace(startsFromInputText.val()) ||
         isNullOrWhiteSpace(endsOnInputText.val()) ||
+        !parseFloat(incomeTaxRateInputText.val()) ||
+        isNullOrWhiteSpace(weekStartDaySelect.val()) ||
+        isNullOrWhiteSpace(transactionStartDateInputText.val()) ||
         isNullOrWhiteSpace(adminNameInputText.val()) ||
         isNullOrWhiteSpace(usernameInputText.val()) ||
         isNullOrWhiteSpace(passwordInputPassword.val()) ||
@@ -69,7 +81,7 @@ saveButton.click(function() {
         $(".form").addClass("loading");
         $(".dimmer").dimmer("show");
 
-        var ajaxSaveOffice = saveOffice(officeCodeInputText.val(), officeNameInputText.val(), nickNameInputText.val(), registrationDateInputText.val(), currencyCodeInputText.val(), currencySymbolInputText.val(), currencyNameInputText.val(), hundredthNameInputText.val(), fiscalYearCodeInputText.val(), fiscalYearNameInputText.val(), startsFromInputText.val(), endsOnInputText.val(), adminNameInputText.val(), usernameInputText.val(), passwordInputPassword.val(), confirmPasswordInputPassword.val());
+        var ajaxSaveOffice = saveOffice(officeCodeInputText.val(), officeNameInputText.val(), nickNameInputText.val(), registrationDateInputText.val(), currencyCodeInputText.val(), currencySymbolInputText.val(), currencyNameInputText.val(), hundredthNameInputText.val(), fiscalYearCodeInputText.val(), fiscalYearNameInputText.val(), startsFromInputText.val(), endsOnInputText.val(), parseFloat(incomeTaxRateInputText.val() || 0), weekStartDaySelect.val(), transactionStartDateInputText.val(), adminNameInputText.val(), usernameInputText.val(), passwordInputPassword.val(), confirmPasswordInputPassword.val());
 
         ajaxSaveOffice.success(function(msg) {
             if (msg.d) {
@@ -87,7 +99,7 @@ saveButton.click(function() {
     };
 });
 
-function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, adminName, username, password, confirmPassword) {
+function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, incomeTaxRate, weekStartDay, transactionStartDate, adminName, username, password, confirmPassword) {
     var url = "/Services/Install.asmx/SaveOffice";
 
     var data = appendParameter("", "officeCode", officeCode);
@@ -102,6 +114,9 @@ function saveOffice(officeCode, officeName, nickName, registrationDate, currency
     data = appendParameter(data, "fiscalYearName", fiscalYearName);
     data = appendParameter(data, "startsFrom", startsFrom);
     data = appendParameter(data, "endsOn", endsOn);
+    data = appendParameter(data, "incomeTaxRate", incomeTaxRate);
+    data = appendParameter(data, "weekStartDay", weekStartDay);
+    data = appendParameter(data, "transactionStartDate", transactionStartDate);
     data = appendParameter(data, "adminName", adminName);
     data = appendParameter(data, "username", username);
     data = appendParameter(data, "password", password);

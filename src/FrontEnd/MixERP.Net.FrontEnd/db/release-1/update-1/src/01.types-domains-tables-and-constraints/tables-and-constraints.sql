@@ -76,7 +76,7 @@ BEGIN
             office.get_office_id_by_store_id(store_id) IS NULL OR
             office.get_office_id_by_store_id(store_id) = office_id
         );
-    END IF;    
+    END IF;
 END
 $$
 LANGUAGE plpgsql;
@@ -522,6 +522,74 @@ BEGIN
             unit_id                                     integer NOT NULL REFERENCES core.units(unit_id),
             base_quantity                               numeric NOT NULL,
             base_unit_id                                integer NOT NULL REFERENCES core.units(unit_id)
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('transaction_start_date')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN transaction_start_date DATE NOT NULL DEFAULT(NOW());
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('week_start_day')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN week_start_day int NOT NULL
+        CHECK (week_start_day > 0 AND week_start_day < 8)
+        DEFAULT(2);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'office'
+        AND    c.relname = 'holidays'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE office.holidays
+        (
+            holiday_id                          integer NOT NULL PRIMARY KEY,
+            office_id                           integer NOT NULL REFERENCES office.offices(office_id),
+            falls_on                            date,
+            holiday_name                        national character varying(100) NOT NULL,
+            description                         text,
+            recurs_next_year                    boolean NOT NULL DEFAULT(true),
+            audit_user_id                       integer NULL REFERENCES office.users(user_id),
+            audit_ts                            TIMESTAMP WITH TIME ZONE NULL        
         );
     END IF;    
 END

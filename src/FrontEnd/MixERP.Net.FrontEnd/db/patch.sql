@@ -97,7 +97,7 @@ BEGIN
             office.get_office_id_by_store_id(store_id) IS NULL OR
             office.get_office_id_by_store_id(store_id) = office_id
         );
-    END IF;    
+    END IF;
 END
 $$
 LANGUAGE plpgsql;
@@ -549,6 +549,74 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('transaction_start_date')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN transaction_start_date DATE NOT NULL DEFAULT(NOW());
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('week_start_day')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN week_start_day int NOT NULL
+        CHECK (week_start_day > 0 AND week_start_day < 8)
+        DEFAULT(2);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'office'
+        AND    c.relname = 'holidays'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE office.holidays
+        (
+            holiday_id                          integer NOT NULL PRIMARY KEY,
+            office_id                           integer NOT NULL REFERENCES office.offices(office_id),
+            falls_on                            date,
+            holiday_name                        national character varying(100) NOT NULL,
+            description                         text,
+            recurs_next_year                    boolean NOT NULL DEFAULT(true),
+            audit_user_id                       integer NULL REFERENCES office.users(user_id),
+            audit_ts                            TIMESTAMP WITH TIME ZONE NULL        
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
@@ -816,6 +884,28 @@ DROP FUNCTION IF EXISTS office.add_office
     _password               national character varying(48)
 );
 
+DROP FUNCTION IF EXISTS office.add_office
+(
+    _office_code            national character varying(12),
+    _office_name            national character varying(150),
+    _nick_name              national character varying(50),
+    _registration_date      date,
+    _currency_code          national character varying(12),
+    _currency_symbol        national character varying(12),
+    _currency_name          national character varying(48),
+    _hundredth_name         national character varying(48),
+    _fiscal_year_code       national character varying(12),
+    _fiscal_year_name       national character varying(50),
+    _starts_from            date,
+    _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
+    _admin_name             national character varying(100),
+    _user_name              national character varying(50),
+    _password               national character varying(48)
+);
+
 CREATE FUNCTION office.add_office
 (
     _office_code            national character varying(12),
@@ -830,6 +920,9 @@ CREATE FUNCTION office.add_office
     _fiscal_year_name       national character varying(50),
     _starts_from            date,
     _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
     _admin_name             national character varying(100),
     _user_name              national character varying(50),
     _password               national character varying(48)
@@ -856,8 +949,8 @@ BEGIN
     END IF;
 
 
-    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code)
-    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code
+    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day)
+    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day
     RETURNING office_id INTO _office_id;
 
     IF NOT EXISTS(SELECT 0 FROM office.users WHERE user_name='sys') THEN
@@ -1247,6 +1340,125 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_inventory_transfer_request_view(2, 5, 1,'2010-1-1','2020-1-1','','','','','','','','');
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_pl_appropriation_data.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_pl_appropriation_data(_office_id int);
+
+CREATE FUNCTION transactions.get_pl_appropriation_data(_office_id int)
+RETURNS TABLE
+(
+    account_id          bigint,
+    account_number      text,
+    account_name        text,
+    debit               decimal(24, 4),
+    credit              decimal(24, 4)
+)
+AS
+$$
+    DECLARE _start_date  date = core.get_fiscal_year_start_date(_office_id);
+    DECLARE _end_date    date = core.get_fiscal_year_end_date(_office_id);
+    DECLARE _value_date  date = transactions.get_value_date(_office_id);
+BEGIN
+    IF(_value_date <> _end_date) THEN
+        RAISE EXCEPTION 'Access is denied.'
+        USING ERRCODE='P9001';
+    END IF;    
+
+    IF EXISTS
+    (
+        SELECT * FROM transactions.transaction_master
+        WHERE verification_status_id = 0
+        AND value_date <= _end_date
+        LIMIT 1
+    ) THEN
+        RAISE EXCEPTION 'There are still transactions in verification queue.'
+        USING ERRCODE='P5105';
+    END IF;
+
+    IF EXISTS
+    (
+        SELECT * FROM office.offices
+        WHERE parent_office_id = _office_id
+    ) THEN
+        RAISE EXCEPTION 'You cannot perform PL appropriation on an office group.'
+        USING ERRCODE='P5106';
+    END IF;
+
+    DROP TABLE IF EXISTS temp_pl_appropriation;
+    CREATE TEMPORARY TABLE temp_pl_appropriation
+    (
+        account_id          bigint,
+        account_number      text,
+        account_name        text,
+        has_children        boolean,
+        balance             decimal(24, 4),
+        debit               decimal(24, 4),
+        credit              decimal(24, 4)
+    ) ON COMMIT DROP;
+
+    INSERT INTO temp_pl_appropriation(account_id, account_number, account_name)
+    SELECT 
+        core.accounts.account_id, 
+        core.accounts.account_number, 
+        core.accounts.account_name
+    FROM core.accounts
+    WHERE account_master_id >= 20100
+    ORDER BY account_id;
+
+    UPDATE temp_pl_appropriation
+    SET has_children = true
+    WHERE temp_pl_appropriation.account_id IN
+    (
+        SELECT distinct parent_account_id FROM core.accounts
+        WHERE parent_account_id IS NOT NULL
+    );
+
+    UPDATE temp_pl_appropriation
+    SET balance = summary.balance
+    FROM
+    (
+        SELECT
+            transactions.verified_transaction_view.account_id,
+            SUM
+            (
+                CASE tran_type 
+                WHEN 'Cr' 
+                THEN amount_in_local_currency 
+                ELSE amount_in_local_currency * -1 
+                END
+            ) AS balance
+        FROM transactions.verified_transaction_view
+        WHERE account_master_id >= 20100
+        AND office_id = _office_id
+        AND transactions.verified_transaction_view.value_date BETWEEN _start_date AND _end_date
+        GROUP BY transactions.verified_transaction_view.account_id
+    ) AS summary
+    WHERE temp_pl_appropriation.account_id = summary.account_id;
+
+    UPDATE temp_pl_appropriation
+    SET debit = balance
+    WHERE balance >=0;
+
+    UPDATE temp_pl_appropriation
+    SET credit = balance * -1
+    WHERE balance < 0;
+
+    DELETE FROM temp_pl_appropriation
+    WHERE COALESCE(balance, 0) = 0;
+    
+    RETURN QUERY
+    SELECT
+        temp_pl_appropriation.account_id,
+        temp_pl_appropriation.account_number,
+        temp_pl_appropriation.account_name,
+        temp_pl_appropriation.debit,
+        temp_pl_appropriation.credit
+    FROM temp_pl_appropriation;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM transactions.get_pl_appropriation_data(2);
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_trial_balance.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_trial_balance
 (
@@ -1478,6 +1690,47 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_trial_balance('12-1-2014','12-31-2014',1,1, false, 1000, false, false);
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_value_date.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_value_date(_office_id integer);
+
+CREATE FUNCTION transactions.get_value_date(_office_id integer)
+RETURNS date
+AS
+$$
+    DECLARE this            RECORD;
+    DECLARE _value_date     date;
+BEGIN
+    SELECT * FROM transactions.day_operation
+    WHERE office_id = _office_id
+    AND value_date =
+    (
+        SELECT MAX(value_date)
+        FROM transactions.day_operation
+        WHERE office_id = _office_id
+    ) INTO this;
+
+    IF(this.day_id IS NOT NULL) THEN
+        IF(this.completed) THEN
+            _value_date  := this.value_date + interval '1' day;
+        ELSE
+            _value_date  := this.value_date;    
+        END IF;
+    END IF;
+
+    IF(_value_date IS NULL) THEN
+        SELECT transaction_start_date INTO _value_date
+        FROM office.offices
+        WHERE office_id = $1;
+    END IF;
+    
+    RETURN _value_date;
+END
+$$
+LANGUAGE plpgsql;
+
+
+--select transactions.get_value_date(2);
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_delivery.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_delivery
@@ -2373,6 +2626,8 @@ SELECT localization.add_localized_resource('DbErrors', '', 'P5101', 'Cannot post
 SELECT localization.add_localized_resource('DbErrors', '', 'P5102', 'End of day operation was already performed.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5103', 'Past dated transactions in verification queue.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5104', 'Please verify transactions before performing end of day operation.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5105', 'There are still transactions in verification queue.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5106', 'You cannot perform PL appropriation on an office group.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5110', 'You cannot provide sales tax information for non-taxable sales.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5111', 'Invalid bank transaction information provided.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5112', 'Invalid payment card information.');
@@ -19839,6 +20094,105 @@ SELECT core.create_menu_locale('SAA', 'zh', 'API访问策略');--API Access Poli
 SELECT core.create_menu_locale('PAC', 'zh', '支付卡');--Payment Cards
 SELECT core.create_menu_locale('MFS', 'zh', '商家安装费');--Merchant Fee Setup
 SELECT core.create_menu_locale('RW', 'zh', '报表生成器');--Report Writer
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.attachment_factory.sql --<--<--
+DROP VIEW IF EXISTS config.attachment_factory_scrud_view;
+
+CREATE VIEW config.attachment_factory_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.attachment_factory;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.currency_layer_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.currency_layer_scrud_view;
+
+CREATE VIEW config.currency_layer_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.currency_layer;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.db_parameter.sql --<--<--
+DROP VIEW IF EXISTS config.db_parameter_scrud_view;
+
+CREATE VIEW config.db_parameter_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.db_paramters;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.messaging_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.messaging_scrud_view;
+
+CREATE VIEW config.messaging_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.messaging;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.mixerp_scrud_view;
+
+CREATE VIEW config.mixerp_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.mixerp;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.open_exchange_rate_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.open_exchange_rate_scrud_view;
+
+CREATE VIEW config.open_exchange_rate_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.open_exchange_rates;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.scrud_factory_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.scrud_factory_scrud_view;
+
+CREATE VIEW config.scrud_factory_scrud_view
+AS
+SELECT 
+	key,
+	value	
+FROM
+config.scrud_factory;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.switch_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.switch_scrud_view;
+
+CREATE VIEW config.switch_scrud_view
+AS
+SELECT 
+	key,
+	value	
+FROM
+config.switches;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/1.core.bank_account_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.bank_account_scrud_view CASCADE;

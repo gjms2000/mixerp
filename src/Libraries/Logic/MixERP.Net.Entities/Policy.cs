@@ -2,6 +2,9 @@
 using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace MixERP.Net.Entities.Policy
 {
@@ -116,45 +119,6 @@ namespace MixERP.Net.Entities.Policy
 
         [Column("scope")] 
         public string Scope { get; set; }
-
-    }
-
-    [TableName("policy.auto_verification_policy_scrud_view")]
-    [ExplicitColumns]
-    public class AutoVerificationPolicyScrudView : PetaPocoDB.Record<AutoVerificationPolicyScrudView> , IPoco
-    {
-        [Column("user_id")] 
-        public int? UserId { get; set; }
-
-        [Column("user_name")] 
-        public string UserName { get; set; }
-
-        [Column("verify_sales_transactions")] 
-        public bool? VerifySalesTransactions { get; set; }
-
-        [Column("sales_verification_limit")] 
-        public decimal? SalesVerificationLimit { get; set; }
-
-        [Column("verify_purchase_transactions")] 
-        public bool? VerifyPurchaseTransactions { get; set; }
-
-        [Column("purchase_verification_limit")] 
-        public decimal? PurchaseVerificationLimit { get; set; }
-
-        [Column("verify_gl_transactions")] 
-        public bool? VerifyGlTransactions { get; set; }
-
-        [Column("gl_verification_limit")] 
-        public decimal? GlVerificationLimit { get; set; }
-
-        [Column("effective_from")] 
-        public DateTime? EffectiveFrom { get; set; }
-
-        [Column("ends_on")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("is_active")] 
-        public bool? IsActive { get; set; }
 
     }
 
@@ -297,6 +261,45 @@ namespace MixERP.Net.Entities.Policy
 
         [Column("office_id")] 
         public int OfficeId { get; set; }
+
+    }
+
+    [TableName("policy.auto_verification_policy_scrud_view")]
+    [ExplicitColumns]
+    public class AutoVerificationPolicyScrudView : PetaPocoDB.Record<AutoVerificationPolicyScrudView> , IPoco
+    {
+        [Column("user_id")] 
+        public int? UserId { get; set; }
+
+        [Column("user_name")] 
+        public string UserName { get; set; }
+
+        [Column("verify_sales_transactions")] 
+        public bool? VerifySalesTransactions { get; set; }
+
+        [Column("sales_verification_limit")] 
+        public decimal? SalesVerificationLimit { get; set; }
+
+        [Column("verify_purchase_transactions")] 
+        public bool? VerifyPurchaseTransactions { get; set; }
+
+        [Column("purchase_verification_limit")] 
+        public decimal? PurchaseVerificationLimit { get; set; }
+
+        [Column("verify_gl_transactions")] 
+        public bool? VerifyGlTransactions { get; set; }
+
+        [Column("gl_verification_limit")] 
+        public decimal? GlVerificationLimit { get; set; }
+
+        [Column("effective_from")] 
+        public DateTime? EffectiveFrom { get; set; }
+
+        [Column("ends_on")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("is_active")] 
+        public bool? IsActive { get; set; }
 
     }
 

@@ -37,8 +37,9 @@ namespace MixERP.Net.FrontEnd.Services
         [WebMethod]
         public bool SaveOffice(string officeCode, string officeName, string nickName, string registrationDate,
             string currencyCode, string currencySymbol, string currencyName, string hundredthName, string fiscalYearCode,
-            string fiscalYearName, string startsFrom, string endsOn, string adminName,
-            string username, string password, string confirmPassword)
+            string fiscalYearName, string startsFrom, string endsOn, 
+            decimal incomeTaxRate, int weekStartDay, string transactionStartDate,
+            string adminName, string username, string password, string confirmPassword)
         {
             if (string.IsNullOrWhiteSpace(officeName) || string.IsNullOrWhiteSpace(officeCode) ||
                 string.IsNullOrWhiteSpace(nickName) || string.IsNullOrWhiteSpace(registrationDate) ||
@@ -61,17 +62,25 @@ namespace MixERP.Net.FrontEnd.Services
             DateTime dateOfRegistration = Convert.ToDateTime(registrationDate);
             DateTime fiscalYearStartDate = Convert.ToDateTime(startsFrom);
             DateTime fiscalYearEndDate = Convert.ToDateTime(endsOn);
+            DateTime transactionStartsFrom = Convert.ToDateTime(transactionStartDate);
 
             if (fiscalYearStartDate > fiscalYearEndDate)
             {
                 throw new MixERPException(Warnings.StartDateGreaterThanEndDate);
             }
 
+            if (transactionStartsFrom > fiscalYearEndDate)
+            {
+                throw new MixERPException("Transaction start date cannot be greater than fiscal year end date.");
+            }
+
             try
             {
                 Data.Office.Offices.SaveOffice(AppUsers.GetCurrentUserDB(), officeCode, officeName, nickName,
                     dateOfRegistration, currencyCode,
-                    currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, fiscalYearStartDate, fiscalYearEndDate, adminName, username, password);
+                    currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, fiscalYearStartDate, fiscalYearEndDate, 
+                    incomeTaxRate, weekStartDay, transactionStartsFrom,
+                    adminName, username, password);
 
                 return true;
             }

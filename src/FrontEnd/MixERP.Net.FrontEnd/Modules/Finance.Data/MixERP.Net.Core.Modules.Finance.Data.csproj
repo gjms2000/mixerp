@@ -68,11 +68,13 @@
   <ItemGroup>
     <Compile Include="Core\ExchangeRates.cs" />
     <Compile Include="Core\Workflow.cs" />
+    <Compile Include="DayOperation\EOY.cs" />
     <Compile Include="EODOperation.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Helpers\CashRepositories.cs" />
     <Compile Include="Helpers\CostCenters.cs" />
     <Compile Include="Helpers\Currencies.cs" />
+    <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\Transaction.cs" />
     <Compile Include="Models\ExchangeRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +94,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
+      <Project>{61AB8B69-2097-4595-97B7-4A930A70163D}</Project>
+      <Name>MixERP.Net.ApplicationState</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
       <Name>MixERP.Net.Common</Name>

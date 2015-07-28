@@ -1,6 +1,10 @@
 ﻿
 using MixERP.Net.Entities.Contracts;
 using PetaPoco;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace MixERP.Net.Entities.Localization
 {
@@ -79,6 +83,21 @@ namespace MixERP.Net.Entities.Localization
 
         [Column("value")] 
         public string Value { get; set; }
+
+    }
+
+    [FunctionName("get_menu_table")]
+    [ExplicitColumns]
+    public class DbGetMenuTableResult : PetaPocoDB.Record<DbGetMenuTableResult> , IPoco
+    {
+        [Column("menu_code")] 
+        public string MenuCode { get; set; }
+
+        [Column("invariant")] 
+        public string Invariant { get; set; }
+
+        [Column("localized")] 
+        public string Localized { get; set; }
 
     }
 

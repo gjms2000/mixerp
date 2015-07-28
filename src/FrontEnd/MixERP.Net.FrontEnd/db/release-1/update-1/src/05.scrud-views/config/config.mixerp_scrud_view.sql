@@ -1,4 +1,6 @@
-﻿CREATE VIEW config.mixerp_scrud_view
+﻿DROP VIEW IF EXISTS config.mixerp_scrud_view;
+
+CREATE VIEW config.mixerp_scrud_view
 AS
 SELECT 
 	key,

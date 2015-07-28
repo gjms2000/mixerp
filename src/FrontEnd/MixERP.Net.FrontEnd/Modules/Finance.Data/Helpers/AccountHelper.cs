@@ -32,6 +32,13 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
             return Factory.Get<Account>(catalog, sql, accountNumber).Count().Equals(1);
         }
 
+
+        public static string GetAccountNameByAccountId(string catalog, long accountId)
+        {
+            const string sql = "SELECT account_name FROM core.accounts WHERE account_id=@0;";
+            return Factory.Scalar<string>(catalog, sql, accountId);
+        }
+
         public static string GetAccountNumberByAccountId(string catalog, long accountId)
         {
             const string sql = "SELECT account_number FROM core.accounts WHERE account_id=@0;";
@@ -47,6 +54,12 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
         public static IEnumerable<Account> GetAccounts(string catalog)
         {
             const string sql = "SELECT * FROM core.accounts ORDER BY account_id;";
+            return Factory.Get<Account>(catalog, sql);
+        }
+
+        public static IEnumerable<Account> GetPLAppropriationAccounts(string catalog)
+        {
+            const string sql = "SELECT * FROM core.accounts WHERE account_master_id = 15300 ORDER BY account_id;";
             return Factory.Get<Account>(catalog, sql);
         }
 

@@ -25,9 +25,12 @@ using MixERP.Net.Entities.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.ApplicationState;
 
 namespace MixERP.Net.Core.Modules.Finance
 {
@@ -40,6 +43,11 @@ namespace MixERP.Net.Core.Modules.Finance
         {
             this.InitializeEODStatus();
 
+            if (this.IsYearEnd())
+            {
+                this.Page.Response.Redirect("DayOperation/EOY.mix");
+            }
+
             this.CreateHeader(this.Placeholder1);
             this.CreateDivider(this.Placeholder1);
             this.CreateButtons(this.Placeholder1);
@@ -48,6 +56,25 @@ namespace MixERP.Net.Core.Modules.Finance
             this.CreateProgress(this.Placeholder1);
             this.CreateEODConsole(this.Placeholder1);
             this.CreateList(this.Placeholder1);
+        }
+
+        private bool IsYearEnd()
+        {
+            Collection<FrequencyDates> applicationDates = Dates.GetFrequencyDates(AppUsers.GetCurrentUserDB());
+
+            if (applicationDates == null || applicationDates.Count.Equals(0))
+            {
+                applicationDates = Data.Helpers.DateHelper.GetFrequencyDates(AppUsers.GetCurrentUserDB());
+            }
+
+            FrequencyDates model = applicationDates.FirstOrDefault(c => c.OfficeId.Equals(officeId));
+
+            if (model != null)
+            {
+                return model.FiscalYearEndDate == model.Today;
+            }
+
+            return false;
         }
 
         private void InitializeEODStatus()

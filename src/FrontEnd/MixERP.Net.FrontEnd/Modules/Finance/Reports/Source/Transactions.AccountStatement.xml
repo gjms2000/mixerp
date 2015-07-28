@@ -100,8 +100,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         <Parameter Name="@AccountNumber" Type="Text" />
         <Parameter Name="@OfficeId" Type="Number" />
       </Parameters>
-      <RunningTotalTextColumnIndex>1</RunningTotalTextColumnIndex>
-      <RunningTotalFieldIndices>2, 3</RunningTotalFieldIndices>
+      <RunningTotalTextColumnIndex>2</RunningTotalTextColumnIndex>
+      <RunningTotalFieldIndices>3, 4</RunningTotalFieldIndices>
     </DataSource>
   </DataSources>
 </MixERPReport>

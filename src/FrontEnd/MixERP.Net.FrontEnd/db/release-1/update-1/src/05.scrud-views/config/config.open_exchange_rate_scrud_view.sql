@@ -1,4 +1,6 @@
-﻿CREATE VIEW config.open_exchange_rate_scrud_view
+﻿DROP VIEW IF EXISTS config.open_exchange_rate_scrud_view;
+
+CREATE VIEW config.open_exchange_rate_scrud_view
 AS
 SELECT 
 	key,

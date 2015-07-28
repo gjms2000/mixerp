@@ -100,6 +100,7 @@
     <Content Include="..\..\..\..\mixerp.licenseheader">
       <Link>mixerp.licenseheader</Link>
     </Content>
+    <Content Include="DayOperation\EOY.ascx" />
     <Content Include="EODOperation.ascx" />
     <Content Include="Mix Open Foundation.snk" />
     <Content Include="Reports\AccountStatementPopup.ascx" />
@@ -112,6 +113,7 @@
     <Content Include="Reports\Source\Transactions.TrialBalance.xml" />
     <Content Include="Reports\TrialBalanceReport.ascx" />
     <Content Include="Scripts\UpdateExchangeRates.js" />
+    <Content Include="Services\DayOperation\EOY.asmx" />
     <Content Include="Services\Transactions.asmx" />
     <Content Include="Setup\MerchantFeeSetup.ascx" />
     <Content Include="Setup\PaymentCards.ascx" />
@@ -180,6 +182,13 @@
     </Compile>
     <Compile Include="Confirmation\JournalVoucher.ascx.designer.cs">
       <DependentUpon>JournalVoucher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DayOperation\EOY.ascx.cs">
+      <DependentUpon>EOY.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DayOperation\EOY.ascx.designer.cs">
+      <DependentUpon>EOY.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\JournalVoucher.ascx.cs">
       <DependentUpon>JournalVoucher.ascx</DependentUpon>
@@ -301,6 +310,10 @@
     </Compile>
     <Compile Include="Services\CurrencyData.asmx.cs">
       <DependentUpon>CurrencyData.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\DayOperation\EOY.asmx.cs">
+      <DependentUpon>EOY.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\EODOperation.asmx.cs">

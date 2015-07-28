@@ -539,6 +539,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for There are still transactions in verification queue.
+		/// </summary>
+		public static string P5105 
+		{
+			get
+			{
+				return Get("P5105");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for You cannot perform PL appropriation on an office group.
+		/// </summary>
+		public static string P5106 
+		{
+			get
+			{
+				return Get("P5106");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for You cannot provide sales tax information for non taxable sales.
 		/// </summary>
 		public static string P5110 

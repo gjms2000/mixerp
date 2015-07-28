@@ -1,4 +1,6 @@
-﻿CREATE VIEW config.currency_layer_scrud_view
+﻿DROP VIEW IF EXISTS config.currency_layer_scrud_view;
+
+CREATE VIEW config.currency_layer_scrud_view
 AS
 SELECT 
 	key,

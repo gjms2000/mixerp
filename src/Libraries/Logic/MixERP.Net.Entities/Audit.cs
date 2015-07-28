@@ -2,6 +2,9 @@
 using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace MixERP.Net.Entities.Audit
 {

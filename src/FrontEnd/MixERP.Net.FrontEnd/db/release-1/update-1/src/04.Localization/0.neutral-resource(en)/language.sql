@@ -45,6 +45,8 @@ SELECT localization.add_localized_resource('DbErrors', '', 'P5101', 'Cannot post
 SELECT localization.add_localized_resource('DbErrors', '', 'P5102', 'End of day operation was already performed.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5103', 'Past dated transactions in verification queue.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5104', 'Please verify transactions before performing end of day operation.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5105', 'There are still transactions in verification queue.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5106', 'You cannot perform PL appropriation on an office group.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5110', 'You cannot provide sales tax information for non-taxable sales.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5111', 'Invalid bank transaction information provided.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5112', 'Invalid payment card information.');

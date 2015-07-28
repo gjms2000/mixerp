@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DatabaseBackup.ascx.cs" Inherits="MixERP.Net.Core.Modules.BackOffice.Admin.DatabaseBackup" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DatabaseBackup.ascx.cs" 
+    Inherits="MixERP.Net.Core.Modules.BackOffice.Admin.DatabaseBackup" %>
 <asp:PlaceHolder runat="server" ID="Placeholder1" />
 
 <script src="/Modules/BackOffice/Scripts/Admin/DatabaseBackup.ascx.js"></script>
