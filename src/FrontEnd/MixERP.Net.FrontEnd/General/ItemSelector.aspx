@@ -1,12 +1,12 @@
 ﻿<%--
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,14 +25,15 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <head runat="server">
     <title>Scrud Item Selector</title>
 
-    <script src="//code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-    <%--<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />--%>
+    <script src="/Scripts/jquery-1.9.1.js"></script>
     <link href='/Scripts/semantic-ui/semantic.min.css' rel='stylesheet' type='text/css' />
 
     <style type="text/css">
         html, body, form {
             height: 100%;
             background-color: white !important;
+            font-family: "Titillium Web", "Open Sans","Segoe UI", Helvetica,Arial,sans-serif !important;
+            font-size:12px;
         }
 
         form {

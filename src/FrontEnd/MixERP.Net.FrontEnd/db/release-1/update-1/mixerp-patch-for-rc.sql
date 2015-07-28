@@ -649,6 +649,33 @@ ALTER TABLE core.accounts
 ADD CONSTRAINT accounts_parent_account_id_chk
 CHECK(parent_account_id IS NULL OR NOT core.is_parent_account(account_id, parent_account_id));
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/localization/localization.get_menu_table.sql --<--<--
+DROP FUNCTION IF EXISTS localization.get_menu_table(_culture_code text);
+
+CREATE FUNCTION localization.get_menu_table(_culture_code text)
+RETURNS TABLE
+(
+    menu_code           text,
+    invariant           text,
+    localized           text
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        core.menus.menu_code::text,
+        core.menus.menu_text::text,
+        core.menu_locale.menu_text::text AS translated
+    FROM core.menus
+    LEFT JOIN core.menu_locale
+    ON core.menus.menu_id = core.menu_locale.menu_id
+    AND core.menu_locale.culture = _culture_code
+    ORDER BY 3 DESC, 2, 1;
+END
+$$
+LANGUAGE plpgsql;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_account_id_by_account_name(text);
 
@@ -20059,6 +20086,9 @@ CREATE TRIGGER party_after_insert_trigger
 AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.refresh-materialized-views.sql --<--<--
+SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/ownership.sql --<--<--
 DO
