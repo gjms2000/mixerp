@@ -37,7 +37,7 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
                 scrud.TableSchema = "core";
                 scrud.Table = "merchant_fee_setup";
                 scrud.ViewSchema = "core";
-                scrud.View = "merchant_fee_setup";
+                scrud.View = "merchant_fee_setup_scrud_view";
                 scrud.Text = Titles.MerchantFeeSetup;
 
                 scrud.DisplayFields = GetDisplayFields();
@@ -61,7 +61,7 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
         {
             List<string> displayViews = new List<string>();
             ScrudHelper.AddDisplayView(displayViews, "core.bank_accounts.account_id", "core.merchant_account_selector_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.payment_cards.payment_card_id", "core.payment_cards");
+            ScrudHelper.AddDisplayView(displayViews, "core.payment_cards.payment_card_id", "core.payment_card_scrud_view");
             ScrudHelper.AddDisplayView(displayViews, "core.accounts.account_id", "core.merchant_fee_setup_account_selector_view");
             return string.Join(",", displayViews);
         }
