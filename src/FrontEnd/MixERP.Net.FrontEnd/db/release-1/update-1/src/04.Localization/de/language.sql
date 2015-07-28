@@ -1,4 +1,4 @@
-﻿-This translation is originally a courtesy of Johann Schwarz
+﻿--This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
 SELECT * FROM localization.add_localized_resource('CommonResource', 'de', 'DateMustBeGreaterThan', 'Ungültiges Datum. Muss größer sein als "{0}".');
 SELECT * FROM localization.add_localized_resource('CommonResource', 'de', 'DateMustBeLessThan', 'Ungültiges Datum. Muss kleiner sein als "{0}".');
