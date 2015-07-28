@@ -1,12 +1,12 @@
 ﻿<%--
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,7 +19,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Receipt.ascx.cs" Inherits="MixERP.Net.Core.Modules.Sales.Entry.Receipt"
     OverridePath="/Modules/Sales/Receipt.mix" %>
 <%@ Register TagPrefix="mixerp" Namespace="MixERP.Net.WebControls.Common" Assembly="MixERP.Net.WebControls.Common, Version=1.2.0.1, Culture=neutral, PublicKeyToken=a724a47a0879d02f" %>
-
 
 <h2>
     <asp:Literal runat="server" ID="TitleLiteral" />
@@ -61,7 +60,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                 <label for="DebitExchangeRateInputText">
                     <asp:Literal runat="server" ID="DebitExchangeRateLiteral" />
                 </label>
-                <input type="text" id="DebitExchangeRateInputText" class="decimal text-right" />
+                <input type="text" id="DebitExchangeRateInputText" class="decimal4 text-right" />
             </div>
             <div class="field">
                 <label for="AmountInHomeCurrencyInputText">
@@ -74,7 +73,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                 <label for="CreditExchangeRateInputText">
                     <asp:Literal runat="server" ID="CreditExchangeRateLiteral" />
                 </label>
-                <input type="text" id="CreditExchangeRateInputText" class="decimal text-right" />
+                <input type="text" id="CreditExchangeRateInputText" class="decimal4 text-right" />
             </div>
             <div class="field">
                 <label for="BaseAmountInputText">
@@ -139,7 +138,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                     <div class="field">
                         <label for="MerchantFeeInputText">
                             <asp:Literal ID="MerchantFeeLiteral" runat="server" />
-
                         </label>
                         <input type="text" id="MerchantFeeInputText" readonly="readonly" />
                     </div>
@@ -190,7 +188,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
             <div class="field">
                 <label for="StatementReferenceTextArea">
                     <asp:Literal runat="server" ID="StatementReferenceLiteral" />
-
                 </label>
                 <textarea id="StatementReferenceTextArea" rows="3"></textarea>
             </div>

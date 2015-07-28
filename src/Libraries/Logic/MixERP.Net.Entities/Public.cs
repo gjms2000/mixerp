@@ -2,6 +2,9 @@
 using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace MixERP.Net.Entities.Public
 {
@@ -36,6 +39,33 @@ namespace MixERP.Net.Entities.Public
 
         [Column("autoanalyze_count")] 
         public long? AutoanalyzeCount { get; set; }
+
+    }
+
+    [FunctionName("each")]
+    [ExplicitColumns]
+    public class DbEachResult : PetaPocoDB.Record<DbEachResult> , IPoco
+    {
+        [Column("key")] 
+        public string Key { get; set; }
+
+        [Column("value")] 
+        public string Value { get; set; }
+
+    }
+
+    [FunctionName("crosstab2")]
+    [ExplicitColumns]
+    public class DbCrosstab2Result : PetaPocoDB.Record<DbCrosstab2Result> , IPoco
+    {
+        [Column("row_name")] 
+        public string RowName { get; set; }
+
+        [Column("category_1")] 
+        public string Category1 { get; set; }
+
+        [Column("category_2")] 
+        public string Category2 { get; set; }
 
     }
 
@@ -75,33 +105,6 @@ namespace MixERP.Net.Entities.Public
 
         [Column("category_3")] 
         public string Category3 { get; set; }
-
-    }
-
-    [FunctionName("each")]
-    [ExplicitColumns]
-    public class DbEachResult : PetaPocoDB.Record<DbEachResult> , IPoco
-    {
-        [Column("key")] 
-        public string Key { get; set; }
-
-        [Column("value")] 
-        public string Value { get; set; }
-
-    }
-
-    [FunctionName("crosstab2")]
-    [ExplicitColumns]
-    public class DbCrosstab2Result : PetaPocoDB.Record<DbCrosstab2Result> , IPoco
-    {
-        [Column("row_name")] 
-        public string RowName { get; set; }
-
-        [Column("category_1")] 
-        public string Category1 { get; set; }
-
-        [Column("category_2")] 
-        public string Category2 { get; set; }
 
     }
 

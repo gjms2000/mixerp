@@ -1,12 +1,12 @@
 ﻿<%-- 
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,6 +34,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     <style type="text/css">
         body {
             background-color: #FFF;
+            font-family: "Titillium Web", "Open Sans","Segoe UI", Helvetica,Arial,sans-serif !important;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -48,7 +50,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
 
-                <div class="ui small form segment" style="width: 700px;">
+                <div class="ui small form purple segment" style="width: 700px;">
                     <div class="ui header">
                         <div class="content">
                             <%= Titles.AboutYourOffice %>
@@ -81,6 +83,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                             <input type="text" maxlength="50" id="RegistrationDateInputText" placeholder="yyyy-mm-dd" />
                         </div>
                     </div>
+
+
                     <div class="ui header">
                         <div class="content">
                             <%= Questions.WhatIsYourHomeCurrency %>
@@ -114,8 +118,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </div>
 
-                    
-                    
+
+
                     <div class="ui header">
                         <div class="content">
                             <%= Titles.FiscalYear %>
@@ -148,7 +152,44 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                             <input type="text" maxlength="48" id="EndsOnInputText" placeholder="yyyy-mm-dd" />
                         </div>
                     </div>
-                    
+                    <div class="fields">
+                        <div class="field">
+                            <label for="IncomeTaxRateInputText">
+                                Income Tax Rate
+                            </label>
+
+                            <div class="ui small right labeled input">
+                                <input type="text" id="IncomeTaxRateInputText" placeholder="00.00" />
+                                <div class="ui label">
+                                    %
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="WeekStartDaySelect">
+                                Week Starts On
+                            </label>
+                            <select id="WeekStartDaySelect" class="ui dropdown">
+                                <option value="1">Sunday</option>
+                                <option value="2">Monday</option>
+                                <option value="3">Tuesday</option>
+                                <option value="4">Wednesday</option>
+                                <option value="5">Thursday</option>
+                                <option value="6">Friday</option>
+                                <option value="7">Saturday</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="TransactionStartDateInputText">
+                                Transaction Start Date
+                            </label>
+                            <input type="text" maxlength="50" id="TransactionStartDateInputText"
+                                class="ui activating element"
+                                data-content="Enter the exact date from when you want to record transactions in MixERP."
+                                placeholder="yyyy-mm-dd" />
+                        </div>
+                    </div>
+
 
                     <div class="ui header">
                         <div class="content">

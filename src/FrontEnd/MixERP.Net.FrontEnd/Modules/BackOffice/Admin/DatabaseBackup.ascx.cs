@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +30,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;

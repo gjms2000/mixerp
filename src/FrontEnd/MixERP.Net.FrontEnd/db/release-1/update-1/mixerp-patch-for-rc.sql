@@ -97,7 +97,7 @@ BEGIN
             office.get_office_id_by_store_id(store_id) IS NULL OR
             office.get_office_id_by_store_id(store_id) = office_id
         );
-    END IF;    
+    END IF;
 END
 $$
 LANGUAGE plpgsql;
@@ -549,6 +549,74 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('transaction_start_date')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN transaction_start_date DATE NOT NULL DEFAULT(NOW());
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('week_start_day')
+        AND    NOT attisdropped
+    ) THEN
+
+        ALTER TABLE office.offices
+        ADD COLUMN week_start_day int NOT NULL
+        CHECK (week_start_day > 0 AND week_start_day < 8)
+        DEFAULT(2);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'office'
+        AND    c.relname = 'holidays'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE office.holidays
+        (
+            holiday_id                          integer NOT NULL PRIMARY KEY,
+            office_id                           integer NOT NULL REFERENCES office.offices(office_id),
+            falls_on                            date,
+            holiday_name                        national character varying(100) NOT NULL,
+            description                         text,
+            recurs_next_year                    boolean NOT NULL DEFAULT(true),
+            audit_user_id                       integer NULL REFERENCES office.users(user_id),
+            audit_ts                            TIMESTAMP WITH TIME ZONE NULL        
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
@@ -648,6 +716,33 @@ LANGUAGE plpgsql;
 ALTER TABLE core.accounts
 ADD CONSTRAINT accounts_parent_account_id_chk
 CHECK(parent_account_id IS NULL OR NOT core.is_parent_account(account_id, parent_account_id));
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/localization/localization.get_menu_table.sql --<--<--
+DROP FUNCTION IF EXISTS localization.get_menu_table(_culture_code text);
+
+CREATE FUNCTION localization.get_menu_table(_culture_code text)
+RETURNS TABLE
+(
+    menu_code           text,
+    invariant           text,
+    localized           text
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        core.menus.menu_code::text,
+        core.menus.menu_text::text,
+        core.menu_locale.menu_text::text AS translated
+    FROM core.menus
+    LEFT JOIN core.menu_locale
+    ON core.menus.menu_id = core.menu_locale.menu_id
+    AND core.menu_locale.culture = _culture_code
+    ORDER BY 3 DESC, 2, 1;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_account_id_by_account_name(text);
@@ -789,6 +884,28 @@ DROP FUNCTION IF EXISTS office.add_office
     _password               national character varying(48)
 );
 
+DROP FUNCTION IF EXISTS office.add_office
+(
+    _office_code            national character varying(12),
+    _office_name            national character varying(150),
+    _nick_name              national character varying(50),
+    _registration_date      date,
+    _currency_code          national character varying(12),
+    _currency_symbol        national character varying(12),
+    _currency_name          national character varying(48),
+    _hundredth_name         national character varying(48),
+    _fiscal_year_code       national character varying(12),
+    _fiscal_year_name       national character varying(50),
+    _starts_from            date,
+    _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
+    _admin_name             national character varying(100),
+    _user_name              national character varying(50),
+    _password               national character varying(48)
+);
+
 CREATE FUNCTION office.add_office
 (
     _office_code            national character varying(12),
@@ -803,6 +920,9 @@ CREATE FUNCTION office.add_office
     _fiscal_year_name       national character varying(50),
     _starts_from            date,
     _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
     _admin_name             national character varying(100),
     _user_name              national character varying(50),
     _password               national character varying(48)
@@ -829,8 +949,8 @@ BEGIN
     END IF;
 
 
-    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code)
-    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code
+    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day)
+    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day
     RETURNING office_id INTO _office_id;
 
     IF NOT EXISTS(SELECT 0 FROM office.users WHERE user_name='sys') THEN
@@ -1220,6 +1340,125 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_inventory_transfer_request_view(2, 5, 1,'2010-1-1','2020-1-1','','','','','','','','');
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_pl_appropriation_data.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_pl_appropriation_data(_office_id int);
+
+CREATE FUNCTION transactions.get_pl_appropriation_data(_office_id int)
+RETURNS TABLE
+(
+    account_id          bigint,
+    account_number      text,
+    account_name        text,
+    debit               decimal(24, 4),
+    credit              decimal(24, 4)
+)
+AS
+$$
+    DECLARE _start_date  date = core.get_fiscal_year_start_date(_office_id);
+    DECLARE _end_date    date = core.get_fiscal_year_end_date(_office_id);
+    DECLARE _value_date  date = transactions.get_value_date(_office_id);
+BEGIN
+    IF(_value_date <> _end_date) THEN
+        RAISE EXCEPTION 'Access is denied.'
+        USING ERRCODE='P9001';
+    END IF;    
+
+    IF EXISTS
+    (
+        SELECT * FROM transactions.transaction_master
+        WHERE verification_status_id = 0
+        AND value_date <= _end_date
+        LIMIT 1
+    ) THEN
+        RAISE EXCEPTION 'There are still transactions in verification queue.'
+        USING ERRCODE='P5105';
+    END IF;
+
+    IF EXISTS
+    (
+        SELECT * FROM office.offices
+        WHERE parent_office_id = _office_id
+    ) THEN
+        RAISE EXCEPTION 'You cannot perform PL appropriation on an office group.'
+        USING ERRCODE='P5106';
+    END IF;
+
+    DROP TABLE IF EXISTS temp_pl_appropriation;
+    CREATE TEMPORARY TABLE temp_pl_appropriation
+    (
+        account_id          bigint,
+        account_number      text,
+        account_name        text,
+        has_children        boolean,
+        balance             decimal(24, 4),
+        debit               decimal(24, 4),
+        credit              decimal(24, 4)
+    ) ON COMMIT DROP;
+
+    INSERT INTO temp_pl_appropriation(account_id, account_number, account_name)
+    SELECT 
+        core.accounts.account_id, 
+        core.accounts.account_number, 
+        core.accounts.account_name
+    FROM core.accounts
+    WHERE account_master_id >= 20100
+    ORDER BY account_id;
+
+    UPDATE temp_pl_appropriation
+    SET has_children = true
+    WHERE temp_pl_appropriation.account_id IN
+    (
+        SELECT distinct parent_account_id FROM core.accounts
+        WHERE parent_account_id IS NOT NULL
+    );
+
+    UPDATE temp_pl_appropriation
+    SET balance = summary.balance
+    FROM
+    (
+        SELECT
+            transactions.verified_transaction_view.account_id,
+            SUM
+            (
+                CASE tran_type 
+                WHEN 'Cr' 
+                THEN amount_in_local_currency 
+                ELSE amount_in_local_currency * -1 
+                END
+            ) AS balance
+        FROM transactions.verified_transaction_view
+        WHERE account_master_id >= 20100
+        AND office_id = _office_id
+        AND transactions.verified_transaction_view.value_date BETWEEN _start_date AND _end_date
+        GROUP BY transactions.verified_transaction_view.account_id
+    ) AS summary
+    WHERE temp_pl_appropriation.account_id = summary.account_id;
+
+    UPDATE temp_pl_appropriation
+    SET debit = balance
+    WHERE balance >=0;
+
+    UPDATE temp_pl_appropriation
+    SET credit = balance * -1
+    WHERE balance < 0;
+
+    DELETE FROM temp_pl_appropriation
+    WHERE COALESCE(balance, 0) = 0;
+    
+    RETURN QUERY
+    SELECT
+        temp_pl_appropriation.account_id,
+        temp_pl_appropriation.account_number,
+        temp_pl_appropriation.account_name,
+        temp_pl_appropriation.debit,
+        temp_pl_appropriation.credit
+    FROM temp_pl_appropriation;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM transactions.get_pl_appropriation_data(2);
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_trial_balance.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_trial_balance
 (
@@ -1451,6 +1690,47 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_trial_balance('12-1-2014','12-31-2014',1,1, false, 1000, false, false);
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_value_date.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_value_date(_office_id integer);
+
+CREATE FUNCTION transactions.get_value_date(_office_id integer)
+RETURNS date
+AS
+$$
+    DECLARE this            RECORD;
+    DECLARE _value_date     date;
+BEGIN
+    SELECT * FROM transactions.day_operation
+    WHERE office_id = _office_id
+    AND value_date =
+    (
+        SELECT MAX(value_date)
+        FROM transactions.day_operation
+        WHERE office_id = _office_id
+    ) INTO this;
+
+    IF(this.day_id IS NOT NULL) THEN
+        IF(this.completed) THEN
+            _value_date  := this.value_date + interval '1' day;
+        ELSE
+            _value_date  := this.value_date;    
+        END IF;
+    END IF;
+
+    IF(_value_date IS NULL) THEN
+        SELECT transaction_start_date INTO _value_date
+        FROM office.offices
+        WHERE office_id = $1;
+    END IF;
+    
+    RETURN _value_date;
+END
+$$
+LANGUAGE plpgsql;
+
+
+--select transactions.get_value_date(2);
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_delivery.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_delivery
@@ -2346,6 +2626,8 @@ SELECT localization.add_localized_resource('DbErrors', '', 'P5101', 'Cannot post
 SELECT localization.add_localized_resource('DbErrors', '', 'P5102', 'End of day operation was already performed.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5103', 'Past dated transactions in verification queue.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5104', 'Please verify transactions before performing end of day operation.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5105', 'There are still transactions in verification queue.');
+SELECT localization.add_localized_resource('DbErrors', '', 'P5106', 'You cannot perform PL appropriation on an office group.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5110', 'You cannot provide sales tax information for non-taxable sales.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5111', 'Invalid bank transaction information provided.');
 SELECT localization.add_localized_resource('DbErrors', '', 'P5112', 'Invalid payment card information.');
@@ -2414,6 +2696,7 @@ SELECT localization.add_localized_resource('Errors', '', 'InvalidUserId', 'Inval
 SELECT localization.add_localized_resource('Errors', '', 'KeyValueMismatch', 'There is a mismatching count of key/value items in this ListControl.');
 SELECT localization.add_localized_resource('Errors', '', 'NoTransactionToPost', 'No transaction to post.');
 SELECT localization.add_localized_resource('Errors', '', 'ReferencingSidesNotEqual', 'The referencing sides are not equal.');
+SELECT localization.add_localized_resource('Labels', '', 'AddNewUsersDescription', 'Create users and define various policies such as menu access policy and verification policy.');
 SELECT localization.add_localized_resource('Labels', '', 'AllFieldsRequired', 'All fields are required.');
 SELECT localization.add_localized_resource('Labels', '', 'BackingUp', 'Backing up {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'BackingUpForMigration', 'Backing up file {0} for migration.');
@@ -2421,6 +2704,20 @@ SELECT localization.add_localized_resource('Labels', '', 'CannotWithdrawNotValid
 SELECT localization.add_localized_resource('Labels', '', 'CannotWithdrawTransaction', 'Cannot withdraw transaction.');
 SELECT localization.add_localized_resource('Labels', '', 'ClickHereToDownload', 'Click here to download.');
 SELECT localization.add_localized_resource('Labels', '', 'ConfirmedPasswordDoesNotMatch', 'The confirmed password does not match.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateCashRepositoriesDescription', 'Cash repository is a place where you store your cash and valuables. Example: Cash in Vault, Cash in Drawers.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateCountySalesTaxDescription', 'County sales tax is the direct consumption tax imposed by your county government when you make purchase or sales.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateFiscalYearDescription', 'Fiscal year is an accounting period of 12 months, used to prepare financial statements.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateFrequenciesDescription', 'The fiscal year is further divided into 12 frequencies, categorized as months, quarters, fiscal half, and fiscal year.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateItemGroupsDescription', 'An item group allows you to manage similar inventory items into meaningful groups and categories.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateItemOrServiceDescription', 'Inventory items may refer to the stockable products or nonstockable services that you buy and/or sell.');
+SELECT localization.add_localized_resource('Labels', '', 'CreatePartiesDescription', 'The term "party" collectively refers to customer, supplier, or agent you have business with.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateSalespersonsDescription', 'Salespersons are the sales guys who sell your products and bring business to your company.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateSalesTaxFormDescription', 'Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateShippingCompanyDescription', 'Shipping companies transfer the goods through land, sea, and/or air to your customers.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateStateSalesTaxDescription', 'State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateStoresDescription', 'Store is a place where you keep your goods. Example: Shop, Go-down, Warehouse.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateTaxAuthorityDescription', 'Tax authority is the government body or agency to whom you file your periodic tax reports to.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateTaxMasterDescription', 'Tax master is a category to group your taxes logically. Example: [Country] Taxation.');
 SELECT localization.add_localized_resource('Labels', '', 'DatabaseBackupSuccessful', 'The database backup was successful.');
 SELECT localization.add_localized_resource('Labels', '', 'DaysLowerCase', 'days');
 SELECT localization.add_localized_resource('Labels', '', 'DeletedApplicationFiles', 'Existing application files were deleted successfully.');
@@ -2437,10 +2734,40 @@ SELECT localization.add_localized_resource('Labels', '', 'EmailSentConfirmation'
 SELECT localization.add_localized_resource('Labels', '', 'ExtractingDownloadedFile', 'Extracting the downloaded file.');
 SELECT localization.add_localized_resource('Labels', '', 'ExtractionCompleted', 'Extraction completed.');
 SELECT localization.add_localized_resource('Labels', '', 'FlagLabel', 'You can mark this transaction with a flag, however you will not be able to see the flags created by other users.');
+SELECT localization.add_localized_resource('Labels', '', 'FrequencySetupIsComplete', 'Frequency setup is complete.');
 SELECT localization.add_localized_resource('Labels', '', 'GoToChecklistWindow', 'Go to checklist window.');
 SELECT localization.add_localized_resource('Labels', '', 'GoToTop', 'Go to top.');
 SELECT localization.add_localized_resource('Labels', '', 'InstanceIsUpToDate', 'Your instance of MixERP is up to date.');
 SELECT localization.add_localized_resource('Labels', '', 'JustAMomentPlease', 'Just a moment, please!');
+SELECT localization.add_localized_resource('Labels', '', 'MenuAccessPolicyDescription', 'Menu access policy enables you to define permission for a user to access menu item(s).');
+SELECT localization.add_localized_resource('Labels', '', 'NCountySalesTaxesDefined', '{0} county sales taxes defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NCashRepositoriesInThisOffice', 'There are {0} cash repositories in this office.');
+SELECT localization.add_localized_resource('Labels', '', 'NCashRepositoriesInThisOffice', 'There are {0} cash repositories in this office.');
+SELECT localization.add_localized_resource('Labels', '', 'NItemGroupsFound', '{0} item group(s) found.');
+SELECT localization.add_localized_resource('Labels', '', 'NItemsFound', '{0} item(s) found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoAdditionalUserFound', 'No additional user found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoCashRepositoryDefnied', 'No cash repository defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoCountySalesTaxDefined', 'No county sales tax defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoFiscalYearDefined', 'No fiscal year defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoPartyFound', 'No party found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoSalespersonFound', 'No salesperson found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoSalesTaxFormDefined', 'No sales tax form defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoShipperFound', 'No shipper found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoStateSalesTaxDefined', 'No state sales tax defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoStorePresent', 'No store present.');
+SELECT localization.add_localized_resource('Labels', '', 'NoSupplierFound', 'No supplier found.');
+SELECT localization.add_localized_resource('Labels', '', 'NoTaxAuthorityDefined', 'No tax authority defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoTaxMasterDefined', 'No tax master defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NotDefinedForNUsers', 'Not defined for {0} users.');
+SELECT localization.add_localized_resource('Labels', '', 'NOutOfNFrequenciesDefined', '{0} out of 12 frequencies defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NPartiesFound', '{0} parties found.');
+SELECT localization.add_localized_resource('Labels', '', 'NSalespersonsFound', '{0} salespersons found.');
+SELECT localization.add_localized_resource('Labels', '', 'NSalesTaxFormsDefined', '{0} sales tax forms defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NShippersFound', '{0} shippers found.');
+SELECT localization.add_localized_resource('Labels', '', 'NStateSalesTaxesDefined', '{0} state sales taxes defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NStoresInThisOffice', 'There are {0} stores in this office.');
+SELECT localization.add_localized_resource('Labels', '', 'NTaxAuthoritiesFound', '{0} tax authorities found.');
+SELECT localization.add_localized_resource('Labels', '', 'NTaxMasterFound', '{0} tax master(s) found.');
 SELECT localization.add_localized_resource('Labels', '', 'NumRowsAffected', '{0} rows affected.');
 SELECT localization.add_localized_resource('Labels', '', 'OpeningInventoryAlreadyEntered', 'Opening inventory has already been entered for this office.');
 SELECT localization.add_localized_resource('Labels', '', 'PartyDescription', 'Parties collectively refer to suppliers, customers, agents, and dealers.');
@@ -2451,9 +2778,11 @@ SELECT localization.add_localized_resource('Labels', '', 'ReleaseContainsNoUpdat
 SELECT localization.add_localized_resource('Labels', '', 'RestoringDirectory', 'Restoring directory : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringFile', 'Restoring file : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
+SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedProgress', '{0} out of {1} tasks completed.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedSuccessfully', 'Task completed successfully.');
 SELECT localization.add_localized_resource('Labels', '', 'ThankYouForYourBusiness', 'Thank you for your business.');
 SELECT localization.add_localized_resource('Labels', '', 'ThisFieldIsRequired', 'This field is required.');
+SELECT localization.add_localized_resource('Labels', '', 'TotalUsersN', 'Total users : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'TransactionApprovedDetails', 'This transaction was approved by {0} on {1}.');
 SELECT localization.add_localized_resource('Labels', '', 'TransactionAutoApprovedDetails', 'This transaction was automatically approved by {0} on {1}.');
 SELECT localization.add_localized_resource('Labels', '', 'TransactionAwaitingVerification', 'This transaction is awaiting verification from an administrator.');
@@ -3001,11 +3330,13 @@ SELECT localization.add_localized_resource('Titles', '', 'Actions', 'Actions');
 SELECT localization.add_localized_resource('Titles', '', 'Actual', 'Actual');
 SELECT localization.add_localized_resource('Titles', '', 'Add', 'Add');
 SELECT localization.add_localized_resource('Titles', '', 'AddNew', 'Add New');
+SELECT localization.add_localized_resource('Titles', '', 'AddNewUsers', 'Add New Users');
 SELECT localization.add_localized_resource('Titles', '', 'Address', 'Address');
 SELECT localization.add_localized_resource('Titles', '', 'AddressAndContactInfo', 'Address & Contact Information');
 SELECT localization.add_localized_resource('Titles', '', 'AgeingSlabs', 'Ageing Slabs');
 SELECT localization.add_localized_resource('Titles', '', 'AgentBonusSlabAssignment', 'Bonus Slab Assignment');
 SELECT localization.add_localized_resource('Titles', '', 'AgentBonusSlabs', 'Bonus Slab for Salespersons');
+SELECT localization.add_localized_resource('Titles', '', 'AllTasks', 'All Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'Alerts', 'Alerts');
 SELECT localization.add_localized_resource('Titles', '', 'Amount', 'Amount');
 SELECT localization.add_localized_resource('Titles', '', 'AmountInBaseCurrency', 'Amount (In Base Currency)');
@@ -3064,6 +3395,7 @@ SELECT localization.add_localized_resource('Titles', '', 'ClosingBalance', 'Clos
 SELECT localization.add_localized_resource('Titles', '', 'ClosingCredit', 'Closing Credit');
 SELECT localization.add_localized_resource('Titles', '', 'ClosingDebit', 'Closing Debit');
 SELECT localization.add_localized_resource('Titles', '', 'Comment', 'Comment');
+SELECT localization.add_localized_resource('Titles', '', 'CompleteTasks', 'Complete Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'CompoundItemDetails', 'Compound Item Details');
 SELECT localization.add_localized_resource('Titles', '', 'CompoundItems', 'Compound Items');
 SELECT localization.add_localized_resource('Titles', '', 'CompoundUnitsOfMeasure', 'Compound Units of Measure');
@@ -3081,6 +3413,20 @@ SELECT localization.add_localized_resource('Titles', '', 'CountySalesTaxes', 'Co
 SELECT localization.add_localized_resource('Titles', '', 'CreateaUserAccountforYourself', 'Create a User Account for Yourself');
 SELECT localization.add_localized_resource('Titles', '', 'CreateBackupFirst', 'Create a Backup First');
 SELECT localization.add_localized_resource('Titles', '', 'CreatedOn', 'Created On');
+SELECT localization.add_localized_resource('Titles', '', 'CreateCashRepositories', 'Create Cash Repositories');
+SELECT localization.add_localized_resource('Titles', '', 'CreateCountySalesTax', 'Create County Sales Tax');
+SELECT localization.add_localized_resource('Titles', '', 'CreateParties', 'Create Party');
+SELECT localization.add_localized_resource('Titles', '', 'CreateFiscalYear', 'Create Fiscal Year');
+SELECT localization.add_localized_resource('Titles', '', 'CreateFrequencies', 'Create Frequencies');
+SELECT localization.add_localized_resource('Titles', '', 'CreateItemGroups', 'Create Item Groups');
+SELECT localization.add_localized_resource('Titles', '', 'CreateItemOrService', 'Create Item or Service');
+SELECT localization.add_localized_resource('Titles', '', 'CreateSalespersons', 'Create Salespersons');
+SELECT localization.add_localized_resource('Titles', '', 'CreateSalesTaxForm', 'Create Sales Tax Form');
+SELECT localization.add_localized_resource('Titles', '', 'CreateShippingCompany', 'Create Shipping Company');
+SELECT localization.add_localized_resource('Titles', '', 'CreateStateSalesTax', 'Create State Sales Tax');
+SELECT localization.add_localized_resource('Titles', '', 'CreateStores', 'Create Stores');
+SELECT localization.add_localized_resource('Titles', '', 'CreateTaxAuthority', 'Create Tax Authority');
+SELECT localization.add_localized_resource('Titles', '', 'CreateTaxMaster', 'Create Tax Master');
 SELECT localization.add_localized_resource('Titles', '', 'Credit', 'Credit');
 SELECT localization.add_localized_resource('Titles', '', 'CreditAllowed', 'Credit Allowed');
 SELECT localization.add_localized_resource('Titles', '', 'CreditTotal', 'Credit Total');
@@ -3173,6 +3519,8 @@ SELECT localization.add_localized_resource('Titles', '', 'FilePath', 'File Path'
 SELECT localization.add_localized_resource('Titles', '', 'Filter', 'Filter');
 SELECT localization.add_localized_resource('Titles', '', 'FinalDueAmountinBaseCurrency', 'Final Due Amount in Base Currency');
 SELECT localization.add_localized_resource('Titles', '', 'FirstPage', 'First Page');
+SELECT localization.add_localized_resource('Titles', '', 'FirstSteps', 'First Steps');
+SELECT localization.add_localized_resource('Titles', '', 'FirstTasks', 'First Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'FiscalYear', 'Fiscal Year');
 SELECT localization.add_localized_resource('Titles', '', 'Flag', 'Flag');
 SELECT localization.add_localized_resource('Titles', '', 'FlagBackgroundColor', 'Flag Background Color');
@@ -3191,12 +3539,14 @@ SELECT localization.add_localized_resource('Titles', '', 'GoToBottom', 'GoToBott
 SELECT localization.add_localized_resource('Titles', '', 'GoToTop', 'GoToTop');
 SELECT localization.add_localized_resource('Titles', '', 'GoodsReceiptNote', 'Goods Receipt Note');
 SELECT localization.add_localized_resource('Titles', '', 'GrandTotal', 'Grand Total');
+SELECT localization.add_localized_resource('Titles', '', 'HideForNow', 'Hide for Now');
 SELECT localization.add_localized_resource('Titles', '', 'Home', 'Home');
 SELECT localization.add_localized_resource('Titles', '', 'HomeCurrency', 'Home Currency');
 SELECT localization.add_localized_resource('Titles', '', 'HundredthName', 'Hundredth Name');
 SELECT localization.add_localized_resource('Titles', '', 'Id', 'Id');
 SELECT localization.add_localized_resource('Titles', '', 'InVerificationStack', 'In Verification Stack');
 SELECT localization.add_localized_resource('Titles', '', 'IncludeZeroBalanceAccounts', 'Include Zero Balance Accounts');
+SELECT localization.add_localized_resource('Titles', '', 'IncompleteTasks', 'Incomplete Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'Industries', 'Industries');
 SELECT localization.add_localized_resource('Titles', '', 'InitializeDayEnd', 'Initialize Day End');
 SELECT localization.add_localized_resource('Titles', '', 'InstallMixERP', 'Install MixERP');
@@ -3398,6 +3748,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Salesperson', 'Salespe
 SELECT localization.add_localized_resource('Titles', '', 'Save', 'Save');
 SELECT localization.add_localized_resource('Titles', '', 'Saving', 'Saving');
 SELECT localization.add_localized_resource('Titles', '', 'ScrudFactoryParameters', 'ScrudFactory Parameters');
+SELECT localization.add_localized_resource('Titles', '', 'Search', 'Search');
 SELECT localization.add_localized_resource('Titles', '', 'Select', 'Select');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCompany', 'Select Company');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCustomer', 'Select Customer');
@@ -3503,6 +3854,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Url', 'Url');
 SELECT localization.add_localized_resource('Titles', '', 'Use', 'Use');
 SELECT localization.add_localized_resource('Titles', '', 'User', 'User');
 SELECT localization.add_localized_resource('Titles', '', 'UserId', 'User Id');
+SELECT localization.add_localized_resource('Titles', '', 'UserManagement', 'User Management');
 SELECT localization.add_localized_resource('Titles', '', 'Username', 'Username');
 SELECT localization.add_localized_resource('Titles', '', 'Users', 'Users');
 SELECT localization.add_localized_resource('Titles', '', 'VacuumDatabase', 'Vacuum Database');
@@ -19743,6 +20095,105 @@ SELECT core.create_menu_locale('PAC', 'zh', '支付卡');--Payment Cards
 SELECT core.create_menu_locale('MFS', 'zh', '商家安装费');--Merchant Fee Setup
 SELECT core.create_menu_locale('RW', 'zh', '报表生成器');--Report Writer
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.attachment_factory.sql --<--<--
+DROP VIEW IF EXISTS config.attachment_factory_scrud_view;
+
+CREATE VIEW config.attachment_factory_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.attachment_factory;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.currency_layer_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.currency_layer_scrud_view;
+
+CREATE VIEW config.currency_layer_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.currency_layer;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.db_parameter.sql --<--<--
+DROP VIEW IF EXISTS config.db_parameter_scrud_view;
+
+CREATE VIEW config.db_parameter_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.db_paramters;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.messaging_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.messaging_scrud_view;
+
+CREATE VIEW config.messaging_scrud_view
+AS
+SELECT 
+	key,
+	value
+FROM
+config.messaging;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.mixerp_scrud_view;
+
+CREATE VIEW config.mixerp_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.mixerp;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.open_exchange_rate_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.open_exchange_rate_scrud_view;
+
+CREATE VIEW config.open_exchange_rate_scrud_view
+AS
+SELECT 
+	key,
+	value,
+	description
+FROM
+config.open_exchange_rates;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.scrud_factory_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.scrud_factory_scrud_view;
+
+CREATE VIEW config.scrud_factory_scrud_view
+AS
+SELECT 
+	key,
+	value	
+FROM
+config.scrud_factory;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.switch_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS config.switch_scrud_view;
+
+CREATE VIEW config.switch_scrud_view
+AS
+SELECT 
+	key,
+	value	
+FROM
+config.switches;
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/1.core.bank_account_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.bank_account_scrud_view CASCADE;
 
@@ -19898,6 +20349,45 @@ FROM policy.voucher_verification_policy
 INNER JOIN office.users
 ON policy.voucher_verification_policy.user_id=office.users.user_id;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.discount_received_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.discount_received_account_selector_view;
+
+CREATE VIEW core.discount_received_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+--All income headings
+WHERE account_master_id >= 20100
+AND account_master_id < 20400
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.expenses_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.expenses_account_selector_view;
+
+CREATE VIEW core.expenses_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+WHERE account_master_id > 20400
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.purchase_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.purchase_account_selector_view;
+
+CREATE VIEW core.purchase_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+WHERE account_master_id = 15010
+ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.sales_return_account_selector_view.sql --<--<--
+DROP VIEW IF EXISTS core.sales_return_account_selector_view;
+
+CREATE VIEW core.sales_return_account_selector_view
+AS
+SELECT * FROM core.account_scrud_view
+--Current Liabilities, Accounts Payable
+WHERE account_master_id = ANY(ARRAY[15000, 15010])
+ORDER BY account_id;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS core.party_after_insert_trigger() CASCADE;
 
@@ -19950,6 +20440,9 @@ CREATE TRIGGER party_after_insert_trigger
 AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.refresh-materialized-views.sql --<--<--
+SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/ownership.sql --<--<--
 DO

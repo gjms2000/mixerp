@@ -1,4 +1,4 @@
-﻿DROP FUNCTION IF EXISTS office.add_office
+DROP FUNCTION IF EXISTS office.add_office
 (
     _office_code            national character varying(12),
     _office_name            national character varying(150),
@@ -32,6 +32,28 @@ DROP FUNCTION IF EXISTS office.add_office
     _password               national character varying(48)
 );
 
+DROP FUNCTION IF EXISTS office.add_office
+(
+    _office_code            national character varying(12),
+    _office_name            national character varying(150),
+    _nick_name              national character varying(50),
+    _registration_date      date,
+    _currency_code          national character varying(12),
+    _currency_symbol        national character varying(12),
+    _currency_name          national character varying(48),
+    _hundredth_name         national character varying(48),
+    _fiscal_year_code       national character varying(12),
+    _fiscal_year_name       national character varying(50),
+    _starts_from            date,
+    _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
+    _admin_name             national character varying(100),
+    _user_name              national character varying(50),
+    _password               national character varying(48)
+);
+
 CREATE FUNCTION office.add_office
 (
     _office_code            national character varying(12),
@@ -46,6 +68,9 @@ CREATE FUNCTION office.add_office
     _fiscal_year_name       national character varying(50),
     _starts_from            date,
     _ends_on                date,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
     _admin_name             national character varying(100),
     _user_name              national character varying(50),
     _password               national character varying(48)
@@ -72,8 +97,8 @@ BEGIN
     END IF;
 
 
-    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code)
-    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code
+    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day)
+    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day
     RETURNING office_id INTO _office_id;
 
     IF NOT EXISTS(SELECT 0 FROM office.users WHERE user_name='sys') THEN

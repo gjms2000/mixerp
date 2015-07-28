@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,6 +40,8 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
                 scrud.View = "item_group_scrud_view";
                 scrud.DisplayFields = GetDisplayFields();
                 scrud.DisplayViews = GetDisplayViews();
+                scrud.UseLocalColumnInDisplayViews = true;
+                scrud.UseDisplayViewsAsParents = true;
 
                 scrud.Text = Titles.ItemGroups;
                 this.ScrudPlaceholder.Controls.Add(scrud);
@@ -49,12 +51,20 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
         private static string GetDisplayFields()
         {
             List<string> displayFields = new List<string>();
-            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.item_group_id",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "ItemGroupDisplayField"));
-            ScrudHelper.AddDisplayField(displayFields, "core.sales_taxes.sales_tax_id",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "SalesTaxDisplayField"));
-            ScrudHelper.AddDisplayField(displayFields, "core.accounts.account_id",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "AccountDisplayField"));
+
+            string accountDisplayField = DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "AccountDisplayField");
+
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.parent_item_group_id", DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "ItemGroupDisplayField"));
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.sales_tax_id", DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "SalesTaxDisplayField"));
+            ScrudHelper.AddDisplayField(displayFields, "core.accounts.account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.sales_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.sales_discount_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.sales_return_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.purchase_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.purchase_discount_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.inventory_account_id", accountDisplayField);
+            ScrudHelper.AddDisplayField(displayFields, "core.item_groups.cost_of_goods_sold_account_id", accountDisplayField);
+
 
             return string.Join(",", displayFields);
         }
@@ -63,9 +73,15 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
         {
             List<string> displayViews = new List<string>();
 
-            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.item_group_id", "core.item_group_scrud_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.accounts.account_id", "core.account_scrud_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.sales_taxes.sales_tax_id", "core.sales_tax_scrud_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.parent_item_group_id", "core.item_group_scrud_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.sales_account_id", "core.revenue_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.sales_discount_account_id", "core.expenses_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.sales_return_account_id", "core.sales_return_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.purchase_account_id", "core.purchase_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.purchase_discount_account_id", "core.discount_received_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.inventory_account_id", "core.inventory_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.cost_of_goods_sold_account_id", "core.cost_of_sales_account_selector_view");
+            ScrudHelper.AddDisplayView(displayViews, "core.item_groups.sales_tax_id", "core.sales_tax_scrud_view");
 
             return string.Join(",", displayViews);
         }

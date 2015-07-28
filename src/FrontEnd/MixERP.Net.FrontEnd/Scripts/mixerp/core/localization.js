@@ -31,6 +31,7 @@ var setNumberFormat = function () {
     };
 
     $('input.decimal').number(true, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
+    $('input.decimal4').number(true, 4, decimalSeparator, thousandSeparator);
     $('input.integer').number(true, 0, decimalSeparator, thousandSeparator);
 };
 
@@ -68,4 +69,15 @@ var getFormattedNumber = function (input, isInteger) {
     };
 
     return $.number(input, decimalPlaces, decimalSeparator, thousandSeparator);
+};
+
+stringFormat = function () {
+    var s = arguments[0];
+
+    for (var i = 0; i < arguments.length - 1; i++) {
+        var reg = new RegExp("\\{" + i + "\\}", "gm");
+        s = s.replace(reg, arguments[i + 1]);
+    };
+
+    return s;
 };

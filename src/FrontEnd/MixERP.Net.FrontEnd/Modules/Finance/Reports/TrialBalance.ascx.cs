@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -67,7 +67,7 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
 
         #region GridView
 
-        private GridView trialBalanceGridView;
+        private MixERPGridView trialBalanceGridView;
 
         private void CreateColumns()
         {
@@ -89,11 +89,10 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
             {
                 gridPanel.Attributes.Add("style", "width:100%;");
 
-                this.trialBalanceGridView = new GridView();
+                this.trialBalanceGridView = new MixERPGridView();
                 this.trialBalanceGridView.ID = "TrialBalanceGridView";
                 this.trialBalanceGridView.GridLines = GridLines.None;
                 this.trialBalanceGridView.CssClass = "ui celled segment table nowrap";
-                this.trialBalanceGridView.DataBound += this.TrialBalanceGridView_DataBound;
 
                 this.CreateColumns();
 
@@ -103,10 +102,6 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
             }
         }
 
-        private void TrialBalanceGridView_DataBound(object sender, EventArgs eventArgs)
-        {
-            this.trialBalanceGridView.HeaderRow.TableSection = TableRowSection.TableHeader;
-        }
 
         #endregion
 

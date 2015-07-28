@@ -54,7 +54,7 @@ ORDER BY pg_attribute.attnum;
 /********************************************************************************
 The PostgreSQL License
 
-Copyright (c) 2014, Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (c) 2014, MixERP Inc. (http://mixof.org).
 
 Permission to use, copy, modify, and distribute this software and its documentation 
 for any purpose, without fee, and without a written agreement is hereby granted, 
@@ -82,7 +82,7 @@ DROP DOMAIN IF EXISTS public.test_result CASCADE;
 /********************************************************************************
 The PostgreSQL License
 
-Copyright (c) 2014, Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (c) 2014, MixERP Inc. (http://mixof.org).
 
 Permission to use, copy, modify, and distribute this software and its documentation 
 for any purpose, without fee, and without a written agreement is hereby granted, 
@@ -1123,9 +1123,7 @@ BEGIN
     ) THEN
         ALTER TABLE core.bonus_slabs
         ADD COLUMN account_id bigint NOT NULL 
-        REFERENCES core.accounts(account_id)
-        CONSTRAINT bonus_slab_account_id_df
-        DEFAULT(core.get_account_id_by_account_number('40230'));
+        REFERENCES core.accounts(account_id);
     END IF;
 
     IF NOT EXISTS
@@ -1226,10 +1224,15 @@ BEGIN
         AND    NOT attisdropped
     ) THEN
         ALTER TABLE core.late_fee
-        ADD COLUMN account_id bigint NOT NULL 
-        REFERENCES core.accounts(account_id)
-        CONSTRAINT late_fee_account_id_df
-        DEFAULT(core.get_account_id_by_account_number('30300'));
+        ADD COLUMN account_id bigint NULL 
+        REFERENCES core.accounts(account_id);
+        
+        UPDATE core.late_fee
+        SET account_id = core.get_account_id_by_account_number('30300')
+        WHERE account_id IS NULL;
+        
+        ALTER TABLE core.late_fee
+        ALTER COLUMN account_id SET NOT NULL;
     END IF;
 END
 $$
@@ -1514,29 +1517,6 @@ CREATE TABLE localization.localized_resources
 CREATE UNIQUE INDEX localized_resources_culture_key_uix
 ON localization.localized_resources
 (resource_id, UPPER(culture_code));
-
-
-ALTER TABLE core.item_groups
-ALTER COLUMN sales_account_id SET DEFAULT(core.get_account_id_by_account_number('30100'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN sales_discount_account_id SET DEFAULT(core.get_account_id_by_account_number('40270'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN sales_return_account_id SET DEFAULT(core.get_account_id_by_account_number('20701'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN purchase_account_id SET DEFAULT(core.get_account_id_by_account_number('40100'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN purchase_discount_account_id SET DEFAULT(core.get_account_id_by_account_number('30700'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN inventory_account_id SET DEFAULT(core.get_account_id_by_account_number('10700'));
-
-ALTER TABLE core.item_groups
-ALTER COLUMN cost_of_goods_sold_account_id SET DEFAULT(core.get_account_id_by_account_number('40200'));
-
 
 DO
 $$
@@ -26271,7 +26251,7 @@ WHERE menu_code = 'TRA';
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/currencies.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26300,7 +26280,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/fiscal_year.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26329,7 +26309,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/frequencies.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26373,7 +26353,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/frequency_setups.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26477,7 +26457,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/sys-user-test.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26550,7 +26530,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/verification_statuses.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26604,7 +26584,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/office/is_parent_office_test.sql --<--<--
 /********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 

@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,6 +28,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.FrontEnd.Application;
 
 namespace MixERP.Net.FrontEnd.Services
 {
@@ -59,7 +60,7 @@ namespace MixERP.Net.FrontEnd.Services
 
             if (attempts > 3)
             {
-                return attempts*10000;
+                return attempts * 10000;
             }
 
             return 1000;
@@ -78,9 +79,9 @@ namespace MixERP.Net.FrontEnd.Services
 
                 if (globalLoginId > 0)
                 {
-                    AppUsers.SetCurrentLogin(globalLoginId);
-                    MixERPWebpage.SetAuthenticationTicket(this.Context.Response, globalLoginId, rememberMe);
+                    MixERPWebpage.SetAuthenticationTicket(HttpContext.Current.Response, globalLoginId, rememberMe);
 
+                    AppUsers.SetCurrentLogin(globalLoginId);
 
                     return "OK";
                 }

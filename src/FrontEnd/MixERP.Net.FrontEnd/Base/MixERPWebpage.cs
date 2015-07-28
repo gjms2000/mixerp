@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -102,9 +102,8 @@ namespace MixERP.Net.FrontEnd.Base
                 return;
             }
 
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
-                signInId.ToString(CultureInfo.InvariantCulture), DateTime.Now, DateTime.Now.AddMinutes(30), rememberMe,
-                String.Empty, FormsAuthentication.FormsCookiePath);
+            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, signInId.ToString(CultureInfo.InvariantCulture), DateTime.Now, DateTime.Now.AddMinutes(30), rememberMe, String.Empty, FormsAuthentication.FormsCookiePath);
+
             string encryptedCookie = FormsAuthentication.Encrypt(ticket);
 
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedCookie);
@@ -112,7 +111,6 @@ namespace MixERP.Net.FrontEnd.Base
             cookie.Path = ticket.CookiePath;
 
             response.Cookies.Add(cookie);
-            //response.Redirect(FormsAuthentication.GetRedirectUrl(signInId.ToString(CultureInfo.InvariantCulture), rememberMe));
         }
 
         protected override void InitializeCulture()

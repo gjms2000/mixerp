@@ -196,217 +196,425 @@ BEGIN
 
 
         INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
-                  SELECT 1,     '10000', 'Assets',                                                      TRUE,  core.get_account_id_by_account_name('Balance Sheet A/C')
-        UNION ALL SELECT 10100, '10001', 'Current Assets',                                              TRUE,  core.get_account_id_by_account_name('Assets')
-        UNION ALL SELECT 10102, '10100', 'Cash at Bank A/C',                                            TRUE,  core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10102, '10110', 'Regular Checking Account',                                    FALSE, core.get_account_id_by_account_name('Cash at Bank A/C')
-        UNION ALL SELECT 10102, '10120', 'Payroll Checking Account',                                    FALSE, core.get_account_id_by_account_name('Cash at Bank A/C')
-        UNION ALL SELECT 10102, '10130', 'Savings Account',                                             FALSE, core.get_account_id_by_account_name('Cash at Bank A/C')
-        UNION ALL SELECT 10102, '10140', 'Special Account',                                             FALSE, core.get_account_id_by_account_name('Cash at Bank A/C')
-        UNION ALL SELECT 10101, '10200', 'Cash in Hand A/C',                                            TRUE,  core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10300', 'Investments',                                                 FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10310', 'Short Term Investment',                                       FALSE, core.get_account_id_by_account_name('Investments')
-        UNION ALL SELECT 10100, '10320', 'Other Investments',                                           FALSE, core.get_account_id_by_account_name('Investments')
-        UNION ALL SELECT 10100, '10321', 'Investments-Money Market',                                    FALSE, core.get_account_id_by_account_name('Other Investments')
-        UNION ALL SELECT 10100, '10322', 'Bank Deposit Contract (Fixed Deposit)',                       FALSE, core.get_account_id_by_account_name('Other Investments')
-        UNION ALL SELECT 10100, '10323', 'Investments-Certificates of Deposit',                         FALSE, core.get_account_id_by_account_name('Other Investments')
-        UNION ALL SELECT 10110, '10400', 'Accounts Receivable',                                         FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10500', 'Other Receivables',                                           FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10501', 'Purchase Return (Receivables)',                               FALSE, core.get_account_id_by_account_name('Other Receivables')
-        UNION ALL SELECT 10100, '10600', 'Allowance for Doubtful Accounts',                             FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10700', 'Inventory',                                                   TRUE,  core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10720', 'Raw Materials Inventory',                                     TRUE,  core.get_account_id_by_account_name('Inventory')
-        UNION ALL SELECT 10100, '10730', 'Supplies Inventory',                                          TRUE,  core.get_account_id_by_account_name('Inventory')
-        UNION ALL SELECT 10100, '10740', 'Work in Progress Inventory',                                  TRUE,  core.get_account_id_by_account_name('Inventory')
-        UNION ALL SELECT 10100, '10750', 'Finished Goods Inventory',                                    TRUE,  core.get_account_id_by_account_name('Inventory')
-        UNION ALL SELECT 10100, '10800', 'Prepaid Expenses',                                            FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '10900', 'Employee Advances',                                           FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '11000', 'Notes Receivable-Current',                                    FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '11100', 'Prepaid Interest',                                            FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '11200', 'Accrued Incomes (Assets)',                                    FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '11300', 'Other Debtors',                                               FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10100, '11400', 'Other Current Assets',                                        FALSE, core.get_account_id_by_account_name('Current Assets')
-        UNION ALL SELECT 10200, '12001', 'Noncurrent Assets',                                           TRUE,  core.get_account_id_by_account_name('Assets')
-        UNION ALL SELECT 10200, '12100', 'Furniture and Fixtures',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10201, '12200', 'Plants & Equipments',                                         FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12300', 'Rental Property',                                             FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12400', 'Vehicles',                                                    FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12500', 'Intangibles',                                                 FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12600', 'Other Depreciable Properties',                                FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12700', 'Leasehold Improvements',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12800', 'Buildings',                                                   FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '12900', 'Building Improvements',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13000', 'Interior Decorations',                                        FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13100', 'Land',                                                        FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13200', 'Long Term Investments',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13300', 'Trade Debtors',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13400', 'Rental Debtors',                                              FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13500', 'Staff Debtors',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13600', 'Other Noncurrent Debtors',                                    FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13700', 'Other Financial Assets',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13710', 'Deposits Held',                                               FALSE, core.get_account_id_by_account_name('Other Financial Assets')
-        UNION ALL SELECT 10200, '13800', 'Accumulated Depreciations',                                   FALSE, core.get_account_id_by_account_name('Noncurrent Assets')
-        UNION ALL SELECT 10200, '13810', 'Accumulated Depreciation-Furniture and Fixtures',             FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13820', 'Accumulated Depreciation-Equipment',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13830', 'Accumulated Depreciation-Vehicles',                           FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13840', 'Accumulated Depreciation-Other Depreciable Properties',       FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13850', 'Accumulated Depreciation-Leasehold',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13860', 'Accumulated Depreciation-Buildings',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13870', 'Accumulated Depreciation-Building Improvements',              FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10200, '13880', 'Accumulated Depreciation-Interior Decorations',               FALSE, core.get_account_id_by_account_name('Accumulated Depreciations')
-        UNION ALL SELECT 10300, '14001', 'Other Assets',                                                TRUE,  core.get_account_id_by_account_name('Assets')
-        UNION ALL SELECT 10300, '14100', 'Other Assets-Deposits',                                       FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 10300, '14200', 'Other Assets-Organization Costs',                             FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 10300, '14300', 'Other Assets-Accumulated Amortization-Organization Costs',    FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 10300, '14400', 'Notes Receivable-Non-current',                                FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 10300, '14500', 'Other Non-current Assets',                                    FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 10300, '14600', 'Non-financial Assets',                                        FALSE, core.get_account_id_by_account_name('Other Assets')
-        UNION ALL SELECT 1,     '20000', 'Liabilities',                                                 TRUE,  core.get_account_id_by_account_name('Balance Sheet A/C')
-        UNION ALL SELECT 15000, '20001', 'Current Liabilities',                                         TRUE,  core.get_account_id_by_account_name('Liabilities')
-        UNION ALL SELECT 15010, '20100', 'Accounts Payable',                                            FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20110', 'Shipping Charge Payable',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20200', 'Accrued Expenses',                                            FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20300', 'Wages Payable',                                               FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20400', 'Deductions Payable',                                          FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20500', 'Health Insurance Payable',                                    FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20600', 'Superannuation Payable',                                      FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20700', 'Tax Payables',                                                FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20701', 'Sales Return (Payables)',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20710', 'Sales Tax Payable',                                           FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20720', 'Federal Payroll Taxes Payable',                               FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20730', 'FUTA Tax Payable',                                            FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20740', 'State Payroll Taxes Payable',                                 FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20750', 'SUTA Payable',                                                FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20760', 'Local Payroll Taxes Payable',                                 FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20770', 'Income Taxes Payable',                                        FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20780', 'Other Taxes Payable',                                         FALSE, core.get_account_id_by_account_name('Tax Payables')
-        UNION ALL SELECT 15000, '20800', 'Employee Benefits Payable',                                   FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '20810', 'Provision for Annual Leave',                                  FALSE, core.get_account_id_by_account_name('Employee Benefits Payable')
-        UNION ALL SELECT 15000, '20820', 'Provision for Long Service Leave',                            FALSE, core.get_account_id_by_account_name('Employee Benefits Payable')
-        UNION ALL SELECT 15000, '20830', 'Provision for Personal Leave',                                FALSE, core.get_account_id_by_account_name('Employee Benefits Payable')
-        UNION ALL SELECT 15000, '20840', 'Provision for Health Leave',                                  FALSE, core.get_account_id_by_account_name('Employee Benefits Payable')
-        UNION ALL SELECT 15000, '20900', 'Current Portion of Long-term Debt',                           FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '21000', 'Advance Incomes',                                             FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '21010', 'Advance Sales Income',                                        FALSE, core.get_account_id_by_account_name('Advance Incomes')
-        UNION ALL SELECT 15000, '21020', 'Grant Received in Advance',                                   FALSE, core.get_account_id_by_account_name('Advance Incomes')
-        UNION ALL SELECT 15000, '21100', 'Deposits from Customers',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '21200', 'Other Current Liabilities',                                   FALSE, core.get_account_id_by_account_name('Current Liabilities')
-        UNION ALL SELECT 15000, '21210', 'Short Term Loan Payables',                                    FALSE, core.get_account_id_by_account_name('Other Current Liabilities')
-        UNION ALL SELECT 15000, '21220', 'Short Term Hire-purchase Payables',                           FALSE, core.get_account_id_by_account_name('Other Current Liabilities')
-        UNION ALL SELECT 15000, '21230', 'Short Term Lease Liability',                                  FALSE, core.get_account_id_by_account_name('Other Current Liabilities')
-        UNION ALL SELECT 15000, '21240', 'Grants Repayable',                                            FALSE, core.get_account_id_by_account_name('Other Current Liabilities')
-        UNION ALL SELECT 15100, '24001', 'Noncurrent Liabilities',                                      TRUE,  core.get_account_id_by_account_name('Liabilities')
-        UNION ALL SELECT 15100, '24100', 'Notes Payable',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24200', 'Land Payable',                                                FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24300', 'Equipment Payable',                                           FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24400', 'Vehicles Payable',                                            FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24500', 'Lease Liability',                                             FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24600', 'Loan Payable',                                                FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24700', 'Hire-purchase Payable',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24800', 'Bank Loans Payable',                                          FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '24900', 'Deferred Revenue',                                            FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '25000', 'Other Long-term Liabilities',                                 FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities')
-        UNION ALL SELECT 15100, '25010', 'Long Term Employee Benefit Provision',                        FALSE, core.get_account_id_by_account_name('Other Long-term Liabilities')
-        UNION ALL SELECT 15200, '28001', 'Equity',                                                      TRUE,  core.get_account_id_by_account_name('Liabilities')
-        UNION ALL SELECT 15200, '28100', 'Stated Capital',                                              FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28110', 'Founder Capital',                                             FALSE, core.get_account_id_by_account_name('Stated Capital')
-        UNION ALL SELECT 15200, '28120', 'Promoter Capital',                                            FALSE, core.get_account_id_by_account_name('Stated Capital')
-        UNION ALL SELECT 15200, '28130', 'Member Capital',                                              FALSE, core.get_account_id_by_account_name('Stated Capital')
-        UNION ALL SELECT 15200, '28200', 'Capital Surplus',                                             FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28210', 'Share Premium',                                               FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28220', 'Capital Redemption Reserves',                                 FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28230', 'Statutory Reserves',                                          FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28240', 'Asset Revaluation Reserves',                                  FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28250', 'Exchange Rate Fluctuation Reserves',                          FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28260', 'Capital Reserves Arising From Merger',                        FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15200, '28270', 'Capital Reserves Arising From Acuisition',                    FALSE, core.get_account_id_by_account_name('Capital Surplus')
-        UNION ALL SELECT 15300, '28300', 'Retained Surplus',                                            TRUE,  core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15300, '28310', 'Accumulated Profits',                                         FALSE, core.get_account_id_by_account_name('Retained Surplus')
-        UNION ALL SELECT 15300, '28320', 'Accumulated Losses',                                          FALSE, core.get_account_id_by_account_name('Retained Surplus')
-        UNION ALL SELECT 15400, '28330', 'Dividends Declared (Common Stock)',                           FALSE, core.get_account_id_by_account_name('Retained Surplus')
-        UNION ALL SELECT 15400, '28340', 'Dividends Declared (Preferred Stock)',                        FALSE, core.get_account_id_by_account_name('Retained Surplus')
-        UNION ALL SELECT 15200, '28400', 'Treasury Stock',                                              FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28500', 'Current Year Surplus',                                        FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28600', 'General Reserves',                                            FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28700', 'Other Reserves',                                              FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28800', 'Dividends Payable (Common Stock)',                            FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 15200, '28900', 'Dividends Payable (Preferred Stock)',                         FALSE, core.get_account_id_by_account_name('Equity')
-        UNION ALL SELECT 2,     '30000', 'Revenues',                                                    TRUE,  core.get_account_id_by_account_name('Profit and Loss A/C')
-        UNION ALL SELECT 20100,  '30100', 'Sales A/C',                                                  FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30200', 'Interest Income',                                            FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30300', 'Other Income',                                               FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30400', 'Finance Charge Income',                                      FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30500', 'Shipping Charges Reimbursed',                                FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30600', 'Sales Returns and Allowances',                               FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 20100,  '30700', 'Purchase Discounts',                                         FALSE, core.get_account_id_by_account_name('Revenues')
-        UNION ALL SELECT 2,     '40000', 'Expenses',                                                    TRUE,  core.get_account_id_by_account_name('Profit and Loss A/C')
-        UNION ALL SELECT 2,     '40100', 'Purchase A/C',                                                FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20400,  '40200', 'Cost of Goods Sold',                                         FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20500,  '40205', 'Product Cost',                                               FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40210', 'Raw Material Purchases',                                     FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40215', 'Direct Labor Costs',                                         FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40220', 'Indirect Labor Costs',                                       FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40225', 'Heat and Power',                                             FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40230', 'Commissions',                                                FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40235', 'Miscellaneous Factory Costs',                                FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40240', 'Cost of Goods Sold-Salaries and Wages',                      FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40245', 'Cost of Goods Sold-Contract Labor',                          FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40250', 'Cost of Goods Sold-Freight',                                 FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40255', 'Cost of Goods Sold-Other',                                   FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40260', 'Inventory Adjustments',                                      FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40265', 'Purchase Returns and Allowances',                            FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20500,  '40270', 'Sales Discounts',                                            FALSE, core.get_account_id_by_account_name('Cost of Goods Sold')
-        UNION ALL SELECT 20600,  '40300', 'General Purchase Expenses',                                  FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '40400', 'Advertising Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '40500', 'Amortization Expenses',                                      FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '40600', 'Auto Expenses',                                              FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '40700', 'Bad Debt Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20700,  '40800', 'Bank Fees',                                                  FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '40900', 'Cash Over and Short',                                        FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41000', 'Charitable Contributions Expenses',                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20700,  '41100', 'Commissions and Fees Expenses',                              FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41200', 'Depreciation Expenses',                                      FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41300', 'Dues and Subscriptions Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41400', 'Employee Benefit Expenses',                                  FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41410', 'Employee Benefit Expenses-Health Insurance',                 FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses')
-        UNION ALL SELECT 20600,  '41420', 'Employee Benefit Expenses-Pension Plans',                    FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses')
-        UNION ALL SELECT 20600,  '41430', 'Employee Benefit Expenses-Profit Sharing Plan',              FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses')
-        UNION ALL SELECT 20600,  '41440', 'Employee Benefit Expenses-Other',                            FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses')
-        UNION ALL SELECT 20600,  '41500', 'Freight Expenses',                                           FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41600', 'Gifts Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20800,  '41700', 'Income Tax Expenses',                                        FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20800,  '41710', 'Income Tax Expenses-Federal',                                FALSE, core.get_account_id_by_account_name('Income Tax Expenses')
-        UNION ALL SELECT 20800,  '41720', 'Income Tax Expenses-State',                                  FALSE, core.get_account_id_by_account_name('Income Tax Expenses')
-        UNION ALL SELECT 20800,  '41730', 'Income Tax Expenses-Local',                                  FALSE, core.get_account_id_by_account_name('Income Tax Expenses')
-        UNION ALL SELECT 20600,  '41800', 'Insurance Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '41810', 'Insurance Expenses-Product Liability',                       FALSE, core.get_account_id_by_account_name('Insurance Expenses')
-        UNION ALL SELECT 20600,  '41820', 'Insurance Expenses-Vehicle',                                 FALSE, core.get_account_id_by_account_name('Insurance Expenses')
-        UNION ALL SELECT 20701,  '41900', 'Interest Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42000', 'Laundry and Dry Cleaning Expenses',                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42100', 'Legal and Professional Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42200', 'Licenses Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42300', 'Loss on NSF Checks',                                         FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42400', 'Maintenance Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42500', 'Meals and Entertainment Expenses',                           FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42600', 'Office Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42700', 'Payroll Tax Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20700,  '42800', 'Penalties and Fines Expenses',                               FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '42900', 'Other Taxe Expenses',                                        FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43000', 'Postage Expenses',                                           FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43100', 'Rent or Lease Expenses',                                     FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43200', 'Repair and Maintenance Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43210', 'Repair and Maintenance Expenses-Office',                     FALSE, core.get_account_id_by_account_name('Repair and Maintenance Expenses')
-        UNION ALL SELECT 20600,  '43220', 'Repair and Maintenance Expenses-Vehicle',                    FALSE, core.get_account_id_by_account_name('Repair and Maintenance Expenses')
-        UNION ALL SELECT 20600,  '43300', 'Supplies Expenses-Office',                                   FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43400', 'Telephone Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43500', 'Training Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43600', 'Travel Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43700', 'Salary Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43800', 'Wages Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '43900', 'Utilities Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '44000', 'Other Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses')
-        UNION ALL SELECT 20600,  '44100', 'Gain/Loss on Sale of Assets',                                FALSE, core.get_account_id_by_account_name('Expenses');
-
+		SELECT 1,     '10000', 'Assets',                                                      TRUE,  core.get_account_id_by_account_name('Balance Sheet A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10001', 'Current Assets',                                              TRUE,  core.get_account_id_by_account_name('Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10102, '10100', 'Cash at Bank A/C',                                            TRUE,  core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10102, '10110', 'Regular Checking Account',                                    FALSE, core.get_account_id_by_account_name('Cash at Bank A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10102, '10120', 'Payroll Checking Account',                                    FALSE, core.get_account_id_by_account_name('Cash at Bank A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10102, '10130', 'Savings Account',                                             FALSE, core.get_account_id_by_account_name('Cash at Bank A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10102, '10140', 'Special Account',                                             FALSE, core.get_account_id_by_account_name('Cash at Bank A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10101, '10200', 'Cash in Hand A/C',                                            TRUE,  core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10300', 'Investments',                                                 FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10310', 'Short Term Investment',                                       FALSE, core.get_account_id_by_account_name('Investments');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10320', 'Other Investments',                                           FALSE, core.get_account_id_by_account_name('Investments');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10321', 'Investments-Money Market',                                    FALSE, core.get_account_id_by_account_name('Other Investments');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10322', 'Bank Deposit Contract (Fixed Deposit)',                       FALSE, core.get_account_id_by_account_name('Other Investments');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10323', 'Investments-Certificates of Deposit',                         FALSE, core.get_account_id_by_account_name('Other Investments');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10110, '10400', 'Accounts Receivable',                                         FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10500', 'Other Receivables',                                           FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10501', 'Purchase Return (Receivables)',                               FALSE, core.get_account_id_by_account_name('Other Receivables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10600', 'Allowance for Doubtful Accounts',                             FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10700', 'Inventory',                                                   TRUE,  core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10720', 'Raw Materials Inventory',                                     TRUE,  core.get_account_id_by_account_name('Inventory');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10730', 'Supplies Inventory',                                          TRUE,  core.get_account_id_by_account_name('Inventory');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10740', 'Work in Progress Inventory',                                  TRUE,  core.get_account_id_by_account_name('Inventory');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10750', 'Finished Goods Inventory',                                    TRUE,  core.get_account_id_by_account_name('Inventory');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10800', 'Prepaid Expenses',                                            FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '10900', 'Employee Advances',                                           FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '11000', 'Notes Receivable-Current',                                    FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '11100', 'Prepaid Interest',                                            FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '11200', 'Accrued Incomes (Assets)',                                    FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '11300', 'Other Debtors',                                               FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10100, '11400', 'Other Current Assets',                                        FALSE, core.get_account_id_by_account_name('Current Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12001', 'Noncurrent Assets',                                           TRUE,  core.get_account_id_by_account_name('Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12100', 'Furniture and Fixtures',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10201, '12200', 'Plants & Equipments',                                         FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12300', 'Rental Property',                                             FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12400', 'Vehicles',                                                    FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12500', 'Intangibles',                                                 FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12600', 'Other Depreciable Properties',                                FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12700', 'Leasehold Improvements',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12800', 'Buildings',                                                   FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '12900', 'Building Improvements',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13000', 'Interior Decorations',                                        FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13100', 'Land',                                                        FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13200', 'Long Term Investments',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13300', 'Trade Debtors',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13400', 'Rental Debtors',                                              FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13500', 'Staff Debtors',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13600', 'Other Noncurrent Debtors',                                    FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13700', 'Other Financial Assets',                                      FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13710', 'Deposits Held',                                               FALSE, core.get_account_id_by_account_name('Other Financial Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13800', 'Accumulated Depreciations',                                   FALSE, core.get_account_id_by_account_name('Noncurrent Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13810', 'Accumulated Depreciation-Furniture and Fixtures',             FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13820', 'Accumulated Depreciation-Equipment',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13830', 'Accumulated Depreciation-Vehicles',                           FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13840', 'Accumulated Depreciation-Other Depreciable Properties',       FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13850', 'Accumulated Depreciation-Leasehold',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13860', 'Accumulated Depreciation-Buildings',                          FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13870', 'Accumulated Depreciation-Building Improvements',              FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10200, '13880', 'Accumulated Depreciation-Interior Decorations',               FALSE, core.get_account_id_by_account_name('Accumulated Depreciations');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14001', 'Other Assets',                                                TRUE,  core.get_account_id_by_account_name('Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14100', 'Other Assets-Deposits',                                       FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14200', 'Other Assets-Organization Costs',                             FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14300', 'Other Assets-Accumulated Amortization-Organization Costs',    FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14400', 'Notes Receivable-Non-current',                                FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14500', 'Other Non-current Assets',                                    FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 10300, '14600', 'Non-financial Assets',                                        FALSE, core.get_account_id_by_account_name('Other Assets');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 1,     '20000', 'Liabilities',                                                 TRUE,  core.get_account_id_by_account_name('Balance Sheet A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20001', 'Current Liabilities',                                         TRUE,  core.get_account_id_by_account_name('Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15010, '20100', 'Accounts Payable',                                            FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20110', 'Shipping Charge Payable',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20200', 'Accrued Expenses',                                            FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20300', 'Wages Payable',                                               FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20400', 'Deductions Payable',                                          FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20500', 'Health Insurance Payable',                                    FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20600', 'Superannuation Payable',                                      FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20700', 'Tax Payables',                                                FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20701', 'Sales Return (Payables)',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20710', 'Sales Tax Payable',                                           FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20720', 'Federal Payroll Taxes Payable',                               FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20730', 'FUTA Tax Payable',                                            FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20740', 'State Payroll Taxes Payable',                                 FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20750', 'SUTA Payable',                                                FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20760', 'Local Payroll Taxes Payable',                                 FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20770', 'Income Taxes Payable',                                        FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20780', 'Other Taxes Payable',                                         FALSE, core.get_account_id_by_account_name('Tax Payables');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20800', 'Employee Benefits Payable',                                   FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20810', 'Provision for Annual Leave',                                  FALSE, core.get_account_id_by_account_name('Employee Benefits Payable');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20820', 'Provision for Long Service Leave',                            FALSE, core.get_account_id_by_account_name('Employee Benefits Payable');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20830', 'Provision for Personal Leave',                                FALSE, core.get_account_id_by_account_name('Employee Benefits Payable');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20840', 'Provision for Health Leave',                                  FALSE, core.get_account_id_by_account_name('Employee Benefits Payable');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '20900', 'Current Portion of Long-term Debt',                           FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21000', 'Advance Incomes',                                             FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21010', 'Advance Sales Income',                                        FALSE, core.get_account_id_by_account_name('Advance Incomes');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21020', 'Grant Received in Advance',                                   FALSE, core.get_account_id_by_account_name('Advance Incomes');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21100', 'Deposits from Customers',                                     FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21200', 'Other Current Liabilities',                                   FALSE, core.get_account_id_by_account_name('Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21210', 'Short Term Loan Payables',                                    FALSE, core.get_account_id_by_account_name('Other Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21220', 'Short Term Hire-purchase Payables',                           FALSE, core.get_account_id_by_account_name('Other Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21230', 'Short Term Lease Liability',                                  FALSE, core.get_account_id_by_account_name('Other Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15000, '21240', 'Grants Repayable',                                            FALSE, core.get_account_id_by_account_name('Other Current Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24001', 'Noncurrent Liabilities',                                      TRUE,  core.get_account_id_by_account_name('Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24100', 'Notes Payable',                                               FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24200', 'Land Payable',                                                FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24300', 'Equipment Payable',                                           FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24400', 'Vehicles Payable',                                            FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24500', 'Lease Liability',                                             FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24600', 'Loan Payable',                                                FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24700', 'Hire-purchase Payable',                                       FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24800', 'Bank Loans Payable',                                          FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '24900', 'Deferred Revenue',                                            FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '25000', 'Other Long-term Liabilities',                                 FALSE, core.get_account_id_by_account_name('Noncurrent Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15100, '25010', 'Long Term Employee Benefit Provision',                        FALSE, core.get_account_id_by_account_name('Other Long-term Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28001', 'Equity',                                                      TRUE,  core.get_account_id_by_account_name('Liabilities');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28100', 'Stated Capital',                                              FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28110', 'Founder Capital',                                             FALSE, core.get_account_id_by_account_name('Stated Capital');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28120', 'Promoter Capital',                                            FALSE, core.get_account_id_by_account_name('Stated Capital');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28130', 'Member Capital',                                              FALSE, core.get_account_id_by_account_name('Stated Capital');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28200', 'Capital Surplus',                                             FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28210', 'Share Premium',                                               FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28220', 'Capital Redemption Reserves',                                 FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28230', 'Statutory Reserves',                                          FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28240', 'Asset Revaluation Reserves',                                  FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28250', 'Exchange Rate Fluctuation Reserves',                          FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28260', 'Capital Reserves Arising From Merger',                        FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28270', 'Capital Reserves Arising From Acuisition',                    FALSE, core.get_account_id_by_account_name('Capital Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15300, '28300', 'Retained Surplus',                                            TRUE,  core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15300, '28310', 'Accumulated Profits',                                         FALSE, core.get_account_id_by_account_name('Retained Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15300, '28320', 'Accumulated Losses',                                          FALSE, core.get_account_id_by_account_name('Retained Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15400, '28330', 'Dividends Declared (Common Stock)',                           FALSE, core.get_account_id_by_account_name('Retained Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15400, '28340', 'Dividends Declared (Preferred Stock)',                        FALSE, core.get_account_id_by_account_name('Retained Surplus');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28400', 'Treasury Stock',                                              FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28500', 'Current Year Surplus',                                        FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28600', 'General Reserves',                                            FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28700', 'Other Reserves',                                              FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28800', 'Dividends Payable (Common Stock)',                            FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 15200, '28900', 'Dividends Payable (Preferred Stock)',                         FALSE, core.get_account_id_by_account_name('Equity');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 2,     '30000', 'Revenues',                                                    TRUE,  core.get_account_id_by_account_name('Profit and Loss A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30100', 'Sales A/C',                                                  FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30200', 'Interest Income',                                            FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30300', 'Other Income',                                               FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30400', 'Finance Charge Income',                                      FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30500', 'Shipping Charges Reimbursed',                                FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30600', 'Sales Returns and Allowances',                               FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20100,  '30700', 'Purchase Discounts',                                         FALSE, core.get_account_id_by_account_name('Revenues');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 2,     '40000', 'Expenses',                                                    TRUE,  core.get_account_id_by_account_name('Profit and Loss A/C');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 2,     '40100', 'Purchase A/C',                                                FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20400,  '40200', 'Cost of Goods Sold',                                         FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40205', 'Product Cost',                                               FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40210', 'Raw Material Purchases',                                     FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40215', 'Direct Labor Costs',                                         FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40220', 'Indirect Labor Costs',                                       FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40225', 'Heat and Power',                                             FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40230', 'Commissions',                                                FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40235', 'Miscellaneous Factory Costs',                                FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40240', 'Cost of Goods Sold-Salaries and Wages',                      FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40245', 'Cost of Goods Sold-Contract Labor',                          FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40250', 'Cost of Goods Sold-Freight',                                 FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40255', 'Cost of Goods Sold-Other',                                   FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40260', 'Inventory Adjustments',                                      FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40265', 'Purchase Returns and Allowances',                            FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20500,  '40270', 'Sales Discounts',                                            FALSE, core.get_account_id_by_account_name('Cost of Goods Sold');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40300', 'General Purchase Expenses',                                  FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40400', 'Advertising Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40500', 'Amortization Expenses',                                      FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40600', 'Auto Expenses',                                              FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40700', 'Bad Debt Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20700,  '40800', 'Bank Fees',                                                  FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '40900', 'Cash Over and Short',                                        FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41000', 'Charitable Contributions Expenses',                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20700,  '41100', 'Commissions and Fees Expenses',                              FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41200', 'Depreciation Expenses',                                      FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41300', 'Dues and Subscriptions Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41400', 'Employee Benefit Expenses',                                  FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41410', 'Employee Benefit Expenses-Health Insurance',                 FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41420', 'Employee Benefit Expenses-Pension Plans',                    FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41430', 'Employee Benefit Expenses-Profit Sharing Plan',              FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41440', 'Employee Benefit Expenses-Other',                            FALSE, core.get_account_id_by_account_name('Employee Benefit Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41500', 'Freight Expenses',                                           FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41600', 'Gifts Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20800,  '41700', 'Income Tax Expenses',                                        FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20800,  '41710', 'Income Tax Expenses-Federal',                                FALSE, core.get_account_id_by_account_name('Income Tax Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20800,  '41720', 'Income Tax Expenses-State',                                  FALSE, core.get_account_id_by_account_name('Income Tax Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20800,  '41730', 'Income Tax Expenses-Local',                                  FALSE, core.get_account_id_by_account_name('Income Tax Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41800', 'Insurance Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41810', 'Insurance Expenses-Product Liability',                       FALSE, core.get_account_id_by_account_name('Insurance Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '41820', 'Insurance Expenses-Vehicle',                                 FALSE, core.get_account_id_by_account_name('Insurance Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20701,  '41900', 'Interest Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42000', 'Laundry and Dry Cleaning Expenses',                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42100', 'Legal and Professional Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42200', 'Licenses Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42300', 'Loss on NSF Checks',                                         FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42400', 'Maintenance Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42500', 'Meals and Entertainment Expenses',                           FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42600', 'Office Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42700', 'Payroll Tax Expenses',                                       FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20700,  '42800', 'Penalties and Fines Expenses',                               FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '42900', 'Other Taxe Expenses',                                        FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43000', 'Postage Expenses',                                           FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43100', 'Rent or Lease Expenses',                                     FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43200', 'Repair and Maintenance Expenses',                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43210', 'Repair and Maintenance Expenses-Office',                     FALSE, core.get_account_id_by_account_name('Repair and Maintenance Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43220', 'Repair and Maintenance Expenses-Vehicle',                    FALSE, core.get_account_id_by_account_name('Repair and Maintenance Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43300', 'Supplies Expenses-Office',                                   FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43400', 'Telephone Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43500', 'Training Expenses',                                          FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43600', 'Travel Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43700', 'Salary Expenses',                                            FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43800', 'Wages Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '43900', 'Utilities Expenses',                                         FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '44000', 'Other Expenses',                                             FALSE, core.get_account_id_by_account_name('Expenses');
+        INSERT INTO core.accounts(account_master_id,account_number,account_name, sys_type, parent_account_id) 
+		SELECT 20600,  '44100', 'Gain/Loss on Sale of Assets',                                FALSE, core.get_account_id_by_account_name('Expenses');
 
         UPDATE core.accounts
         SET currency_code='USD';

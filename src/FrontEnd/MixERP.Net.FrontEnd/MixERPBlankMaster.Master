@@ -39,6 +39,43 @@
 
         <div class="row">
             <div class="col-md-12">
+                <script src="/signalr/hubs"></script>
+                <script type="text/javascript">
+                    $(function () {
+                        var started = false;
+
+                        $.connection.baseHub.client.terminate = function (c, cat) {
+                            if (top.catalog !== cat) {
+                                return;
+                            };
+
+                            if (typeof terminateListener === "function") {
+                                terminateListener(c);
+                            };
+
+                            $("#EODModal .circular.segment h2").html(c + "%");
+
+                            if (!started) {
+                                $("#EODModal").modal("show");
+
+                                var message = "<%= MixERP.Net.i18n.Resources.Titles.EODBegun %>";
+                        var action = "$('#EODModal').modal('show');";
+                        addNotification(message, action);
+                        started = true;
+                    };
+
+                    if (c === 100) {
+                        window.location = "/Site/Account/SignOut.aspx";
+                    };
+                };
+
+                    $.connection.hub.start().done(function () {
+                        if (typeof connectionListener === "function") {
+                            connectionListener();
+                        };
+                    });;
+                });
+                </script>
                 <asp:ContentPlaceHolder ID="BodyContentPlaceholder" runat="server">
                 </asp:ContentPlaceHolder>
             </div>

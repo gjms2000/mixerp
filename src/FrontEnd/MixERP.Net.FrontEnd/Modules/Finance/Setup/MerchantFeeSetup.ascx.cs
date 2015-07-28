@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
+Copyright (C) MixERP Inc. (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, version 2 of the License.
+
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,7 +37,7 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
                 scrud.TableSchema = "core";
                 scrud.Table = "merchant_fee_setup";
                 scrud.ViewSchema = "core";
-                scrud.View = "merchant_fee_setup";
+                scrud.View = "merchant_fee_setup_scrud_view";
                 scrud.Text = Titles.MerchantFeeSetup;
 
                 scrud.DisplayFields = GetDisplayFields();
@@ -61,7 +61,7 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
         {
             List<string> displayViews = new List<string>();
             ScrudHelper.AddDisplayView(displayViews, "core.bank_accounts.account_id", "core.merchant_account_selector_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.payment_cards.payment_card_id", "core.payment_cards");
+            ScrudHelper.AddDisplayView(displayViews, "core.payment_cards.payment_card_id", "core.payment_card_scrud_view");
             ScrudHelper.AddDisplayView(displayViews, "core.accounts.account_id", "core.merchant_fee_setup_account_selector_view");
             return string.Join(",", displayViews);
         }
