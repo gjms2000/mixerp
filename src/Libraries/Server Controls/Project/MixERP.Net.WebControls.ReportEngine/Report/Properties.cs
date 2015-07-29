@@ -46,6 +46,7 @@ namespace MixERP.Net.WebControls.ReportEngine
         public string Path { get; set; }
         public string ReportNotFoundErrorMessage { get; set; }
         public string RunningTotalText { get; set; }
+        public string Html { get; set; }
 
         public void AddParameterToCollection(Collection<KeyValuePair<string, object>> parameter)
         {

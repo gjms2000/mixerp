@@ -6,6 +6,7 @@
 <head runat="server">
     <title>MixERP Report</title>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/Stylesheets/report.min.css" rel="stylesheet" />
     <script src="/bundles/scripts/libraries.min.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -20,6 +21,27 @@
         <script type="text/javascript">
             var closeWindow = function () {
                 parent.$.fn.colorbox.close();
+            };
+
+            function updateReportHiddenPdf() {
+                var temp = $(".container div .hide");
+                temp.remove();
+
+                $('#ReportHidden').val($("html").html());
+                $(".container div").append(temp);
+            };
+
+            function updateReportHidden() {
+                var temp = $(".container div .hide");
+                temp.remove();
+
+                $("table").attr("border", "1");
+
+                var template = "<html><head><title>Document</title></head><body>" + $("#report").html() + "</body></html>";
+
+                $('#ReportHidden').val(template);
+
+                $(".container div").append(temp);
             };
         </script>
     </form>

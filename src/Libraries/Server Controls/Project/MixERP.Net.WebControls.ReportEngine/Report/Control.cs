@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System.IO;
 using MixERP.Net.Common;
 using System.Reflection;
 using System.Web.UI;
@@ -34,6 +35,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.AddCommandPanel(this.reportContainer);
             this.AddReportBody(this.reportContainer);
             this.Controls.Add(this.reportContainer);
+            this.ValidateRequestMode = ValidateRequestMode.Disabled;
 
             PageUtility.AddMeta(this.Page, "generator", Assembly.GetAssembly(typeof (Report)).GetName().Name);
 
@@ -51,6 +53,16 @@ namespace MixERP.Net.WebControls.ReportEngine
 
         protected override void Render(HtmlTextWriter w)
         {
+            // setup a TextWriter to capture the markup
+            TextWriter tw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(tw);
+
+            // render the markup into our surrogate TextWriter
+            base.Render(htw);
+
+            // get the captured markup as a string
+            string pageSource = tw.ToString(); 
+            this.Html = pageSource;
             this.reportContainer.RenderControl(w);
         }
     }

@@ -127,8 +127,31 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
             return true;
         }
 
+        #region Accounts
         [WebMethod]
-        public Collection<ListItem> PLAppropriationAccounts()
+        public Collection<ListItem> GetLiabilityAccounts()
+        {
+            if (AppUsers.GetCurrent().View.IsAdmin.ToBool())
+            {
+                return GetValues(AccountHelper.GetLiabilityAccounts(AppUsers.GetCurrentUserDB()));
+            }
+
+            return null;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetIncomeTaxExpenseAccounts()
+        {
+            if (AppUsers.GetCurrent().View.IsAdmin.ToBool())
+            {
+                return GetValues(AccountHelper.GetIncomeTaxExpenseAccounts(AppUsers.GetCurrentUserDB()));
+            }
+
+            return null;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetPLAppropriationAccounts()
         {
             if (AppUsers.GetCurrent().View.IsAdmin.ToBool())
             {
@@ -149,6 +172,6 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
 
             return values;
         }
-
+        #endregion
     }
 }

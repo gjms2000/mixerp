@@ -31,7 +31,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <div style="clear: both;"></div>
     <br/>
 
-
     <div class="ui tiny buttons">
         <button class="ui button">Save Position</button>
         <div class="or"></div>

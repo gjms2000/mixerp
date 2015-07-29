@@ -89,4 +89,12 @@ th {
     display: none;
   }
 }
+.report-command a {
+  cursor: pointer;
+}
+.report-command a i {
+  height: 16px;
+  width: 16px;
+  color: #700961;
+}
 /*# sourceMappingURL=report.css.map */

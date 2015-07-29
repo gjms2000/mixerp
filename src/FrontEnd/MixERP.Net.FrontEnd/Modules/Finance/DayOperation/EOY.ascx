@@ -29,7 +29,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     <div class="ui button">New Fiscal Year</div>
     <div class="ui button">Perform EOD</div>
 </div>
-<div class="ui attached segment" id="PLAppropriation">
+<div class="ui attached initially hidden segment" id="PLAppropriation">
     <div class="ui purple header">PL Appropriation</div>
     <div class="ui divider"></div>
 
@@ -64,7 +64,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
             </tr>
         </tfoot>
     </table>
-    <div class="ui form" style="width: 400px;">
+    <div class="ui form" style="width: 500px;">
         <div class="two fields">
             <div class="field">
                 <label><%=Titles.ReferenceNumber %></label>
@@ -72,12 +72,12 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="field">
                 <label><%=Titles.CostCenter %></label>
-                <select id="CostCenterSelect"></select>
+                <select class="ui dropdown" id="CostCenterSelect"></select>
             </div>
         </div>
         <div class="field">
             <label>Select PL Appropriation A/C</label>
-            <select id="PLAppropriationAccountSelect"></select>
+            <select class="ui dropdown" id="PLAppropriationAccountSelect"></select>
         </div>
         <div class="field">
             <label><%=Titles.StatementReference %></label>
@@ -89,15 +89,15 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 
 </div>
-<div class="ui attached initially hidden segment" id="IncomeTax">
+<div class="ui attached segment" id="IncomeTax">
     <div class="ui purple header">Book Income Tax</div>
     <div class="ui divider"></div>
 
     <div class="ui form">
         <div class="fields">
             <div class="four wide field">
-                <label>Select Tax Office GL</label>
-                <select class="ui dropdown"></select>
+                <label for="TaxOfficeAccountSelect">Select Tax Office GL</label>
+                <select class="ui search selection dropdown" id="TaxOfficeAccountSelect"></select>
             </div>
             <div class="two wide field">
                 <label>Profit Before Tax</label>
@@ -114,8 +114,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         </div>
         <div class="fields">
             <div class="four wide field">
-                <label>Select Expenses GL</label>
-                <select class="ui dropdown"></select>
+                <label for="TaxExpenseSelect">Select Expenses GL</label>
+                <select class="ui search selection dropdown" id="TaxExpenseSelect"></select>
             </div>
             <div class="twelve wide field">
                 <label>Statement Reference</label>
@@ -126,14 +126,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         <div class="ui purple button">
             Post Transaction
         </div>
-
-        <div class="ui green button">
-            Approve This Transaction
-        </div>
-
-        <div class="ui green button">
-            Next
-        </div>
     </div>
 </div>
 
@@ -143,6 +135,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     var pLAppropriationAccountSelect = $("#PLAppropriationAccountSelect");
     var statementReferenceTextArea = $("#StatementReferenceTextArea");
     var postPLAppropriationInputButton = $("#PostPLAppropriationInputButton");
+    var taxOfficeSelect = $("#TaxOfficeAccountSelect");
+    var taxExpenseSelect = $("#TaxExpenseSelect");
+
     var url;
     var data;
 
@@ -179,6 +174,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     $(document).ready(function () {
         loadCostCenter();
         loadPLAppropriationAccount();
+        loadTaxOfficeAccount();
+        loadTaxExpensesAccount();
     });
 
 
@@ -234,7 +231,19 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     function loadPLAppropriationAccount() {
-        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/PLAppropriationAccounts";
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/GetPLAppropriationAccounts";
         ajaxDataBind(url, pLAppropriationAccountSelect);
+    };
+    function loadPLAppropriationAccount() {
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/GetPLAppropriationAccounts";
+        ajaxDataBind(url, pLAppropriationAccountSelect);
+    };
+    function loadTaxOfficeAccount() {
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/GetLiabilityAccounts";
+        ajaxDataBind(url, taxOfficeSelect);
+    };
+    function loadTaxExpensesAccount() {
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/GetIncomeTaxExpenseAccounts";
+        ajaxDataBind(url, taxExpenseSelect);
     };
 </script>

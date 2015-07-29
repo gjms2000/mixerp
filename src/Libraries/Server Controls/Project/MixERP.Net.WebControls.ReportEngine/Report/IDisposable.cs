@@ -19,6 +19,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace MixERP.Net.WebControls.ReportEngine
@@ -27,7 +28,7 @@ namespace MixERP.Net.WebControls.ReportEngine
     {
         private Literal bodyContentsLiteral;
         private Literal bottomSectionLiteral;
-        private ImageButton closeImageButton;
+        private HtmlAnchor closeImageButton;
 
         /// <summary>
         ///     CommandPanel is displayed at the top of the report.
@@ -37,13 +38,16 @@ namespace MixERP.Net.WebControls.ReportEngine
         private Collection<DataTable> dataTableCollection;
         private Collection<string> decimalFieldIndicesCollection;
         private bool disposed;
-        private ImageButton emailImageButton;
-        private ImageButton filterImageButton;
-        private ImageButton goBottomImageButton;
-        private ImageButton goTopImageButton;
+        private LinkButton emailImageButton;
+        private LinkButton pdfLinkButton;
+        private LinkButton excelLinkButton;
+        private LinkButton wordLinkButton;
+        private HtmlAnchor filterAnchor;
+        private HtmlAnchor goBottomAnchor;
+        private HtmlAnchor goTopAnchor;
         private PlaceHolder gridPlaceHolder;
         private ReportHeader header;
-        private ImageButton printImageButton;
+        private HtmlAnchor printAnchor;
 
         /// <summary>
         ///     ReportBody is displayed below the CommandPanel and contains the following sections:
@@ -124,22 +128,22 @@ namespace MixERP.Net.WebControls.ReportEngine
                 this.emailImageButton = null;
             }
 
-            if (this.filterImageButton != null)
+            if (this.filterAnchor != null)
             {
-                this.filterImageButton.Dispose();
-                this.filterImageButton = null;
+                this.filterAnchor.Dispose();
+                this.filterAnchor = null;
             }
 
-            if (this.goBottomImageButton != null)
+            if (this.goBottomAnchor != null)
             {
-                this.goBottomImageButton.Dispose();
-                this.goBottomImageButton = null;
+                this.goBottomAnchor.Dispose();
+                this.goBottomAnchor = null;
             }
 
-            if (this.goTopImageButton != null)
+            if (this.goTopAnchor != null)
             {
-                this.goTopImageButton.Dispose();
-                this.goTopImageButton = null;
+                this.goTopAnchor.Dispose();
+                this.goTopAnchor = null;
             }
 
             if (this.gridPlaceHolder != null)
@@ -154,10 +158,10 @@ namespace MixERP.Net.WebControls.ReportEngine
                 this.header = null;
             }
 
-            if (this.printImageButton != null)
+            if (this.printAnchor != null)
             {
-                this.printImageButton.Dispose();
-                this.printImageButton = null;
+                this.printAnchor.Dispose();
+                this.printAnchor = null;
             }
 
             if (this.reportBody != null)
