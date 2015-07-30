@@ -27,8 +27,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Threading;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Entities.Core;
+using PetaPoco;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Data
 {
@@ -412,6 +416,54 @@ namespace MixERP.Net.WebControls.ScrudFactory.Data
                     Log.Warning("{Sql}/{Data}/{Exception}.", sql, data, ex);
                     throw new MixERPException(ex.Message, ex, ex.ConstraintName);
                 }
+            }
+        }
+
+        public static IEnumerable<CustomFieldSetup> GetCustomFieldSetups(string catalog, string schemaName, string tableName)
+        {
+            string objectName = schemaName + "." + tableName;
+            const string sql = "SELECT core.custom_field_setup.* FROM core.custom_field_setup " +
+                               "INNER JOIN core.custom_field_forms " +
+                               "ON core.custom_field_forms.form_name = core.custom_field_setup.form_name " +
+                               "WHERE core.custom_field_forms.table_name=@0;";
+
+            return Factory.Get<CustomFieldSetup>(catalog, sql, objectName);
+        }
+
+        public static string GetCustomFieldValue(string catalog, string schemaName, string tableName, string fieldName, string id)
+        {
+            string objectName = schemaName + "." + tableName;
+            const string sql = @"SELECT core.custom_fields.value
+                                FROM core.custom_fields
+                                INNER JOIN core.custom_field_setup
+                                ON core.custom_field_setup.custom_field_setup_id = core.custom_fields.custom_field_setup_id
+                                INNER JOIN core.custom_field_forms
+                                ON core.custom_field_forms.form_name = core.custom_field_setup.form_name
+                                WHERE core.custom_field_forms.table_name = @0
+                                AND core.custom_field_setup.field_name=@1
+                                AND core.custom_fields.resource_id = @2;";
+
+            return Factory.Scalar<string>(catalog, sql, objectName, fieldName, id);
+        }
+
+        public static void SaveCustomFields(string catalog, string tableSchema, string tableName,
+            string keyColumnName, Collection<KeyValuePair<string, object>> data)
+        {
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name(@0::character varying(100), @1::character varying(100))" +
+                         ");";
+
+            Factory.NonQuery(catalog, sql, tableSchema, tableName);
+
+            foreach (var pair in data)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name(@0::character varying(100), @1::character varying(100), @2::character varying(100)), " +
+                      "@3, @4;";
+
+                Factory.NonQuery(catalog, sql, tableSchema, tableName, pair.Key, keyColumnName, pair.Value);
             }
         }
     }

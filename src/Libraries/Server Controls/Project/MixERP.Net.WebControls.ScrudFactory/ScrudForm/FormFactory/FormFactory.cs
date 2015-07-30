@@ -25,6 +25,7 @@ using System.Linq;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using MixERP.Net.Common;
+using MixERP.Net.Entities.Core;
 using MixERP.Net.WebControls.ScrudFactory.Controls;
 using MixERP.Net.WebControls.ScrudFactory.Data;
 using MixERP.Net.WebControls.ScrudFactory.Helpers;
@@ -72,77 +73,110 @@ namespace MixERP.Net.WebControls.ScrudFactory
                             }
                         }
 
-                        if (string.IsNullOrWhiteSpace(parentTableColumn))
-                        {
-                            if (ScrudTypes.TextBoxTypes.Contains(dataType))
-                            {
-                                using (
-                                    TextBox textBox = this.formContainer.FindControl(columnName + "_textbox") as TextBox
-                                    )
-                                {
-                                    if (textBox != null)
-                                    {
-                                        list.Add(new KeyValuePair<string, object>(columnName,
-                                            ScrudParser.ParseValue(textBox.Text, dataType)));
-                                    }
-                                }
-                            }
-
-                            if (ScrudTypes.Bools.Contains(dataType))
-                            {
-                                using (
-                                    RadioButtonList radioButtonList =
-                                        this.formContainer.FindControl(columnName + "_radiobuttonlist") as
-                                            RadioButtonList)
-                                {
-                                    if (radioButtonList != null)
-                                    {
-                                        list.Add(new KeyValuePair<string, object>(columnName,
-                                            ScrudParser.ParseValue(radioButtonList.Text, dataType)));
-                                    }
-                                }
-                            }
-
-                            if (dataType.Equals("bytea"))
-                            {
-                                using (
-                                    FileUpload fileUpload =
-                                        this.formContainer.FindControl(columnName + "_fileupload") as FileUpload)
-                                {
-                                    if (fileUpload != null)
-                                    {
-                                        var file = ScrudFileUpload.UploadFile(this.Catalog, fileUpload);
-                                        list.Add(new KeyValuePair<string, object>(columnName, file));
-                                        this.imageColumn = columnName;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //DropDownList
-                            using (
-                                DropDownList dropDownList =
-                                    this.formContainer.FindControl(columnName + "_dropdownlist") as DropDownList)
-                            {
-                                object value = null;
-
-                                if (dropDownList != null && !string.IsNullOrWhiteSpace(dropDownList.Text))
-                                {
-                                    value = dropDownList.SelectedValue;
-                                }
-
-                                list.Add(new KeyValuePair<string, object>(columnName, value));
-                            }
-                        }
+                        this.AddToList(ref list, columnName, parentTableColumn, dataType);
                     }
                 }
             }
 
             return list;
         }
+        /// <summary>
+        ///     This function iterates through all the dynamically added controls,
+        ///     checks their values, and returns a list of column and values
+        ///     mapped as KeyValuePair of column_name (key) and value.
+        /// </summary>
+        /// <returns>
+        ///     Returns a list of column and values mapped as
+        ///     KeyValuePair of column_name (key) and value.
+        /// </returns>
+        private Collection<KeyValuePair<string, object>> GetCustomFieldCollection()
+        {
+            Collection<KeyValuePair<string, object>> list = new Collection<KeyValuePair<string, object>>();
+            var customFields = FormHelper.GetCustomFieldSetups(this.Catalog, this.TableSchema, this.Table).ToList();
 
-        private void LoadForm(Panel container, DataTable values, bool editing = false)
+            if (customFields.Any())
+            {
+                foreach (var customField in customFields)
+                {
+                    string columnName = customField.FieldName;
+                    string dataType = customField.DataType;
+                    this.AddToList(ref list, columnName, string.Empty, dataType);
+
+                }
+            }
+
+            return list;
+        }
+
+        private void AddToList(ref Collection<KeyValuePair<string, object>> list, string columnName,
+            string parentTableColumn, string dataType)
+        {
+            if (string.IsNullOrWhiteSpace(parentTableColumn))
+            {
+                if (ScrudTypes.TextBoxTypes.Contains(dataType))
+                {
+                    using (
+                        TextBox textBox = this.formContainer.FindControl(columnName + "_textbox") as TextBox
+                        )
+                    {
+                        if (textBox != null)
+                        {
+                            list.Add(new KeyValuePair<string, object>(columnName,
+                                ScrudParser.ParseValue(textBox.Text, dataType)));
+                        }
+                    }
+                }
+
+                if (ScrudTypes.Bools.Contains(dataType))
+                {
+                    using (
+                        RadioButtonList radioButtonList =
+                            this.formContainer.FindControl(columnName + "_radiobuttonlist") as
+                                RadioButtonList)
+                    {
+                        if (radioButtonList != null)
+                        {
+                            list.Add(new KeyValuePair<string, object>(columnName,
+                                ScrudParser.ParseValue(radioButtonList.Text, dataType)));
+                        }
+                    }
+                }
+
+                if (dataType.Equals("bytea"))
+                {
+                    using (
+                        FileUpload fileUpload =
+                            this.formContainer.FindControl(columnName + "_fileupload") as FileUpload)
+                    {
+                        if (fileUpload != null)
+                        {
+                            var file = ScrudFileUpload.UploadFile(this.Catalog, fileUpload);
+                            list.Add(new KeyValuePair<string, object>(columnName, file));
+                            this.imageColumn = columnName;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //DropDownList
+                using (
+                    DropDownList dropDownList =
+                        this.formContainer.FindControl(columnName + "_dropdownlist") as DropDownList)
+                {
+                    object value = null;
+
+                    if (dropDownList != null && !string.IsNullOrWhiteSpace(dropDownList.Text))
+                    {
+                        value = dropDownList.SelectedValue;
+                    }
+
+                    list.Add(new KeyValuePair<string, object>(columnName, value));
+                }
+            }
+        }
+
+        private void LoadForm(Panel container, DataTable values, string id = "", bool editing = false)
         {
             using (HtmlTable htmlTable = new HtmlTable())
             {
@@ -201,8 +235,35 @@ namespace MixERP.Net.WebControls.ScrudFactory
                     }
                 }
 
+                var customFields = FormHelper.GetCustomFieldSetups(this.Catalog, this.TableSchema, this.Table).ToList();
+
+                if (customFields.Any())
+                {
+                    foreach (CustomFieldSetup field in customFields)
+                    {
+                        string defaultValue = string.Empty;
+
+                        if (editing)
+                        {
+                            defaultValue = this.GetCustomFieldValue(this.TableSchema, this.Table, field.FieldName, id);
+                        }
+
+                        ScrudFactoryHelper.AddField(this.Catalog, htmlTable, "",
+                            this.GetItemSelectorPath(), this.TableSchema, this.Table, field.FieldName, defaultValue,
+                            false, true, field.DataType,
+                            "", 100, "", "", "", this.DisplayFields,
+                            this.DisplayViews, this.UseDisplayViewsAsParents, this.SelectedValues,
+                            this.GetErrorCssClass(), false, this.UseLocalColumnInDisplayViews);
+                    }
+                }
+
                 container.Controls.Add(htmlTable);
             }
+        }
+
+        private string GetCustomFieldValue(string schema, string table, string fieldName, string id)
+        {
+            return FormHelper.GetCustomFieldValue(this.Catalog, schema, table, fieldName, id);
         }
     }
 }

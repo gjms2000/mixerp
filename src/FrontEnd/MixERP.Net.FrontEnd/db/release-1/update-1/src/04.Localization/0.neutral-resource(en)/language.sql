@@ -193,6 +193,7 @@ SELECT localization.add_localized_resource('Labels', '', 'PartyDescription', 'Pa
 SELECT localization.add_localized_resource('Labels', '', 'PatchedDatabase', 'Patched the database.');
 SELECT localization.add_localized_resource('Labels', '', 'PatchingDatabase', 'Patching the database.');
 SELECT localization.add_localized_resource('Labels', '', 'PercentCompleted', '{0} percent completed.');
+SELECT localization.add_localized_resource('Labels', '', 'PleaseSelectAFormFirst', 'Please select a form first.');
 SELECT localization.add_localized_resource('Labels', '', 'ReleaseContainsNoUpdates', 'This release does not contain any update.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringDirectory', 'Restoring directory : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringFile', 'Restoring file : {0}.');
@@ -872,9 +873,11 @@ SELECT localization.add_localized_resource('Titles', '', 'CustomerCode', 'Custom
 SELECT localization.add_localized_resource('Titles', '', 'CustomerName', 'Customer Name');
 SELECT localization.add_localized_resource('Titles', '', 'CustomerPanNumber', 'Customer PAN #');
 SELECT localization.add_localized_resource('Titles', '', 'CustomerPaysFees', 'Customer Pays Fees');
+SELECT localization.add_localized_resource('Titles', '', 'CustomFields', 'Custom Fields');
 SELECT localization.add_localized_resource('Titles', '', 'DatabaseBackups', 'Database Backups');
 SELECT localization.add_localized_resource('Titles', '', 'DatabaseParameters', 'Database Parameters');
 SELECT localization.add_localized_resource('Titles', '', 'DatabaseStatistics', 'Database Statistics');
+SELECT localization.add_localized_resource('Titles', '', 'DataType', 'Data Type');
 SELECT localization.add_localized_resource('Titles', '', 'Date', 'Date');
 SELECT localization.add_localized_resource('Titles', '', 'Day', 'Day');
 SELECT localization.add_localized_resource('Titles', '', 'Days', 'Days');
@@ -897,6 +900,7 @@ SELECT localization.add_localized_resource('Titles', '', 'DeliverTo', 'Deliver T
 SELECT localization.add_localized_resource('Titles', '', 'DeliveredTo', 'Delivered To');
 SELECT localization.add_localized_resource('Titles', '', 'Department', 'Department');
 SELECT localization.add_localized_resource('Titles', '', 'Departments', 'Departments');
+SELECT localization.add_localized_resource('Titles', '', 'Description', 'Description');
 SELECT localization.add_localized_resource('Titles', '', 'DestinationStore', 'Destination Store');
 SELECT localization.add_localized_resource('Titles', '', 'Difference', 'Difference');
 SELECT localization.add_localized_resource('Titles', '', 'DirectPurchase', 'Direct Purchase');
@@ -937,6 +941,9 @@ SELECT localization.add_localized_resource('Titles', '', 'ExtractingDownload', '
 SELECT localization.add_localized_resource('Titles', '', 'Factor', 'Factor');
 SELECT localization.add_localized_resource('Titles', '', 'Fax', 'Fax');
 SELECT localization.add_localized_resource('Titles', '', 'FilePath', 'File Path');
+SELECT localization.add_localized_resource('Titles', '', 'FieldOrder', 'Field Order');
+SELECT localization.add_localized_resource('Titles', '', 'FieldLabel', 'Field Label');
+SELECT localization.add_localized_resource('Titles', '', 'FieldName', 'Field Name');
 SELECT localization.add_localized_resource('Titles', '', 'Filter', 'Filter');
 SELECT localization.add_localized_resource('Titles', '', 'FinalDueAmountinBaseCurrency', 'Final Due Amount in Base Currency');
 SELECT localization.add_localized_resource('Titles', '', 'FirstPage', 'First Page');
@@ -1174,6 +1181,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Select', 'Select');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCompany', 'Select Company');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCustomer', 'Select Customer');
 SELECT localization.add_localized_resource('Titles', '', 'SelectFlag', 'Select a Flag');
+SELECT localization.add_localized_resource('Titles', '', 'SelectForm', 'Select a Form');
 SELECT localization.add_localized_resource('Titles', '', 'SelectLanguage', 'Select Language');
 SELECT localization.add_localized_resource('Titles', '', 'SelectOffice', 'Select Office');
 SELECT localization.add_localized_resource('Titles', '', 'SelectParty', 'Select Party');

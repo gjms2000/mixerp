@@ -6,4 +6,4 @@ SELECT
 	key,
 	value
 FROM
-config.db_paramters;
+config.db_parameters;

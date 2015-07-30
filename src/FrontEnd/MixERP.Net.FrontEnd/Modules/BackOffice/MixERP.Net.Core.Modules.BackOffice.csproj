@@ -104,6 +104,7 @@
     <Content Include="Counters.ascx" />
     <Content Include="Counties.ascx" />
     <Content Include="Countries.ascx" />
+    <Content Include="CustomFields.ascx" />
     <Content Include="Entities.ascx" />
     <Content Include="Handlers\ImageHandler.ashx" />
     <Content Include="..\..\..\..\mixerp.licenseheader">
@@ -123,9 +124,11 @@
     <Content Include="Policy\ApiAccess.ascx" />
     <Content Include="Scripts\Admin\ReportWriter.ascx..js" />
     <Content Include="Scripts\Admin\DatabaseBackup.ascx.js" />
+    <Content Include="Scripts\CustomFields.ascx.js" />
     <Content Include="Scripts\AttachmentManager.ascx.js" />
     <Content Include="packages.config" />
     <Content Include="Services\Admin\ReportWriter.asmx" />
+    <Content Include="Services\CustomFields.asmx" />
     <Content Include="Services\OTS\OpeningInventory.asmx" />
     <Content Include="Widgets\LinksWidget.ascx" />
     <Content Include="Widgets\OfficeInformationWidget.ascx" />
@@ -261,6 +264,13 @@
     </Compile>
     <Compile Include="Countries.ascx.designer.cs">
       <DependentUpon>Countries.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomFields.ascx.cs">
+      <DependentUpon>CustomFields.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomFields.ascx.designer.cs">
+      <DependentUpon>CustomFields.ascx</DependentUpon>
     </Compile>
     <Compile Include="Departments.ascx.cs">
       <DependentUpon>Departments.ascx</DependentUpon>
@@ -445,6 +455,10 @@
     </Compile>
     <Compile Include="Services\Attachments.asmx.cs">
       <DependentUpon>Attachments.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\CustomFields.asmx.cs">
+      <DependentUpon>CustomFields.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\OTS\OpeningInventory.asmx.cs">

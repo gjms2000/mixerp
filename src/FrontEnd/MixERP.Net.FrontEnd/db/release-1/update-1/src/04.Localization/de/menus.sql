@@ -10,7 +10,6 @@ SELECT core.create_menu_locale( 'OTSMSG', 'de', 'Nachrichten Parameter');
 SELECT core.create_menu_locale( 'OTSMIX', 'de', 'MixERP parameter');
 SELECT core.create_menu_locale( 'OTSOER', 'de', 'Offene Wechselkurse Parameter');
 SELECT core.create_menu_locale( 'RET', 'de', 'Erklärung zum Bilanzgewinn');
-SELECT core.create_menu_locale( 'SPR', 'de', 'Verkaufspersonal Report');
 SELECT core.create_menu_locale( 'OTSSFP', 'de', 'Scrud Factory Report');
 SELECT core.create_menu_locale( 'STK', 'de', 'Lager Transfer Bestätigung');
 SELECT core.create_menu_locale( 'STP', 'de', 'Lager Transfer Authorisierung');

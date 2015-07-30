@@ -2166,6 +2166,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Please select a form first.
+		/// </summary>
+		public static string PleaseSelectAFormFirst 
+		{
+			get
+			{
+				return Get("PleaseSelectAFormFirst");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for This release does not contain any update.
 		/// </summary>
 		public static string ReleaseContainsNoUpdates 
@@ -5652,6 +5663,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Merchant Account
+		/// </summary>
+		public static string merchant_account 
+		{
+			get
+			{
+				return Get("merchant_account");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Merchant Account Id
 		/// </summary>
 		public static string merchant_account_id 
@@ -6066,6 +6088,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("password");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Payment Card
+		/// </summary>
+		public static string payment_card 
+		{
+			get
+			{
+				return Get("payment_card");
 			}
 		}
 		
@@ -9597,6 +9630,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Custom Fields
+		/// </summary>
+		public static string CustomFields 
+		{
+			get
+			{
+				return Get("CustomFields");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Customer Code
 		/// </summary>
 		public static string CustomerCode 
@@ -9637,6 +9681,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("CustomerPaysFees");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Data Type
+		/// </summary>
+		public static string DataType 
+		{
+			get
+			{
+				return Get("DataType");
 			}
 		}
 		
@@ -9901,6 +9956,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Departments");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Description
+		/// </summary>
+		public static string Description 
+		{
+			get
+			{
+				return Get("Description");
 			}
 		}
 		
@@ -10330,6 +10396,39 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Fax");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Field Label
+		/// </summary>
+		public static string FieldLabel 
+		{
+			get
+			{
+				return Get("FieldLabel");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Field Name
+		/// </summary>
+		public static string FieldName 
+		{
+			get
+			{
+				return Get("FieldName");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Field Order
+		/// </summary>
+		public static string FieldOrder 
+		{
+			get
+			{
+				return Get("FieldOrder");
 			}
 		}
 		
@@ -12948,6 +13047,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectFlag");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Select a Form
+		/// </summary>
+		public static string SelectForm 
+		{
+			get
+			{
+				return Get("SelectForm");
 			}
 		}
 		

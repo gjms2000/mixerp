@@ -95,6 +95,7 @@ SELECT * FROM core.create_menu('Sales Tax Exempts', '~/Modules/BackOffice/Tax/Sa
 SELECT * FROM core.create_menu('Sales Tax Exempt Details', '~/Modules/BackOffice/Tax/SalesTaxExemptDetails.mix', 'STXEXD', 2, core.get_menu_id('BOTC'));
 SELECT * FROM core.create_menu('Miscellaneous Parameters', NULL, 'SMP', 1, core.get_menu_id('BO'));
 SELECT * FROM core.create_menu('Flags', '~/Modules/BackOffice/Flags.mix', 'TRF', 2, core.get_menu_id('SMP'));
+SELECT * FROM core.create_menu('Custom Fields', '~/Modules/BackOffice/CustomFields.mix', 'CF', 2, core.get_menu_id('SMP'));
 SELECT * FROM core.create_menu('Audit Reports', NULL, 'SEAR', 1, core.get_menu_id('BO'));
 SELECT * FROM core.create_menu('Login View', '~/Reports/Office.Login.xml', 'SEAR-LV', 2, core.get_menu_id('SEAR'));
 SELECT * FROM core.create_menu('Office Setup', NULL, 'SOS', 1, core.get_menu_id('BO'));

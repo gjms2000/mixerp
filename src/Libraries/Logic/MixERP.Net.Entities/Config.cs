@@ -50,10 +50,10 @@ namespace MixERP.Net.Entities.Config
 
     }
 
-    [TableName("config.db_paramters")]
+    [TableName("config.db_parameters")]
     [PrimaryKey("key", autoIncrement=false)]
     [ExplicitColumns]
-    public class DbParamter : PetaPocoDB.Record<DbParamter> , IPoco
+    public class DbParameter : PetaPocoDB.Record<DbParameter> , IPoco
     {
         [Column("key")] 
         public string Key { get; set; }
