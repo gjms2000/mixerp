@@ -80,7 +80,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.wordLinkButton.Text = "<i class='fa fa-file-word-o'></i>";
 
             this.wordLinkButton.OnClientClick = "return updateReportHidden();";
-            this.wordLinkButton.ToolTip = @"Microsoft Word";
+            this.wordLinkButton.ToolTip = Titles.ExportToDoc;
             this.wordLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;
@@ -99,7 +99,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.excelLinkButton.Text = "<i class='fa fa-file-excel-o'></i>";
 
             this.excelLinkButton.OnClientClick = "return updateReportHidden();";
-            this.excelLinkButton.ToolTip = @"Microsoft Excel";
+            this.excelLinkButton.ToolTip = Titles.ExportToExcel;
             this.excelLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;
@@ -118,7 +118,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.pdfLinkButton.Text = "<i class='fa fa-file-pdf-o'></i>";
 
             this.pdfLinkButton.OnClientClick = "return updateReportHiddenPdf();";
-            this.pdfLinkButton.ToolTip = @"PDF";
+            this.pdfLinkButton.ToolTip = Titles.ExportToPDF;
             this.pdfLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;

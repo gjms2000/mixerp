@@ -33,7 +33,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
         protected override void CreateChildControls()
         {
             this.Validate();
-
+            this.ValidateRequestMode = ValidateRequestMode.Disabled;
             this.scrudContainer = new Panel();
 
             this.LoadScrudContainer(this.scrudContainer);

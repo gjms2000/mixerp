@@ -23,6 +23,7 @@ using System;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MixERP.Net.WebControls.ReportEngine.Helpers;
 
 namespace MixERP.Net.WebControls.ScrudFactory
 {
@@ -30,6 +31,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
     {
         private CommandPanel bottomCommandPanel;
         private Label messageLabel;
+        private HiddenField markupHidden;
         private HiddenField officeCodeHidden;
         private CommandPanel topCommandPanel;
         private UpdatePanel updatePanel;
@@ -44,14 +46,23 @@ namespace MixERP.Net.WebControls.ScrudFactory
         private void AddScriptManager()
         {
             ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
+
             if (scriptManager != null)
             {
                 scriptManager.RegisterAsyncPostBackControl(this.saveButton);
                 scriptManager.RegisterAsyncPostBackControl(this.saveButton);
                 scriptManager.RegisterAsyncPostBackControl(this.topCommandPanel.EditButton);
-                scriptManager.RegisterAsyncPostBackControl(this.bottomCommandPanel.EditButton);
                 scriptManager.RegisterAsyncPostBackControl(this.topCommandPanel.DeleteButton);
+                scriptManager.RegisterAsyncPostBackControl(this.bottomCommandPanel.EditButton);
                 scriptManager.RegisterAsyncPostBackControl(this.bottomCommandPanel.DeleteButton);
+
+                scriptManager.RegisterPostBackControl(this.topCommandPanel.ExcelExportButton);
+                scriptManager.RegisterPostBackControl(this.topCommandPanel.WordExportButton);
+                scriptManager.RegisterPostBackControl(this.topCommandPanel.PdfExportButton);
+                scriptManager.RegisterPostBackControl(this.bottomCommandPanel.ExcelExportButton);
+                scriptManager.RegisterPostBackControl(this.bottomCommandPanel.WordExportButton);
+                scriptManager.RegisterPostBackControl(this.bottomCommandPanel.PdfExportButton);
+
             }
         }
 
@@ -79,8 +90,13 @@ namespace MixERP.Net.WebControls.ScrudFactory
             this.officeCodeHidden.ID = "OfficeCodeHidden";
             this.officeCodeHidden.Value = this.OfficeCode;
 
+            this.markupHidden = new HiddenField();
+            this.markupHidden.ID = "MarkupHidden";
+
             this.updatePanel.ContentTemplateContainer.Controls.Add(this.userIdHidden);
             this.updatePanel.ContentTemplateContainer.Controls.Add(this.officeCodeHidden);
+            this.updatePanel.ContentTemplateContainer.Controls.Add(this.markupHidden);
+
             p.Controls.Add(this.updatePanel);
         }
 
@@ -103,6 +119,23 @@ namespace MixERP.Net.WebControls.ScrudFactory
             this.topCommandPanel = new CommandPanel();
             this.topCommandPanel.DeleteButtonClick += this.DeleteButton_Click;
             this.topCommandPanel.EditButtonClick += this.EditButton_Click;
+            this.topCommandPanel.WordExportButtonClick += delegate
+            {
+                string html = this.markupHidden.Value;
+                DownloadHelper.DownloadWord(html);
+            };
+
+            this.topCommandPanel.ExcelExportButtonClick += delegate
+            {
+                string html = this.markupHidden.Value;
+                DownloadHelper.DownloadExcel(html);
+            };
+            this.topCommandPanel.PdfExportButtonClick += delegate
+            {
+                string html = this.markupHidden.Value;
+                DownloadHelper.DownloadPdf(html);
+            };
+
             this.topCommandPanel.ButtonCssClass = this.GetCommandPanelButtonCssClass();
             this.topCommandPanel.CssClass = this.GetCommandPanelCssClass();
 
@@ -114,6 +147,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
             this.topCommandPanel.DeleteButtonIconCssClass = this.GetDeleteButtonIconCssClass();
             this.topCommandPanel.PrintButtonIconCssClass = this.GetPrintButtonIconCssClass();
         }
+
 
         private string GetItemSelectorPath()
         {

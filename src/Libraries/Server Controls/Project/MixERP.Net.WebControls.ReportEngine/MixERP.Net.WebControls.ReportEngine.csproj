@@ -64,12 +64,10 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\DownloadHelper.cs" />
     <Compile Include="Helpers\ParameterHelper.cs" />
     <Compile Include="Helpers\ReportInstaller.cs" />
     <Compile Include="Helpers\ReportParser.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
-    <Compile Include="PdfConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportHeader\Control.cs" />
     <Compile Include="ReportHeader\Events.cs" />

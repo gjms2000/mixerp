@@ -93,6 +93,7 @@
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\DbConfig.cs" />
     <Compile Include="Helpers\DirectoryHelper.cs" />
+    <Compile Include="Helpers\DownloadHelper.cs" />
     <Compile Include="Helpers\DropDownListHelper.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />
     <Compile Include="Helpers\FileSystemHelper.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="jQueryHelper\jQueryUI.cs" />
     <Compile Include="Models\PostgreSQLServer.cs" />
     <Compile Include="PageUtility.cs" />
+    <Compile Include="PdfConvert.cs" />
     <Compile Include="PostgresHelper\ParameterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

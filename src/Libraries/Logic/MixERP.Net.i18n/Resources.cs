@@ -10356,6 +10356,50 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Export
+		/// </summary>
+		public static string Export 
+		{
+			get
+			{
+				return Get("Export");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to Doc
+		/// </summary>
+		public static string ExportToDoc 
+		{
+			get
+			{
+				return Get("ExportToDoc");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to Excel
+		/// </summary>
+		public static string ExportToExcel 
+		{
+			get
+			{
+				return Get("ExportToExcel");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to PDF
+		/// </summary>
+		public static string ExportToPDF 
+		{
+			get
+			{
+				return Get("ExportToPDF");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for External Code
 		/// </summary>
 		public static string ExternalCode 

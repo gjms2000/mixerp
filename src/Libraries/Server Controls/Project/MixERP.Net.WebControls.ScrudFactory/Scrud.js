@@ -73,6 +73,16 @@ var scrudPrintGridView = function () {
     printGridView(reportTemplatePath, reportHeaderPath, title, formGridViewId, date, user, office, 'ScrudReport', 1, 0);
 };
 
+
+var scrudUpdateMarkup = function (triggerControlId) {
+    var user = $("#" + userIdHiddenId).val();
+    var office = $("#" + officeCodeHiddenId).val();
+    var title = $("#" + titleLabelId).html();
+
+    printGridView(reportTemplatePath, reportHeaderPath, title, formGridViewId, date, user, office, 'ScrudReport', 1, 0, $("#MarkupHidden"), triggerControlId);
+};
+
+
 Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
     //Fired on each ASP.net AJAX request.
     scrudInitialize();

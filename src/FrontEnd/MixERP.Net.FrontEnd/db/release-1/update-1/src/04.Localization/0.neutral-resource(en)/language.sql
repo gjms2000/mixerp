@@ -936,6 +936,10 @@ SELECT localization.add_localized_resource('Titles', '', 'EnteredBy', 'Entered B
 SELECT localization.add_localized_resource('Titles', '', 'Entities', 'Entities');
 SELECT localization.add_localized_resource('Titles', '', 'ExchangeRate', 'Exchange Rate');
 SELECT localization.add_localized_resource('Titles', '', 'Execute', 'Execute');
+SELECT localization.add_localized_resource('Titles', '', 'Export', 'Export');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToExcel', 'Export to Excel');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToDoc', 'Export to Doc');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToPDF', 'Export to PDF');
 SELECT localization.add_localized_resource('Titles', '', 'ExternalCode', 'External Code');
 SELECT localization.add_localized_resource('Titles', '', 'ExtractingDownload', 'Extracting Download');
 SELECT localization.add_localized_resource('Titles', '', 'Factor', 'Factor');

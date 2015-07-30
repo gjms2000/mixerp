@@ -1,4 +1,4 @@
-var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast) {
+var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
     //Load report template from the path.
     $.get(templatePath, function () { }).done(function (data) {
         //Load report header template.
@@ -25,6 +25,17 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
             data = data.replace("{OfficeCode}", office);
             data = data.replace("{Table}", table);
 
+            if (hiddenFieldToUpdate) {                
+                //Update the hidden field with data, but do not print.
+                $(hiddenFieldToUpdate).val(data);
+
+                if (triggerControlId) {
+                    $("#" + triggerControlId).trigger("click");
+                };
+
+                return;
+            };
+
             //Creating and opening a new window to display the report.
             var w = window.open('', windowName,
                 + ',menubar=0'
@@ -34,6 +45,7 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
                 + ',resizable=0');
             w.moveTo(0, 0);
             w.resizeTo(screen.width, screen.height);
+
 
             //Writing the report to the window.
             w.document.writeln(data);
