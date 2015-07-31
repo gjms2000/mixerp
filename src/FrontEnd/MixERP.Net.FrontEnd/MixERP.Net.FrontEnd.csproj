@@ -333,6 +333,7 @@
     <Content Include="Modules\web.config" />
     <Content Include="MixERP.Installation.config" />
     <Content Include="PostSignIn.aspx" />
+    <Content Include="Reports\Export.html" />
     <Content Include="Resource\Configs\index.html" />
     <Content Include="Resource\Configs\Updater.config" />
     <Content Include="Resource\CustomReports\index.html" />

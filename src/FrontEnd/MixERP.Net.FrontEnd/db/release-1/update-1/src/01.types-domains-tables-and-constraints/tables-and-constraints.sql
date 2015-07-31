@@ -697,3 +697,18 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT * FROM config.scrud_factory
+        WHERE key = 'ExportTemplatePath'
+    ) THEN
+        INSERT INTO config.scrud_factory
+        SELECT 'ExportTemplatePath', '~/Reports/Export.html';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;

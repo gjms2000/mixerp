@@ -18,12 +18,12 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.Hosting;
 using Codaxy.WkHtmlToPdf;
-using MixERP.Net.Common;
 
-namespace MixERP.Net.WebControls.ReportEngine.Helpers
+namespace MixERP.Net.Common.Helpers
 {
     public static class DownloadHelper
     {
@@ -52,42 +52,61 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             return HostingEnvironment.MapPath(source);
         }
 
+        public static string CreateWord(string html)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            //public directory is allowed direct access
+            string source = "~/Resource/Temp/Public/" + id + ".doc";
+            WriteHtml(source, html);
+            return HostingEnvironment.MapPath(source);
+        }
+
         public static void DownloadExcel(string html)
         {
             string path = CreateExcel(html);
-            OpenDownload(path, "application/vnd.xls", "xls");
-            File.Delete(path);
+            try
+            {
+                OpenDownload(path, "application/vnd.xls", "xls");
+
+            }
+            finally
+            {
+                File.Delete(path);
+            }
         }
 
         public static void DownloadWord(string html)
         {
-            string path = CreateExcel(html);
-            OpenDownload(path, "application/vnd.doc", "doc");
-            File.Delete(path);
+            string path = CreateWord(html);
+
+            try
+            {
+                OpenDownload(path, "application/vnd.doc", "doc");
+            }
+            finally
+            {
+                File.Delete(path);
+            }
         }
 
         public static void DownloadPdf(string html)
         {
-            if (HttpContext.Current == null)
-            {
-                return;
-            }
-
             string path = CreatePDF(html);
-            OpenDownload(path, "application/pdf", "pdf");
-            File.Delete(path);
+
+            try
+            {
+                OpenDownload(path, "application/pdf", "pdf");
+            }
+            finally
+            {
+                File.Delete(path);
+            }
         }
 
         private static void OpenDownload(string path, string mimeType, string extension)
         {
             string fileName = Path.GetFileNameWithoutExtension(HttpContext.Current.Request.Url.AbsolutePath);
-
-            FileInfo file = new FileInfo(path);
-
-            if (!file.Exists)
-            {
-                return;
-            }
 
             HttpResponse response = HttpContext.Current.Response;
 
@@ -96,11 +115,28 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             response.ClearHeaders();
             response.ClearContent();
             response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + "." + extension);
-            response.AddHeader("Content-Length", file.Length.ToString());
             response.ContentType = mimeType;
             response.Flush();
-            response.TransmitFile(file.FullName);
+
+            using (var stream = GetFileStream(path))
+            {
+                response.BinaryWrite(stream.ToArray());                
+            }
+
             response.End();
+        }
+
+        private static MemoryStream GetFileStream(string filePath)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (FileStream fs = File.OpenRead(filePath))
+                {
+                    fs.CopyTo(ms);
+                }
+
+                return ms;
+            }
         }
 
         private static void WriteHtml(string path, string html)
@@ -109,7 +145,7 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
 
             if (file != null)
             {
-                File.WriteAllText(file, html);
+                File.WriteAllText(file, html, Encoding.UTF8);
             }
         }
 

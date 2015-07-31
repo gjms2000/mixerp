@@ -711,13 +711,29 @@ BEGIN
         (
             custom_field_id             BIGSERIAL NOT NULL PRIMARY KEY,
             custom_field_setup_id       integer NOT NULL REFERENCES core.custom_field_setup,
-            resource_id                 BIGINT NOT NULL,
+            resource_id                 text NOT NULL,
             value                       text
         );
     END IF;
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT * FROM config.scrud_factory
+        WHERE key = 'ExportTemplatePath'
+    ) THEN
+        INSERT INTO config.scrud_factory
+        SELECT 'ExportTemplatePath', '~/Reports/Export.html';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
@@ -784,6 +800,56 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_custom_field_form_name.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_form_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100)
+);
+
+CREATE FUNCTION core.get_custom_field_form_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100)
+)
+RETURNS national character varying(100)
+AS
+$$
+BEGIN
+    RETURN form_name 
+    FROM core.custom_field_forms
+    WHERE table_name = _schema_name || '.' || _table_name;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_custom_field_setup_id_by_table_name.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_setup_id_by_table_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100),
+    _field_name national character varying(100)
+);
+
+CREATE FUNCTION core.get_custom_field_setup_id_by_table_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100),
+    _field_name national character varying(100)
+)
+RETURNS national character varying(100)
+AS
+$$
+BEGIN
+    RETURN custom_field_setup_id
+    FROM core.custom_field_setup
+    WHERE form_name = core.get_custom_field_form_name(_schema_name, _table_name)
+    AND field_name = _field_name;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_root_account_id.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_second_root_account_id(integer, integer);
@@ -3659,6 +3725,10 @@ SELECT localization.add_localized_resource('Titles', '', 'EnteredBy', 'Entered B
 SELECT localization.add_localized_resource('Titles', '', 'Entities', 'Entities');
 SELECT localization.add_localized_resource('Titles', '', 'ExchangeRate', 'Exchange Rate');
 SELECT localization.add_localized_resource('Titles', '', 'Execute', 'Execute');
+SELECT localization.add_localized_resource('Titles', '', 'Export', 'Export');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToExcel', 'Export to Excel');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToDoc', 'Export to Doc');
+SELECT localization.add_localized_resource('Titles', '', 'ExportToPDF', 'Export to PDF');
 SELECT localization.add_localized_resource('Titles', '', 'ExternalCode', 'External Code');
 SELECT localization.add_localized_resource('Titles', '', 'ExtractingDownload', 'Extracting Download');
 SELECT localization.add_localized_resource('Titles', '', 'Factor', 'Factor');
@@ -5652,17 +5722,30 @@ DO
 $$
 BEGIN
     IF(core.get_locale() = 'en-US') THEN
-        INSERT INTO core.custom_field_data_types(data_type, is_number)
-        SELECT 'Number', true;
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Text') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_number)
+            SELECT 'Text', true;
+        END IF;
 
-        INSERT INTO core.custom_field_data_types(data_type, is_date)
-        SELECT 'Date', true;
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Number') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_number)
+            SELECT 'Number', true;
+        END IF;
 
-        INSERT INTO core.custom_field_data_types(data_type, is_boolean)
-        SELECT 'True/False', true;
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Date') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_date)
+            SELECT 'Date', true;
+        END IF;
 
-        INSERT INTO core.custom_field_data_types(data_type, is_long_text)
-        SELECT 'Text/Memo', true;
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='True/False') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_boolean)
+            SELECT 'True/False', true;
+        END IF;
+
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Long Text') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_long_text)
+            SELECT 'Long Text', true;
+        END IF;
 
 
         PERFORM core.add_custom_field_form('Accounts', 'core.accounts', 'account_id');

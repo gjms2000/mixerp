@@ -79,7 +79,7 @@ var scrudUpdateMarkup = function (triggerControlId) {
     var office = $("#" + officeCodeHiddenId).val();
     var title = $("#" + titleLabelId).html();
 
-    printGridView(reportTemplatePath, reportHeaderPath, title, formGridViewId, date, user, office, 'ScrudReport', 1, 0, $("#MarkupHidden"), triggerControlId);
+    printGridView(reportExportTemplatePath, reportHeaderPath, title, formGridViewId, date, user, office, 'ScrudReport', 1, 0, $("#MarkupHidden"), triggerControlId);
 };
 
 
