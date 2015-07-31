@@ -179,7 +179,7 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
                 this.fromDateTextBox.ID = "FromDateTextBox";
                 this.fromDateTextBox.Mode = FrequencyType.QuarterStartDate;
                 this.fromDateTextBox.Catalog = AppUsers.GetCurrentUserDB();
-                this.fromDateTextBox.OfficeId = AppUsers.GetCurrent().View.UserId.ToInt();
+                this.fromDateTextBox.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
 
 
                 field.Controls.Add(this.fromDateTextBox);

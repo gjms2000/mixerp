@@ -14,11 +14,16 @@ var endsOnInputText = $("#EndsOnInputText");
 var incomeTaxRateInputText = $("#IncomeTaxRateInputText");
 var weekStartDaySelect = $("#WeekStartDaySelect");
 var transactionStartDateInputText = $("#TransactionStartDateInputText");
+var inventoryAccountingSystemSelect = $("#InventoryAccountingSystemSelect");
+var inventoryValuationMethodSelect = $("#InventoryValuationMethodSelect");
 var adminNameInputText = $("#AdminNameInputText");
 var usernameInputText = $("#UsernameInputText");
 var passwordInputPassword = $("#PasswordInputPassword");
 var confirmPasswordInputPassword = $("#ConfirmPasswordInputPassword");
 var saveButton = $("#SaveButton");
+var file = $("#file");
+var logo = "";
+var allowed = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
 
 $(document).ready(function () {
     initializeUI();
@@ -31,6 +36,7 @@ $(document).ready(function () {
 function initializeUI() {
     $(".ui.dropdown").dropdown();
     $('.activating.element').popup();
+    $('.checkbox').checkbox();
 };
 
 var validateFields = function() {
@@ -81,7 +87,38 @@ saveButton.click(function() {
         $(".form").addClass("loading");
         $(".dimmer").dimmer("show");
 
-        var ajaxSaveOffice = saveOffice(officeCodeInputText.val(), officeNameInputText.val(), nickNameInputText.val(), registrationDateInputText.val(), currencyCodeInputText.val(), currencySymbolInputText.val(), currencyNameInputText.val(), hundredthNameInputText.val(), fiscalYearCodeInputText.val(), fiscalYearNameInputText.val(), startsFromInputText.val(), endsOnInputText.val(), parseFloat(incomeTaxRateInputText.val() || 0), weekStartDaySelect.val(), transactionStartDateInputText.val(), adminNameInputText.val(), usernameInputText.val(), passwordInputPassword.val(), confirmPasswordInputPassword.val());
+        var salesTaxIsVat = $("input[name=salestax]:checked").val();
+        var hasstateTax = $("input[name=statetax]:checked").val();
+        var hascountyTax = $("input[name=countytax]:checked").val();
+
+        var ajaxSaveOffice = saveOffice
+            (
+                officeCodeInputText.val(),
+                officeNameInputText.val(),
+                nickNameInputText.val(),
+                registrationDateInputText.val(),
+                currencyCodeInputText.val(),
+                currencySymbolInputText.val(),
+                currencyNameInputText.val(),
+                hundredthNameInputText.val(),
+                fiscalYearCodeInputText.val(),
+                fiscalYearNameInputText.val(),
+                startsFromInputText.val(),
+                endsOnInputText.val(),
+                salesTaxIsVat,
+                hasstateTax,
+                hascountyTax,
+                parseFloat(incomeTaxRateInputText.val() || 0),
+                weekStartDaySelect.val(),
+                transactionStartDateInputText.val(),
+                inventoryAccountingSystemSelect.getSelectedValue(),
+                inventoryValuationMethodSelect.getSelectedValue(),
+                logo,
+                adminNameInputText.val(),
+                usernameInputText.val(),
+                passwordInputPassword.val(),
+                confirmPasswordInputPassword.val()
+            );
 
         ajaxSaveOffice.success(function(msg) {
             if (msg.d) {
@@ -99,7 +136,7 @@ saveButton.click(function() {
     };
 });
 
-function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, incomeTaxRate, weekStartDay, transactionStartDate, adminName, username, password, confirmPassword) {
+function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, salesTaxIsVat, hasStateSalesTax, hasCountySalesTax, incomeTaxRate, weekStartDay, transactionStartDate, isPerpetual, valuationMethod, logo, adminName, username, password, confirmPassword) {
     var url = "/Services/Install.asmx/SaveOffice";
 
     var data = appendParameter("", "officeCode", officeCode);
@@ -114,9 +151,15 @@ function saveOffice(officeCode, officeName, nickName, registrationDate, currency
     data = appendParameter(data, "fiscalYearName", fiscalYearName);
     data = appendParameter(data, "startsFrom", startsFrom);
     data = appendParameter(data, "endsOn", endsOn);
+    data = appendParameter(data, "salesTaxIsVat", salesTaxIsVat);
+    data = appendParameter(data, "hasStateSalesTax", hasStateSalesTax);
+    data = appendParameter(data, "hasCountySalesTax", hasCountySalesTax);
     data = appendParameter(data, "incomeTaxRate", incomeTaxRate);
     data = appendParameter(data, "weekStartDay", weekStartDay);
     data = appendParameter(data, "transactionStartDate", transactionStartDate);
+    data = appendParameter(data, "isPerpetual", isPerpetual);
+    data = appendParameter(data, "valuationMethod", valuationMethod);
+    data = appendParameter(data, "logo", logo);
     data = appendParameter(data, "adminName", adminName);
     data = appendParameter(data, "username", username);
     data = appendParameter(data, "password", password);
@@ -125,3 +168,63 @@ function saveOffice(officeCode, officeName, nickName, registrationDate, currency
 
     return getAjax(url, data);
 };
+
+
+function isValidExtension(el) {
+
+    if (el.type === "file") {
+        var fileName = el.value;
+
+        if (fileName.length > 0) {
+
+            var valid = false;
+
+            for (var i = 0; i < allowed.length; i++) {
+                var extension = allowed[i];
+
+                if (fileName.substr(fileName.length - extension.length, extension.length).toLowerCase() === extension.toLowerCase()) {
+                    valid = true;
+                    break;
+                };
+            };
+
+            if (!valid) {
+                alert("Invalid file extension.");
+                el.value = "";
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+
+
+file.change(function () {
+    if (isValidExtension(this)) {
+        readURL(this);
+        $('#logo').parent().addClass("loading");
+        $(this).upload("/FileUploadHanlder.ashx", function (success) {
+            logo = success;
+            $('#logo').parent().removeClass("loading");
+        }, function (progress, value) {
+            //not implemented yet.
+        });
+    };
+});
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#logo').attr('src', e.target.result);
+            $('#logo').attr('style', "max-height:160px;max-width:250;");
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    };
+};
+
+
+

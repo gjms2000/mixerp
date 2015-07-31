@@ -19,6 +19,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Web.Script.Services;
 using System.Web.Services;
 using MixERP.Net.ApplicationState.Cache;
@@ -38,7 +39,9 @@ namespace MixERP.Net.FrontEnd.Services
         public bool SaveOffice(string officeCode, string officeName, string nickName, string registrationDate,
             string currencyCode, string currencySymbol, string currencyName, string hundredthName, string fiscalYearCode,
             string fiscalYearName, string startsFrom, string endsOn, 
+            bool salesTaxIsVat, bool hasStateSalesTax, bool hasCountySalesTax,
             decimal incomeTaxRate, int weekStartDay, string transactionStartDate,
+            bool isPerpetual, string valuationMethod, string logo,
             string adminName, string username, string password, string confirmPassword)
         {
             if (string.IsNullOrWhiteSpace(officeName) || string.IsNullOrWhiteSpace(officeCode) ||
@@ -51,6 +54,11 @@ namespace MixERP.Net.FrontEnd.Services
                 string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
             {
                 throw new MixERPException(Labels.AllFieldsRequired);
+            }
+
+            if (!new[] {"FIFO", "LIFO", "MAVCO"}.Contains(valuationMethod))
+            {
+                throw new MixERPException("Invalid inventory valuation method specified.");
             }
 
             if (password != confirmPassword)
@@ -76,11 +84,34 @@ namespace MixERP.Net.FrontEnd.Services
 
             try
             {
-                Data.Office.Offices.SaveOffice(AppUsers.GetCurrentUserDB(), officeCode, officeName, nickName,
-                    dateOfRegistration, currencyCode,
-                    currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, fiscalYearStartDate, fiscalYearEndDate, 
-                    incomeTaxRate, weekStartDay, transactionStartsFrom,
-                    adminName, username, password);
+                Data.Office.Offices.SaveOffice
+                    (
+                    AppUsers.GetCurrentUserDB(), 
+                    officeCode, 
+                    officeName, 
+                    nickName,
+                    dateOfRegistration, 
+                    currencyCode,
+                    currencySymbol, 
+                    currencyName, 
+                    hundredthName, 
+                    fiscalYearCode, 
+                    fiscalYearName, 
+                    fiscalYearStartDate, 
+                    fiscalYearEndDate, 
+                    salesTaxIsVat,
+                    hasStateSalesTax,
+                    hasCountySalesTax,
+                    incomeTaxRate, 
+                    weekStartDay, 
+                    transactionStartsFrom,
+                    isPerpetual,
+                    valuationMethod,
+                    logo,
+                    adminName, 
+                    username, 
+                    password
+                    );
 
                 return true;
             }

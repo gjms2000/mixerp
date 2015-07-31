@@ -712,3 +712,75 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('primary_sales_tax_is_vat')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN primary_sales_tax_is_vat bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('has_state_sales_tax')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN has_state_sales_tax bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('has_county_sales_tax')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN has_county_sales_tax bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('logo_file')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN logo_file text NOT NULL DEFAULT('');
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
