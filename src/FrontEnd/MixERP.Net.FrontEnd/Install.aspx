@@ -141,37 +141,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
                         <div class="ui header">
                             <div class="content">
-                                <%= Titles.FiscalYear %>
-                            </div>
-                        </div>
-                        <div class="four fields">
-                            <div class="field">
-                                <label for="FiscalYearCodeInputText">
-                                    <%=ScrudResource.fiscal_year_code %>
-                                </label>
-                                <input type="text" maxlength="12" id="FiscalYearCodeInputText" />
-                            </div>
-                            <div class="field">
-                                <label for="FiscalYearNameInputText">
-                                    <%=ScrudResource.fiscal_year_name %>
-                                </label>
-                                <input type="text" maxlength="48" id="FiscalYearNameInputText" />
-                            </div>
-                            <div class="field">
-                                <label for="StartsFromInputText">
-                                    <%=ScrudResource.starts_from %>
-                                </label>
-                                <input type="text" maxlength="48" id="StartsFromInputText" placeholder="yyyy-mm-dd" />
-                            </div>
-                            <div class="field">
-                                <label for="EndsOnInputText">
-                                    <%=ScrudResource.ends_on %>
-                                </label>
-                                <input type="text" maxlength="48" id="EndsOnInputText" placeholder="yyyy-mm-dd" />
-                            </div>
-                        </div>
-                        <div class="ui header">
-                            <div class="content">
                                 Global Parameters
                             </div>
                         </div>
@@ -297,6 +266,37 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                             </div>
                         </div>
 
+                        <div class="ui header">
+                            <div class="content">
+                                <%= Titles.FiscalYear %>
+                            </div>
+                        </div>
+                        <div class="four fields">
+                            <div class="field">
+                                <label for="FiscalYearCodeInputText">
+                                    <%=ScrudResource.fiscal_year_code %>
+                                </label>
+                                <input type="text" maxlength="12" id="FiscalYearCodeInputText" />
+                            </div>
+                            <div class="field">
+                                <label for="FiscalYearNameInputText">
+                                    <%=ScrudResource.fiscal_year_name %>
+                                </label>
+                                <input type="text" maxlength="48" id="FiscalYearNameInputText" />
+                            </div>
+                            <div class="field">
+                                <label for="StartsFromInputText">
+                                    <%=ScrudResource.starts_from %>
+                                </label>
+                                <input type="text" maxlength="48" id="StartsFromInputText" placeholder="yyyy-mm-dd" />
+                            </div>
+                            <div class="field">
+                                <label for="EndsOnInputText">
+                                    <%=ScrudResource.ends_on %>
+                                </label>
+                                <input type="text" maxlength="48" id="EndsOnInputText" placeholder="yyyy-mm-dd" />
+                            </div>
+                        </div>
 
                         <div class="ui header">
                             <div class="content">
@@ -304,7 +304,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                             </div>
                         </div>
                         <div class="ui divider"></div>
-                        <div class="two fields">
+                        <div class="four fields">
                             <div class="field">
                                 <label for="AdminNameInputText">
                                     <%=Titles.YourName %>
@@ -317,8 +317,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                                 </label>
                                 <input type="text" maxlength="50" id="UsernameInputText" />
                             </div>
-                        </div>
-                        <div class="two fields">
                             <div class="field">
                                 <label for="PasswordInputPassword">
                                     <%=Titles.Password %>

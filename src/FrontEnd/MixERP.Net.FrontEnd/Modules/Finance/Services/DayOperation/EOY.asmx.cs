@@ -80,6 +80,13 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
             string currencyCode = AppUsers.GetCurrent().View.CurrencyCode;
 
             DateTime valueDate = DatePersister.GetFrequencyDates(catalog, officeId).Today;
+            DateTime eoyDate = DatePersister.GetFrequencyDates(catalog, officeId).FiscalYearEndDate;
+
+            if (valueDate != eoyDate)
+            {
+                throw new MixERPException(Warnings.AccessIsDenied);
+            }
+
             DateTime bookDate = valueDate;
 
             Collection<JournalDetail> details = new Collection<JournalDetail>();
@@ -120,6 +127,93 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
                 });
 
             }
+
+            Transaction.Add(catalog, valueDate, bookDate, officeId, userId, loginId, costCenterId,
+                referenceNumber, details, new Collection<Attachment>());
+
+            return true;
+        }
+
+
+        [WebMethod]
+        public DbGetEoyProfitSummaryResult GetEoyProfitSummary()
+        {
+            string catalog = AppUsers.GetCurrentUserDB();
+            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+
+            return Data.DayOperation.EOY.GetEoyProfitSummary(catalog, officeId);
+        }
+
+        [WebMethod]
+        public bool PostIncomeTax(string taxOfficeAccountNumber, string taxExpensesAccountNumber, int costCenterId, string referenceNumber, string statementReference)
+        {
+            bool isAdmin = AppUsers.GetCurrent().View.IsAdmin.ToBool();
+
+            if (!isAdmin)
+            {
+                throw new MixERPException(Warnings.AccessIsDenied);
+            }
+
+            if (string.IsNullOrWhiteSpace(taxOfficeAccountNumber) || string.IsNullOrWhiteSpace(taxExpensesAccountNumber))
+            {
+                throw new MixERPException(Warnings.InvalidAccount);
+            }
+
+            string catalog = AppUsers.GetCurrentUserDB();
+            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            int userId = AppUsers.GetCurrent().View.UserId.ToInt();
+            long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            string currencyCode = AppUsers.GetCurrent().View.CurrencyCode;
+
+            decimal tax = this.GetEoyProfitSummary().Tax;
+
+            if (tax <= 0)
+            {
+                return true;
+            }
+
+            DateTime valueDate = DatePersister.GetFrequencyDates(catalog, officeId).Today;
+            DateTime eoyDate = DatePersister.GetFrequencyDates(catalog, officeId).FiscalYearEndDate;
+
+            if (valueDate != eoyDate)
+            {
+                throw new MixERPException(Warnings.AccessIsDenied);
+            }
+
+            DateTime bookDate = valueDate;
+
+            Collection<JournalDetail> details = new Collection<JournalDetail>();
+
+            JournalDetail liability = new JournalDetail
+            {
+                Account = string.Empty,
+                AccountNumber = taxOfficeAccountNumber,
+                Credit = tax,
+                Debit = 0,
+                CashRepositoryCode = string.Empty,
+                CurrencyCode = currencyCode,
+                ExchangeRate = 1,
+                LocalCurrencyCredit = tax,
+                LocalCurrencyDebit = 0,
+                StatementReference = statementReference
+            };
+
+            JournalDetail expenses = new JournalDetail
+            {
+                Account = string.Empty,
+                AccountNumber = taxExpensesAccountNumber,
+                Credit = 0,
+                Debit = tax,
+                CashRepositoryCode = string.Empty,
+                CurrencyCode = currencyCode,
+                ExchangeRate = 1,
+                LocalCurrencyCredit = 0,
+                LocalCurrencyDebit = tax,
+                StatementReference = statementReference
+            };
+
+            details.Add(liability);
+            details.Add(expenses);
 
             Transaction.Add(catalog, valueDate, bookDate, officeId, userId, loginId, costCenterId,
                 referenceNumber, details, new Collection<Attachment>());

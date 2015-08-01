@@ -76,6 +76,7 @@ SELECT * FROM core.create_menu('Cash Flow Headings', '~/Modules/Finance/Setup/Ca
 SELECT * FROM core.create_menu('Cash Flow Setup', '~/Modules/Finance/Setup/CashFlowSetup.mix', 'CFS', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Cost Centers', '~/Modules/Finance/Setup/CostCenters.mix', 'CC', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Reports', NULL, 'FIR', 1, core.get_menu_id('FI'));
+SELECT * FROM core.create_menu('Exchange Rates', '~/Modules/Finance/Reports/ExchangeRates.mix', 'ERR', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Account Statement', '~/Modules/Finance/Reports/AccountStatement.mix', 'AS', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Trial Balance', '~/Modules/Finance/Reports/TrialBalance.mix', 'TB', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Profit & Loss Account', '~/Modules/Finance/Reports/ProfitAndLossAccount.mix', 'PLA', 2, core.get_menu_id('FIR'));

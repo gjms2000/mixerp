@@ -135,6 +135,8 @@ BEGIN
         SELECT _currency_code, _currency_symbol, _currency_name, _hundredth_name;
     END IF;
 
+    UPDATE core.accounts
+    SET currency_code = _currency_code;
 
     INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day, primary_sales_tax_is_vat, has_state_sales_tax, has_county_sales_tax, logo_file)
     SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day, _sales_tax_is_vat, _has_state_sales_tax, _has_county_sales_tax, _logo_file

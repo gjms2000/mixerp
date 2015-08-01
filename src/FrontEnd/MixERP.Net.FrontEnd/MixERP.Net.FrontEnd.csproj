@@ -185,6 +185,13 @@
     <Compile Include="Modules\Update.aspx.designer.cs">
       <DependentUpon>Update.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Modules\WidgetManager.aspx.cs">
+      <DependentUpon>WidgetManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Modules\WidgetManager.aspx.designer.cs">
+      <DependentUpon>WidgetManager.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PostSignIn.aspx.cs">
       <DependentUpon>PostSignIn.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -332,6 +339,7 @@
     <Content Include="Modules\Update.aspx" />
     <Content Include="Modules\web.config" />
     <Content Include="MixERP.Installation.config" />
+    <Content Include="Modules\WidgetManager.aspx" />
     <Content Include="PostSignIn.aspx" />
     <Content Include="Reports\Export.html" />
     <Content Include="Resource\Configs\index.html" />

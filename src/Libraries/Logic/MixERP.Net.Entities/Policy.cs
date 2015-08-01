@@ -9,6 +9,54 @@ using System.Web;
 namespace MixERP.Net.Entities.Policy
 {
 
+    [TableName("policy.voucher_verification_policy_scrud_view")]
+    [ExplicitColumns]
+    public class VoucherVerificationPolicyScrudView : PetaPocoDB.Record<VoucherVerificationPolicyScrudView> , IPoco
+    {
+        [Column("policy_id")] 
+        public int? PolicyId { get; set; }
+
+        [Column("user_id")] 
+        public int? UserId { get; set; }
+
+        [Column("user_name")] 
+        public string UserName { get; set; }
+
+        [Column("can_verify_sales_transactions")] 
+        public bool? CanVerifySalesTransactions { get; set; }
+
+        [Column("sales_verification_limit")] 
+        public decimal? SalesVerificationLimit { get; set; }
+
+        [Column("can_verify_purchase_transactions")] 
+        public bool? CanVerifyPurchaseTransactions { get; set; }
+
+        [Column("purchase_verification_limit")] 
+        public decimal? PurchaseVerificationLimit { get; set; }
+
+        [Column("can_verify_gl_transactions")] 
+        public bool? CanVerifyGlTransactions { get; set; }
+
+        [Column("gl_verification_limit")] 
+        public decimal? GlVerificationLimit { get; set; }
+
+        [Column("can_self_verify")] 
+        public bool? CanSelfVerify { get; set; }
+
+        [Column("self_verification_limit")] 
+        public decimal? SelfVerificationLimit { get; set; }
+
+        [Column("effective_from")] 
+        public DateTime? EffectiveFrom { get; set; }
+
+        [Column("ends_on")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("is_active")] 
+        public bool? IsActive { get; set; }
+
+    }
+
     [TableName("policy.lock_outs")]
     [PrimaryKey("lock_out_id")]
     [ExplicitColumns]
@@ -291,54 +339,6 @@ namespace MixERP.Net.Entities.Policy
 
         [Column("gl_verification_limit")] 
         public decimal? GlVerificationLimit { get; set; }
-
-        [Column("effective_from")] 
-        public DateTime? EffectiveFrom { get; set; }
-
-        [Column("ends_on")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("is_active")] 
-        public bool? IsActive { get; set; }
-
-    }
-
-    [TableName("policy.voucher_verification_policy_scrud_view")]
-    [ExplicitColumns]
-    public class VoucherVerificationPolicyScrudView : PetaPocoDB.Record<VoucherVerificationPolicyScrudView> , IPoco
-    {
-        [Column("policy_id")] 
-        public int? PolicyId { get; set; }
-
-        [Column("user_id")] 
-        public int? UserId { get; set; }
-
-        [Column("user_name")] 
-        public string UserName { get; set; }
-
-        [Column("can_verify_sales_transactions")] 
-        public bool? CanVerifySalesTransactions { get; set; }
-
-        [Column("sales_verification_limit")] 
-        public decimal? SalesVerificationLimit { get; set; }
-
-        [Column("can_verify_purchase_transactions")] 
-        public bool? CanVerifyPurchaseTransactions { get; set; }
-
-        [Column("purchase_verification_limit")] 
-        public decimal? PurchaseVerificationLimit { get; set; }
-
-        [Column("can_verify_gl_transactions")] 
-        public bool? CanVerifyGlTransactions { get; set; }
-
-        [Column("gl_verification_limit")] 
-        public decimal? GlVerificationLimit { get; set; }
-
-        [Column("can_self_verify")] 
-        public bool? CanSelfVerify { get; set; }
-
-        [Column("self_verification_limit")] 
-        public decimal? SelfVerificationLimit { get; set; }
 
         [Column("effective_from")] 
         public DateTime? EffectiveFrom { get; set; }

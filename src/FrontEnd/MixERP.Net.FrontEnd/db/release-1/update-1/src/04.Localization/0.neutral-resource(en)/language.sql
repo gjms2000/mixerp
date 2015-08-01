@@ -405,6 +405,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'entity_id', 'En
 SELECT localization.add_localized_resource('ScrudResource', '', 'entity_name', 'Entity Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'entry_ts', 'Entry Ts');
 SELECT localization.add_localized_resource('ScrudResource', '', 'er', 'ER');
+SELECT localization.add_localized_resource('ScrudResource', '', 'exchange_rate', 'Exchange Rate');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exclude_from_purchase', 'Exclude From Purchase');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exclude_from_sales', 'Exclude From Sales');
 SELECT localization.add_localized_resource('ScrudResource', '', 'external_code', 'External Code');
@@ -417,6 +418,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'flag_id', 'Flag
 SELECT localization.add_localized_resource('ScrudResource', '', 'flag_type_id', 'Flag Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'flag_type_name', 'Flag Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'flagged_on', 'Flagged On');
+SELECT localization.add_localized_resource('ScrudResource', '', 'foreign_currency_code', 'Foreign Currency Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'foreground_color', 'Foreground Color');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_code', 'Frequency Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_id', 'Frequency Id');
@@ -934,6 +936,7 @@ SELECT localization.add_localized_resource('Titles', '', 'EnterBackupName', 'Ent
 SELECT localization.add_localized_resource('Titles', '', 'EnterNewPassword', 'Enter a New Password');
 SELECT localization.add_localized_resource('Titles', '', 'EnteredBy', 'Entered By');
 SELECT localization.add_localized_resource('Titles', '', 'Entities', 'Entities');
+SELECT localization.add_localized_resource('Titles', '', 'ExchangeRates', 'Exchange Rates');
 SELECT localization.add_localized_resource('Titles', '', 'ExchangeRate', 'Exchange Rate');
 SELECT localization.add_localized_resource('Titles', '', 'Execute', 'Execute');
 SELECT localization.add_localized_resource('Titles', '', 'Export', 'Export');
@@ -1279,6 +1282,7 @@ SELECT localization.add_localized_resource('Titles', '', 'UnitName', 'Unit Name'
 SELECT localization.add_localized_resource('Titles', '', 'UnitsOfMeasure', 'Units of Measure');
 SELECT localization.add_localized_resource('Titles', '', 'UnknownError', 'Operation failed due to an unknown error.');
 SELECT localization.add_localized_resource('Titles', '', 'Update', 'Update');
+SELECT localization.add_localized_resource('Titles', '', 'UpdatedOn', 'Updated On');
 SELECT localization.add_localized_resource('Titles', '', 'UpdateConsole', 'Update Console');
 SELECT localization.add_localized_resource('Titles', '', 'Upload', 'Upload');
 SELECT localization.add_localized_resource('Titles', '', 'UploadAttachments', 'Upload Attachments');
