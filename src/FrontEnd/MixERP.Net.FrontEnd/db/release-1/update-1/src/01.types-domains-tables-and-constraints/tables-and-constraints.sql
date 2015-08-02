@@ -784,3 +784,11 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DROP INDEX IF EXISTS core.salespersons_salesperson_name_uix;
+DROP INDEX IF EXISTS core.salespersons_salesperson_code_uix;
+
+CREATE UNIQUE INDEX salespersons_salesperson_code_uix
+ON core.salespersons(salesperson_code);
+
+
