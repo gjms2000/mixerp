@@ -72,6 +72,7 @@
     <Compile Include="Admin\User.cs" />
     <Compile Include="Attachments.cs" />
     <Compile Include="Audit.cs" />
+    <Compile Include="CustomFields.cs" />
     <Compile Include="OneTimeSetup\OpeningInventory.cs" />
     <Compile Include="OpeningInventory.cs" />
     <Compile Include="Policy\Menu.cs" />

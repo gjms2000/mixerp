@@ -97,7 +97,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
 
                     //Load the form again in the container with values
                     //retrieved from database.
-                    this.LoadForm(this.formContainer, table, true);
+                    this.LoadForm(this.formContainer, table, id, true);
                     this.gridPanel.Attributes["style"] = "display:none;";
                     this.formPanel.Attributes["style"] = "display:block;";
                 }
@@ -115,6 +115,8 @@ namespace MixERP.Net.WebControls.ScrudFactory
             }
 
             Collection<KeyValuePair<string, object>> list = this.GetFormCollection(true);
+            Collection<KeyValuePair<string, object>> customFields = this.GetCustomFieldCollection();
+
             string id = this.GetSelectedValue();
             this.lastValueHiddenTextBox.Text = id;
 
@@ -129,6 +131,8 @@ namespace MixERP.Net.WebControls.ScrudFactory
                     }
 
                     long lastValue = FormHelper.InsertRecord(this.Catalog, userId, this.TableSchema, this.Table, this.KeyColumn, list, this.imageColumn);
+
+                    FormHelper.SaveCustomFields(this.Catalog, this.TableSchema, this.Table, lastValue.ToString(CultureInfo.InvariantCulture), customFields);
 
                     if (lastValue > 0)
                     {
@@ -178,6 +182,8 @@ namespace MixERP.Net.WebControls.ScrudFactory
 
                     if (FormHelper.UpdateRecord(this.Catalog, userId, this.TableSchema, this.Table, list, this.KeyColumn, id, this.imageColumn, exclusion))
                     {
+                        FormHelper.SaveCustomFields(this.Catalog, this.TableSchema, this.Table, id.ToString(CultureInfo.InvariantCulture), customFields);
+
                         //Clear the form container.
                         this.formContainer.Controls.Clear();
 

@@ -45,6 +45,7 @@ namespace MixERP.Net.Core.Modules.BackOffice
                 scrud.Table = "frequency_setups";
                 scrud.ViewSchema = "core";
                 scrud.View = "frequency_setup_scrud_view";
+                scrud.PageSize = 12;
 
                 scrud.DisplayFields = GetDisplayFields();
                 scrud.DisplayViews = GetDisplayViews();

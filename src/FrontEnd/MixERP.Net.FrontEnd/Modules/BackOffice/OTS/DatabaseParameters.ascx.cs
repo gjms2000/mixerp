@@ -42,7 +42,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.OTS
                 scrud.TableSchema = "config";
                 scrud.DenyDelete = true;
 
-                scrud.Table = "db_paramters";
+                scrud.Table = "db_parameters";
                 scrud.ViewSchema = "config";
                 scrud.View = "db_parameter_scrud_view";
 

@@ -25,12 +25,11 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="BodyContentPlaceholder" runat="server">
     <div id="sortable-container" class="ui stackable grid">
-        <asp:PlaceHolder ID="WidgetPlaceholder" runat="server"/>
+        <asp:PlaceHolder ID="WidgetPlaceholder" runat="server" />
     </div>
 
     <div style="clear: both;"></div>
-    <br/>
-
+    <br />
 
     <div class="ui tiny buttons">
         <button class="ui button">Save Position</button>

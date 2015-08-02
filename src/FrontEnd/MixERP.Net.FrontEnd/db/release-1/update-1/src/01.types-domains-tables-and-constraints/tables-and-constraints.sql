@@ -218,10 +218,10 @@ BEGIN
         FROM   pg_catalog.pg_class c
         JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
         WHERE  n.nspname = 'config'
-        AND    c.relname = 'db_paramters'
+        AND    c.relname = 'db_parameters'
         AND    c.relkind = 'r'
     ) THEN
-        CREATE TABLE config.db_paramters
+        CREATE TABLE config.db_parameters
         (
             key                 text PRIMARY KEY,
             value               text,
@@ -230,7 +230,7 @@ BEGIN
                                 DEFAULT(NOW())
         );
 
-        INSERT INTO config.db_paramters
+        INSERT INTO config.db_parameters
         SELECT 'AccountMasterDisplayField', 'account_master_code + '' ('' + account_master_name + '')''' UNION ALL
         SELECT 'AccountDisplayField', 'account_number + '' ('' + account_name + '')''' UNION ALL
         SELECT 'SalespersonDisplayField', 'salesperson_code + '' ('' + salesperson_name + '')''' UNION ALL
@@ -592,6 +592,195 @@ BEGIN
             audit_ts                            TIMESTAMP WITH TIME ZONE NULL        
         );
     END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'custom_field_data_types'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.custom_field_data_types
+        (
+            data_type               national character varying(50) NOT NULL PRIMARY KEY,
+            is_number               boolean DEFAULT(false),
+            is_date                 boolean DEFAULT(false),
+            is_boolean              boolean DEFAULT(false),
+            is_long_text            boolean DEFAULT(false)
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'custom_field_forms'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.custom_field_forms
+        (
+            form_name                   national character varying(100) NOT NULL PRIMARY KEY,
+            table_name                  national character varying(100) NOT NULL UNIQUE,
+            key_name                    national character varying(100) NOT NULL        
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'custom_field_setup'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.custom_field_setup
+        (
+            custom_field_setup_id       SERIAL NOT NULL PRIMARY KEY,
+            form_name                   national character varying(100) NOT NULL
+                                        REFERENCES core.custom_field_forms,
+            field_order                 integer NOT NULL DEFAULT(0),
+            field_name                  national character varying(100) NOT NULL,
+            field_label                 national character varying(100) NOT NULL,                   
+            data_type                   national character varying(50)
+                                        REFERENCES core.custom_field_data_types,
+            description                 text NOT NULL
+        );
+
+        CREATE UNIQUE INDEX custom_field_setup_uix
+        ON core.custom_field_setup(UPPER(form_name), UPPER(field_label));
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'custom_fields'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.custom_fields
+        (
+            custom_field_id             BIGSERIAL NOT NULL PRIMARY KEY,
+            custom_field_setup_id       integer NOT NULL REFERENCES core.custom_field_setup,
+            resource_id                 text NOT NULL,
+            value                       text
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT * FROM config.scrud_factory
+        WHERE key = 'ExportTemplatePath'
+    ) THEN
+        INSERT INTO config.scrud_factory
+        SELECT 'ExportTemplatePath', '~/Reports/Export.html';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('primary_sales_tax_is_vat')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN primary_sales_tax_is_vat bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('has_state_sales_tax')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN has_state_sales_tax bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('has_county_sales_tax')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN has_county_sales_tax bool NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('logo_file')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE office.offices
+        ADD COLUMN logo_file text NOT NULL DEFAULT('');
+    END IF;
 END
 $$
 LANGUAGE plpgsql;

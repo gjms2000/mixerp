@@ -41,6 +41,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
             script += JSUtility.GetVar("cancelButtonId ", cancelButtonId);
 
             script += JSUtility.GetVar("reportTemplatePath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(catalog, "TemplatePath")));
+            script += JSUtility.GetVar("reportExportTemplatePath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(catalog, "ExportTemplatePath")));
             script += JSUtility.GetVar("reportHeaderPath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(catalog, "HeaderPath")));
             script += JSUtility.GetVar("date", DateTime.Now.ToString(CultureInfo.InvariantCulture));
             script += JSUtility.GetVar("keyColumn", keyColumn);

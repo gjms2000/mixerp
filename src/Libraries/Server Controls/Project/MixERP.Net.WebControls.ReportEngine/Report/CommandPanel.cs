@@ -17,9 +17,11 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.i18n.Resources;
-using System.Web.UI.WebControls;
+using MixERP.Net.WebControls.ReportEngine.Helpers;
 
 namespace MixERP.Net.WebControls.ReportEngine
 {
@@ -43,83 +45,171 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.commandPanel.ID = "ReportParameterPanel";
             this.commandPanel.CssClass = "report-command hide";
 
-            this.AddEmailImageButton(this.commandPanel);
-            this.AddPrintImageButton(this.commandPanel);
-            this.AddGoTopImageButton(this.commandPanel);
-            this.AddGoBottomImageButton(this.commandPanel);
-            this.AddFilterImageButton(this.commandPanel);
-            this.AddCloseImageButton(this.commandPanel);
+            this.AddPdfLinkButton(this.commandPanel);
+            this.AddWordLinkButton(this.commandPanel);
+            this.AddExcelLinkButton(this.commandPanel);
+            //this.AddEmailLinkButton(this.commandPanel);
+            this.AddPrintAnchor(this.commandPanel);
+            this.AddGoTopAnchor(this.commandPanel);
+            this.AddGoBottomAnchor(this.commandPanel);
+            this.AddFilterAnchor(this.commandPanel);
+            this.AddCloseAnchor(this.commandPanel);
 
             p.Controls.Add(this.commandPanel);
         }
 
-        private void AddEmailImageButton(Panel p)
+        private void AddEmailLinkButton(Panel p)
         {
-            this.emailImageButton = new ImageButton();
+            this.emailImageButton = new LinkButton();
             this.emailImageButton.ID = "SendEmailImageButton";
             this.emailImageButton.CssClass = this.GetImageButtonCssClass();
-            this.emailImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("EmailIcon"));
+            this.emailImageButton.Text = "<i class='fa fa-envelope-o'></i>";
+
+            this.emailImageButton.OnClientClick = "return updateReportHidden();";
             this.emailImageButton.ToolTip = Titles.Email;
+
 
             p.Controls.Add(this.emailImageButton);
         }
 
-        private void AddPrintImageButton(Panel p)
+        private void AddWordLinkButton(Panel p)
         {
-            this.printImageButton = new ImageButton();
-            this.printImageButton.ID = "PrintImageButton";
-            this.printImageButton.CssClass = this.GetImageButtonCssClass();
-            this.printImageButton.OnClientClick = "javascript:window.print();return false;";
-            this.printImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("PrintIcon"));
-            this.printImageButton.ToolTip = Titles.Print;
+            this.wordLinkButton = new LinkButton();
+            this.wordLinkButton.ID = "WordAnchor";
+            this.wordLinkButton.CssClass = this.GetImageButtonCssClass();
+            this.wordLinkButton.Text = "<i class='fa fa-file-word-o'></i>";
 
-            p.Controls.Add(this.printImageButton);
+            this.wordLinkButton.OnClientClick = "return updateReportHidden();";
+            this.wordLinkButton.ToolTip = Titles.ExportToDoc;
+            this.wordLinkButton.Click += delegate
+            {
+                string html = this.reportHidden.Value;
+                DownloadHelper.DownloadWord(html);
+            };
+
+
+            p.Controls.Add(this.wordLinkButton);
         }
 
-        private void AddGoTopImageButton(Panel p)
+        private void AddExcelLinkButton(Panel p)
         {
-            this.goTopImageButton = new ImageButton();
-            this.goTopImageButton.ID = "GoTop";
-            this.goTopImageButton.CssClass = this.GetImageButtonCssClass();
-            this.goTopImageButton.OnClientClick = "window.scrollTo(0, 0);";
-            this.goTopImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("GoTopIcon"));
-            this.goTopImageButton.ToolTip = Titles.GoToTop;
+            this.excelLinkButton = new LinkButton();
+            this.excelLinkButton.ID = "ExcelAnchor";
+            this.excelLinkButton.CssClass = this.GetImageButtonCssClass();
+            this.excelLinkButton.Text = "<i class='fa fa-file-excel-o'></i>";
 
-            p.Controls.Add(this.goTopImageButton);
+            this.excelLinkButton.OnClientClick = "return updateReportHidden();";
+            this.excelLinkButton.ToolTip = Titles.ExportToExcel;
+            this.excelLinkButton.Click += delegate
+            {
+                string html = this.reportHidden.Value;
+                DownloadHelper.DownloadExcel(html);
+            };
+
+
+            p.Controls.Add(this.excelLinkButton);
         }
 
-        private void AddGoBottomImageButton(Panel p)
+        private void AddPdfLinkButton(Panel p)
         {
-            this.goBottomImageButton = new ImageButton();
-            this.goBottomImageButton.CssClass = this.GetImageButtonCssClass();
-            this.goBottomImageButton.ID = "GoBottom";
-            this.goBottomImageButton.OnClientClick = "window.scrollTo(0,document.body.scrollHeight);";
-            this.goBottomImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("GoBottomIcon"));
-            this.goBottomImageButton.ToolTip = Titles.GoToBottom;
+            this.pdfLinkButton = new LinkButton();
+            this.pdfLinkButton.ID = "PdfAnchor";
+            this.pdfLinkButton.CssClass = this.GetImageButtonCssClass();
+            this.pdfLinkButton.Text = "<i class='fa fa-file-pdf-o'></i>";
 
-            p.Controls.Add(this.goBottomImageButton);
+            this.pdfLinkButton.OnClientClick = "return updateReportHiddenPdf();";
+            this.pdfLinkButton.ToolTip = Titles.ExportToPDF;
+            this.pdfLinkButton.Click += delegate
+            {
+                string html = this.reportHidden.Value;
+                DownloadHelper.DownloadPdf(html);
+            };
+
+
+            p.Controls.Add(this.pdfLinkButton);
         }
 
-        private void AddFilterImageButton(Panel p)
+        private void AddPrintAnchor(Panel p)
         {
-            this.filterImageButton = new ImageButton();
-            this.filterImageButton.ID = "FilterImageButton";
-            this.filterImageButton.CssClass = this.GetImageButtonCssClass();
-            this.filterImageButton.OnClientClick = "$('.report-parameter').toggle(500);return false;";
-            this.filterImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("FilterIcon"));
-            this.filterImageButton.ToolTip = Titles.Filter;
+            this.printAnchor = new HtmlAnchor();
+            this.printAnchor.ID = "PrintImageButton";
+            this.printAnchor.Attributes.Add("class", this.GetImageButtonCssClass());
+            this.printAnchor.Attributes.Add("onclick", "javascript:window.print();");
+            this.printAnchor.Title = Titles.Print;
 
-            p.Controls.Add(this.filterImageButton);
+            using (HtmlGenericControl i = HtmlControlHelper.GetIcon("fa fa-print"))
+            {
+                this.printAnchor.Controls.Add(i);
+            }
+
+            p.Controls.Add(this.printAnchor);
         }
 
-        private void AddCloseImageButton(Panel p)
+        private void AddGoTopAnchor(Panel p)
         {
-            this.closeImageButton = new ImageButton();
-            this.closeImageButton.CssClass = this.GetImageButtonCssClass();
+            this.goTopAnchor = new HtmlAnchor();
+            this.goTopAnchor.ID = "GoTop";
+            this.goTopAnchor.Attributes.Add("class", this.GetImageButtonCssClass());
+            this.goTopAnchor.Attributes.Add("onclick", "window.scrollTo(0, 0);");
+            this.goTopAnchor.Title = Titles.GoToTop;
+
+            using (HtmlGenericControl i = HtmlControlHelper.GetIcon("fa fa-arrow-up"))
+            {
+                this.goTopAnchor.Controls.Add(i);
+            }
+
+
+            p.Controls.Add(this.goTopAnchor);
+        }
+
+        private void AddGoBottomAnchor(Panel p)
+        {
+            this.goBottomAnchor = new HtmlAnchor();
+            this.goBottomAnchor.Attributes.Add("class", this.GetImageButtonCssClass());
+            this.goBottomAnchor.ID = "GoBottom";
+            this.goBottomAnchor.Attributes.Add("onclick", "window.scrollTo(0,document.body.scrollHeight);");
+            this.goBottomAnchor.Title = Titles.GoToBottom;
+
+            using (HtmlGenericControl i = HtmlControlHelper.GetIcon("fa fa-arrow-down"))
+            {
+                this.goBottomAnchor.Controls.Add(i);
+            }
+
+            p.Controls.Add(this.goBottomAnchor);
+        }
+
+        private void AddFilterAnchor(Panel p)
+        {
+            this.filterAnchor = new HtmlAnchor();
+            this.filterAnchor.ID = "FilterImageButton";
+            this.filterAnchor.Attributes.Add("class", this.GetImageButtonCssClass());
+            this.filterAnchor.Attributes.Add("onclick", "$('.report-parameter').toggle(500);return false;");
+
+            this.filterAnchor.Title = Titles.Filter;
+
+
+            using (HtmlGenericControl i = HtmlControlHelper.GetIcon("fa fa-filter"))
+            {
+                this.filterAnchor.Controls.Add(i);
+            }
+
+            p.Controls.Add(this.filterAnchor);
+        }
+
+        private void AddCloseAnchor(Panel p)
+        {
+            this.closeImageButton = new HtmlAnchor();
+            this.closeImageButton.Attributes.Add("class", this.GetImageButtonCssClass());
             this.closeImageButton.ID = "CloseImageButton";
-            this.closeImageButton.OnClientClick = "closeWindow();";
-            this.closeImageButton.ImageUrl = this.Page.ResolveUrl(ConfigurationHelper.GetReportParameter("CloseIcon"));
-            this.closeImageButton.ToolTip = Titles.Close;
+            this.closeImageButton.Attributes.Add("onclick", "closeWindow();");
+
+            this.closeImageButton.Title = Titles.Close;
+
+
+            using (HtmlGenericControl i = HtmlControlHelper.GetIcon("fa fa-close"))
+            {
+                this.closeImageButton.Controls.Add(i);
+            }
 
             p.Controls.Add(this.closeImageButton);
         }

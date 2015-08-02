@@ -34,7 +34,7 @@ namespace MixERP.Net.Framework
             {
                 return;
             }
-
+            
             var cacheItem = new CacheItem(key, value);
 
             if (MemoryCache.Default[key] == null)

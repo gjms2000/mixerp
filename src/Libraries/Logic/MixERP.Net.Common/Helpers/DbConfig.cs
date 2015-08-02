@@ -49,7 +49,7 @@ namespace MixERP.Net.Common.Helpers
 
         public static string GetDbParameter(string catalog, string key)
         {
-            const string sql = "SELECT value FROM config.db_paramters WHERE key=@0";
+            const string sql = "SELECT value FROM config.db_parameters WHERE key=@0";
             return Factory.Scalar<string>(catalog, sql, key);
         }
 

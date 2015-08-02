@@ -35,16 +35,18 @@ namespace MixERP.Net.FrontEnd.Data.Office
             DateTime registrationDate, string currencyCode, string currencySymbol, string currencyName,
             string hundredthName, string fiscalYearCode,
             string fiscalYearName, DateTime startsFrom, DateTime endsOn,
+            bool salesTaxIsVat, bool hasStateSalesTax, bool hasCountySalesTax,
             decimal incomeTaxRate, int weekStartDay, DateTime transactionStartDate,
-            string adminName,
-            string username, string password)
+            bool isPerpetual, string valuationMethod, string logo,
+            string adminName, string username, string password)
         {
             const string sql =
-                "SELECT * FROM office.add_office(@0::varchar(12), @1::varchar(150), @2::varchar(50), @3::date, @4::varchar(12), @5::varchar(12), @6::varchar(48), @7::varchar(48), @8::varchar(12), @9::varchar(50), @10::date,@11::date, @12::numeric, @13::int, @14::date, @15::varchar(100), @16::varchar(50), @17::varchar(48));";
+                "SELECT * FROM office.add_office(@0::varchar(12), @1::varchar(150), @2::varchar(50), @3::date, @4::varchar(12), @5::varchar(12), @6::varchar(48), @7::varchar(48), @8::varchar(12), @9::varchar(50), @10::date,@11::date, @12::boolean, @13::boolean, @14::boolean, @15::numeric, @16::int, @17::date, @18::boolean, @19::character varying(5), @20::text, @21::varchar(100), @22::varchar(50), @23::varchar(48));";
 
             Factory.NonQuery(catalog, sql, officeCode, officeName, nickName, registrationDate, currencyCode,
                 currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn,
-                incomeTaxRate, weekStartDay, transactionStartDate, adminName, username, password);
+                salesTaxIsVat, hasStateSalesTax, hasCountySalesTax,
+                incomeTaxRate, weekStartDay, transactionStartDate, isPerpetual, valuationMethod, logo, adminName, username, password);
         }
     }
 }

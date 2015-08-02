@@ -14,6 +14,11 @@ namespace MixERP.Net.i18n
 
         public static string GetString(string resourceClass, string resourceKey, string cultureCode = null)
         {
+            if (string.IsNullOrWhiteSpace(resourceClass))
+            {
+                return resourceKey;
+            }
+
             string result = TryGetResourceFromCache(resourceClass, resourceKey, cultureCode);
 
             if (result == null)

@@ -57,6 +57,18 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
             return Factory.Get<Account>(catalog, sql);
         }
 
+        public static IEnumerable<Account> GetLiabilityAccounts(string catalog)
+        {
+            const string sql = "SELECT * FROM core.accounts WHERE account_master_id >= 15000 AND account_master_id <=15999 ORDER BY account_id;";
+            return Factory.Get<Account>(catalog, sql);
+        }
+
+        public static IEnumerable<Account> GetIncomeTaxExpenseAccounts(string catalog)
+        {
+            const string sql = "SELECT * FROM core.accounts WHERE account_master_id = 20800 ORDER BY account_id;";
+            return Factory.Get<Account>(catalog, sql);
+        }
+
         public static IEnumerable<Account> GetPLAppropriationAccounts(string catalog)
         {
             const string sql = "SELECT * FROM core.accounts WHERE account_master_id = 15300 ORDER BY account_id;";

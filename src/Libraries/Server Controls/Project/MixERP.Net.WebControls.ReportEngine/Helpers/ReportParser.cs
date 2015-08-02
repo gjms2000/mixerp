@@ -17,18 +17,21 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.Framework;
-using MixERP.Net.i18n;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Hosting;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.ReportEngine.Helpers
 {
@@ -52,7 +55,8 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
 
                 if (word.StartsWith("{DataSource", StringComparison.OrdinalIgnoreCase))
                 {
-                    int index = Conversion.TryCastInteger(word.Split('.').First().Replace("{DataSource[", "").Replace("]", ""));
+                    int index =
+                        Conversion.TryCastInteger(word.Split('.').First().Replace("{DataSource[", "").Replace("]", ""));
                     string column = word.Split('.').Last().Replace("}", "");
 
                     if (table[index] != null)
@@ -80,7 +84,8 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             {
                 string cacheKey = "Dictionary" + globalLoginId;
 
-                Dictionary<string, object> dictionary = CacheFactory.GetFromDefaultCacheByKey(cacheKey) as Dictionary<string, object>;
+                Dictionary<string, object> dictionary =
+                    CacheFactory.GetFromDefaultCacheByKey(cacheKey) as Dictionary<string, object>;
 
                 if (dictionary != null)
                 {
@@ -96,6 +101,30 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             return string.Empty;
         }
 
+        private static string GetLogo()
+        {
+            //Default logo
+            string logo = ConfigurationHelper.GetReportParameter("LogoPath");
+
+
+            string officeLogoFile = AppUsers.GetCurrent().View.LogoFile;
+
+            if (!string.IsNullOrWhiteSpace(officeLogoFile))
+            {
+                string attachmentsDirectory = DbConfig.GetAttachmentParameter(AppUsers.GetCurrentUserDB(),
+                    "AttachmentsDirectory");
+
+                officeLogoFile = Path.Combine(attachmentsDirectory, officeLogoFile);
+
+                if (File.Exists(HostingEnvironment.MapPath(officeLogoFile)))
+                {
+                    logo = officeLogoFile;
+                }
+            }
+
+            return logo;
+        }
+
         public static string ParseExpression(string expression, Collection<DataTable> dataTableCollection)
         {
             if (string.IsNullOrWhiteSpace(expression))
@@ -104,8 +133,10 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             }
 
 
-            string logo = ConfigurationHelper.GetReportParameter("LogoPath");
-            expression = expression.Replace("{LogoPath}", PageUtility.GetCurrentDomainName() + PageUtility.ResolveUrl(logo)); //Or else logo will not be exported into excel.
+            string logo = GetLogo();
+            expression = expression.Replace("{LogoPath}",
+                PageUtility.GetCurrentDomainName() + PageUtility.ResolveUrl(logo));
+                //Or else logo will not be exported into excel.
             expression = expression.Replace("{PrintDate}", DateTime.Now.ToString(CurrentCulture.GetCurrentUICulture()));
 
             foreach (var match in Regex.Matches(expression, "{.*?}"))
@@ -131,19 +162,32 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
 
                     expression = expression.Replace(word, ResourceManager.GetString(resource[1], key));
                 }
-                else if (word.StartsWith("{DataSource", StringComparison.OrdinalIgnoreCase) && word.ToLower(CultureInfo.InvariantCulture).Contains("runningtotalfieldvalue"))
+                else if (word.StartsWith("{DataSource", StringComparison.OrdinalIgnoreCase) &&
+                         word.ToLower(CultureInfo.InvariantCulture).Contains("runningtotalfieldvalue"))
                 {
                     string res = RemoveBraces(word);
                     string[] resource = res.Split('.');
 
-                    int dataSourceIndex = Conversion.TryCastInteger(resource[0].ToLower(CultureInfo.InvariantCulture).Replace("datasource", "").Replace("[", "").Replace("]", ""));
-                    int index = Conversion.TryCastInteger(resource[1].ToLower(CultureInfo.InvariantCulture).Replace("runningtotalfieldvalue", "").Replace("[", "").Replace("]", ""));
+                    int dataSourceIndex =
+                        Conversion.TryCastInteger(
+                            resource[0].ToLower(CultureInfo.InvariantCulture)
+                                .Replace("datasource", "")
+                                .Replace("[", "")
+                                .Replace("]", ""));
+                    int index =
+                        Conversion.TryCastInteger(
+                            resource[1].ToLower(CultureInfo.InvariantCulture)
+                                .Replace("runningtotalfieldvalue", "")
+                                .Replace("[", "")
+                                .Replace("]", ""));
 
                     if (dataSourceIndex >= 0 && index >= 0)
                     {
                         if (dataTableCollection != null && dataTableCollection[dataSourceIndex] != null)
                         {
-                            expression = expression.Replace(word, GetSum(dataTableCollection[dataSourceIndex], index).ToString(CultureInfo.InvariantCulture));
+                            expression = expression.Replace(word,
+                                GetSum(dataTableCollection[dataSourceIndex], index)
+                                    .ToString(CultureInfo.InvariantCulture));
                         }
                     }
                 }
@@ -168,8 +212,11 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
                     string barCodeBackgroundColor = ConfigurationHelper.GetReportParameter("BarCodeBackgroundColor");
                     string barCodeLineColor = ConfigurationHelper.GetReportParameter("BarCodeLineColor");
 
-                    string imageSource = "<img class='reportEngineBarCode' data-barcodevalue='{0}' alt='{0}' value='{0}' data-barcodeformat='{1}' data-barcodedisplayvalue='{2}' data-barcodefontsize='{3}' data-barcodewidth='{4}' data-barcodeheight='{5}' data-barcodefont='{6}' data-barcodetextalign='{7}' data-barcodebackgroundcolor='{8}' data-barcodelinecolor='{9}' data-barcodequite={10} />";
-                    imageSource = string.Format(CultureInfo.InvariantCulture, imageSource, barCodeValue, barCodeFormat, barCodeDisplayValue, barCodeFontSize, barCodeWidth, barCodeHeight, barCodeFont, barCodeTextAlign, barCodeBackgroundColor, barCodeLineColor, barCodeQuite);
+                    string imageSource =
+                        "<img class='reportEngineBarCode' data-barcodevalue='{0}' alt='{0}' value='{0}' data-barcodeformat='{1}' data-barcodedisplayvalue='{2}' data-barcodefontsize='{3}' data-barcodewidth='{4}' data-barcodeheight='{5}' data-barcodefont='{6}' data-barcodetextalign='{7}' data-barcodebackgroundcolor='{8}' data-barcodelinecolor='{9}' data-barcodequite={10} />";
+                    imageSource = string.Format(CultureInfo.InvariantCulture, imageSource, barCodeValue,
+                        barCodeFormat, barCodeDisplayValue, barCodeFontSize, barCodeWidth, barCodeHeight,
+                        barCodeFont, barCodeTextAlign, barCodeBackgroundColor, barCodeLineColor, barCodeQuite);
                     expression = expression.Replace(word, imageSource).ToString(CultureInfo.InvariantCulture);
                 }
                 else if (word.StartsWith("{QRCode", StringComparison.OrdinalIgnoreCase))
@@ -189,8 +236,10 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
                     string qrCodeHeight = ConfigurationHelper.GetReportParameter("QRCodeHeight");
                     string qrCodeTypeNumber = ConfigurationHelper.GetReportParameter("QRCodeTypeNumber");
 
-                    string qrCodeDiv = "<div class='reportEngineQRCode' data-qrcodevalue={0} data-qrcoderender='{1}' data-qrcodebackgroundcolor='{2}' data-qrcodeforegroundcolor='{3}' data-qrcodewidth='{4}' data-qrcodeheight='{5}' data-qrcodetypenumber='{6}'></div>";
-                    qrCodeDiv = string.Format(CultureInfo.InvariantCulture, qrCodeDiv, qrCodeValue, qrCodeRender, qrCodeBackgroundColor, qrCodeForegroundColor, qrCodeWidth, qrCodeHeight, qrCodeTypeNumber);
+                    string qrCodeDiv =
+                        "<div class='reportEngineQRCode' data-qrcodevalue={0} data-qrcoderender='{1}' data-qrcodebackgroundcolor='{2}' data-qrcodeforegroundcolor='{3}' data-qrcodewidth='{4}' data-qrcodeheight='{5}' data-qrcodetypenumber='{6}'></div>";
+                    qrCodeDiv = string.Format(CultureInfo.InvariantCulture, qrCodeDiv, qrCodeValue, qrCodeRender,
+                        qrCodeBackgroundColor, qrCodeForegroundColor, qrCodeWidth, qrCodeHeight, qrCodeTypeNumber);
                     expression = expression.Replace(word, qrCodeDiv).ToString(CultureInfo.InvariantCulture);
                 }
             }

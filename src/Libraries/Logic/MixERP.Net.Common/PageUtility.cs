@@ -298,11 +298,11 @@ namespace MixERP.Net.Common
             ScriptManager.RegisterStartupScript(page, typeof (Page), key, javaScript, addScriptTags);
         }
 
-        public static string ResolveAbsoluteUrl(Page page, string relativeUrl)
+        public static string ResolveAbsoluteUrl(string relativeUrl)
         {
-            if (page != null)
+            if (HttpContext.Current != null)
             {
-                return page.Request.Url.GetLeftPart(UriPartial.Authority) + page.ResolveUrl(relativeUrl);
+                return HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + VirtualPathUtility.ToAbsolute(relativeUrl);
             }
             return relativeUrl;
         }
