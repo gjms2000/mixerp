@@ -791,4 +791,10 @@ DROP INDEX IF EXISTS core.salespersons_salesperson_code_uix;
 CREATE UNIQUE INDEX salespersons_salesperson_code_uix
 ON core.salespersons(salesperson_code);
 
+DROP INDEX IF EXISTS core.cash_flow_setup_cash_flow_heading_id_account_master_id_uix;
+
+CREATE UNIQUE INDEX cash_flow_setup_cash_flow_heading_id_account_master_id_uix
+ON core.cash_flow_setup (account_master_id,cash_flow_heading_id);
+
+
 
