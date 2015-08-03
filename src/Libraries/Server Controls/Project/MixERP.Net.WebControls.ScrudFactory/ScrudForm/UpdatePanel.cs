@@ -121,18 +121,18 @@ namespace MixERP.Net.WebControls.ScrudFactory
             this.topCommandPanel.WordExportButtonClick += delegate
             {
                 string html = this.markupHidden.Value;
-                DownloadHelper.DownloadWord(html);
+                ExportHelper.DownloadWord(html);
             };
 
             this.topCommandPanel.ExcelExportButtonClick += delegate
             {
                 string html = this.markupHidden.Value;
-                DownloadHelper.DownloadExcel(html);
+                ExportHelper.DownloadExcel(html);
             };
             this.topCommandPanel.PdfExportButtonClick += delegate
             {
                 string html = this.markupHidden.Value;
-                DownloadHelper.DownloadPdf(html);
+                ExportHelper.DownloadPdf(html);
             };
 
             this.topCommandPanel.ButtonCssClass = this.GetCommandPanelButtonCssClass();

@@ -84,7 +84,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.wordLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;
-                DownloadHelper.DownloadWord(html);
+                ExportHelper.DownloadWord(html);
             };
 
 
@@ -103,7 +103,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.excelLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;
-                DownloadHelper.DownloadExcel(html);
+                ExportHelper.DownloadExcel(html);
             };
 
 
@@ -122,7 +122,7 @@ namespace MixERP.Net.WebControls.ReportEngine
             this.pdfLinkButton.Click += delegate
             {
                 string html = this.reportHidden.Value;
-                DownloadHelper.DownloadPdf(html);
+                ExportHelper.DownloadPdf(html);
             };
 
 

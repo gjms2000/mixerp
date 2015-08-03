@@ -314,7 +314,7 @@ BEGIN
         SELECT 'SpecifiedPickupDirectoryLocation',  '~/Resource/Static/Emails' UNION ALL
         SELECT 'SMTPHost',                          'smtp-mail.outlook.com' UNION ALL
         SELECT 'SMTPPort',                          '587' UNION ALL
-        SELECT 'SMTPEnableSSL',                     'true' UNION ALL
+        SELECT 'SMTPEnableSSL',                     'false' UNION ALL
         SELECT 'SMTPUserName',                      '' UNION ALL
         SELECT 'SMTPPassword',                      '';
     END IF;

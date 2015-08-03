@@ -46,6 +46,11 @@ namespace MixERP.Net.FrontEnd.Handlers
 
         private bool IsRtl()
         {
+            if (CultureInfo.DefaultThreadCurrentCulture == null)
+            {
+                return false;
+            }
+
             return CultureInfo.DefaultThreadCurrentCulture.TextInfo.IsRightToLeft;
         }
     }

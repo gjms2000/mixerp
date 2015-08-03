@@ -34,7 +34,7 @@ namespace MixERP.Net.Messaging.Email
 
         public bool IsValid
         {
-            get { return !this.isValid; }
+            get { return this.isValid; }
         }
 
         public string EmailAddress { get; set; }

@@ -18,7 +18,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using MixERP.Net.Common.Helpers;
-using MixERP.Net.HtmlParser.ImageSerializer;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Messaging.Email;
 
@@ -37,30 +36,16 @@ namespace MixERP.Net.WebControls.TransactionChecklist.Helpers
 
         public string Catalog { get; set; }
         internal string EmailBody { get; set; }
-
         internal string Html { get; set; }
         internal string Recipient { get; set; }
-
         internal string Subject { get; set; }
+
         internal void SendEmail()
         {
+            string pdf = ExportHelper.CreatePDF(this.Html);
 
-            IHtmlImageSerializer serializer = new HtmlRendererImageSerializer();
-
-            string extension = ConfigurationHelper.GetTransactionChecklistParameter("EmailImageExtension") ?? ".png";
-
-            serializer.Html = this.Html;
-            serializer.ImageFormat = ImageHelper.GetImageFormat(extension);
-            serializer.ImageSaved += this.Serializer_ImageSaved;
-            serializer.TempDirectory = "~/Resource/Temp/Images/";
-            serializer.Serialize();
-        }
-
-
-        private void Serializer_ImageSaved(object sender, ImageSavedEventArgs e)
-        {
             Processor processor = new Processor(this.Catalog);
-            processor.Send(this.Recipient, this.Subject, this.EmailBody, AttachmentFactory.GetAttachments(e.ImagePath));
+            processor.Send(this.Recipient, this.Subject, this.EmailBody, true, pdf);
         }
     }
 }

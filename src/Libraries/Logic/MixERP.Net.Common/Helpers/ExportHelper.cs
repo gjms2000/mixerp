@@ -25,7 +25,7 @@ using Codaxy.WkHtmlToPdf;
 
 namespace MixERP.Net.Common.Helpers
 {
-    public static class DownloadHelper
+    public static class ExportHelper
     {
         public static string CreatePDF(string html)
         {

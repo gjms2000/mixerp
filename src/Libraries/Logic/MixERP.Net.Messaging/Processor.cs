@@ -21,9 +21,11 @@ using MixERP.Net.Messaging.Email.Helpers;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 
@@ -38,7 +40,7 @@ namespace MixERP.Net.Messaging.Email
             this.Catalog = catalog;
         }
 
-        public void Send(string sendTo, string subject, string body, IEnumerable<Attachment> attachments)
+        public void Send(string sendTo, string subject, string body, bool deleteAttachmentes, params string[] attachments)
         {
             Config config = new Config(this.Catalog);
 
@@ -69,11 +71,11 @@ namespace MixERP.Net.Messaging.Email
                 Password = config.SmtpUserPassword
             };
 
-            this.Send(email, host, credentials, attachments);
+            this.Send(email, host, credentials, deleteAttachmentes, attachments);
         }
 
         public void Send(EmailMessage email, SmtpHost host, ICredentials credentials,
-            IEnumerable<Attachment> attachments)
+            bool deleteAttachmentes, params string[] attachments)
         {
             if (string.IsNullOrWhiteSpace(email.SentTo))
             {
@@ -107,10 +109,28 @@ namespace MixERP.Net.Messaging.Email
 
                 using (MailMessage mail = new MailMessage(email.FromEmail, email.SentTo))
                 {
-                    foreach (var attachment in attachments)
+                    if (attachments != null)
                     {
-                        mail.Attachments.Add(attachment);
+                        foreach (string file in attachments)
+                        {
+                            if (!string.IsNullOrWhiteSpace(file))
+                            {
+                                Attachment attachment = new Attachment(file, MediaTypeNames.Application.Octet);
+
+                                ContentDisposition disposition = attachment.ContentDisposition;
+                                disposition.CreationDate = File.GetCreationTime(file);
+                                disposition.ModificationDate = File.GetLastWriteTime(file);
+                                disposition.ReadDate = File.GetLastAccessTime(file);
+
+                                disposition.FileName = Path.GetFileName(file);
+                                disposition.Size = new FileInfo(file).Length;
+                                disposition.DispositionType = DispositionTypeNames.Attachment;
+
+                                mail.Attachments.Add(attachment);
+                            }
+                        }
                     }
+
 
                     mail.From = sender;
                     using (SmtpClient smtp = new SmtpClient(host.Address, host.Port))
@@ -136,9 +156,39 @@ namespace MixERP.Net.Messaging.Email
                             email.Status = Status.Failed;
                             Log.Warning(@"Could not send email to {To}. {Ex}. ", email.SentTo, ex);
                         }
+                        finally
+                        {
+                            foreach (IDisposable item in mail.Attachments)
+                            {
+                                if (item != null)
+                                {
+                                    item.Dispose();
+                                }
+                            }
+
+                            if (deleteAttachmentes)
+                            {
+                                this.DeleteFiles(attachments);
+                            }
+                        }
                     }
                 }
             });
+        }
+
+
+        private void DeleteFiles(params string[] files)
+        {
+            foreach (string file in files)
+            {
+                if (!string.IsNullOrWhiteSpace(file))
+                {
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                }
+            }
         }
     }
 }
