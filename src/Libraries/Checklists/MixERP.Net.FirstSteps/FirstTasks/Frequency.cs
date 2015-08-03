@@ -21,7 +21,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
 
             int count = this.CountFrequencySetups();
 
-            if (count == 12)
+            if (count % 12 == 0)
             {
                 this.Status = true;
                 this.Message = Labels.FrequencySetupIsComplete;
@@ -36,7 +36,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         {
             string catalog = AppUsers.GetCurrentUserDB();
 
-            const string sql = "SELECT COUNT(*) FROM core.frequency_setups";
+            const string sql = "SELECT COUNT(*) FROM core.frequency_setups;";
             return Factory.Scalar<int>(catalog, sql);
         }
     }

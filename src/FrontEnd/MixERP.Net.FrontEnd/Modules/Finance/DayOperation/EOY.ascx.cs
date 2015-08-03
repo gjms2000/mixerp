@@ -17,12 +17,18 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System;
+using MixERP.Net.Framework.Controls;
 using MixERP.Net.FrontEnd.Base;
 
 namespace MixERP.Net.Core.Modules.Finance.DayOperation
 {
     public partial class EOY : MixERPUserControl
     {
+        public override AccessLevel AccessLevel
+        {
+            get { return AccessLevel.AdminOnly; }
+        }
+
         public override void OnControlLoad(object sender, EventArgs e)
         {
             this.SetOverrideUrl();

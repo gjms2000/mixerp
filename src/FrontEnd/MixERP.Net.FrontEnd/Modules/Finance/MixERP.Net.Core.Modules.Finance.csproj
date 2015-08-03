@@ -100,6 +100,7 @@
     <Content Include="..\..\..\..\mixerp.licenseheader">
       <Link>mixerp.licenseheader</Link>
     </Content>
+    <Content Include="DayOperation\EOD.ascx" />
     <Content Include="DayOperation\EOY.ascx" />
     <Content Include="EODOperation.ascx" />
     <Content Include="Mix Open Foundation.snk" />
@@ -187,6 +188,13 @@
     </Compile>
     <Compile Include="Confirmation\JournalVoucher.ascx.designer.cs">
       <DependentUpon>JournalVoucher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DayOperation\EOD.ascx.cs">
+      <DependentUpon>EOD.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DayOperation\EOD.ascx.designer.cs">
+      <DependentUpon>EOD.ascx</DependentUpon>
     </Compile>
     <Compile Include="DayOperation\EOY.ascx.cs">
       <DependentUpon>EOY.ascx</DependentUpon>

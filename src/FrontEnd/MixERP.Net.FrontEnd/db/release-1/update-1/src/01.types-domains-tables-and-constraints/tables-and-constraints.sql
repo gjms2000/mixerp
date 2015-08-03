@@ -796,5 +796,7 @@ DROP INDEX IF EXISTS core.cash_flow_setup_cash_flow_heading_id_account_master_id
 CREATE UNIQUE INDEX cash_flow_setup_cash_flow_heading_id_account_master_id_uix
 ON core.cash_flow_setup (account_master_id,cash_flow_heading_id);
 
+DROP INDEX IF EXISTS core.frequency_setups_frequency_setup_code_uix;
 
-
+CREATE UNIQUE INDEX frequency_setups_frequency_setup_code_uix
+ON core.frequency_setups(UPPER(fiscal_year_code), UPPER(frequency_setup_code));

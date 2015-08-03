@@ -806,6 +806,21 @@ END
 $$
 LANGUAGE plpgsql;
 
+DROP INDEX IF EXISTS core.salespersons_salesperson_name_uix;
+DROP INDEX IF EXISTS core.salespersons_salesperson_code_uix;
+
+CREATE UNIQUE INDEX salespersons_salesperson_code_uix
+ON core.salespersons(salesperson_code);
+
+DROP INDEX IF EXISTS core.cash_flow_setup_cash_flow_heading_id_account_master_id_uix;
+
+CREATE UNIQUE INDEX cash_flow_setup_cash_flow_heading_id_account_master_id_uix
+ON core.cash_flow_setup (account_master_id,cash_flow_heading_id);
+
+DROP INDEX IF EXISTS core.frequency_setups_frequency_setup_code_uix;
+
+CREATE UNIQUE INDEX frequency_setups_frequency_setup_code_uix
+ON core.frequency_setups(UPPER(fiscal_year_code), UPPER(frequency_setup_code));
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
@@ -1023,6 +1038,71 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.create_new_fiscal_year.sql --<--<--
+DROP FUNCTION IF EXISTS core.create_new_fiscal_year
+(
+    _office_id                          integer,
+    _user_id                            integer,
+    _fiscal_year_code                   national character varying(12),
+    _fiscal_year_name                   national character varying(50)
+);
+
+CREATE FUNCTION core.create_new_fiscal_year
+(
+    _office_id                          integer,
+    _user_id                            integer,
+    _fiscal_year_code                   national character varying(12),
+    _fiscal_year_name                   national character varying(50)
+)
+RETURNS void
+AS
+$$
+    DECLARE _value_date                 date;
+    DECLARE _eoy_date                   date;
+    DECLARE _current_fiscal_year_code   national character varying(12);
+BEGIN
+    _current_fiscal_year_code   := core.get_current_fiscal_year_code(_office_id);
+    _value_date                 := core.get_date(_office_id);
+    _eoy_date                   := core.get_fiscal_year_end_date(_office_id);
+
+    IF(_value_date <> _eoy_date) THEN
+        RAISE EXCEPTION 'Access is denied.'
+        USING ERRCODE='P9001';
+    END IF;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM core.fiscal_year
+        WHERE ends_on > _eoy_date
+    ) THEN
+        --One of the other branch offices had already created a new fiscal year.
+        RETURN;
+    END IF;
+
+    INSERT INTO core.fiscal_year(fiscal_year_code, fiscal_year_name, starts_from, ends_on, audit_user_id)
+    SELECT 
+        _fiscal_year_code, 
+        _fiscal_year_name, 
+        starts_from + interval '1 year', 
+        ends_on + interval '1 year',
+        _user_id
+    FROM core.fiscal_year
+    WHERE fiscal_year_code = _current_fiscal_year_code;
+
+    INSERT INTO core.frequency_setups(fiscal_year_code, frequency_setup_code, value_date, frequency_id, audit_user_id)
+    SELECT 
+        _fiscal_year_code, 
+        frequency_setup_code, 
+        value_date + interval '1 year',
+        frequency_id,
+        _user_id
+    FROM core.frequency_setups
+    WHERE fiscal_year_code = _current_fiscal_year_code;
+END
+$$
+LANGUAGE plpgsql;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_account_id_by_account_name(text);
 
@@ -1040,6 +1120,25 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_current_fiscal_year_code().sql --<--<--
+DROP FUNCTION IF EXISTS core.get_current_fiscal_year_code(_office_id integer);
+
+CREATE FUNCTION core.get_current_fiscal_year_code(_office_id integer)
+RETURNS national character varying(12)
+AS
+$$
+    DECLARE _today date = core.get_date(_office_id);
+BEGIN
+    RETURN fiscal_year_code 
+    FROM core.fiscal_year
+    WHERE _today >= starts_from
+    AND _today <= ends_on
+    ORDER BY ends_on DESC
+    LIMIT 1;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_party_code.sql --<--<--
 CREATE OR REPLACE FUNCTION core.get_party_code
@@ -1127,6 +1226,36 @@ BEGIN
 END;
 $$
 LANGUAGE 'plpgsql';
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.is_new_fiscal_year_created.sql --<--<--
+DROP FUNCTION IF EXISTS core.is_new_fiscal_year_created
+(
+    _office_id              integer
+);
+
+CREATE FUNCTION core.is_new_fiscal_year_created
+(
+    _office_id              integer
+)
+RETURNS boolean
+AS
+$$
+    DECLARE _eoy_date       date;
+BEGIN
+    _eoy_date               := core.get_fiscal_year_end_date(_office_id);
+
+    IF EXISTS
+    (
+        SELECT 1 FROM core.fiscal_year
+        WHERE ends_on > _eoy_date
+    ) THEN
+        RETURN true;
+    END IF;
+    
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/office/office.add_office.sql --<--<--
 DROP FUNCTION IF EXISTS office.add_office
@@ -1266,6 +1395,8 @@ BEGIN
         SELECT _currency_code, _currency_symbol, _currency_name, _hundredth_name;
     END IF;
 
+    UPDATE core.accounts
+    SET currency_code = _currency_code;
 
     INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day, primary_sales_tax_is_vat, has_state_sales_tax, has_county_sales_tax, logo_file)
     SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day, _sales_tax_is_vat, _has_state_sales_tax, _has_county_sales_tax, _logo_file
@@ -1309,6 +1440,45 @@ BEGIN
 
     RETURN;
 END;
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_eoy_profit_summary.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_eoy_profit_summary
+(
+    _office_id              integer
+);
+
+CREATE FUNCTION transactions.get_eoy_profit_summary
+(
+    _office_id              integer
+)
+RETURNS TABLE
+(
+    profit_before_tax       decimal(24, 4),
+    tax_rate                decimal(24, 4),
+    tax                     decimal(24, 4)
+)
+AS
+$$
+    DECLARE _date_from      date = core.get_fiscal_year_start_date(_office_id);
+    DECLARE _date_to        date = core.get_fiscal_year_end_date(_office_id);
+    DECLARE _profit         decimal(24, 4);
+    DECLARE _tax_rate       decimal(24, 4);
+    DECLARE _tax            decimal(24, 4);
+BEGIN
+    REFRESH MATERIALIZED VIEW transactions.verified_transaction_mat_view;
+    _profit := transactions.get_net_profit(_date_from, _date_to, _office_id, 1, true);
+
+    SELECT income_tax_rate INTO _tax_rate
+    FROM office.offices
+    WHERE office_id = _office_id;
+
+    _tax = (_profit * _tax_rate) / 100;
+
+    RETURN QUERY
+    SELECT _profit, _tax_rate, _tax;
+END
 $$
 LANGUAGE plpgsql;
 
@@ -2821,7 +2991,7 @@ SELECT * FROM core.create_menu('Transactions & Templates', NULL, 'FTT', 1, core.
 SELECT * FROM core.create_menu('Journal Voucher Entry', '~/Modules/Finance/JournalVoucher.mix', 'JVN', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Update Exchange Rates', '~/Modules/Finance/UpdateExchangeRates.mix', 'UER', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Voucher Verification', '~/Modules/Finance/VoucherVerification.mix', 'FVV', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('End of Day Operation', '~/Modules/Finance/EODOperation.mix', 'EOD', 2, core.get_menu_id('FTT'));
+SELECT * FROM core.create_menu('End of Day Operation', '~/Modules/Finance/DayOperation/EOD.mix', 'EOD', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'FSM', 1, core.get_menu_id('FI'));
 SELECT * FROM core.create_menu('Chart of Accounts', '~/Modules/Finance/Setup/COA.mix', 'COA', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Currency Management', '~/Modules/Finance/Setup/Currencies.mix', 'CUR', 2, core.get_menu_id('FSM'));
@@ -2833,6 +3003,7 @@ SELECT * FROM core.create_menu('Cash Flow Headings', '~/Modules/Finance/Setup/Ca
 SELECT * FROM core.create_menu('Cash Flow Setup', '~/Modules/Finance/Setup/CashFlowSetup.mix', 'CFS', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Cost Centers', '~/Modules/Finance/Setup/CostCenters.mix', 'CC', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Reports', NULL, 'FIR', 1, core.get_menu_id('FI'));
+SELECT * FROM core.create_menu('Exchange Rates', '~/Modules/Finance/Reports/ExchangeRates.mix', 'ERR', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Account Statement', '~/Modules/Finance/Reports/AccountStatement.mix', 'AS', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Trial Balance', '~/Modules/Finance/Reports/TrialBalance.mix', 'TB', 2, core.get_menu_id('FIR'));
 SELECT * FROM core.create_menu('Profit & Loss Account', '~/Modules/Finance/Reports/ProfitAndLossAccount.mix', 'PLA', 2, core.get_menu_id('FIR'));
@@ -3325,6 +3496,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'entity_id', 'En
 SELECT localization.add_localized_resource('ScrudResource', '', 'entity_name', 'Entity Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'entry_ts', 'Entry Ts');
 SELECT localization.add_localized_resource('ScrudResource', '', 'er', 'ER');
+SELECT localization.add_localized_resource('ScrudResource', '', 'exchange_rate', 'Exchange Rate');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exclude_from_purchase', 'Exclude From Purchase');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exclude_from_sales', 'Exclude From Sales');
 SELECT localization.add_localized_resource('ScrudResource', '', 'external_code', 'External Code');
@@ -3337,6 +3509,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'flag_id', 'Flag
 SELECT localization.add_localized_resource('ScrudResource', '', 'flag_type_id', 'Flag Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'flag_type_name', 'Flag Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'flagged_on', 'Flagged On');
+SELECT localization.add_localized_resource('ScrudResource', '', 'foreign_currency_code', 'Foreign Currency Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'foreground_color', 'Foreground Color');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_code', 'Frequency Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_id', 'Frequency Id');
@@ -3854,6 +4027,7 @@ SELECT localization.add_localized_resource('Titles', '', 'EnterBackupName', 'Ent
 SELECT localization.add_localized_resource('Titles', '', 'EnterNewPassword', 'Enter a New Password');
 SELECT localization.add_localized_resource('Titles', '', 'EnteredBy', 'Entered By');
 SELECT localization.add_localized_resource('Titles', '', 'Entities', 'Entities');
+SELECT localization.add_localized_resource('Titles', '', 'ExchangeRates', 'Exchange Rates');
 SELECT localization.add_localized_resource('Titles', '', 'ExchangeRate', 'Exchange Rate');
 SELECT localization.add_localized_resource('Titles', '', 'Execute', 'Execute');
 SELECT localization.add_localized_resource('Titles', '', 'Export', 'Export');
@@ -4199,6 +4373,7 @@ SELECT localization.add_localized_resource('Titles', '', 'UnitName', 'Unit Name'
 SELECT localization.add_localized_resource('Titles', '', 'UnitsOfMeasure', 'Units of Measure');
 SELECT localization.add_localized_resource('Titles', '', 'UnknownError', 'Operation failed due to an unknown error.');
 SELECT localization.add_localized_resource('Titles', '', 'Update', 'Update');
+SELECT localization.add_localized_resource('Titles', '', 'UpdatedOn', 'Updated On');
 SELECT localization.add_localized_resource('Titles', '', 'UpdateConsole', 'Update Console');
 SELECT localization.add_localized_resource('Titles', '', 'Upload', 'Upload');
 SELECT localization.add_localized_resource('Titles', '', 'UploadAttachments', 'Upload Attachments');
@@ -20915,6 +21090,62 @@ SELECT * FROM core.account_scrud_view
 --Current Liabilities, Accounts Payable
 WHERE account_master_id = ANY(ARRAY[15000, 15010])
 ORDER BY account_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/office/office.sign_in_view.sql --<--<--
+DROP VIEW IF EXISTS office.sign_in_view;
+
+CREATE VIEW office.sign_in_view
+AS
+SELECT 
+  logins.login_id, 
+  logins.user_id, 
+  users.role_id, 
+  roles.role_code || ' (' || roles.role_name || ')' AS role, 
+  roles.role_code, 
+  roles.role_name, 
+  roles.is_admin, 
+  roles.is_system, 
+  logins.browser, 
+  logins.ip_address, 
+  logins.login_date_time, 
+  logins.remote_user, 
+  logins.culture, 
+  users.user_name, 
+  users.full_name, 
+  users.elevated, 
+  offices.office_code || ' (' || offices.office_name || ')' AS office,
+  offices.office_id, 
+  offices.office_code, 
+  offices.office_name, 
+  offices.nick_name, 
+  offices.registration_date, 
+  offices.currency_code, 
+  offices.po_box, 
+  offices.address_line_1, 
+  offices.address_line_2, 
+  offices.street, 
+  offices.city, 
+  offices.state, 
+  offices.zip_code, 
+  offices.country, 
+  offices.phone, 
+  offices.fax, 
+  offices.email, 
+  offices.url, 
+  offices.registration_number, 
+  offices.pan_number,
+  offices.allow_transaction_posting,
+  offices.week_start_day,
+  offices.logo_file
+FROM 
+  audit.logins, 
+  office.users, 
+  office.offices, 
+  office.roles
+WHERE 
+  logins.user_id = users.user_id AND
+  logins.office_id = offices.office_id AND
+  users.role_id = roles.role_id;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS core.party_after_insert_trigger() CASCADE;

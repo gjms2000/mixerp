@@ -22,7 +22,7 @@ namespace MixERP.Net.i18n
 
             context.Response.ContentType = "text/javascript";
 
-            context.Response.ContentEncoding = System.Text.Encoding.UTF8;
+            context.Response.ContentEncoding = Encoding.UTF8;
             context.Response.Cache.SetLastModifiedFromFileDependencies();
             context.Response.Cache.SetETagFromFileDependencies();
             context.Response.Cache.SetCacheability(HttpCacheability.Public);

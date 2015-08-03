@@ -26,9 +26,6 @@ using System.Web;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Handlers
 {
-    /// <summary>
-    /// Summary description for ImageHandler
-    /// </summary>
     public class ImageHandler : IHttpHandler
     {
         public bool IsReusable

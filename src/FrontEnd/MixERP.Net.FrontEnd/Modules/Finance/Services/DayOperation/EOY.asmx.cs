@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI.WebControls;
@@ -59,7 +58,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
         }
 
         [WebMethod]
-        public bool PostPLAppropriation(string referenceNumber, int costCenterId, string accountNumber, string statementReference)
+        public bool PostPLAppropriation(string referenceNumber, int costCenterId, string accountNumber,
+            string statementReference)
         {
             bool isAdmin = AppUsers.GetCurrent().View.IsAdmin.ToBool();
 
@@ -99,7 +99,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
                     AccountNumber = item.AccountNumber,
                     Credit = item.Credit,
                     Debit = item.Debit,
-                    CashRepositoryCode= string.Empty,
+                    CashRepositoryCode = string.Empty,
                     CurrencyCode = currencyCode,
                     ExchangeRate = 1,
                     LocalCurrencyCredit = item.Credit,
@@ -123,9 +123,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
                     ExchangeRate = 1,
                     LocalCurrencyCredit = credit,
                     LocalCurrencyDebit = debit,
-                    StatementReference = statementReference
+                    StatementReference = statementReference + " (" + item.AccountName + ")"
                 });
-
             }
 
             Transaction.Add(catalog, valueDate, bookDate, officeId, userId, loginId, costCenterId,
@@ -133,7 +132,6 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
 
             return true;
         }
-
 
         [WebMethod]
         public DbGetEoyProfitSummaryResult GetEoyProfitSummary()
@@ -145,7 +143,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
         }
 
         [WebMethod]
-        public bool PostIncomeTax(string taxOfficeAccountNumber, string taxExpensesAccountNumber, int costCenterId, string referenceNumber, string statementReference)
+        public bool PostIncomeTax(string taxOfficeAccountNumber, string taxExpensesAccountNumber, int costCenterId,
+            string referenceNumber, string statementReference)
         {
             bool isAdmin = AppUsers.GetCurrent().View.IsAdmin.ToBool();
 
@@ -221,7 +220,50 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
             return true;
         }
 
+        [WebMethod]
+        public void CreateNewFiscalYear(string fiscalYearCode, string fiscalYearName)
+
+        {
+            bool isAdmin = AppUsers.GetCurrent().View.IsAdmin.ToBool();
+
+            if (!isAdmin)
+            {
+                throw new MixERPException(Warnings.AccessIsDenied);
+            }
+
+            if (string.IsNullOrWhiteSpace(fiscalYearCode) || string.IsNullOrWhiteSpace(fiscalYearName))
+            {
+                throw new MixERPException(Labels.AllFieldsRequired);
+            }
+
+            string catalog = AppUsers.GetCurrentUserDB();
+            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            int userId = AppUsers.GetCurrent().View.UserId.ToInt();
+
+
+            DateTime valueDate = DatePersister.GetFrequencyDates(catalog, officeId).Today;
+            DateTime eoyDate = DatePersister.GetFrequencyDates(catalog, officeId).FiscalYearEndDate;
+
+            if (valueDate != eoyDate)
+            {
+                throw new MixERPException(Warnings.AccessIsDenied);
+            }
+
+
+            Data.DayOperation.EOY.CreateNewFiscalYear(catalog, officeId, userId, fiscalYearCode, fiscalYearName);
+        }
+
+        [WebMethod]
+        public bool IsNewFiscalYearCreated()
+        {
+            string catalog = AppUsers.GetCurrentUserDB();
+            int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+
+            return Data.DayOperation.EOY.IsNewFiscalYearCreated(catalog, officeId);
+        }
+
         #region Accounts
+
         [WebMethod]
         public Collection<ListItem> GetLiabilityAccounts()
         {
@@ -266,6 +308,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
 
             return values;
         }
+
         #endregion
     }
 }

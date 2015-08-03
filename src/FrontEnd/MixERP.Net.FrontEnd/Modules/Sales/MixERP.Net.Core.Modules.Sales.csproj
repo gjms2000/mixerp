@@ -85,6 +85,8 @@
     <Content Include="Confirmation\Order.ascx" />
     <Content Include="Confirmation\Quotation.ascx" />
     <Content Include="Reports\ReceiptReport.ascx" />
+    <Content Include="Reports\SalesByOffice.ascx" />
+    <Content Include="Reports\SalesByOfficeFrame.ascx" />
     <Content Include="Reports\SalesOrderReport.ascx" />
     <Content Include="Reports\SalesQuotationReport.ascx" />
     <Content Include="DirectSales.ascx" />
@@ -98,6 +100,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Reports\Source\Sales.Return.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\Source\SalesByOffice.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Reports\Source\TopSellingProductsOfAllTime.xml">
@@ -181,132 +186,168 @@
   <ItemGroup>
     <Compile Include="Confirmation\Receipt.ascx.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\Receipt.ascx.designer.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
     </Compile>
     <Compile Include="Confirmation\Return.ascx.cs">
       <DependentUpon>Return.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\Return.ascx.designer.cs">
       <DependentUpon>Return.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\Receipt.ascx.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\Receipt.ascx.designer.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\Return.ascx.cs">
       <DependentUpon>Return.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\Return.ascx.designer.cs">
       <DependentUpon>Return.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\CustomerInvoiceReport.ascx.cs">
       <DependentUpon>CustomerInvoiceReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\CustomerInvoiceReport.ascx.designer.cs">
       <DependentUpon>CustomerInvoiceReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Confirmation\Delivery.ascx.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\Delivery.ascx.designer.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\DeliveryNoteReport.ascx.cs">
       <DependentUpon>DeliveryNoteReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\DeliveryNoteReport.ascx.designer.cs">
       <DependentUpon>DeliveryNoteReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\DeliveryReport.ascx.cs">
       <DependentUpon>DeliveryReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\DeliveryReport.ascx.designer.cs">
       <DependentUpon>DeliveryReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Confirmation\DirectSales.ascx.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\DirectSales.ascx.designer.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\DirectSalesInvoiceReport.ascx.cs">
       <DependentUpon>DirectSalesInvoiceReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\DirectSalesInvoiceReport.ascx.designer.cs">
       <DependentUpon>DirectSalesInvoiceReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Confirmation\Order.ascx.cs">
       <DependentUpon>Order.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\Order.ascx.designer.cs">
       <DependentUpon>Order.ascx</DependentUpon>
     </Compile>
     <Compile Include="Confirmation\Quotation.ascx.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Confirmation\Quotation.ascx.designer.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\ReceiptReport.ascx.cs">
       <DependentUpon>ReceiptReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\ReceiptReport.ascx.designer.cs">
       <DependentUpon>ReceiptReport.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\SalesByOffice.ascx.cs">
+      <DependentUpon>SalesByOffice.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\SalesByOffice.ascx.designer.cs">
+      <DependentUpon>SalesByOffice.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SalesByOfficeFrame.ascx.cs">
+      <DependentUpon>SalesByOfficeFrame.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\SalesByOfficeFrame.ascx.designer.cs">
+      <DependentUpon>SalesByOfficeFrame.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\SalesOrderReport.ascx.cs">
       <DependentUpon>SalesOrderReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\SalesOrderReport.ascx.designer.cs">
       <DependentUpon>SalesOrderReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\SalesQuotationReport.ascx.cs">
       <DependentUpon>SalesQuotationReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\SalesQuotationReport.ascx.designer.cs">
       <DependentUpon>SalesQuotationReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Delivery.ascx.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Delivery.ascx.designer.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
     </Compile>
     <Compile Include="DirectSales.ascx.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DirectSales.ascx.designer.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\Delivery.ascx.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\Delivery.ascx.designer.cs">
       <DependentUpon>Delivery.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\DirectSales.ascx.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\DirectSales.ascx.designer.cs">
       <DependentUpon>DirectSales.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\Order.ascx.cs">
       <DependentUpon>Order.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\Order.ascx.designer.cs">
       <DependentUpon>Order.ascx</DependentUpon>
     </Compile>
     <Compile Include="Entry\Quotation.ascx.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Entry\Quotation.ascx.designer.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
     </Compile>
     <Compile Include="Order.ascx.cs">
       <DependentUpon>Order.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Order.ascx.designer.cs">
       <DependentUpon>Order.ascx</DependentUpon>
@@ -314,42 +355,49 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quotation.ascx.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Quotation.ascx.designer.cs">
       <DependentUpon>Quotation.ascx</DependentUpon>
     </Compile>
     <Compile Include="Receipt.ascx.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Receipt.ascx.designer.cs">
       <DependentUpon>Receipt.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\CustomerReceiptReport.ascx.cs">
       <DependentUpon>CustomerReceiptReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\CustomerReceiptReport.ascx.designer.cs">
       <DependentUpon>CustomerReceiptReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\SalesReturnReport.ascx.cs">
       <DependentUpon>SalesReturnReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\SalesReturnReport.ascx.designer.cs">
       <DependentUpon>SalesReturnReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\TopSellingItems.ascx.cs">
       <DependentUpon>TopSellingItems.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\TopSellingItems.ascx.designer.cs">
       <DependentUpon>TopSellingItems.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\TopSellingItemsFrame.ascx.cs">
       <DependentUpon>TopSellingItemsFrame.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\TopSellingItemsFrame.ascx.designer.cs">
       <DependentUpon>TopSellingItemsFrame.ascx</DependentUpon>
     </Compile>
     <Compile Include="Return.ascx.cs">
       <DependentUpon>Return.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Return.ascx.designer.cs">
       <DependentUpon>Return.ascx</DependentUpon>
@@ -388,84 +436,98 @@
     </Compile>
     <Compile Include="Setup\BonusSlabDetails.ascx.cs">
       <DependentUpon>BonusSlabDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\BonusSlabDetails.ascx.designer.cs">
       <DependentUpon>BonusSlabDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\BonusSlabs.ascx.cs">
       <DependentUpon>BonusSlabs.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\BonusSlabs.ascx.designer.cs">
       <DependentUpon>BonusSlabs.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\LateFees.ascx.cs">
       <DependentUpon>LateFees.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\LateFees.ascx.designer.cs">
       <DependentUpon>LateFees.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\PaymentTerms.ascx.cs">
       <DependentUpon>PaymentTerms.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\PaymentTerms.ascx.designer.cs">
       <DependentUpon>PaymentTerms.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\RecurringInvoices.ascx.cs">
       <DependentUpon>RecurringInvoices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\RecurringInvoices.ascx.designer.cs">
       <DependentUpon>RecurringInvoices.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\RecurringInvoiceSetup.ascx.cs">
       <DependentUpon>RecurringInvoiceSetup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\RecurringInvoiceSetup.ascx.designer.cs">
       <DependentUpon>RecurringInvoiceSetup.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\Salespersons.ascx.cs">
       <DependentUpon>Salespersons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\Salespersons.ascx.designer.cs">
       <DependentUpon>Salespersons.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\BonusSlabAssignment.ascx.cs">
       <DependentUpon>BonusSlabAssignment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\BonusSlabAssignment.ascx.designer.cs">
       <DependentUpon>BonusSlabAssignment.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\Teams.ascx.cs">
       <DependentUpon>Teams.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\Teams.ascx.designer.cs">
       <DependentUpon>Teams.ascx</DependentUpon>
     </Compile>
     <Compile Include="Widgets\CurrentOfficeSalesByMonthWidget.ascx.cs">
       <DependentUpon>CurrentOfficeSalesByMonthWidget.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Widgets\CurrentOfficeSalesByMonthWidget.ascx.designer.cs">
       <DependentUpon>CurrentOfficeSalesByMonthWidget.ascx</DependentUpon>
     </Compile>
     <Compile Include="Widgets\SalesByGeographyWidget.ascx.cs">
       <DependentUpon>SalesByGeographyWidget.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Widgets\SalesByGeographyWidget.ascx.designer.cs">
       <DependentUpon>SalesByGeographyWidget.ascx</DependentUpon>
     </Compile>
     <Compile Include="Widgets\SalesByOfficeWidget.ascx.cs">
       <DependentUpon>SalesByOfficeWidget.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Widgets\SalesByOfficeWidget.ascx.designer.cs">
       <DependentUpon>SalesByOfficeWidget.ascx</DependentUpon>
     </Compile>
     <Compile Include="Widgets\TopSellingProductOfAllTimeCurrentWidget.ascx.cs">
       <DependentUpon>TopSellingProductOfAllTimeCurrentWidget.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Widgets\TopSellingProductOfAllTimeCurrentWidget.ascx.designer.cs">
       <DependentUpon>TopSellingProductOfAllTimeCurrentWidget.ascx</DependentUpon>
     </Compile>
     <Compile Include="Widgets\TopSellingProductOfAllTimeWidget.ascx.cs">
       <DependentUpon>TopSellingProductOfAllTimeWidget.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Widgets\TopSellingProductOfAllTimeWidget.ascx.designer.cs">
       <DependentUpon>TopSellingProductOfAllTimeWidget.ascx</DependentUpon>

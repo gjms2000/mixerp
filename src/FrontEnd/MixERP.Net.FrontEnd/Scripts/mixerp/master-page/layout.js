@@ -7,6 +7,8 @@ $(window).on('resize', function () {
 });
 
 function fixLayout() {
+    return;
+    alert("fix layout");
     if (contentRow) {
         var contentHeight = contentRow.height();
         var docHeight = $(document).height();

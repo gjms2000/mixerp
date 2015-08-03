@@ -545,7 +545,7 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
 
                 using (HtmlGenericControl iconInput = new HtmlGenericControl("div"))
                 {
-                    iconInput.Attributes.Add("class", "ui icon input");
+                    iconInput.Attributes.Add("class", "");
 
                     iconInput.Controls.Add(dateTextBox);
 

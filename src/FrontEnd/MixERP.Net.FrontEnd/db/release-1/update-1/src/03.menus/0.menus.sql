@@ -26,6 +26,7 @@ SELECT * FROM core.create_menu('Recurring Invoices', '~/Modules/Sales/Setup/Recu
 SELECT * FROM core.create_menu('Recurring Invoice Setup', '~/Modules/Sales/Setup/RecurringInvoiceSetup.mix', 'RIS', 2, core.get_menu_id('SSM'));
 SELECT * FROM core.create_menu('Sales Reports', NULL, 'SAR', 1, core.get_menu_id('SA'));
 SELECT * FROM core.create_menu('Top Selling Items', '~/Modules/Sales/Reports/TopSellingItems.mix', 'SAR-TSI', 2, core.get_menu_id('SAR'));
+SELECT * FROM core.create_menu('Sales by Office', '~/Modules/Sales/Reports/SalesByOffice.mix', 'SAR-SBO', 2, core.get_menu_id('SAR'));
 SELECT * FROM core.create_menu('Purchase & Quotation', NULL, 'PUQ', 1, core.get_menu_id('PU'));
 SELECT * FROM core.create_menu('Direct Purchase', '~/Modules/Purchase/DirectPurchase.mix', 'DRP', 2, core.get_menu_id('PUQ'));
 SELECT * FROM core.create_menu('Purchase Order', '~/Modules/Purchase/Order.mix', 'PO', 2, core.get_menu_id('PUQ'));
@@ -64,7 +65,7 @@ SELECT * FROM core.create_menu('Transactions & Templates', NULL, 'FTT', 1, core.
 SELECT * FROM core.create_menu('Journal Voucher Entry', '~/Modules/Finance/JournalVoucher.mix', 'JVN', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Update Exchange Rates', '~/Modules/Finance/UpdateExchangeRates.mix', 'UER', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Voucher Verification', '~/Modules/Finance/VoucherVerification.mix', 'FVV', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('End of Day Operation', '~/Modules/Finance/EODOperation.mix', 'EOD', 2, core.get_menu_id('FTT'));
+SELECT * FROM core.create_menu('End of Day Operation', '~/Modules/Finance/DayOperation/EOD.mix', 'EOD', 2, core.get_menu_id('FTT'));
 SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'FSM', 1, core.get_menu_id('FI'));
 SELECT * FROM core.create_menu('Chart of Accounts', '~/Modules/Finance/Setup/COA.mix', 'COA', 2, core.get_menu_id('FSM'));
 SELECT * FROM core.create_menu('Currency Management', '~/Modules/Finance/Setup/Currencies.mix', 'CUR', 2, core.get_menu_id('FSM'));
