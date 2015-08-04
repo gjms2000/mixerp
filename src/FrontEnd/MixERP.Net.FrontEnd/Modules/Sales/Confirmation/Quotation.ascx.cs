@@ -25,6 +25,7 @@ using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
 using System;
+using System.Web.Hosting;
 
 namespace MixERP.Net.Core.Modules.Sales.Confirmation
 {
@@ -39,8 +40,12 @@ namespace MixERP.Net.Core.Modules.Sales.Confirmation
                 checklist.ViewReportButtonText = Titles.ViewThisQuotation;
                 checklist.EmailReportButtonText = Titles.EmailThisQuotation;
                 checklist.Text = Titles.SalesQuotation;
+
+                checklist.AttachmentFileName = HostingEnvironment.MapPath("/Resource/Documents/" + checklist.Text + "-#" + transactionMasterId + ".pdf");
                 checklist.PartyEmailAddress = Data.Helpers.Parties.GetEmailAddress(AppUsers.GetCurrentUserDB(),
                     TranBook.Sales, SubTranBook.Quotation, transactionMasterId);
+
+
                 checklist.AttachmentBookName = "non-gl-transaction";
                 checklist.OverridePath = "/Modules/Sales/Quotation.mix";
                 checklist.DisplayViewReportButton = true;

@@ -1,0 +1,116 @@
+﻿/********************************************************************************
+Copyright (C) MixERP Inc. (http://mixof.org).
+
+This file is part of MixERP.
+
+MixERP is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 2 of the License.
+
+MixERP is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************************/
+
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using MixERP.Net.Entities.Meta;
+using MixERP.Net.FrontEnd.Controls;
+using MixERP.Net.i18n.Resources;
+
+namespace MixERP.Net.FrontEnd.Public
+{
+    public partial class ApproveQuotation : System.Web.UI.Page
+    {
+        private SalesQuotationValidation quotation;
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string validationId = this.Page.Request.QueryString["ValidationId"];
+
+            if (string.IsNullOrWhiteSpace(validationId))
+            {
+                this.DisplayError(Warnings.AccessIsDenied);
+                return;
+            }
+
+            quotation = Data.Public.ApproveQuotation.GetQuotation(validationId);
+
+            if (quotation == null || quotation.TranId <= 0)
+            {
+                this.DisplayError(Warnings.AccessIsDenied);
+                return;
+            }
+
+            if (quotation.Accepted)
+            {
+                this.DisplayError(string.Format(Labels.SalesQuotationAlreadyAccepted, quotation.AcceptedOn));
+                return;
+            }
+
+
+            string catalog = quotation.Catalog;
+
+            Collection<KeyValuePair<string, object>> list = new Collection<KeyValuePair<string, object>>();
+            list.Add(new KeyValuePair<string, object>("@non_gl_stock_master_id", quotation.TranId));
+
+            using (WebReport report = new WebReport())
+            {
+                report.Catalog = catalog;
+                report.NoHeader = true;
+                report.AddParameterToCollection(list);
+                report.AddParameterToCollection(list);
+                report.AutoInitialize = true;
+                report.Path = "~/Modules/Sales/Reports/Source/Sales.Quotation.xml";
+
+                this.Placeholder1.Controls.Add(report);
+            }
+
+            this.AcceptButton.Text = Titles.Accept;
+            this.AcceptButton.Visible = true;
+            this.AcceptButton.Enabled = this.IsValid();
+        }
+
+        private void DisplayError(string message)
+        {
+            this.MessageLabel.Text = message;
+            this.MessageLabel.CssClass = "ui red small message";
+            this.MessageLabel.Visible = true;
+        }
+
+        private void DisplayMessage(string message)
+        {
+            this.MessageLabel.Text = message;
+            this.MessageLabel.CssClass = "ui small positive message";
+            this.MessageLabel.Visible = true;
+        }
+
+        private bool IsValid()
+        {
+            if (quotation.ValidTill < DateTime.Now)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected void AcceptButton_OnClick(object sender, EventArgs e)
+        {
+            if (!this.IsValid())
+            {
+                return;
+            }
+
+
+            Data.Public.ApproveQuotation.AcceptQuote(quotation.ValidationId);
+            this.DisplayMessage(Titles.ThankYou);
+            this.AcceptButton.Visible = false;
+        }
+    }
+}

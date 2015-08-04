@@ -28,7 +28,10 @@ using System.Threading;
 using System.Web;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Entities.Transactions;
 using MixERP.Net.FrontEnd.Application;
+using MixERP.Net.Messaging.Email;
 
 namespace MixERP.Net.FrontEnd.Services
 {
@@ -82,6 +85,18 @@ namespace MixERP.Net.FrontEnd.Services
                     MixERPWebpage.SetAuthenticationTicket(HttpContext.Current.Response, globalLoginId, rememberMe);
 
                     AppUsers.SetCurrentLogin(globalLoginId);
+
+                    if (AppUsers.GetCurrent(globalLoginId).View.IsAdmin.ToBool())
+                    {
+                        //Process email queue
+                        MailQueueManager manager = new MailQueueManager();
+                        manager.Catalog = catalog;
+
+                        ThreadPool.QueueUserWorkItem(async callback =>
+                        {
+                            await manager.ProcessMailQueue();
+                        });
+                    }
 
                     return "OK";
                 }

@@ -1,0 +1,32 @@
+﻿<strong>Dear {customer_name},</strong>
+{Header}
+<p>
+    This is a payment receipt acknowledgment.
+</p>
+
+<table style="border-collapse: collapse" border="1">
+    <tbody>
+        <tr>
+            <th>Receipt #</th>
+            <td>{tran_id}</td>
+        </tr>
+        <tr>
+            <th>Reference Number</th>
+            <td>{reference_number}</td>
+        </tr>
+        <tr>
+            <th>Receipt Currency</th>
+            <td>{receipt_currency}</td>
+        </tr>
+        <tr>
+            <th>Received Amount</th>
+            <td>{received_amount}</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    If you have any questions, please contact us at <a href="mailto:{office_email}">{office_email}</a>.
+</p>
+Thank you for your business.<br />
+{Footer}

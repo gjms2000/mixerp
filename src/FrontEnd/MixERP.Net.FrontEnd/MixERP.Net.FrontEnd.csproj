@@ -213,6 +213,13 @@
     <Compile Include="MixERPMaster.Master.designer.cs">
       <DependentUpon>MixERPMaster.Master</DependentUpon>
     </Compile>
+    <Compile Include="Public\ApproveQuotation.aspx.cs">
+      <DependentUpon>ApproveQuotation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Public\ApproveQuotation.aspx.designer.cs">
+      <DependentUpon>ApproveQuotation.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Assets\Header.aspx.cs">
       <DependentUpon>Header.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -236,6 +243,10 @@
     </Compile>
     <Compile Include="Services\Checklists.asmx.cs">
       <DependentUpon>Checklists.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\CreateDocument.asmx.cs">
+      <DependentUpon>CreateDocument.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\Install.asmx.cs">
@@ -353,6 +364,7 @@
     <Content Include="MixERP.Installation.config" />
     <Content Include="Modules\WidgetManager.aspx" />
     <Content Include="PostSignIn.aspx" />
+    <Content Include="Public\ApproveQuotation.aspx" />
     <Content Include="Reports\Export.html" />
     <Content Include="Resource\Configs\index.html" />
     <Content Include="Resource\Configs\Updater.config" />
@@ -627,6 +639,7 @@
     <Content Include="Scripts\underscore\underscore-min.js" />
     <Content Include="Scripts\underscore\underscore.js" />
     <Content Include="Services\Checklists.asmx" />
+    <Content Include="Services\CreateDocument.asmx" />
     <Content Include="Services\Menu.asmx" />
     <Content Include="Static\Icons\bottom-16.png" />
     <Content Include="Static\Icons\calendar-16.png" />
@@ -650,7 +663,8 @@
     <Content Include="Static\images\not-image-file.png" />
     <Content Include="Static\images\powered-by.png" />
     <Content Include="Static\images\spinner.gif" />
-    <Content Include="Static\Templates\EmailTemplate.html" />
+    <Content Include="Static\Templates\Email\EmailHeader.html" />
+    <Content Include="Static\Templates\Email\EmailFooter.html" />
     <Content Include="Static\Templates\ModalTemplate.html" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\ajax-file-upload.js" />
@@ -882,6 +896,12 @@
     <Content Include="Scripts\qunit\qunit-1.17.1.js" />
     <Content Include="Services\Install.asmx" />
     <Content Include="Services\Office.asmx" />
+    <Content Include="Static\Templates\Email\Sales\Delivery.html" />
+    <Content Include="Static\Templates\Email\AR\AccountStatement.html" />
+    <Content Include="Static\Templates\Email\AR\InvoiceDue.html" />
+    <Content Include="Static\Templates\Email\Sales\Receipt.html" />
+    <Content Include="Static\Templates\Email\Sales\Order.html" />
+    <Content Include="Static\Templates\Email\Sales\Quotation.html" />
     <Content Include="Tests\all-tests.js">
       <DependentUpon>all-tests.js.bundle</DependentUpon>
     </Content>
@@ -1109,6 +1129,10 @@
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.i18n\MixERP.Net.i18n.csproj">
       <Project>{2ecd1c2e-d7d0-4a24-896a-e625b0566db5}</Project>
       <Name>MixERP.Net.i18n</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.Messaging\MixERP.Net.Messaging.Email.csproj">
+      <Project>{D29B7B60-76B2-4A00-A8FA-7654519AFCD4}</Project>
+      <Name>MixERP.Net.Messaging.Email</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.ReportManager\MixERP.Net.ReportManager.csproj">
       <Project>{52F97ED7-2013-4950-8725-01E5715EB285}</Project>

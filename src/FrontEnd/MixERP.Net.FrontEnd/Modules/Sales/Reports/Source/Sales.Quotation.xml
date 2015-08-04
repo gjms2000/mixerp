@@ -51,6 +51,10 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         <td>{Resources.Titles.CustomerName}</td>
         <td>{DataSource[0].party_name}</td>
       </tr>
+      <tr>
+        <td>{Resources.Titles.PriceType}</td>
+        <td>{DataSource[0].price_type_name}</td>
+      </tr>
     </table>
     <br />
   </TopSection>
@@ -66,19 +70,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     </GridViews>
   </Body>
   <BottomSection>
-    <h3>{Resources.Titles.OtherDetails}</h3>
-    <p>
-      <table class="table horizontal">
-        <tr>
-          <td>{Resources.Titles.PriceType}</td>
-          <td>{DataSource[0].price_type_name}</td>
-        </tr>
-        <tr>
-          <td>{Resources.Titles.StatementReference}</td>
-          <td>{DataSource[0].statement_reference}</td>
-        </tr>
-      </table>
-    </p>
   </BottomSection>
   <DataSources>
     <DataSource>

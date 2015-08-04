@@ -57,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\MailQueue.cs" />
+    <Compile Include="EmailTemplateProcessor.cs" />
+    <Compile Include="MailQueueManager.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Type.cs" />
     <Compile Include="ICredentials.cs" />
@@ -78,6 +81,10 @@
     <ProjectReference Include="..\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
       <Project>{BDE918B1-DD9B-41C9-A41F-F3DDEC18B6D8}</Project>
       <Name>MixERP.Net.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PetaPoco\PetaPoco.csproj">
+      <Project>{969D7960-52E2-40FC-91E5-1393B71E23B0}</Project>
+      <Name>PetaPoco</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

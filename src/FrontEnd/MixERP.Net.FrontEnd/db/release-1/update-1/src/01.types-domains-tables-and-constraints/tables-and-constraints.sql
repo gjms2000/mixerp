@@ -800,3 +800,35 @@ DROP INDEX IF EXISTS core.frequency_setups_frequency_setup_code_uix;
 
 CREATE UNIQUE INDEX frequency_setups_frequency_setup_code_uix
 ON core.frequency_setups(UPPER(fiscal_year_code), UPPER(frequency_setup_code));
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'email_queue'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.email_queue
+        (
+            queue_id                BIGSERIAL NOT NULL PRIMARY KEY,
+            subject                 national character varying(256) NOT NULL,
+            send_to                 national character varying(256) NOT NULL,
+            attachments             text,
+            message                 text NOT NULL,
+            added_on                TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+            delivered               boolean NOT NULL DEFAULT(false),
+            delivered_on            TIMESTAMP WITH TIME ZONE
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP INDEX IF EXISTS office.configuration_config_id_office_id_uix;
+
+CREATE UNIQUE INDEX configuration_config_id_office_id_uix
+ON office.configuration(config_id, office_id);

@@ -126,5 +126,8 @@ namespace MixERP.Net.ApplicationState.Cache
 
         [Column("logo_file")]
         public string LogoFile { get; set; }
+
+        [Column("sales_quotation_valid_duration")]
+        public int? SalesQuotationValidDuration { get; set; }
     }
 }

@@ -101,10 +101,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
           <td>{Resources.Titles.ShippingCharge}</td>
           <td>{DataSource[0].shipping_charge}</td>
         </tr>
-        <tr>
-          <td>{Resources.Titles.StatementReference}</td>
-          <td>{DataSource[0].statement_reference}</td>
-        </tr>
       </table>
     </p>
   </BottomSection>

@@ -93,6 +93,7 @@
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\DbConfig.cs" />
     <Compile Include="Helpers\DirectoryHelper.cs" />
+    <Compile Include="Helpers\EmailTemplateHelper.cs" />
     <Compile Include="Helpers\ExportHelper.cs" />
     <Compile Include="Helpers\DropDownListHelper.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />

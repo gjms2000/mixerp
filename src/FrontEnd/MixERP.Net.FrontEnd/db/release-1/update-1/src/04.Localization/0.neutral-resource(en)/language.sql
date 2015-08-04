@@ -197,6 +197,8 @@ SELECT localization.add_localized_resource('Labels', '', 'PleaseSelectAFormFirst
 SELECT localization.add_localized_resource('Labels', '', 'ReleaseContainsNoUpdates', 'This release does not contain any update.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringDirectory', 'Restoring directory : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringFile', 'Restoring file : {0}.');
+SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from MixERP
+SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationAlreadyAccepted', 'This quotation was already accepted on {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedProgress', '{0} out of {1} tasks completed.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedSuccessfully', 'Task completed successfully.');
@@ -738,6 +740,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'width_in_centim
 SELECT localization.add_localized_resource('ScrudResource', '', 'zip_code', 'Zip Code');
 SELECT localization.add_localized_resource('Titles', '', 'AboutInitializingDayEnd', 'About Initializing Day End');
 SELECT localization.add_localized_resource('Titles', '', 'AboutYourOffice', 'About Your Office');
+SELECT localization.add_localized_resource('Titles', '', 'Accept', 'Accept');
 SELECT localization.add_localized_resource('Titles', '', 'Access', 'Access');
 SELECT localization.add_localized_resource('Titles', '', 'AccessIsDenied', 'Access is denied.');
 SELECT localization.add_localized_resource('Titles', '', 'Account', 'Account');
@@ -1154,6 +1157,7 @@ SELECT localization.add_localized_resource('Titles', '', 'RestoringMigrationFile
 SELECT localization.add_localized_resource('Titles', '', 'RestrictedTransactionMode', 'Restricted Transaction Mode');
 SELECT localization.add_localized_resource('Titles', '', 'RetainedEarnings', 'Retained Earnings');
 SELECT localization.add_localized_resource('Titles', '', 'Return', 'Return');
+SELECT localization.add_localized_resource('Titles', '', 'ReturnBack', 'Return Back');
 SELECT localization.add_localized_resource('Titles', '', 'ReturnHome', 'Return Home');
 SELECT localization.add_localized_resource('Titles', '', 'ReturnToView', 'Return to View');
 SELECT localization.add_localized_resource('Titles', '', 'Role', 'Role');
@@ -1254,6 +1258,7 @@ SELECT localization.add_localized_resource('Titles', '', 'TaxTotal', 'Tax Total'
 SELECT localization.add_localized_resource('Titles', '', 'TaxTypes', 'Tax Types');
 SELECT localization.add_localized_resource('Titles', '', 'TaxableSales', 'Taxable Sales');
 SELECT localization.add_localized_resource('Titles', '', 'Tel', 'Tel');
+SELECT localization.add_localized_resource('Titles', '', 'ThankYou', 'Thank You');
 SELECT localization.add_localized_resource('Titles', '', 'To', 'To');
 SELECT localization.add_localized_resource('Titles', '', 'TopSellingProductsOfAllTime', 'Top Selling Products of All Time');
 SELECT localization.add_localized_resource('Titles', '', 'Total', 'Total');

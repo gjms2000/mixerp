@@ -1,7 +1,8 @@
 ﻿using MixERP.Net.Entities.Contracts;
+using MixERP.Net.Entities.Office;
 using PetaPoco;
 
-namespace MixERP.Net.Entities.Office
+namespace MixERP.Net.Entities.Meta
 {
     [TableName("public.global_logins")]
     [ExplicitColumns]

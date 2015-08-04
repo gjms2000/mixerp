@@ -1,4 +1,5 @@
 ﻿
+
 using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
@@ -9,51 +10,22 @@ using System.Web;
 namespace MixERP.Net.Entities.Policy
 {
 
-    [TableName("policy.voucher_verification_policy_scrud_view")]
+    [TableName("policy.menu_access")]
+    [PrimaryKey("access_id")]
     [ExplicitColumns]
-    public class VoucherVerificationPolicyScrudView : PetaPocoDB.Record<VoucherVerificationPolicyScrudView> , IPoco
+    public class MenuAccess : PetaPocoDB.Record<MenuAccess> , IPoco
     {
-        [Column("policy_id")] 
-        public int? PolicyId { get; set; }
+        [Column("access_id")] 
+        public long AccessId { get; set; }
+
+        [Column("office_id")] 
+        public int OfficeId { get; set; }
+
+        [Column("menu_id")] 
+        public int MenuId { get; set; }
 
         [Column("user_id")] 
         public int? UserId { get; set; }
-
-        [Column("user_name")] 
-        public string UserName { get; set; }
-
-        [Column("can_verify_sales_transactions")] 
-        public bool? CanVerifySalesTransactions { get; set; }
-
-        [Column("sales_verification_limit")] 
-        public decimal? SalesVerificationLimit { get; set; }
-
-        [Column("can_verify_purchase_transactions")] 
-        public bool? CanVerifyPurchaseTransactions { get; set; }
-
-        [Column("purchase_verification_limit")] 
-        public decimal? PurchaseVerificationLimit { get; set; }
-
-        [Column("can_verify_gl_transactions")] 
-        public bool? CanVerifyGlTransactions { get; set; }
-
-        [Column("gl_verification_limit")] 
-        public decimal? GlVerificationLimit { get; set; }
-
-        [Column("can_self_verify")] 
-        public bool? CanSelfVerify { get; set; }
-
-        [Column("self_verification_limit")] 
-        public decimal? SelfVerificationLimit { get; set; }
-
-        [Column("effective_from")] 
-        public DateTime? EffectiveFrom { get; set; }
-
-        [Column("ends_on")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("is_active")] 
-        public bool? IsActive { get; set; }
 
     }
 
@@ -73,25 +45,6 @@ namespace MixERP.Net.Entities.Policy
 
         [Column("lock_out_till")] 
         public DateTime LockOutTill { get; set; }
-
-    }
-
-    [TableName("policy.menu_access")]
-    [PrimaryKey("access_id")]
-    [ExplicitColumns]
-    public class MenuAccess : PetaPocoDB.Record<MenuAccess> , IPoco
-    {
-        [Column("access_id")] 
-        public long AccessId { get; set; }
-
-        [Column("office_id")] 
-        public int OfficeId { get; set; }
-
-        [Column("menu_id")] 
-        public int MenuId { get; set; }
-
-        [Column("user_id")] 
-        public int? UserId { get; set; }
 
     }
 
@@ -309,6 +262,54 @@ namespace MixERP.Net.Entities.Policy
 
         [Column("office_id")] 
         public int OfficeId { get; set; }
+
+    }
+
+    [TableName("policy.voucher_verification_policy_scrud_view")]
+    [ExplicitColumns]
+    public class VoucherVerificationPolicyScrudView : PetaPocoDB.Record<VoucherVerificationPolicyScrudView> , IPoco
+    {
+        [Column("policy_id")] 
+        public int? PolicyId { get; set; }
+
+        [Column("user_id")] 
+        public int? UserId { get; set; }
+
+        [Column("user_name")] 
+        public string UserName { get; set; }
+
+        [Column("can_verify_sales_transactions")] 
+        public bool? CanVerifySalesTransactions { get; set; }
+
+        [Column("sales_verification_limit")] 
+        public decimal? SalesVerificationLimit { get; set; }
+
+        [Column("can_verify_purchase_transactions")] 
+        public bool? CanVerifyPurchaseTransactions { get; set; }
+
+        [Column("purchase_verification_limit")] 
+        public decimal? PurchaseVerificationLimit { get; set; }
+
+        [Column("can_verify_gl_transactions")] 
+        public bool? CanVerifyGlTransactions { get; set; }
+
+        [Column("gl_verification_limit")] 
+        public decimal? GlVerificationLimit { get; set; }
+
+        [Column("can_self_verify")] 
+        public bool? CanSelfVerify { get; set; }
+
+        [Column("self_verification_limit")] 
+        public decimal? SelfVerificationLimit { get; set; }
+
+        [Column("effective_from")] 
+        public DateTime? EffectiveFrom { get; set; }
+
+        [Column("ends_on")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("is_active")] 
+        public bool? IsActive { get; set; }
 
     }
 

@@ -74,6 +74,9 @@ body {
   padding: 6px;
   color: white;
 }
+.footer-links a {
+  padding-right: 8px;
+}
 .theme {
   background-color: #67238b !important;
 }
