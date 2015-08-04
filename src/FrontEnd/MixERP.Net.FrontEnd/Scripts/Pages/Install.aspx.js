@@ -204,8 +204,8 @@ file.change(function () {
     if (isValidExtension(this)) {
         readURL(this);
         $('#logo').parent().addClass("loading");
-        $(this).upload("/FileUploadHanlder.ashx", function (success) {
-            logo = success;
+        $(this).upload("/FileUploadHanlder.ashx", function (uploadedFileName) {
+            logo = uploadedFileName;
             $('#logo').parent().removeClass("loading");
         }, function (progress, value) {
             //not implemented yet.

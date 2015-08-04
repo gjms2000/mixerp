@@ -234,9 +234,9 @@ function getAjaxMenu() {
 
 function toggleSidebar(el) {
     if ($('.sidebar').is(":visible")) {
-        $('#page-wrapper').css('margin-left', '0');
+        $('#Content').removeClass("twelve wide column").addClass("sixteen wide column");
     } else {
-        $('#page-wrapper').css('margin-left', '250px');
+        $('#Content').removeClass("sixteen wide column").addClass("twelve wide column");
     };
 
     $('.sidebar').toggle(100);
@@ -256,5 +256,4 @@ function adjustSidebar(){
 
 
 window.onresize = function (event) {
-    adjustSidebar();
 };

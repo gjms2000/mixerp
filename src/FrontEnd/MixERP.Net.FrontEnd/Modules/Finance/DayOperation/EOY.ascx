@@ -51,29 +51,29 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="two wide field">
                 <label for="ProfitBeforeTaxInputText">Profit Before Tax</label>
-                <input type="text" id="ProfitBeforeTaxInputText" readonly/>
+                <input type="text" id="ProfitBeforeTaxInputText" readonly />
             </div>
             <div class="two wide field">
                 <label for="IncomeTaxRateInputText">Tax Rate</label>
-                <input type="text" id="IncomeTaxRateInputText" readonly/>
+                <input type="text" id="IncomeTaxRateInputText" readonly />
             </div>
             <div class="two wide field">
                 <label for="IncomeTaxInputText">Income Tax</label>
-                <input type="text" id="IncomeTaxInputText" readonly/>
+                <input type="text" id="IncomeTaxInputText" readonly />
             </div>
         </div>
         <div class="fields">
             <div class="four wide field">
                 <label for="TaxReferenceNumberInputText">Reference Number</label>
-                <input type="text" id="TaxReferenceNumberInputText"/>
+                <input type="text" id="TaxReferenceNumberInputText" />
             </div>
             <div class="twelve wide field">
                 <label for="TaxStatementReferenceInputText">Statement Reference</label>
-                <input type="text" id="TaxStatementReferenceInputText"/>
+                <input type="text" id="TaxStatementReferenceInputText" />
             </div>
         </div>
 
-        <input type="button" class="ui purple button" id="PostTaxButton" value="Post Transaction"/>
+        <input type="button" class="ui purple button" id="PostTaxButton" value="Post Transaction" />
     </div>
 </div>
 
@@ -83,40 +83,40 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
     <table class="ui striped celled table" data-ng-controller="EOYController">
         <thead>
-        <tr>
-            <th><%= Titles.AccountId %></th>
-            <th><%= Titles.AccountNumber %></th>
-            <th><%= Titles.Account %></th>
-            <th><%= Titles.Debit %></th>
-            <th><%= Titles.Credit %></th>
-        </tr>
+            <tr>
+                <th><%= Titles.AccountId %></th>
+                <th><%= Titles.AccountNumber %></th>
+                <th><%= Titles.Account %></th>
+                <th><%= Titles.Debit %></th>
+                <th><%= Titles.Credit %></th>
+            </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="item in items">
-            <td>{{item.AccountId}}</td>
-            <td>{{item.AccountNumber}}</td>
-            <td>{{item.AccountName}}</td>
-            <td>{{item.Debit}}</td>
-            <td>{{item.Credit}}</td>
-        </tr>
+            <tr data-ng-repeat="item in items">
+                <td>{{item.AccountId}}</td>
+                <td>{{item.AccountNumber}}</td>
+                <td>{{item.AccountName}}</td>
+                <td>{{item.Debit}}</td>
+                <td>{{item.Credit}}</td>
+            </tr>
         </tbody>
         <tfoot>
-        <tr>
-            <th class="right aligned" colspan="3"><%= Titles.Total %></th>
-            <th>{{drTotal}}</th>
-            <th>{{crTotal}}</th>
-        </tr>
-        <tr>
-            <th class="right aligned" colspan="4">Profit or Loss</th>
-            <td class="{{profit > 0 ? 'positive' : 'warning'}}">{{profit}}</td>
-        </tr>
+            <tr>
+                <th class="right aligned" colspan="3"><%= Titles.Total %></th>
+                <th>{{drTotal}}</th>
+                <th>{{crTotal}}</th>
+            </tr>
+            <tr>
+                <th class="right aligned" colspan="4">Profit or Loss</th>
+                <td class="{{profit > 0 ? 'positive' : 'warning'}}">{{profit}}</td>
+            </tr>
         </tfoot>
     </table>
     <div class="ui form" style="width: 500px;">
         <div class="two fields">
             <div class="field">
                 <label><%= Titles.ReferenceNumber %></label>
-                <input type="text" value="PL-APPR-2015" maxlength="24" id="ReferenceNumberInputText"/>
+                <input type="text" value="PL-APPR-2015" maxlength="24" id="ReferenceNumberInputText" />
             </div>
             <div class="field">
                 <label><%= Titles.CostCenter %></label>
@@ -133,9 +133,30 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         </div>
 
 
-        <input id="PostPLAppropriationInputButton" type="button" class="ui purple button" value="<%= Titles.PostTransaction %>"/>
+        <input id="PostPLAppropriationInputButton" type="button" class="ui purple button" value="<%= Titles.PostTransaction %>" />
     </div>
 
+</div>
+
+
+<div class="ui initially hidden segment" id="FiscalYearPanel">
+    <div class="ui purple header">New Fiscal Year</div>
+    <div class="ui divider"></div>
+
+    <div class="ui form">
+        <div class="fields">
+            <div class="field">
+                <label>Fiscal Year Code</label>
+                <input type="text" id="FiscalYearCodeInputText" />
+            </div>
+            <div class="field">
+                <label>Fiscal Year Name</label>
+                <input type="text" id="FiscalYearNameInputText" />
+            </div>
+        </div>
+
+        <input type="button" id="CreateFiscalYearButton" class="ui purple button" value="Create New Fiscal Year" />
+    </div>
 </div>
 
 <script>
@@ -159,22 +180,39 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
     var plAppropriationPanel = $("#PLAppropriationPanel");
     var incomeTaxPanel = $("#IncomeTaxPanel");
+    var fiscalYearPanel = $("#FiscalYearPanel");
+
+    var fiscalYearCodeInputText = $("#FiscalYearCodeInputText ");
+    var fiscalYearNameInputText = $("#FiscalYearNameInputText");
+    var createFiscalYearButton = $("#CreateFiscalYearButton");
 
     var url;
     var data;
 
 
     function showIncomeTax() {
+        fiscalYearPanel.addClass("initially hidden");
         plAppropriationPanel.addClass("initially hidden");
         incomeTaxPanel.removeClass("initially hidden");
     };
 
     function showPLAppropriation() {
+        fiscalYearPanel.addClass("initially hidden");
         incomeTaxPanel.addClass("initially hidden");
         plAppropriationPanel.removeClass("initially hidden");
     };
 
-    MixERPApp.controller("EOYController", function($scope, $sce) {
+    function showNewFiscalYear() {
+        incomeTaxPanel.addClass("initially hidden");
+        plAppropriationPanel.addClass("initially hidden");
+        fiscalYearPanel.removeClass("initially hidden");
+    };
+
+    function showEOD() {
+        window.location = 'EOD.mix?EOYCompleted=true';
+    };
+
+    MixERPApp.controller("EOYController", function ($scope, $sce) {
         function getAppropriationData() {
             url = "/Modules/Finance/Services/DayOperation/EOY.asmx/GetAppropriationData";
             return getAjax(url);
@@ -182,8 +220,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
         var ajaxGetAppropriationData = getAppropriationData();
 
-        ajaxGetAppropriationData.success(function(msg) {
-            $scope.$apply(function() {
+        ajaxGetAppropriationData.success(function (msg) {
+            $scope.$apply(function () {
                 $scope.items = msg.d;
 
                 var dr = 0;
@@ -199,24 +237,38 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
             });
         });
 
-        ajaxGetAppropriationData.fail(function(xhr) {
+        ajaxGetAppropriationData.fail(function (xhr) {
             logAjaxErrorMessage(xhr);
         });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         loadCostCenter();
         loadPLAppropriationAccount();
         loadTaxOfficeAccount();
         loadTaxExpensesAccount();
         loadEoyProfitSummary();
+        checkNewFiscalYearExistence();
     });
 
+    function checkNewFiscalYearExistence() {
+        var ajaxIsNewFiscalYearCreated = isNewFiscalYearCreated();
+
+        ajaxIsNewFiscalYearCreated.success(function(msg) {
+            if (msg.d) {
+                fiscalYearPanel.find("input").attr("disabled", "disabled");
+            };
+        });
+
+        ajaxIsNewFiscalYearCreated.fail(function(xhr) {
+            logAjaxErrorMessage(xhr);
+        });
+    };
 
     function loadEoyProfitSummary() {
         var ajaxGetEoyProfitSummary = getEoyProfitSummary();
 
-        ajaxGetEoyProfitSummary.success(function(msg) {
+        ajaxGetEoyProfitSummary.success(function (msg) {
             var data = msg.d;
 
             profitBeforeTaxInputText.val(data.ProfitBeforeTax);
@@ -225,13 +277,57 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
         });
 
-        ajaxGetEoyProfitSummary.fail(function(xhr) {
+        ajaxGetEoyProfitSummary.fail(function (xhr) {
             logAjaxErrorMessage(xhr);
         });
     };
 
 
-    postTaxButton.click(function() {
+    createFiscalYearButton.click(function () {
+
+        if (isNullOrWhiteSpace(fiscalYearCodeInputText.val())) {
+            makeDirty(fiscalYearCodeInputText);
+            return;
+        };
+
+        removeDirty(fiscalYearCodeInputText);
+
+        if (isNullOrWhiteSpace(fiscalYearNameInputText.val())) {
+            makeDirty(fiscalYearNameInputText);
+            return;
+        };
+
+        removeDirty(fiscalYearNameInputText);
+
+        var ajaxCreateNewFiscalYear = createNewFiscalYear(fiscalYearCodeInputText.val(), fiscalYearNameInputText.val());
+
+        ajaxCreateNewFiscalYear.success(function () {
+            displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+            fiscalYearPanel.addClass("initially hidden");
+        });
+
+        ajaxCreateNewFiscalYear.fail(function (xhr) {
+            logAjaxErrorMessage(xhr);
+        });
+
+    });
+
+    function isNewFiscalYearCreated() {
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/IsNewFiscalYearCreated";
+
+        return getAjax(url);
+    };
+
+    function createNewFiscalYear(fiscalYearCode, fiscalYearName) {
+        url = "/Modules/Finance/Services/DayOperation/EOY.asmx/CreateNewFiscalYear";
+        data = appendParameter("", "fiscalYearCode", fiscalYearCode);
+        data = appendParameter(data, "fiscalYearName", fiscalYearName);
+        data = getData(data);
+
+        return getAjax(url, data);
+    };
+
+    postTaxButton.click(function () {
         if (isNullOrWhiteSpace(taxOfficeAccountSelect.val())) {
             makeDirty(taxOfficeAccountSelect);
             return;
@@ -263,11 +359,11 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         );
 
 
-        ajaxPostIncomeTax.success(function() {
+        ajaxPostIncomeTax.success(function () {
             window.location = "/Modules/Finance/VoucherVerification.mix";
         });
 
-        ajaxPostIncomeTax.fail(function(xhr) {
+        ajaxPostIncomeTax.fail(function (xhr) {
             logAjaxErrorMessage(xhr);
         });
     });
@@ -286,7 +382,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     };
 
 
-    postPLAppropriationInputButton.click(function() {
+    postPLAppropriationInputButton.click(function () {
         var referenceNumber = referenceNumberInputText.val();
         var costCenterId = parseInt(costCenterSelect.getSelectedValue() || 0);
         var accountNumber = pLAppropriationAccountSelect.getSelectedValue();
@@ -310,11 +406,11 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
         var ajaxPostPLAppropriation = postPLAppropriation(referenceNumber, costCenterId, accountNumber, statementReference);
 
-        ajaxPostPLAppropriation.success(function() {
+        ajaxPostPLAppropriation.success(function () {
             window.location = "/Modules/Finance/VoucherVerification.mix";
         });
 
-        ajaxPostPLAppropriation.fail(function(xhr) {
+        ajaxPostPLAppropriation.fail(function (xhr) {
             logAjaxErrorMessage(xhr);
         });
 

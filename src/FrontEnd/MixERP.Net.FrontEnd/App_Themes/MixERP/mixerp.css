@@ -42,12 +42,18 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+label,
+input,
+select,
+optgroup,
+option {
   font-family: "Titillium Web", "Open Sans", "Segoe UI", Helvetica, Arial, sans-serif !important;
 }
 html,
 body,
-form {
+form,
+input {
   height: 100%;
   font-size: 12px;
 }
@@ -55,21 +61,26 @@ body {
   background-color: #ffffff;
   margin: 0;
 }
-#MenuContainer {
-  width: 300px !important;
-  overflow: hidden;
-}
-.sidebar,
 #SignInBody {
   background-color: #67238b;
+}
+#RightMenu {
+  padding: 12px 12px 0 0 !important;
+}
+#MainMenu {
+  padding: 0 8px;
+}
+.footer-text {
+  padding: 6px;
+  color: white;
 }
 .theme {
   background-color: #67238b !important;
 }
-footer {
+#Footer {
   background-color: #f7f1fb;
   border-top: 1px solid #eddaf9;
-  height: 36px;
+  min-height: 36px;
   padding: 12px;
 }
 #SearchInput:hover,
@@ -246,6 +257,16 @@ h6:hover {
 }
 .widget {
   height: 100%;
+  cursor: move;
+}
+.widget i {
+  cursor: pointer;
+}
+.widget .right.floated {
+  float: right;
+}
+.widget .left.floated {
+  float: left;
 }
 .sortable-item {
   margin-bottom: 24px;
@@ -420,6 +441,10 @@ table.borderless td {
   border: none;
 }
 /*Semantic UI Override Start */
+.fields input,
+.fields .button {
+  height: 32px;
+}
 .inline .checkbox {
   margin-top: 9px !important;
 }
@@ -584,12 +609,8 @@ input,
 option {
   font-family: "Titillium Web", "Open Sans", "Segoe UI", Helvetica, Arial, sans-serif !important;
 }
-body,
-.sidebar {
+body {
   background-color: #fff;
-}
-#wrapper {
-  width: 100%;
 }
 #page-wrapper {
   padding: 24px;
@@ -601,54 +622,13 @@ body,
   width: 240px;
 }
 .sidebar {
-  border-width: 1px 1px 0 0;
-  border-style: solid;
-  border-color: #e7e7e7;
+  border-right: 1px solid #D4D4D5;
   min-height: 1000px;
+  overflow: auto;
 }
-@media (min-width: 768px) {
-  #page-wrapper {
-    position: inherit;
-    margin: 0 0 0 250px;
-    padding: 12px;
-    border-top: 1px solid #e7e7e7;
-    border-left: 1px solid #e7e7e7;
-  }
-  .sidebar {
-    z-index: 1;
-    position: absolute;
-    width: 250px;
-    margin-top: 0;
-    padding: 12px 0;
-    overflow: hidden;
-  }
-  .logo img {
-    position: absolute;
-    top: 0;
-  }
-  .right-menu {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-  }
-  .brand {
-    min-height: 70px;
-  }
-  #tree {
-    padding-top: 12px;
-    width: 240px;
-  }
-}
-@media (max-width: 768px) {
-  #top-menu {
-    margin-top: 32px;
-  }
-  .brand {
-    min-height: 30px;
-  }
-}
-.logo {
-  height: 54px;
+#Logo img {
+  padding: 12px 0 0 12px !important;
+  max-height: 54px;
 }
 .theme,
 #SignInBody {

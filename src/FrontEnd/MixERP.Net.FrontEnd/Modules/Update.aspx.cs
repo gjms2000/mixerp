@@ -81,15 +81,21 @@ namespace MixERP.Net.FrontEnd.Modules
                 return;
             }
 
-
-            string keyword = Config.UpdateKeyword;
-
-            Asset ass =
-                this._release.Assets.FirstOrDefault(a => a.Name.ToUpperInvariant().Contains(keyword.ToUpperInvariant()));
-
-            if (ass != null)
+            if (this._release == null)
             {
-                this._downloadUrl = ass.DownloadUrl;
+                this._release = new Release();
+            }
+            else
+            {
+                string keyword = Config.UpdateKeyword;
+
+                Asset ass =
+                    this._release.Assets.FirstOrDefault(a => a.Name.ToUpperInvariant().Contains(keyword.ToUpperInvariant()));
+
+                if (ass != null)
+                {
+                    this._downloadUrl = ass.DownloadUrl;
+                }                
             }
 
             if (string.IsNullOrWhiteSpace(this._downloadUrl))

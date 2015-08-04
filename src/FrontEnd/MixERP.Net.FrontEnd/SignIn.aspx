@@ -27,6 +27,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <link href="/bundles/stylesheets/master-page.min.css" rel="stylesheet" />
 </head>
 <body id="SignInBody">
+
     <form id="form1" runat="server">
         <asp:Literal ID="TestLiteral" runat="server" />
         <asp:PlaceHolder runat="server" ID="Placeholder1"></asp:PlaceHolder>

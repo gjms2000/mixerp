@@ -40,7 +40,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <DataSource>
       <Query>
         SELECT
-        id,
+        item,
         previous_period,
         current_period
         FROM transactions.get_balance_sheet(@PreviousPeriod::date, @CurrentPeriod::date, @UserId::integer, @OfficeId::integer, @Factor);

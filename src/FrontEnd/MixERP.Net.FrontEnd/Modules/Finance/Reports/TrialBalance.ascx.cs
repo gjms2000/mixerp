@@ -119,6 +119,8 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
         {
             using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                field.Controls.Add(this.GetEmptyLabel());
+
                 using (HtmlGenericControl slider = new HtmlGenericControl("div"))
                 {
                     slider.Attributes.Add("class", "ui checkbox");
@@ -190,26 +192,40 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
 
         private void AddPrintButton(HtmlGenericControl container)
         {
-            using (HtmlInputButton printButton = new HtmlInputButton())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
-                printButton.ID = "PrintButton";
-                printButton.Attributes.Add("class", "ui orange button");
+                field.Controls.Add(this.GetEmptyLabel());
 
-                printButton.Value = Titles.Print;
+                using (HtmlInputButton printButton = new HtmlInputButton())
+                {
+                    printButton.ID = "PrintButton";
+                    printButton.Attributes.Add("class", "ui orange button");
 
-                container.Controls.Add(printButton);
+                    printButton.Value = Titles.Print;
+
+                    field.Controls.Add(printButton);
+                }
+
+                container.Controls.Add(field);
             }
         }
 
         private void AddShowButton(HtmlGenericControl container)
         {
-            this.showButton = new Button();
-            this.showButton.ID = "ShowButton";
-            this.showButton.Text = Titles.Show;
-            this.showButton.CssClass = "ui positive button";
-            this.showButton.Click += this.ShowButton_Click;
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
+            {
+                field.Controls.Add(this.GetEmptyLabel());
 
-            container.Controls.Add(this.showButton);
+                this.showButton = new Button();
+                this.showButton.ID = "ShowButton";
+                this.showButton.Text = Titles.Show;
+                this.showButton.CssClass = "ui positive button";
+                this.showButton.Click += this.ShowButton_Click;
+
+                field.Controls.Add(this.showButton);
+
+                container.Controls.Add(field);
+            }
         }
 
         private void AddToDateTextBoxField(HtmlGenericControl container)
@@ -253,10 +269,21 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
             }
         }
 
+        private HtmlGenericControl GetEmptyLabel()
+        {
+            using (HtmlGenericControl label = new HtmlGenericControl("label"))
+            {
+                label.InnerHtml = "&nbsp;";
+                return label;
+            }
+        }
+
         private void ChangeSideCheckBoxField(HtmlGenericControl container)
         {
             using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                field.Controls.Add(this.GetEmptyLabel());
+
                 using (HtmlGenericControl slider = new HtmlGenericControl("div"))
                 {
                     slider.Attributes.Add("class", "ui checkbox");
@@ -297,7 +324,7 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
             {
                 formSegment.Attributes.Add("class", "ui form segment");
 
-                using (HtmlGenericControl fields = HtmlControlHelper.GetFields("eight inline fields"))
+                using (HtmlGenericControl fields = HtmlControlHelper.GetFields("fields"))
                 {
                     this.AddFromDateTextBoxField(fields);
                     this.AddToDateTextBoxField(fields);
@@ -322,6 +349,7 @@ namespace MixERP.Net.Core.Modules.Finance.Reports
         {
             using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                field.Controls.Add(this.GetEmptyLabel());
                 using (HtmlGenericControl slider = new HtmlGenericControl("div"))
                 {
                     slider.Attributes.Add("class", "ui checkbox");

@@ -1163,6 +1163,7 @@ SELECT localization.add_localized_resource('Titles', '', 'RunningTotal', 'Runnin
 SELECT localization.add_localized_resource('Titles', '', 'RunningDatabasePatch', 'Running Database Patch');
 SELECT localization.add_localized_resource('Titles', '', 'SSTNumber', 'SST Number');
 SELECT localization.add_localized_resource('Titles', '', 'SalesByMonthInThousands', 'Sales By Month (In Thousands)');
+SELECT localization.add_localized_resource('Titles', '', 'SalesByOffice', 'Sales By Office');
 SELECT localization.add_localized_resource('Titles', '', 'SalesByOfficeInThousands', 'Sales By Office (In Thousands)');
 SELECT localization.add_localized_resource('Titles', '', 'SalesDelivery', 'Sales Delivery');
 SELECT localization.add_localized_resource('Titles', '', 'SalesDeliveryNote', 'Delivery Note');

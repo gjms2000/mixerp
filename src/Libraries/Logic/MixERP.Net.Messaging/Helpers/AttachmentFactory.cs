@@ -18,7 +18,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -27,9 +26,9 @@ namespace MixERP.Net.Messaging.Email
 {
     public static class AttachmentFactory
     {
-        public static IEnumerable<Attachment> GetAttachments(params string[] files)
+        public static List<Attachment> GetAttachments(params string[] files)
         {
-            Collection<Attachment> attachments = new Collection<Attachment>();
+            List<Attachment> attachments = new List<Attachment>();
 
             if (files != null)
             {

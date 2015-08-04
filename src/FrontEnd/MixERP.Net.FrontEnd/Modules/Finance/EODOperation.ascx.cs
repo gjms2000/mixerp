@@ -43,7 +43,7 @@ namespace MixERP.Net.Core.Modules.Finance
         {
             this.InitializeEODStatus();
 
-            if (this.IsYearEnd())
+            if (this.IsYearEnd() && !this.HasEoyParameter())
             {
                 this.Page.Response.Redirect("DayOperation/EOY.mix");
             }
@@ -75,6 +75,17 @@ namespace MixERP.Net.Core.Modules.Finance
             }
 
             return false;
+        }
+
+        private bool HasEoyParameter()
+        {
+            string parameter = this.Page.Request.QueryString["EOYCompleted"];
+            if (string.IsNullOrWhiteSpace(parameter))
+            {
+                return false;
+            }
+
+            return parameter.ToUpperInvariant().StartsWith("T");
         }
 
         private void InitializeEODStatus()

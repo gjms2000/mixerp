@@ -314,7 +314,7 @@ BEGIN
         SELECT 'SpecifiedPickupDirectoryLocation',  '~/Resource/Static/Emails' UNION ALL
         SELECT 'SMTPHost',                          'smtp-mail.outlook.com' UNION ALL
         SELECT 'SMTPPort',                          '587' UNION ALL
-        SELECT 'SMTPEnableSSL',                     'true' UNION ALL
+        SELECT 'SMTPEnableSSL',                     'false' UNION ALL
         SELECT 'SMTPUserName',                      '' UNION ALL
         SELECT 'SMTPPassword',                      '';
     END IF;
@@ -784,3 +784,19 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DROP INDEX IF EXISTS core.salespersons_salesperson_name_uix;
+DROP INDEX IF EXISTS core.salespersons_salesperson_code_uix;
+
+CREATE UNIQUE INDEX salespersons_salesperson_code_uix
+ON core.salespersons(salesperson_code);
+
+DROP INDEX IF EXISTS core.cash_flow_setup_cash_flow_heading_id_account_master_id_uix;
+
+CREATE UNIQUE INDEX cash_flow_setup_cash_flow_heading_id_account_master_id_uix
+ON core.cash_flow_setup (account_master_id,cash_flow_heading_id);
+
+DROP INDEX IF EXISTS core.frequency_setups_frequency_setup_code_uix;
+
+CREATE UNIQUE INDEX frequency_setups_frequency_setup_code_uix
+ON core.frequency_setups(UPPER(fiscal_year_code), UPPER(frequency_setup_code));
