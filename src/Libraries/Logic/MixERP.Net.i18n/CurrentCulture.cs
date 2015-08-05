@@ -35,6 +35,17 @@ namespace MixERP.Net.i18n
             return culture.NumberFormat.CurrencySymbol;
         }
 
+        public static bool IsRtl()
+        {
+            if (CultureInfo.DefaultThreadCurrentCulture == null)
+            {
+                return false;
+            }
+
+            return CultureInfo.DefaultThreadCurrentCulture.TextInfo.IsRightToLeft;
+        }
+
+
         public static CultureInfo GetCurrentUICulture()
         {
             CultureInfo culture = CultureInfo.DefaultThreadCurrentUICulture ?? CultureInfo.CurrentUICulture;

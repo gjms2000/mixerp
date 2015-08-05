@@ -48,7 +48,7 @@ namespace MixERP.Net.FrontEnd.Services
 
             if (File.Exists(destination))
             {
-                return;
+                File.Delete(destination);
             }
 
             ExportHelper.CreatePDF(html, destination);

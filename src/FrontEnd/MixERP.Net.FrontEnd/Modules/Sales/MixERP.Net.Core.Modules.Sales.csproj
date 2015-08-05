@@ -111,6 +111,8 @@
     <Content Include="Reports\TopSellingItems.ascx" />
     <Content Include="Reports\TopSellingItemsFrame.ascx" />
     <EmbeddedResource Include="Scripts\Widgets\SalesByGeographyWidget.ascx.js" />
+    <Content Include="Services\Notification\Delivery.asmx" />
+    <Content Include="Services\Notification\Receipt.asmx" />
     <Content Include="Setup\LateFees.ascx" />
     <Content Include="Setup\PaymentTerms.ascx" />
     <Content Include="Setup\RecurringInvoices.ascx" />
@@ -420,6 +422,14 @@
     </Compile>
     <Compile Include="Services\Entry\Return.asmx.cs">
       <DependentUpon>Return.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\Notification\Delivery.asmx.cs">
+      <DependentUpon>Delivery.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\Notification\Receipt.asmx.cs">
+      <DependentUpon>Receipt.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\Receipt\Accounts.asmx.cs">

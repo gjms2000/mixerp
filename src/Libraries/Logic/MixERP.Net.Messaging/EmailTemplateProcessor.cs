@@ -34,7 +34,7 @@ namespace MixERP.Net.Messaging.Email
 
         public string Process()
         {
-            List<string> parameters = this.GetParameters();
+            List<string> parameters = this.GetParameters(this.Template);
             string template = this.Template;
 
             foreach (object item in this.Dictionary)
@@ -50,13 +50,20 @@ namespace MixERP.Net.Messaging.Email
                 }
             }
 
+            //Remove null parameters
+            parameters = this.GetParameters(this.Template);
+            foreach (string parameter in parameters)
+            {
+                template = template.Replace("{" + parameter + "}", string.Empty);
+            }
+
             return template;
         }
 
-        private List<string> GetParameters()
+        private List<string> GetParameters(string template)
         {
             Regex regex = new Regex(@"(?<=\{)[^}]*(?=\})", RegexOptions.IgnoreCase);
-            MatchCollection matches = regex.Matches(this.Template);
+            MatchCollection matches = regex.Matches(template);
 
             return matches.Cast<Match>().Select(m => m.Value.Replace("{", "}")).Distinct().ToList();
         }
@@ -75,7 +82,14 @@ namespace MixERP.Net.Messaging.Email
                 return string.Empty;
             }
 
-            return prop.GetValue(obj, null).ToString();
+            var value = prop.GetValue(obj, null);
+
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
+            return value.ToString();
         }
     }
 }

@@ -2177,6 +2177,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Receipt #{0} confirmation, {1}
+		/// </summary>
+		public static string ReceiptEmailSubject 
+		{
+			get
+			{
+				return Get("ReceiptEmailSubject");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for This release does not contain any update.
 		/// </summary>
 		public static string ReleaseContainsNoUpdates 
@@ -2206,6 +2217,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("RestoringFile");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sales delivery #{0} confirmation, {1}
+		/// </summary>
+		public static string SalesDeliveryEmailSubject 
+		{
+			get
+			{
+				return Get("SalesDeliveryEmailSubject");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for We received your PO #{0}, {1}
+		/// </summary>
+		public static string SalesOrderEmailSubject 
+		{
+			get
+			{
+				return Get("SalesOrderEmailSubject");
 			}
 		}
 		

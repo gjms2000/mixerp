@@ -1,13 +1,15 @@
-﻿<strong>Dear {customer_name},</strong>
-{Header}
-<p>
-    This is a notice that your Invoice #{tran_id} has been due since {due_date}.
-</p>
+﻿<div style="padding:6px 0;">
+	<p style="padding-bottom:8px;font-weight:bold;">Dear {CustomerName},</p>{Header}
+	<p style="padding-bottom:8px;">This is a notice that your Invoice #{TranId} of amount {CurrencyCode} {DueAmount} 
+	has been due since {DueSince}.</p>
 
-<a href="{quote_link}">{quote_link}</a>
+	<p style="padding-bottom:8px;">
+	    If you have any questions, please contact us at <a href="mailto:{Email}">{Email}</a>.
+	</p>
 
-<p>
-    If you have any questions, please reply us at <a href="mailto:{office_email}">{office_email}</a>.
-</p>
-Thank you for your business.<br/>
-{Footer}
+	<p style="padding-bottom:8px;">
+	Thank you for your business.
+	</p>
+
+	{Footer}
+</div>

@@ -148,7 +148,7 @@ SELECT localization.add_localized_resource('Labels', '', 'DirectoryRestoreSucces
 SELECT localization.add_localized_resource('Labels', '', 'DownloadingUpdateFrom', 'Downloading update from {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'DownloadSuccessful', 'Download was successful.');
 SELECT localization.add_localized_resource('Labels', '', 'EODBegunSaveYourWork', 'Please close this window and save your existing work before you will be signed off automatically.');
-SELECT localization.add_localized_resource('Labels', '', 'EmailBody', '<h2>Hi,</h2><p>Please find the attached document.</p><p>Thank you.<br />MixERP</p>');
+SELECT localization.add_localized_resource('Labels', '', 'EmailBody', '<h2>Hi,</h2><p>Please find the attached document.</p><p>Thank you.<br />{0}</p>');
 SELECT localization.add_localized_resource('Labels', '', 'EmailSentConfirmation', 'An email was sent to {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'ExtractingDownloadedFile', 'Extracting the downloaded file.');
 SELECT localization.add_localized_resource('Labels', '', 'ExtractionCompleted', 'Extraction completed.');
@@ -194,10 +194,13 @@ SELECT localization.add_localized_resource('Labels', '', 'PatchedDatabase', 'Pat
 SELECT localization.add_localized_resource('Labels', '', 'PatchingDatabase', 'Patching the database.');
 SELECT localization.add_localized_resource('Labels', '', 'PercentCompleted', '{0} percent completed.');
 SELECT localization.add_localized_resource('Labels', '', 'PleaseSelectAFormFirst', 'Please select a form first.');
+SELECT localization.add_localized_resource('Labels', '', 'ReceiptEmailSubject', 'Receipt #{0} notification, {1}');--Receipt #777 confirmation, waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'ReleaseContainsNoUpdates', 'This release does not contain any update.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringDirectory', 'Restoring directory : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringFile', 'Restoring file : {0}.');
-SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from MixERP
+SELECT localization.add_localized_resource('Labels', '', 'SalesDeliveryEmailSubject', 'Sales delivery #{0} confirmation, {1}');--Sales delivery #777 confirmation, waltbishop trading inc.
+SELECT localization.add_localized_resource('Labels', '', 'SalesOrderEmailSubject', 'We received your PO #{0}, {1}');--We received your PO #777, waltbishop trading inc.
+SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationAlreadyAccepted', 'This quotation was already accepted on {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedProgress', '{0} out of {1} tasks completed.');
@@ -596,6 +599,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_invoi
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_invoice_setup_id', 'Recurring Invoice Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_invoices_item_id_auto_trigger_on_sales_uix', 'You cannot have more than one auto trigger on sales for this item.');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurs_on_same_calendar_date', 'Recurs on Same Calendar Date');
+SELECT localization.add_localized_resource('ScrudResource', '', 'reference_number', 'Reference Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'registration_date', 'Registration Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'registration_number', 'Registration Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'relationship_officer_name', 'Relationship Officer Name');

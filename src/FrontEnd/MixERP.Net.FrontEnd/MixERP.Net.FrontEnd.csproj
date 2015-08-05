@@ -141,9 +141,6 @@
     <Compile Include="Handlers\LogoHandler.ashx.cs">
       <DependentUpon>LogoHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Handlers\StylesheetHandler.ashx.cs">
-      <DependentUpon>StylesheetHandler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Hubs\UpdateHub.cs" />
     <Compile Include="Hubs\BaseHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
@@ -739,7 +736,6 @@
     <Content Include="Resource\Configs\TransactionChecklistParameters.config" />
     <Content Include="Backups\web.config" />
     <Content Include="bundles\stylesheets\master-page.rtl.css.bundle" />
-    <Content Include="Handlers\StylesheetHandler.ashx" />
     <Content Include="Handlers\LogoHandler.ashx" />
     <Content Include="App_Themes\MixERP\mixerp.less" />
     <Content Include="App_Themes\MixERP\mixerp.css.map">

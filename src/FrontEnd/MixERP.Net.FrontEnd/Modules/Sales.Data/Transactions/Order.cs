@@ -18,9 +18,13 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using MixERP.Net.Entities.Transactions;
+using PetaPoco;
+using StockDetail = MixERP.Net.Entities.Models.Transactions.StockDetail;
+using StockMaster = MixERP.Net.Entities.Models.Transactions.StockMaster;
 
 namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
 {
@@ -40,5 +44,12 @@ namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
             long nonGlStockMasterId = NonGlStockTransaction.Add(catalog, "Sales.Order", valueDate, officeId, userId, loginId, referenceNumber, statementReference, stockMaster, details, transactionIdCollection, attachments, nonTaxable);
             return nonGlStockMasterId;
         }
+
+        public static SalesOrderView GetSalesOrderView(string catalog, long tranId)
+        {
+            const string sql = "SELECT * FROM transactions.sales_order_view WHERE tran_id = @0;";
+            return Factory.Get<SalesOrderView>(catalog, sql, tranId).FirstOrDefault();
+        }
+
     }
 }

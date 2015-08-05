@@ -21,4 +21,5 @@ ON transactions.non_gl_stock_master.user_id = office.users.user_id
 INNER JOIN core.parties
 ON transactions.non_gl_stock_master.party_id = core.parties.party_id
 INNER JOIN core.price_types
-ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id;
+ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id
+WHERE transactions.non_gl_stock_master.book = 'Sales.Quotation';

@@ -3,7 +3,6 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.Entities.Models.Transactions;
 using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -24,11 +23,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Core.Modules.Sales.Data.Helpers;
+using MixERP.Net.Messaging.Email;
+using CollectionHelper = MixERP.Net.WebControls.StockTransactionFactory.Helpers.CollectionHelper;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {

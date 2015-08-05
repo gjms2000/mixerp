@@ -20,6 +20,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using MixERP.Net.Common;
 using Npgsql;
 using System;
+using System.Linq;
+using MixERP.Net.Entities.Transactions;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
 {
@@ -117,5 +120,12 @@ namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
                 return Conversion.TryCastLong(DbFactory.DbOperation.GetScalarValue(catalog, command));
             }
         }
+
+        public static ReceiptView GetReceiptView(string catalog, long tranId)
+        {
+            const string sql = "SELECT * FROM transactions.receipt_view WHERE tran_id = @0;";
+            return Factory.Get<ReceiptView>(catalog, sql, tranId).FirstOrDefault();
+        }
+
     }
 }

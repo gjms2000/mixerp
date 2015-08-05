@@ -24,6 +24,14 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
   <TopSection>
     <table class="table horizontal">
       <tr>
+        <td>{Resources.Titles.TranId}</td>
+        <td>
+          {DataSource[0].transaction_master_id}
+          <br />
+          {Barcode(DataSource[0].transaction_master_id)}
+        </td>
+      </tr>
+      <tr>
         <td>{Resources.Titles.TransactionDate}</td>
         <td>{DataSource[0].transaction_ts}</td>
       </tr>
@@ -108,6 +116,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <DataSource>
       <Query>
         SELECT
+        transactions.transaction_master.transaction_master_id,
         transactions.transaction_master.transaction_ts,
         transactions.transaction_master.value_date,
         office.users.user_name AS entered_by,

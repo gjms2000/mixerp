@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System.Threading;
+using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Messaging.Email;
@@ -28,7 +30,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist.Helpers
         public EmailHelper(string catalog, string html, string subject, string recipient, string attachmentFileName)
         {
             this.Catalog = catalog;
-            this.EmailBody = Labels.EmailBody;
+            this.EmailBody = string.Format(Labels.EmailBody, AppUsers.GetCurrent().View.OfficeName);
             this.Html = html;
             this.Subject = subject;
             this.Recipient = recipient;
@@ -46,8 +48,12 @@ namespace MixERP.Net.WebControls.TransactionChecklist.Helpers
         {
             ExportHelper.CreatePDF(this.Html, this.AttachmentFileName);
 
-            Processor processor = new Processor(this.Catalog);
-            processor.Send(this.Recipient, this.Subject, this.EmailBody, true, this.AttachmentFileName);
+            ThreadPool.QueueUserWorkItem(async callback =>
+            {
+                Processor processor = new Processor(this.Catalog);
+                await processor.Send(this.Recipient, this.Subject, this.EmailBody, true, this.AttachmentFileName);
+            });
+
         }
     }
 }

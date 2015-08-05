@@ -79,6 +79,58 @@ $(document).ready(function () {
         };
     });
 
+    function loadCheckList(tranId, callBack) {
+        var book = transactionGridView.find("tr").eq(selectedIndex + 1).find("td:nth-child(5)").html();
+        var path;
+
+        switch (book) {
+            case "Sales.Receipt":
+                path = "/Modules/Sales/Confirmation/Receipt.mix?TranId=" + tranId;
+                break;
+            case "Sales.Delivery":
+                path = "/Modules/Sales/Confirmation/Delivery.mix?TranId=" + tranId;
+                break;
+        };
+
+
+        if (!path) {
+            return;
+        }
+
+        var frame = $("#ChecklistFrame");
+
+        frame.load(function() {
+            if (typeof (callBack) === "function") {
+                callBack(book, tranId);
+            };
+        });
+
+        frame.attr("src", path);
+    };
+
+    function sendEmailNotification(book, tranId) {
+        var path;
+
+        switch (book) {
+            case "Sales.Receipt":
+                path = "/Modules/Sales/Services/Notification/Receipt.asmx/Send";
+                break;
+            case "Sales.Delivery":
+                path = "/Modules/Sales/Services/Notification/Delivery.asmx/Send";
+                break;
+        };
+
+
+        if (!path) {
+            return;
+        };
+
+
+        var data = appendParameter("", "tranId", tranId);
+        data = getData(data);
+
+        getAjax(path, data);
+    };
 
     function ajaxApprove(tranId, reason) {
         url = "/Modules/Finance/Services/Transactions.asmx/Approve";
@@ -109,8 +161,12 @@ $(document).ready(function () {
         }
 
         ajaxAction.success(function () {
+            //Need to load the checklist page in order to create a PDF document.
+            loadCheckList(tranId, sendEmailNotification);
+
             transactionGridView.find("tr").eq(selectedIndex + 1).addClass("negative").fadeOut(500, function () {
                 $(this).remove();
+                modal.modal("hide");
             });
         });
 
@@ -120,6 +176,7 @@ $(document).ready(function () {
 
         return false;
     });
+
 
     $(document).keyup(function (e) {
         if (e.ctrlKey) {
