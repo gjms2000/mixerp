@@ -25,6 +25,7 @@ using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n.Resources;
 using System;
+using System.Web.Hosting;
 
 namespace MixERP.Net.Core.Modules.Sales.Confirmation
 {
@@ -39,6 +40,7 @@ namespace MixERP.Net.Core.Modules.Sales.Confirmation
                 checklist.ViewReportButtonText = Titles.PrintReceipt;
                 checklist.EmailReportButtonText = Titles.EmailThisReceipt;
                 checklist.Text = Titles.SalesReceipt;
+                checklist.AttachmentFileName = HostingEnvironment.MapPath("/Resource/Documents/" + checklist.Text + "-#" + transactionMasterId + ".pdf");
                 checklist.PartyEmailAddress = Data.Helpers.Parties.GetEmailAddress(AppUsers.GetCurrentUserDB(),
                     TranBook.Sales, SubTranBook.Receipt, transactionMasterId);
                 checklist.AttachmentBookName = "transaction";

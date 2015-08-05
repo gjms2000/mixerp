@@ -551,6 +551,10 @@
       <Project>{2ECD1C2E-D7D0-4A24-896A-E625B0566DB5}</Project>
       <Name>MixERP.Net.i18n</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.Messaging\MixERP.Net.Messaging.Email.csproj">
+      <Project>{d29b7b60-76b2-4a00-a8fa-7654519afcd4}</Project>
+      <Name>MixERP.Net.Messaging.Email</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.TransactionGovernor\MixERP.Net.TransactionGovernor.csproj">
       <Project>{0aacf4db-8332-4c4b-96df-2bf6aea68473}</Project>
       <Name>MixERP.Net.TransactionGovernor</Name>

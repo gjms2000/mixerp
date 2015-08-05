@@ -20,6 +20,10 @@ DO
 $$
 BEGIN
     IF(core.get_locale() = 'en-US') THEN
+        INSERT INTO office.configuration(office_id, config_id, value, configuration_details)
+        SELECT office_id, 3, '15', ''
+        FROM office.offices;
+
         INSERT INTO core.brands(brand_code, brand_name)
         SELECT 'APP', 'Apple'       UNION ALL
         SELECT 'MS', 'Microsoft'    UNION ALL

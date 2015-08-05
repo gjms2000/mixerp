@@ -67,6 +67,7 @@
     <Compile Include="Office\Offices.cs" />
     <Compile Include="Office\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Public\ApproveQuotation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">

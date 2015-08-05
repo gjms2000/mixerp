@@ -2210,6 +2210,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for This quotation was already accepted on {0}.
+		/// </summary>
+		public static string SalesQuotationAlreadyAccepted 
+		{
+			get
+			{
+				return Get("SalesQuotationAlreadyAccepted");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Quotation #{0} from {1}
+		/// </summary>
+		public static string SalesQuotationEmailSubject 
+		{
+			get
+			{
+				return Get("SalesQuotationEmailSubject");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Select a flag.
 		/// </summary>
 		public static string SelectAFlag 
@@ -4519,6 +4541,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Exchange Rate
+		/// </summary>
+		public static string exchange_rate 
+		{
+			get
+			{
+				return Get("exchange_rate");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Exclude From Purchase
 		/// </summary>
 		public static string exclude_from_purchase 
@@ -4658,6 +4691,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("foreground_color");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Foreign Currency Code
+		/// </summary>
+		public static string foreign_currency_code 
+		{
+			get
+			{
+				return Get("foreign_currency_code");
 			}
 		}
 		
@@ -8167,6 +8211,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Accept
+		/// </summary>
+		public static string Accept 
+		{
+			get
+			{
+				return Get("Accept");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Access
 		/// </summary>
 		public static string Access 
@@ -10341,6 +10396,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("ExchangeRate");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Exchange Rates
+		/// </summary>
+		public static string ExchangeRates 
+		{
+			get
+			{
+				return Get("ExchangeRates");
 			}
 		}
 		
@@ -12721,6 +12787,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Return Back
+		/// </summary>
+		public static string ReturnBack 
+		{
+			get
+			{
+				return Get("ReturnBack");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Return Home
 		/// </summary>
 		public static string ReturnHome 
@@ -12816,6 +12893,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SalesByMonthInThousands");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sales By Office
+		/// </summary>
+		public static string SalesByOffice 
+		{
+			get
+			{
+				return Get("SalesByOffice");
 			}
 		}
 		
@@ -13799,6 +13887,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Thank You
+		/// </summary>
+		public static string ThankYou 
+		{
+			get
+			{
+				return Get("ThankYou");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for To
 		/// </summary>
 		public static string To 
@@ -14125,6 +14224,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("UpdateConsole");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Updated On
+		/// </summary>
+		public static string UpdatedOn 
+		{
+			get
+			{
+				return Get("UpdatedOn");
 			}
 		}
 		

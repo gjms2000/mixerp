@@ -27,7 +27,7 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory
         private void CreateErrorLabel(Control container)
         {
             this.errorLabel = new HtmlGenericControl("div");
-            this.errorLabel.Attributes.Add("class", "big error");
+            this.errorLabel.Attributes.Add("class", "big error vpad8");
 
             container.Controls.Add(this.errorLabel);
         }

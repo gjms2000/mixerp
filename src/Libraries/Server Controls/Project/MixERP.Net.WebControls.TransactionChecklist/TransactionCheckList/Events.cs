@@ -49,7 +49,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 return;
             }
 
-            EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress);
+            EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress, this.AttachmentFileName);
             email.SendEmail();
             this.subTitleLiteral.Text = string.Format(CultureInfo.CurrentCulture, Labels.EmailSentConfirmation, this.PartyEmailAddress);
         }

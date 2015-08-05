@@ -41,6 +41,7 @@ namespace MixERP.Net.FrontEnd
             this.MixERPDocumentationLiteral.Text = Titles.MixERPDocumentation;
             this.NotificationLiteral.Text = Titles.Notifications;
             this.VersionLiteral.Text = GetProductVersion();
+            this.FooterLiteral.Text = GetFooter();
         }
 
         public static string GetProductVersion()
@@ -50,6 +51,13 @@ namespace MixERP.Net.FrontEnd
               .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true)
               .Single();
             return attribute.InformationalVersion;
+        }
+
+        public static string GetFooter()
+        {
+            const string footer = @"<p>Copyright © 2013-2015. MixERP is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2 of the License.</p><p class=""footer-links""><a href=""http://mixerp.org/forum/"" target=""_blank"">Support</a><a href=""http://mixerp.org/contact-us/"" target=""_blank"">Contact Us</a></p>";
+
+            return footer;
         }
     }
 }

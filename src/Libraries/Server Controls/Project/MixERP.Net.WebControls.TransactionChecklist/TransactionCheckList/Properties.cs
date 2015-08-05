@@ -23,8 +23,9 @@ namespace MixERP.Net.WebControls.TransactionChecklist
 {
     public partial class TransactionChecklistForm
     {
-        public string AddNewPath { get; set; }
+        public string AttachmentFileName { get; set; }
         public string AttachmentBookName { get; set; }
+        public string AddNewPath { get; set; }
         public string Catalog { get; set; }
         public string CustomerReportButtonText { get; set; }
         public string CustomerReportPath { get; set; }

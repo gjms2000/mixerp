@@ -27,13 +27,18 @@ namespace MixERP.Net.Common.Helpers
 {
     public static class ExportHelper
     {
-        public static string CreatePDF(string html)
+        public static string CreatePDF(string html, string destination = "")
         {
             string id = Guid.NewGuid().ToString();
 
             //public directory is allowed direct access
             string source = "~/Resource/Temp/Public/" + id + ".html";
-            string destination = HostingEnvironment.MapPath("~/Resource/Temp/" + id + ".pdf");
+
+            if (string.IsNullOrWhiteSpace(destination))
+            {
+                destination = HostingEnvironment.MapPath("~/Resource/Temp/" + id + ".pdf");
+            }
+
 
             WriteHtml(source, html);
             ToPdf(source, destination);

@@ -42,7 +42,8 @@ SELECT
   offices.pan_number,
   offices.allow_transaction_posting,
   offices.week_start_day,
-  offices.logo_file
+  offices.logo_file,
+  core.get_quotation_valid_duration(@3)  AS sales_quotation_valid_duration
 FROM 
   audit.logins, 
   office.users, 

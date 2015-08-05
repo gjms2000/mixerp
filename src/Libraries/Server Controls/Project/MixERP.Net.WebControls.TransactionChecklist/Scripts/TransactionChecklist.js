@@ -43,5 +43,18 @@ function prepareEmail(url) {
         url,
         function (response) {
             emailHidden.val(response);
+
+            if (window.fileName) {
+                createDocument(response, window.fileName);
+            };
         });
+};
+
+function createDocument(html, documentName) {
+    var url = "/Services/CreateDocument.asmx/Create";
+    var data = appendParameter("", "html", html);
+    data = appendParameter(data, "documentName", documentName);
+    data = getData(data);
+
+    return getAjax(url, data);
 };

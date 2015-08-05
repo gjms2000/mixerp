@@ -52,6 +52,27 @@ namespace PetaPoco
             }
         }
 
+        public static object Update(string catalog, object poco, object primaryKeyValue)
+        {
+            try
+            {
+                using (Database db = new Database(GetConnectionString(catalog), ProviderName))
+                {
+                    return db.Update(poco, primaryKeyValue);
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                if (ex.Code.StartsWith("P"))
+                {
+                    string errorMessage = GetDBErrorResource(ex);
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                throw;
+            }
+        }
+
         public static T Scalar<T>(string catalog, string sql, params object[] args)
         {
             try

@@ -20,14 +20,30 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
+using System.Web.UI;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Core.Modules.Sales.Data.Helpers;
+using MixERP.Net.Entities.Audit;
+using MixERP.Net.Entities.Transactions;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.Messaging.Email;
+using PetaPoco;
+using CollectionHelper = MixERP.Net.WebControls.StockTransactionFactory.Helpers.CollectionHelper;
+using StockDetail = MixERP.Net.Entities.Models.Transactions.StockDetail;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {
@@ -58,14 +74,61 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+                int validDuration = AppUsers.GetCurrent().View.SalesQuotationValidDuration.ToInt();
 
-                return Data.Transactions.Quotation.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate, partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds, attachments, nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
+                long tranId = Data.Transactions.Quotation.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate, partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds, attachments, nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
+                string token = Data.Transactions.Quotation.AddValidation(AppUsers.GetCurrentUserDB(), validDuration, tranId);
+
+                if (tranId > 0)
+                {
+                    this.CreateEmail(tranId, partyCode, token);
+                }
+
+                return tranId;
             }
             catch (Exception ex)
             {
                 Log.Warning("Could not save sales quotation entry. {Exception}", ex);
                 throw;
             }
+        }
+
+        private void CreateEmail(long tranId, string partyCode, string token)
+        {
+            string sendTo = Parties.GetEmailAddress(AppUsers.GetCurrentUserDB(), partyCode);
+            if (string.IsNullOrWhiteSpace(sendTo))
+            {
+                return;
+            }
+
+            string message = ProcessEmailMessage(tranId, token);
+            string attachment =
+                HostingEnvironment.MapPath("/Resource/Documents/" + Titles.SalesQuotation + "-#" + tranId + ".pdf");
+
+            string subject = string.Format(Labels.SalesQuotationEmailSubject, tranId, AppUsers.GetCurrent().View.OfficeName);
+
+            MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo, subject);
+            queue.Add();
+        }
+
+        private static string ProcessEmailMessage(long tranId, string token)
+        {
+            string template = EmailTemplateHelper.GetTemplateFileContents("/Static/Templates/Email/Sales/Quotation.html");
+            string link = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/Public/ApproveQuotation.aspx?ValidationId=" + token;
+
+
+            template = template.Replace("{QuotationAcceptLink}", link);
+
+            List<object> dictionary = new List<object>
+            {
+                AppUsers.GetCurrent().View,
+                Data.Transactions.Quotation.GetSalesQuotationView(AppUsers.GetCurrentUserDB(), tranId)
+            };
+
+            var processor = new EmailTemplateProcessor(template, dictionary);
+            template = processor.Process();
+
+            return template;
         }
     }
 }

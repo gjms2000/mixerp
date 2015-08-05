@@ -19,6 +19,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Linq;
 using System.Web;
+using MixERP.Net.Entities.Meta;
 using MixERP.Net.Entities.Office;
 using MixERP.Net.Framework;
 using Npgsql;

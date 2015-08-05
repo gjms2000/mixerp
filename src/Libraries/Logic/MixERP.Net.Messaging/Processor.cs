@@ -17,30 +17,30 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Messaging.Email.Helpers;
-using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
+using MixERP.Net.Messaging.Email.Helpers;
+using Serilog;
 
 namespace MixERP.Net.Messaging.Email
 {
     public sealed class Processor
     {
-        public string Catalog { get; set; }
-
         public Processor(string catalog)
         {
             this.Catalog = catalog;
         }
 
-        public void Send(string sendTo, string subject, string body, bool deleteAttachmentes, params string[] attachments)
+        public string Catalog { get; set; }
+
+        public async Task<bool> Send(string sendTo, string subject, string body, bool deleteAttachmentes,
+            params string[] attachments)
         {
             Config config = new Config(this.Catalog);
 
@@ -71,10 +71,10 @@ namespace MixERP.Net.Messaging.Email
                 Password = config.SmtpUserPassword
             };
 
-            this.Send(email, host, credentials, deleteAttachmentes, attachments);
+            return await this.Send(email, host, credentials, deleteAttachmentes, attachments);
         }
 
-        public void Send(EmailMessage email, SmtpHost host, ICredentials credentials,
+        public async Task<bool> Send(EmailMessage email, SmtpHost host, ICredentials credentials,
             bool deleteAttachmentes, params string[] attachments)
         {
             if (string.IsNullOrWhiteSpace(email.SentTo))
@@ -95,7 +95,7 @@ namespace MixERP.Net.Messaging.Email
 
                 if (!validator.IsValid)
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -103,17 +103,17 @@ namespace MixERP.Net.Messaging.Email
             email.SentTo = string.Join(",", addresses);
             email.Status = Status.Executing;
 
-            ThreadPool.QueueUserWorkItem(callback =>
-            {
-                MailAddress sender = new MailAddress(email.FromEmail, email.FromName);
+            MailAddress sender = new MailAddress(email.FromEmail, email.FromName);
 
-                using (MailMessage mail = new MailMessage(email.FromEmail, email.SentTo))
+            using (MailMessage mail = new MailMessage(email.FromEmail, email.SentTo))
+            {
+                if (attachments != null)
                 {
-                    if (attachments != null)
+                    foreach (string file in attachments)
                     {
-                        foreach (string file in attachments)
+                        if (!string.IsNullOrWhiteSpace(file))
                         {
-                            if (!string.IsNullOrWhiteSpace(file))
+                            if (File.Exists(file))
                             {
                                 Attachment attachment = new Attachment(file, MediaTypeNames.Application.Octet);
 
@@ -130,52 +130,54 @@ namespace MixERP.Net.Messaging.Email
                             }
                         }
                     }
+                }
 
 
-                    mail.From = sender;
-                    using (SmtpClient smtp = new SmtpClient(host.Address, host.Port))
+                mail.From = sender;
+                using (SmtpClient smtp = new SmtpClient(host.Address, host.Port))
+                {
+                    smtp.DeliveryMethod = host.DeliveryMethod;
+                    smtp.PickupDirectoryLocation = host.PickupDirectory;
+
+                    smtp.EnableSsl = host.EnableSSL;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential(credentials.Username, credentials.Password);
+                    try
                     {
-                        smtp.DeliveryMethod = host.DeliveryMethod;
-                        smtp.PickupDirectoryLocation = host.PickupDirectory;
+                        mail.Subject = email.Subject;
+                        mail.Body = email.Message;
+                        mail.IsBodyHtml = true;
+                        mail.SubjectEncoding = Encoding.UTF8;
+                        email.Status = Status.Completed;
 
-                        smtp.EnableSsl = host.EnableSSL;
-                        smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = new NetworkCredential(credentials.Username, credentials.Password);
-                        try
+                        await smtp.SendMailAsync(mail);
+                        return true;
+                    }
+                    catch (SmtpException ex)
+                    {
+                        email.Status = Status.Failed;
+                        Log.Warning(@"Could not send email to {To}. {Ex}. ", email.SentTo, ex);
+                    }
+                    finally
+                    {
+                        foreach (IDisposable item in mail.Attachments)
                         {
-                            mail.Subject = email.Subject;
-                            mail.Body = email.Message;
-                            mail.IsBodyHtml = true;
-                            mail.SubjectEncoding = Encoding.UTF8;
-                            email.Status = Status.Completed;
-
-                            smtp.Send(mail);
-                        }
-                        catch (SmtpException ex)
-                        {
-                            email.Status = Status.Failed;
-                            Log.Warning(@"Could not send email to {To}. {Ex}. ", email.SentTo, ex);
-                        }
-                        finally
-                        {
-                            foreach (IDisposable item in mail.Attachments)
+                            if (item != null)
                             {
-                                if (item != null)
-                                {
-                                    item.Dispose();
-                                }
+                                item.Dispose();
                             }
+                        }
 
-                            if (deleteAttachmentes)
-                            {
-                                this.DeleteFiles(attachments);
-                            }
+                        if (deleteAttachmentes)
+                        {
+                            this.DeleteFiles(attachments);
                         }
                     }
                 }
-            });
-        }
+            }
 
+            return false;
+        }
 
         private void DeleteFiles(params string[] files)
         {
