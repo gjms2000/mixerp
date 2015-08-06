@@ -1583,6 +1583,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for yyyy-mm-dd
+		/// </summary>
+		public static string DateFormatYYYYMMDD 
+		{
+			get
+			{
+				return Get("DateFormatYYYYMMDD");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for days
 		/// </summary>
 		public static string DaysLowerCase 
@@ -2166,6 +2177,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for %
+		/// </summary>
+		public static string PercentageSymbol 
+		{
+			get
+			{
+				return Get("PercentageSymbol");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Please select a form first.
 		/// </summary>
 		public static string PleaseSelectAFormFirst 
@@ -2173,6 +2195,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("PleaseSelectAFormFirst");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Receipt #{0} notification, {1}
+		/// </summary>
+		public static string ReceiptEmailSubject 
+		{
+			get
+			{
+				return Get("ReceiptEmailSubject");
 			}
 		}
 		
@@ -2210,6 +2243,39 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for SMTP is disabled.
+		/// </summary>
+		public static string SMTPIsDisabled 
+		{
+			get
+			{
+				return Get("SMTPIsDisabled");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sales delivery #{0} confirmation, {1}
+		/// </summary>
+		public static string SalesDeliveryEmailSubject 
+		{
+			get
+			{
+				return Get("SalesDeliveryEmailSubject");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for We received your PO #{0}, {1}
+		/// </summary>
+		public static string SalesOrderEmailSubject 
+		{
+			get
+			{
+				return Get("SalesOrderEmailSubject");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for This quotation was already accepted on {0}.
 		/// </summary>
 		public static string SalesQuotationAlreadyAccepted 
@@ -2239,6 +2305,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectAFlag");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Your outgoig email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
+		/// </summary>
+		public static string SetupEmailDescription 
+		{
+			get
+			{
+				return Get("SetupEmailDescription");
 			}
 		}
 		
@@ -2364,6 +2441,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Enter the exact date from when you want to record transactions in MixERP.
+		/// </summary>
+		public static string TransactionStartDateDescription 
+		{
+			get
+			{
+				return Get("TransactionStartDateDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for When you withdraw a transaction, it won't be forwarded to the workflow module. This means that your withdrawn transactions are rejected and require no further verification. However, you won't be able to unwithdraw this transaction later.
 		/// </summary>
 		public static string TransactionWithdrawalInformation 
@@ -2415,6 +2503,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("UpdateOperationCompletedSuccessfully");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Upload logo.
+		/// </summary>
+		public static string UploadLogo 
+		{
+			get
+			{
+				return Get("UploadLogo");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
+		/// </summary>
+		public static string UploadLogoDescription 
+		{
+			get
+			{
+				return Get("UploadLogoDescription");
 			}
 		}
 		
@@ -4827,6 +4937,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Has County Sales Tax?
+		/// </summary>
+		public static string has_county_sales_tax 
+		{
+			get
+			{
+				return Get("has_county_sales_tax");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Has State Sales Tax?
+		/// </summary>
+		public static string has_state_sales_tax 
+		{
+			get
+			{
+				return Get("has_state_sales_tax");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Height In Centimeters
 		/// </summary>
 		public static string height_in_centimeters 
@@ -5652,6 +5784,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Logo File
+		/// </summary>
+		public static string logo_file 
+		{
+			get
+			{
+				return Get("logo_file");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Machinable
 		/// </summary>
 		public static string machinable 
@@ -6422,6 +6565,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Primary Sales Tax Is Vat?
+		/// </summary>
+		public static string primary_sales_tax_is_vat 
+		{
+			get
+			{
+				return Get("primary_sales_tax_is_vat");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Priority
 		/// </summary>
 		public static string priority 
@@ -6616,6 +6770,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("recurs_on_same_calendar_date");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Reference Number
+		/// </summary>
+		public static string reference_number 
+		{
+			get
+			{
+				return Get("reference_number");
 			}
 		}
 		
@@ -7962,6 +8127,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Transaction Start Date
+		/// </summary>
+		public static string transaction_start_date 
+		{
+			get
+			{
+				return Get("transaction_start_date");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Unit
 		/// </summary>
 		public static string unit 
@@ -8145,6 +8321,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("verify_sales_transactions");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Week Start Day
+		/// </summary>
+		public static string week_start_day 
+		{
+			get
+			{
+				return Get("week_start_day");
 			}
 		}
 		
@@ -9263,6 +9450,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Countries");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for County Sales Tax
+		/// </summary>
+		public static string CountySalesTax 
+		{
+			get
+			{
+				return Get("CountySalesTax");
 			}
 		}
 		
@@ -10488,6 +10686,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for First In, First Out (FIFO)
+		/// </summary>
+		public static string FIFO 
+		{
+			get
+			{
+				return Get("FIFO");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Factor
 		/// </summary>
 		public static string Factor 
@@ -10708,6 +10917,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Friday
+		/// </summary>
+		public static string Friday 
+		{
+			get
+			{
+				return Get("Friday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for From
 		/// </summary>
 		public static string From 
@@ -10748,6 +10968,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("GLHead");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Global Parameters
+		/// </summary>
+		public static string GlobalParameters 
+		{
+			get
+			{
+				return Get("GlobalParameters");
 			}
 		}
 		
@@ -10884,6 +11115,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Income Tax Rate
+		/// </summary>
+		public static string IncomeTaxRate 
+		{
+			get
+			{
+				return Get("IncomeTaxRate");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Incomplete Tasks
 		/// </summary>
 		public static string IncompleteTasks 
@@ -10972,6 +11214,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Inventory Accounting System
+		/// </summary>
+		public static string InventoryAccountingSystem 
+		{
+			get
+			{
+				return Get("InventoryAccountingSystem");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Inventory Advice
 		/// </summary>
 		public static string InventoryAdvice 
@@ -10979,6 +11232,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("InventoryAdvice");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Inventory Valuation Method
+		/// </summary>
+		public static string InventoryValuationMethod 
+		{
+			get
+			{
+				return Get("InventoryValuationMethod");
 			}
 		}
 		
@@ -11236,6 +11500,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Last In, First Out (LIFO)
+		/// </summary>
+		public static string LIFO 
+		{
+			get
+			{
+				return Get("LIFO");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Last Accessed On
 		/// </summary>
 		public static string LastAccessedOn 
@@ -11386,6 +11661,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("LoginView");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Moving Average Cost (MAVCO)
+		/// </summary>
+		public static string MAVCO 
+		{
+			get
+			{
+				return Get("MAVCO");
 			}
 		}
 		
@@ -11599,6 +11885,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Monday
+		/// </summary>
+		public static string Monday 
+		{
+			get
+			{
+				return Get("Monday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Month
 		/// </summary>
 		public static string Month 
@@ -11698,6 +11995,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Non VAT
+		/// </summary>
+		public static string NonVAT 
+		{
+			get
+			{
+				return Get("NonVAT");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for None
 		/// </summary>
 		public static string None 
@@ -11782,6 +12090,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("OfficeInformation");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Office Logo
+		/// </summary>
+		public static string OfficeLogo 
+		{
+			get
+			{
+				return Get("OfficeLogo");
 			}
 		}
 		
@@ -12050,6 +12369,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Periodic Inventory
+		/// </summary>
+		public static string PeriodicInventory 
+		{
+			get
+			{
+				return Get("PeriodicInventory");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Perpetual Inventory
+		/// </summary>
+		public static string PerpetualInventory 
+		{
+			get
+			{
+				return Get("PerpetualInventory");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Phone
 		/// </summary>
 		public static string Phone 
@@ -12237,6 +12578,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Primary Sales Tax Type
+		/// </summary>
+		public static string PrimarySalesTaxType 
+		{
+			get
+			{
+				return Get("PrimarySalesTaxType");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Print
 		/// </summary>
 		public static string Print 
@@ -12376,6 +12728,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("QuantityOnHandAbbreviated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Quotation Valid Days
+		/// </summary>
+		public static string QuotationValidDays 
+		{
+			get
+			{
+				return Get("QuotationValidDays");
 			}
 		}
 		
@@ -13095,6 +13458,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Saturday
+		/// </summary>
+		public static string Saturday 
+		{
+			get
+			{
+				return Get("Saturday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Save
 		/// </summary>
 		public static string Save 
@@ -13315,6 +13689,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Setup Email
+		/// </summary>
+		public static string SetupEmail 
+		{
+			get
+			{
+				return Get("SetupEmail");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Shipper
 		/// </summary>
 		public static string Shipper 
@@ -13476,6 +13861,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Start");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for State Sales Tax
+		/// </summary>
+		public static string StateSalesTax 
+		{
+			get
+			{
+				return Get("StateSalesTax");
 			}
 		}
 		
@@ -13689,6 +14085,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Sunday
+		/// </summary>
+		public static string Sunday 
+		{
+			get
+			{
+				return Get("Sunday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Supplier Name
 		/// </summary>
 		public static string SupplierName 
@@ -13898,6 +14305,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Thursday
+		/// </summary>
+		public static string Thursday 
+		{
+			get
+			{
+				return Get("Thursday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for To
 		/// </summary>
 		public static string To 
@@ -14030,6 +14448,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Transaction Start Date
+		/// </summary>
+		public static string TransactionStartDate 
+		{
+			get
+			{
+				return Get("TransactionStartDate");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Enter the exact date from when you want to record transactions in MixERP.
+		/// </summary>
+		public static string TransactionStartDateDescription 
+		{
+			get
+			{
+				return Get("TransactionStartDateDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for TransactionStatement
 		/// </summary>
 		public static string TransactionStatement 
@@ -14114,6 +14554,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("TrialBalance");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Tuesday
+		/// </summary>
+		public static string Tuesday 
+		{
+			get
+			{
+				return Get("Tuesday");
 			}
 		}
 		
@@ -14272,6 +14723,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Upload Logo
+		/// </summary>
+		public static string UploadLogo 
+		{
+			get
+			{
+				return Get("UploadLogo");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Url
 		/// </summary>
 		public static string Url 
@@ -14345,6 +14807,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Users");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for VAT/GST
+		/// </summary>
+		public static string VATOrGST 
+		{
+			get
+			{
+				return Get("VATOrGST");
 			}
 		}
 		
@@ -14664,6 +15137,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Warning");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Wednesday
+		/// </summary>
+		public static string Wednesday 
+		{
+			get
+			{
+				return Get("Wednesday");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Week Starts On
+		/// </summary>
+		public static string WeekStartsOn 
+		{
+			get
+			{
+				return Get("WeekStartsOn");
 			}
 		}
 		

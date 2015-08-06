@@ -1,4 +1,4 @@
-DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer);
+DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer) CASCADE;
 
 CREATE FUNCTION core.get_quotation_valid_duration(_office_id integer)
 RETURNS integer

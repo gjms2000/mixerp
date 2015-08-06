@@ -36,16 +36,16 @@ namespace MixERP.Net.FrontEnd.Data.Office
             string hundredthName, string fiscalYearCode,
             string fiscalYearName, DateTime startsFrom, DateTime endsOn,
             bool salesTaxIsVat, bool hasStateSalesTax, bool hasCountySalesTax,
-            decimal incomeTaxRate, int weekStartDay, DateTime transactionStartDate,
+            int quotationValidDays, decimal incomeTaxRate, int weekStartDay, DateTime transactionStartDate,
             bool isPerpetual, string valuationMethod, string logo,
             string adminName, string username, string password)
         {
             const string sql =
-                "SELECT * FROM office.add_office(@0::varchar(12), @1::varchar(150), @2::varchar(50), @3::date, @4::varchar(12), @5::varchar(12), @6::varchar(48), @7::varchar(48), @8::varchar(12), @9::varchar(50), @10::date,@11::date, @12::boolean, @13::boolean, @14::boolean, @15::numeric, @16::int, @17::date, @18::boolean, @19::character varying(5), @20::text, @21::varchar(100), @22::varchar(50), @23::varchar(48));";
+                "SELECT * FROM office.add_office(@0::varchar(12), @1::varchar(150), @2::varchar(50), @3::date, @4::varchar(12), @5::varchar(12), @6::varchar(48), @7::varchar(48), @8::varchar(12), @9::varchar(50), @10::date,@11::date, @12::boolean, @13::boolean, @14::boolean, @15::integer, @16::numeric, @17::integer, @18::date, @19::boolean, @20::character varying(5), @21::text, @22::varchar(100), @23::varchar(50), @24::varchar(48));";
 
             Factory.NonQuery(catalog, sql, officeCode, officeName, nickName, registrationDate, currencyCode,
                 currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn,
-                salesTaxIsVat, hasStateSalesTax, hasCountySalesTax,
+                salesTaxIsVat, hasStateSalesTax, hasCountySalesTax, quotationValidDays,
                 incomeTaxRate, weekStartDay, transactionStartDate, isPerpetual, valuationMethod, logo, adminName, username, password);
         }
     }

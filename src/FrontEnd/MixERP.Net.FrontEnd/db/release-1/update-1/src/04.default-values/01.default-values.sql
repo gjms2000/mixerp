@@ -48,3 +48,20 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowSupplierInSales') THEN
+        INSERT INTO config.switches
+        SELECT 'AllowSupplierInSales', false;
+    END IF;
+
+    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowNonSupplierInPurchase') THEN
+        INSERT INTO config.switches
+        SELECT 'AllowNonSupplierInPurchase', false;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;

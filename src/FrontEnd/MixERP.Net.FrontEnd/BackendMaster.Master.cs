@@ -24,11 +24,32 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Web.UI.HtmlControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.FrontEnd
 {
     public partial class BackendMaster : MixERPMasterPage
     {
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            using (HtmlLink stylesheet = new HtmlLink())
+            {
+                string path = "/bundles/stylesheets/master-page.min.css";
+
+                if (CurrentCulture.IsRtl())
+                {
+                    path = path.Replace("min.css", "rtl.min.css");
+                }
+
+                stylesheet.Href = path;
+                stylesheet.Attributes["rel"] = "stylesheet";
+                stylesheet.Attributes["type"] = "text/css";
+                stylesheet.Attributes["media"] = "all";
+                this.Page.Header.Controls.Add(stylesheet);
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.CatalogLiteral.Text = AppUsers.GetCurrentUserDB();

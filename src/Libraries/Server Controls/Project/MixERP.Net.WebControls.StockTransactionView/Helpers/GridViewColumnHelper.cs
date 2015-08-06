@@ -47,7 +47,7 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory.Helpers
             }
 
             GridViewHelper.AddDataBoundControl(grid, "Amount", Titles.Amount);
-            GridViewHelper.AddDataBoundControl(grid, "TransactionTs", Titles.TransactionTimestamp, "{0:d}");
+            GridViewHelper.AddDataBoundControl(grid, "TransactionTs", Titles.TransactionTimestamp, "{0:U}");
             GridViewHelper.AddDataBoundControl(grid, "User", Titles.User);
             GridViewHelper.AddDataBoundControl(grid, "StatementReference", Titles.StatementReference);
 

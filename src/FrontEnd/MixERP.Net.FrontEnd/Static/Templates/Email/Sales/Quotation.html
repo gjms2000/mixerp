@@ -1,18 +1,24 @@
-﻿<strong>Dear {CustomerName},</strong>
-{Header}
-<p>Thank you for your interest in our products. We have created a quotation (Ref #{TranId}) for you which is attached along in this email.</p>
+﻿<div style="padding:6px 0;">
+	<p style="padding-bottom:8px;font-weight:bold;">Dear {CustomerName},</p>{Header}
+	<p style="padding-bottom:8px;">Thank you for the inquiry.
+	We have created a quotation (Ref #{TranId}) for you which is attached along in this email.</p>
 
-<p>
-    Please note that this quotation is valid for {QuotationValidDuration} days only.
-    Please click on the following link to accept the quote before it expires automatically:
-</p>
+	<p style="padding-bottom:8px;">
+	    Please note that this quotation is valid for {QuotationValidDuration} days only.
+	    Please click on the following link to accept the quote before it expires automatically:
+	</p>
 
-<a href="{QuotationAcceptLink}">{QuotationAcceptLink}</a>
+	<p style="padding-bottom:8px;">
+		<a href="{QuotationAcceptLink}">{QuotationAcceptLink}</a>
+	</p>
 
-<p>
-    If you have any questions, please contact us at <a href="mailto:{Email}">{Email}</a>.
-</p>
+	<p style="padding-bottom:8px;">
+	    If you have any questions, please contact us at <a href="mailto:{Email}">{Email}</a>.
+	</p>
 
-Thank you.<br />
+	<p style="padding-bottom:8px;">
+	Thank you.
+	</p>
 
-{Footer}
+	{Footer}
+</div>

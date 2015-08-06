@@ -11,7 +11,7 @@ namespace MixERP.Net.FirstSteps.Office
     {
         public CashRepository()
         {
-            this.Order = 300;
+            this.Order = 301;
             this.Name = Titles.CreateCashRepositories;
             this.Category = Titles.FirstTasks;
             this.CategoryAlias = "first-tasks";

@@ -136,6 +136,11 @@ namespace MixERP.Net.WebControls.ScrudFactory
 
                     if (lastValue > 0)
                     {
+                        if (this.RedirectToReturnUrl())
+                        {
+                            return;
+                        }
+
                         this.lastValueHiddenTextBox.Text = lastValue.ToString(CultureInfo.InvariantCulture);
                         //Clear the form container.
                         this.formContainer.Controls.Clear();
@@ -144,13 +149,6 @@ namespace MixERP.Net.WebControls.ScrudFactory
                         {
                             //Load the form again.
                             this.LoadForm(this.formContainer, table);
-                        }
-
-
-                        if (this.Page.Request.QueryString["ReturnUrl"] != null)
-                        {
-                            this.Page.Response.Redirect(this.Page.Request.QueryString["ReturnUrl"]);
-                            return;
                         }
 
                         //Refresh the grid.
@@ -184,6 +182,10 @@ namespace MixERP.Net.WebControls.ScrudFactory
                     {
                         FormHelper.SaveCustomFields(this.Catalog, this.TableSchema, this.Table, id.ToString(CultureInfo.InvariantCulture), customFields);
 
+                        if (this.RedirectToReturnUrl())
+                        {
+                            return;
+                        }
                         //Clear the form container.
                         this.formContainer.Controls.Clear();
 
@@ -197,7 +199,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
 
                         //Refresh the grid.
                         this.BindGridView();
-
+                        
                         this.DisplaySuccess();
                     }
                     else
@@ -210,6 +212,17 @@ namespace MixERP.Net.WebControls.ScrudFactory
                     this.DisplayError(ex);
                 }
             }
+        }
+
+        private bool RedirectToReturnUrl()
+        {
+            if (this.Page.Request.QueryString["ReturnUrl"] != null)
+            {
+                this.Page.Response.Redirect(this.Page.Request.QueryString["ReturnUrl"]);
+                return true;
+            }
+
+            return false;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)

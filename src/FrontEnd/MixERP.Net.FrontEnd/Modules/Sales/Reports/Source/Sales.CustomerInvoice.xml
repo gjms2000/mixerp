@@ -24,6 +24,14 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
   <TopSection>
     <table class="table horizontal">
       <tr>
+        <td>{Resources.Titles.TranId}</td>
+        <td>
+          {DataSource[0].transaction_master_id}
+          <br />
+          {Barcode(DataSource[0].transaction_master_id)}
+        </td>
+      </tr>
+      <tr>
         <td>{Resources.Titles.TranCode}</td>
         <td>
           {DataSource[0].transaction_code}
@@ -108,16 +116,13 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <DataSource>
       <Query>
         SELECT
+        transactions.transaction_master.transaction_master_id,
         transactions.transaction_master.transaction_code,
         transactions.transaction_master.transaction_ts,
         transactions.transaction_master.value_date,
         office.users.user_name AS entered_by,
         core.verification_statuses.verification_status_name AS status,
-        CASE is_credit
-        WHEN false THEN NULL
-        ELSE
-        transactions.transaction_master.value_date + core.parties.maximum_credit_period
-        END AS due_date,
+        transactions.get_due_date(transactions.transaction_master.value_date, transactions.stock_master.payment_term_id) AS due_date,
         transactions.transaction_master.statement_reference,
         core.parties.party_code,
         core.parties.party_name,

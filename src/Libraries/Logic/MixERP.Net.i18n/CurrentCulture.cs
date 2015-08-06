@@ -35,6 +35,19 @@ namespace MixERP.Net.i18n
             return culture.NumberFormat.CurrencySymbol;
         }
 
+        public static bool IsRtl()
+        {
+            CultureInfo culture = GetCurrentCulture();
+
+            if (culture == null)
+            {
+                return false;
+            }
+
+            return culture.TextInfo.IsRightToLeft;
+        }
+
+
         public static CultureInfo GetCurrentUICulture()
         {
             CultureInfo culture = CultureInfo.DefaultThreadCurrentUICulture ?? CultureInfo.CurrentUICulture;
@@ -45,6 +58,11 @@ namespace MixERP.Net.i18n
                 culture.NumberFormat.NumberGroupSeparator = "\x0020";
             }
             return culture;
+        }
+
+        public static CultureInfo GetCurrentCulture()
+        {
+            return CultureInfo.DefaultThreadCurrentCulture ?? CultureInfo.CurrentCulture;
         }
 
         public static string GetDecimalSeparator()

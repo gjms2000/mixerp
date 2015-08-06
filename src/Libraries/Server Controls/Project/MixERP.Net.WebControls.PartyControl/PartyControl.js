@@ -252,5 +252,8 @@ partyCodeTextBox.blur(function () {
 //Ajax Data Binding
 function loadParties() {
     url = "/Modules/Inventory/Services/PartyData.asmx/GetParties";
-    ajaxDataBind(url, partyDropDownList);
+    data = appendParameter("", "book", "");
+    data = getData(data);
+
+    ajaxDataBind(url, partyDropDownList, data);
 };

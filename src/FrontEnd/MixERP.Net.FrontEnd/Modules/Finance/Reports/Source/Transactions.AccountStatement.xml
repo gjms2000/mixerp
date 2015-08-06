@@ -84,6 +84,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         debit,
         credit,
         balance,
+        reference_number,
         statement_reference,
         office,
         book,

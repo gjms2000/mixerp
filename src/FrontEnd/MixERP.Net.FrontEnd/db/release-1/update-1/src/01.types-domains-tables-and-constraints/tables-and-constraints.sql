@@ -832,3 +832,38 @@ DROP INDEX IF EXISTS office.configuration_config_id_office_id_uix;
 
 CREATE UNIQUE INDEX configuration_config_id_office_id_uix
 ON office.configuration(config_id, office_id);
+
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT typname FROM pg_catalog.pg_type 
+        WHERE typname = 'image'
+    ) THEN
+        CREATE DOMAIN public.image AS text;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('logo_file')
+        AND    NOT attisdropped
+    ) THEN
+        DROP VIEW IF EXISTS office.sign_in_view;
+        ALTER TABLE office.offices
+        ALTER COLUMN logo_file TYPE public.image;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;

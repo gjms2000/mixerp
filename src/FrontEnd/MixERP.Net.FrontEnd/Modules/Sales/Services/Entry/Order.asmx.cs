@@ -21,13 +21,21 @@ using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
+using System.Web;
+using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Core.Modules.Sales.Data.Helpers;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.Messaging.Email;
+using CollectionHelper = MixERP.Net.WebControls.StockTransactionFactory.Helpers.CollectionHelper;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {
@@ -61,9 +69,16 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                return Data.Transactions.Order.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate,
+                long tranId = Data.Transactions.Order.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate,
                     partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds, attachments,
                     nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
+
+                if (tranId > 0)
+                {
+                    this.CreateEmail(tranId, partyCode);
+                }
+
+                return tranId;
             }
             catch (Exception ex)
             {
@@ -71,5 +86,44 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 throw;
             }
         }
+
+        private void CreateEmail(long tranId, string partyCode)
+        {
+            string sendTo = Parties.GetEmailAddress(AppUsers.GetCurrentUserDB(), partyCode);
+
+            if (string.IsNullOrWhiteSpace(sendTo))
+            {
+                return;
+            }
+
+            string message = ProcessEmailMessage(tranId);
+            string attachment =
+                HostingEnvironment.MapPath("/Resource/Documents/" + Titles.SalesOrder + "-#" + tranId + ".pdf");
+
+            string subject = string.Format(Labels.SalesOrderEmailSubject, tranId,
+                AppUsers.GetCurrent().View.OfficeName);
+
+            MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo,
+                subject);
+            queue.Add();
+
+        }
+
+        private static string ProcessEmailMessage(long tranId)
+        {
+            string template = EmailTemplateHelper.GetTemplateFileContents("/Static/Templates/Email/Sales/Order.html");
+
+            List<object> dictionary = new List<object>
+            {
+                AppUsers.GetCurrent().View,
+                Data.Transactions.Order.GetSalesOrderView(AppUsers.GetCurrentUserDB(), tranId)
+            };
+
+            var processor = new EmailTemplateProcessor(template, dictionary);
+            template = processor.Process();
+
+            return template;
+        }
+
     }
 }

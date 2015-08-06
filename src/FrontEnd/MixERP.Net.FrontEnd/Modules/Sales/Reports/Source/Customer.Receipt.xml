@@ -24,6 +24,14 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
   <TopSection>
     <table class="table horizontal">
       <tr>
+        <td>{Resources.Titles.TranId}</td>
+        <td>
+          {DataSource[0].transaction_master_id}
+          <br />
+          {Barcode(DataSource[0].transaction_master_id)}
+        </td>
+      </tr>
+      <tr>
         <td>{Resources.Titles.TranCode}</td>
         <td>
           {DataSource[0].transaction_code}

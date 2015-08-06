@@ -17,33 +17,25 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Entities.Core;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
-using System.Web.UI;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Core.Modules.Sales.Data.Helpers;
-using MixERP.Net.Entities.Audit;
-using MixERP.Net.Entities.Transactions;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Models.Transactions;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Messaging.Email;
-using PetaPoco;
+using Serilog;
 using CollectionHelper = MixERP.Net.WebControls.StockTransactionFactory.Helpers.CollectionHelper;
-using StockDetail = MixERP.Net.Entities.Models.Transactions.StockDetail;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {
@@ -54,7 +46,9 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
     public class Quotation : WebService
     {
         [WebMethod]
-        public long Save(DateTime valueDate, int storeId, string partyCode, int priceTypeId, string referenceNumber, string data, string statementReference, string transactionIds, string attachmentsJSON, bool nonTaxable, int salespersonId, int shipperId, string shippingAddressCode)
+        public long Save(DateTime valueDate, int storeId, string partyCode, int priceTypeId, string referenceNumber,
+            string data, string statementReference, string transactionIds, string attachmentsJSON, bool nonTaxable,
+            int salespersonId, int shipperId, string shippingAddressCode)
         {
             try
             {
@@ -76,8 +70,11 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
                 int validDuration = AppUsers.GetCurrent().View.SalesQuotationValidDuration.ToInt();
 
-                long tranId = Data.Transactions.Quotation.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate, partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds, attachments, nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
-                string token = Data.Transactions.Quotation.AddValidation(AppUsers.GetCurrentUserDB(), validDuration, tranId);
+                long tranId = Data.Transactions.Quotation.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId,
+                    valueDate, partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds,
+                    attachments, nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
+                string token = Data.Transactions.Quotation.AddValidation(AppUsers.GetCurrentUserDB(), validDuration,
+                    tranId);
 
                 if (tranId > 0)
                 {
@@ -105,16 +102,19 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
             string attachment =
                 HostingEnvironment.MapPath("/Resource/Documents/" + Titles.SalesQuotation + "-#" + tranId + ".pdf");
 
-            string subject = string.Format(Labels.SalesQuotationEmailSubject, tranId, AppUsers.GetCurrent().View.OfficeName);
+            string subject = string.Format(Labels.SalesQuotationEmailSubject, tranId,
+                AppUsers.GetCurrent().View.OfficeName);
 
-            MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo, subject);
+            MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo,
+                subject);
             queue.Add();
         }
 
         private static string ProcessEmailMessage(long tranId, string token)
         {
             string template = EmailTemplateHelper.GetTemplateFileContents("/Static/Templates/Email/Sales/Quotation.html");
-            string link = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/Public/ApproveQuotation.aspx?ValidationId=" + token;
+            string link = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
+                          "/Public/ApproveQuotation.aspx?ValidationId=" + token;
 
 
             template = template.Replace("{QuotationAcceptLink}", link);

@@ -56,6 +56,11 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                     textBox.CssClass = "color";
                 }
 
+                if (dataType.ToUpperInvariant().Equals("IMAGE"))
+                {
+                    textBox.CssClass = "image";
+                }
+
                 if (isPasswordField)
                 {
                     textBox.Attributes.Add("type", "password");

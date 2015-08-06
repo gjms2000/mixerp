@@ -75,7 +75,7 @@ namespace MixERP.Net.Core.Modules.Finance
 
                     using (HtmlInputButton cancelButton = new HtmlInputButton())
                     {
-                        cancelButton.Attributes.Add("class", "ui red button");
+                        cancelButton.Attributes.Add("class", "ui red cancel button");
                         cancelButton.Value = Titles.Cancel;
 
                         buttons.Controls.Add(cancelButton);
@@ -84,7 +84,7 @@ namespace MixERP.Net.Core.Modules.Finance
                     using (HtmlInputButton verifyButton = new HtmlInputButton())
                     {
                         verifyButton.ID = "VerifyButton";
-                        verifyButton.Attributes.Add("class", "ui green button");
+                        verifyButton.Attributes.Add("class", "ui green ok button");
                         verifyButton.Value = Titles.Verify;
                         verifyButton.Attributes.Add("title", "CTRL + RETURN");
                         buttons.Controls.Add(verifyButton);

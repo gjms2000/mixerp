@@ -31,13 +31,12 @@ namespace MixERP.Net.Messaging.Email.Helpers
         public Config(string catalog)
         {
             this.Catalog = catalog;
+            this.Enabled = Conversion.TryCastBoolean(DbConfig.GetMessagingParameter(this.Catalog, "Enabled"));
             this.FromName = DbConfig.GetMessagingParameter(this.Catalog, "FromDisplayName");
             this.FromEmail = DbConfig.GetMessagingParameter(this.Catalog, "FromEmailAddress");
             this.SmtpHost = DbConfig.GetMessagingParameter(this.Catalog, "SMTPHost");
-            this.EnableSsl =
-                Conversion.TryCastBoolean(DbConfig.GetMessagingParameter(this.Catalog, "SMTPEnableSSL"));
-            this.SmtpPort =
-                Conversion.TryCastInteger(DbConfig.GetMessagingParameter(this.Catalog, "SMTPPort"));
+            this.EnableSsl = Conversion.TryCastBoolean(DbConfig.GetMessagingParameter(this.Catalog, "SMTPEnableSSL"));
+            this.SmtpPort = Conversion.TryCastInteger(DbConfig.GetMessagingParameter(this.Catalog, "SMTPPort"));
             this.SmtpUsername = DbConfig.GetMessagingParameter(this.Catalog, "SMTPUserName");
             this.SmtpUserPassword = GetSmtpUserPassword();
 
@@ -48,6 +47,7 @@ namespace MixERP.Net.Messaging.Email.Helpers
         }
 
         public string Catalog { get; set; }
+        public bool Enabled { get; set; }
         public bool EnableSsl { get; set; }
         public string FromName { get; set; }
         public string FromEmail { get; set; }

@@ -30,7 +30,7 @@ BEGIN
         PERFORM localization.add_resource(_resource_class, _key, _value);
         RETURN;
     END IF;
-
+       
     SELECT resource_id INTO _resource_id
     FROM localization.resources
     WHERE UPPER(resource_class) = UPPER(_resource_class)

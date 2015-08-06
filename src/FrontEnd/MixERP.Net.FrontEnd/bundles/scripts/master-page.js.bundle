@@ -28,9 +28,9 @@
     <file>/Scripts/vakata-jstree/dist/jstree.min.js</file>
     <file>/Scripts/sprintf/sprintf.min.js</file>
     <file>/Scripts/mixerp/mixerp-core.js</file>
-
+    <file>/Scripts/ajax-file-upload.js</file>
     <!--Libraries End -->
-    
+
     <file>/Scripts/mixerp/master-page/declaration.js</file>
     <file>/Scripts/mixerp/master-page/js-tree.js</file>
     <file>/Scripts/mixerp/master-page/keyboard.js</file>

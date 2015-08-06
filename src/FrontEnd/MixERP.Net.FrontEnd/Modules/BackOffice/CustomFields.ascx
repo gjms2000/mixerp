@@ -36,13 +36,13 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
     <div class="ui form">
         <div id="CustomFieldContainer">
-            
         </div>
-        <div class="ui pink button" onclick="window.addField();">
-            <%=Titles.AddNew %>
+        <div class="vpad8">
+            <div class="ui pink button" onclick="window.addField();">
+                <%=Titles.AddNew %>
+            </div>
+            <a class="ui positive button" onclick="save()"><%=Titles.Save %></a>
         </div>
-        <a class="ui positive button" onclick="save()"><%=Titles.Save %></a>
-
     </div>
 </div>
 
