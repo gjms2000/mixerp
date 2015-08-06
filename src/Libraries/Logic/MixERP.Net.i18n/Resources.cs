@@ -1583,6 +1583,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for yyyy-mm-dd
+		/// </summary>
+		public static string DateFormatYYYYMMDD 
+		{
+			get
+			{
+				return Get("DateFormatYYYYMMDD");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for days
 		/// </summary>
 		public static string DaysLowerCase 
@@ -2166,6 +2177,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for %
+		/// </summary>
+		public static string PercentageSymbol 
+		{
+			get
+			{
+				return Get("PercentageSymbol");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Please select a form first.
 		/// </summary>
 		public static string PleaseSelectAFormFirst 
@@ -2415,6 +2437,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("TransactionRejectedDetails");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Enter the exact date from when you want to record transactions in MixERP.
+		/// </summary>
+		public static string TransactionStartDateDescription 
+		{
+			get
+			{
+				return Get("TransactionStartDateDescription");
 			}
 		}
 		
@@ -9421,6 +9454,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for County Sales Tax
+		/// </summary>
+		public static string CountySalesTax 
+		{
+			get
+			{
+				return Get("CountySalesTax");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for County Sales Taxes
 		/// </summary>
 		public static string CountySalesTaxes 
@@ -10642,6 +10686,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for First In, First Out (FIFO)
+		/// </summary>
+		public static string FIFO 
+		{
+			get
+			{
+				return Get("FIFO");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Factor
 		/// </summary>
 		public static string Factor 
@@ -10862,6 +10917,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Friday
+		/// </summary>
+		public static string Friday 
+		{
+			get
+			{
+				return Get("Friday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for From
 		/// </summary>
 		public static string From 
@@ -10902,6 +10968,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("GLHead");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Global Parameters
+		/// </summary>
+		public static string GlobalParameters 
+		{
+			get
+			{
+				return Get("GlobalParameters");
 			}
 		}
 		
@@ -11038,6 +11115,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Income Tax Rate
+		/// </summary>
+		public static string IncomeTaxRate 
+		{
+			get
+			{
+				return Get("IncomeTaxRate");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Incomplete Tasks
 		/// </summary>
 		public static string IncompleteTasks 
@@ -11126,6 +11214,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Inventory Accounting System
+		/// </summary>
+		public static string InventoryAccountingSystem 
+		{
+			get
+			{
+				return Get("InventoryAccountingSystem");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Inventory Advice
 		/// </summary>
 		public static string InventoryAdvice 
@@ -11133,6 +11232,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("InventoryAdvice");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Inventory Valuation Method
+		/// </summary>
+		public static string InventoryValuationMethod 
+		{
+			get
+			{
+				return Get("InventoryValuationMethod");
 			}
 		}
 		
@@ -11390,6 +11500,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Last In, First Out (LIFO)
+		/// </summary>
+		public static string LIFO 
+		{
+			get
+			{
+				return Get("LIFO");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Last Accessed On
 		/// </summary>
 		public static string LastAccessedOn 
@@ -11540,6 +11661,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("LoginView");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Moving Average Cost (MAVCO)
+		/// </summary>
+		public static string MAVCO 
+		{
+			get
+			{
+				return Get("MAVCO");
 			}
 		}
 		
@@ -11753,6 +11885,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Monday
+		/// </summary>
+		public static string Monday 
+		{
+			get
+			{
+				return Get("Monday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Month
 		/// </summary>
 		public static string Month 
@@ -11852,6 +11995,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Non VAT
+		/// </summary>
+		public static string NonVAT 
+		{
+			get
+			{
+				return Get("NonVAT");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for None
 		/// </summary>
 		public static string None 
@@ -11936,6 +12090,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("OfficeInformation");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Office Logo
+		/// </summary>
+		public static string OfficeLogo 
+		{
+			get
+			{
+				return Get("OfficeLogo");
 			}
 		}
 		
@@ -12204,6 +12369,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Periodic Inventory
+		/// </summary>
+		public static string PeriodicInventory 
+		{
+			get
+			{
+				return Get("PeriodicInventory");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Perpetual Inventory
+		/// </summary>
+		public static string PerpetualInventory 
+		{
+			get
+			{
+				return Get("PerpetualInventory");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Phone
 		/// </summary>
 		public static string Phone 
@@ -12391,6 +12578,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Primary Sales Tax Type
+		/// </summary>
+		public static string PrimarySalesTaxType 
+		{
+			get
+			{
+				return Get("PrimarySalesTaxType");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Print
 		/// </summary>
 		public static string Print 
@@ -12530,6 +12728,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("QuantityOnHandAbbreviated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Quotation Valid Days
+		/// </summary>
+		public static string QuotationValidDays 
+		{
+			get
+			{
+				return Get("QuotationValidDays");
 			}
 		}
 		
@@ -13249,6 +13458,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Saturday
+		/// </summary>
+		public static string Saturday 
+		{
+			get
+			{
+				return Get("Saturday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Save
 		/// </summary>
 		public static string Save 
@@ -13645,6 +13865,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for State Sales Tax
+		/// </summary>
+		public static string StateSalesTax 
+		{
+			get
+			{
+				return Get("StateSalesTax");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for State Sales Taxes
 		/// </summary>
 		public static string StateSalesTaxes 
@@ -13850,6 +14081,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SuccessfullyUpdated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sunday
+		/// </summary>
+		public static string Sunday 
+		{
+			get
+			{
+				return Get("Sunday");
 			}
 		}
 		
@@ -14063,6 +14305,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Thursday
+		/// </summary>
+		public static string Thursday 
+		{
+			get
+			{
+				return Get("Thursday");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for To
 		/// </summary>
 		public static string To 
@@ -14195,6 +14448,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Transaction Start Date
+		/// </summary>
+		public static string TransactionStartDate 
+		{
+			get
+			{
+				return Get("TransactionStartDate");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Enter the exact date from when you want to record transactions in MixERP.
+		/// </summary>
+		public static string TransactionStartDateDescription 
+		{
+			get
+			{
+				return Get("TransactionStartDateDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for TransactionStatement
 		/// </summary>
 		public static string TransactionStatement 
@@ -14279,6 +14554,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("TrialBalance");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Tuesday
+		/// </summary>
+		public static string Tuesday 
+		{
+			get
+			{
+				return Get("Tuesday");
 			}
 		}
 		
@@ -14521,6 +14807,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Users");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for VAT/GST
+		/// </summary>
+		public static string VATOrGST 
+		{
+			get
+			{
+				return Get("VATOrGST");
 			}
 		}
 		
@@ -14840,6 +15137,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Warning");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Wednesday
+		/// </summary>
+		public static string Wednesday 
+		{
+			get
+			{
+				return Get("Wednesday");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Week Starts On
+		/// </summary>
+		public static string WeekStartsOn 
+		{
+			get
+			{
+				return Get("WeekStartsOn");
 			}
 		}
 		

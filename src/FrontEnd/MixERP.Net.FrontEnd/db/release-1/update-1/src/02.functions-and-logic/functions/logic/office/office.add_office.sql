@@ -82,6 +82,35 @@ DROP FUNCTION IF EXISTS office.add_office
     _password               national character varying(48)
 );
 
+DROP FUNCTION IF EXISTS office.add_office
+(
+    _office_code            national character varying(12),
+    _office_name            national character varying(150),
+    _nick_name              national character varying(50),
+    _registration_date      date,
+    _currency_code          national character varying(12),
+    _currency_symbol        national character varying(12),
+    _currency_name          national character varying(48),
+    _hundredth_name         national character varying(48),
+    _fiscal_year_code       national character varying(12),
+    _fiscal_year_name       national character varying(50),
+    _starts_from            date,
+    _ends_on                date,
+    _sales_tax_is_vat       boolean,
+    _has_state_sales_tax    boolean,
+    _has_county_sales_tax   boolean,
+    _quotation_valid_days   integer,
+    _income_tax_rate        decimal(24, 4),
+    _week_start_day         integer,
+    _transaction_start_date date,
+    _is_perpetual           boolean,
+    _inv_valuation_method   national character varying(5),
+    _logo_file              text,
+    _admin_name             national character varying(100),
+    _user_name              national character varying(50),
+    _password               national character varying(48)
+);
+
 CREATE FUNCTION office.add_office
 (
     _office_code            national character varying(12),
@@ -99,6 +128,7 @@ CREATE FUNCTION office.add_office
     _sales_tax_is_vat       boolean,
     _has_state_sales_tax    boolean,
     _has_county_sales_tax   boolean,
+    _quotation_valid_days   integer,
     _income_tax_rate        decimal(24, 4),
     _week_start_day         integer,
     _transaction_start_date date,
@@ -152,8 +182,22 @@ BEGIN
         SELECT 1, _office_id, _inventory_system, '';
     END IF;
 
+    IF(COALESCE(_quotation_valid_days, 0) = 0) THEN
+        _quotation_valid_days = 15;
+    END IF;
+    
+    --Quotation valid duration
+    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 3 AND office_id = _office_id) THEN
+        UPDATE office.configuration
+        SET value = _quotation_valid_days::text
+        WHERE config_id = 3 AND office_id = _office_id;
+    ELSE
+        INSERT INTO office.configuration(config_id, office_id, value, configuration_details)
+        SELECT 3, _office_id, _quotation_valid_days::text, '';
+    END IF;
+
     --COGS Calculation Method/Inventory Valuation Method
-    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 1 AND office_id = _office_id) THEN
+    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 2 AND office_id = _office_id) THEN
         UPDATE office.configuration
         SET value = _inv_valuation_method
         WHERE config_id = 2 AND office_id = _office_id;

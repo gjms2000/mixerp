@@ -37,12 +37,14 @@ namespace MixERP.Net.i18n
 
         public static bool IsRtl()
         {
-            if (CultureInfo.DefaultThreadCurrentCulture == null)
+            CultureInfo culture = GetCurrentCulture();
+
+            if (culture == null)
             {
                 return false;
             }
 
-            return CultureInfo.DefaultThreadCurrentCulture.TextInfo.IsRightToLeft;
+            return culture.TextInfo.IsRightToLeft;
         }
 
 
@@ -56,6 +58,11 @@ namespace MixERP.Net.i18n
                 culture.NumberFormat.NumberGroupSeparator = "\x0020";
             }
             return culture;
+        }
+
+        public static CultureInfo GetCurrentCulture()
+        {
+            return CultureInfo.DefaultThreadCurrentCulture ?? CultureInfo.CurrentCulture;
         }
 
         public static string GetDecimalSeparator()

@@ -11,6 +11,7 @@ var fiscalYearCodeInputText = $("#FiscalYearCodeInputText");
 var fiscalYearNameInputText = $("#FiscalYearNameInputText");
 var startsFromInputText = $("#StartsFromInputText");
 var endsOnInputText = $("#EndsOnInputText");
+var quotationValidDaysInputText = $("#QuotationValidDaysInputText");
 var incomeTaxRateInputText = $("#IncomeTaxRateInputText");
 var weekStartDaySelect = $("#WeekStartDaySelect");
 var transactionStartDateInputText = $("#TransactionStartDateInputText");
@@ -108,6 +109,7 @@ saveButton.click(function() {
                 salesTaxIsVat,
                 hasstateTax,
                 hascountyTax,
+                parseInt(quotationValidDaysInputText.val() || 0),
                 parseFloat(incomeTaxRateInputText.val() || 0),
                 weekStartDaySelect.val(),
                 transactionStartDateInputText.val(),
@@ -136,7 +138,7 @@ saveButton.click(function() {
     };
 });
 
-function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, salesTaxIsVat, hasStateSalesTax, hasCountySalesTax, incomeTaxRate, weekStartDay, transactionStartDate, isPerpetual, valuationMethod, logo, adminName, username, password, confirmPassword) {
+function saveOffice(officeCode, officeName, nickName, registrationDate, currencyCode, currencySymbol, currencyName, hundredthName, fiscalYearCode, fiscalYearName, startsFrom, endsOn, salesTaxIsVat, hasStateSalesTax, hasCountySalesTax, quotationValidDays, incomeTaxRate, weekStartDay, transactionStartDate, isPerpetual, valuationMethod, logo, adminName, username, password, confirmPassword) {
     var url = "/Services/Install.asmx/SaveOffice";
 
     var data = appendParameter("", "officeCode", officeCode);
@@ -154,6 +156,7 @@ function saveOffice(officeCode, officeName, nickName, registrationDate, currency
     data = appendParameter(data, "salesTaxIsVat", salesTaxIsVat);
     data = appendParameter(data, "hasStateSalesTax", hasStateSalesTax);
     data = appendParameter(data, "hasCountySalesTax", hasCountySalesTax);
+    data = appendParameter(data, "quotationValidDays", quotationValidDays);
     data = appendParameter(data, "incomeTaxRate", incomeTaxRate);
     data = appendParameter(data, "weekStartDay", weekStartDay);
     data = appendParameter(data, "transactionStartDate", transactionStartDate);

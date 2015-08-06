@@ -40,7 +40,7 @@ namespace MixERP.Net.FrontEnd.Services
             string currencyCode, string currencySymbol, string currencyName, string hundredthName, string fiscalYearCode,
             string fiscalYearName, string startsFrom, string endsOn, 
             bool salesTaxIsVat, bool hasStateSalesTax, bool hasCountySalesTax,
-            decimal incomeTaxRate, int weekStartDay, string transactionStartDate,
+            int quotationValidDays, decimal incomeTaxRate, int weekStartDay, string transactionStartDate,
             bool isPerpetual, string valuationMethod, string logo,
             string adminName, string username, string password, string confirmPassword)
         {
@@ -102,6 +102,7 @@ namespace MixERP.Net.FrontEnd.Services
                     salesTaxIsVat,
                     hasStateSalesTax,
                     hasCountySalesTax,
+                    quotationValidDays,
                     incomeTaxRate, 
                     weekStartDay, 
                     transactionStartsFrom,
