@@ -38433,9 +38433,11 @@ table.borderless td {
   border: none;
 }
 /*Semantic UI Override Start */
+td input,
 .fields input,
-.fields .button {
-  height: 32px;
+.button,
+input[readonly] {
+  height: 30px!important;
 }
 .inline .checkbox {
   margin-top: 9px !important;
