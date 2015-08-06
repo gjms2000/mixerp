@@ -8,10 +8,10 @@ SELECT * FROM core.create_menu('Back Office', '~/Modules/BackOffice/Index.mix', 
 
 
 SELECT * FROM core.create_menu('Sales & Quotation', NULL, 'SAQ', 1, core.get_menu_id('SA'));
-SELECT * FROM core.create_menu('Direct Sales', '~/Modules/Sales/DirectSales.mix', 'DRS', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Quotation', '~/Modules/Sales/Quotation.mix', 'SQ', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Order', '~/Modules/Sales/Order.mix', 'SO', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Delivery', '~/Modules/Sales/Delivery.mix', 'SD', 2, core.get_menu_id('SAQ'));
+SELECT * FROM core.create_menu('Direct Sales', '~/Modules/Sales/DirectSales.mix', 'DRS', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Receipt from Customer', '~/Modules/Sales/Receipt.mix', 'RFC', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Return', '~/Modules/Sales/Return.mix', 'SR', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'SSM', 1, core.get_menu_id('SA'));

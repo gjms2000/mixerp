@@ -34,7 +34,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
         {
             string catalog = AppUsers.GetCurrentUserDB();
 
-            const string sql = "SELECT COUNT(*) FROM core.fiscal_year";
+            const string sql = "SELECT COUNT(*) FROM core.fiscal_year;";
             return Factory.Scalar<int>(catalog, sql);
         }
     }

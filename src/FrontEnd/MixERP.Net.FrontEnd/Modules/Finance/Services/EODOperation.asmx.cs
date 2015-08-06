@@ -24,8 +24,10 @@ using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.Messaging.Email;
 
 namespace MixERP.Net.Core.Modules.Finance.Services
 {
@@ -45,11 +47,12 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                     return false;
                 }
 
+
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 int officeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
 
                 Data.EODOperation.Initialize(AppUsers.GetCurrentUserDB(), userId, officeId);
-
+                this.ProcessEmailQueue();
                 ForceLogOff(officeId);
 
                 return true;
@@ -59,6 +62,17 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                 Log.Warning("Could not initialize eod operation. {Exception}", ex);
                 throw;
             }
+        }
+
+        private void ProcessEmailQueue()
+        {
+            MailQueueManager manager = new MailQueueManager();
+            manager.Catalog = AppUsers.GetCurrentUserDB();
+
+            ThreadPool.QueueUserWorkItem(async callback =>
+            {
+                await manager.ProcessMailQueue();
+            });
         }
 
         [WebMethod]

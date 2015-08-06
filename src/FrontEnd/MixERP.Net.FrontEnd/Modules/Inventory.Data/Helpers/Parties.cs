@@ -33,6 +33,26 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Helpers
             return Factory.Get<Party>(catalog, sql);
         }
 
+        public static IEnumerable<Party> GetSuppliers(string catalog)
+        {
+            const string sql = @"SELECT core.parties.*  FROM core.parties INNER JOIN core.party_types
+                                ON core.parties.party_type_id = core.party_types.party_type_id
+                                WHERE core.party_types.is_supplier
+                                ORDER BY party_id;";
+
+            return Factory.Get<Party>(catalog, sql);
+        }
+
+        public static IEnumerable<Party> GetNonSuppliers(string catalog)
+        {
+            const string sql = @"SELECT core.parties.*  FROM core.parties INNER JOIN core.party_types
+                                ON core.parties.party_type_id = core.party_types.party_type_id
+                                WHERE NOT core.party_types.is_supplier
+                                ORDER BY party_id;";
+
+            return Factory.Get<Party>(catalog, sql);
+        }
+
         public static string GetPartyCodeByPartyId(string catalog, int partyId)
         {
             const string sql = "SELECT party_code FROM core.parties WHERE party_id=@0;";

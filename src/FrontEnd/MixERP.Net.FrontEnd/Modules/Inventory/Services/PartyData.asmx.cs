@@ -29,6 +29,7 @@ using System.Globalization;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI.WebControls;
+using MixERP.Net.Common.Helpers;
 
 
 namespace MixERP.Net.Core.Modules.Inventory.Services
@@ -54,17 +55,43 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
         }
 
         [WebMethod]
-        public Collection<ListItem> GetParties()
+        public Collection<ListItem> GetParties(string book)
+        {
+            bool allowSupplierInSales = DbConfig.GetSwitch(AppUsers.GetCurrentUserDB(), "AllowSupplierInSales");
+            bool allowNonSupplierInPurchase = DbConfig.GetSwitch(AppUsers.GetCurrentUserDB(), "AllowNonSupplierInPurchase");
+
+            if (book.ToUpperInvariant().Equals("SALES"))
+            {
+                if (!allowSupplierInSales)
+                {
+                    return this.GetParties(Parties.GetNonSuppliers(AppUsers.GetCurrentUserDB()));
+                }
+            }
+
+            if (book.ToUpperInvariant().Equals("PURCHASE"))
+            {
+                if (!allowNonSupplierInPurchase)
+                {
+                    return this.GetParties(Parties.GetSuppliers(AppUsers.GetCurrentUserDB()));
+                }
+            }
+
+            return this.GetParties(Parties.GetParties(AppUsers.GetCurrentUserDB()));
+
+        }
+
+        private Collection<ListItem> GetParties(IEnumerable<Party> parties)
         {
             Collection<ListItem> values = new Collection<ListItem>();
 
-            foreach (Party party in Parties.GetParties(AppUsers.GetCurrentUserDB()))
+            foreach (Party party in parties)
             {
                 values.Add(new ListItem(party.PartyName, party.PartyCode));
             }
 
             return values;
         }
+
 
         [WebMethod]
         public string GetPartyCodeByPartyId(int partyId)

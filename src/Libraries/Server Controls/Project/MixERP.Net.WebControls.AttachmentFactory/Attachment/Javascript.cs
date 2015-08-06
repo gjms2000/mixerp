@@ -8,10 +8,6 @@ using ConfigurationHelper = MixERP.Net.WebControls.AttachmentFactory.Helpers.Con
 [assembly:
     WebResource("MixERP.Net.WebControls.AttachmentFactory.AttachmentFactory.js", "application/x-javascript",
         PerformSubstitution = true)]
-[assembly:
-    WebResource("MixERP.Net.WebControls.AttachmentFactory.ajax-file-upload.js", "application/x-javascript",
-        PerformSubstitution = true)]
-
 namespace MixERP.Net.WebControls.AttachmentFactory
 {
     public sealed partial class Attachment
@@ -19,8 +15,6 @@ namespace MixERP.Net.WebControls.AttachmentFactory
         [AspNetHostingPermission(SecurityAction.Demand, Level = AspNetHostingPermissionLevel.Minimal)]
         private void AddJavascript()
         {
-            JSUtility.AddJSReference(this.Page, "MixERP.Net.WebControls.AttachmentFactory.ajax-file-upload.js",
-                "AttachmentAjaxFileUpload", typeof (Attachment));
             JSUtility.AddJSReference(this.Page, "MixERP.Net.WebControls.AttachmentFactory.AttachmentFactory.js",
                 "Attachment", typeof (Attachment));
         }

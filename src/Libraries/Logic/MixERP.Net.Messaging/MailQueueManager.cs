@@ -31,36 +31,48 @@ namespace MixERP.Net.Messaging.Email
 
         public void Add()
         {
-            EmailQueue queue = new EmailQueue
-            {
-                Subject = this.Subject,
-                SendTo = this.SendTo,
-                Attachments = this.Attachments,
-                Message = this.Message,
-                AddedOn = DateTime.UtcNow
-            };
 
-            Database.MailQueue.AddToQueue(this.Catalog, queue);
+            if (this.IsEnabled())
+            {
+                EmailQueue queue = new EmailQueue
+                {
+                    Subject = this.Subject,
+                    SendTo = this.SendTo,
+                    Attachments = this.Attachments,
+                    Message = this.Message,
+                    AddedOn = DateTime.UtcNow
+                };
+
+                Database.MailQueue.AddToQueue(this.Catalog, queue);
+            }
+        }
+
+        private bool IsEnabled()
+        {
+            Config config = new Config(this.Catalog);
+            return config.Enabled;
         }
 
         public async Task ProcessMailQueue()
         {
             IEnumerable<EmailQueue> queue = Database.MailQueue.GetMailInQueue(this.Catalog);
-            Config config = new Config(this.Catalog);
 
-            foreach (EmailQueue mail in queue)
+            if (this.IsEnabled())
             {
-                Processor processor = new Processor(this.Catalog);
-                bool success =
-                    await
-                        processor.Send(mail.SendTo, mail.Subject, mail.Message, false,
-                            mail.Attachments.Split(',').ToArray());
-
-                if (success)
+                foreach (EmailQueue mail in queue)
                 {
-                    mail.Delivered = true;
-                    mail.DeliveredOn = DateTime.UtcNow;
-                    Factory.Update(this.Catalog, mail, mail.QueueId);
+                    Processor processor = new Processor(this.Catalog);
+                    bool success =
+                        await
+                            processor.Send(mail.SendTo, mail.Subject, mail.Message, false,
+                                mail.Attachments.Split(',').ToArray());
+
+                    if (success)
+                    {
+                        mail.Delivered = true;
+                        mail.DeliveredOn = DateTime.UtcNow;
+                        Factory.Update(this.Catalog, mail, mail.QueueId);
+                    }
                 }
             }
         }

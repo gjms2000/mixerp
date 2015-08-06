@@ -2177,7 +2177,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Receipt #{0} confirmation, {1}
+		///   Localized string for Receipt #{0} notification, {1}
 		/// </summary>
 		public static string ReceiptEmailSubject 
 		{
@@ -2217,6 +2217,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("RestoringFile");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SMTP is disabled.
+		/// </summary>
+		public static string SMTPIsDisabled 
+		{
+			get
+			{
+				return Get("SMTPIsDisabled");
 			}
 		}
 		
@@ -2272,6 +2283,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectAFlag");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Your outgoig email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
+		/// </summary>
+		public static string SetupEmailDescription 
+		{
+			get
+			{
+				return Get("SetupEmailDescription");
 			}
 		}
 		
@@ -2448,6 +2470,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("UpdateOperationCompletedSuccessfully");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Upload logo.
+		/// </summary>
+		public static string UploadLogo 
+		{
+			get
+			{
+				return Get("UploadLogo");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
+		/// </summary>
+		public static string UploadLogoDescription 
+		{
+			get
+			{
+				return Get("UploadLogoDescription");
 			}
 		}
 		
@@ -4860,6 +4904,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Has County Sales Tax?
+		/// </summary>
+		public static string has_county_sales_tax 
+		{
+			get
+			{
+				return Get("has_county_sales_tax");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Has State Sales Tax?
+		/// </summary>
+		public static string has_state_sales_tax 
+		{
+			get
+			{
+				return Get("has_state_sales_tax");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Height In Centimeters
 		/// </summary>
 		public static string height_in_centimeters 
@@ -5685,6 +5751,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Logo File
+		/// </summary>
+		public static string logo_file 
+		{
+			get
+			{
+				return Get("logo_file");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Machinable
 		/// </summary>
 		public static string machinable 
@@ -6455,6 +6532,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Primary Sales Tax Is Vat?
+		/// </summary>
+		public static string primary_sales_tax_is_vat 
+		{
+			get
+			{
+				return Get("primary_sales_tax_is_vat");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Priority
 		/// </summary>
 		public static string priority 
@@ -6649,6 +6737,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("recurs_on_same_calendar_date");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Reference Number
+		/// </summary>
+		public static string reference_number 
+		{
+			get
+			{
+				return Get("reference_number");
 			}
 		}
 		
@@ -7995,6 +8094,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Transaction Start Date
+		/// </summary>
+		public static string transaction_start_date 
+		{
+			get
+			{
+				return Get("transaction_start_date");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Unit
 		/// </summary>
 		public static string unit 
@@ -8178,6 +8288,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("verify_sales_transactions");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Week Start Day
+		/// </summary>
+		public static string week_start_day 
+		{
+			get
+			{
+				return Get("week_start_day");
 			}
 		}
 		
@@ -13348,6 +13469,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Setup Email
+		/// </summary>
+		public static string SetupEmail 
+		{
+			get
+			{
+				return Get("SetupEmail");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Shipper
 		/// </summary>
 		public static string Shipper 
@@ -14301,6 +14433,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("UploadAttachmentsForThisTransaction");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Upload Logo
+		/// </summary>
+		public static string UploadLogo 
+		{
+			get
+			{
+				return Get("UploadLogo");
 			}
 		}
 		

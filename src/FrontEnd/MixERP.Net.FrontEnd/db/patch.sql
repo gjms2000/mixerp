@@ -855,6 +855,41 @@ CREATE UNIQUE INDEX configuration_config_id_office_id_uix
 ON office.configuration(config_id, office_id);
 
 
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT typname FROM pg_catalog.pg_type 
+        WHERE typname = 'image'
+    ) THEN
+        CREATE DOMAIN public.image AS text;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'office.offices'::regclass
+        AND    attname IN ('logo_file')
+        AND    NOT attisdropped
+    ) THEN
+        DROP VIEW IF EXISTS office.sign_in_view;
+        ALTER TABLE office.offices
+        ALTER COLUMN logo_file TYPE public.image;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
 (
@@ -972,7 +1007,7 @@ $$
 LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_quotation_valid_duration.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer);
+DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer) CASCADE;
 
 CREATE FUNCTION core.get_quotation_valid_duration(_office_id integer)
 RETURNS integer
@@ -3342,10 +3377,10 @@ SELECT * FROM core.create_menu('Back Office', '~/Modules/BackOffice/Index.mix', 
 
 
 SELECT * FROM core.create_menu('Sales & Quotation', NULL, 'SAQ', 1, core.get_menu_id('SA'));
-SELECT * FROM core.create_menu('Direct Sales', '~/Modules/Sales/DirectSales.mix', 'DRS', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Quotation', '~/Modules/Sales/Quotation.mix', 'SQ', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Order', '~/Modules/Sales/Order.mix', 'SO', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Delivery', '~/Modules/Sales/Delivery.mix', 'SD', 2, core.get_menu_id('SAQ'));
+SELECT * FROM core.create_menu('Direct Sales', '~/Modules/Sales/DirectSales.mix', 'DRS', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Receipt from Customer', '~/Modules/Sales/Receipt.mix', 'RFC', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Sales Return', '~/Modules/Sales/Return.mix', 'SR', 2, core.get_menu_id('SAQ'));
 SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'SSM', 1, core.get_menu_id('SA'));
@@ -3522,6 +3557,24 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowSupplierInSales') THEN
+        INSERT INTO config.switches
+        SELECT 'AllowSupplierInSales', false;
+    END IF;
+
+    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowNonSupplierInPurchase') THEN
+        INSERT INTO config.switches
+        SELECT 'AllowNonSupplierInPurchase', false;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--
 SELECT localization.add_localized_resource('CommonResource', '', 'DateMustBeGreaterThan', 'Invalid date. Must be greater than "{0}".');
@@ -3729,6 +3782,8 @@ SELECT localization.add_localized_resource('Labels', '', 'SalesOrderEmailSubject
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationAlreadyAccepted', 'This quotation was already accepted on {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
+SELECT localization.add_localized_resource('Labels', '', 'SetupEmailDescription', 'Your outgoig email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.');
+SELECT localization.add_localized_resource('Labels', '', 'SMTPIsDisabled', 'SMTP is disabled.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedProgress', '{0} out of {1} tasks completed.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedSuccessfully', 'Task completed successfully.');
 SELECT localization.add_localized_resource('Labels', '', 'ThankYouForYourBusiness', 'Thank you for your business.');
@@ -3745,6 +3800,8 @@ SELECT localization.add_localized_resource('Labels', '', 'TransactionWithdrawnDe
 SELECT localization.add_localized_resource('Labels', '', 'TransactionWithdrawnMessage', 'The transaction was withdrawn successfully. Moreover, this action will affect the all the reports produced on and after "{0}".');
 SELECT localization.add_localized_resource('Labels', '', 'UpdateBackupMessage', 'Before you perform the update operation, please make sure that you have latest backups handy.');
 SELECT localization.add_localized_resource('Labels', '', 'UpdateOperationCompletedSuccessfully', 'The update operation completed successfully.');
+SELECT localization.add_localized_resource('Labels', '', 'UploadLogo', 'Upload logo.');
+SELECT localization.add_localized_resource('Labels', '', 'UploadLogoDescription', 'Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.');
 SELECT localization.add_localized_resource('Labels', '', 'UserGreeting', 'Hi {0}!');
 SELECT localization.add_localized_resource('Labels', '', 'YourPasswordWasChanged', 'Your password was changed.');
 SELECT localization.add_localized_resource('Messages', '', 'AreYouSure', 'Are you sure?');
@@ -3962,6 +4019,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'gl_head', 'GL H
 SELECT localization.add_localized_resource('ScrudResource', '', 'gl_verification_limit', 'Gl Verification Limit');
 SELECT localization.add_localized_resource('ScrudResource', '', 'grace_period', 'Grace Period');
 SELECT localization.add_localized_resource('ScrudResource', '', 'has_child', 'Has Child');
+SELECT localization.add_localized_resource('ScrudResource', '', 'has_county_sales_tax', 'Has County Sales Tax?');
+SELECT localization.add_localized_resource('ScrudResource', '', 'has_state_sales_tax', 'Has State Sales Tax?');
 SELECT localization.add_localized_resource('ScrudResource', '', 'height_in_centimeters', 'Height In Centimeters');
 SELECT localization.add_localized_resource('ScrudResource', '', 'hot_item', 'Hot item');
 SELECT localization.add_localized_resource('ScrudResource', '', 'http_action_code', 'HTTP Action Code');
@@ -4037,6 +4096,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'lead_time_in_da
 SELECT localization.add_localized_resource('ScrudResource', '', 'length_in_centimeters', 'Length In Centimeters');
 SELECT localization.add_localized_resource('ScrudResource', '', 'login_date_time', 'Login Date Time');
 SELECT localization.add_localized_resource('ScrudResource', '', 'login_id', 'Login Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'logo_file', 'Logo File');
 SELECT localization.add_localized_resource('ScrudResource', '', 'machinable', 'Machinable');
 SELECT localization.add_localized_resource('ScrudResource', '', 'maintain_stock', 'Maintain Stock');
 SELECT localization.add_localized_resource('ScrudResource', '', 'maintained_by_user_id', 'Maintained By User Id');
@@ -4107,6 +4167,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'price_to', 'Pri
 SELECT localization.add_localized_resource('ScrudResource', '', 'price_type_code', 'Price Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'price_type_id', 'Price Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'price_type_name', 'Price Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'primary_sales_tax_is_vat', 'Primary Sales Tax Is Vat?');
 SELECT localization.add_localized_resource('ScrudResource', '', 'priority', 'Priority');
 SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_account_id', 'Purchase Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_discount_account_id', 'Purchase Discount Account Id');
@@ -4248,6 +4309,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'total_duration'
 SELECT localization.add_localized_resource('ScrudResource', '', 'total_sales', 'Total Sales');
 SELECT localization.add_localized_resource('ScrudResource', '', 'tran_code', 'Tran Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'tran_type', 'Tran Type');
+SELECT localization.add_localized_resource('ScrudResource', '', 'transaction_start_date', 'Transaction Start Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'unit', 'Unit');
 SELECT localization.add_localized_resource('ScrudResource', '', 'unit_code', 'Unit Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'unit_id', 'Unit Id');
@@ -4265,6 +4327,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'value_date', 'V
 SELECT localization.add_localized_resource('ScrudResource', '', 'verify_gl_transactions', 'Verify Gl Transactions');
 SELECT localization.add_localized_resource('ScrudResource', '', 'verify_purchase_transactions', 'Verify Purchase Transactions');
 SELECT localization.add_localized_resource('ScrudResource', '', 'verify_sales_transactions', 'Verify Sales Transactions');
+SELECT localization.add_localized_resource('ScrudResource', '', 'week_start_day', 'Week Start Day');
 SELECT localization.add_localized_resource('ScrudResource', '', 'weight_in_grams', 'Weight In Grams');
 SELECT localization.add_localized_resource('ScrudResource', '', 'width_in_centimeters', 'Width In Centimeters');
 SELECT localization.add_localized_resource('ScrudResource', '', 'zip_code', 'Zip Code');
@@ -4735,7 +4798,8 @@ SELECT localization.add_localized_resource('Titles', '', 'SelectUser', 'Select U
 SELECT localization.add_localized_resource('Titles', '', 'SelectYourBranch', 'Select Your Branch');
 SELECT localization.add_localized_resource('Titles', '', 'Send', 'Send');
 SELECT localization.add_localized_resource('Titles', '', 'Sent', 'Sent');
-SELECT localization.add_localized_resource('Titles', '', 'Shipper', 'Shipper');
+SELECT localization.add_localized_resource('Titles', '', 'Sent', 'Sent');
+SELECT localization.add_localized_resource('Titles', '', 'SetupEmail', 'Setup Email');
 SELECT localization.add_localized_resource('Titles', '', 'Shippers', 'Shippers');
 SELECT localization.add_localized_resource('Titles', '', 'ShippingAddress', 'Shipping Address');
 SELECT localization.add_localized_resource('Titles', '', 'ShippingAddressMaintenance', 'Shipping Address Maintenance');
@@ -4821,6 +4885,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Update', 'Update');
 SELECT localization.add_localized_resource('Titles', '', 'UpdatedOn', 'Updated On');
 SELECT localization.add_localized_resource('Titles', '', 'UpdateConsole', 'Update Console');
 SELECT localization.add_localized_resource('Titles', '', 'Upload', 'Upload');
+SELECT localization.add_localized_resource('Titles', '', 'UploadLogo', 'Upload Logo');
 SELECT localization.add_localized_resource('Titles', '', 'UploadAttachments', 'Upload Attachments');
 SELECT localization.add_localized_resource('Titles', '', 'UploadAttachmentsForThisTransaction', 'Upload Attachments for This Transaction');
 SELECT localization.add_localized_resource('Titles', '', 'Url', 'Url');
@@ -23353,10 +23418,7 @@ AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.refresh-materialized-views.sql --<--<--
-SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;
@@ -23463,3 +23525,6 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.refresh-materialized-views.sql --<--<--
+SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');

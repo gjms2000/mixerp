@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,12 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FirstTasks\Messaging.cs" />
     <Compile Include="FirstTasks\FiscalYear.cs" />
     <Compile Include="FirstTasks\Frequency.cs" />
     <Compile Include="FirstTasks\Shipper.cs" />
     <Compile Include="FirstTasks\Salesperson.cs" />
     <Compile Include="Inventory\Item.cs" />
     <Compile Include="Inventory\ItemGroup.cs" />
+    <Compile Include="Office\Logo.cs" />
     <Compile Include="Tax\SalesTax.cs" />
     <Compile Include="Tax\CountySalesTax.cs" />
     <Compile Include="Tax\StateSalesTax.cs" />

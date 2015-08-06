@@ -192,9 +192,10 @@ function isValidExtension(el) {
                 alert("Invalid file extension.");
                 el.value = "";
                 return false;
-            }
-        }
-    }
+            };
+        };
+    };
+
     return true;
 };
 

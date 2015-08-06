@@ -140,7 +140,7 @@ function initializeAjaxData() {
     processCallBackActions();
 
     loadPriceTypes();
-    loadParties();
+    loadParties(window.tranBook);
     loadPaymentTerms();
 
     partySelect.change(function () {
@@ -678,9 +678,12 @@ function loadItems() {
     });
 };
 
-function loadParties() {
+function loadParties(tranBook) {
     url = "/Modules/Inventory/Services/PartyData.asmx/GetParties";
-    ajaxDataBind(url, partySelect, null, partyCodeInputText.val());
+    var data = appendParameter("", "book", tranBook);
+
+    data = getData(data);
+    ajaxDataBind(url, partySelect, data, partyCodeInputText.val());
 };
 
 function loadPaymentTerms() {
