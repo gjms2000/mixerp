@@ -2100,6 +2100,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for No widget found.
+		/// </summary>
+		public static string NoWidgetFound 
+		{
+			get
+			{
+				return Get("NoWidgetFound");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Not defined for {0} users.
 		/// </summary>
 		public static string NotDefinedForNUsers 
@@ -12193,6 +12204,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Other Widgets
+		/// </summary>
+		public static string OtherWidgets 
+		{
+			get
+			{
+				return Get("OtherWidgets");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for PAN Number
 		/// </summary>
 		public static string PANNumber 
@@ -13480,6 +13502,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Save Order
+		/// </summary>
+		public static string SaveOrder 
+		{
+			get
+			{
+				return Get("SaveOrder");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Saving
 		/// </summary>
 		public static string Saving 
@@ -13564,6 +13597,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectForm");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Select a Group
+		/// </summary>
+		public static string SelectGroup 
+		{
+			get
+			{
+				return Get("SelectGroup");
 			}
 		}
 		
@@ -13663,6 +13707,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectYourBranch");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Selected Widgets
+		/// </summary>
+		public static string SelectedWidgets 
+		{
+			get
+			{
+				return Get("SelectedWidgets");
 			}
 		}
 		
@@ -14811,6 +14866,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for VAT
+		/// </summary>
+		public static string VAT 
+		{
+			get
+			{
+				return Get("VAT");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for VAT/GST
 		/// </summary>
 		public static string VATOrGST 
@@ -15170,6 +15236,39 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("WhichBank");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Widget
+		/// </summary>
+		public static string Widget 
+		{
+			get
+			{
+				return Get("Widget");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Widget Manager
+		/// </summary>
+		public static string WidgetManager 
+		{
+			get
+			{
+				return Get("WidgetManager");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Widgets
+		/// </summary>
+		public static string Widgets 
+		{
+			get
+			{
+				return Get("Widgets");
 			}
 		}
 		
