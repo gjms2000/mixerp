@@ -898,6 +898,12 @@
     <Content Include="Static\Templates\Email\Sales\Receipt.html" />
     <Content Include="Static\Templates\Email\Sales\Order.html" />
     <Content Include="Static\Templates\Email\Sales\Quotation.html" />
+    <Content Include="Stylesheets\report.rtl.css">
+      <DependentUpon>report.rtl.less</DependentUpon>
+    </Content>
+    <Content Include="Stylesheets\report.rtl.min.css">
+      <DependentUpon>report.rtl.css</DependentUpon>
+    </Content>
     <Content Include="Tests\all-tests.js">
       <DependentUpon>all-tests.js.bundle</DependentUpon>
     </Content>
@@ -1099,6 +1105,10 @@
     <Content Include="Scripts\semantic-ui\themes\default\assets\fonts\icons.ttf" />
     <Content Include="Scripts\semantic-ui\themes\default\assets\fonts\icons.woff" />
     <Content Include="Scripts\semantic-ui\themes\default\assets\fonts\icons.woff2" />
+    <Content Include="Stylesheets\report.rtl.css.map">
+      <DependentUpon>report.rtl.css</DependentUpon>
+    </Content>
+    <None Include="Stylesheets\report.rtl.less" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
