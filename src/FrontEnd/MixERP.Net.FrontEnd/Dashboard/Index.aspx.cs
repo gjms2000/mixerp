@@ -34,14 +34,13 @@ namespace MixERP.Net.FrontEnd.Dashboard
         {
             this.IsLandingPage = true;
         }
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            IEnumerable<Widget> widgets = Data.Core.Widget.GetWidgets(AppUsers.GetCurrentUserDB());
+            var widgets = Data.Core.Widget.GetDefaultWidgets(AppUsers.GetCurrentUserDB());
             this.LoadWidgets(widgets, this.WidgetPlaceholder, this.Page);
         }
 
-        public void LoadWidgets(IEnumerable<Widget> widgetModels, Control placeholder, TemplateControl page)
+        public void LoadWidgets(IEnumerable<DefaultWidgetSetupView> widgetModels, Control placeholder, TemplateControl page)
         {
             if (placeholder == null)
             {
@@ -58,23 +57,18 @@ namespace MixERP.Net.FrontEnd.Dashboard
                 return;
             }
 
-            var groups =
-                widgetModels.OrderBy(x => x.RowNumber).ThenBy(x => x.ColumnNumber).GroupBy(x => new {x.RowNumber});
-
-            foreach (var group in groups)
+            foreach (DefaultWidgetSetupView item in widgetModels.OrderBy(x => x.WidgetOrder))
             {
-                foreach (Widget item in group)
+                using (MixERPWidget widget = page.LoadControl(item.WidgetSource) as MixERPWidget)
                 {
-                    using (MixERPWidget widget = page.LoadControl(item.WidgetSource) as MixERPWidget)
+                    if (widget != null)
                     {
-                        if (widget != null)
-                        {
-                            placeholder.Controls.Add(widget);
-                            widget.OnControlLoad(widget, new EventArgs());
-                        }
+                        placeholder.Controls.Add(widget);
+                        widget.OnControlLoad(widget, new EventArgs());
                     }
                 }
             }
         }
+
     }
 }

@@ -18,6 +18,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Page Title="" Language="C#" MasterPageFile="~/BackendMaster.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="MixERP.Net.FrontEnd.Dashboard.Index" %>
+<%@ Import Namespace="MixERP.Net.i18n.Resources" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ScriptContentPlaceholder" runat="server">
 </asp:Content>
@@ -31,11 +32,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <div style="clear: both;"></div>
     <br/>
 
-    <div class="ui tiny buttons">
-        <button class="ui button">Save Position</button>
-        <div class="or"></div>
-        <button class="ui button">Widget Manager</button>
-    </div>
+    <a class="ui purple button" href="/Modules/WidgetManager.aspx"><%=Titles.WidgetManager %></a>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="BottomScriptContentPlaceholder" runat="server">
 </asp:Content>

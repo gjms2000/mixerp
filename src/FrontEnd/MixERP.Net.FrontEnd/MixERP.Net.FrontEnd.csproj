@@ -262,6 +262,10 @@
       <DependentUpon>User.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Services\WidgetManager.asmx.cs">
+      <DependentUpon>WidgetManager.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Site\Account\UserProfile.aspx.cs">
       <DependentUpon>UserProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -378,6 +382,7 @@
     <Content Include="Scripts\mixerp\core\browser.js" />
     <Content Include="Scripts\mixerp\master-page\notification.js" />
     <Content Include="Scripts\mixerp\master-page\menu.js" />
+    <Content Include="Scripts\Pages\Modules\WidgetManager.aspx.js" />
     <Content Include="Scripts\Pages\Modules\FirstSteps.aspx.js" />
     <Content Include="Scripts\semantic-ui\components\accordion.css" />
     <Content Include="Scripts\semantic-ui\components\accordion.js" />
@@ -638,6 +643,7 @@
     <Content Include="Services\Checklists.asmx" />
     <Content Include="Services\CreateDocument.asmx" />
     <Content Include="Services\Menu.asmx" />
+    <Content Include="Services\WidgetManager.asmx" />
     <Content Include="Static\Icons\bottom-16.png" />
     <Content Include="Static\Icons\calendar-16.png" />
     <Content Include="Static\Icons\checklist-16.png" />

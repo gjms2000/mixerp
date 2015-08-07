@@ -867,3 +867,88 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF
+    (
+        SELECT a.attname
+        FROM   pg_index i
+        JOIN   pg_attribute a ON a.attrelid = i.indrelid
+                             AND a.attnum = ANY(i.indkey)
+        WHERE  i.indrelid = 'core.widgets'::regclass
+        AND    i.indisprimary
+    ) = 'widget_id' THEN
+        ALTER TABLE core.widgets
+        DROP CONSTRAINT IF EXISTS widgets_pkey;
+
+        ALTER TABLE core.widgets
+        ADD PRIMARY KEY(widget_name);
+
+        ALTER TABLE core.widgets
+        DROP COLUMN IF EXISTS row_number;
+
+        ALTER TABLE core.widgets
+        DROP COLUMN IF EXISTS column_number;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'widget_groups'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.widget_groups
+        (
+            widget_group_name       national character varying(100) NOT NULL PRIMARY KEY,
+            is_default              boolean NOT NULL DEFAULT(false)
+        );
+
+        INSERT INTO core.widget_groups
+        SELECT 'Default', true;
+    END IF;
+    
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'widget_setup'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.widget_setup
+        (
+            widget_setup_id         SERIAL NOT NULL PRIMARY KEY,
+            widget_order            integer NOT NULL,
+            widget_group_name       national character varying(100) NOT NULL REFERENCES core.widget_groups,
+            widget_name             national character varying(100) NOT NULL REFERENCES core.widgets
+        );
+
+        CREATE INDEX widget_setup_widget_order_inx
+        ON core.widget_setup(widget_order);
+
+        INSERT INTO core.widget_setup(widget_order, widget_group_name, widget_name)
+        SELECT 1, 'Default', 'SalesByGeographyWidget' UNION ALL
+        SELECT 2, 'Default', 'SalesByOfficeWidget' UNION ALL
+        SELECT 3, 'Default', 'CurrentOfficeSalesByMonthWidget' UNION ALL
+        SELECT 4, 'Default', 'OfficeInformationWidget' UNION ALL
+        SELECT 5, 'Default', 'LinksWidget' UNION ALL
+        SELECT 6, 'Default', 'WorkflowWidget' UNION ALL
+        SELECT 7, 'Default', 'TopSellingProductOfAllTimeWidget' UNION ALL
+        SELECT 8, 'Default', 'TopSellingProductOfAllTimeCurrentWidget';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
