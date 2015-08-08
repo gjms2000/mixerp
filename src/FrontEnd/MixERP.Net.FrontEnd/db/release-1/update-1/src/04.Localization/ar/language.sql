@@ -1,6 +1,8 @@
 ﻿/********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
+
+Arabic   ar  العربية
 ********************************************************************************************************************************************************/
 DO
 $$
@@ -1422,3 +1424,33 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'RestrictedT
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'ReturnButtonUrlNull', 'لا يمكن العودة . لم يتم توفير رابط العودة.');
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'StartDateGreaterThanEndDate', 'تاريخ البدء لا يمكن أن يكون أكبر من تاريخ انتهاء.');
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPasswordIncorrect', 'اسم المستخدم أو كلمة المرور غير صحيحة.');
+/***********************************************************************************************************/
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'DateFormatYYYYMMDD', 'يوم/شهر/سنة');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'PercentageSymbol', '%');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'TransactionStartDateDescription', 'ادخل التاريخ الذي تريد بدء تسجيل المعاملات به في نظام MixERP.');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CountySalesTax', 'ضريبة مبيعات المقاطعة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'FIFO', 'طريقة الوارد أولاَ صادر أولاَ  (FIFO)');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Friday', 'الجمعة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Saturday', 'السبت');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Sunday', 'الاحد');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Monday', 'الاثنين');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Tuesday', 'الثلاثاء');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Wednesday', 'الاربعاء');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Thursday', 'الخميس');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'GlobalParameters', 'اعدادات عامة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'IncomeTaxRate', 'معدل ضريبة الدخل');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'InventoryAccountingSystem', 'المعالجة المحاسبية للمخزون');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'InventoryValuationMethod', 'طريقة تقييم المخزون');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'LIFO', 'طريقة الوارد أخيراَ صادر أولاَ (LIFO)');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MAVCO', 'طريقة متوسط التكلفة (MAVCO)');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'NonVAT', 'لا يخضع لضريبة القيمة المضافة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'OfficeLogo', 'شعار الشركة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'PeriodicInventory', 'الجرد الدوري');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'PerpetualInventory', 'الجرد المستمر');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'PrimarySalesTaxType', 'نوع ضريبة المبيعات الرئيسية');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'QuotationValidDays', 'مهلة طلب التسعير');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'StateSalesTax', 'ضريبة المبيعات العامة (الدولة)');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'TransactionStartDate', 'تاريخ بداية تسجيل المعاملات');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VATOrGST', 'VAT/GST');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VAT', 'ضريبة القيمة المضافة');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'WeekStartsOn', 'بداية الاسبوع');
