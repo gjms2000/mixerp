@@ -131,7 +131,7 @@ SELECT * FROM core.create_menu('Opening Inventory', '~/Modules/BackOffice/OTS/Op
 SELECT * FROM core.create_menu('Attachment Parameters', '~/Modules/BackOffice/OTS/AttachmentParameters.mix', 'OTSAP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Currencylayer Parameters', '~/Modules/BackOffice/OTS/CurrencylayerParameters.mix', 'OTSCLP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Database Parameters', '~/Modules/BackOffice/OTS/DatabaseParameters.mix', 'OTSDBP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Messaging Parameters', '~/Modules/BackOffice/OTS/MessagingParameters.mix', 'OTSMSG', 2, core.get_menu_id('OTS'));
+SELECT * FROM core.create_menu('SMTP Parameters', '~/Modules/BackOffice/OTS/SMTP.mix', 'OTSSMTP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('MixERP Parameters', '~/Modules/BackOffice/OTS/MixERPParameters.mix', 'OTSMIX', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('OpenExchangeRates Parameters', '~/Modules/BackOffice/OTS/OpenExchangeRatesParameters.mix', 'OTSOER', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('ScrudFactory Parameters', '~/Modules/BackOffice/OTS/ScrudFactoryParameters.mix', 'OTSSFP', 2, core.get_menu_id('OTS'));

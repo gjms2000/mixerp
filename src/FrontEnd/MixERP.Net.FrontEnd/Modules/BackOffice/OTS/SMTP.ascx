@@ -16,5 +16,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MessagingParameters.ascx.cs" Inherits="MixERP.Net.Core.Modules.BackOffice.OTS.MessagingParameters" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="SMTP.ascx.cs" Inherits="MixERP.Net.Core.Modules.BackOffice.OTS.SMTP" %>
 <asp:PlaceHolder runat="server" ID="ScrudPlaceholder"/>

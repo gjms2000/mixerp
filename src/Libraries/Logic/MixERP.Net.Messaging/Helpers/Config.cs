@@ -20,9 +20,11 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using MixERP.Net.Common;
 using MixERP.Net.Common.Helpers;
 using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Security;
 using System.Web.Hosting;
+using PetaPoco;
 
 namespace MixERP.Net.Messaging.Email.Helpers
 {
@@ -30,20 +32,24 @@ namespace MixERP.Net.Messaging.Email.Helpers
     {
         public Config(string catalog)
         {
-            this.Catalog = catalog;
-            this.Enabled = Conversion.TryCastBoolean(DbConfig.GetMessagingParameter(this.Catalog, "Enabled"));
-            this.FromName = DbConfig.GetMessagingParameter(this.Catalog, "FromDisplayName");
-            this.FromEmail = DbConfig.GetMessagingParameter(this.Catalog, "FromEmailAddress");
-            this.SmtpHost = DbConfig.GetMessagingParameter(this.Catalog, "SMTPHost");
-            this.EnableSsl = Conversion.TryCastBoolean(DbConfig.GetMessagingParameter(this.Catalog, "SMTPEnableSSL"));
-            this.SmtpPort = Conversion.TryCastInteger(DbConfig.GetMessagingParameter(this.Catalog, "SMTPPort"));
-            this.SmtpUsername = DbConfig.GetMessagingParameter(this.Catalog, "SMTPUserName");
-            this.SmtpUserPassword = GetSmtpUserPassword();
+            var smtp = this.GetSmtpConfig(catalog);
 
-            this.DeliveryMethod = GetSmtpDeliveryMethod();
-            this.PickupDirectory =
-                HostingEnvironment.MapPath(DbConfig.GetMessagingParameter(this.Catalog,
-                    "SpecifiedPickupDirectoryLocation"));
+            this.Catalog = catalog;
+            this.Enabled = smtp.Enabled;
+            this.FromName = smtp.FromDisplayName;
+            this.FromEmail = smtp.FromEmailAddress;
+            this.SmtpHost = smtp.SmpHost;
+            this.EnableSsl = smtp.SmtpEnableSsl;
+            this.SmtpPort = smtp.SmtpPort;
+            this.SmtpUsername = smtp.SmtpUsername;
+            this.SmtpUserPassword = GetSmtpUserPassword(smtp.SmtpPassword);
+            this.DeliveryMethod = SmtpDeliveryMethod.Network;
+        }
+
+        private Entities.Config.Smtp GetSmtpConfig(string catalog)
+        {
+            const string sql = "SELECT * FROM config.smtp WHERE enabled AND is_default LIMIT 1;";
+            return Factory.Get<Entities.Config.Smtp>(catalog, sql).FirstOrDefault();
         }
 
         public string Catalog { get; set; }
@@ -58,30 +64,9 @@ namespace MixERP.Net.Messaging.Email.Helpers
         public SecureString SmtpUserPassword { get; set; }
         public string PickupDirectory { get; set; }
 
-        private SmtpDeliveryMethod GetSmtpDeliveryMethod()
-        {
-            SmtpDeliveryMethod method;
-
-            if (Enum.TryParse(DbConfig.GetMessagingParameter(this.Catalog, "SmtpDeliveryMethod"), true,
-                out method))
-            {
-                return method;
-            }
-
-            return new SmtpDeliveryMethod();
-        }
-
-        private SecureString GetSmtpUserPassword()
+        private SecureString GetSmtpUserPassword(string password)
         {
             SecureString secureString = new SecureString();
-
-            if (this.GetSmtpDeliveryMethod() == SmtpDeliveryMethod.SpecifiedPickupDirectory)
-            {
-                return secureString;
-            }
-
-            string password = DbConfig.GetMessagingParameter(this.Catalog, "SMTPPassword");
-
             foreach (char c in password)
             {
                 secureString.AppendChar(c);

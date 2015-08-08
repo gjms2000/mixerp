@@ -971,9 +971,39 @@ END
 $$
 LANGUAGE plpgsql;
 
+DROP TABLE IF EXISTS config.messaging CASCADE;
 
-
-
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'config'
+        AND    c.relname = 'smtp'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE config.smtp
+        (
+            smtp_id                             SERIAL NOT NULL PRIMARY KEY,
+            configuration_name                  national character varying(256) NOT NULL UNIQUE,
+            enabled                             boolean NOT NULL DEFAULT(false),
+            from_display_name                   national character varying(256) NOT NULL,
+            from_email_address                  national character varying(256) NOT NULL,
+            smp_host                            national character varying(256) NOT NULL,
+            smtp_port                           public.integer_strict NOT NULL,
+            smtp_enable_ssl                     boolean NOT NULL DEFAULT(true),
+            smtp_username                       national character varying(256) NOT NULL,
+            smtp_password                       national character varying(256) NOT NULL,
+            audit_user_id                       integer NULL REFERENCES office.users(user_id),
+            audit_ts                            TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
@@ -3629,7 +3659,7 @@ SELECT * FROM core.create_menu('Opening Inventory', '~/Modules/BackOffice/OTS/Op
 SELECT * FROM core.create_menu('Attachment Parameters', '~/Modules/BackOffice/OTS/AttachmentParameters.mix', 'OTSAP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Currencylayer Parameters', '~/Modules/BackOffice/OTS/CurrencylayerParameters.mix', 'OTSCLP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Database Parameters', '~/Modules/BackOffice/OTS/DatabaseParameters.mix', 'OTSDBP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Messaging Parameters', '~/Modules/BackOffice/OTS/MessagingParameters.mix', 'OTSMSG', 2, core.get_menu_id('OTS'));
+SELECT * FROM core.create_menu('SMTP Parameters', '~/Modules/BackOffice/OTS/SMTP.mix', 'OTSSMTP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('MixERP Parameters', '~/Modules/BackOffice/OTS/MixERPParameters.mix', 'OTSMIX', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('OpenExchangeRates Parameters', '~/Modules/BackOffice/OTS/OpenExchangeRatesParameters.mix', 'OTSOER', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('ScrudFactory Parameters', '~/Modules/BackOffice/OTS/ScrudFactoryParameters.mix', 'OTSSFP', 2, core.get_menu_id('OTS'));
@@ -4063,6 +4093,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'compound_unit_i
 SELECT localization.add_localized_resource('ScrudResource', '', 'compound_units_chk', 'The base unit id cannot same as compare unit id.');
 SELECT localization.add_localized_resource('ScrudResource', '', 'compounding_frequency', 'Compounding Frequency');
 SELECT localization.add_localized_resource('ScrudResource', '', 'confidential', 'Confidential');
+SELECT localization.add_localized_resource('ScrudResource', '', 'configuration_name', 'ConfigurationName');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_address_line_1', 'Contact Address Line 1');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_address_line_2', 'Contact Address Line 2');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_cell', 'Contact Cell');
@@ -4147,6 +4178,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_name'
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_setup_code', 'Frequency Setup Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_setup_id', 'Frequency Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'from_days', 'From Days');
+SELECT localization.add_localized_resource('ScrudResource', '', 'from_display_name', 'FromDisplayName');
+SELECT localization.add_localized_resource('ScrudResource', '', 'from_email_address', 'FromEmailAddress');
 SELECT localization.add_localized_resource('ScrudResource', '', 'full_name', 'Full Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'gl_head', 'GL Head');
 SELECT localization.add_localized_resource('ScrudResource', '', 'gl_verification_limit', 'Gl Verification Limit');
@@ -4387,6 +4420,12 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_packag
 SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_package_shape_id', 'Shipping Package Shape Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_package_shape_name', 'Shipping Package Shape Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'slab_name', 'Slab Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smp_host', 'SmpHost');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_enable_ssl', 'SmtpEnableSsl');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_id', 'SmtpId');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_password', 'SmtpPassword');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_port', 'SmtpPort');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_username', 'SmtpUsername');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sst_number', 'SST Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'starts_from', 'Starts From');
 SELECT localization.add_localized_resource('ScrudResource', '', 'state', 'State');
@@ -4778,7 +4817,6 @@ SELECT localization.add_localized_resource('Titles', '', 'MergeBatchToGRN', 'Mer
 SELECT localization.add_localized_resource('Titles', '', 'MergeBatchToSalesDelivery', 'Merge Batch to Sales Delivery');
 SELECT localization.add_localized_resource('Titles', '', 'MergeBatchToSalesOrder', 'Merge Batch to Sales Order');
 SELECT localization.add_localized_resource('Titles', '', 'Message', 'Message');
-SELECT localization.add_localized_resource('Titles', '', 'MessagingParameters', 'Messaging Parameters');
 SELECT localization.add_localized_resource('Titles', '', 'MigratingFiles', 'Migrating Files');
 SELECT localization.add_localized_resource('Titles', '', 'MixERPDocumentation', 'MixERP Documentation');
 SELECT localization.add_localized_resource('Titles', '', 'MixERPLinks', 'MixERP Links');
@@ -4966,6 +5004,7 @@ SELECT localization.add_localized_resource('Titles', '', 'ShowCompact', 'Show Co
 SELECT localization.add_localized_resource('Titles', '', 'SignIn', 'Sign In');
 SELECT localization.add_localized_resource('Titles', '', 'SignOut', 'Sign Out');
 SELECT localization.add_localized_resource('Titles', '', 'SigningIn', 'Signing In');
+SELECT localization.add_localized_resource('Titles', '', 'SMTPConfiguration', 'SMTP Configuration');
 SELECT localization.add_localized_resource('Titles', '', 'SourceStore', 'Source Store');
 SELECT localization.add_localized_resource('Titles', '', 'Start', 'Start');
 SELECT localization.add_localized_resource('Titles', '', 'StateSalesTaxes', 'State Sales Taxes');
@@ -23012,18 +23051,6 @@ SELECT
 	value
 FROM
 config.db_parameters;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.messaging_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.messaging_scrud_view;
-
-CREATE VIEW config.messaging_scrud_view
-AS
-SELECT 
-	key,
-	value
-FROM
-config.messaging;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--

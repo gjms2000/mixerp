@@ -17,39 +17,29 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.Common.Models;
-using MixERP.Net.Framework.Controls;
-using MixERP.Net.FrontEnd.Base;
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.Common;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Framework.Controls;
+using MixERP.Net.FrontEnd.Base;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.Common;
+using MixERP.Net.WebJobs.BackupDatabase;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Admin
 {
     public partial class DatabaseBackup : MixERPUserControl
     {
-        private readonly PostgreSQLServer server = new PostgreSQLServer
-        {
-            BinDirectory = ConfigurationHelper.GetDbServerParameter("PostgreSQLBinDirectory"),
-            DatabaseBackupDirectory = ConfigurationHelper.GetDbServerParameter("DatabaseBackupDirectory"),
-            DatabaseName = AppUsers.GetCurrentUserDB(),
-            HostName = ConfigurationHelper.GetDbServerParameter("Server"),
-            PortNumber = Conversion.TryCastInteger(ConfigurationHelper.GetDbServerParameter("Port")),
-            UserId = ConfigurationHelper.GetDbServerParameter("UserId"),
-            Password = ConfigurationHelper.GetDbServerParameter("Password")
-        };
+        private readonly PostgreSQLServer server = new PostgreSQLServer();
 
         public override AccessLevel AccessLevel
         {
@@ -58,6 +48,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Admin
 
         public override void OnControlLoad(object sender, EventArgs e)
         {
+            this.server.DatabaseName = AppUsers.GetCurrentUserDB();
             this.CreateHeader(this.Placeholder1);
             this.CreateFormSegment(this.Placeholder1);
             this.CreateGridModal(this.Placeholder1);

@@ -10,7 +10,7 @@
 namespace MixERP.Net.Core.Modules.BackOffice.OTS {
     
     
-    public partial class MessagingParameters {
+    public partial class SMTP {
         
         /// <summary>
         /// ScrudPlaceholder control.

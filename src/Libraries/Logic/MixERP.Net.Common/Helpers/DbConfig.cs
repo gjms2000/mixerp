@@ -53,12 +53,6 @@ namespace MixERP.Net.Common.Helpers
             return Factory.Scalar<string>(catalog, sql, key);
         }
 
-        public static string GetMessagingParameter(string catalog, string key)
-        {
-            const string sql = "SELECT value FROM config.messaging WHERE key=@0";
-            return Factory.Scalar<string>(catalog, sql, key);
-        }
-
         public static string GetScrudParameter(string catalog, string key)
         {
             const string sql = "SELECT value FROM config.scrud_factory WHERE key=@0";

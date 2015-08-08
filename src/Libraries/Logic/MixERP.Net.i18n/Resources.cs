@@ -3969,6 +3969,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for ConfigurationName
+		/// </summary>
+		public static string configuration_name 
+		{
+			get
+			{
+				return Get("configuration_name");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Contact Address Line 1
 		/// </summary>
 		public static string contact_address_line_1 
@@ -4607,6 +4618,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Enabled
+		/// </summary>
+		public static string enabled 
+		{
+			get
+			{
+				return Get("enabled");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Ends On
 		/// </summary>
 		public static string ends_on 
@@ -4893,6 +4915,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for FromDisplayName
+		/// </summary>
+		public static string from_display_name 
+		{
+			get
+			{
+				return Get("from_display_name");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for FromEmailAddress
+		/// </summary>
+		public static string from_email_address 
+		{
+			get
+			{
+				return Get("from_email_address");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Full Name
 		/// </summary>
 		public static string full_name 
@@ -5164,6 +5208,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("is_debit");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Is Default
+		/// </summary>
+		public static string is_default 
+		{
+			get
+			{
+				return Get("is_default");
 			}
 		}
 		
@@ -7529,6 +7584,72 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("slab_name");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmpHost
+		/// </summary>
+		public static string smp_host 
+		{
+			get
+			{
+				return Get("smp_host");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmtpEnableSsl
+		/// </summary>
+		public static string smtp_enable_ssl 
+		{
+			get
+			{
+				return Get("smtp_enable_ssl");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmtpId
+		/// </summary>
+		public static string smtp_id 
+		{
+			get
+			{
+				return Get("smtp_id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmtpPassword
+		/// </summary>
+		public static string smtp_password 
+		{
+			get
+			{
+				return Get("smtp_password");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmtpPort
+		/// </summary>
+		public static string smtp_port 
+		{
+			get
+			{
+				return Get("smtp_port");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SmtpUsername
+		/// </summary>
+		public static string smtp_username 
+		{
+			get
+			{
+				return Get("smtp_username");
 			}
 		}
 		
@@ -11830,17 +11951,6 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Messaging Parameters
-		/// </summary>
-		public static string MessagingParameters 
-		{
-			get
-			{
-				return Get("MessagingParameters");
-			}
-		}
-		
-		/// <summary>
 		///   Localized string for Migrating Files
 		/// </summary>
 		public static string MigratingFiles 
@@ -13260,6 +13370,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for SMTP Configuration
+		/// </summary>
+		public static string SMTPConfiguration 
+		{
+			get
+			{
+				return Get("SMTPConfiguration");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for SST Number
 		/// </summary>
 		public static string SSTNumber 
@@ -14514,17 +14635,6 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Enter the exact date from when you want to record transactions in MixERP.
-		/// </summary>
-		public static string TransactionStartDateDescription 
-		{
-			get
-			{
-				return Get("TransactionStartDateDescription");
-			}
-		}
-		
-		/// <summary>
 		///   Localized string for TransactionStatement
 		/// </summary>
 		public static string TransactionStatement 
@@ -15397,6 +15507,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("AccessIsDenied");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Backup directory was not found.
+		/// </summary>
+		public static string BackupDirectoryNotFound 
+		{
+			get
+			{
+				return Get("BackupDirectoryNotFound");
 			}
 		}
 		

@@ -1,26 +1,19 @@
-﻿/********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
-
-This file is part of MixERP.
-
-MixERP is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, version 2 of the License.
-
-
-MixERP is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
-***********************************************************************************/
-
-namespace MixERP.Net.Common.Models
+﻿namespace MixERP.Net.WebJobs.BackupDatabase
 {
     public sealed class PostgreSQLServer
     {
+        public PostgreSQLServer()
+        {
+            this.BinDirectory = Config.GetDbServerParameter("PostgreSQLBinDirectory");
+            this.DatabaseBackupDirectory = Config.GetDbServerParameter("DatabaseBackupDirectory");
+            this.DatabaseName = Config.GetDbServerParameter("Database");
+            this.HostName = Config.GetDbServerParameter("Server");
+            this.PortNumber = int.Parse(Config.GetDbServerParameter("Port"));
+            this.UserId = Config.GetDbServerParameter("UserId");
+            this.Password = Config.GetDbServerParameter("Password");
+            this.Validate();
+        }
+
         public string BinDirectory { get; set; }
         public string DatabaseBackupDirectory { get; set; }
         public string DatabaseName { get; set; }

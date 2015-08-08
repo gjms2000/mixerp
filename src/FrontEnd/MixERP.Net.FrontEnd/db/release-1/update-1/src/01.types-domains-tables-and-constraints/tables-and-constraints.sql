@@ -950,5 +950,37 @@ END
 $$
 LANGUAGE plpgsql;
 
+DROP TABLE IF EXISTS config.messaging CASCADE;
 
-
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'config'
+        AND    c.relname = 'smtp'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE config.smtp
+        (
+            smtp_id                             SERIAL NOT NULL PRIMARY KEY,
+            configuration_name                  national character varying(256) NOT NULL UNIQUE,
+            enabled                             boolean NOT NULL DEFAULT(false),
+            is_default                          boolean NOT NULL DEFAULT(false),
+            from_display_name                   national character varying(256) NOT NULL,
+            from_email_address                  national character varying(256) NOT NULL,
+            smp_host                            national character varying(256) NOT NULL,
+            smtp_port                           public.integer_strict NOT NULL,
+            smtp_enable_ssl                     boolean NOT NULL DEFAULT(true),
+            smtp_username                       national character varying(256) NOT NULL,
+            smtp_password                       national character varying(256) NOT NULL,
+            audit_user_id                       integer NULL REFERENCES office.users(user_id),
+            audit_ts                            TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
