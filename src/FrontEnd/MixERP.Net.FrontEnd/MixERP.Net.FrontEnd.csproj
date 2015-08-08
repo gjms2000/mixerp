@@ -69,6 +69,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog">
       <HintPath>..\..\packages\Serilog.1.5.7\lib\net45\Serilog.dll</HintPath>
       <Private>True</Private>
@@ -95,6 +99,7 @@
     <Compile Include="Application\LogManager.cs" />
     <Compile Include="Application\Routes.cs" />
     <Compile Include="Application\UpdateManager.cs" />
+    <Compile Include="Application\WebJobManager.cs" />
     <Compile Include="BackendMaster.Master.cs">
       <DependentUpon>BackendMaster.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1177,6 +1182,10 @@
     <ProjectReference Include="..\..\Libraries\Server Controls\Project\MixERP.Net.WebControls.TransactionChecklist\MixERP.Net.WebControls.TransactionChecklist.csproj">
       <Project>{64490b89-b228-4188-8235-71744a94c9ae}</Project>
       <Name>MixERP.Net.WebControls.TransactionChecklist</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\WebJobs\MixERP.Net.WebJobs.BackupDatabase\MixERP.Net.WebJobs.BackupDatabase.csproj">
+      <Project>{c5846038-80fe-469e-8a64-3d3158db5fad}</Project>
+      <Name>MixERP.Net.WebJobs.BackupDatabase</Name>
     </ProjectReference>
     <ProjectReference Include="..\MixERP.Net.FrontEnd.Data\MixERP.Net.FrontEnd.Data.csproj">
       <Project>{a84ed536-8e44-4d32-a22d-26d9924a9481}</Project>

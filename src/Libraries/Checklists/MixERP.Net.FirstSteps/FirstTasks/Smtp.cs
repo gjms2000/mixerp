@@ -5,9 +5,9 @@ using PetaPoco;
 
 namespace MixERP.Net.FirstSteps.FirstTasks
 {
-    public class Messaging : FirstStep
+    public class Smtp : FirstStep
     {
-        public Messaging()
+        public Smtp()
         {
             this.Order = 181;
             this.Name = Titles.SetupEmail;
@@ -16,9 +16,9 @@ namespace MixERP.Net.FirstSteps.FirstTasks
 
             this.Description = Labels.SetupEmailDescription;
             this.Icon = "mail icon";
-            this.NavigateUrl = "/Modules/BackOffice/OTS/MessagingParameters.mix";
+            this.NavigateUrl = "/Modules/BackOffice/OTS/Smtp.mix";
 
-            if (this.IsSmtpEnabled())
+            if (this.CountSmtp() > 0)
             {
                 this.Status = true;
                 this.Message = Titles.OK;
@@ -28,12 +28,12 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             this.Message = Labels.SMTPIsDisabled;
         }
 
-        private bool IsSmtpEnabled()
+        private int CountSmtp()
         {
             string catalog = AppUsers.GetCurrentUserDB();
 
-            const string sql = "SELECT COUNT(*) FROM config.messaging WHERE key = 'Enabled' AND value = 'true';";
-            return Factory.Scalar<int>(catalog, sql).Equals(1);
+            const string sql = "SELECT COUNT(*) FROM config.smtp WHERE enabled;";
+            return Factory.Scalar<int>(catalog, sql);
         }
     }
 }

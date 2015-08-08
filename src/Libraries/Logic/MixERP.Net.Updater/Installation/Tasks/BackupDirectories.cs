@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Framework;
@@ -13,7 +12,7 @@ namespace MixERP.Net.Updater.Installation.Tasks
             : base(config)
         {
         }
-      
+
         public override string Description
         {
             get { return Titles.BackupDirectories; }

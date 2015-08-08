@@ -44,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -72,6 +78,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Serilog">
       <HintPath>..\..\..\..\packages\Serilog.1.5.7\lib\net45\Serilog.dll</HintPath>
@@ -115,11 +124,11 @@
     <Content Include="OTS\AttachmentParameters.ascx" />
     <Content Include="OTS\CurrencylayerParameters.ascx" />
     <Content Include="OTS\DatabaseParameters.ascx" />
-    <Content Include="OTS\MessagingParameters.ascx" />
     <Content Include="OTS\MixERPParameters.ascx" />
     <Content Include="OTS\OpenExchangeRatesParameters.ascx" />
     <Content Include="OTS\OpeningInventory.ascx" />
     <Content Include="OTS\ScrudFactoryParameters.ascx" />
+    <Content Include="OTS\SMTP.ascx" />
     <Content Include="OTS\Switches.ascx" />
     <Content Include="Policy\ApiAccess.ascx" />
     <Content Include="Scripts\Admin\ReportWriter.ascx..js" />
@@ -132,6 +141,9 @@
     <Content Include="Services\OTS\OpeningInventory.asmx" />
     <Content Include="Widgets\LinksWidget.ascx" />
     <Content Include="Widgets\OfficeInformationWidget.ascx" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -325,6 +337,7 @@
     <Compile Include="Industries.ascx.designer.cs">
       <DependentUpon>Industries.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Jobs\BackupJob.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\ReportBuilder.cs" />
     <Compile Include="Models\ReportDefinition.cs" />
@@ -357,13 +370,6 @@
     <Compile Include="OTS\DatabaseParameters.ascx.designer.cs">
       <DependentUpon>DatabaseParameters.ascx</DependentUpon>
     </Compile>
-    <Compile Include="OTS\MessagingParameters.ascx.cs">
-      <DependentUpon>MessagingParameters.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OTS\MessagingParameters.ascx.designer.cs">
-      <DependentUpon>MessagingParameters.ascx</DependentUpon>
-    </Compile>
     <Compile Include="OTS\MixERPParameters.ascx.cs">
       <DependentUpon>MixERPParameters.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -391,6 +397,13 @@
     </Compile>
     <Compile Include="OTS\ScrudFactoryParameters.ascx.designer.cs">
       <DependentUpon>ScrudFactoryParameters.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="OTS\SMTP.ascx.cs">
+      <DependentUpon>SMTP.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OTS\SMTP.ascx.designer.cs">
+      <DependentUpon>SMTP.ascx</DependentUpon>
     </Compile>
     <Compile Include="OTS\Switches.ascx.cs">
       <DependentUpon>Switches.ascx</DependentUpon>
@@ -615,6 +628,10 @@
     <ProjectReference Include="..\..\..\..\Libraries\Server Controls\Project\MixERP.Net.WebControls.StockTransactionView\MixERP.Net.WebControls.StockTransactionViewFactory.csproj">
       <Project>{E82752DA-F0D2-4987-B011-6B2623937DEA}</Project>
       <Name>MixERP.Net.WebControls.StockTransactionViewFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\WebJobs\MixERP.Net.WebJobs.BackupDatabase\MixERP.Net.WebJobs.BackupDatabase.csproj">
+      <Project>{c5846038-80fe-469e-8a64-3d3158db5fad}</Project>
+      <Name>MixERP.Net.WebJobs.BackupDatabase</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MixERP.Net.FrontEnd.csproj">
       <Project>{ACE1017D-71BC-4417-A906-72C4B9C55823}</Project>

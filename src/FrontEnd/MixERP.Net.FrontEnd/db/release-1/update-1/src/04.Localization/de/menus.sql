@@ -6,7 +6,6 @@ SELECT core.create_menu_locale( 'UPD', 'de', 'Auf Updates prüfen');
 SELECT core.create_menu_locale( 'OTSCLP', 'de', 'Währungslayer Parameter');
 SELECT core.create_menu_locale( 'OTSDBP', 'de', 'Datenbank Parameter');
 SELECT core.create_menu_locale( 'SIT', 'de', 'Artikelgruppen');
-SELECT core.create_menu_locale( 'OTSMSG', 'de', 'Nachrichten Parameter');
 SELECT core.create_menu_locale( 'OTSMIX', 'de', 'MixERP parameter');
 SELECT core.create_menu_locale( 'OTSOER', 'de', 'Offene Wechselkurse Parameter');
 SELECT core.create_menu_locale( 'RET', 'de', 'Erklärung zum Bilanzgewinn');

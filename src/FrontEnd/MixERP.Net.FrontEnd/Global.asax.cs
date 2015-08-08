@@ -36,6 +36,7 @@ namespace MixERP.Net.FrontEnd
         private void Application_Start(object sender, EventArgs e)
         {
             LogManager.IntializeLogger();
+            WebJobManager.Register();
             UpdateManager.CheckForUpdates(this.Application);
             Routes.RegisterRoutes(RouteTable.Routes);
 

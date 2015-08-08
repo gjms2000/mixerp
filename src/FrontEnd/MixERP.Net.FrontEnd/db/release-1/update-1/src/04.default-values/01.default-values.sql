@@ -22,21 +22,6 @@ END
 $$
 LANGUAGE plpgsql;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM config.messaging WHERE key='Enabled') THEN
-        INSERT INTO config.messaging
-        SELECT 'Enabled', 'false';
-    END IF;
-
-    IF NOT EXISTS(SELECT 1 FROM config.messaging WHERE key='ReplyToEmailAddress') THEN
-        INSERT INTO config.messaging
-        SELECT 'ReplyToEmailAddress', 'info@mixof.org';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
 
 DO
 $$

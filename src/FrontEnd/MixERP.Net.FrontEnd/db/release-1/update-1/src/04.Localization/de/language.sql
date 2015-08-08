@@ -1021,7 +1021,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToG
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToSalesDelivery', 'Stapel mit Ausslieferung zusammenführen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToSalesOrder', 'Stapel mit Kundenbestellunng zusammenführen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'Message', 'Nachricht');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MessagingParameters', 'Nachrichten Parameter');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MigratingFiles', 'Files Migrieren');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MixERPDocumentation', 'MixERP Dokumentation');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MixERPLinks', 'MixERP-Links');
