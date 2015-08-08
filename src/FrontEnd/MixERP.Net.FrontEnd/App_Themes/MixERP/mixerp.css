@@ -444,10 +444,10 @@ table.borderless td {
   border: none;
 }
 /*Semantic UI Override Start */
-td input,
+td input[type=text],
 .fields input,
 .button,
-input[readonly] {
+input[type=text][readonly] {
   height: 30px!important;
 }
 .inline .checkbox {

@@ -27,7 +27,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 {
     internal static class ScrudRadioButtonList
     {
-        internal static void AddRadioButtonList(HtmlTable htmlTable, string resourceClassName, string columnName,
+        internal static void AddRadioButtonList(HtmlTable htmlTable, string resourceClassName, string columnName, string label, string description,
             bool isNullable, string keys, string values, string selectedValue, string errorCssClass, bool disabled)
         {
             if (htmlTable == null)
@@ -35,11 +35,18 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
                 return;
             }
 
-            using (
-                RadioButtonList radioButtonList = GetRadioButtonList(columnName + "_radiobuttonlist", keys, values,
-                    selectedValue))
+            using (RadioButtonList radioButtonList = GetRadioButtonList(columnName + "_radiobuttonlist", keys, values, selectedValue))
             {
-                string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    radioButtonList.CssClass += " activating element";
+                    radioButtonList.Attributes.Add("data-content", description);
+                }
+
+                if (string.IsNullOrWhiteSpace(label))
+                {
+                    label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                }
 
                 radioButtonList.Enabled = !disabled;
 

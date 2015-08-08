@@ -34,16 +34,25 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
     internal static class ScrudDropDownList
     {
         internal static void AddDropDownList(string catalog, HtmlTable container, string resourcePrefix,
-            string itemSelectorPath, string currentSchema, string currentTable, string columnName,
+            string itemSelectorPath, string currentSchema, string currentTable, string columnName, string label, string description,
             bool isNullable, string targetSchema, string targetTable,
             string targetColumn, string defaultValue, string displayFields, string displayViews,
             bool useDisplayViewsAsParent, string selectedValues, string errorCssClass, bool disabled,
             bool useLocalColumnInDisplayViews)
         {
-            string label = ScrudLocalizationHelper.GetResourceString(resourcePrefix, columnName);
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                label = ScrudLocalizationHelper.GetResourceString(resourcePrefix, columnName);
+            }
 
             using (DropDownList dropDownList = GetDropDownList(columnName + "_dropdownlist"))
             {
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    dropDownList.CssClass += " activating element";
+                    dropDownList.Attributes.Add("data-content", description);
+                }
+
                 if (disabled)
                 {
                     dropDownList.Attributes.Add("disabled", "disabled");

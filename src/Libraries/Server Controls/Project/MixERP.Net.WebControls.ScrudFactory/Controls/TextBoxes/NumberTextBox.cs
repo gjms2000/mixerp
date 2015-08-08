@@ -17,18 +17,20 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.ScrudFactory.Helpers;
 using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.ScrudFactory.Helpers;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
 {
     internal static class ScrudNumberTextBox
     {
-        internal static void AddNumberTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string defaultValue, bool isSerial, bool isNullable, int maxLength, string domain, string errorCssClass, bool disabled)
+        internal static void AddNumberTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string label, string description,
+            string defaultValue, bool isSerial, bool isNullable, int maxLength, string domain, string errorCssClass,
+            bool disabled)
         {
             if (htmlTable == null)
             {
@@ -42,9 +44,19 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
 
             using (TextBox textBox = ScrudTextBox.GetTextBox(columnName + "_textbox", maxLength))
             {
+
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    textBox.CssClass += " activating element";
+                    textBox.Attributes.Add("data-content", description);
+                }
+
                 using (CompareValidator numberValidator = GetNumberValidator(textBox, domain, errorCssClass))
                 {
-                    string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                    if (string.IsNullOrWhiteSpace(label))
+                    {
+                        label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                    }
 
                     if (!string.IsNullOrWhiteSpace(defaultValue))
                     {
@@ -64,9 +76,12 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                     {
                         if (!isNullable)
                         {
-                            using (RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox, errorCssClass))
+                            using (
+                                RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox,
+                                    errorCssClass))
                             {
-                                ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox, numberValidator, required);
+                                ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox,
+                                    numberValidator, required);
                                 return;
                             }
                         }
@@ -76,7 +91,6 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                 }
             }
         }
-
 
         private static CompareValidator GetNumberValidator(Control controlToValidate, string domain, string cssClass)
         {

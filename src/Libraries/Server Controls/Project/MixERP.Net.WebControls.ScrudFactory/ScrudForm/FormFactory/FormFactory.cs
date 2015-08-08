@@ -141,21 +141,6 @@ namespace MixERP.Net.WebControls.ScrudFactory
                         }
                     }
                 }
-
-                if (dataType.Equals("bytea"))
-                {
-                    using (
-                        FileUpload fileUpload =
-                            this.formContainer.FindControl(columnName + "_fileupload") as FileUpload)
-                    {
-                        if (fileUpload != null)
-                        {
-                            var file = ScrudFileUpload.UploadFile(this.Catalog, fileUpload);
-                            list.Add(new KeyValuePair<string, object>(columnName, file));
-                            this.imageColumn = columnName;
-                        }
-                    }
-                }
             }
             else
             {
@@ -226,7 +211,8 @@ namespace MixERP.Net.WebControls.ScrudFactory
 
 
                             ScrudFactoryHelper.AddField(this.Catalog, htmlTable, this.GetResourceClassName(),
-                                this.GetItemSelectorPath(), this.TableSchema, this.Table, columnName, defaultValue,
+                                this.GetItemSelectorPath(), this.TableSchema, this.Table, columnName, string.Empty, string.Empty,
+                                defaultValue,
                                 isSerial, isNullable, dataType,
                                 domain, maxLength, parentTableSchema, parentTable, parentTableColumn, this.DisplayFields,
                                 this.DisplayViews, this.UseDisplayViewsAsParents, this.SelectedValues,
@@ -249,7 +235,8 @@ namespace MixERP.Net.WebControls.ScrudFactory
                         }
 
                         ScrudFactoryHelper.AddField(this.Catalog, htmlTable, "",
-                            this.GetItemSelectorPath(), this.TableSchema, this.Table, field.FieldName, defaultValue,
+                            this.GetItemSelectorPath(), this.TableSchema, this.Table, field.FieldName, field.FieldLabel, field.Description,
+                            defaultValue,
                             false, true, field.DataType,
                             "", 100, "", "", "", this.DisplayFields,
                             this.DisplayViews, this.UseDisplayViewsAsParents, this.SelectedValues,

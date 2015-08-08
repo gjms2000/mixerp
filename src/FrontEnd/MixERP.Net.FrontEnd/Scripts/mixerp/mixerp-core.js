@@ -480,7 +480,7 @@ function logAjaxErrorMessage(xhr) {
     logError(getAjaxErrorMessage(xhr));
 };
 ///#source 1 1 /Scripts/mixerp/core/libraries/semantic-ui.js
-//Semantic UI Tab Support
+//Semantic UI
 $(document).ready(function () {
     var tabItems = $('.tabular .item');
 
@@ -495,6 +495,8 @@ $(document).ready(function () {
         buttons.removeClass("active");
         $(this).addClass("active");
     });
+
+    $('.activating.element').popup();
 });
 ///#source 1 1 /Scripts/mixerp/core/prototype/string.js
 if (!String.prototype.format) {

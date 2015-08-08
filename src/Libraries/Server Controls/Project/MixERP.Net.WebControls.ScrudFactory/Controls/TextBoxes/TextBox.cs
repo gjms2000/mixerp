@@ -17,17 +17,18 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.ScrudFactory.Helpers;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.ScrudFactory.Helpers;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
 {
     internal static class ScrudTextBox
     {
-        internal static void AddTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string dataType, string defaultValue, bool isNullable, int maxLength, string errorCssClass, bool disabled)
+        internal static void AddTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string label, string description,
+            string dataType, string defaultValue, bool isNullable, int maxLength, string errorCssClass, bool disabled)
         {
             if (htmlTable == null)
             {
@@ -48,7 +49,10 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
 
             using (TextBox textBox = GetTextBox(columnName + "_textbox", maxLength))
             {
-                string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                if (string.IsNullOrWhiteSpace(label))
+                {
+                    label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                }
 
 
                 if (dataType.ToUpperInvariant().Equals("COLOR"))
@@ -71,12 +75,20 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                     textBox.ReadOnly = true;
                 }
 
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    textBox.CssClass += " activating element";
+                    textBox.Attributes.Add("data-content", description);
+                }
+
                 textBox.Text = defaultValue;
 
 
                 if (!isNullable)
                 {
-                    using (RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox, errorCssClass))
+                    using (
+                        RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox,
+                            errorCssClass))
                     {
                         ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox, required);
                         return;
