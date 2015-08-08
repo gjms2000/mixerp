@@ -989,6 +989,7 @@ BEGIN
             smtp_id                             SERIAL NOT NULL PRIMARY KEY,
             configuration_name                  national character varying(256) NOT NULL UNIQUE,
             enabled                             boolean NOT NULL DEFAULT(false),
+            is_default                          boolean NOT NULL DEFAULT(false),
             from_display_name                   national character varying(256) NOT NULL,
             from_email_address                  national character varying(256) NOT NULL,
             smp_host                            national character varying(256) NOT NULL,
@@ -3690,21 +3691,6 @@ END
 $$
 LANGUAGE plpgsql;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM config.messaging WHERE key='Enabled') THEN
-        INSERT INTO config.messaging
-        SELECT 'Enabled', 'false';
-    END IF;
-
-    IF NOT EXISTS(SELECT 1 FROM config.messaging WHERE key='ReplyToEmailAddress') THEN
-        INSERT INTO config.messaging
-        SELECT 'ReplyToEmailAddress', 'info@mixof.org';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
 
 DO
 $$
@@ -4152,6 +4138,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'due_on_date', '
 SELECT localization.add_localized_resource('ScrudResource', '', 'effective_from', 'Effective From');
 SELECT localization.add_localized_resource('ScrudResource', '', 'elevated', 'Elevated');
 SELECT localization.add_localized_resource('ScrudResource', '', 'email', 'Email');
+SELECT localization.add_localized_resource('ScrudResource', '', 'enabled', 'Enabled');
 SELECT localization.add_localized_resource('ScrudResource', '', 'ends_on', 'Ends On');
 SELECT localization.add_localized_resource('ScrudResource', '', 'entity_id', 'Entity Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'entity_name', 'Entity Name');
@@ -4205,6 +4192,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'is_added', 'Is 
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_admin', 'Is Admin');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_cash', 'Is Cash');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_debit', 'Is Debit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'is_default', 'Is Default');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_employee', 'Is Employee');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exempt', 'Is Exempt');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exemption', 'Is Exemption');
@@ -5141,6 +5129,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Yes', 'Yes');
 SELECT localization.add_localized_resource('Titles', '', 'YourName', 'Your Name');
 SELECT localization.add_localized_resource('Titles', '', 'YourOffice', 'Your Office');
 SELECT localization.add_localized_resource('Warnings', '', 'AccessIsDenied', 'Access is denied.');
+SELECT localization.add_localized_resource('Warnings', '', 'BackupDirectoryNotFound', 'Backup directory was not found.');
 SELECT localization.add_localized_resource('Warnings', '', 'CannotCreateABackup', 'Sorry, cannot create a database backup at this time.');
 SELECT localization.add_localized_resource('Warnings', '', 'CannotCreateFlagTransactionTableNull', 'Cannot create or update flag. Transaction table was not provided.');
 SELECT localization.add_localized_resource('Warnings', '', 'CannotCreateFlagTransactionTablePrimaryKeyNull', 'Cannot create or update flag. Transaction table primary key was not provided.');
@@ -6273,7 +6262,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MergeBatchToG
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MergeBatchToSalesDelivery', 'دمج دفعة لتسليم المبيعات');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MergeBatchToSalesOrder', 'دمج دفعة لاوامر المبيعات');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Message', 'رسالة');
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MessagingParameters', 'معلمات الرسائل');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MigratingFiles', 'تحديث الملفات');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MixERPDocumentation', 'MixERP وثائق');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'MixERPLinks', 'MixERP روابط سريعة');
@@ -7788,7 +7776,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToG
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToSalesDelivery', 'Stapel mit Ausslieferung zusammenführen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MergeBatchToSalesOrder', 'Stapel mit Kundenbestellunng zusammenführen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'Message', 'Nachricht');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MessagingParameters', 'Nachrichten Parameter');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MigratingFiles', 'Files Migrieren');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MixERPDocumentation', 'MixERP Dokumentation');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'MixERPLinks', 'MixERP-Links');
@@ -8162,7 +8149,6 @@ SELECT core.create_menu_locale( 'UPD', 'de', 'Auf Updates prüfen');
 SELECT core.create_menu_locale( 'OTSCLP', 'de', 'Währungslayer Parameter');
 SELECT core.create_menu_locale( 'OTSDBP', 'de', 'Datenbank Parameter');
 SELECT core.create_menu_locale( 'SIT', 'de', 'Artikelgruppen');
-SELECT core.create_menu_locale( 'OTSMSG', 'de', 'Nachrichten Parameter');
 SELECT core.create_menu_locale( 'OTSMIX', 'de', 'MixERP parameter');
 SELECT core.create_menu_locale( 'OTSOER', 'de', 'Offene Wechselkurse Parameter');
 SELECT core.create_menu_locale( 'RET', 'de', 'Erklärung zum Bilanzgewinn');
