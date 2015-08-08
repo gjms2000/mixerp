@@ -546,7 +546,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'opport
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'opportunity_stage_id', 'معرف المرحلة الفرصة');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'opportunity_stage_name', 'اسم المرحلة الفرصة');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'pan_number', 'رقم PAN');
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'parent', 'الأصل');
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'parent', 'الحساب الرئيسي');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'parent_account_id', 'معرف الحساب الرئيسي');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'parent_account_master_id', 'المعرف  الحساب الرئيسي');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'parent_account_name', 'اسم الحساب الرئيسي');
@@ -1453,3 +1453,10 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'TransactionSt
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VATOrGST', 'VAT/GST');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VAT', 'ضريبة القيمة المضافة');
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'WeekStartsOn', 'بداية الاسبوع');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'EmailBody', '<h2>مرحبا,</h2><p>من فضلك اتطلع علي الملف المرفق.</p><p>شكرا لك.<br />{0}</p>');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'EmailSentConfirmation', 'تم ارسال بريد الكتروني الي {0}.');
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SetupEmail', 'إعدادات البريد الالكتروني');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SetupEmailDescription', 'اعدادات البريد الصادر غير مفعل. قم بضبط اعدادات البريد الصادر SMTP لارسال التنبيهات الي عملائك.');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SMTPIsDisabled', 'SMTP غير مفعل.');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogo', 'تحميل الشعار.');
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogoDescription', 'حمل شعار الشركة بصيغة   jpeg, gif, png, او bmp. هذا الشعار سيظهرعلي التقارير والمستندات الخاصة بالشركة.');
