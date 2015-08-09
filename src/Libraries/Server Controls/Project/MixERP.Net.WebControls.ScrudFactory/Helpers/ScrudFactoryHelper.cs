@@ -23,7 +23,6 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.ScrudFactory.Controls;
 using MixERP.Net.WebControls.ScrudFactory.Controls.ListControls;
 using MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes;
 
@@ -105,7 +104,8 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
         }
 
         internal static void AddField(string catalog, HtmlTable htmlTable, string resourceClassName,
-            string itemSelectorPath, string currentTableSchema, string currentTableName, string columnName,
+            string itemSelectorPath, string currentTableSchema, string currentTableName, string columnName, string label,
+            string description,
             string defaultValue, bool isSerial, bool isNullable,
             string dataType, string domain, int maxLength, string parentTableSchema, string parentTable,
             string parentTableColumn, string displayFields, string displayViews, bool useDisplayFieldAsParent,
@@ -130,44 +130,43 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
             {
                 if (ScrudTypes.Strings.Contains(dataType))
                 {
-                    ScrudTextBox.AddTextBox(htmlTable, resourceClassName, columnName, dataType, defaultValue, isNullable,
+                    ScrudTextBox.AddTextBox(htmlTable, resourceClassName, columnName, label, description, dataType,
+                        defaultValue, isNullable,
                         maxLength, errorCssClass, disabled);
                 }
 
                 if (ScrudTypes.Shorts.Contains(dataType) || ScrudTypes.Integers.Contains(dataType) ||
                     ScrudTypes.Longs.Contains(dataType))
                 {
-                    ScrudNumberTextBox.AddNumberTextBox(htmlTable, resourceClassName, columnName, defaultValue, isSerial,
+                    ScrudNumberTextBox.AddNumberTextBox(htmlTable, resourceClassName, columnName, label, description,
+                        defaultValue, isSerial,
                         isNullable, maxLength, domain, errorCssClass, disabled);
                 }
 
                 if (ScrudTypes.Decimals.Contains(dataType))
                 {
-                    ScrudDecimalTextBox.AddDecimalTextBox(htmlTable, resourceClassName, columnName, defaultValue,
+                    ScrudDecimalTextBox.AddDecimalTextBox(htmlTable, resourceClassName, columnName, label, description,
+                        defaultValue,
                         isNullable, maxLength, domain, errorCssClass, disabled);
                 }
 
                 if (ScrudTypes.Bools.Contains(dataType))
                 {
-                    ScrudRadioButtonList.AddRadioButtonList(htmlTable, resourceClassName, columnName, isNullable,
+                    ScrudRadioButtonList.AddRadioButtonList(htmlTable, resourceClassName, columnName, label, description,
+                        isNullable,
                         Titles.Yes + "," + Titles.No, "true,false", defaultValue, errorCssClass, disabled);
                 }
 
                 if (ScrudTypes.Dates.Contains(dataType))
                 {
-                    ScrudDateTextBox.AddDateTextBox(htmlTable, resourceClassName, columnName, defaultValue, isNullable,
+                    ScrudDateTextBox.AddDateTextBox(htmlTable, resourceClassName, columnName, label, description, defaultValue, isNullable,
                         errorCssClass, disabled);
-                }
-
-                if (ScrudTypes.Files.Contains(dataType))
-                {
-                    ScrudFileUpload.AddFileUpload(htmlTable, resourceClassName, columnName, isNullable, errorCssClass);
                 }
             }
             else
             {
-                ScrudDropDownList.AddDropDownList(catalog, htmlTable, resourceClassName, itemSelectorPath, 
-                    currentTableSchema, currentTableName, columnName,
+                ScrudDropDownList.AddDropDownList(catalog, htmlTable, resourceClassName, itemSelectorPath,
+                    currentTableSchema, currentTableName, columnName, label, description,
                     isNullable, parentTableSchema, parentTable, parentTableColumn, defaultValue, displayFields,
                     displayViews, useDisplayFieldAsParent, selectedValues, errorCssClass, disabled,
                     useLocalColumnInDisplayViews);

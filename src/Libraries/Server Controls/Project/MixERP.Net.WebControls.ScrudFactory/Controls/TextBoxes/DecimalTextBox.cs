@@ -17,21 +17,25 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.ScrudFactory.Helpers;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.ScrudFactory.Helpers;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
 {
     internal static class ScrudDecimalTextBox
     {
-        internal static void AddDecimalTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string defaultValue, bool isNullable, int maxLength, string domain, string errorCssClass, bool disabled)
+        internal static void AddDecimalTextBox(HtmlTable htmlTable, string resourceClassName, string columnName, string label, string description,
+            string defaultValue, bool isNullable, int maxLength, string domain, string errorCssClass, bool disabled)
         {
             using (TextBox textBox = ScrudTextBox.GetTextBox(columnName + "_textbox", maxLength))
             {
-                string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                if (string.IsNullOrWhiteSpace(label))
+                {
+                    label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
+                }
 
                 using (CompareValidator validator = GetDecimalValidator(textBox, domain, errorCssClass))
                 {
@@ -39,10 +43,18 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                     textBox.ReadOnly = disabled;
                     textBox.CssClass = "decimal";
 
+                    if (!string.IsNullOrWhiteSpace(description))
+                    {
+                        textBox.CssClass += " activating element";
+                        textBox.Attributes.Add("data-content", description);
+                    }
+
                     if (!isNullable)
                     {
-                        RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox, errorCssClass);
-                        ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox, validator, required);
+                        RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox,
+                            errorCssClass);
+                        ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox, validator,
+                            required);
                         return;
                     }
 

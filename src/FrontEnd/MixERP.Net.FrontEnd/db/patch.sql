@@ -1110,7 +1110,7 @@ CREATE FUNCTION core.get_custom_field_setup_id_by_table_name
     _table_name national character varying(100),
     _field_name national character varying(100)
 )
-RETURNS national character varying(100)
+RETURNS integer
 AS
 $$
 BEGIN
@@ -3719,6 +3719,7 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--

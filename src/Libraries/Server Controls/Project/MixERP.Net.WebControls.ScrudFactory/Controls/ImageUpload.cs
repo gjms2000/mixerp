@@ -31,7 +31,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
 {
     internal static class ScrudFileUpload
     {
-        public static void AddFileUpload(HtmlTable htmlTable, string resourceClassName, string columnName,
+        private static void AddFileUpload(HtmlTable htmlTable, string resourceClassName, string columnName,
             bool isNullable, string errorCssClass)
         {
             string label = ScrudLocalizationHelper.GetResourceString(resourceClassName, columnName);
@@ -53,7 +53,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
             ScrudFactoryHelper.AddRow(htmlTable, label, fileUpload, validator);
         }
 
-        public static string UploadFile(string catalog, FileUpload fileUpload)
+        private static string UploadFile(string catalog, FileUpload fileUpload)
         {
             if (fileUpload == null)
             {

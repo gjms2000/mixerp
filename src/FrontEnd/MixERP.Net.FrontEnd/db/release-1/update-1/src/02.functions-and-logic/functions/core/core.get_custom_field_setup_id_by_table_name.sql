@@ -11,7 +11,7 @@ CREATE FUNCTION core.get_custom_field_setup_id_by_table_name
     _table_name national character varying(100),
     _field_name national character varying(100)
 )
-RETURNS national character varying(100)
+RETURNS integer
 AS
 $$
 BEGIN

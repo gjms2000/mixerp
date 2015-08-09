@@ -141,29 +141,30 @@ function loadTree(menuId, callback) {
         localStorage["menuId"] = menuId;
     };
 
-    $.each(menus, function (i, v) {
+
+    $.each(menus, function () {
         var items;
         var li;
 
         if (menuId === 0) {
-            items = getItems(v.Children);
+            items = getItems(this.Children);
             li = sprintf("<li id='node%s'>" +
                 "<a id='anchorNode%1$s' href='javascript:void(0);' title='%s'>%2$s</a>" +
                 "%s" +
                 "</li>",
-                v.Menu.MenuId,
-                v.Menu.MenuText,
+                this.Menu.MenuId,
+                this.Menu.MenuText,
                 items);
             treeData.append(li);
         } else {
-            if (v.Menu.MenuId === menuId) {
-                items = getItems(v.Children);
+            if (this.Menu.MenuId === menuId) {
+                items = getItems(this.Children);
                 li = sprintf("<li id='node%s'>" +
                     "<a id='anchorNode%1$s' href='javascript:void(0);' title='%s'>%2$s</a>" +
                     "%s" +
                     "</li>",
-                    v.Menu.MenuId,
-                    v.Menu.MenuText,
+                    this.Menu.MenuId,
+                    this.Menu.MenuText,
                     items);
                 treeData.append(li);
 
@@ -181,6 +182,7 @@ function loadTree(menuId, callback) {
 };
 
 function getItems(nav) {
+
     var menu = "";
     $.each(nav, function (i, v) {
         if (i === 0) {

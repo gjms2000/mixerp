@@ -1,4 +1,4 @@
-//Semantic UI Tab Support
+//Semantic UI
 $(document).ready(function () {
     var tabItems = $('.tabular .item');
 
@@ -13,4 +13,6 @@ $(document).ready(function () {
         buttons.removeClass("active");
         $(this).addClass("active");
     });
+
+    $('.activating.element').popup();
 });

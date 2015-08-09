@@ -89,7 +89,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
                         this.cancelButton.ID = "CancelButton";
                         this.cancelButton.Text = Titles.Cancel;
                         this.cancelButton.CausesValidation = false;
-                        this.cancelButton.OnClientClick = "$('#FormPanel').hide(500); $('#GridPanel').show(500);";
+                        this.cancelButton.OnClientClick = "$('#FormPanel').hide(500); $('#GridPanel').addClass('ui loading segment').show(500);";
                         this.cancelButton.Click += this.CancelButton_Click;
                         this.cancelButton.CssClass = this.GetButtonCssClass();
 

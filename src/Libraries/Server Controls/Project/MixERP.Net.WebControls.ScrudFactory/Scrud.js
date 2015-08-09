@@ -57,9 +57,13 @@ var scrudConfirmAction = function () {
             retVal = true;
             if (customFormUrl && keyColumn) {
                 window.location = customFormUrl + "?" + keyColumn + "=" + selectedItemValue;
-            }
-        }
-    }
+            };
+
+            $("#GridPanel").addClass("ui segment loading");
+        };
+    };
+
+    
     return retVal;
 };
 
@@ -100,6 +104,7 @@ Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
     //Fired on each ASP.net AJAX request.
     scrudInitialize();
     initializeUploader();
+    $(".activating.element").popup();
 });
 
 $(document).ready(function () {
