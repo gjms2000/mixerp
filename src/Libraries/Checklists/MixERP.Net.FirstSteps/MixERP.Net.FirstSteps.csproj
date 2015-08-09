@@ -63,6 +63,7 @@
     <Compile Include="FirstTasks\Party.cs" />
     <Compile Include="Office\Store.cs" />
     <Compile Include="Office\CashRepository.cs" />
+    <Compile Include="UserManagement\VerificationPolicy.cs" />
     <Compile Include="UserManagement\MenuAccessPolicy.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -369,12 +369,16 @@
     <Content Include="Modules\web.config" />
     <Content Include="MixERP.Installation.config" />
     <Content Include="Modules\WidgetManager.aspx" />
+    <Content Include="plugins\wkhtmltopdf\wkhtmltoimage.exe" />
+    <Content Include="plugins\wkhtmltopdf\wkhtmltopdf.exe" />
+    <Content Include="plugins\wkhtmltopdf\wkhtmltox.dll" />
     <Content Include="PostSignIn.aspx" />
     <Content Include="Public\ApproveQuotation.aspx" />
     <Content Include="Reports\Export.html" />
     <Content Include="Resource\Configs\index.html" />
     <Content Include="Resource\Configs\Updater.config" />
     <Content Include="Resource\CustomReports\index.html" />
+    <Content Include="Resource\Documents\index.html" />
     <Content Include="Resource\index.html" />
     <Content Include="Resource\Static\Attachments\index.html" />
     <Content Include="Resource\Static\Emails\index.html" />
@@ -752,6 +756,8 @@
     <Content Include="App_Themes\MixERP\mixerp.css.map">
       <DependentUpon>mixerp.css</DependentUpon>
     </Content>
+    <Content Include="plugins\wkhtmltopdf\LICENSE" />
+    <Content Include="Resource\Temp\Public\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\colorpicker\.gitignore" />

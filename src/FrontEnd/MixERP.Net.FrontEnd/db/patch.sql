@@ -1006,6 +1006,43 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.email_queue'::regclass
+        AND    attname = 'transaction_master_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.email_queue
+        ADD COLUMN transaction_master_id bigint REFERENCES transactions.transaction_master;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.email_queue'::regclass
+        AND    attname = 'canceled'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.email_queue
+        ADD COLUMN canceled BOOLEAN NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
 (
@@ -1740,6 +1777,31 @@ BEGIN
     SELECT office.get_role_id_by_role_code('ADMN'), office.get_department_id_by_department_code('SUP'), _office_id, _user_name, _password, _admin_name, true
     RETURNING user_id INTO _user_id;
 
+    INSERT INTO policy.auto_verification_policy
+    (
+        user_id, 
+        verify_sales_transactions, 
+        sales_verification_limit,
+        verify_purchase_transactions,
+        purchase_verification_limit,
+        verify_gl_transactions,
+        gl_verification_limit,
+        effective_from,
+        ends_on,
+        is_active
+    )
+    SELECT 
+        _user_id,
+        true,
+        0,
+        true,
+        0,
+        true,
+        0,
+        _starts_from,
+        _ends_on,
+        true;
+        
     INSERT INTO core.fiscal_year(fiscal_year_code, fiscal_year_name, starts_from, ends_on, audit_user_id)
     SELECT _fiscal_year_code, _fiscal_year_name, _starts_from, _ends_on, _user_id;
 
@@ -1749,6 +1811,685 @@ BEGIN
 
     RETURN;
 END;
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.auto_verify.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.auto_verify
+(
+    _tran_id        bigint,
+    _office_id      integer
+) CASCADE;
+
+CREATE FUNCTION transactions.auto_verify
+(
+    _tran_id        bigint,
+    _office_id      integer
+)
+RETURNS VOID
+VOLATILE
+AS
+$$
+    DECLARE _transaction_master_id          bigint;
+    DECLARE _transaction_posted_by          integer;
+    DECLARE _verifier                       integer;
+    DECLARE _status                         integer;
+    DECLARE _reason                         national character varying(128);
+    DECLARE _rejected                       smallint=-3;
+    DECLARE _closed                         smallint=-2;
+    DECLARE _withdrawn                      smallint=-1;
+    DECLARE _unapproved                     smallint = 0;
+    DECLARE _auto_approved                  smallint = 1;
+    DECLARE _approved                       smallint=2;
+    DECLARE _book                           text;
+    DECLARE _auto_verify_sales              boolean;
+    DECLARE _sales_verification_limit       public.money_strict2;
+    DECLARE _auto_verify_purchase           boolean;
+    DECLARE _purchase_verification_limit    public.money_strict2;
+    DECLARE _auto_verify_gl                 boolean;
+    DECLARE _gl_verification_limit          public.money_strict2;
+    DECLARE _posted_amount                  public.money_strict2;
+    DECLARE _auto_verification              boolean=true;
+    DECLARE _has_policy                     boolean=false;
+    DECLARE _voucher_date                   date;
+    DECLARE _value_date                     date=transactions.get_value_date(_office_id);
+BEGIN
+    _transaction_master_id := $1;
+
+    SELECT
+        transactions.transaction_master.book,
+        transactions.transaction_master.value_date,
+        transactions.transaction_master.user_id
+    INTO
+        _book,
+        _voucher_date,
+        _transaction_posted_by  
+    FROM
+    transactions.transaction_master
+    WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id;
+
+    IF(_voucher_date <> _value_date) THEN
+        RETURN;
+    END IF;
+
+    _verifier := office.get_sys_user_id();
+    _status := 1;
+    _reason := 'Automatically verified by workflow.';
+
+    IF EXISTS
+    (
+        SELECT 1 FROM policy.voucher_verification_policy    
+        WHERE user_id=_verifier
+        AND is_active=true
+        AND now() >= effective_from
+        AND now() <= ends_on
+    ) THEN
+        RAISE INFO 'A sys cannot have a verification policy defined.';
+        RETURN;
+    END IF;
+    
+    SELECT
+        SUM(amount_in_local_currency)
+    INTO
+        _posted_amount
+    FROM
+        transactions.transaction_details
+    WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
+    AND transactions.transaction_details.tran_type='Cr';
+
+
+    SELECT
+        true,
+        verify_sales_transactions,
+        sales_verification_limit,
+        verify_purchase_transactions,
+        purchase_verification_limit,
+        verify_gl_transactions,
+        gl_verification_limit
+    INTO
+        _has_policy,
+        _auto_verify_sales,
+        _sales_verification_limit,
+        _auto_verify_purchase,
+        _purchase_verification_limit,
+        _auto_verify_gl,
+        _gl_verification_limit
+    FROM
+    policy.auto_verification_policy
+    WHERE user_id=_transaction_posted_by
+    AND office_id = _office_id
+    AND is_active=true
+    AND now() >= effective_from
+    AND now() <= ends_on;
+
+
+
+    IF(lower(_book) LIKE 'sales%') THEN
+        IF(_auto_verify_sales = false) THEN
+            _auto_verification := false;
+        END IF;
+        IF(_auto_verify_sales = true) THEN
+            IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::public.money_strict2) THEN
+                _auto_verification := false;
+            END IF;
+        END IF;         
+    END IF;
+
+
+    IF(lower(_book) LIKE 'purchase%') THEN
+        IF(_auto_verify_purchase = false) THEN
+            _auto_verification := false;
+        END IF;
+        IF(_auto_verify_purchase = true) THEN
+            IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::public.money_strict2) THEN
+                _auto_verification := false;
+            END IF;
+        END IF;         
+    END IF;
+
+
+    IF(lower(_book) LIKE 'journal%') THEN
+        IF(_auto_verify_gl = false) THEN
+            _auto_verification := false;
+        END IF;
+        IF(_auto_verify_gl = true) THEN
+            IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::public.money_strict2) THEN
+                _auto_verification := false;
+            END IF;
+        END IF;         
+    END IF;
+
+    IF(_has_policy=true) THEN
+        IF(_auto_verification = true) THEN
+            UPDATE transactions.transaction_master
+            SET 
+                last_verified_on = now(),
+                verified_by_user_id=_verifier,
+                verification_status_id=_status,
+                verification_reason=_reason
+            WHERE
+                transactions.transaction_master.transaction_master_id=_transaction_master_id
+            OR
+                transactions.transaction_master.cascading_tran_id=_transaction_master_id;
+
+            PERFORM transactions.create_recurring_invoices(_transaction_master_id);
+        END IF;
+    ELSE
+        RAISE NOTICE 'No auto verification policy found for this user.';
+    END IF;
+    RETURN;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+/**************************************************************************************************************************
+--------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------
+'########::'##:::::::'########:::'######:::'##::::'##:'##::: ##:'####:'########::::'########:'########::'######::'########:
+ ##.... ##: ##::::::: ##.... ##:'##... ##:: ##:::: ##: ###:: ##:. ##::... ##..:::::... ##..:: ##.....::'##... ##:... ##..::
+ ##:::: ##: ##::::::: ##:::: ##: ##:::..::: ##:::: ##: ####: ##:: ##::::: ##:::::::::: ##:::: ##::::::: ##:::..::::: ##::::
+ ########:: ##::::::: ########:: ##::'####: ##:::: ##: ## ## ##:: ##::::: ##:::::::::: ##:::: ######:::. ######::::: ##::::
+ ##.....::: ##::::::: ##.....::: ##::: ##:: ##:::: ##: ##. ####:: ##::::: ##:::::::::: ##:::: ##...:::::..... ##:::: ##::::
+ ##:::::::: ##::::::: ##:::::::: ##::: ##:: ##:::: ##: ##:. ###:: ##::::: ##:::::::::: ##:::: ##:::::::'##::: ##:::: ##::::
+ ##:::::::: ########: ##::::::::. ######:::. #######:: ##::. ##:'####:::: ##:::::::::: ##:::: ########:. ######::::: ##::::
+..:::::::::........::..::::::::::......:::::.......:::..::::..::....:::::..:::::::::::..:::::........:::......::::::..:::::
+--------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------
+**************************************************************************************************************************/
+
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_sales_test1();
+
+CREATE FUNCTION unit_tests.auto_verify_sales_test1()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE _book_name                              national character varying(48)='Sales.Direct';
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _cost_center_id                         integer;
+    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
+    DECLARE _statement_reference                    text='Plpgunit test was here.';
+    DECLARE _is_credit                              boolean=false;
+    DECLARE _payment_term_id                        integer;
+    DECLARE _party_code                             national character varying(12);
+    DECLARE _price_type_id                          integer;
+    DECLARE _salesperson_id                         integer;
+    DECLARE _shipper_id                             integer;
+    DECLARE _shipping_address_code                  national character varying(12)='';
+    DECLARE _store_id                               integer;
+    DECLARE _is_non_taxable_sales                   boolean=true;
+    DECLARE _details                                transactions.stock_detail_type[];
+    DECLARE _attachments                            core.attachment_type[];
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+    _value_date         := transactions.get_value_date(_office_id);
+    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
+    _payment_term_id    := core.get_payment_term_id_by_payment_term_code('dummy-pt01');
+    _party_code         := 'dummy-pr01';
+    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
+    _salesperson_id     := core.get_salesperson_id_by_salesperson_code('dummy-sp01');
+    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
+    _store_id           := office.get_store_id_by_store_code('dummy-st01');
+
+    
+    _details            := ARRAY[
+                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',1800000, 0, 0, '', 0)::transactions.stock_detail_type,
+                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',1300000, 300, 0, '', 0)::transactions.stock_detail_type];
+             
+    
+    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
+
+
+    SELECT * FROM transactions.post_sales
+    (
+        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
+        _is_credit, _payment_term_id, _party_code, _price_type_id, _salesperson_id, _shipper_id,
+        _shipping_address_code,
+        _store_id,
+        _is_non_taxable_sales,
+        _details,
+        _attachments,
+        NULL
+    ) INTO _tran_id;
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id < 1) THEN
+        SELECT assert.fail('This transaction should have been verified.') INTO message;
+        RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_sales_test2();
+
+CREATE FUNCTION unit_tests.auto_verify_sales_test2()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE _book_name                              national character varying(48)='Sales.Direct';
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _cost_center_id                         integer;
+    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
+    DECLARE _statement_reference                    text='Plpgunit test was here.';
+    DECLARE _is_credit                              boolean=false;
+    DECLARE _payment_term_id                        integer;
+    DECLARE _party_code                             national character varying(12);
+    DECLARE _price_type_id                          integer;
+    DECLARE _salesperson_id                         integer;
+    DECLARE _shipper_id                             integer;
+    DECLARE _shipping_address_code                  national character varying(12)='';
+    DECLARE _store_id                               integer;
+    DECLARE _is_non_taxable_sales                   boolean=true;
+    DECLARE _details                                transactions.stock_detail_type[];
+    DECLARE _attachments                            core.attachment_type[];
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+    _value_date         := transactions.get_value_date(_office_id);
+    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
+    _payment_term_id    := core.get_payment_term_id_by_payment_term_code('dummy-pt01');
+    _party_code         := 'dummy-pr01';
+    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
+    _salesperson_id     := core.get_salesperson_id_by_salesperson_code('dummy-sp01');
+    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
+    _store_id           := office.get_store_id_by_store_code('dummy-st01');
+
+    
+    _details            := ARRAY[
+                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
+                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
+
+    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 100, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
+
+    SELECT * FROM transactions.post_sales
+    (
+        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
+        _is_credit, _payment_term_id, _party_code, _price_type_id, _salesperson_id, _shipper_id,
+        _shipping_address_code,
+        _store_id,
+        _is_non_taxable_sales,
+        _details,
+        _attachments,
+        NULL
+    ) INTO _tran_id;
+
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id > 0) THEN
+        SELECT assert.fail('This transaction should not have been verified.') INTO message;
+        RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+
+
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_purchase_test1();
+
+CREATE FUNCTION unit_tests.auto_verify_purchase_test1()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE _book_name                              national character varying(48)='Purchase.Direct';
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _cost_center_id                         integer;
+    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
+    DECLARE _statement_reference                    text='Plpgunit test was here.';
+    DECLARE _is_credit                              boolean=false;
+    DECLARE _payment_term_id                        integer;
+    DECLARE _party_code                             national character varying(12);
+    DECLARE _price_type_id                          integer;
+    DECLARE _shipper_id                             integer;
+    DECLARE _store_id                               integer;
+    DECLARE _is_non_taxable_sales                   boolean=true;
+    DECLARE _tran_ids                               bigint[];
+    DECLARE _details                                transactions.stock_detail_type[];
+    DECLARE _attachments                            core.attachment_type[];
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+    _value_date         := transactions.get_value_date(_office_id);
+    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
+    _party_code         := 'dummy-pr01';
+    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
+    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
+    _store_id           := office.get_store_id_by_store_code('dummy-st01');
+
+    
+    _details            := ARRAY[
+                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
+                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
+
+    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
+
+    SELECT * FROM transactions.post_purchase
+    (
+        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
+        _is_credit, _party_code, _price_type_id, _shipper_id,
+        _store_id, _tran_ids, _details, _attachments
+    ) INTO _tran_id;
+
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id < 1) THEN
+            SELECT assert.fail('This transaction should have been verified.') INTO message;
+            RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_purchase_test2();
+
+CREATE FUNCTION unit_tests.auto_verify_purchase_test2()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE _book_name                              national character varying(48)='Purchase.Direct';
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _cost_center_id                         integer;
+    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
+    DECLARE _statement_reference                    text='Plpgunit test was here.';
+    DECLARE _is_credit                              boolean=false;
+    DECLARE _payment_term_id                        integer;
+    DECLARE _party_code                             national character varying(12);
+    DECLARE _price_type_id                          integer;
+    DECLARE _shipper_id                             integer;
+    DECLARE _store_id                               integer;
+    DECLARE _is_non_taxable_sales                   boolean=true;
+    DECLARE _tran_ids                               bigint[];
+    DECLARE _details                                transactions.stock_detail_type[];
+    DECLARE _attachments                            core.attachment_type[];
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+    _value_date         := transactions.get_value_date(_office_id);
+    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
+    _party_code         := 'dummy-pr01';
+    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
+    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
+    _store_id           := office.get_store_id_by_store_code('dummy-st01');
+
+    
+    _details            := ARRAY[
+                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
+                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
+
+    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 100, true, 0, '1-1-2000', '1-1-2000', true);
+
+
+    SELECT * FROM transactions.post_purchase
+    (
+        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
+        _is_credit, _party_code, _price_type_id, _shipper_id,
+        _store_id, _tran_ids, _details, _attachments
+    ) INTO _tran_id;
+
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id > 0) THEN
+        SELECT assert.fail('This transaction should not have been verified.') INTO message;
+        RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_journal_test1();
+
+CREATE FUNCTION unit_tests.auto_verify_journal_test1()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _value_date         := transactions.get_value_date(_office_id);
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+
+    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
+
+    _tran_id := nextval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id'));
+
+    INSERT INTO transactions.transaction_master
+    (
+        transaction_master_id, 
+        transaction_counter, 
+        transaction_code, 
+        book, 
+        value_date, 
+        user_id, 
+        login_id, 
+        office_id, 
+        reference_number, 
+        statement_reference
+    )
+    SELECT 
+        _tran_id, 
+        transactions.get_new_transaction_counter(_value_date), 
+        transactions.get_transaction_code(_value_date, _office_id, _user_id, 1),
+        'Journal',
+        _value_date,
+        _user_id,
+        _login_id,
+        _office_id,
+        'REF# TEST',
+        'Thou art not able to see this.';
+
+
+
+    INSERT INTO transactions.transaction_details
+    (
+        transaction_master_id, 
+        value_date,
+        tran_type, 
+        account_id, 
+        statement_reference, 
+        currency_code, 
+        amount_in_currency, 
+        local_currency_code,    
+        er, 
+        amount_in_local_currency
+    )
+
+    SELECT _tran_id, _value_date, 'Cr', core.get_account_id_by_account_number('dummy-acc01'), '', 'NPR', 12000, 'NPR', 1, 12000 UNION ALL
+    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc02'), '', 'NPR', 3000, 'NPR', 1, 3000 UNION ALL
+    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc03'), '', 'NPR', 9000, 'NPR', 1, 9000;
+
+
+    PERFORM transactions.auto_verify(currval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id')), office.get_office_id_by_office_code('dummy-off01'));
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id < 1) THEN
+        SELECT assert.fail('This transaction should have been verified.') INTO message;
+        RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+DROP FUNCTION IF EXISTS unit_tests.auto_verify_journal_test2();
+
+CREATE FUNCTION unit_tests.auto_verify_journal_test2()
+RETURNS public.test_result
+AS
+$$
+    DECLARE _value_date                             date;
+    DECLARE _office_id                              integer;
+    DECLARE _user_id                                integer;
+    DECLARE _login_id                               bigint;
+    DECLARE _tran_id                                bigint;
+    DECLARE _verification_status_id                 smallint;
+    DECLARE message                                 test_result;
+BEGIN
+    PERFORM unit_tests.create_mock();
+    PERFORM unit_tests.sign_in_test();
+
+    _office_id          := office.get_office_id_by_office_code('dummy-off01');
+    _value_date         := transactions.get_value_date(_office_id);
+    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
+    _login_id           := office.get_login_id(_user_id);
+
+     PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 100, '1-1-2000', '1-1-2020', true);
+    _tran_id := nextval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id'));
+
+    INSERT INTO transactions.transaction_master
+    (
+        transaction_master_id, 
+        transaction_counter, 
+        transaction_code, 
+        book, 
+        value_date, 
+        user_id, 
+        login_id, 
+        office_id, 
+        reference_number, 
+        statement_reference
+    )
+    SELECT 
+        _tran_id, 
+        transactions.get_new_transaction_counter(_value_date), 
+        transactions.get_transaction_code(_value_date, _office_id, _user_id, 1),
+        'Journal',
+        _value_date,
+        _user_id,
+        _login_id,
+        _office_id,
+        'REF# TEST',
+        'Thou art not able to see this.';
+
+
+
+    INSERT INTO transactions.transaction_details
+    (
+        transaction_master_id,
+        value_date,
+        tran_type, 
+        account_id, 
+        statement_reference, 
+        currency_code, 
+        amount_in_currency, 
+        local_currency_code,    
+        er, 
+        amount_in_local_currency
+    )
+    SELECT _tran_id, _value_date, 'Cr', core.get_account_id_by_account_number('dummy-acc01'), '', 'NPR', 12000, 'NPR', 1, 12000 UNION ALL
+    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc02'), '', 'NPR', 3000, 'NPR', 1, 3000 UNION ALL
+    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc03'), '', 'NPR', 9000, 'NPR', 1, 9000;
+
+
+    PERFORM transactions.auto_verify(currval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id')), office.get_office_id_by_office_code('dummy-off01'));
+
+    SELECT verification_status_id
+    INTO _verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+
+    IF(_verification_status_id > 0) THEN
+            SELECT assert.fail('This transaction should not have been verified.') INTO message;
+            RETURN message;
+    END IF;
+
+    SELECT assert.ok('End of test.') INTO message;  
+    RETURN message;
+END
 $$
 LANGUAGE plpgsql;
 
@@ -3526,6 +4267,288 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM public.poco_get_table_function_definition('office', 'get_stores');
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.get_verification_status.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_verification_status
+(
+    _tran_id              BIGINT
+);
+
+CREATE FUNCTION transactions.get_verification_status
+(
+    _tran_id              BIGINT
+)
+RETURNS smallint
+STABLE
+AS
+$$
+BEGIN
+    RETURN verification_status_id
+    FROM transactions.transaction_master
+    WHERE transaction_master_id = _tran_id;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/triggers/transactions.verification_trigger.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.verification_trigger() CASCADE;
+CREATE FUNCTION transactions.verification_trigger()
+RETURNS TRIGGER
+AS
+$$
+    DECLARE _transaction_master_id bigint;
+    DECLARE _transaction_posted_by integer;
+    DECLARE _old_verifier integer;
+    DECLARE _old_status integer;
+    DECLARE _old_reason national character varying(128);
+    DECLARE _verifier integer;
+    DECLARE _status integer;
+    DECLARE _reason national character varying(128);
+    DECLARE _has_policy boolean;
+    DECLARE _is_sys boolean;
+    DECLARE _rejected smallint=-3;
+    DECLARE _closed smallint=-2;
+    DECLARE _withdrawn smallint=-1;
+    DECLARE _unapproved smallint = 0;
+    DECLARE _auto_approved smallint = 1;
+    DECLARE _approved smallint=2;
+    DECLARE _book text;
+    DECLARE _can_verify_sales_transactions boolean;
+    DECLARE _sales_verification_limit money_strict2;
+    DECLARE _can_verify_purchase_transactions boolean;
+    DECLARE _purchase_verification_limit money_strict2;
+    DECLARE _can_verify_gl_transactions boolean;
+    DECLARE _gl_verification_limit money_strict2;
+    DECLARE _can_verify_self boolean;
+    DECLARE _self_verification_limit money_strict2;
+    DECLARE _posted_amount money_strict2;
+BEGIN
+    IF TG_OP='DELETE' THEN
+        RAISE EXCEPTION 'Deleting a transaction is not allowed. Mark the transaction as rejected instead.'
+        USING ERRCODE='P5800';
+    END IF;
+
+    IF TG_OP='UPDATE' THEN
+        RAISE NOTICE 'Columns except the following will be ignored for this update: %', 'verified_by_user_id, verification_status_id, verification_reason.';
+
+        IF(OLD.transaction_master_id IS DISTINCT FROM NEW.transaction_master_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_master_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.transaction_counter IS DISTINCT FROM NEW.transaction_counter) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_counter".'
+            USING ERRCODE='P8502';            
+        END IF;
+
+        IF(OLD.transaction_code IS DISTINCT FROM NEW.transaction_code) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_code".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.book IS DISTINCT FROM NEW.book) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"book".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.value_date IS DISTINCT FROM NEW.value_date) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"value_date".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.transaction_ts IS DISTINCT FROM NEW.transaction_ts) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_ts".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.login_id IS DISTINCT FROM NEW.login_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"login_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.user_id IS DISTINCT FROM NEW.user_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"user_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.sys_user_id IS DISTINCT FROM NEW.sys_user_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"sys_user_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.office_id IS DISTINCT FROM NEW.office_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"office_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.cost_center_id IS DISTINCT FROM NEW.cost_center_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"cost_center_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        _transaction_master_id := OLD.transaction_master_id;
+        _book := OLD.book;
+        _old_verifier := OLD.verified_by_user_id;
+        _old_status := OLD.verification_status_id;
+        _old_reason := OLD.verification_reason;
+        _transaction_posted_by := OLD.user_id;      
+        _verifier := NEW.verified_by_user_id;
+        _status := NEW.verification_status_id;
+        _reason := NEW.verification_reason;
+        _is_sys := office.is_sys(_verifier);
+
+        
+        SELECT
+            SUM(amount_in_local_currency)
+        INTO
+            _posted_amount
+        FROM
+            transactions.transaction_details
+        WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
+        AND transactions.transaction_details.tran_type='Cr';
+
+
+        SELECT
+            true,
+            can_verify_sales_transactions,
+            sales_verification_limit,
+            can_verify_purchase_transactions,
+            purchase_verification_limit,
+            can_verify_gl_transactions,
+            gl_verification_limit,
+            can_self_verify,
+            self_verification_limit
+        INTO
+            _has_policy,
+            _can_verify_sales_transactions,
+            _sales_verification_limit,
+            _can_verify_purchase_transactions,
+            _purchase_verification_limit,
+            _can_verify_gl_transactions,
+            _gl_verification_limit,
+            _can_verify_self,
+            _self_verification_limit
+        FROM
+        policy.voucher_verification_policy
+        WHERE user_id=_verifier
+        AND is_active=true
+        AND now() >= effective_from
+        AND now() <= ends_on;
+
+        IF(_verifier IS NULL) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;     
+        
+        IF(_status != _withdrawn AND _has_policy = false) THEN
+            RAISE EXCEPTION 'Access is denied. You don''t have the right to verify the transaction.'
+            USING ERRCODE='P9016';
+        END IF;
+
+        IF(_status = _withdrawn AND _has_policy = false) THEN
+            IF(_transaction_posted_by != _verifier) THEN
+                RAISE EXCEPTION 'Access is denied. You don''t have the right to withdraw the transaction.'
+                USING ERRCODE='P9017';
+            END IF;
+        END IF;
+
+        IF(_status = _auto_approved AND _is_sys = false) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;
+
+
+        IF(_has_policy = false) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;
+
+
+        --Is trying verify self transaction.
+        IF(NEW.verified_by_user_id = NEW.user_id) THEN
+            IF(_can_verify_self = false) THEN
+                RAISE EXCEPTION 'Please ask someone else to verify the transaction you posted.'
+                USING ERRCODE='P5901';                
+            END IF;
+            IF(_can_verify_self = true) THEN
+                IF(_posted_amount > _self_verification_limit AND _self_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Self verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5910';
+                END IF;
+            END IF;
+        END IF;
+
+        IF(lower(_book) LIKE '%sales%') THEN
+            IF(_can_verify_sales_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_sales_transactions = true) THEN
+                IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Sales verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5911';
+                END IF;
+            END IF;         
+        END IF;
+
+
+        IF(lower(_book) LIKE '%purchase%') THEN
+            IF(_can_verify_purchase_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_purchase_transactions = true) THEN
+                IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Purchase verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5912';
+                END IF;
+            END IF;         
+        END IF;
+
+
+        IF(lower(_book) LIKE 'journal%') THEN
+            IF(_can_verify_gl_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_gl_transactions = true) THEN
+                IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'GL verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5913';
+                END IF;
+            END IF;         
+        END IF;
+
+        --This transaction is rejected. So, cancel all emails related to this transaction.
+        IF(_status < 0) THEN
+            UPDATE core.email_queue
+            SET canceled = true
+            WHERE transaction_master_id = _transaction_master_id;
+        END IF;
+        
+        NEW.last_verified_on := now();
+
+    END IF; 
+    RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER verification_update_trigger
+AFTER UPDATE
+ON transactions.transaction_master
+FOR EACH ROW 
+EXECUTE PROCEDURE transactions.verification_trigger();
+
+CREATE TRIGGER verification_delete_trigger
+BEFORE DELETE
+ON transactions.transaction_master
+FOR EACH ROW 
+EXECUTE PROCEDURE transactions.verification_trigger();
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/03.menus/0.menus.sql --<--<--
 --This table should not be localized.
 
@@ -3534,6 +4557,7 @@ SELECT * FROM core.create_menu('Purchase', '~/Modules/Purchase/Index.mix', 'PU',
 SELECT * FROM core.create_menu('Products & Items', '~/Modules/Inventory/Index.mix', 'ITM', 0, NULL);
 SELECT * FROM core.create_menu('Finance', '~/Modules/Finance/Index.mix', 'FI', 0, NULL);
 SELECT * FROM core.create_menu('Back Office', '~/Modules/BackOffice/Index.mix', 'BO', 0, NULL);
+SELECT * FROM core.create_menu('Settings', '#', 'SET', 0, NULL);
 
 
 SELECT * FROM core.create_menu('Sales & Quotation', NULL, 'SAQ', 1, core.get_menu_id('SA'));
@@ -3642,20 +4666,20 @@ SELECT * FROM core.create_menu('State Setup', '~/Modules/BackOffice/States.mix',
 SELECT * FROM core.create_menu('County Setup', '~/Modules/BackOffice/Counties.mix', 'SCTS', 2, core.get_menu_id('SOS'));
 SELECT * FROM core.create_menu('Fiscal Year Information', '~/Modules/BackOffice/FiscalYear.mix', 'SFY', 2, core.get_menu_id('SOS'));
 SELECT * FROM core.create_menu('Frequency & Fiscal Year Management', '~/Modules/BackOffice/Frequency.mix', 'SFR', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Policy Management', NULL, 'SPM', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('Policy Management', NULL, 'SPM', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Voucher Verification Policy', '~/Modules/BackOffice/Policy/VoucherVerification.mix', 'SVV', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Automatic Verification Policy', '~/Modules/BackOffice/Policy/AutoVerification.mix', 'SAV', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Menu Access Policy', '~/Modules/BackOffice/Policy/MenuAccess.mix', 'SMA', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('GL Access Policy', '~/Modules/BackOffice/Policy/GLAccess.mix', 'SAP', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Store Policy', '~/Modules/BackOffice/Policy/Store.mix', 'SSP', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Api Access Policy', '~/Modules/BackOffice/Policy/ApiAccess.mix', 'SAA', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Admin Tools', NULL, 'SAT', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('Admin Tools', NULL, 'SAT', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Database Statistics', '~/Modules/BackOffice/Admin/DatabaseStatistics.mix', 'DBSTAT', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Backup Database', '~/Modules/BackOffice/Admin/DatabaseBackup.mix', 'BAK', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Report Writer', '~/Modules/BackOffice/Admin/ReportWriter.mix', 'RW', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Change User Password', '~/Modules/BackOffice/Admin/ChangePassword.mix', 'PWD', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Check Updates', '~/Modules/BackOffice/Admin/CheckUpdates.mix', 'UPD', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('One Time Setup', NULL, 'OTS', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('One Time Setup', NULL, 'OTS', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Opening Inventory', '~/Modules/BackOffice/OTS/OpeningInventory.mix', 'OTSI', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Attachment Parameters', '~/Modules/BackOffice/OTS/AttachmentParameters.mix', 'OTSAP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Currencylayer Parameters', '~/Modules/BackOffice/OTS/CurrencylayerParameters.mix', 'OTSCLP', 2, core.get_menu_id('OTS'));
@@ -3953,6 +4977,7 @@ SELECT localization.add_localized_resource('Labels', '', 'UpdateOperationComplet
 SELECT localization.add_localized_resource('Labels', '', 'UploadLogo', 'Upload logo.');
 SELECT localization.add_localized_resource('Labels', '', 'UploadLogoDescription', 'Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.');
 SELECT localization.add_localized_resource('Labels', '', 'UserGreeting', 'Hi {0}!');
+SELECT localization.add_localized_resource('Labels', '', 'VoucherVerificationPolicyDescription', 'Assisgn voucher verification policies to administrators for approving or rejecting transactions.');
 SELECT localization.add_localized_resource('Labels', '', 'YourPasswordWasChanged', 'Your password was changed.');
 SELECT localization.add_localized_resource('Messages', '', 'AreYouSure', 'Are you sure?');
 SELECT localization.add_localized_resource('Messages', '', 'CouldNotDetermineVirtualPathError', 'Could not determine virtual path to create an image.');
@@ -4550,6 +5575,7 @@ SELECT localization.add_localized_resource('Titles', '', 'BaseUnitName', 'Base U
 SELECT localization.add_localized_resource('Titles', '', 'BonusSlabDetails', 'Bonus Slab Details for Salespersons');
 SELECT localization.add_localized_resource('Titles', '', 'Book', 'Book');
 SELECT localization.add_localized_resource('Titles', '', 'BookDate', 'Book Date');
+SELECT localization.add_localized_resource('Titles', '', 'BookIncomeTax', 'Book Income Tax');
 SELECT localization.add_localized_resource('Titles', '', 'Brand', 'Brand');
 SELECT localization.add_localized_resource('Titles', '', 'Brands', 'Brands');
 SELECT localization.add_localized_resource('Titles', '', 'Browse', 'Browse');
@@ -4593,6 +5619,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Countries', 'Countries
 SELECT localization.add_localized_resource('Titles', '', 'CountySalesTax', 'County Sales Tax');
 SELECT localization.add_localized_resource('Titles', '', 'CountySalesTaxes', 'County Sales Taxes');
 SELECT localization.add_localized_resource('Titles', '', 'CreateaUserAccountforYourself', 'Create a User Account for Yourself');
+SELECT localization.add_localized_resource('Titles', '', 'CreateBackup', 'Create Backup');
 SELECT localization.add_localized_resource('Titles', '', 'CreateBackupFirst', 'Create a Backup First');
 SELECT localization.add_localized_resource('Titles', '', 'CreatedOn', 'Created On');
 SELECT localization.add_localized_resource('Titles', '', 'CreateCashRepositories', 'Create Cash Repositories');
@@ -4602,6 +5629,7 @@ SELECT localization.add_localized_resource('Titles', '', 'CreateFiscalYear', 'Cr
 SELECT localization.add_localized_resource('Titles', '', 'CreateFrequencies', 'Create Frequencies');
 SELECT localization.add_localized_resource('Titles', '', 'CreateItemGroups', 'Create Item Groups');
 SELECT localization.add_localized_resource('Titles', '', 'CreateItemOrService', 'Create Item or Service');
+SELECT localization.add_localized_resource('Titles', '', 'CreateNewFiscalYear', 'Create New Fiscal Year');
 SELECT localization.add_localized_resource('Titles', '', 'CreateSalespersons', 'Create Salespersons');
 SELECT localization.add_localized_resource('Titles', '', 'CreateSalesTaxForm', 'Create Sales Tax Form');
 SELECT localization.add_localized_resource('Titles', '', 'CreateShippingCompany', 'Create Shipping Company');
@@ -4690,6 +5718,7 @@ SELECT localization.add_localized_resource('Titles', '', 'EmailThisQuotation', '
 SELECT localization.add_localized_resource('Titles', '', 'EmailThisReceipt', 'Email This Receipt');
 SELECT localization.add_localized_resource('Titles', '', 'EmailThisReturn', 'Email This Return');
 SELECT localization.add_localized_resource('Titles', '', 'EndOfDayOperation', 'End of Day Operation');
+SELECT localization.add_localized_resource('Titles', '', 'EndOfYearProcessing', 'End of Year Processing');
 SELECT localization.add_localized_resource('Titles', '', 'EnterBackupName', 'Enter Backup Name');
 SELECT localization.add_localized_resource('Titles', '', 'EnterNewPassword', 'Enter a New Password');
 SELECT localization.add_localized_resource('Titles', '', 'EnteredBy', 'Entered By');
@@ -4716,6 +5745,8 @@ SELECT localization.add_localized_resource('Titles', '', 'FirstPage', 'First Pag
 SELECT localization.add_localized_resource('Titles', '', 'FirstSteps', 'First Steps');
 SELECT localization.add_localized_resource('Titles', '', 'FirstTasks', 'First Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'FiscalYear', 'Fiscal Year');
+SELECT localization.add_localized_resource('Titles', '', 'FiscalYearCode', 'Fiscal Year Code');
+SELECT localization.add_localized_resource('Titles', '', 'FiscalYearName', 'Fiscal Year Name');
 SELECT localization.add_localized_resource('Titles', '', 'Flag', 'Flag');
 SELECT localization.add_localized_resource('Titles', '', 'FlagBackgroundColor', 'Flag Background Color');
 SELECT localization.add_localized_resource('Titles', '', 'FlagDescription', 'You can mark this transaction with a flag, however you will not be able to see the flags created by other users.');
@@ -4745,6 +5776,7 @@ SELECT localization.add_localized_resource('Titles', '', 'IncludeZeroBalanceAcco
 SELECT localization.add_localized_resource('Titles', '', 'IncomeTaxRate', 'Income Tax Rate');
 SELECT localization.add_localized_resource('Titles', '', 'IncompleteTasks', 'Incomplete Tasks');
 SELECT localization.add_localized_resource('Titles', '', 'Industries', 'Industries');
+SELECT localization.add_localized_resource('Titles', '', 'IncomeTax', 'Income Tax');
 SELECT localization.add_localized_resource('Titles', '', 'InitializeDayEnd', 'Initialize Day End');
 SELECT localization.add_localized_resource('Titles', '', 'InstallMixERP', 'Install MixERP');
 SELECT localization.add_localized_resource('Titles', '', 'InstrumentCode', 'Instrument Code');
@@ -4815,6 +5847,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Monday', 'Monday');
 SELECT localization.add_localized_resource('Titles', '', 'Month', 'Month');
 SELECT localization.add_localized_resource('Titles', '', 'Name', 'Name');
 SELECT localization.add_localized_resource('Titles', '', 'NewBookDate', 'New Book Date');
+SELECT localization.add_localized_resource('Titles', '', 'NewFiscalYear', 'New Fiscal Year');
 SELECT localization.add_localized_resource('Titles', '', 'NewJournalEntry', 'New Journal Entry');
 SELECT localization.add_localized_resource('Titles', '', 'NewPassword', 'New Password');
 SELECT localization.add_localized_resource('Titles', '', 'NewReleaseAvailable', 'A New Release Is Available');
@@ -4854,15 +5887,18 @@ SELECT localization.add_localized_resource('Titles', '', 'Password', 'Password')
 SELECT localization.add_localized_resource('Titles', '', 'PasswordUpdated', 'Password was updated.');
 SELECT localization.add_localized_resource('Titles', '', 'PaymentCards', 'Payment Cards');
 SELECT localization.add_localized_resource('Titles', '', 'PaymentTerms', 'Payment Terms');
+SELECT localization.add_localized_resource('Titles', '', 'PerformEOD', 'Perform EOD');
 SELECT localization.add_localized_resource('Titles', '', 'PerformEODOperation', 'Perform EOD Operation');
 SELECT localization.add_localized_resource('Titles', '', 'PerformingEODOperation', 'Performing EOD Operation');
 SELECT localization.add_localized_resource('Titles', '', 'PeriodicInventory', 'Periodic Inventory');
 SELECT localization.add_localized_resource('Titles', '', 'PerpetualInventory', 'Perpetual Inventory');
 SELECT localization.add_localized_resource('Titles', '', 'Phone', 'Phone');
 SELECT localization.add_localized_resource('Titles', '', 'PlaceReorderRequests', 'Place Reorder Request(s)');
+SELECT localization.add_localized_resource('Titles', '', 'PLAppropriation', 'PL Appropriation');
 SELECT localization.add_localized_resource('Titles', '', 'PostTransaction', 'Post Transaction');
 SELECT localization.add_localized_resource('Titles', '', 'PostedBy', 'Posted By');
 SELECT localization.add_localized_resource('Titles', '', 'PostedDate', 'Posted Date');
+SELECT localization.add_localized_resource('Titles', '', 'PostTransaction', 'Post Transaction');
 SELECT localization.add_localized_resource('Titles', '', 'PreferredSupplier', 'Preferred Supplier');
 SELECT localization.add_localized_resource('Titles', '', 'PreferredSupplierIdAbbreviated', 'Pref SupId');
 SELECT localization.add_localized_resource('Titles', '', 'Prepare', 'Prepare');
@@ -4880,6 +5916,8 @@ SELECT localization.add_localized_resource('Titles', '', 'Print', 'Print');
 SELECT localization.add_localized_resource('Titles', '', 'PrintGlEntry', 'Print GL Entry');
 SELECT localization.add_localized_resource('Titles', '', 'PrintReceipt', 'Print Receipt');
 SELECT localization.add_localized_resource('Titles', '', 'ProfitAndLossStatement', 'Profit & Loss Statement');
+SELECT localization.add_localized_resource('Titles', '', 'ProfitBeforeTax', 'Profit Before Tax');
+SELECT localization.add_localized_resource('Titles', '', 'ProfitOrLoss', 'Profit or Loss');
 SELECT localization.add_localized_resource('Titles', '', 'Progress', 'Progress');
 SELECT localization.add_localized_resource('Titles', '', 'PublishedOn', 'Published On');
 SELECT localization.add_localized_resource('Titles', '', 'PurchaseInvoice', 'Purchase Invoice');
@@ -4907,7 +5945,6 @@ SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoiceSetup'
 SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoices', 'Recurring Invoices');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumber', 'Reference Number');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumberAbbreviated', 'Ref#');
-SELECT localization.add_localized_resource('Titles', '', 'RefererenceNumberAbbreviated', 'Ref #');
 SELECT localization.add_localized_resource('Titles', '', 'RegistrationDate', 'Registration Date');
 SELECT localization.add_localized_resource('Titles', '', 'Reject', 'Reject');
 SELECT localization.add_localized_resource('Titles', '', 'RejectThisTransaction', 'Reject This Transaction');
@@ -4964,6 +6001,9 @@ SELECT localization.add_localized_resource('Titles', '', 'Search', 'Search');
 SELECT localization.add_localized_resource('Titles', '', 'Select', 'Select');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCompany', 'Select Company');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCustomer', 'Select Customer');
+SELECT localization.add_localized_resource('Titles', '', 'SelectExpensesGL', 'Select Expenses GL');
+SELECT localization.add_localized_resource('Titles', '', 'SelectTaxOfficeGL', 'Select Tax Office GL');
+SELECT localization.add_localized_resource('Titles', '', 'SelectPLAppropriationAccount', 'Select PL Appropriation A/C');
 SELECT localization.add_localized_resource('Titles', '', 'SelectedWidgets', 'Selected Widgets');
 SELECT localization.add_localized_resource('Titles', '', 'SelectFlag', 'Select a Flag');
 SELECT localization.add_localized_resource('Titles', '', 'SelectForm', 'Select a Form');
@@ -5040,6 +6080,7 @@ SELECT localization.add_localized_resource('Titles', '', 'ThankYou', 'Thank You'
 SELECT localization.add_localized_resource('Titles', '', 'Thursday', 'Thursday');
 SELECT localization.add_localized_resource('Titles', '', 'To', 'To');
 SELECT localization.add_localized_resource('Titles', '', 'TopSellingProductsOfAllTime', 'Top Selling Products of All Time');
+SELECT localization.add_localized_resource('Titles', '', 'ToPLAppropriationAC', 'To PL Appropriation A/C');
 SELECT localization.add_localized_resource('Titles', '', 'Total', 'Total');
 SELECT localization.add_localized_resource('Titles', '', 'TotalDueAmount', 'Total Due Amount');
 SELECT localization.add_localized_resource('Titles', '', 'TotalDueAmountCurrentOffice', 'Total Due Amount (Current Office)');

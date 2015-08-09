@@ -22,7 +22,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.Entities.Models.Transactions;
 using MixERP.Net.i18n.Resources;
-using MixERP.Net.TransactionGovernor.Transactions;
+using MixERP.Net.TransactionGovernor;
 using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 using Serilog;
 using System;

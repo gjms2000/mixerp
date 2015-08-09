@@ -23,6 +23,7 @@ using MixERP.Net.i18n.Resources;
 using Serilog;
 using System;
 using System.Web.Services;
+using MixERP.Net.Entities.Models.Transactions;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Receipt
 {
@@ -77,9 +78,20 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Receipt
                     throw new InvalidOperationException(Warnings.CashTransactionCannotContainBankInfo);
                 }
 
-                return PostTransaction(partyCode, currencyCode, amount, debitExchangeRate, creditExchangeRate,
+                long tranId = PostTransaction(partyCode, currencyCode, amount, debitExchangeRate, creditExchangeRate,
                     referenceNumber, statementReference, costCenterId, cashRepositoryId, postedDate, bankAccountId,
                     paymentCardId, bankInstrumentCode, bankTransactionCode);
+
+                Verification status = TransactionGovernor.Verification.Status.GetVerificationStatus(AppUsers.GetCurrentUserDB(), tranId, false);
+
+
+                if (status.VerificationStatusId > 0)
+                {
+                    Notification.Receipt notification = new Notification.Receipt();
+                    notification.Send(tranId);
+                }
+
+                return tranId;
             }
             catch (Exception ex)
             {

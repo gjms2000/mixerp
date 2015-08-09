@@ -26,6 +26,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Web.UI;
+using MixERP.Net.Common.jQueryHelper;
 
 namespace MixERP.Net.FrontEnd.Base
 {
@@ -71,6 +72,12 @@ namespace MixERP.Net.FrontEnd.Base
             script += JSUtility.GetVar("update", this.Update());
 
             script += JSUtility.GetVar("firstStepsPending", this.Context.Session["FirstStepsPending"]);
+
+            script += JSUtility.GetVar("datepickerFormat", jQueryUI.GetDatePickerFormat());
+            script += JSUtility.GetVar("datepickerShowWeekNumber", jQueryUI.ShowWeekNumber());
+            script += JSUtility.GetVar("datepickerWeekStartDay", jQueryUI.GetWeekStartDay());
+            script += JSUtility.GetVar("datepickerNumberOfMonths", jQueryUI.GetNumberOfMonths());
+
 
             PageUtility.RegisterJavascript("MixERPMasterPage", script, this.Page, true);
         }

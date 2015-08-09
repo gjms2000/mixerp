@@ -63,7 +63,7 @@ var scrudConfirmAction = function () {
         };
     };
 
-    
+
     return retVal;
 };
 
@@ -104,12 +104,14 @@ Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
     //Fired on each ASP.net AJAX request.
     scrudInitialize();
     initializeUploader();
+    scrudLoadDatepicker();
     $(".activating.element").popup();
 });
 
 $(document).ready(function () {
     scrudInitialize();
     initializeUploader();
+    scrudLoadDatepicker();
 });
 
 var scrudInitialize = function () {
@@ -438,3 +440,14 @@ function readURL(input) {
 };
 
 //Scrud Uploader End
+function scrudLoadDatepicker() {
+    $(".date").datepicker(
+    {
+        dateFormat: datepickerFormat,
+        showWeek: datepickerShowWeekNumber,
+        firstDay: datepickerWeekStartDay,
+        constrainInput: false,
+        numberOfMonths: eval(datepickerNumberOfMonths)
+    },
+    $.datepicker.regional['en']);
+};

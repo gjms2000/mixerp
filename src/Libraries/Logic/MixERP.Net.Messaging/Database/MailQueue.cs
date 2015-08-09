@@ -31,7 +31,7 @@ namespace MixERP.Net.Messaging.Email.Database
 
         public static IEnumerable<EmailQueue> GetMailInQueue(string catlog)
         {
-            const string sql = "SELECT * FROM core.email_queue WHERE NOT delivered";
+            const string sql = "SELECT * FROM core.email_queue WHERE NOT delivered AND NOT canceled;";
             return Factory.Get<EmailQueue>(catlog, sql);
         }
     }

@@ -118,6 +118,8 @@
     <Content Include="Reports\Source\Transactions.BalanceSheet.xml" />
     <Content Include="Reports\Source\Transactions.TrialBalance.xml" />
     <Content Include="Reports\TrialBalanceReport.ascx" />
+    <Content Include="Scripts\DayOperation\EOD.ascx.js" />
+    <Content Include="Scripts\DayOperation\EOY.ascx.js" />
     <Content Include="Scripts\UpdateExchangeRates.js" />
     <Content Include="Services\DayOperation\EOY.asmx" />
     <Content Include="Services\Transactions.asmx" />

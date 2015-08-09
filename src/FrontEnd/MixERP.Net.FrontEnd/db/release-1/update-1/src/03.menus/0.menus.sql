@@ -5,6 +5,7 @@ SELECT * FROM core.create_menu('Purchase', '~/Modules/Purchase/Index.mix', 'PU',
 SELECT * FROM core.create_menu('Products & Items', '~/Modules/Inventory/Index.mix', 'ITM', 0, NULL);
 SELECT * FROM core.create_menu('Finance', '~/Modules/Finance/Index.mix', 'FI', 0, NULL);
 SELECT * FROM core.create_menu('Back Office', '~/Modules/BackOffice/Index.mix', 'BO', 0, NULL);
+SELECT * FROM core.create_menu('Settings', '#', 'SET', 0, NULL);
 
 
 SELECT * FROM core.create_menu('Sales & Quotation', NULL, 'SAQ', 1, core.get_menu_id('SA'));
@@ -113,20 +114,20 @@ SELECT * FROM core.create_menu('State Setup', '~/Modules/BackOffice/States.mix',
 SELECT * FROM core.create_menu('County Setup', '~/Modules/BackOffice/Counties.mix', 'SCTS', 2, core.get_menu_id('SOS'));
 SELECT * FROM core.create_menu('Fiscal Year Information', '~/Modules/BackOffice/FiscalYear.mix', 'SFY', 2, core.get_menu_id('SOS'));
 SELECT * FROM core.create_menu('Frequency & Fiscal Year Management', '~/Modules/BackOffice/Frequency.mix', 'SFR', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Policy Management', NULL, 'SPM', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('Policy Management', NULL, 'SPM', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Voucher Verification Policy', '~/Modules/BackOffice/Policy/VoucherVerification.mix', 'SVV', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Automatic Verification Policy', '~/Modules/BackOffice/Policy/AutoVerification.mix', 'SAV', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Menu Access Policy', '~/Modules/BackOffice/Policy/MenuAccess.mix', 'SMA', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('GL Access Policy', '~/Modules/BackOffice/Policy/GLAccess.mix', 'SAP', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Store Policy', '~/Modules/BackOffice/Policy/Store.mix', 'SSP', 2, core.get_menu_id('SPM'));
 SELECT * FROM core.create_menu('Api Access Policy', '~/Modules/BackOffice/Policy/ApiAccess.mix', 'SAA', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Admin Tools', NULL, 'SAT', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('Admin Tools', NULL, 'SAT', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Database Statistics', '~/Modules/BackOffice/Admin/DatabaseStatistics.mix', 'DBSTAT', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Backup Database', '~/Modules/BackOffice/Admin/DatabaseBackup.mix', 'BAK', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Report Writer', '~/Modules/BackOffice/Admin/ReportWriter.mix', 'RW', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Change User Password', '~/Modules/BackOffice/Admin/ChangePassword.mix', 'PWD', 2, core.get_menu_id('SAT'));
 SELECT * FROM core.create_menu('Check Updates', '~/Modules/BackOffice/Admin/CheckUpdates.mix', 'UPD', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('One Time Setup', NULL, 'OTS', 1, core.get_menu_id('BO'));
+SELECT * FROM core.create_menu('One Time Setup', NULL, 'OTS', 1, core.get_menu_id('SET'));
 SELECT * FROM core.create_menu('Opening Inventory', '~/Modules/BackOffice/OTS/OpeningInventory.mix', 'OTSI', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Attachment Parameters', '~/Modules/BackOffice/OTS/AttachmentParameters.mix', 'OTSAP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Currencylayer Parameters', '~/Modules/BackOffice/OTS/CurrencylayerParameters.mix', 'OTSCLP', 2, core.get_menu_id('OTS'));
