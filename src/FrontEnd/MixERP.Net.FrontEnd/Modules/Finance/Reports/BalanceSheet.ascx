@@ -120,8 +120,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 
     printButton.click(function () {
         var report = "BalanceSheetReport.mix?PreviousPeriod={0}&CurrentPeriod={1}&Factor={2}";
-        var previousPeriod = Date.parseExact(previousPeriodDateTextBox.val(), window.shortDateFormat).toDateString();
-        var currentPeriod = Date.parseExact(currentPeriodDateTextBox.val(), window.shortDateFormat).toDateString();
+        var previousPeriod = previousPeriodDateTextBox.val();
+        var currentPeriod = currentPeriodDateTextBox.val();
         var factor = factorInputText.val();
 
         report = String.format(report, previousPeriod, currentPeriod, factor);
