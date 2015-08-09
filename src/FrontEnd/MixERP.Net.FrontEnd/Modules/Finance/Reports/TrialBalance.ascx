@@ -112,8 +112,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 
     printButton.click(function () {
         var report = "TrialBalanceReport.mix?FromDate={0}&ToDate={1}&Factor={2}&Compact={3}&ChangeSide={4}&IncludeZeroBalanceAccounts={5}";
-        var fromDate = Date.parseExact(fromDateTextBox.val(), window.shortDateFormat).toDateString();
-        var toDate = Date.parseExact(toDateTextBox.val(), window.shortDateFormat).toDateString();
+        var fromDate = fromDateTextBox.val();
+        var toDate = toDateTextBox.val();
         var factor = factorInputText.val();
         var compact = compactCheckBox.is(":checked");
         var changeSide = changeSideCheckBox.is(":checked");
