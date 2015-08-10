@@ -121,6 +121,7 @@
     <Content Include="Scripts\DayOperation\EOD.ascx.js" />
     <Content Include="Scripts\DayOperation\EOY.ascx.js" />
     <Content Include="Scripts\UpdateExchangeRates.js" />
+    <Content Include="Services\DayOperation\EOD.asmx" />
     <Content Include="Services\DayOperation\EOY.asmx" />
     <Content Include="Services\Transactions.asmx" />
     <Content Include="Setup\MerchantFeeSetup.ascx" />
@@ -166,7 +167,6 @@
     <Content Include="Reports\TrialBalance.ascx" />
     <Content Include="Scripts\Entry\JournalVoucher.js" />
     <Content Include="Services\CurrencyData.asmx" />
-    <Content Include="Services\EODOperation.asmx" />
     <Content Include="Setup\CashFlowHeadings.ascx" />
     <Content Include="Setup\CashFlowSetup.ascx" />
     <Content Include="SQL\Menu.sql" />
@@ -341,12 +341,12 @@
       <DependentUpon>CurrencyData.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Services\DayOperation\EOY.asmx.cs">
-      <DependentUpon>EOY.asmx</DependentUpon>
+    <Compile Include="Services\DayOperation\EOD.asmx.cs">
+      <DependentUpon>EOD.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Services\EODOperation.asmx.cs">
-      <DependentUpon>EODOperation.asmx</DependentUpon>
+    <Compile Include="Services\DayOperation\EOY.asmx.cs">
+      <DependentUpon>EOY.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\Entry\JournalVoucher.asmx.cs">

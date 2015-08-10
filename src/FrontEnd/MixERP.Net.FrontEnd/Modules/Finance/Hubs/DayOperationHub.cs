@@ -19,6 +19,8 @@ namespace MixERP.Net.Core.Modules.Finance.Hubs
                 return;
             }
 
+
+
             Data.EODOperation operation = new Data.EODOperation();
             operation.NotificationReceived += this.EOD_NotificationReceived;
 

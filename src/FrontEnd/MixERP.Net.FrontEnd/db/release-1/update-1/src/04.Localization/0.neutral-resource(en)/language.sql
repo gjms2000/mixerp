@@ -1272,6 +1272,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Send', 'Send');
 SELECT localization.add_localized_resource('Titles', '', 'Sent', 'Sent');
 SELECT localization.add_localized_resource('Titles', '', 'Sent', 'Sent');
 SELECT localization.add_localized_resource('Titles', '', 'SetupEmail', 'Setup Email');
+SELECT localization.add_localized_resource('Titles', '', 'Shipper', 'Shipper');
 SELECT localization.add_localized_resource('Titles', '', 'Shippers', 'Shippers');
 SELECT localization.add_localized_resource('Titles', '', 'ShippingAddress', 'Shipping Address');
 SELECT localization.add_localized_resource('Titles', '', 'ShippingAddressMaintenance', 'Shipping Address Maintenance');

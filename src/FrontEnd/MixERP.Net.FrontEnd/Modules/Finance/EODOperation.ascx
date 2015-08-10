@@ -171,13 +171,13 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     };
 
     function startNewDay() {
-        url = "/Modules/Finance/Services/EODOperation.asmx/StartNewDay";
+        url = "/Modules/Finance/Services/DayOperation/EOD.asmx/StartNewDay";
 
         return getAjax(url, null);
     };
 
     function intializeEODOperation() {
-        url = "/Modules/Finance/Services/EODOperation.asmx/InitializeEODOperation";
+        url = "/Modules/Finance/Services/DayOperation/EOD.asmx/InitializeEODOperation";
 
         return getAjax(url, null);
     };

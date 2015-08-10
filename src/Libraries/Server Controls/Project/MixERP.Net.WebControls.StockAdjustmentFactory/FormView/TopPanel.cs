@@ -40,7 +40,7 @@ namespace MixERP.Net.WebControls.StockAdjustmentFactory
                 {
                     label.TagName = "label";
                     label.Attributes.Add("for", "ReferenceNumberInputText");
-                    label.InnerText = Titles.RefererenceNumberAbbreviated;
+                    label.InnerText = Titles.ReferenceNumberAbbreviated;
                     field.Controls.Add(label);
                 }
 

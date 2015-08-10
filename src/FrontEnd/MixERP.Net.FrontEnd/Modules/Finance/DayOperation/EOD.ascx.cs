@@ -52,7 +52,6 @@ namespace MixERP.Net.Core.Modules.Finance.DayOperation
             this.CreatePerformingEOD(this.Placeholder1);
             this.CreateProgress(this.Placeholder1);
             this.CreateEODConsole(this.Placeholder1);
-            this.CreateList(this.Placeholder1);
         }
 
         private bool IsYearEnd()
@@ -143,21 +142,33 @@ namespace MixERP.Net.Core.Modules.Finance.DayOperation
 
         private void CreateEODConsole(Control container)
         {
-            using (HtmlGenericControl console = new HtmlGenericControl("h2"))
+            using (HtmlGenericControl segment = HtmlControlHelper.GetSegment("ui segment initially hidden"))
             {
-                console.InnerText = Titles.EODConsole;
-                console.Attributes.Add("class", "ui blue header initially hidden");
-                container.Controls.Add(console);
+                segment.ID = "EODSegment";
+                segment.Attributes.Add("style", "overflow:auto;");
+
+                using (HtmlGenericControl console = new HtmlGenericControl("h2"))
+                {
+                    console.InnerText = Titles.EODConsole;
+                    console.Attributes.Add("class", "ui blue header initially hidden");
+                    segment.Controls.Add(console);
+
+                    this.CreateList(segment);
+                }
+
+                container.Controls.Add(segment);
             }
         }
 
         private void CreateList(Control container)
         {
+
             using (HtmlGenericControl list = new HtmlGenericControl("div"))
             {
                 list.Attributes.Add("class", "ui celled list");
                 container.Controls.Add(list);
             }
+
         }
 
         #region Buttons

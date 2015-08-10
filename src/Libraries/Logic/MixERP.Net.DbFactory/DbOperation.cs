@@ -28,6 +28,7 @@ using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MixERP.Net.DbFactory
 {
@@ -308,7 +309,7 @@ namespace MixERP.Net.DbFactory
             return false;
         }
 
-        public void ListenNonQuery(string catalog, NpgsqlCommand command)
+        public Task ListenNonQuery(string catalog, NpgsqlCommand command)
         {
             try
             {
@@ -316,7 +317,7 @@ namespace MixERP.Net.DbFactory
                 {
                     if (ValidateCommand(command))
                     {
-                        ThreadStart queryStart = delegate
+                        Task task = new Task(delegate
                         {
                             try
                             {
@@ -350,13 +351,10 @@ namespace MixERP.Net.DbFactory
 
                                     listen(this, args);
                                 }
-                            }
-                        };
+                            }                            
+                        });
 
-                        queryStart += () => { Thread.Sleep(15000); };
-
-                        Thread query = new Thread(queryStart) {IsBackground = true};
-                        query.Start();
+                        return task;
                     }
                 }
             }
@@ -370,6 +368,8 @@ namespace MixERP.Net.DbFactory
 
                 throw;
             }
+
+            return null;
         }
 
         private static Collection<string> GetCommandTextParameterCollection(string commandText)
