@@ -20,6 +20,8 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeGreaterThan', 'تاريخ غير صحيح. يجب أن تكون أكبر من "{0}".');--Invalid date. Must be greater than "{0}"."
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeLessThan', 'تاريخ غير صحيح. يجب أن تكون أقل من "{0}".');--Invalid date. Must be less than "{0}"."
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'InvalidDate', 'تاريخ غير صحيح.');--Invalid date."
