@@ -28,7 +28,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 
     printButton.click(function () {
         var report = "RetainedEarningsReport.mix?Date={0}&Factor={1}";
-        var date = Date.parseExact(dateTextBox.val(), window.shortDateFormat).toDateString();
+        var date = dateTextBox.val();
         var factor = factorInputText.val();
 
         report = String.format(report, date, factor);

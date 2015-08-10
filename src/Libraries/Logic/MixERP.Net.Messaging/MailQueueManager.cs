@@ -23,15 +23,21 @@ namespace MixERP.Net.Messaging.Email
             this.Subject = subject;
         }
 
+        public MailQueueManager(string catalog, string message, string attachments, string sendTo, string subject,
+            long transactionMasterId) : this(catalog, message, attachments, sendTo, subject)
+        {
+            this.TransactionMasterId = transactionMasterId;
+        }
+
         public string Message { get; private set; }
         public string Attachments { get; private set; }
         public string SendTo { get; private set; }
         public string Subject { get; private set; }
         public string Catalog { get; set; }
+        public long? TransactionMasterId { get; private set; }
 
         public void Add()
         {
-
             if (this.IsEnabled())
             {
                 EmailQueue queue = new EmailQueue
@@ -40,7 +46,8 @@ namespace MixERP.Net.Messaging.Email
                     SendTo = this.SendTo,
                     Attachments = this.Attachments,
                     Message = this.Message,
-                    AddedOn = DateTime.UtcNow
+                    AddedOn = DateTime.UtcNow,
+                    TransactionMasterId = this.TransactionMasterId
                 };
 
                 Database.MailQueue.AddToQueue(this.Catalog, queue);
@@ -62,10 +69,7 @@ namespace MixERP.Net.Messaging.Email
                 foreach (EmailQueue mail in queue)
                 {
                     Processor processor = new Processor(this.Catalog);
-                    bool success =
-                        await
-                            processor.Send(mail.SendTo, mail.Subject, mail.Message, false,
-                                mail.Attachments.Split(',').ToArray());
+                    bool success = await processor.Send(mail.SendTo, mail.Subject, mail.Message, false, mail.Attachments.Split(',').ToArray());
 
                     if (success)
                     {

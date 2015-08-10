@@ -215,6 +215,31 @@ BEGIN
     SELECT office.get_role_id_by_role_code('ADMN'), office.get_department_id_by_department_code('SUP'), _office_id, _user_name, _password, _admin_name, true
     RETURNING user_id INTO _user_id;
 
+    INSERT INTO policy.auto_verification_policy
+    (
+        user_id, 
+        verify_sales_transactions, 
+        sales_verification_limit,
+        verify_purchase_transactions,
+        purchase_verification_limit,
+        verify_gl_transactions,
+        gl_verification_limit,
+        effective_from,
+        ends_on,
+        is_active
+    )
+    SELECT 
+        _user_id,
+        true,
+        0,
+        true,
+        0,
+        true,
+        0,
+        _starts_from,
+        _ends_on,
+        true;
+        
     INSERT INTO core.fiscal_year(fiscal_year_code, fiscal_year_name, starts_from, ends_on, audit_user_id)
     SELECT _fiscal_year_code, _fiscal_year_name, _starts_from, _ends_on, _user_id;
 

@@ -65,7 +65,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Notification
                 AppUsers.GetCurrent().View.OfficeName);
 
             MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo,
-                subject);
+                subject, tranId);
             queue.Add();
         }
 

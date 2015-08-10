@@ -78,7 +78,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         var date = now;
         var windowName = "PLAccountGridView";
         var offsetFirst = 0;
-        var offsetLast = 0;
+        var offsetLast = 1;
 
         printGridView(templatePath, headerPath, title, targetControlId, date, user, office, windowName, offsetFirst, offsetLast);
     });

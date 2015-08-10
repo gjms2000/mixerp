@@ -984,3 +984,39 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.email_queue'::regclass
+        AND    attname = 'transaction_master_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.email_queue
+        ADD COLUMN transaction_master_id bigint REFERENCES transactions.transaction_master;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.email_queue'::regclass
+        AND    attname = 'canceled'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.email_queue
+        ADD COLUMN canceled BOOLEAN NOT NULL DEFAULT(false);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;

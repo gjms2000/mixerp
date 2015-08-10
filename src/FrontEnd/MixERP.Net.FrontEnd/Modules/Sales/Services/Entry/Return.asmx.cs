@@ -22,7 +22,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.Entities.Models.Transactions;
 using MixERP.Net.i18n.Resources;
-using MixERP.Net.TransactionGovernor.Transactions;
+using MixERP.Net.TransactionGovernor;
 using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 using Serilog;
 using System;
@@ -67,6 +67,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 return Data.Transactions.Return.PostTransaction(AppUsers.GetCurrentUserDB(), tranId, valueDate, officeId,
                     userId, loginId, storeId,
                     partyCode, priceTypeId, referenceNumber, statementReference, details, attachments);
+
             }
             catch (Exception ex)
             {

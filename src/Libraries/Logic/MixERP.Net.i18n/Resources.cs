@@ -2551,6 +2551,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Assisgn voucher verification policies to administrators for approving or rejecting transactions.
+		/// </summary>
+		public static string VoucherVerificationPolicyDescription 
+		{
+			get
+			{
+				return Get("VoucherVerificationPolicyDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Your password was changed.
 		/// </summary>
 		public static string YourPasswordWasChanged 
@@ -9146,6 +9157,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Book Income Tax
+		/// </summary>
+		public static string BookIncomeTax 
+		{
+			get
+			{
+				return Get("BookIncomeTax");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Brand
 		/// </summary>
 		public static string Brand 
@@ -9608,6 +9630,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Create Backup
+		/// </summary>
+		public static string CreateBackup 
+		{
+			get
+			{
+				return Get("CreateBackup");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Create a Backup First
 		/// </summary>
 		public static string CreateBackupFirst 
@@ -9681,6 +9714,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("CreateItemOrService");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create New Fiscal Year
+		/// </summary>
+		public static string CreateNewFiscalYear 
+		{
+			get
+			{
+				return Get("CreateNewFiscalYear");
 			}
 		}
 		
@@ -10675,6 +10719,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for End of Year Processing
+		/// </summary>
+		public static string EndOfYearProcessing 
+		{
+			get
+			{
+				return Get("EndOfYearProcessing");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Enter Backup Name
 		/// </summary>
 		public static string EnterBackupName 
@@ -10961,6 +11016,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Fiscal Year Code
+		/// </summary>
+		public static string FiscalYearCode 
+		{
+			get
+			{
+				return Get("FiscalYearCode");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Fiscal Year Name
+		/// </summary>
+		public static string FiscalYearName 
+		{
+			get
+			{
+				return Get("FiscalYearName");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Flag
 		/// </summary>
 		public static string Flag 
@@ -11243,6 +11320,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("IncludeZeroBalanceAccounts");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Income Tax
+		/// </summary>
+		public static string IncomeTax 
+		{
+			get
+			{
+				return Get("IncomeTax");
 			}
 		}
 		
@@ -12050,6 +12138,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for New Fiscal Year
+		/// </summary>
+		public static string NewFiscalYear 
+		{
+			get
+			{
+				return Get("NewFiscalYear");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for New Journal Entry
 		/// </summary>
 		public static string NewJournalEntry 
@@ -12336,6 +12435,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for PL Appropriation
+		/// </summary>
+		public static string PLAppropriation 
+		{
+			get
+			{
+				return Get("PLAppropriation");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Page {0}
 		/// </summary>
 		public static string PageN 
@@ -12475,6 +12585,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("PaymentTerms");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Perform EOD
+		/// </summary>
+		public static string PerformEOD 
+		{
+			get
+			{
+				return Get("PerformEOD");
 			}
 		}
 		
@@ -12761,6 +12882,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("ProfitAndLossStatement");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Profit Before Tax
+		/// </summary>
+		public static string ProfitBeforeTax 
+		{
+			get
+			{
+				return Get("ProfitBeforeTax");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Profit or Loss
+		/// </summary>
+		public static string ProfitorLoss 
+		{
+			get
+			{
+				return Get("ProfitorLoss");
 			}
 		}
 		
@@ -13700,6 +13843,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Select Expenses GL
+		/// </summary>
+		public static string SelectExpensesGL 
+		{
+			get
+			{
+				return Get("SelectExpensesGL");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Select a Flag
 		/// </summary>
 		public static string SelectFlag 
@@ -13755,6 +13909,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Select PL Appropriation A/C
+		/// </summary>
+		public static string SelectPLAppropriationAccount 
+		{
+			get
+			{
+				return Get("SelectPLAppropriationAccount");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Select Party
 		/// </summary>
 		public static string SelectParty 
@@ -13795,6 +13960,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SelectSupplier");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Select Tax Office GL
+		/// </summary>
+		public static string SelectTaxOfficeGL 
+		{
+			get
+			{
+				return Get("SelectTaxOfficeGL");
 			}
 		}
 		
@@ -14499,6 +14675,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("To");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for To PL Appropriation A/C
+		/// </summary>
+		public static string ToPLAppropriationAC 
+		{
+			get
+			{
+				return Get("ToPLAppropriationAC");
 			}
 		}
 		
