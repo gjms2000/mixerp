@@ -5,8 +5,8 @@
 <#@ assembly name="System.Xml" #>
 <#@ assembly name="System.Configuration" #>
 <#@ assembly name="System.Windows.Forms" #>
-<#@ assembly name="$(SolutionDir)FrontEnd\MixERP.Net.FrontEnd\bin\Npgsql.dll" #>
-<#@ assembly name="$(SolutionDir)FrontEnd\MixERP.Net.FrontEnd\bin\Mono.Security.dll" #>
+<#@ assembly name="$(SolutionDir)packages\Npgsql.2.2.3\lib\net45\Npgsql.dll" #>
+<#@ assembly name="$(SolutionDir)packages\Npgsql.2.2.3\lib\net45\Mono.Security.dll" #>
 <#@ import namespace="Npgsql" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Data" #>
@@ -604,18 +604,21 @@ class PostGreSqlSchemaReader : SchemaReader
 			case "_time":
 			case "_timetz":
 			case "_timestamp with time zone":
+			case "_timestamp without time zone":
 			case "_timestamp":
 			case "_timestamptz":    
 			case "_date":    
 			case "time[]":
 			case "timetz[]":
 			case "timestamp with time zone[]":
+			case "timestamp without time zone[]":
 			case "timestamp[]":
 			case "timestamptz[]":    
 			case "date[]":    
 			case "time":
 			case "timetz":
 			case "timestamp with time zone":
+			case "timestamp without time zone":
 			case "timestamp":
 			case "timestamptz":    
 			case "date":    
@@ -704,7 +707,7 @@ class PostGreSqlSchemaReader : SchemaReader
 			FROM pg_class
 			INNER JOIN pg_namespace
 			ON pg_class.relnamespace=pg_namespace.oid
-			WHERE relkind='c'
+			WHERE relkind IN('c', 'm')
 			AND nspname=@schemaname;";
 
 	const string COLUMN_SQL=@"SELECT * FROM public.poco_get_table_function_definition(@schemaname::text, @tableName::text);";
