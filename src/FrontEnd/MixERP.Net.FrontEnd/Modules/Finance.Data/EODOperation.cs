@@ -23,6 +23,7 @@ using MixERP.Net.DbFactory;
 using Npgsql;
 using System;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace MixERP.Net.Core.Modules.Finance.Data
 {
@@ -90,8 +91,22 @@ namespace MixERP.Net.Core.Modules.Finance.Data
 
         public void Perform(string catalog, long loginId)
         {
-            const string sql = "SELECT * FROM transactions.perform_eod_operation(@LoginId::bigint);";
-            
+            string sql = "VACUUM ANALYZE VERBOSE;";
+            Task vacuumAnalyzeTask;
+            Task eodTask;
+
+            using (NpgsqlCommand command = new NpgsqlCommand(sql))
+            {
+                command.CommandTimeout = 3600;
+
+                DbOperation operation = new DbOperation();
+                operation.Listen += this.Listen;
+                vacuumAnalyzeTask = operation.ListenNonQuery(catalog, command);
+            }
+
+
+            sql = "SELECT * FROM transactions.perform_eod_operation(@LoginId::bigint);";
+
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
                 command.Parameters.AddWithValue("@LoginId", loginId);
@@ -99,7 +114,23 @@ namespace MixERP.Net.Core.Modules.Finance.Data
 
                 DbOperation operation = new DbOperation();
                 operation.Listen += this.Listen;
-                operation.ListenNonQuery(catalog, command);
+                eodTask = operation.ListenNonQuery(catalog, command);
+            }
+            try
+            {
+                vacuumAnalyzeTask.Start();
+
+                vacuumAnalyzeTask.ContinueWith(delegate
+                {
+                    eodTask.Start();
+                });
+            }
+            catch (Exception ex)
+            {
+                this.Listen(this, new DbNotificationArgs
+                {
+                    Message = ex.Message
+                });
             }
         }
 

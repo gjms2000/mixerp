@@ -151,7 +151,7 @@
                 <p>
                     <%= MixERP.Net.i18n.Resources.Labels.EODBegunSaveYourWork %>
                 </p>
-                <div style="margin-left: 150px;">
+                <div style="margin-left: 300px;">
                     <div class="ui circular segment" style="width: 120px; height: 120px;">
                         <h2 class="ui large header" style="font-size: 36px;"></h2>
                     </div>

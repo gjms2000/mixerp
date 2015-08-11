@@ -111,7 +111,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                     <th>{{crTotal}}</th>
                 </tr>
                 <tr>
-                    <th class="right aligned" colspan="4"><%=Titles.ProfitorLoss %></th>
+                    <th class="right aligned" colspan="4"><%=Titles.ProfitOrLoss %></th>
                     <td class="{{profit > 0 ? 'positive' : 'warning'}}">{{profit}}</td>
                 </tr>
             </tfoot>

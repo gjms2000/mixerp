@@ -7,7 +7,6 @@ MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, version 2 of the License.
 
-
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,25 +16,26 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.ApplicationState;
-using MixERP.Net.Common.Extensions;
-using Serilog;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.ApplicationState;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
 using MixERP.Net.Messaging.Email;
+using Serilog;
 
-namespace MixERP.Net.Core.Modules.Finance.Services
+namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
 {
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
+    [ToolboxItem(false)]
     [ScriptService]
-    public class EODOperation : WebService
+    public class EOD : WebService
     {
         [WebMethod]
         public bool InitializeEODOperation()
@@ -69,10 +69,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
             MailQueueManager manager = new MailQueueManager();
             manager.Catalog = AppUsers.GetCurrentUserDB();
 
-            ThreadPool.QueueUserWorkItem(async callback =>
-            {
-                await manager.ProcessMailQueue();
-            });
+            ThreadPool.QueueUserWorkItem(async callback => { await manager.ProcessMailQueue(); });
         }
 
         [WebMethod]

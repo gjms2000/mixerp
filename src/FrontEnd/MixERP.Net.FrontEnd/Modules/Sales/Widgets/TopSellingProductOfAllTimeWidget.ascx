@@ -29,7 +29,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
             <i class="expand disabled icon"></i>
             <i class="move icon"></i>
             <i class="help icon"></i>
-            <i class="close icon" onclick="$(this).closest('.widget').remove();"></i>
+            <i class="close icon"></i>
         </div>
     </div>
     <div class="ui attached segment">

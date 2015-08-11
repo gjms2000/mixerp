@@ -53264,15 +53264,25 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
 
     var ctx = document.getElementById(canvasId).getContext("2d");
 
+    var animation = true;
+
+    if (typeof (window.chartAnimation) !== "undefined") {
+        animation = window.chartAnimation;
+    };
+
+    var options = {
+        animation: animation
+    };
+
     switch (type) {
         case "doughnut":
-            new Chart(ctx).Doughnut(data);
+            new Chart(ctx).Doughnut(data, options);
             break;
         case "polar":
-            new Chart(ctx).PolarArea(data);
+            new Chart(ctx).PolarArea(data, options);
             break;
         default:
-            new Chart(ctx).Pie(data);
+            new Chart(ctx).Pie(data, options);
             break;
     }
 
