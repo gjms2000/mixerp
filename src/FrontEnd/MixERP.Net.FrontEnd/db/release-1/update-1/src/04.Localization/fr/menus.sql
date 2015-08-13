@@ -4,16 +4,16 @@ SELECT core.create_menu_locale('PU', 'fr', 'achat');--Purchase
 SELECT core.create_menu_locale('ITM', 'fr', 'Produits et Articles');--Products & Items
 SELECT core.create_menu_locale('FI', 'fr', 'financement');--Finance
 SELECT core.create_menu_locale('BO', 'fr', 'Back-Office');--Back Office
-SELECT core.create_menu_locale('SAQ', 'fr', 'Sales & Devis');--Sales & Quotation
+SELECT core.create_menu_locale('SAQ', 'fr', 'Vente et Devis');--Sales & Quotation
 SELECT core.create_menu_locale('DRS', 'fr', 'Ventes directes');--Direct Sales
 SELECT core.create_menu_locale('SQ', 'fr', 'Devis de vente');--Sales Quotation
-SELECT core.create_menu_locale('SO', 'fr', 'Commande client');--Sales Order
-SELECT core.create_menu_locale('SD', 'fr', 'Vente livraison');--Sales Delivery
-SELECT core.create_menu_locale('RFC', 'fr', 'Réception du client');--Receipt from Customer
-SELECT core.create_menu_locale('SR', 'fr', 'Retour sur les ventes');--Sales Return
-SELECT core.create_menu_locale('SSM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
-SELECT core.create_menu_locale('ABS', 'fr', 'Dalle de bonus pour les vendeurs');--Bonus Slab for Salespersons
-SELECT core.create_menu_locale('BSD', 'fr', 'Détails du bonus dalle');--Bonus Slab Details
+SELECT core.create_menu_locale('SO', 'fr', 'ordres de ventes');--Sales Order
+SELECT core.create_menu_locale('SD', 'fr', 'Les ventes Livraison');--Sales Delivery
+SELECT core.create_menu_locale('RFC', 'fr', 'Les recettes provenant de clients');--Receipt from Customer
+SELECT core.create_menu_locale('SR', 'fr', 'Les ventes  retourner');--Sales Return
+SELECT core.create_menu_locale('SSM', 'fr', 'Installation & entretien');--Setup & Maintenance
+SELECT core.create_menu_locale('ABS', 'fr', 'En tranche un bonus pour les vendeurs');--Bonus Slab for Salespersons
+SELECT core.create_menu_locale('BSD', 'fr', 'Détails en tranche un bonus');--Bonus Slab Details
 SELECT core.create_menu_locale('SST', 'fr', 'Équipes de vente');--Sales Teams
 SELECT core.create_menu_locale('SSA', 'fr', 'Vendeurs/vendeuses');--Salespersons
 SELECT core.create_menu_locale('BSA', 'fr', 'Affectation de dalle de bonus');--Bonus Slab Assignment
@@ -96,7 +96,7 @@ SELECT core.create_menu_locale('SRM', 'fr', 'Gestion des rôles');--Role Managem
 SELECT core.create_menu_locale('SUM', 'fr', 'Gestion des utilisateurs');--User Management
 SELECT core.create_menu_locale('SES', 'fr', 'Configuration de l''entité');--Entity Setup
 SELECT core.create_menu_locale('SIS', 'fr', 'Installation de l''industrie');--Industry Setup
-SELECT core.create_menu_locale('SCRS', 'fr', 'Programme d''installation de pays');--Country Setup
+SELECT core.create_menu_locale('SCRS', 'fr', 'Configuration de Pays');--Country Setup
 SELECT core.create_menu_locale('SSS', 'fr', 'Installation de l''État');--State Setup
 SELECT core.create_menu_locale('SCTS', 'fr', 'Comté de Setup');--County Setup
 SELECT core.create_menu_locale('SFY', 'fr', 'Informations de l''exercice');--Fiscal Year Information
