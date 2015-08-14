@@ -23,6 +23,7 @@
     </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -141,6 +142,7 @@
     <Content Include="Services\OTS\OpeningInventory.asmx" />
     <Content Include="Widgets\LinksWidget.ascx" />
     <Content Include="Widgets\OfficeInformationWidget.ascx" />
+    <Content Include="Handlers\PartyImageHandler.ashx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -321,6 +323,9 @@
     </Compile>
     <Compile Include="Handlers\ImageHandler.ashx.cs">
       <DependentUpon>ImageHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Handlers\PartyImageHandler.ashx.cs">
+      <DependentUpon>PartyImageHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Hubs\DbHub.cs" />
     <Compile Include="Index.ascx.cs">

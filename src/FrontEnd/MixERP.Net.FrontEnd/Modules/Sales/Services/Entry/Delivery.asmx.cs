@@ -53,14 +53,14 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 
                 Collection<Attachment> attachments = CollectionHelper.GetAttachmentCollection(attachmentsJSON);
 
-                if (!Data.Helpers.Stores.IsSalesAllowed(AppUsers.GetCurrentUserDB(), storeId))
+                if (!Stores.IsSalesAllowed(AppUsers.GetCurrentUserDB(), storeId))
                 {
                     throw new InvalidOperationException("Sales is not allowed here.");
                 }
 
                 foreach (StockDetail model in details)
                 {
-                    if (Data.Helpers.Items.IsStockItem(AppUsers.GetCurrentUserDB(), model.ItemCode))
+                    if (Items.IsStockItem(AppUsers.GetCurrentUserDB(), model.ItemCode))
                     {
                         decimal available = Data.Helpers.Items.CountItemInStock(AppUsers.GetCurrentUserDB(),
                             model.ItemCode, model.UnitName, model.StoreId);

@@ -12,4 +12,4 @@ function legend(parent, data) {
         var text = document.createTextNode(d.title);
         title.appendChild(text);
     });
-}
+};

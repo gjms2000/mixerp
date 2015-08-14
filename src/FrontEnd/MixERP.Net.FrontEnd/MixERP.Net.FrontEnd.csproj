@@ -23,6 +23,7 @@
     </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -381,16 +382,72 @@
     <Content Include="Resource\Documents\index.html" />
     <Content Include="Resource\index.html" />
     <Content Include="Resource\Static\Attachments\index.html" />
+    <Content Include="Resource\Static\Attachments\sample\21-38-48-104_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\beautiful-19075_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\beautiful-653317_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\beauty-20150_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\beauty-739667_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\brunette-15963_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\businessman-805770_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\chinese-572945_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\cowboy-67630_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\eyes-622355_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\fairy-tales-636649_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\friend-762590_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-102829_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-518321_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-518331_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-602177_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-637568_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-803179_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girl-846991_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\girls-602168_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\guy-549173_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\indian-627831_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\james-stewart-392932_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\male-777913_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-140547_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-324103_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-407084_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-504453_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-56087_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-783701_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\man-838636_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\meet-696077_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\model-299694_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\old-man-692807_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\people-850949_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\people-875597_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\person-783780_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\person-822552_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\person-827608_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\person-829966_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\person-854095_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\portrait-597173_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\portrait-642528_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\portrait-750781_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\professor-836151_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\teenager-398355_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\woman-422706_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\woman-487067_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\woman-858003_640.jpg" />
+    <Content Include="Resource\Static\Attachments\sample\woman-868522_640.jpg" />
     <Content Include="Resource\Static\Emails\index.html" />
     <Content Include="Resource\Static\index.html" />
     <Content Include="Resource\Temp\Images\index.html" />
     <Content Include="Resource\Temp\index.html" />
     <Content Include="Scripts\angular\angular.min.js" />
-    <Content Include="Scripts\d3.min.js" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\Datamaps\topojson.js" />
     <Content Include="Scripts\mixerp\core\browser.js" />
+    <Content Include="Scripts\mixerp\core\dom\frame.js" />
+    <Content Include="Scripts\mixerp\core\dom\uploader.js" />
+    <Content Include="Scripts\mixerp\core\libraries\jquery-ui.js" />
     <Content Include="Scripts\mixerp\master-page\notification.js" />
     <Content Include="Scripts\mixerp\master-page\menu.js" />
+    <Content Include="Scripts\mixerp\utitlities\localizable.js" />
+    <Content Include="Scripts\mixerp\utitlities\countries.js" />
     <Content Include="Scripts\Pages\Modules\WidgetManager.aspx.js" />
     <Content Include="Scripts\Pages\Modules\FirstSteps.aspx.js" />
     <Content Include="Scripts\semantic-ui\components\accordion.css" />
@@ -672,6 +729,7 @@
     <Content Include="Static\images\document.png" />
     <Content Include="Static\images\mixerp-logo-light.png" />
     <Content Include="Static\images\mixerp-logo.png" />
+    <Content Include="Static\images\not-found.png" />
     <Content Include="Static\images\not-image-file.png" />
     <Content Include="Static\images\powered-by.png" />
     <Content Include="Static\images\spinner.gif" />
@@ -758,6 +816,9 @@
     </Content>
     <Content Include="plugins\wkhtmltopdf\LICENSE" />
     <Content Include="Resource\Temp\Public\web.config" />
+    <Content Include="Scripts\d3\LICENSE" />
+    <None Include="bundleconfig.json" />
+    <Content Include="Resource\Static\Attachments\sample\readme.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\colorpicker\.gitignore" />

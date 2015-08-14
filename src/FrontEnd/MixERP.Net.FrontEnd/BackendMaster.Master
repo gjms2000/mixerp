@@ -121,6 +121,7 @@
                 <div id="MainContent">
                     <asp:ContentPlaceHolder ID="BodyContentPlaceholder" runat="server">
                     </asp:ContentPlaceHolder>
+                    <script src="/Scripts/mixerp/utitlities/localizable.js"></script>
                 </div>
             </div>
             <div class="sixteen wide theme column" id="Footer">
@@ -132,7 +133,7 @@
                     </div>
                     <div class="twelve wide column">
                         <div class="footer-text">
-                            <asp:Literal ID="FooterLiteral" runat="server"/>
+                            <asp:Literal ID="FooterLiteral" runat="server" />
                         </div>
                     </div>
                 </div>

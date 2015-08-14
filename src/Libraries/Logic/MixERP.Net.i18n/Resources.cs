@@ -286,7 +286,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Invalid Login Id.
+		///   Localized string for Invalid LoginId.
 		/// </summary>
 		public static string P3101 
 		{
@@ -561,7 +561,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for You cannot provide sales tax information for non-taxable sales.
+		///   Localized string for You cannot provide sales tax information for non taxable sales.
 		/// </summary>
 		public static string P5110 
 		{
@@ -737,7 +737,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Self-verification limit exceeded. The transaction was not verified.
+		///   Localized string for Self verification limit exceeded. The transaction was not verified.
 		/// </summary>
 		public static string P5910 
 		{
@@ -957,7 +957,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Access is denied. You cannot verify past or future dated transaction.
+		///   Localized string for Access is denied. You cannot verify past or futuer dated transaction.
 		/// </summary>
 		public static string P9015 
 		{
@@ -990,7 +990,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Access is denied. You cannot update the "transaction_details" table.
+		///   Localized string for Acess is denied. You cannot update the "transaction_details" table.
 		/// </summary>
 		public static string P9201 
 		{
@@ -1693,7 +1693,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for <h2>Hi,</h2><p>Please find the attached document.</p><p>Thank you.<br />{0}</p>
+		///   Localized string for <h2>Hi,</h2><p>Please find the attached document.</p><p>Thank you.<br />MixERP</p>
 		/// </summary>
 		public static string EmailBody 
 		{
@@ -2133,7 +2133,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Opening inventory has already been entered for this office.
+		///   Localized string for Opening inventory has already been entered for this office.
 		/// </summary>
 		public static string OpeningInventoryAlreadyEntered 
 		{
@@ -6312,7 +6312,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Party Type Code
+		///   Localized string for Party Tpye Code
 		/// </summary>
 		public static string party_type_code 
 		{
@@ -6451,6 +6451,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("phone");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Photo
+		/// </summary>
+		public static string photo 
+		{
+			get
+			{
+				return Get("photo");
 			}
 		}
 		
@@ -7434,7 +7445,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Self-Verification Limit
+		///   Localized string for Self Verification Limit
 		/// </summary>
 		public static string self_verification_limit 
 		{
@@ -8849,7 +8860,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Analyze Database
+		///   Localized string for Analyze Databse
 		/// </summary>
 		public static string AnalyzeDatabse 
 		{
@@ -8970,7 +8981,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Auto Verification Policy
+		///   Localized string for Autoverification Policy
 		/// </summary>
 		public static string AutoVerificationPolicy 
 		{
@@ -10576,6 +10587,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Edit
+		/// </summary>
+		public static string Edit 
+		{
+			get
+			{
+				return Get("Edit");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Edit & Receive
 		/// </summary>
 		public static string EditAndReceive 
@@ -10939,7 +10961,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for File Path
+		///   Localized string for File Path
 		/// </summary>
 		public static string FilePath 
 		{
@@ -10968,6 +10990,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("FinalDueAmountinBaseCurrency");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for First
+		/// </summary>
+		public static string First 
+		{
+			get
+			{
+				return Get("First");
 			}
 		}
 		
@@ -11533,7 +11566,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Item Code
+		///   Localized string for Item Code
 		/// </summary>
 		public static string ItemCode 
 		{
@@ -11588,7 +11621,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Item Name
+		///   Localized string for Item Name
 		/// </summary>
 		public static string ItemName 
 		{
@@ -11727,6 +11760,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("LIFO");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Last
+		/// </summary>
+		public static string Last 
+		{
+			get
+			{
+				return Get("Last");
 			}
 		}
 		
@@ -12178,6 +12222,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("NewReleaseAvailable");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Next
+		/// </summary>
+		public static string Next 
+		{
+			get
+			{
+				return Get("Next");
 			}
 		}
 		
@@ -12754,6 +12809,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Previous
+		/// </summary>
+		public static string Previous 
+		{
+			get
+			{
+				return Get("Previous");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Previous Balance
 		/// </summary>
 		public static string PreviousBalance 
@@ -13201,6 +13267,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("ReferenceNumberAbbreviated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Ref #
+		/// </summary>
+		public static string RefererenceNumberAbbreviated 
+		{
+			get
+			{
+				return Get("RefererenceNumberAbbreviated");
 			}
 		}
 		
@@ -15995,6 +16072,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Invalid file extension.
+		/// </summary>
+		public static string InvalidFileExtension 
+		{
+			get
+			{
+				return Get("InvalidFileExtension");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Invalid Npgsql parameter name {0}. . Make sure that the parameter name matches with your command text.
 		/// </summary>
 		public static string InvalidParameterName 
@@ -16292,7 +16380,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for You have to select either item id or compound item id.
+		///   Localized string for You have to select either item id or  compound item id.
 		/// </summary>
 		public static string ItemErrorMessage 
 		{
@@ -16325,7 +16413,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for New password cannot be old password.
+		///   Localized string for New password can not be old password.
 		/// </summary>
 		public static string NewPasswordCannotBeOldPassword 
 		{

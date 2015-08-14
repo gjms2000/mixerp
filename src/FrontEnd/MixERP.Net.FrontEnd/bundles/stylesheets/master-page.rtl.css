@@ -122,7 +122,7 @@
 }
 
 #cboxLoadingGraphic {
-    background: url(../../Scripts/colorbox/images/loading.gif) no-repeat center center;
+    background: url(images/loading.gif) no-repeat center center;
 }
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
@@ -152,7 +152,7 @@
     top: 50%;
     left: 5px;
     margin-top: -32px;
-    background: url(../../Scripts/colorbox/images/controls.png) no-repeat top left;
+    background: url(images/controls.png) no-repeat top left;
     width: 28px;
     height: 65px;
     text-indent: -9999px;
@@ -167,7 +167,7 @@
     top: 50%;
     right: 5px;
     margin-top: -32px;
-    background: url(../../Scripts/colorbox/images/controls.png) no-repeat top right;
+    background: url(images/controls.png) no-repeat top right;
     width: 28px;
     height: 65px;
     text-indent: -9999px;
@@ -182,7 +182,7 @@
     top: 5px;
     right: 5px;
     display: block;
-    background: url(../../Scripts/colorbox/images/controls.png) no-repeat top center;
+    background: url(images/controls.png) no-repeat top center;
     width: 38px;
     height: 19px;
     text-indent: -9999px;
@@ -191,6 +191,7 @@
     #cboxClose:hover {
         background-position: bottom center;
     }
+
 /*! jQuery UI - v1.11.3 - 2015-02-14
 * http://jqueryui.com
 * Includes: core.css, draggable.css, resizable.css, selectable.css, sortable.css, accordion.css, autocomplete.css, button.css, datepicker.css, dialog.css, menu.css, progressbar.css, selectmenu.css, slider.css, spinner.css, tabs.css, tooltip.css, theme.css
@@ -1038,7 +1039,7 @@ body .ui-tooltip {
 }
 .ui-widget-content {
 	border: 1px solid #f6d7f9;
-	background: #fceefd url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_highlight-hard_100_fceefd_1x100.png) 50% top repeat-x;
+	background: #fceefd url("images/ui-bg_highlight-hard_100_fceefd_1x100.png") 50% top repeat-x;
 	color: #362b36;
 }
 .ui-widget-content a {
@@ -1046,7 +1047,7 @@ body .ui-tooltip {
 }
 .ui-widget-header {
 	border: 1px solid #f6d7f9;
-	background: #efdef7 url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_highlight-soft_100_efdef7_1x100.png) 50% 50% repeat-x;
+	background: #efdef7 url("images/ui-bg_highlight-soft_100_efdef7_1x100.png") 50% 50% repeat-x;
 	color: #67238B;
 	font-weight: bold;
 }
@@ -1060,7 +1061,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
 	border: 1px solid #f1c3f6;
-	background: #fcecfd url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_glass_80_fcecfd_1x400.png) 50% 50% repeat-x;
+	background: #fcecfd url("images/ui-bg_glass_80_fcecfd_1x400.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #67238B;
 }
@@ -1077,7 +1078,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #ecb4f1;
-	background: #edb7f2 url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_glass_100_edb7f2_1x400.png) 50% 50% repeat-x;
+	background: #edb7f2 url("images/ui-bg_glass_100_edb7f2_1x400.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #67238B;
 }
@@ -1096,7 +1097,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
 	border: 1px solid #a431e0;
-	background: #67238B url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_glass_50_67238B_1x400.png) 50% 50% repeat-x;
+	background: #67238B url("images/ui-bg_glass_50_67238B_1x400.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #ffffff;
 }
@@ -1113,7 +1114,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
 	border: 1px solid #f9dd34;
-	background: #ffef8f url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_highlight-soft_25_ffef8f_1x100.png) 50% top repeat-x;
+	background: #ffef8f url("images/ui-bg_highlight-soft_25_ffef8f_1x100.png") 50% top repeat-x;
 	color: #363636;
 }
 .ui-state-highlight a,
@@ -1125,7 +1126,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
 	border: 1px solid #cd0a0a;
-	background: #cd0a0a url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_flat_15_cd0a0a_40x100.png) 50% 50% repeat-x;
+	background: #cd0a0a url("images/ui-bg_flat_15_cd0a0a_40x100.png") 50% 50% repeat-x;
 	color: #ffffff;
 }
 .ui-state-error a,
@@ -1171,27 +1172,27 @@ body .ui-tooltip {
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_72a7cf_256x240.png);
+	background-image: url("images/ui-icons_72a7cf_256x240.png");
 }
 .ui-widget-header .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_67238B_256x240.png);
+	background-image: url("images/ui-icons_67238B_256x240.png");
 }
 .ui-state-default .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_67238B_256x240.png);
+	background-image: url("images/ui-icons_67238B_256x240.png");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_8b2abe_256x240.png);
+	background-image: url("images/ui-icons_8b2abe_256x240.png");
 }
 .ui-state-active .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_ffffff_256x240.png);
+	background-image: url("images/ui-icons_ffffff_256x240.png");
 }
 .ui-state-highlight .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_67238B_256x240.png);
+	background-image: url("images/ui-icons_67238B_256x240.png");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url(../../Scripts/jquery-ui/css/custom-theme/images/ui-icons_ffffff_256x240.png);
+	background-image: url("images/ui-icons_ffffff_256x240.png");
 }
 
 /* positioning */
@@ -1404,18 +1405,19 @@ body .ui-tooltip {
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #eeeeee url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
+	background: #eeeeee url("images/ui-bg_diagonals-thick_90_eeeeee_40x40.png") 50% 50% repeat;
 	opacity: .8;
 	filter: Alpha(Opacity=80); /* support: IE8 */
 }
 .ui-widget-shadow {
 	margin: -7px 0 0 -7px;
 	padding: 7px;
-	background: #000000 url(../../Scripts/jquery-ui/css/custom-theme/images/ui-bg_highlight-hard_70_000000_1x100.png) 50% top repeat-x;
+	background: #000000 url("images/ui-bg_highlight-hard_70_000000_1x100.png") 50% top repeat-x;
 	opacity: .3;
 	filter: Alpha(Opacity=30); /* support: IE8 */
 	border-radius: 8px;
 }
+
 /* jsTree default theme */
 .jstree-node,
 .jstree-children,
@@ -1829,7 +1831,7 @@ body .ui-tooltip {
 }
 .jstree-default .jstree-node,
 .jstree-default .jstree-icon {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("/Scripts/vakata-jstree/dist/themes/default/32px.png");
 }
 .jstree-default .jstree-node {
   background-position: -292px -4px;
@@ -1925,13 +1927,13 @@ body .ui-tooltip {
   background-position: 0 0;
 }
 .jstree-default > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/throbber.gif) center center no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/throbber.gif") center center no-repeat;
 }
 .jstree-default .jstree-file {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -100px -68px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -100px -68px no-repeat;
 }
 .jstree-default .jstree-folder {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -260px -4px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -260px -4px no-repeat;
 }
 .jstree-default > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -1943,7 +1945,7 @@ body .ui-tooltip {
 }
 #jstree-dnd.jstree-default .jstree-ok,
 #jstree-dnd.jstree-default .jstree-er {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("/Scripts/vakata-jstree/dist/themes/default/32px.png");
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -1993,7 +1995,7 @@ body .ui-tooltip {
 }
 .jstree-default-small .jstree-node,
 .jstree-default-small .jstree-icon {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("/Scripts/vakata-jstree/dist/themes/default/32px.png");
 }
 .jstree-default-small .jstree-node {
   background-position: -295px -7px;
@@ -2089,13 +2091,13 @@ body .ui-tooltip {
   background-position: 0 0;
 }
 .jstree-default-small > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/throbber.gif) center center no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/throbber.gif") center center no-repeat;
 }
 .jstree-default-small .jstree-file {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -103px -71px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -103px -71px no-repeat;
 }
 .jstree-default-small .jstree-folder {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -263px -7px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -263px -7px no-repeat;
 }
 .jstree-default-small > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -2107,7 +2109,7 @@ body .ui-tooltip {
 }
 #jstree-dnd.jstree-default-small .jstree-ok,
 #jstree-dnd.jstree-default-small .jstree-er {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("/Scripts/vakata-jstree/dist/themes/default/32px.png");
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -2157,7 +2159,7 @@ body .ui-tooltip {
 }
 .jstree-default-large .jstree-node,
 .jstree-default-large .jstree-icon {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("/Scripts/vakata-jstree/dist/themes/default/32px.png");
 }
 .jstree-default-large .jstree-node {
   background-position: -288px 0px;
@@ -2253,13 +2255,13 @@ body .ui-tooltip {
   background-position: 0 0;
 }
 .jstree-default-large > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/throbber.gif) center center no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/throbber.gif") center center no-repeat;
 }
 .jstree-default-large .jstree-file {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -96px -64px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -96px -64px no-repeat;
 }
 .jstree-default-large .jstree-folder {
-  background: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png) -256px 0px no-repeat;
+  background: url("/Scripts/vakata-jstree/dist/themes/default/32px.png") -256px 0px no-repeat;
 }
 .jstree-default-large > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -2271,7 +2273,7 @@ body .ui-tooltip {
 }
 #jstree-dnd.jstree-default-large .jstree-ok,
 #jstree-dnd.jstree-default-large .jstree-er {
-  background-image: url(../../Scripts/vakata-jstree/dist/themes/default/32px.png);
+  background-image: url("32px.png");
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -2306,12 +2308,12 @@ body .ui-tooltip {
     height: 40px;
   }
   #jstree-dnd.jstree-dnd-responsive > .jstree-ok {
-    background-image: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png);
+    background-image: url("40px.png");
     background-position: 0 -200px;
     background-size: 120px 240px;
   }
   #jstree-dnd.jstree-dnd-responsive > .jstree-er {
-    background-image: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png);
+    background-image: url("40px.png");
     background-position: -40px -200px;
     background-size: 120px 240px;
   }
@@ -2330,7 +2332,7 @@ body .ui-tooltip {
 	*/
   }
   .jstree-default-responsive .jstree-icon {
-    background-image: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png);
+    background-image: url("40px.png");
   }
   .jstree-default-responsive .jstree-node,
   .jstree-default-responsive .jstree-leaf > .jstree-ocl {
@@ -2432,7 +2434,7 @@ body .ui-tooltip {
   .jstree-default-responsive .jstree-node > .jstree-ocl,
   .jstree-default-responsive .jstree-themeicon,
   .jstree-default-responsive .jstree-checkbox {
-    background-image: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png);
+    background-image: url("40px.png");
     background-size: 120px 240px;
   }
   .jstree-default-responsive .jstree-node {
@@ -2454,11 +2456,11 @@ body .ui-tooltip {
     background-position: 0 0;
   }
   .jstree-default-responsive .jstree-file {
-    background: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png) 0 -160px no-repeat;
+    background: url("/Scripts/vakata-jstree/dist/themes/default/40px.png") 0 -160px no-repeat;
     background-size: 120px 240px;
   }
   .jstree-default-responsive .jstree-folder {
-    background: url(../../Scripts/vakata-jstree/dist/themes/default/40px.png) -40px -40px no-repeat;
+    background: url("/Scripts/vakata-jstree/dist/themes/default/40px.png") -40px -40px no-repeat;
     background-size: 120px 240px;
   }
   .jstree-default-responsive > .jstree-container-ul > .jstree-node {
@@ -2466,7 +2468,8 @@ body .ui-tooltip {
     margin-right: 0;
   }
 }
-/*
+
+ /*
  * # Semantic UI - x.x
  * https://github.com/Semantic-Org/Semantic-UI
  * http://www.semantic-ui.com/

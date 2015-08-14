@@ -11,10 +11,12 @@ SELECT
     parties.first_name,
     parties.middle_name,
     parties.last_name,
-    CASE WHEN parties.company_name IS NULL THEN
-    parties.party_name 
-    ELSE
-    parties.company_name  END AS party_name,
+    parties.currency_code,
+    CASE WHEN COALESCE(parties.party_name, '') = ''
+    THEN parties.company_name
+    ELSE parties.party_name 
+    END AS party_name,
+    parties.company_name,
     parties.zip_code,
     parties.address_line_1,
     parties.address_line_2,
@@ -35,7 +37,8 @@ SELECT
     parties.url,
     accounts.account_id,
     accounts.account_number,
-    ((accounts.account_number::text || ' ('::text) || accounts.account_name::text) || ')'::text AS gl_head
+    ((accounts.account_number::text || ' ('::text) || accounts.account_name::text) || ')'::text AS gl_head,
+    parties.photo
 FROM core.parties
 INNER JOIN core.party_types 
 ON parties.party_type_id = party_types.party_type_id

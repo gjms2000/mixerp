@@ -106,7 +106,7 @@ goButton.click(function () {
     });
 
     var ajaxGetPartyView = getPartyView(partyCode);
-    var partyCurrencySymbol = "रू.";//Todo
+    var partyCurrencySymbol = "$";//Todo
 
     ajaxGetPartyView.success(function (msg) {
         var partyView = msg.d;
@@ -213,8 +213,7 @@ function localizeBool(val) {
 };
 
 function getPartyView(partyCode) {
-    //Todo
-    url = "/Modules/Inventory/Services/PartyData.asmx/GetPartyView";//Todo--Parametrize these.
+    url = "/Modules/Inventory/Services/PartyData.asmx/GetPartyView";
     data = appendParameter("", "partyCode", partyCode);
     data = getData(data);
 
@@ -222,7 +221,6 @@ function getPartyView(partyCode) {
 };
 
 function getPartyDueModel(partyCode) {
-    //Todo
     url = "/Modules/Inventory/Services/PartyData.asmx/GetPartyDue";
     data = appendParameter("", "partyCode", partyCode);
     data = getData(data);

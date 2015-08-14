@@ -1,5 +1,4 @@
-﻿///#source 1 1 /Scripts/jquery-1.9.1.js
-(function( window, undefined ) {
+﻿(function( window, undefined ) {
 // Can't do this because several apps including ASP.NET trace
 // the stack via arguments.caller.callee and Firefox dies if
 // you try to trace through "use strict" call chains. (#13335)
@@ -9426,7 +9425,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	define( "jquery", [], function () { return jQuery; } );
 }
 })( window );
-///#source 1 1 /Scripts/shortcut.js
 shortcut = {
 	'all_shortcuts':{},//All the shortcuts are stored in this array
 	'add': function(shortcut_combination,callback,opt) {
@@ -9642,7 +9640,6 @@ shortcut = {
 		}
 	}
 }
-///#source 1 1 /Scripts/colorbox/jquery.colorbox.js
 var jqueryColorBox = function ($, document, window) {
     var
         // Default settings object.

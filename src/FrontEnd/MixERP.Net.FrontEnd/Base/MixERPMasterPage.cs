@@ -17,16 +17,16 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.i18n;
 using System;
 using System.Globalization;
 using System.Threading;
 using System.Web.UI;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Common.Helpers;
 using MixERP.Net.Common.jQueryHelper;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.FrontEnd.Base
 {
@@ -84,7 +84,7 @@ namespace MixERP.Net.FrontEnd.Base
 
         private int Update()
         {
-            if (Conversion.TryCastBoolean(Application["UpdateAvailable"]) &&
+            if (Conversion.TryCastBoolean(this.Application["UpdateAvailable"]) &&
                 AppUsers.GetCurrent().View.IsAdmin.ToBool())
             {
                 return 1;

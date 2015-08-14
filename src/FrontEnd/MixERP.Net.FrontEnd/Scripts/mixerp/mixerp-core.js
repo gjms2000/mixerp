@@ -1,5 +1,4 @@
-﻿///#source 1 1 /Scripts/mixerp/core/dom/cascading-pair.js
-function createCascadingPair(select, input) {
+﻿function createCascadingPair(select, input) {
     input.blur(function () {
         selectDropDownListByValue(this.id, select.attr("id"));
     });
@@ -35,7 +34,6 @@ var selectDropDownListByValue = function (textBoxId, dropDownListId) {
 
     triggerChange(dropDownListId);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/checkable.js
 var toogleSelection = function (element) {
     var property = element.prop("checked");
 
@@ -45,7 +43,6 @@ var toogleSelection = function (element) {
         element.prop("checked", true);
     }
 };
-///#source 1 1 /Scripts/mixerp/core/dom/document.js
 function getDocHeight(margin) {
     var D = document;
     var height = Math.max(
@@ -66,7 +63,32 @@ var repaint = function () {
         $(document).trigger('resize');
     }, 1000);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/events.js
+function getParentWindow() {
+    var parent;
+
+    if (window.opener && window.opener.document) {
+        parent = window.opener;
+    };
+
+    if (parent == undefined) {
+        parent = window.parent;
+    };
+
+    return parent;
+};
+
+function closeWindow() {
+    if (window.opener && window.opener.document) {
+        top.close();
+    } else {
+        parent.jQuery.colorbox.close();
+    };
+};
+
+function isFrame() {
+    return window.self !== window.top;
+};
+
 var triggerChange = function (controlId) {
     var element = document.getElementById(controlId);
 
@@ -93,7 +115,6 @@ var triggerClick = function (controlId) {
     }
 };
 
-///#source 1 1 /Scripts/mixerp/core/dom/loader.js
 function addLoader(el) {
     $(el).addClass('loading');
 };
@@ -101,7 +122,103 @@ function addLoader(el) {
 function removeLoader(el) {
     $(el).removeClass('loading');
 };
-///#source 1 1 /Scripts/mixerp/core/dom/popunder.js
+var uploaderInitialized = false;
+var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+var uploaderTemplate = '<div class="uploader field">\
+                            <div class="ui segment">\
+                                <img src="{0}" class="ui image preview">\
+                            </div>\
+                            </div>\
+                            <div class="uploader">\
+                            <label for="file{1}" class="ui pink icon button">\
+                                <i class="file icon"></i>\
+                                Upload</label>\
+                                <input id="file{1}" class="file" data-target="{1}" style="display: none" type="file">\
+                            </div>';
+
+function initializeUploader() {
+    var instances = $("input.image");
+    instances.each(function () {
+        var el = $(this);
+        el.parent().find(".uploader").remove();
+        var val = el.val();
+        var id = el.attr("id");
+        var imagePath = "/Static/images/mixerp-logo-light.png";
+
+        if (val) {
+            imagePath = "/Resource/Static/Attachments/" + val;
+        }
+
+        el.attr("style", "display:none;");
+        el.parent().append(stringFormat(uploaderTemplate, imagePath, id));
+    });
+
+
+    var file = $(".file");
+
+    file.change(function () {
+        if (isValidExtension(this)) {
+            readURL(this);
+            var el = $(this);
+            var segment = el.closest(".segment");
+            var target = $("#" + el.attr("data-target"));
+
+            segment.addClass("loading");
+
+            el.upload("/FileUploadHanlder.ashx", function (uploadedFileName) {
+                target.val(uploadedFileName);
+                target.attr("data-val", uploadedFileName);
+                segment.removeClass("loading");
+            }, function (progress, value) {
+                //not implemented yet.
+            });
+        };
+    });
+
+    uploaderInitialized = true;
+};
+
+function isValidExtension(el) {
+
+    if (el.type === "file") {
+        var fileName = el.value;
+
+        if (fileName.length > 0) {
+
+            var valid = false;
+
+            for (var i = 0; i < allowedExtensions.length; i++) {
+                var extension = allowedExtensions[i];
+
+                if (fileName.substr(fileName.length - extension.length, extension.length).toLowerCase() === extension.toLowerCase()) {
+                    valid = true;
+                    break;
+                };
+            };
+
+            if (!valid) {
+                displayMessage(Resources.Warnings.InvalidFileExtension());
+                el.value = "";
+                return false;
+            };
+        };
+    };
+
+    return true;
+};
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var image = $(input).parent().parent().parent().find("img.preview");
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    };
+};
 function popUnder(div, button) {
     div.removeClass("initially hidden");
     div.show(500);
@@ -112,7 +229,6 @@ function popUnder(div, button) {
         of: button
     });
 };
-///#source 1 1 /Scripts/mixerp/core/dom/select.js
 jQuery.fn.getSelectedItem = function () {
     var listItem = $(this[0]);
     return listItem.find("option:selected");
@@ -133,7 +249,6 @@ jQuery.fn.setSelectedText = function (text) {
 
     target.prop('selected', true);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/visibility.js
 function setVisible(targetControl, visible, timeout) {
     if (visible) {
         targetControl.show(timeout);
@@ -159,7 +274,6 @@ function addNotification(message, onclick) {
 
     $("#Notification").append(item);
 };
-///#source 1 1 /Scripts/mixerp/core/grid/cell.js
 var sumOfColumn = function (tableSelector, columnIndex) {
     var total = 0;
 
@@ -201,7 +315,6 @@ var removeRow = function (cell) {
         cell.closest("tr").remove();
     }
 };
-///#source 1 1 /Scripts/mixerp/core/grid/grid.js
 function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition, grid, offset) {
     var selection = [];
 
@@ -236,7 +349,6 @@ function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition
 
     return selection;
 };
-///#source 1 1 /Scripts/mixerp/core/grid/print-grid.js
 var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
     var token = Math.random().toString();
     //Load report template from the path.
@@ -295,7 +407,6 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
         });
     });
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/chartjs.js
 function shuffle(o) {
     for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
@@ -468,11 +579,9 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         table.hide();
     };
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/colorbox.js
 var showWindow = function (url) {
     $.colorbox({ width: +$('html').width() * 0.7, height: +$('html').height() * 0.7, iframe: true, href: url });
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/jquery-notify.js
 function displayMessage(a, b) {
     $.notify(a, b);
 };
@@ -489,7 +598,17 @@ var logError = function (a, b) {
 function logAjaxErrorMessage(xhr) {
     logError(getAjaxErrorMessage(xhr));
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/semantic-ui.js
+function loadDatepicker() {
+    $(".date").datepicker(
+    {
+        dateFormat: datepickerFormat,
+        showWeek: datepickerShowWeekNumber,
+        firstDay: datepickerWeekStartDay,
+        constrainInput: false,
+        numberOfMonths: eval(datepickerNumberOfMonths)
+    },
+    $.datepicker.regional[language]);
+};
 //Semantic UI
 $(document).ready(function () {
     var tabItems = $('.tabular .item');
@@ -508,7 +627,6 @@ $(document).ready(function () {
 
     $('.activating.element').popup();
 });
-///#source 1 1 /Scripts/mixerp/core/prototype/string.js
 if (!String.prototype.format) {
 // ReSharper disable once NativeTypePrototypeExtending
     String.prototype.format = function () {
@@ -520,13 +638,11 @@ if (!String.prototype.format) {
         });
     };
 };
-///#source 1 1 /Scripts/mixerp/core/aspnet-validation.js
 var validateByControlId = function (controlId) {
     if (typeof Page_ClientValidate === "function") {
         Page_ClientValidate(controlId);
     };
 };
-///#source 1 1 /Scripts/mixerp/core/conversion.js
 var parseFloat2 = function (arg) {
     if (typeof (arg) === "undefined") {
         return 0;
@@ -569,7 +685,15 @@ function parseSerializedDate(str) {
     str = str.replace(/[^0-9 +]/g, '');
     return new Date(parseInt(str));
 };
-///#source 1 1 /Scripts/mixerp/core/date-expressions.js
+function convertDate(d) {
+    try {
+        var date = new Date(parseInt(d.substr(6)));
+        return date;
+    } catch (e) {
+        return null;
+    } 
+};
+
 function dateAdd(dt, expression, number) {
     var d = Date.parseExact(dt, shortDateFormat);
     var ret = new Date();
@@ -681,7 +805,6 @@ $(document).ready(function () {
         }
     });
 });
-///#source 1 1 /Scripts/mixerp/core/browser.js
 function supportsBrowserStorage() {
     try {
         return 'localStorage' in window && window['localStorage'] !== null;
@@ -689,7 +812,6 @@ function supportsBrowserStorage() {
         return false;
     }
 };
-///#source 1 1 /Scripts/mixerp/core/flag.js
 jQuery.fn.getTotalColumns = function () {
     var grid = $($(this).selector);
     var row = grid.find("tr").eq(1);
@@ -747,7 +869,6 @@ function createFlaggedRows(grid, bgColorColumnPos, fgColorColumnPos) {
     });
 };
 
-///#source 1 1 /Scripts/mixerp/core/json.js
 var tableToJSON = function (grid) {
     var colData = [];
     var rowData = [];
@@ -770,7 +891,6 @@ var tableToJSON = function (grid) {
 
     return data;
 };
-///#source 1 1 /Scripts/mixerp/core/localization.js
 $(document).ready(function () {
     setCurrencyFormat();
     setNumberFormat();
@@ -854,7 +974,6 @@ stringFormat = function () {
 
     return s;
 };
-///#source 1 1 /Scripts/mixerp/core/location.js
 function getQueryStringByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -892,7 +1011,6 @@ function updateQueryString(key, value, url) {
             return url;
     }
 };
-///#source 1 1 /Scripts/mixerp/core/mixerp-ajax.js
 var appendParameter = function (data, parameter, value) {
     if (!isNullOrWhiteSpace(data)) {
         data += ",";
@@ -1027,11 +1145,6 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
     };
 
     ajax.success(function (msg) {
-
-        if (typeof callback === "function") {
-            callback();
-        };
-
         if (targetControl.length === 1) {
             targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField);
         };
@@ -1048,6 +1161,10 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
         if (typeof ajaxDataBindCallBack === "function") {
             ajaxDataBindCallBack(targetControl);
+        };
+
+        if (typeof callback === "function") {
+            callback();
         };
     });
 
@@ -1080,11 +1197,9 @@ var getAjaxErrorMessage = function (xhr) {
 
     return "";
 };
-///#source 1 1 /Scripts/mixerp/core/transaction.js
 function convertToDebit(balanceInCredit) {
     return balanceInCredit * -1;
 };
-///#source 1 1 /Scripts/mixerp/core/validation.js
 var makeDirty = function (obj) {
     obj.parent().addClass("error");
     obj.focus();
@@ -1119,7 +1234,523 @@ function isDate(val) {
     var d = new Date(val);
     return !isNaN(d.valueOf());
 };
-///#source 1 1 /Scripts/mixerp/core/window.js
 var confirmAction = function () {
     return confirm(Resources.Questions.AreYouSure());
+};
+
+//Jason Bunting & Alex Nazarov
+//http://stackoverflow.com/questions/359788/how-to-execute-a-javascript-function-when-i-have-its-name-as-a-string
+function executeFunctionByName(functionName, context /*, args */) {
+    var args = [].slice.call(arguments).splice(2);
+    var namespaces = functionName.split(".");
+    var func = namespaces.pop();
+    for (var i = 0; i < namespaces.length; i++) {
+        context = context[namespaces[i]];
+    };
+
+    if (typeof (context[func]) === "function") {
+        return context[func].apply(this, args);
+    };
+
+    return undefined;
+};
+
+function createCascadingPair(select, input) {
+    input.blur(function () {
+        selectDropDownListByValue(this.id, select.attr("id"));
+    });
+
+    select.change(function () {
+        input.val(select.getSelectedValue());
+    });
+};
+
+var selectDropDownListByValue = function (textBoxId, dropDownListId) {
+    var listControl = $("#" + dropDownListId);
+    var textBox = $("#" + textBoxId);
+    var selectedValue = textBox.val();
+    var exists;
+
+    if (isNullOrWhiteSpace(textBox.val())) {
+        return;
+    };
+
+    if (listControl.length) {
+        listControl.find('option').each(function () {
+            if (this.value === selectedValue) {
+                exists = true;
+            }
+        });
+    }
+
+    if (exists) {
+        listControl.val(selectedValue).trigger('change');
+    } else {
+        textBox.val('').trigger('change');
+    }
+
+    triggerChange(dropDownListId);
+};
+var toogleSelection = function (element) {
+    var property = element.prop("checked");
+
+    if (property) {
+        element.prop("checked", false);
+    } else {
+        element.prop("checked", true);
+    }
+};
+function getDocHeight(margin) {
+    var D = document;
+    var height = Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+
+    if (margin) {
+        height += parseInt2(margin);
+    };
+
+    return height;
+};
+
+var repaint = function () {
+    setTimeout(function () {
+        $(document).trigger('resize');
+    }, 1000);
+};
+var triggerChange = function (controlId) {
+    var element = document.getElementById(controlId);
+
+    if ('createEvent' in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        element.dispatchEvent(evt);
+    } else {
+        if ("fireEvent" in element)
+            element.fireEvent("onchange");
+    }
+};
+
+var triggerClick = function (controlId) {
+    var element = document.getElementById(controlId);
+
+    if ('createEvent' in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", false, true);
+        element.dispatchEvent(evt);
+    } else {
+        if ("fireEvent" in element)
+            element.fireEvent("onclick");
+    }
+};
+
+function popUnder(div, button) {
+    div.removeClass("initially hidden");
+    div.show(500);
+
+    div.position({
+        my: "left top",
+        at: "left bottom",
+        of: button
+    });
+};
+jQuery.fn.getSelectedItem = function () {
+    var listItem = $(this[0]);
+    return listItem.find("option:selected");
+};
+
+jQuery.fn.getSelectedValue = function () {
+    return $(this[0]).getSelectedItem().val();
+};
+
+jQuery.fn.getSelectedText = function () {
+    return $(this[0]).getSelectedItem().text();
+};
+
+jQuery.fn.setSelectedText = function (text) {
+    var target = $(this).find("option").filter(function () {
+        return this.text === text;
+    });
+
+    target.prop('selected', true);
+};
+function setVisible(targetControl, visible, timeout) {
+    if (visible) {
+        targetControl.show(timeout);
+        return;
+    };
+
+    targetControl.hide(timeout);
+};
+
+function addNotification(message, onclick) {
+    var count = parseInt2($("#NotificationMenu span").addClass("ui red label").html());
+    count++;
+    $("#NotificationMenu span").addClass("ui red label").html(count);
+
+    var item = $("<div />");
+    item.attr("class", "item");
+
+    if (onclick) {
+        item.attr("onclick", onclick);
+    };
+
+    item.html(message);
+
+    $("#Notification").append(item);
+};
+var sumOfColumn = function (tableSelector, columnIndex) {
+    var total = 0;
+
+    $(tableSelector).find('tr').each(function () {
+        var value = parseFloat2($('td', this).eq(columnIndex).text());
+        total += value;
+    });
+
+    return total;
+};
+
+var getColumnText = function (row, columnIndex) {
+    return row.find("td:eq(" + columnIndex + ")").text();
+};
+
+var setColumnText = function (row, columnIndex, value) {
+    row.find("td:eq(" + columnIndex + ")").html(value);
+};
+
+var toggleDanger = function (cell) {
+    var row = cell.closest("tr");
+    row.toggleClass("negative");
+};
+
+var addDanger = function (row) {
+    row.removeClass("negative");
+    row.addClass("negative");
+};
+
+var toggleSuccess = function (cell) {
+    var row = cell.closest("tr");
+    row.toggleClass("positive");
+};
+
+var removeRow = function (cell) {
+    var result = confirm(Resources.Questions.AreYouSure());
+
+    if (result) {
+        cell.closest("tr").remove();
+    }
+};
+function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition, grid, offset) {
+    var selection = [];
+
+    if (!offset) {
+        offset = 0;
+    };
+
+    //Iterate through each row to investigate the selection.
+    grid.find("tr").each(function (i) {
+        if (i > offset) {
+            //Get an instance of the current row in this loop.
+            var row = $(this);
+
+            //Get the instance of the cell which contains the checkbox.
+            var checkBoxContainer = row.select("td:nth-child(" + checkBoxColumnPosition + ")");
+
+            //Get the instance of the checkbox from the container.
+            var checkBox = checkBoxContainer.find("input");
+
+            if (checkBox) {
+                //Check if the checkbox was selected or checked.
+                if (checkBox.prop("checked")) {
+                    //Get ID from the associated cell.
+                    var id = row.find("td:nth-child(" + itemIdColumnPosition + ")").html();
+
+                    //Add the ID to the array.
+                    selection.push(id);
+                };
+            };
+        };
+    });
+
+    return selection;
+};
+var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
+    var token = Math.random().toString();
+    //Load report template from the path.
+    $.get(templatePath + "?" + token, function () { }).done(function (data) {
+        //Load report header template.
+        $.get(headerPath + "?" + token, function () { }).done(function (header) {
+            var table = $("#" + gridViewId).clone();
+
+            table.find("tr.tableFloatingHeader").remove();
+
+            table.find("th:nth-child(-n" + offset + ")").remove();
+            table.find("td:nth-child(-n" + offset + ")").remove();
+
+            table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
+            table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
+
+            table.find("td").removeAttr("style");
+            table.find("tr").removeAttr("style");
+
+            table = "<table class='preview'>" + table.html() + "</table>";
+
+            data = data.replace("{Header}", header);
+            data = data.replace("{ReportHeading}", reportTitle);
+            data = data.replace("{PrintDate}", printedDate);
+            data = data.replace("{UserName}", user);
+            data = data.replace("{OfficeCode}", office);
+            data = data.replace("{Table}", table);
+
+            if (hiddenFieldToUpdate) {                
+                //Update the hidden field with data, but do not print.
+                $(hiddenFieldToUpdate).val(data);
+
+                if (triggerControlId) {
+                    $("#" + triggerControlId).trigger("click");
+                };
+
+                return;
+            };
+
+            //Creating and opening a new window to display the report.
+            var w = window.open('', windowName,
+                + ',menubar=0'
+                + ',toolbar=0'
+                + ',status=0'
+                + ',scrollbars=1'
+                + ',resizable=0');
+            w.moveTo(0, 0);
+            w.resizeTo(screen.width, screen.height);
+
+
+            //Writing the report to the window.
+            w.document.writeln(data);
+            w.document.close();
+
+            //Report sent to the browser.
+        });
+    });
+};
+function shuffle(o) {
+    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
+var chartColors = shuffle(["#DF0101", "#DF3A01", "#DF7401", "#DBA901", "#D7DF01", "#A5DF00", "#74DF00", "#3ADF00", "#01DF74", "#01DFA5", "#01DFD7", "#01A9DB", "#0174DF", "#013ADF", "#0101DF", "#3A01DF", "#7401DF", "#A901DB", "#DF01D7", "#DF01A5", "#DF0174", "#DF013A", "#6E6E6E"]);
+
+function getFillColor(index) {
+    var color = hexToRgb(chartColors[index]);
+    var opacity = 0.8;
+    return "rgba(" + color.r + "," + color.g + "," + color.b + "," + opacity + ")";
+};
+
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
+
+function prepareChart(datasourceId, canvasId, legendId, type, log) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var labels = [];
+    var data = [];
+    var datasets = [];
+    var title;
+    var index = 0;
+
+    //Loop through the table header for labels.
+    table.find("tr:first-child th:not(:first-child)").each(function () {
+        //Create labels from header row columns.
+        labels.push($(this).html());
+    });
+
+    //Loop through each row of the table body.
+    table.find("tr").not(":first").each(function () {
+        //Get an instance of the current row
+        var row = $(this);
+
+        //The first column of each row is the legend.
+        title = row.find(":first-child").html();
+
+        //Reset the data object's value from the previous iteration.
+        data = [];
+        //Loop through the row columns.
+        row.find(":not(:first-child)").each(function () {
+            //Get data from this row.
+            data.push(parseFloat2($(this).html()));
+        });
+
+        //Create a new dataset representing this row.
+        var dataset =
+        {
+            fillColor: getFillColor(index),
+            strokeColor: chartColors[index],
+            pointColor: chartColors[index],
+            data: data,
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        datasets.push(dataset);
+
+        if (log) {
+            console.log(JSON.stringify(datasets));
+        }
+
+        index++;
+    });
+
+    table.remove();
+
+    var reportData = {
+        labels: labels,
+        datasets: datasets
+    };
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    switch (type) {
+        case "line":
+            new Chart(ctx).Line(reportData);
+            break;
+        case "radar":
+            new Chart(ctx).Radar(reportData);
+            break;
+        default:
+            new Chart(ctx).Bar(reportData);
+            break;
+    }
+
+    legend(document.getElementById(legendId), reportData);
+    table.hide();
+}
+
+function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var value;
+    var data = [];
+
+    if (typeof titleColumnIndex === "undefined") {
+        titleColumnIndex = 0;
+    };
+
+    if (typeof valueColumnIndex === "undefined") {
+        valueColumnIndex = 1;
+    };
+
+    //Reset the counter.
+    var counter = 0;
+
+    //Loop through each row of the table body.
+    table.find("tr").not(":first").each(function () {
+        //Get an instance of the current row
+        var row = $(this);
+
+        //The first column of each row is the legend.
+        var title = row.find("td:eq(" + parseInt2(titleColumnIndex) + ")").html();
+
+        //The first column of each row is the legend.
+        value = parseInt(row.find("td:eq(" + parseInt2(valueColumnIndex) + ")").html());
+
+        var dataset = {
+            value: value,
+            color: chartColors[counter],
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        data.push(dataset);
+        counter++;
+    });
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    var animation = true;
+
+    if (typeof (window.chartAnimation) !== "undefined") {
+        animation = window.chartAnimation;
+    };
+
+    var options = {
+        animation: animation
+    };
+
+    switch (type) {
+        case "doughnut":
+            new Chart(ctx).Doughnut(data, options);
+            break;
+        case "polar":
+            new Chart(ctx).PolarArea(data, options);
+            break;
+        default:
+            new Chart(ctx).Pie(data, options);
+            break;
+    }
+
+    legend(document.getElementById(legendId), data);
+    if (hide) {
+        table.hide();
+    };
+};
+var showWindow = function (url) {
+    $.colorbox({ width: +$('html').width() * 0.7, height: +$('html').height() * 0.7, iframe: true, href: url });
+};
+function displayMessage(a, b) {
+    $.notify(a, b);
+};
+
+function displaySucess() {
+    $.notify(Resources.Labels.TaskCompletedSuccessfully(), "success");
+};
+
+var logError = function (a, b) {
+    //Todo
+    $.notify(a, b);
+};
+
+function logAjaxErrorMessage(xhr) {
+    logError(getAjaxErrorMessage(xhr));
+};
+//Semantic UI
+$(document).ready(function () {
+    var tabItems = $('.tabular .item');
+
+    if (tabItems && tabItems.length > 0) {
+        tabItems.tab();
+    };
+
+    //Semantic UI Button Support
+    var buttons = $(".buttons .button");
+
+    buttons.on("click", function () {
+        buttons.removeClass("active");
+        $(this).addClass("active");
+    });
+
+    $('.activating.element').popup();
+});
+if (!String.prototype.format) {
+// ReSharper disable once NativeTypePrototypeExtending
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] !== 'undefined'
+                ? args[number]
+                : match;
+        });
+    };
 };

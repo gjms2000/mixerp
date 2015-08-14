@@ -13,6 +13,24 @@ namespace MixERP.Net.FrontEnd {
     public partial class MixERPBlankMaster {
         
         /// <summary>
+        /// ScriptContentPlaceholder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder ScriptContentPlaceholder;
+        
+        /// <summary>
+        /// StyleSheetContentPlaceholder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder StyleSheetContentPlaceholder;
+        
+        /// <summary>
         /// ContentPlaceHolderHead control.
         /// </summary>
         /// <remarks>
@@ -29,6 +47,15 @@ namespace MixERP.Net.FrontEnd {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        
+        /// <summary>
+        /// SwallowSubmit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button SwallowSubmit;
         
         /// <summary>
         /// ScriptManager1 control.

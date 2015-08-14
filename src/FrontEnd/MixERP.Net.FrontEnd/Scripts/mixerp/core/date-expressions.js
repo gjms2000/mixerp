@@ -1,3 +1,12 @@
+function convertDate(d) {
+    try {
+        var date = new Date(parseInt(d.substr(6)));
+        return date;
+    } catch (e) {
+        return null;
+    } 
+};
+
 function dateAdd(dt, expression, number) {
     var d = Date.parseExact(dt, shortDateFormat);
     var ret = new Date();
