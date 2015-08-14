@@ -100,12 +100,6 @@ namespace MixERP.Net.i18n
             return result;
         }
 
-        private static string GetFallBackResource(ref IDictionary<string, string> cache, CultureInfo culture, string resourceClass, string resourceKey)
-        {
-            throw new NotImplementedException();
-        }
-
-
         private static void InitializeResources()
         {
             IDictionary<string, string> resources = DbResources.GetLocalizedResources();

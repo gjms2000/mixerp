@@ -23,6 +23,7 @@
     </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,6 +80,9 @@
     <Content Include="Entry\TransferRequest.ascx" />
     <Content Include="Mix Open Foundation.snk" />
     <Content Include="packages.config" />
+    <Content Include="Scripts\Setup\Parties\Entry.js" />
+    <Content Include="Services\Setup\Parties.asmx" />
+    <Content Include="Services\Setup\PartyInfo.asmx" />
     <Content Include="Services\web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -130,6 +134,25 @@
     <Content Include="Setup\CompoundItemDetails.ascx" />
     <Content Include="Setup\CompoundItems.ascx" />
     <Content Include="Setup\ItemTypes.ascx" />
+    <Content Include="Setup\Parties\Entry.ascx" />
+    <Content Include="Setup\Parties\index.html" />
+    <Content Include="Setup\PartyInfo.ascx" />
+    <Content Include="Setup\PartyInfo\buttons.html" />
+    <Content Include="Setup\PartyInfo\trend\ajax.js" />
+    <Content Include="Setup\PartyInfo\trend\chart.js" />
+    <Content Include="Setup\PartyInfo\trend\index.html" />
+    <Content Include="Setup\PartyInfo\account-statement\ajax.js" />
+    <Content Include="Setup\PartyInfo\account-statement\controller.js" />
+    <Content Include="Setup\PartyInfo\popular-items\ajax.js" />
+    <Content Include="Setup\PartyInfo\popular-items\chart.js" />
+    <Content Include="Setup\PartyInfo\shipping-addresses\ajax.js" />
+    <Content Include="Setup\PartyInfo\shipping-addresses\controller.js" />
+    <Content Include="Setup\PartyInfo\shipping-addresses\index.html" />
+    <Content Include="Setup\PartyInfo\general-info\ajax.js" />
+    <Content Include="Setup\PartyInfo\general-info\controller.js" />
+    <Content Include="Setup\PartyInfo\general-info\index.html" />
+    <Content Include="Setup\PartyInfo\account-statement\index.html" />
+    <Content Include="Setup\PartyInfo\popular-items\index.html" />
     <Content Include="Setup\Stores.ascx" />
     <Content Include="Setup\StoreTypes.ascx" />
     <Content Include="SQL\Menu.sql" />
@@ -296,6 +319,14 @@
       <DependentUpon>PartyData.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Services\Setup\Parties.asmx.cs">
+      <DependentUpon>Parties.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\Setup\PartyInfo.asmx.cs">
+      <DependentUpon>PartyInfo.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Services\TransferAcknowledgement.asmx.cs">
       <DependentUpon>TransferAcknowledgement.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -366,6 +397,20 @@
     </Compile>
     <Compile Include="Setup\PartiesPopup.ascx.designer.cs">
       <DependentUpon>PartiesPopup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\Parties\Entry.ascx.cs">
+      <DependentUpon>Entry.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\Parties\Entry.ascx.designer.cs">
+      <DependentUpon>Entry.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\PartyInfo.ascx.cs">
+      <DependentUpon>PartyInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\PartyInfo.ascx.designer.cs">
+      <DependentUpon>PartyInfo.ascx</DependentUpon>
     </Compile>
     <Compile Include="Setup\PartyTypes.ascx.cs">
       <DependentUpon>PartyTypes.ascx</DependentUpon>

@@ -1020,3 +1020,42 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.parties'::regclass
+        AND    attname IN ('photo')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.parties
+        ADD COLUMN photo public.image;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.items'::regclass
+        AND    attname IN ('photo')
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.items
+        ADD COLUMN photo public.image;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+

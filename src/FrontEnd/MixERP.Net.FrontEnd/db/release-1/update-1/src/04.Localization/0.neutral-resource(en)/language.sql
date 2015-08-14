@@ -206,7 +206,7 @@ SELECT localization.add_localized_resource('Labels', '', 'SalesOrderEmailSubject
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationAlreadyAccepted', 'This quotation was already accepted on {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
-SELECT localization.add_localized_resource('Labels', '', 'SetupEmailDescription', 'Your outgoig email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.');
+SELECT localization.add_localized_resource('Labels', '', 'SetupEmailDescription', 'Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.');
 SELECT localization.add_localized_resource('Labels', '', 'SMTPIsDisabled', 'SMTP is disabled.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedProgress', '{0} out of {1} tasks completed.');
 SELECT localization.add_localized_resource('Labels', '', 'TaskCompletedSuccessfully', 'Task completed successfully.');
@@ -581,6 +581,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'payment_term_co
 SELECT localization.add_localized_resource('ScrudResource', '', 'payment_term_id', 'Payment Term Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'payment_term_name', 'Payment Term Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'phone', 'Phone');
+SELECT localization.add_localized_resource('ScrudResource', '', 'photo', 'Photo');
 SELECT localization.add_localized_resource('ScrudResource', '', 'po_box', 'Po Box');
 SELECT localization.add_localized_resource('ScrudResource', '', 'poco_type_name', 'Poco Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'policy_id', 'Policy id');
@@ -643,8 +644,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method
 SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method_name', 'Rounding Method Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_account_id', 'Sales Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_discount_account_id', 'Sales Discount Account Id');
-SELECT localization.add_localized_resource('ScrudResource', '', 'sales_quotation_valid_duration', 'Sales Quotation Valid Duration');
-SELECT localization.add_localized_resource('ScrudResource', '', 'sales_return_account_id', 'Sales Return Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_quotation_valid_duration', 'Sales Quotation Valid Duration');SELECT localization.add_localized_resource('ScrudResource', '', 'sales_return_account_id', 'Sales Return Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax', 'Sales Tax');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_code', 'Sales Tax Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_detail_code', 'Sales Tax Detail Code');
@@ -957,6 +957,7 @@ SELECT localization.add_localized_resource('Titles', '', 'EODConsole', 'EOD Cons
 SELECT localization.add_localized_resource('Titles', '', 'ER', 'ER');
 SELECT localization.add_localized_resource('Titles', '', 'ERToBaseCurrency', 'Exchange Rate (To Base Currency)');
 SELECT localization.add_localized_resource('Titles', '', 'ERToHomeCurrency', 'Exchange Rate (To Home Currency)');
+SELECT localization.add_localized_resource('Titles', '', 'Edit', 'Edit');
 SELECT localization.add_localized_resource('Titles', '', 'EditAndSend', 'Edit & Send');
 SELECT localization.add_localized_resource('Titles', '', 'EditAndReceive', 'Edit & Receive');
 SELECT localization.add_localized_resource('Titles', '', 'EditSelected', 'Edit Selected');
@@ -993,6 +994,7 @@ SELECT localization.add_localized_resource('Titles', '', 'FieldLabel', 'Field La
 SELECT localization.add_localized_resource('Titles', '', 'FieldName', 'Field Name');
 SELECT localization.add_localized_resource('Titles', '', 'Filter', 'Filter');
 SELECT localization.add_localized_resource('Titles', '', 'FinalDueAmountinBaseCurrency', 'Final Due Amount in Base Currency');
+SELECT localization.add_localized_resource('Titles', '', 'First', 'First');
 SELECT localization.add_localized_resource('Titles', '', 'FirstPage', 'First Page');
 SELECT localization.add_localized_resource('Titles', '', 'FirstSteps', 'First Steps');
 SELECT localization.add_localized_resource('Titles', '', 'FirstTasks', 'First Tasks');
@@ -1061,6 +1063,7 @@ SELECT localization.add_localized_resource('Titles', '', 'JournalVoucherEntry', 
 SELECT localization.add_localized_resource('Titles', '', 'KeyColumnEmptyExceptionMessage', 'The property ''KeyColumn'' cannot be left empty.');
 SELECT localization.add_localized_resource('Titles', '', 'LCCredit', 'LC Credit');
 SELECT localization.add_localized_resource('Titles', '', 'LCDebit', 'LC Debit');
+SELECT localization.add_localized_resource('Titles', '', 'Last', 'Last');
 SELECT localization.add_localized_resource('Titles', '', 'LastAccessedOn', 'Last Accessed On');
 SELECT localization.add_localized_resource('Titles', '', 'LastLoginIP', 'Last Login IP');
 SELECT localization.add_localized_resource('Titles', '', 'LastLoginOn', 'Last Login On');
@@ -1103,6 +1106,7 @@ SELECT localization.add_localized_resource('Titles', '', 'NewFiscalYear', 'New F
 SELECT localization.add_localized_resource('Titles', '', 'NewJournalEntry', 'New Journal Entry');
 SELECT localization.add_localized_resource('Titles', '', 'NewPassword', 'New Password');
 SELECT localization.add_localized_resource('Titles', '', 'NewReleaseAvailable', 'A New Release Is Available');
+SELECT localization.add_localized_resource('Titles', '', 'Next', 'Next');
 SELECT localization.add_localized_resource('Titles', '', 'NextPage', 'Next Page');
 SELECT localization.add_localized_resource('Titles', '', 'No', 'No');
 SELECT localization.add_localized_resource('Titles', '', 'NonTaxableSales', 'Nontaxable Sales');
@@ -1156,6 +1160,7 @@ SELECT localization.add_localized_resource('Titles', '', 'PreferredSupplierIdAbb
 SELECT localization.add_localized_resource('Titles', '', 'Prepare', 'Prepare');
 SELECT localization.add_localized_resource('Titles', '', 'PreparedOn', 'Prepared On');
 SELECT localization.add_localized_resource('Titles', '', 'Preview', 'Preview');
+SELECT localization.add_localized_resource('Titles', '', 'Previous', 'Previous');
 SELECT localization.add_localized_resource('Titles', '', 'PreviousBalance', 'Previous Balance');
 SELECT localization.add_localized_resource('Titles', '', 'PreviousCredit', 'Previous Credit');
 SELECT localization.add_localized_resource('Titles', '', 'PreviousDebit', 'Previous Debit');
@@ -1452,6 +1457,7 @@ SELECT localization.add_localized_resource('Warnings', '', 'InvalidCashRepositor
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidCostCenter', 'Invalid cost center.');
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidData', 'Invalid data.');
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidDate', 'Invalid date.');
+SELECT localization.add_localized_resource('Warnings', '', 'InvalidFileExtension', 'Invalid file extension.');
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidParameterName', 'Invalid Npgsql parameter name {0}. . Make sure that the parameter name matches with your command text.');
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidParty', 'Invalid party.');
 SELECT localization.add_localized_resource('Warnings', '', 'InvalidPaymentTerm', 'Invalid payment term.');

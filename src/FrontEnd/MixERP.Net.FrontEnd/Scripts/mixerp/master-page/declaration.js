@@ -9,3 +9,9 @@ var datepickerLanguagePath;
 var searchInput = $("#SearchInput");
 
 var MixERPApp = angular.module('MixERPApp', []);
+
+MixERPApp.filter('ConvertDate', function () {
+    return function (d) {
+        return window.convertDate(d);
+    };
+});
