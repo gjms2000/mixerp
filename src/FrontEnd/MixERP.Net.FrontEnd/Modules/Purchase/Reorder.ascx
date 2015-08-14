@@ -107,7 +107,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     function loadParties() {
         url = "/Modules/Inventory/Services/PartyData.asmx/GetParties";
         var parties = $("[data-role='party']");
-        ajaxDataBind(url, parties);
+        data = appendParameter("", "book", "Sales");
+        data = getData(data);
+        ajaxDataBind(url, parties, data);
     };
 
     function loadTaxes() {
