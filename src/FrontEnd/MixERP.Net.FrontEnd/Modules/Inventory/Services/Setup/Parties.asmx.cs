@@ -32,6 +32,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Setup
                 AND (LOWER(party_code) LIKE @1 
                 OR lower(party_name) LIKE @1
                 OR lower(email) LIKE @1)
+                ORDER BY party_id DESC
                 LIMIT @2 OFFSET @3;";
 
             return Factory.Get<PartyScrudView>(catalog, sql, partyTypeId, filter, PAGE_SIZE, offset).ToList();

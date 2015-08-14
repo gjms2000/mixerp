@@ -237,7 +237,14 @@
                 </div>
                 <input type="hidden" id="PartyAccountIdHiddenField" />
                 <div class="big error vpad8 initially hidden"><span data-localize="Titles.RequiredFieldDetails"></span></div>
-                <input id="SaveButton" class="ui basic green button" type="button" value="Save" />
+                <div class="ui buttons">
+                    <a id="SaveButton" class="ui basic green button">
+                        <span data-localize="Titles.Save"></span>
+                    </a>
+                    <a class="ui basic red button" href="../Parties.mix">
+                        <span data-localize="Titles.Cancel"></span>
+                    </a>
+                </div>
             </div>
 
         </div>
