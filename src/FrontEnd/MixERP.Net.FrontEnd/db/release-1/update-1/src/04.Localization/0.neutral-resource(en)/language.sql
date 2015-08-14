@@ -643,6 +643,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method
 SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method_name', 'Rounding Method Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_account_id', 'Sales Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_discount_account_id', 'Sales Discount Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_quotation_valid_duration', 'Sales Quotation Valid Duration');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_return_account_id', 'Sales Return Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax', 'Sales Tax');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_code', 'Sales Tax Code');
