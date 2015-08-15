@@ -45,14 +45,13 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <div class="ui teal header">
     </div>
     <div class="content">
-
         <div class="ui segment">
             <img src="/" alt="" />
             <p class="vpad8"></p>
         </div>
 
         <div class="actions">
-            <div class="ui teal button">
+            <div class="ui teal ok button">
                 <asp:Literal ID="OKLiteral" runat="server"/>
             </div>
         </div>

@@ -217,6 +217,7 @@ BEGIN
 
     INSERT INTO policy.auto_verification_policy
     (
+        office_id,
         user_id, 
         verify_sales_transactions, 
         sales_verification_limit,
@@ -229,6 +230,7 @@ BEGIN
         is_active
     )
     SELECT 
+        _office_id,
         _user_id,
         true,
         0,
@@ -251,3 +253,4 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+

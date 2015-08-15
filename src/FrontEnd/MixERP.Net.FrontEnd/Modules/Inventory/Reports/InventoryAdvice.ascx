@@ -20,4 +20,4 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     CodeBehind="InventoryAdvice.ascx.cs"
     Inherits="MixERP.Net.Core.Modules.Inventory.Reports.InventoryAdvice"
     MasterPageId="MixERPReportMaster.Master"
-    RemoveTheme="true" %>
+    RemoveTheme="true" IsLandingPage="true" %>

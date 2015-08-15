@@ -7,7 +7,7 @@ namespace PetaPoco
 {
     public sealed class Factory
     {
-        private const string ProviderName = "Npgsql";
+        public const string ProviderName = "Npgsql";
         public static string MetaDatabase = ConfigurationHelper.GetDbServerParameter("MetaDatabase");
 
         public static IEnumerable<T> Get<T>(string catalog, string sql, params object[] args)
@@ -115,7 +115,7 @@ namespace PetaPoco
             }
         }
 
-        private static string GetDBErrorResource(NpgsqlException ex)
+        public static string GetDBErrorResource(NpgsqlException ex)
         {
             string message = DbErrors.Get(ex.Code);
 

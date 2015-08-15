@@ -60,7 +60,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
   </TopSection>
   <Body>
     <Content>
-      <h2>{Resources.Titles.InvoiceDetails}</h2>
+      <h2>{Resources.Titles.QuotationDetails}</h2>
     </Content>
     <GridViews>
       <GridView>

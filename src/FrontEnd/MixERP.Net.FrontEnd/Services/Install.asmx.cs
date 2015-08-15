@@ -18,12 +18,16 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Framework;
+using MixERP.Net.FrontEnd.Models;
 using MixERP.Net.i18n.Resources;
 using Serilog;
 
@@ -36,41 +40,50 @@ namespace MixERP.Net.FrontEnd.Services
     public class Install : WebService
     {
         [WebMethod]
-        public bool SaveOffice(string officeCode, string officeName, string nickName, string registrationDate,
-            string currencyCode, string currencySymbol, string currencyName, string hundredthName, string fiscalYearCode,
-            string fiscalYearName, string startsFrom, string endsOn, 
-            bool salesTaxIsVat, bool hasStateSalesTax, bool hasCountySalesTax,
-            int quotationValidDays, decimal incomeTaxRate, int weekStartDay, string transactionStartDate,
-            bool isPerpetual, string valuationMethod, string logo,
-            string adminName, string username, string password, string confirmPassword)
+        public bool SaveOffice(InstallConfig config)
         {
-            if (string.IsNullOrWhiteSpace(officeName) || string.IsNullOrWhiteSpace(officeCode) ||
-                string.IsNullOrWhiteSpace(nickName) || string.IsNullOrWhiteSpace(registrationDate) ||
-                string.IsNullOrWhiteSpace(currencyCode) || string.IsNullOrWhiteSpace(currencySymbol) ||
-                string.IsNullOrWhiteSpace(currencyName) || string.IsNullOrWhiteSpace(hundredthName) ||
-                string.IsNullOrWhiteSpace(fiscalYearCode) || string.IsNullOrWhiteSpace(fiscalYearName) ||
-                string.IsNullOrWhiteSpace(startsFrom) || string.IsNullOrWhiteSpace(endsOn) ||
-                string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(username) ||
-                string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+            if (string.IsNullOrWhiteSpace(config.OfficeName) ||
+                string.IsNullOrWhiteSpace(config.OfficeCode) ||
+                string.IsNullOrWhiteSpace(config.NickName) ||
+                string.IsNullOrWhiteSpace(config.RegistrationDate) ||
+                string.IsNullOrWhiteSpace(config.CurrencyCode) ||
+                string.IsNullOrWhiteSpace(config.CurrencySymbol) ||
+                string.IsNullOrWhiteSpace(config.CurrencyName) ||
+                string.IsNullOrWhiteSpace(config.HundredthName) ||
+                string.IsNullOrWhiteSpace(config.FiscalYearCode) ||
+                string.IsNullOrWhiteSpace(config.FiscalYearName) ||
+                string.IsNullOrWhiteSpace(config.StartsFrom) ||
+                string.IsNullOrWhiteSpace(config.EndsOn) ||
+                string.IsNullOrWhiteSpace(config.AdminName) ||
+                string.IsNullOrWhiteSpace(config.Username) ||
+                string.IsNullOrWhiteSpace(config.Password) ||
+                string.IsNullOrWhiteSpace(config.ConfirmPassword) ||
+                string.IsNullOrWhiteSpace(config.RegionalDataPath))
             {
                 throw new MixERPException(Labels.AllFieldsRequired);
             }
 
-            if (!new[] {"FIFO", "LIFO", "MAVCO"}.Contains(valuationMethod))
+            if (!new[] { "FIFO", "LIFO", "MAVCO" }.Contains(config.ValuationMethod))
             {
                 throw new MixERPException("Invalid inventory valuation method specified.");
             }
 
-            if (password != confirmPassword)
+            if (config.Password != config.ConfirmPassword)
             {
                 throw new MixERPException(Warnings.ConfirmationPasswordDoesNotMatch);
             }
 
 
-            DateTime dateOfRegistration = Convert.ToDateTime(registrationDate);
-            DateTime fiscalYearStartDate = Convert.ToDateTime(startsFrom);
-            DateTime fiscalYearEndDate = Convert.ToDateTime(endsOn);
-            DateTime transactionStartsFrom = Convert.ToDateTime(transactionStartDate);
+            DateTime dateOfRegistration = Convert.ToDateTime(config.RegistrationDate);
+            DateTime fiscalYearStartDate = Convert.ToDateTime(config.StartsFrom);
+            DateTime fiscalYearEndDate = Convert.ToDateTime(config.EndsOn);
+            DateTime transactionStartsFrom = Convert.ToDateTime(config.TransactionStartDate);
+            string regionalDataFullPath = this.GetRegionalDataFullPath(config.RegionalDataPath);
+
+            if (string.IsNullOrWhiteSpace(regionalDataFullPath))
+            {
+                throw new MixERPException(Errors.RegionalDataFileNotFound);
+            }
 
             if (fiscalYearStartDate > fiscalYearEndDate)
             {
@@ -82,36 +95,40 @@ namespace MixERP.Net.FrontEnd.Services
                 throw new MixERPException("Transaction start date cannot be greater than fiscal year end date.");
             }
 
+
+
+
             try
             {
                 Data.Office.Offices.SaveOffice
                     (
-                    AppUsers.GetCurrentUserDB(), 
-                    officeCode, 
-                    officeName, 
-                    nickName,
-                    dateOfRegistration, 
-                    currencyCode,
-                    currencySymbol, 
-                    currencyName, 
-                    hundredthName, 
-                    fiscalYearCode, 
-                    fiscalYearName, 
-                    fiscalYearStartDate, 
-                    fiscalYearEndDate, 
-                    salesTaxIsVat,
-                    hasStateSalesTax,
-                    hasCountySalesTax,
-                    quotationValidDays,
-                    incomeTaxRate, 
-                    weekStartDay, 
+                    AppUsers.GetCurrentUserDB(),
+                    regionalDataFullPath,
+                    config.OfficeCode,
+                    config.OfficeName,
+                    config.NickName,
+                    dateOfRegistration,
+                    config.CurrencyCode,
+                    config.CurrencySymbol,
+                    config.CurrencyName,
+                    config.HundredthName,
+                    config.FiscalYearCode,
+                    config.FiscalYearName,
+                    fiscalYearStartDate,
+                    fiscalYearEndDate,
+                    config.SalesTaxIsVat,
+                    config.HasStateSalesTax,
+                    config.HasCountySalesTax,
+                    config.QuotationValidDays,
+                    config.IncomeTaxRate,
+                    config.WeekStartDay,
                     transactionStartsFrom,
-                    isPerpetual,
-                    valuationMethod,
-                    logo,
-                    adminName, 
-                    username, 
-                    password
+                    config.IsPerpetual,
+                    config.ValuationMethod,
+                    config.Logo,
+                    config.AdminName,
+                    config.Username,
+                    config.Password
                     );
 
                 return true;
@@ -121,6 +138,25 @@ namespace MixERP.Net.FrontEnd.Services
                 Log.Warning("Could not save office. {Exception}", ex);
                 throw;
             }
+        }
+
+        private string GetRegionalDataFullPath(string fileName)
+        {
+            string path = "/Installation/regional/" + fileName + ".sql";
+            path = HostingEnvironment.MapPath(path);
+
+            if (File.Exists(path))
+            {
+                return path;
+            }
+
+            return string.Empty;
+        }
+
+        [WebMethod]
+        public List<RegionalData> GetRegionalDataList()
+        {
+            return RegionalData.GetRegionalDataList();
         }
     }
 }

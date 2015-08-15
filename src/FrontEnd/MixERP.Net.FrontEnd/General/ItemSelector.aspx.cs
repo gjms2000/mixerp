@@ -44,24 +44,20 @@ namespace MixERP.Net.FrontEnd.General
                 selector.Catalog = AppUsers.GetCurrentUserDB();
 
                 this.SelectorPlaceholder.Controls.Add(selector);
+                this.OverridePath = this.GetOverridePath();
             }
         }
 
-        private Assembly GetAssembly()
+        private string GetOverridePath()
         {
-            string assembly = this.Page.Request.QueryString["Assembly"];
+            string path = this.Page.Request.QueryString["OverridePath"];
 
-            if (string.IsNullOrWhiteSpace(assembly))
+            if (!string.IsNullOrWhiteSpace(path))
             {
-                return Assembly.GetAssembly(typeof (ItemSelector));
+                return path;
             }
 
-            return this.GetAssemblyByName(assembly);
-        }
-
-        private Assembly GetAssemblyByName(string name)
-        {
-            return AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == name);
+            return string.Empty;
         }
 
         private string GetResourceClassName()

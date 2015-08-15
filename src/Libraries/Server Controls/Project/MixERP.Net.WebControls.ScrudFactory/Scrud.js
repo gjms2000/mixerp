@@ -157,11 +157,11 @@ function getParent() {
 
     if (window.opener && window.opener.document) {
         parent = window.opener;
-    }
+    };
 
     if (parent == undefined) {
         parent = window.parent;
-    }
+    };
 
     return parent;
 };
@@ -183,9 +183,9 @@ function scrudSaveAndClose() {
             };
 
             closeWindow();
-        }
-    }
-}
+        };
+    };
+};
 
 function closeWindow() {
     if (window.opener && window.opener.document) {
@@ -449,5 +449,5 @@ function scrudLoadDatepicker() {
         constrainInput: false,
         numberOfMonths: eval(datepickerNumberOfMonths)
     },
-    $.datepicker.regional['en']);
+    $.datepicker.regional[language]);
 };

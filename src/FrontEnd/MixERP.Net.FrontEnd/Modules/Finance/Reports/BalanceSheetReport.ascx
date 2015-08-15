@@ -19,7 +19,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     AutoEventWireup="true"
     CodeBehind="BalanceSheetReport.ascx.cs"
     Inherits="MixERP.Net.Core.Modules.Finance.Reports.BalanceSheetReport"
-    RemoveTheme="true"
+    RemoveTheme="true" IsLandingPage="true"
     MasterPageId="MixERPReportMaster.Master" %>
 
 <asp:PlaceHolder ID="Placeholder1" runat="server" />

@@ -17,23 +17,24 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.Common.Helpers;
-using System;
 using System.Linq;
 using System.Net.Mail;
 using System.Security;
-using System.Web.Hosting;
+using MixERP.Net.Entities.Config;
 using PetaPoco;
 
 namespace MixERP.Net.Messaging.Email.Helpers
 {
-    internal class Config
+    public class Config
     {
         public Config(string catalog)
         {
-            var smtp = this.GetSmtpConfig(catalog);
+            Smtp smtp = GetSmtpConfig(catalog);
 
+            if (smtp == null)
+            {
+                return;
+            }
             this.Catalog = catalog;
             this.Enabled = smtp.Enabled;
             this.FromName = smtp.FromDisplayName;
@@ -42,14 +43,20 @@ namespace MixERP.Net.Messaging.Email.Helpers
             this.EnableSsl = smtp.SmtpEnableSsl;
             this.SmtpPort = smtp.SmtpPort;
             this.SmtpUsername = smtp.SmtpUsername;
-            this.SmtpUserPassword = GetSmtpUserPassword(smtp.SmtpPassword);
+            this.SmtpUserPassword = this.GetSmtpUserPassword(smtp.SmtpPassword);
             this.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
-        private Entities.Config.Smtp GetSmtpConfig(string catalog)
+        public static bool IsEnabled(string catalog)
         {
-            const string sql = "SELECT * FROM config.smtp WHERE enabled AND is_default LIMIT 1;";
-            return Factory.Get<Entities.Config.Smtp>(catalog, sql).FirstOrDefault();
+            Smtp smtp = GetSmtpConfig(catalog);
+
+            if (smtp == null)
+            {
+                return false;
+            }
+
+            return smtp.Enabled;
         }
 
         public string Catalog { get; set; }
@@ -63,6 +70,12 @@ namespace MixERP.Net.Messaging.Email.Helpers
         public string SmtpUsername { get; set; }
         public SecureString SmtpUserPassword { get; set; }
         public string PickupDirectory { get; set; }
+
+        private static Smtp GetSmtpConfig(string catalog)
+        {
+            const string sql = "SELECT * FROM config.smtp WHERE enabled AND is_default LIMIT 1;";
+            return Factory.Get<Smtp>(catalog, sql).FirstOrDefault();
+        }
 
         private SecureString GetSmtpUserPassword(string password)
         {

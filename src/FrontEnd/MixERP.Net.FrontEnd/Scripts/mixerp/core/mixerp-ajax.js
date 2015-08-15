@@ -132,11 +132,6 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
     };
 
     ajax.success(function (msg) {
-
-        if (typeof callback === "function") {
-            callback();
-        };
-
         if (targetControl.length === 1) {
             targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField);
         };
@@ -153,6 +148,10 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
         if (typeof ajaxDataBindCallBack === "function") {
             ajaxDataBindCallBack(targetControl);
+        };
+
+        if (typeof callback === "function") {
+            callback();
         };
     });
 

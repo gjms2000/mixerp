@@ -2,7 +2,7 @@
     AutoEventWireup="true"
     CodeBehind="TrialBalanceReport.ascx.cs"
     Inherits="MixERP.Net.Core.Modules.Finance.Reports.TrialBalanceReport"
-    RemoveTheme="true"
+    RemoveTheme="true" IsLandingPage="true"
     MasterPageId="MixERPReportMaster.Master" %>
 
 <asp:PlaceHolder runat="server" ID="Placeholder1"></asp:PlaceHolder>

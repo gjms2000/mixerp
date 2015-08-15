@@ -8,7 +8,7 @@ SELECT core.create_menu_locale('OTSMIX', 'ar', 'MixERP متغيرات');--MixERP
 SELECT core.create_menu_locale('OTSOER', 'ar', 'OpenExchangeRates متغيرات');--OpenExchangeRates Parameters
 SELECT core.create_menu_locale('OTSSMTP', 'ar', 'متغيرات SMTP');--SMTP Parameters
 SELECT core.create_menu_locale('SAR-SBO', 'ar', 'المبيعات حسب الشركة');--Sales by Office
-SELECT core.create_menu_locale('SPR', 'ar', 'تقرير مندوبي المبيعات');--Salesperson Report
+--SELECT core.create_menu_locale('SPR', 'ar', 'تقرير مندوبي المبيعات');--Salesperson Report
 SELECT core.create_menu_locale('OTSSFP', 'ar', 'ScrudFactory متغيرات');--ScrudFactory Parameters
 SELECT core.create_menu_locale('STK', 'ar', 'اشعار تحويل المخزون');--Stock Transfer Acknowledgement
 SELECT core.create_menu_locale('STP', 'ar', 'اقرار تحويل المخزون');--Stock Transfer Authorization

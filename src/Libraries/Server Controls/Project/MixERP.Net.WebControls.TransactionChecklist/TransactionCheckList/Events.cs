@@ -22,6 +22,7 @@ using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.TransactionChecklist.Helpers;
 using System;
 using System.Globalization;
+using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.TransactionGovernor.Verification;
 
 namespace MixERP.Net.WebControls.TransactionChecklist
@@ -49,9 +50,17 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 return;
             }
 
-            EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress, this.AttachmentFileName);
-            email.SendEmail();
-            this.subTitleLiteral.Text = string.Format(CultureInfo.CurrentCulture, Labels.EmailSentConfirmation, this.PartyEmailAddress);
+            if (Messaging.Email.Helpers.Config.IsEnabled(AppUsers.GetCurrentUserDB()))
+            {
+                EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress, this.AttachmentFileName);
+                email.SendEmail();
+
+                this.subTitleHeading.InnerText = string.Format(CultureInfo.CurrentCulture, Labels.EmailSentConfirmation, this.PartyEmailAddress);
+                return;
+            }
+
+            this.subTitleHeading.Attributes.Add("class", "ui red header");
+            this.subTitleHeading.InnerText = Warnings.CannotSendEmailSMTPInvalid;
         }
 
         private void OkButton_Click(object sender, EventArgs e)

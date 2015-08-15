@@ -27,8 +27,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         <td>{Resources.Titles.TranId}</td>
         <td>
           {DataSource[0].transaction_master_id}
-          <br />
-          {Barcode(DataSource[0].transaction_master_id)}
         </td>
       </tr>
       <tr>

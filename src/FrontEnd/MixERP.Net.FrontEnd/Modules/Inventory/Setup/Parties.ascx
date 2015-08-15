@@ -16,9 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartiesPopup.ascx.designer.cs" Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartiesPopup" %>
-<div id="OverflowDiv">
-    <asp:PlaceHolder ID="ScrudPlaceholder" runat="server" />
-</div>
-
-<script src="../Scripts/Setup/Parties.js"></script>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartiesPopup.ascx.designer.cs" 
+    Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartiesPopup" %>
+<script src="https://raw.githubusercontent.com/davidjbradshaw/iframe-resizer/master/js/iframeResizer.min.js"></script>
+<iframe src="PartiesPopup.mix" style="border: 0; width: 100%; height: 100%;" scrolling="no" seamless="seamless">    
+</iframe>

@@ -94,7 +94,7 @@ namespace MixERP.Net.FrontEnd.Models
             return children;
         }
 
-        private static IEnumerable<Menu> GetMenuCollection(string catalog, int officeId, int userId, string culture)
+        public static IEnumerable<Menu> GetMenuCollection(string catalog, int officeId, int userId, string culture)
         {
             return Factory.Get<Menu>(catalog, "SELECT * FROM policy.get_menu(@0, @1, @2) ORDER BY menu_id;", userId,
                 officeId,

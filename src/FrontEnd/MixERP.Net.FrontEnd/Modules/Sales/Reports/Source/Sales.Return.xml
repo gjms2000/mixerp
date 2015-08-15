@@ -27,8 +27,14 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         <td>{Resources.Titles.TranId}</td>
         <td>
           {DataSource[0].transaction_master_id}
+        </td>
+      </tr>
+      <tr>
+        <td>{Resources.Titles.TranCode}</td>
+        <td>
+          {DataSource[0].transaction_code}
           <br />
-          {Barcode(DataSource[0].transaction_master_id)}
+          {Barcode(DataSource[0].transaction_code)}
         </td>
       </tr>
       <tr>
@@ -54,10 +60,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
       <tr>
         <td>{Resources.Titles.VerificationReason}</td>
         <td> {DataSource[0].verification_reason}</td>
-      </tr>
-      <tr>
-        <td>{Resources.Titles.TranCode}</td>
-        <td>{DataSource[0].transaction_code}</td>
       </tr>
       <tr>
         <td>{Resources.Titles.Office}</td>

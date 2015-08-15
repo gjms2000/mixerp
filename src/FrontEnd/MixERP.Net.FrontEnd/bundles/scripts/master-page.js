@@ -1,5 +1,4 @@
-﻿///#source 1 1 /Scripts/jquery-1.9.1.js
-(function( window, undefined ) {
+﻿(function( window, undefined ) {
 // Can't do this because several apps including ASP.NET trace
 // the stack via arguments.caller.callee and Firefox dies if
 // you try to trace through "use strict" call chains. (#13335)
@@ -9426,7 +9425,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	define( "jquery", [], function () { return jQuery; } );
 }
 })( window );
-///#source 1 1 /Scripts/angular/angular.min.js
 /*
  AngularJS v1.3.14
  (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -9678,7 +9676,6 @@ zc=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){if(e
 e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}},Bc=function(){return{restrict:"A",require:"?ngModel",link:function(a,c,d,e){if(e){var f=0;d.$observe("minlength",function(a){f=$(a)||0;e.$validate()});e.$validators.minlength=function(a,c){return e.$isEmpty(c)||c.length>=f}}}}};P.angular.bootstrap?console.log("WARNING: Tried to load angular more than once."):(Nd(),Pd(aa),C(X).ready(function(){Jd(X,tc)}))})(window,document);!window.angular.$$csp()&&window.angular.element(document).find("head").prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
 //# sourceMappingURL=angular.min.js.map
 
-///#source 1 1 /Scripts/jquery.address.js
 /*! jQuery Address v1.6 | (c) 2009, 2013 Rostislav Hristov | jquery.org/license */
 (function ($) {
     $.address = (function () {
@@ -10275,7 +10272,6 @@ e.$validators.maxlength=function(a,c){return 0>f||e.$isEmpty(c)||c.length<=f}}}}
     };
 })(jQuery);
 
-///#source 1 1 /Scripts/jquery-ui.js
 /*! jQuery UI - v1.11.3 - 2015-02-13
 * http://jqueryui.com
 * Includes: core.js, widget.js, mouse.js, position.js, draggable.js, droppable.js, resizable.js, selectable.js, sortable.js, accordion.js, autocomplete.js, button.js, datepicker.js, dialog.js, menu.js, progressbar.js, selectmenu.js, slider.js, spinner.js, tabs.js, tooltip.js, effect.js, effect-blind.js, effect-bounce.js, effect-clip.js, effect-drop.js, effect-explode.js, effect-fade.js, effect-fold.js, effect-highlight.js, effect-puff.js, effect-pulsate.js, effect-scale.js, effect-shake.js, effect-size.js, effect-slide.js, effect-transfer.js
@@ -26884,7 +26880,6 @@ var effectTransfer = $.effects.effect.transfer = function( o, done ) {
 
 
 }));
-///#source 1 1 /Scripts/shortcut.js
 shortcut = {
 	'all_shortcuts':{},//All the shortcuts are stored in this array
 	'add': function(shortcut_combination,callback,opt) {
@@ -27100,7 +27095,6 @@ shortcut = {
 		}
 	}
 }
-///#source 1 1 /Scripts/colorbox/jquery.colorbox.js
 var jqueryColorBox = function ($, document, window) {
     var
         // Default settings object.
@@ -28169,7 +28163,6 @@ var jqueryColorBox = function ($, document, window) {
 
     publicMethod.settings = defaults;
 }(jQuery, document, window);
-///#source 1 1 /Scripts/jqueryNumber/jquery.number.js
 /**
  * jQuery number plug-in 2.1.5
  * Copyright 2012, Digital Fusion
@@ -28892,7 +28885,6 @@ var jqueryColorBox = function ($, document, window) {
     }
 
 })(jQuery);
-///#source 1 1 /Scripts/date.js
 Date.CultureInfo={name:"en-US",englishName:"English (United States)",nativeName:"English (United States)",dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],abbreviatedDayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],shortestDayNames:["Su","Mo","Tu","We","Th","Fr","Sa"],firstLetterDayNames:["S","M","T","W","T","F","S"],monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],abbreviatedMonthNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],amDesignator:"AM",pmDesignator:"PM",firstDayOfWeek:0,twoDigitYearMax:2029,dateElementOrder:"mdy",formatPatterns:{shortDate:"M/d/yyyy",longDate:"dddd, MMMM dd, yyyy",shortTime:"h:mm tt",longTime:"h:mm:ss tt",fullDateTime:"dddd, MMMM dd, yyyy h:mm:ss tt",sortableDateTime:"yyyy-MM-ddTHH:mm:ss",universalSortableDateTime:"yyyy-MM-dd HH:mm:ssZ",rfc1123:"ddd, dd MMM yyyy HH:mm:ss GMT",monthDay:"MMMM dd",yearMonth:"MMMM, yyyy"},regexPatterns:{jan:/^jan(uary)?/i,feb:/^feb(ruary)?/i,mar:/^mar(ch)?/i,apr:/^apr(il)?/i,may:/^may/i,jun:/^jun(e)?/i,jul:/^jul(y)?/i,aug:/^aug(ust)?/i,sep:/^sep(t(ember)?)?/i,oct:/^oct(ober)?/i,nov:/^nov(ember)?/i,dec:/^dec(ember)?/i,sun:/^su(n(day)?)?/i,mon:/^mo(n(day)?)?/i,tue:/^tu(e(s(day)?)?)?/i,wed:/^we(d(nesday)?)?/i,thu:/^th(u(r(s(day)?)?)?)?/i,fri:/^fr(i(day)?)?/i,sat:/^sa(t(urday)?)?/i,future:/^next/i,past:/^last|past|prev(ious)?/i,add:/^(\+|after|from)/i,subtract:/^(\-|before|ago)/i,yesterday:/^yesterday/i,today:/^t(oday)?/i,tomorrow:/^tomorrow/i,now:/^n(ow)?/i,millisecond:/^ms|milli(second)?s?/i,second:/^sec(ond)?s?/i,minute:/^min(ute)?s?/i,hour:/^h(ou)?rs?/i,week:/^w(ee)?k/i,month:/^m(o(nth)?s?)?/i,day:/^d(ays?)?/i,year:/^y((ea)?rs?)?/i,shortMeridian:/^(a|p)/i,longMeridian:/^(a\.?m?\.?|p\.?m?\.?)/i,timezone:/^((e(s|d)t|c(s|d)t|m(s|d)t|p(s|d)t)|((gmt)?\s*(\+|\-)\s*\d\d\d\d?)|gmt)/i,ordinalSuffix:/^\s*(st|nd|rd|th)/i,timeContext:/^\s*(\:|a|p)/i},abbreviatedTimeZoneStandard:{GMT:"-000",EST:"-0400",CST:"-0500",MST:"-0600",PST:"-0700"},abbreviatedTimeZoneDST:{GMT:"-000",EDT:"-0500",CDT:"-0600",MDT:"-0700",PDT:"-0800"}};
 Date.getMonthNumberFromName=function(name){var n=Date.CultureInfo.monthNames,m=Date.CultureInfo.abbreviatedMonthNames,s=name.toLowerCase();for(var i=0;i<n.length;i++){if(n[i].toLowerCase()==s||m[i].toLowerCase()==s){return i;}}
 return-1;};Date.getDayNumberFromName=function(name){var n=Date.CultureInfo.dayNames,m=Date.CultureInfo.abbreviatedDayNames,o=Date.CultureInfo.shortestDayNames,s=name.toLowerCase();for(var i=0;i<n.length;i++){if(n[i].toLowerCase()==s||m[i].toLowerCase()==s){return i;}}
@@ -28990,7 +28982,6 @@ return g._start.call({},s);};}());Date._parse=Date.parse;Date.parse=function(s){
 try{r=Date.Grammar.start.call({},s);}catch(e){return null;}
 return((r[1].length===0)?r[0]:null);};Date.getParseFunction=function(fx){var fn=Date.Grammar.formats(fx);return function(s){var r=null;try{r=fn.call({},s);}catch(e){return null;}
 return((r[1].length===0)?r[0]:null);};};Date.parseExact=function(s,fx){return Date.getParseFunction(fx)(s);};
-///#source 1 1 /Scripts/chartjs/Chart.min.js
 var Chart=function(s){function v(a,c,b){a=A((a-c.graphMin)/(c.steps*c.stepValue),1,0);return b*c.steps*a}function x(a,c,b,e){function h(){g+=f;var k=a.animation?A(d(g),null,0):1;e.clearRect(0,0,q,u);a.scaleOverlay?(b(k),c()):(c(),b(k));if(1>=g)D(h);else if("function"==typeof a.onAnimationComplete)a.onAnimationComplete()}var f=a.animation?1/A(a.animationSteps,Number.MAX_VALUE,1):1,d=B[a.animationEasing],g=a.animation?0:1;"function"!==typeof c&&(c=function(){});D(h)}function C(a,c,b,e,h,f){var d;a=
 Math.floor(Math.log(e-h)/Math.LN10);h=Math.floor(h/(1*Math.pow(10,a)))*Math.pow(10,a);e=Math.ceil(e/(1*Math.pow(10,a)))*Math.pow(10,a)-h;a=Math.pow(10,a);for(d=Math.round(e/a);d<b||d>c;)a=d<b?a/2:2*a,d=Math.round(e/a);c=[];z(f,c,d,h,a);return{steps:d,stepValue:a,graphMin:h,labels:c}}function z(a,c,b,e,h){if(a)for(var f=1;f<b+1;f++)c.push(E(a,{value:(e+h*f).toFixed(0!=h%1?h.toString().split(".")[1].length:0)}))}function A(a,c,b){return!isNaN(parseFloat(c))&&isFinite(c)&&a>c?c:!isNaN(parseFloat(b))&&
 isFinite(b)&&a<b?b:a}function y(a,c){var b={},e;for(e in a)b[e]=a[e];for(e in c)b[e]=c[e];return b}function E(a,c){var b=!/\W/.test(a)?F[a]=F[a]||E(document.getElementById(a).innerHTML):new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(/[\r\t\n]/g," ").split("<%").join("\t").replace(/((^|%>)[^\t]*)'/g,"$1\r").replace(/\t=(.*?)%>/g,"',$1,'").split("\t").join("');").split("%>").join("p.push('").split("\r").join("\\'")+"');}return p.join('');");return c?
@@ -29030,7 +29021,6 @@ Math.floor(r/a.labels.length);s=(m-2*c.scaleGridLineWidth-2*c.barValueSpacing-(c
 d*m,p+c.scaleFontSize),b.rotate(-(w*(Math.PI/180))),b.fillText(a.labels[d],0,0),b.restore()):b.fillText(a.labels[d],n+d*m+m/2,p+c.scaleFontSize+3),b.beginPath(),b.moveTo(n+(d+1)*m,p+3),b.lineWidth=c.scaleGridLineWidth,b.strokeStyle=c.scaleGridLineColor,b.lineTo(n+(d+1)*m,5),b.stroke();b.lineWidth=c.scaleLineWidth;b.strokeStyle=c.scaleLineColor;b.beginPath();b.moveTo(n,p+5);b.lineTo(n,5);b.stroke();b.textAlign="right";b.textBaseline="middle";for(d=0;d<j.steps;d++)b.beginPath(),b.moveTo(n-3,p-(d+1)*
 k),c.scaleShowGridLines?(b.lineWidth=c.scaleGridLineWidth,b.strokeStyle=c.scaleGridLineColor,b.lineTo(n+r+5,p-(d+1)*k)):b.lineTo(n-0.5,p-(d+1)*k),b.stroke(),c.scaleShowLabels&&b.fillText(j.labels[d],n-8,p-(d+1)*k)},function(d){b.lineWidth=c.barStrokeWidth;for(var e=0;e<a.datasets.length;e++){b.fillStyle=a.datasets[e].fillColor;b.strokeStyle=a.datasets[e].strokeColor;for(var f=0;f<a.datasets[e].data.length;f++){var g=n+c.barValueSpacing+m*f+s*e+c.barDatasetSpacing*e+c.barStrokeWidth*e;b.beginPath();
 b.moveTo(g,p);b.lineTo(g,p-d*v(a.datasets[e].data[f],j,k)+c.barStrokeWidth/2);b.lineTo(g+s,p-d*v(a.datasets[e].data[f],j,k)+c.barStrokeWidth/2);b.lineTo(g+s,p);c.barShowStroke&&b.stroke();b.closePath();b.fill()}}},b)},D=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(a){window.setTimeout(a,1E3/60)},F={}};
-///#source 1 1 /Scripts/chartjs/legend.js
 function legend(parent, data) {
     parent.className = 'legend';
     var datas = data.hasOwnProperty('datasets') ? data.datasets : data;
@@ -29045,10 +29035,8 @@ function legend(parent, data) {
         var text = document.createTextNode(d.title);
         title.appendChild(text);
     });
-}
-///#source 1 1 /Scripts/notify-combined.min.js
+};
 (function(t,i,n,e){"use strict";var r,o,s,a,l,h,c,p,u,d,f,A,m,w,g,y,b,v,x,C,S,E,M,k,H,D,F,T=[].indexOf||function(t){for(var i=0,n=this.length;n>i;i++)if(i in this&&this[i]===t)return i;return-1};S="notify",C=S+"js",s=S+"!blank",M={t:"top",m:"middle",b:"bottom",l:"left",c:"center",r:"right"},m=["l","c","r"],F=["t","m","b"],b=["t","b","l","r"],v={t:"b",m:null,b:"t",l:"r",c:null,r:"l"},x=function(t){var i;return i=[],n.each(t.split(/\W+/),function(t,n){var r;return r=n.toLowerCase().charAt(0),M[r]?i.push(r):e}),i},D={},a={name:"core",html:'<div class="'+C+'-wrapper">\n  <div class="'+C+'-arrow"></div>\n  <div class="'+C+'-container"></div>\n</div>',css:"."+C+"-corner {\n  position: fixed;\n  margin: 5px;\n  z-index: 1050;\n}\n\n."+C+"-corner ."+C+"-wrapper,\n."+C+"-corner ."+C+"-container {\n  position: relative;\n  display: block;\n  height: inherit;\n  width: inherit;\n  margin: 3px;\n}\n\n."+C+"-wrapper {\n  z-index: 1;\n  position: absolute;\n  display: inline-block;\n  height: 0;\n  width: 0;\n}\n\n."+C+"-container {\n  display: none;\n  z-index: 1;\n  position: absolute;\n}\n\n."+C+"-hidable {\n  cursor: pointer;\n}\n\n[data-notify-text],[data-notify-html] {\n  position: relative;\n}\n\n."+C+"-arrow {\n  position: absolute;\n  z-index: 2;\n  width: 0;\n  height: 0;\n}"},H={"border-radius":["-webkit-","-moz-"]},f=function(t){return D[t]},o=function(i,e){var r,o,s,a;if(!i)throw"Missing Style name";if(!e)throw"Missing Style definition";if(!e.html)throw"Missing Style HTML";return(null!=(a=D[i])?a.cssElem:void 0)&&(t.console&&console.warn(""+S+": overwriting style '"+i+"'"),D[i].cssElem.remove()),e.name=i,D[i]=e,r="",e.classes&&n.each(e.classes,function(t,i){return r+="."+C+"-"+e.name+"-"+t+" {\n",n.each(i,function(t,i){return H[t]&&n.each(H[t],function(n,e){return r+="  "+e+t+": "+i+";\n"}),r+="  "+t+": "+i+";\n"}),r+="}\n"}),e.css&&(r+="/* styles for "+e.name+" */\n"+e.css),r&&(e.cssElem=y(r),e.cssElem.attr("id","notify-"+e.name)),s={},o=n(e.html),u("html",o,s),u("text",o,s),e.fields=s},y=function(t){var i;i=l("style"),i.attr("type","text/css"),n("head").append(i);try{i.html(t)}catch(e){i[0].styleSheet.cssText=t}return i},u=function(t,i,e){var r;return"html"!==t&&(t="text"),r="data-notify-"+t,p(i,"["+r+"]").each(function(){var i;return i=n(this).attr(r),i||(i=s),e[i]=t})},p=function(t,i){return t.is(i)?t:t.find(i)},E={clickToHide:!0,autoHide:!0,autoHideDelay:5e3,arrowShow:!0,arrowSize:5,breakNewLines:!0,elementPosition:"bottom",globalPosition:"top right",style:"bootstrap",className:"error",showAnimation:"slideDown",showDuration:400,hideAnimation:"slideUp",hideDuration:200,gap:5},g=function(t,i){var e;return e=function(){},e.prototype=t,n.extend(!0,new e,i)},h=function(t){return n.extend(E,t)},l=function(t){return n("<"+t+"></"+t+">")},A={},d=function(t){var i;return t.is("[type=radio]")&&(i=t.parents("form:first").find("[type=radio]").filter(function(i,e){return n(e).attr("name")===t.attr("name")}),t=i.first()),t},w=function(t,i,n){var r,o;if("string"==typeof n)n=parseInt(n,10);else if("number"!=typeof n)return;if(!isNaN(n))return r=M[v[i.charAt(0)]],o=i,t[r]!==e&&(i=M[r.charAt(0)],n=-n),t[i]===e?t[i]=n:t[i]+=n,null},k=function(t,i,n){if("l"===t||"t"===t)return 0;if("c"===t||"m"===t)return n/2-i/2;if("r"===t||"b"===t)return n-i;throw"Invalid alignment"},c=function(t){return c.e=c.e||l("div"),c.e.text(t).html()},r=function(){function t(t,i,e){"string"==typeof e&&(e={className:e}),this.options=g(E,n.isPlainObject(e)?e:{}),this.loadHTML(),this.wrapper=n(a.html),this.options.clickToHide&&this.wrapper.addClass(""+C+"-hidable"),this.wrapper.data(C,this),this.arrow=this.wrapper.find("."+C+"-arrow"),this.container=this.wrapper.find("."+C+"-container"),this.container.append(this.userContainer),t&&t.length&&(this.elementType=t.attr("type"),this.originalElement=t,this.elem=d(t),this.elem.data(C,this),this.elem.before(this.wrapper)),this.container.hide(),this.run(i)}return t.prototype.loadHTML=function(){var t;return t=this.getStyle(),this.userContainer=n(t.html),this.userFields=t.fields},t.prototype.show=function(t,i){var n,r,o,s,a,l=this;if(r=function(){return t||l.elem||l.destroy(),i?i():e},a=this.container.parent().parents(":hidden").length>0,o=this.container.add(this.arrow),n=[],a&&t)s="show";else if(a&&!t)s="hide";else if(!a&&t)s=this.options.showAnimation,n.push(this.options.showDuration);else{if(a||t)return r();s=this.options.hideAnimation,n.push(this.options.hideDuration)}return n.push(r),o[s].apply(o,n)},t.prototype.setGlobalPosition=function(){var t,i,e,r,o,s,a,h;return h=this.getPosition(),a=h[0],s=h[1],o=M[a],t=M[s],r=a+"|"+s,i=A[r],i||(i=A[r]=l("div"),e={},e[o]=0,"middle"===t?e.top="45%":"center"===t?e.left="45%":e[t]=0,i.css(e).addClass(""+C+"-corner"),n("body").append(i)),i.prepend(this.wrapper)},t.prototype.setElementPosition=function(){var t,i,r,o,s,a,l,h,c,p,u,d,f,A,g,y,x,C,S,E,H,D,z,Q,B,R,N,P,U;for(z=this.getPosition(),E=z[0],C=z[1],S=z[2],u=this.elem.position(),h=this.elem.outerHeight(),d=this.elem.outerWidth(),c=this.elem.innerHeight(),p=this.elem.innerWidth(),Q=this.wrapper.position(),s=this.container.height(),a=this.container.width(),A=M[E],y=v[E],x=M[y],l={},l[x]="b"===E?h:"r"===E?d:0,w(l,"top",u.top-Q.top),w(l,"left",u.left-Q.left),U=["top","left"],B=0,N=U.length;N>B;B++)H=U[B],g=parseInt(this.elem.css("margin-"+H),10),g&&w(l,H,g);if(f=Math.max(0,this.options.gap-(this.options.arrowShow?r:0)),w(l,x,f),this.options.arrowShow){for(r=this.options.arrowSize,i=n.extend({},l),t=this.userContainer.css("border-color")||this.userContainer.css("background-color")||"white",R=0,P=b.length;P>R;R++)H=b[R],D=M[H],H!==y&&(o=D===A?t:"transparent",i["border-"+D]=""+r+"px solid "+o);w(l,M[y],r),T.call(b,C)>=0&&w(i,M[C],2*r)}else this.arrow.hide();return T.call(F,E)>=0?(w(l,"left",k(C,a,d)),i&&w(i,"left",k(C,r,p))):T.call(m,E)>=0&&(w(l,"top",k(C,s,h)),i&&w(i,"top",k(C,r,c))),this.container.is(":visible")&&(l.display="block"),this.container.removeAttr("style").css(l),i?this.arrow.removeAttr("style").css(i):e},t.prototype.getPosition=function(){var t,i,n,e,r,o,s,a;if(i=this.options.position||(this.elem?this.options.elementPosition:this.options.globalPosition),t=x(i),0===t.length&&(t[0]="b"),n=t[0],0>T.call(b,n))throw"Must be one of ["+b+"]";return(1===t.length||(e=t[0],T.call(F,e)>=0&&(r=t[1],0>T.call(m,r)))||(o=t[0],T.call(m,o)>=0&&(s=t[1],0>T.call(F,s))))&&(t[1]=(a=t[0],T.call(m,a)>=0?"m":"l")),2===t.length&&(t[2]=t[1]),t},t.prototype.getStyle=function(t){var i;if(t||(t=this.options.style),t||(t="default"),i=D[t],!i)throw"Missing style: "+t;return i},t.prototype.updateClasses=function(){var t,i;return t=["base"],n.isArray(this.options.className)?t=t.concat(this.options.className):this.options.className&&t.push(this.options.className),i=this.getStyle(),t=n.map(t,function(t){return""+C+"-"+i.name+"-"+t}).join(" "),this.userContainer.attr("class",t)},t.prototype.run=function(t,i){var r,o,a,l,h,u=this;if(n.isPlainObject(i)?n.extend(this.options,i):"string"===n.type(i)&&(this.options.className=i),this.container&&!t)return this.show(!1),e;if(this.container||t){o={},n.isPlainObject(t)?o=t:o[s]=t;for(a in o)r=o[a],l=this.userFields[a],l&&("text"===l&&(r=c(r),this.options.breakNewLines&&(r=r.replace(/\n/g,"<br/>"))),h=a===s?"":"="+a,p(this.userContainer,"[data-notify-"+l+h+"]").html(r));return this.updateClasses(),this.elem?this.setElementPosition():this.setGlobalPosition(),this.show(!0),this.options.autoHide?(clearTimeout(this.autohideTimer),this.autohideTimer=setTimeout(function(){return u.show(!1)},this.options.autoHideDelay)):e}},t.prototype.destroy=function(){return this.wrapper.remove()},t}(),n[S]=function(t,i,e){return t&&t.nodeName||t.jquery?n(t)[S](i,e):(e=i,i=t,new r(null,i,e)),t},n.fn[S]=function(t,i){return n(this).each(function(){var e;return e=d(n(this)).data(C),e?e.run(t,i):new r(n(this),t,i)}),this},n.extend(n[S],{defaults:h,addStyle:o,pluginOptions:E,getStyle:f,insertCSS:y}),n(function(){return y(a.css).attr("id","core-notify"),n(i).on("click","."+C+"-hidable",function(){return n(this).trigger("notify-hide")}),n(i).on("notify-hide","."+C+"-wrapper",function(){var t;return null!=(t=n(this).data(C))?t.show(!1):void 0})})})(window,document,jQuery),$.notify.addStyle("bootstrap",{html:"<div>\n<span data-notify-text></span>\n</div>",classes:{base:{"font-weight":"bold",padding:"8px 15px 8px 14px","text-shadow":"0 1px 0 rgba(255, 255, 255, 0.5)","background-color":"#fcf8e3",border:"1px solid #fbeed5","border-radius":"4px","white-space":"nowrap","padding-left":"25px","background-repeat":"no-repeat","background-position":"3px 7px"},error:{color:"#B94A48","background-color":"#F2DEDE","border-color":"#EED3D7","background-image":"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAtRJREFUeNqkVc1u00AQHq+dOD+0poIQfkIjalW0SEGqRMuRnHos3DjwAH0ArlyQeANOOSMeAA5VjyBxKBQhgSpVUKKQNGloFdw4cWw2jtfMOna6JOUArDTazXi/b3dm55socPqQhFka++aHBsI8GsopRJERNFlY88FCEk9Yiwf8RhgRyaHFQpPHCDmZG5oX2ui2yilkcTT1AcDsbYC1NMAyOi7zTX2Agx7A9luAl88BauiiQ/cJaZQfIpAlngDcvZZMrl8vFPK5+XktrWlx3/ehZ5r9+t6e+WVnp1pxnNIjgBe4/6dAysQc8dsmHwPcW9C0h3fW1hans1ltwJhy0GxK7XZbUlMp5Ww2eyan6+ft/f2FAqXGK4CvQk5HueFz7D6GOZtIrK+srupdx1GRBBqNBtzc2AiMr7nPplRdKhb1q6q6zjFhrklEFOUutoQ50xcX86ZlqaZpQrfbBdu2R6/G19zX6XSgh6RX5ubyHCM8nqSID6ICrGiZjGYYxojEsiw4PDwMSL5VKsC8Yf4VRYFzMzMaxwjlJSlCyAQ9l0CW44PBADzXhe7xMdi9HtTrdYjFYkDQL0cn4Xdq2/EAE+InCnvADTf2eah4Sx9vExQjkqXT6aAERICMewd/UAp/IeYANM2joxt+q5VI+ieq2i0Wg3l6DNzHwTERPgo1ko7XBXj3vdlsT2F+UuhIhYkp7u7CarkcrFOCtR3H5JiwbAIeImjT/YQKKBtGjRFCU5IUgFRe7fF4cCNVIPMYo3VKqxwjyNAXNepuopyqnld602qVsfRpEkkz+GFL1wPj6ySXBpJtWVa5xlhpcyhBNwpZHmtX8AGgfIExo0ZpzkWVTBGiXCSEaHh62/PoR0p/vHaczxXGnj4bSo+G78lELU80h1uogBwWLf5YlsPmgDEd4M236xjm+8nm4IuE/9u+/PH2JXZfbwz4zw1WbO+SQPpXfwG/BBgAhCNZiSb/pOQAAAAASUVORK5CYII=)"},success:{color:"#468847","background-color":"#DFF0D8","border-color":"#D6E9C6","background-image":"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAutJREFUeNq0lctPE0Ecx38zu/RFS1EryqtgJFA08YCiMZIAQQ4eRG8eDGdPJiYeTIwHTfwPiAcvXIwXLwoXPaDxkWgQ6islKlJLSQWLUraPLTv7Gme32zoF9KSTfLO7v53vZ3d/M7/fIth+IO6INt2jjoA7bjHCJoAlzCRw59YwHYjBnfMPqAKWQYKjGkfCJqAF0xwZjipQtA3MxeSG87VhOOYegVrUCy7UZM9S6TLIdAamySTclZdYhFhRHloGYg7mgZv1Zzztvgud7V1tbQ2twYA34LJmF4p5dXF1KTufnE+SxeJtuCZNsLDCQU0+RyKTF27Unw101l8e6hns3u0PBalORVVVkcaEKBJDgV3+cGM4tKKmI+ohlIGnygKX00rSBfszz/n2uXv81wd6+rt1orsZCHRdr1Imk2F2Kob3hutSxW8thsd8AXNaln9D7CTfA6O+0UgkMuwVvEFFUbbAcrkcTA8+AtOk8E6KiQiDmMFSDqZItAzEVQviRkdDdaFgPp8HSZKAEAL5Qh7Sq2lIJBJwv2scUqkUnKoZgNhcDKhKg5aH+1IkcouCAdFGAQsuWZYhOjwFHQ96oagWgRoUov1T9kRBEODAwxM2QtEUl+Wp+Ln9VRo6BcMw4ErHRYjH4/B26AlQoQQTRdHWwcd9AH57+UAXddvDD37DmrBBV34WfqiXPl61g+vr6xA9zsGeM9gOdsNXkgpEtTwVvwOklXLKm6+/p5ezwk4B+j6droBs2CsGa/gNs6RIxazl4Tc25mpTgw/apPR1LYlNRFAzgsOxkyXYLIM1V8NMwyAkJSctD1eGVKiq5wWjSPdjmeTkiKvVW4f2YPHWl3GAVq6ymcyCTgovM3FzyRiDe2TaKcEKsLpJvNHjZgPNqEtyi6mZIm4SRFyLMUsONSSdkPeFtY1n0mczoY3BHTLhwPRy9/lzcziCw9ACI+yql0VLzcGAZbYSM5CCSZg1/9oc/nn7+i8N9p/8An4JMADxhH+xHfuiKwAAAABJRU5ErkJggg==)"},info:{color:"#3A87AD","background-color":"#D9EDF7","border-color":"#BCE8F1","background-image":"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QYFAhkSsdes/QAAA8dJREFUOMvVlGtMW2UYx//POaWHXg6lLaW0ypAtw1UCgbniNOLcVOLmAjHZolOYlxmTGXVZdAnRfXQm+7SoU4mXaOaiZsEpC9FkiQs6Z6bdCnNYruM6KNBw6YWewzl9z+sHImEWv+vz7XmT95f/+3/+7wP814v+efDOV3/SoX3lHAA+6ODeUFfMfjOWMADgdk+eEKz0pF7aQdMAcOKLLjrcVMVX3xdWN29/GhYP7SvnP0cWfS8caSkfHZsPE9Fgnt02JNutQ0QYHB2dDz9/pKX8QjjuO9xUxd/66HdxTeCHZ3rojQObGQBcuNjfplkD3b19Y/6MrimSaKgSMmpGU5WevmE/swa6Oy73tQHA0Rdr2Mmv/6A1n9w9suQ7097Z9lM4FlTgTDrzZTu4StXVfpiI48rVcUDM5cmEksrFnHxfpTtU/3BFQzCQF/2bYVoNbH7zmItbSoMj40JSzmMyX5qDvriA7QdrIIpA+3cdsMpu0nXI8cV0MtKXCPZev+gCEM1S2NHPvWfP/hL+7FSr3+0p5RBEyhEN5JCKYr8XnASMT0xBNyzQGQeI8fjsGD39RMPk7se2bd5ZtTyoFYXftF6y37gx7NeUtJJOTFlAHDZLDuILU3j3+H5oOrD3yWbIztugaAzgnBKJuBLpGfQrS8wO4FZgV+c1IxaLgWVU0tMLEETCos4xMzEIv9cJXQcyagIwigDGwJgOAtHAwAhisQUjy0ORGERiELgG4iakkzo4MYAxcM5hAMi1WWG1yYCJIcMUaBkVRLdGeSU2995TLWzcUAzONJ7J6FBVBYIggMzmFbvdBV44Corg8vjhzC+EJEl8U1kJtgYrhCzgc/vvTwXKSib1paRFVRVORDAJAsw5FuTaJEhWM2SHB3mOAlhkNxwuLzeJsGwqWzf5TFNdKgtY5qHp6ZFf67Y/sAVadCaVY5YACDDb3Oi4NIjLnWMw2QthCBIsVhsUTU9tvXsjeq9+X1d75/KEs4LNOfcdf/+HthMnvwxOD0wmHaXr7ZItn2wuH2SnBzbZAbPJwpPx+VQuzcm7dgRCB57a1uBzUDRL4bfnI0RE0eaXd9W89mpjqHZnUI5Hh2l2dkZZUhOqpi2qSmpOmZ64Tuu9qlz/SEXo6MEHa3wOip46F1n7633eekV8ds8Wxjn37Wl63VVa+ej5oeEZ/82ZBETJjpJ1Rbij2D3Z/1trXUvLsblCK0XfOx0SX2kMsn9dX+d+7Kf6h8o4AIykuffjT8L20LU+w4AZd5VvEPY+XpWqLV327HR7DzXuDnD8r+ovkBehJ8i+y8YAAAAASUVORK5CYII=)"},warn:{color:"#C09853","background-color":"#FCF8E3","border-color":"#FBEED5","background-image":"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAABJlBMVEXr6eb/2oD/wi7/xjr/0mP/ykf/tQD/vBj/3o7/uQ//vyL/twebhgD/4pzX1K3z8e349vK6tHCilCWbiQymn0jGworr6dXQza3HxcKkn1vWvV/5uRfk4dXZ1bD18+/52YebiAmyr5S9mhCzrWq5t6ufjRH54aLs0oS+qD751XqPhAybhwXsujG3sm+Zk0PTwG6Shg+PhhObhwOPgQL4zV2nlyrf27uLfgCPhRHu7OmLgAafkyiWkD3l49ibiAfTs0C+lgCniwD4sgDJxqOilzDWowWFfAH08uebig6qpFHBvH/aw26FfQTQzsvy8OyEfz20r3jAvaKbhgG9q0nc2LbZxXanoUu/u5WSggCtp1anpJKdmFz/zlX/1nGJiYmuq5Dx7+sAAADoPUZSAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfdBgUBGhh4aah5AAAAlklEQVQY02NgoBIIE8EUcwn1FkIXM1Tj5dDUQhPU502Mi7XXQxGz5uVIjGOJUUUW81HnYEyMi2HVcUOICQZzMMYmxrEyMylJwgUt5BljWRLjmJm4pI1hYp5SQLGYxDgmLnZOVxuooClIDKgXKMbN5ggV1ACLJcaBxNgcoiGCBiZwdWxOETBDrTyEFey0jYJ4eHjMGWgEAIpRFRCUt08qAAAAAElFTkSuQmCC)"}}});
-///#source 1 1 /Scripts/semantic-ui/semantic.js
  /*
  * # Semantic UI - x.x
  * https://github.com/Semantic-Org/Semantic-UI
@@ -49950,7 +49938,6 @@ $.fn.visibility.settings = {
 };
 
 })( jQuery, window , document );
-///#source 1 1 /Scripts/jquery.signalR.js
 /* jquery.signalR.core.js */
 /*global window:false */
 /*!
@@ -52772,7 +52759,6 @@ $.fn.visibility.settings = {
     $.signalR.version = "2.1.2-pre";
 }(window.jQuery));
 
-///#source 1 1 /Scripts/vakata-jstree/dist/jstree.min.js
 (function(n){"use strict";typeof define=="function"&&define.amd?define(["jquery"],n):typeof exports=="object"?n(require("jquery")):n(jQuery)})(function(n,t){"use strict";
 /*!
      * jsTree 3.0.6
@@ -52815,13 +52801,10 @@ if(i.core.selected)return o=this,this.deselect_all(),n.each(i.core.selected,func
 /*
 //# sourceMappingURL=jstree.min.js.map
 */
-///#source 1 1 /Scripts/sprintf/sprintf.min.js
 /*! sprintf-js | Alexandru Marasteanu <hello@alexei.ro> (http://alexei.ro/) | BSD-3-Clause */
 
 !function(a){function b(){var a=arguments[0],c=b.cache;return c[a]&&c.hasOwnProperty(a)||(c[a]=b.parse(a)),b.format.call(null,c[a],arguments)}function c(a){return Object.prototype.toString.call(a).slice(8,-1).toLowerCase()}function d(a,b){return Array(b+1).join(a)}var e={not_string:/[^s]/,number:/[dief]/,text:/^[^\x25]+/,modulo:/^\x25{2}/,placeholder:/^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fiosuxX])/,key:/^([a-z_][a-z_\d]*)/i,key_access:/^\.([a-z_][a-z_\d]*)/i,index_access:/^\[(\d+)\]/,sign:/^[\+\-]/};b.format=function(a,f){var g,h,i,j,k,l,m,n=1,o=a.length,p="",q=[],r=!0,s="";for(h=0;o>h;h++)if(p=c(a[h]),"string"===p)q[q.length]=a[h];else if("array"===p){if(j=a[h],j[2])for(g=f[n],i=0;i<j[2].length;i++){if(!g.hasOwnProperty(j[2][i]))throw new Error(b("[sprintf] property '%s' does not exist",j[2][i]));g=g[j[2][i]]}else g=j[1]?f[j[1]]:f[n++];if("function"==c(g)&&(g=g()),e.not_string.test(j[8])&&"number"!=c(g)&&isNaN(g))throw new TypeError(b("[sprintf] expecting number but found %s",c(g)));switch(e.number.test(j[8])&&(r=g>=0),j[8]){case"b":g=g.toString(2);break;case"c":g=String.fromCharCode(g);break;case"d":case"i":g=parseInt(g,10);break;case"e":g=j[7]?g.toExponential(j[7]):g.toExponential();break;case"f":g=j[7]?parseFloat(g).toFixed(j[7]):parseFloat(g);break;case"o":g=g.toString(8);break;case"s":g=(g=String(g))&&j[7]?g.substring(0,j[7]):g;break;case"u":g>>>=0;break;case"x":g=g.toString(16);break;case"X":g=g.toString(16).toUpperCase()}!e.number.test(j[8])||r&&!j[3]?s="":(s=r?"+":"-",g=g.toString().replace(e.sign,"")),l=j[4]?"0"===j[4]?"0":j[4].charAt(1):" ",m=j[6]-(s+g).length,k=j[6]&&m>0?d(l,m):"",q[q.length]=j[5]?s+g+k:"0"===l?s+k+g:k+s+g}return q.join("")},b.cache={},b.parse=function(a){for(var b=a,c=[],d=[],f=0;b;){if(null!==(c=e.text.exec(b)))d[d.length]=c[0];else if(null!==(c=e.modulo.exec(b)))d[d.length]="%";else{if(null===(c=e.placeholder.exec(b)))throw new SyntaxError("[sprintf] unexpected placeholder");if(c[2]){f|=1;var g=[],h=c[2],i=[];if(null===(i=e.key.exec(h)))throw new SyntaxError("[sprintf] failed to parse named argument key");for(g[g.length]=i[1];""!==(h=h.substring(i[0].length));)if(null!==(i=e.key_access.exec(h)))g[g.length]=i[1];else{if(null===(i=e.index_access.exec(h)))throw new SyntaxError("[sprintf] failed to parse named argument key");g[g.length]=i[1]}c[2]=g}else f|=2;if(3===f)throw new Error("[sprintf] mixing positional and named placeholders is not (yet) supported");d[d.length]=c}b=b.substring(c[0].length)}return d};var f=function(a,c,d){return d=(c||[]).slice(0),d.splice(0,0,a),b.apply(null,d)};"undefined"!=typeof exports?(exports.sprintf=b,exports.vsprintf=f):(a.sprintf=b,a.vsprintf=f,"function"==typeof define&&define.amd&&define(function(){return{sprintf:b,vsprintf:f}}))}("undefined"==typeof window?this:window);
 //# sourceMappingURL=sprintf.min.map
-///#source 1 1 /Scripts/mixerp/mixerp-core.js
-///#source 1 1 /Scripts/mixerp/core/dom/cascading-pair.js
 function createCascadingPair(select, input) {
     input.blur(function () {
         selectDropDownListByValue(this.id, select.attr("id"));
@@ -52858,7 +52841,6 @@ var selectDropDownListByValue = function (textBoxId, dropDownListId) {
 
     triggerChange(dropDownListId);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/checkable.js
 var toogleSelection = function (element) {
     var property = element.prop("checked");
 
@@ -52868,7 +52850,6 @@ var toogleSelection = function (element) {
         element.prop("checked", true);
     }
 };
-///#source 1 1 /Scripts/mixerp/core/dom/document.js
 function getDocHeight(margin) {
     var D = document;
     var height = Math.max(
@@ -52889,7 +52870,32 @@ var repaint = function () {
         $(document).trigger('resize');
     }, 1000);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/events.js
+function getParentWindow() {
+    var parent;
+
+    if (window.opener && window.opener.document) {
+        parent = window.opener;
+    };
+
+    if (parent == undefined) {
+        parent = window.parent;
+    };
+
+    return parent;
+};
+
+function closeWindow() {
+    if (window.opener && window.opener.document) {
+        top.close();
+    } else {
+        parent.jQuery.colorbox.close();
+    };
+};
+
+function isFrame() {
+    return window.self !== window.top;
+};
+
 var triggerChange = function (controlId) {
     var element = document.getElementById(controlId);
 
@@ -52916,7 +52922,6 @@ var triggerClick = function (controlId) {
     }
 };
 
-///#source 1 1 /Scripts/mixerp/core/dom/loader.js
 function addLoader(el) {
     $(el).addClass('loading');
 };
@@ -52924,7 +52929,103 @@ function addLoader(el) {
 function removeLoader(el) {
     $(el).removeClass('loading');
 };
-///#source 1 1 /Scripts/mixerp/core/dom/popunder.js
+var uploaderInitialized = false;
+var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+var uploaderTemplate = '<div class="uploader field">\
+                            <div class="ui segment">\
+                                <img src="{0}" class="ui image preview">\
+                            </div>\
+                            </div>\
+                            <div class="uploader">\
+                            <label for="file{1}" class="ui pink icon button">\
+                                <i class="file icon"></i>\
+                                Upload</label>\
+                                <input id="file{1}" class="file" data-target="{1}" style="display: none" type="file">\
+                            </div>';
+
+function initializeUploader() {
+    var instances = $("input.image");
+    instances.each(function () {
+        var el = $(this);
+        el.parent().find(".uploader").remove();
+        var val = el.val();
+        var id = el.attr("id");
+        var imagePath = "/Static/images/mixerp-logo-light.png";
+
+        if (val) {
+            imagePath = "/Resource/Static/Attachments/" + val;
+        }
+
+        el.attr("style", "display:none;");
+        el.parent().append(stringFormat(uploaderTemplate, imagePath, id));
+    });
+
+
+    var file = $(".file");
+
+    file.change(function () {
+        if (isValidExtension(this)) {
+            readURL(this);
+            var el = $(this);
+            var segment = el.closest(".segment");
+            var target = $("#" + el.attr("data-target"));
+
+            segment.addClass("loading");
+
+            el.upload("/FileUploadHanlder.ashx", function (uploadedFileName) {
+                target.val(uploadedFileName);
+                target.attr("data-val", uploadedFileName);
+                segment.removeClass("loading");
+            }, function (progress, value) {
+                //not implemented yet.
+            });
+        };
+    });
+
+    uploaderInitialized = true;
+};
+
+function isValidExtension(el) {
+
+    if (el.type === "file") {
+        var fileName = el.value;
+
+        if (fileName.length > 0) {
+
+            var valid = false;
+
+            for (var i = 0; i < allowedExtensions.length; i++) {
+                var extension = allowedExtensions[i];
+
+                if (fileName.substr(fileName.length - extension.length, extension.length).toLowerCase() === extension.toLowerCase()) {
+                    valid = true;
+                    break;
+                };
+            };
+
+            if (!valid) {
+                displayMessage(Resources.Warnings.InvalidFileExtension());
+                el.value = "";
+                return false;
+            };
+        };
+    };
+
+    return true;
+};
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var image = $(input).parent().parent().parent().find("img.preview");
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    };
+};
 function popUnder(div, button) {
     div.removeClass("initially hidden");
     div.show(500);
@@ -52935,7 +53036,6 @@ function popUnder(div, button) {
         of: button
     });
 };
-///#source 1 1 /Scripts/mixerp/core/dom/select.js
 jQuery.fn.getSelectedItem = function () {
     var listItem = $(this[0]);
     return listItem.find("option:selected");
@@ -52956,7 +53056,6 @@ jQuery.fn.setSelectedText = function (text) {
 
     target.prop('selected', true);
 };
-///#source 1 1 /Scripts/mixerp/core/dom/visibility.js
 function setVisible(targetControl, visible, timeout) {
     if (visible) {
         targetControl.show(timeout);
@@ -52982,7 +53081,6 @@ function addNotification(message, onclick) {
 
     $("#Notification").append(item);
 };
-///#source 1 1 /Scripts/mixerp/core/grid/cell.js
 var sumOfColumn = function (tableSelector, columnIndex) {
     var total = 0;
 
@@ -53024,7 +53122,6 @@ var removeRow = function (cell) {
         cell.closest("tr").remove();
     }
 };
-///#source 1 1 /Scripts/mixerp/core/grid/grid.js
 function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition, grid, offset) {
     var selection = [];
 
@@ -53059,7 +53156,6 @@ function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition
 
     return selection;
 };
-///#source 1 1 /Scripts/mixerp/core/grid/print-grid.js
 var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
     var token = Math.random().toString();
     //Load report template from the path.
@@ -53118,7 +53214,6 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
         });
     });
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/chartjs.js
 function shuffle(o) {
     for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
@@ -53291,11 +53386,9 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         table.hide();
     };
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/colorbox.js
 var showWindow = function (url) {
     $.colorbox({ width: +$('html').width() * 0.7, height: +$('html').height() * 0.7, iframe: true, href: url });
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/jquery-notify.js
 function displayMessage(a, b) {
     $.notify(a, b);
 };
@@ -53312,7 +53405,17 @@ var logError = function (a, b) {
 function logAjaxErrorMessage(xhr) {
     logError(getAjaxErrorMessage(xhr));
 };
-///#source 1 1 /Scripts/mixerp/core/libraries/semantic-ui.js
+function loadDatepicker() {
+    $(".date").datepicker(
+    {
+        dateFormat: datepickerFormat,
+        showWeek: datepickerShowWeekNumber,
+        firstDay: datepickerWeekStartDay,
+        constrainInput: false,
+        numberOfMonths: eval(datepickerNumberOfMonths)
+    },
+    $.datepicker.regional[language]);
+};
 //Semantic UI
 $(document).ready(function () {
     var tabItems = $('.tabular .item');
@@ -53331,7 +53434,6 @@ $(document).ready(function () {
 
     $('.activating.element').popup();
 });
-///#source 1 1 /Scripts/mixerp/core/prototype/string.js
 if (!String.prototype.format) {
 // ReSharper disable once NativeTypePrototypeExtending
     String.prototype.format = function () {
@@ -53343,13 +53445,11 @@ if (!String.prototype.format) {
         });
     };
 };
-///#source 1 1 /Scripts/mixerp/core/aspnet-validation.js
 var validateByControlId = function (controlId) {
     if (typeof Page_ClientValidate === "function") {
         Page_ClientValidate(controlId);
     };
 };
-///#source 1 1 /Scripts/mixerp/core/conversion.js
 var parseFloat2 = function (arg) {
     if (typeof (arg) === "undefined") {
         return 0;
@@ -53392,7 +53492,15 @@ function parseSerializedDate(str) {
     str = str.replace(/[^0-9 +]/g, '');
     return new Date(parseInt(str));
 };
-///#source 1 1 /Scripts/mixerp/core/date-expressions.js
+function convertDate(d) {
+    try {
+        var date = new Date(parseInt(d.substr(6)));
+        return date;
+    } catch (e) {
+        return null;
+    } 
+};
+
 function dateAdd(dt, expression, number) {
     var d = Date.parseExact(dt, shortDateFormat);
     var ret = new Date();
@@ -53504,7 +53612,6 @@ $(document).ready(function () {
         }
     });
 });
-///#source 1 1 /Scripts/mixerp/core/browser.js
 function supportsBrowserStorage() {
     try {
         return 'localStorage' in window && window['localStorage'] !== null;
@@ -53512,7 +53619,6 @@ function supportsBrowserStorage() {
         return false;
     }
 };
-///#source 1 1 /Scripts/mixerp/core/flag.js
 jQuery.fn.getTotalColumns = function () {
     var grid = $($(this).selector);
     var row = grid.find("tr").eq(1);
@@ -53570,7 +53676,6 @@ function createFlaggedRows(grid, bgColorColumnPos, fgColorColumnPos) {
     });
 };
 
-///#source 1 1 /Scripts/mixerp/core/json.js
 var tableToJSON = function (grid) {
     var colData = [];
     var rowData = [];
@@ -53593,7 +53698,6 @@ var tableToJSON = function (grid) {
 
     return data;
 };
-///#source 1 1 /Scripts/mixerp/core/localization.js
 $(document).ready(function () {
     setCurrencyFormat();
     setNumberFormat();
@@ -53677,7 +53781,6 @@ stringFormat = function () {
 
     return s;
 };
-///#source 1 1 /Scripts/mixerp/core/location.js
 function getQueryStringByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -53715,7 +53818,6 @@ function updateQueryString(key, value, url) {
             return url;
     }
 };
-///#source 1 1 /Scripts/mixerp/core/mixerp-ajax.js
 var appendParameter = function (data, parameter, value) {
     if (!isNullOrWhiteSpace(data)) {
         data += ",";
@@ -53850,11 +53952,6 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
     };
 
     ajax.success(function (msg) {
-
-        if (typeof callback === "function") {
-            callback();
-        };
-
         if (targetControl.length === 1) {
             targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField);
         };
@@ -53871,6 +53968,10 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
         if (typeof ajaxDataBindCallBack === "function") {
             ajaxDataBindCallBack(targetControl);
+        };
+
+        if (typeof callback === "function") {
+            callback();
         };
     });
 
@@ -53903,11 +54004,9 @@ var getAjaxErrorMessage = function (xhr) {
 
     return "";
 };
-///#source 1 1 /Scripts/mixerp/core/transaction.js
 function convertToDebit(balanceInCredit) {
     return balanceInCredit * -1;
 };
-///#source 1 1 /Scripts/mixerp/core/validation.js
 var makeDirty = function (obj) {
     obj.parent().addClass("error");
     obj.focus();
@@ -53942,12 +54041,527 @@ function isDate(val) {
     var d = new Date(val);
     return !isNaN(d.valueOf());
 };
-///#source 1 1 /Scripts/mixerp/core/window.js
 var confirmAction = function () {
     return confirm(Resources.Questions.AreYouSure());
 };
 
-///#source 1 1 /Scripts/ajax-file-upload.js
+//Jason Bunting & Alex Nazarov
+//http://stackoverflow.com/questions/359788/how-to-execute-a-javascript-function-when-i-have-its-name-as-a-string
+function executeFunctionByName(functionName, context /*, args */) {
+    var args = [].slice.call(arguments).splice(2);
+    var namespaces = functionName.split(".");
+    var func = namespaces.pop();
+    for (var i = 0; i < namespaces.length; i++) {
+        context = context[namespaces[i]];
+    };
+
+    if (typeof (context[func]) === "function") {
+        return context[func].apply(this, args);
+    };
+
+    return undefined;
+};
+
+function createCascadingPair(select, input) {
+    input.blur(function () {
+        selectDropDownListByValue(this.id, select.attr("id"));
+    });
+
+    select.change(function () {
+        input.val(select.getSelectedValue());
+    });
+};
+
+var selectDropDownListByValue = function (textBoxId, dropDownListId) {
+    var listControl = $("#" + dropDownListId);
+    var textBox = $("#" + textBoxId);
+    var selectedValue = textBox.val();
+    var exists;
+
+    if (isNullOrWhiteSpace(textBox.val())) {
+        return;
+    };
+
+    if (listControl.length) {
+        listControl.find('option').each(function () {
+            if (this.value === selectedValue) {
+                exists = true;
+            }
+        });
+    }
+
+    if (exists) {
+        listControl.val(selectedValue).trigger('change');
+    } else {
+        textBox.val('').trigger('change');
+    }
+
+    triggerChange(dropDownListId);
+};
+var toogleSelection = function (element) {
+    var property = element.prop("checked");
+
+    if (property) {
+        element.prop("checked", false);
+    } else {
+        element.prop("checked", true);
+    }
+};
+function getDocHeight(margin) {
+    var D = document;
+    var height = Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+
+    if (margin) {
+        height += parseInt2(margin);
+    };
+
+    return height;
+};
+
+var repaint = function () {
+    setTimeout(function () {
+        $(document).trigger('resize');
+    }, 1000);
+};
+var triggerChange = function (controlId) {
+    var element = document.getElementById(controlId);
+
+    if ('createEvent' in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        element.dispatchEvent(evt);
+    } else {
+        if ("fireEvent" in element)
+            element.fireEvent("onchange");
+    }
+};
+
+var triggerClick = function (controlId) {
+    var element = document.getElementById(controlId);
+
+    if ('createEvent' in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", false, true);
+        element.dispatchEvent(evt);
+    } else {
+        if ("fireEvent" in element)
+            element.fireEvent("onclick");
+    }
+};
+
+function popUnder(div, button) {
+    div.removeClass("initially hidden");
+    div.show(500);
+
+    div.position({
+        my: "left top",
+        at: "left bottom",
+        of: button
+    });
+};
+jQuery.fn.getSelectedItem = function () {
+    var listItem = $(this[0]);
+    return listItem.find("option:selected");
+};
+
+jQuery.fn.getSelectedValue = function () {
+    return $(this[0]).getSelectedItem().val();
+};
+
+jQuery.fn.getSelectedText = function () {
+    return $(this[0]).getSelectedItem().text();
+};
+
+jQuery.fn.setSelectedText = function (text) {
+    var target = $(this).find("option").filter(function () {
+        return this.text === text;
+    });
+
+    target.prop('selected', true);
+};
+function setVisible(targetControl, visible, timeout) {
+    if (visible) {
+        targetControl.show(timeout);
+        return;
+    };
+
+    targetControl.hide(timeout);
+};
+
+function addNotification(message, onclick) {
+    var count = parseInt2($("#NotificationMenu span").addClass("ui red label").html());
+    count++;
+    $("#NotificationMenu span").addClass("ui red label").html(count);
+
+    var item = $("<div />");
+    item.attr("class", "item");
+
+    if (onclick) {
+        item.attr("onclick", onclick);
+    };
+
+    item.html(message);
+
+    $("#Notification").append(item);
+};
+var sumOfColumn = function (tableSelector, columnIndex) {
+    var total = 0;
+
+    $(tableSelector).find('tr').each(function () {
+        var value = parseFloat2($('td', this).eq(columnIndex).text());
+        total += value;
+    });
+
+    return total;
+};
+
+var getColumnText = function (row, columnIndex) {
+    return row.find("td:eq(" + columnIndex + ")").text();
+};
+
+var setColumnText = function (row, columnIndex, value) {
+    row.find("td:eq(" + columnIndex + ")").html(value);
+};
+
+var toggleDanger = function (cell) {
+    var row = cell.closest("tr");
+    row.toggleClass("negative");
+};
+
+var addDanger = function (row) {
+    row.removeClass("negative");
+    row.addClass("negative");
+};
+
+var toggleSuccess = function (cell) {
+    var row = cell.closest("tr");
+    row.toggleClass("positive");
+};
+
+var removeRow = function (cell) {
+    var result = confirm(Resources.Questions.AreYouSure());
+
+    if (result) {
+        cell.closest("tr").remove();
+    }
+};
+function getSelectedCheckBoxItemIds(checkBoxColumnPosition, itemIdColumnPosition, grid, offset) {
+    var selection = [];
+
+    if (!offset) {
+        offset = 0;
+    };
+
+    //Iterate through each row to investigate the selection.
+    grid.find("tr").each(function (i) {
+        if (i > offset) {
+            //Get an instance of the current row in this loop.
+            var row = $(this);
+
+            //Get the instance of the cell which contains the checkbox.
+            var checkBoxContainer = row.select("td:nth-child(" + checkBoxColumnPosition + ")");
+
+            //Get the instance of the checkbox from the container.
+            var checkBox = checkBoxContainer.find("input");
+
+            if (checkBox) {
+                //Check if the checkbox was selected or checked.
+                if (checkBox.prop("checked")) {
+                    //Get ID from the associated cell.
+                    var id = row.find("td:nth-child(" + itemIdColumnPosition + ")").html();
+
+                    //Add the ID to the array.
+                    selection.push(id);
+                };
+            };
+        };
+    });
+
+    return selection;
+};
+var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
+    var token = Math.random().toString();
+    //Load report template from the path.
+    $.get(templatePath + "?" + token, function () { }).done(function (data) {
+        //Load report header template.
+        $.get(headerPath + "?" + token, function () { }).done(function (header) {
+            var table = $("#" + gridViewId).clone();
+
+            table.find("tr.tableFloatingHeader").remove();
+
+            table.find("th:nth-child(-n" + offset + ")").remove();
+            table.find("td:nth-child(-n" + offset + ")").remove();
+
+            table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
+            table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
+
+            table.find("td").removeAttr("style");
+            table.find("tr").removeAttr("style");
+
+            table = "<table class='preview'>" + table.html() + "</table>";
+
+            data = data.replace("{Header}", header);
+            data = data.replace("{ReportHeading}", reportTitle);
+            data = data.replace("{PrintDate}", printedDate);
+            data = data.replace("{UserName}", user);
+            data = data.replace("{OfficeCode}", office);
+            data = data.replace("{Table}", table);
+
+            if (hiddenFieldToUpdate) {                
+                //Update the hidden field with data, but do not print.
+                $(hiddenFieldToUpdate).val(data);
+
+                if (triggerControlId) {
+                    $("#" + triggerControlId).trigger("click");
+                };
+
+                return;
+            };
+
+            //Creating and opening a new window to display the report.
+            var w = window.open('', windowName,
+                + ',menubar=0'
+                + ',toolbar=0'
+                + ',status=0'
+                + ',scrollbars=1'
+                + ',resizable=0');
+            w.moveTo(0, 0);
+            w.resizeTo(screen.width, screen.height);
+
+
+            //Writing the report to the window.
+            w.document.writeln(data);
+            w.document.close();
+
+            //Report sent to the browser.
+        });
+    });
+};
+function shuffle(o) {
+    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
+var chartColors = shuffle(["#DF0101", "#DF3A01", "#DF7401", "#DBA901", "#D7DF01", "#A5DF00", "#74DF00", "#3ADF00", "#01DF74", "#01DFA5", "#01DFD7", "#01A9DB", "#0174DF", "#013ADF", "#0101DF", "#3A01DF", "#7401DF", "#A901DB", "#DF01D7", "#DF01A5", "#DF0174", "#DF013A", "#6E6E6E"]);
+
+function getFillColor(index) {
+    var color = hexToRgb(chartColors[index]);
+    var opacity = 0.8;
+    return "rgba(" + color.r + "," + color.g + "," + color.b + "," + opacity + ")";
+};
+
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
+
+function prepareChart(datasourceId, canvasId, legendId, type, log) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var labels = [];
+    var data = [];
+    var datasets = [];
+    var title;
+    var index = 0;
+
+    //Loop through the table header for labels.
+    table.find("tr:first-child th:not(:first-child)").each(function () {
+        //Create labels from header row columns.
+        labels.push($(this).html());
+    });
+
+    //Loop through each row of the table body.
+    table.find("tr").not(":first").each(function () {
+        //Get an instance of the current row
+        var row = $(this);
+
+        //The first column of each row is the legend.
+        title = row.find(":first-child").html();
+
+        //Reset the data object's value from the previous iteration.
+        data = [];
+        //Loop through the row columns.
+        row.find(":not(:first-child)").each(function () {
+            //Get data from this row.
+            data.push(parseFloat2($(this).html()));
+        });
+
+        //Create a new dataset representing this row.
+        var dataset =
+        {
+            fillColor: getFillColor(index),
+            strokeColor: chartColors[index],
+            pointColor: chartColors[index],
+            data: data,
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        datasets.push(dataset);
+
+        if (log) {
+            console.log(JSON.stringify(datasets));
+        }
+
+        index++;
+    });
+
+    table.remove();
+
+    var reportData = {
+        labels: labels,
+        datasets: datasets
+    };
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    switch (type) {
+        case "line":
+            new Chart(ctx).Line(reportData);
+            break;
+        case "radar":
+            new Chart(ctx).Radar(reportData);
+            break;
+        default:
+            new Chart(ctx).Bar(reportData);
+            break;
+    }
+
+    legend(document.getElementById(legendId), reportData);
+    table.hide();
+}
+
+function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var value;
+    var data = [];
+
+    if (typeof titleColumnIndex === "undefined") {
+        titleColumnIndex = 0;
+    };
+
+    if (typeof valueColumnIndex === "undefined") {
+        valueColumnIndex = 1;
+    };
+
+    //Reset the counter.
+    var counter = 0;
+
+    //Loop through each row of the table body.
+    table.find("tr").not(":first").each(function () {
+        //Get an instance of the current row
+        var row = $(this);
+
+        //The first column of each row is the legend.
+        var title = row.find("td:eq(" + parseInt2(titleColumnIndex) + ")").html();
+
+        //The first column of each row is the legend.
+        value = parseInt(row.find("td:eq(" + parseInt2(valueColumnIndex) + ")").html());
+
+        var dataset = {
+            value: value,
+            color: chartColors[counter],
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        data.push(dataset);
+        counter++;
+    });
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    var animation = true;
+
+    if (typeof (window.chartAnimation) !== "undefined") {
+        animation = window.chartAnimation;
+    };
+
+    var options = {
+        animation: animation
+    };
+
+    switch (type) {
+        case "doughnut":
+            new Chart(ctx).Doughnut(data, options);
+            break;
+        case "polar":
+            new Chart(ctx).PolarArea(data, options);
+            break;
+        default:
+            new Chart(ctx).Pie(data, options);
+            break;
+    }
+
+    legend(document.getElementById(legendId), data);
+    if (hide) {
+        table.hide();
+    };
+};
+var showWindow = function (url) {
+    $.colorbox({ width: +$('html').width() * 0.7, height: +$('html').height() * 0.7, iframe: true, href: url });
+};
+function displayMessage(a, b) {
+    $.notify(a, b);
+};
+
+function displaySucess() {
+    $.notify(Resources.Labels.TaskCompletedSuccessfully(), "success");
+};
+
+var logError = function (a, b) {
+    //Todo
+    $.notify(a, b);
+};
+
+function logAjaxErrorMessage(xhr) {
+    logError(getAjaxErrorMessage(xhr));
+};
+//Semantic UI
+$(document).ready(function () {
+    var tabItems = $('.tabular .item');
+
+    if (tabItems && tabItems.length > 0) {
+        tabItems.tab();
+    };
+
+    //Semantic UI Button Support
+    var buttons = $(".buttons .button");
+
+    buttons.on("click", function () {
+        buttons.removeClass("active");
+        $(this).addClass("active");
+    });
+
+    $('.activating.element').popup();
+});
+if (!String.prototype.format) {
+// ReSharper disable once NativeTypePrototypeExtending
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] !== 'undefined'
+                ? args[number]
+                : match;
+        });
+    };
+};
+
 // Ajax File upload with jQuery and XHR2
 // Sean Clark http://square-bracket.com
 // xhr2 file upload
@@ -54011,7 +54625,6 @@ $.fn.upload = function (remote, data, successFn, progressFn) {
         }
     });
 };
-///#source 1 1 /Scripts/mixerp/master-page/declaration.js
 var contentRow = $("#ContentRow");
 var anchors = $("a.sub-menu-anchor");
 var footer = $("footer");
@@ -54023,9 +54636,13 @@ var datepickerLanguagePath;
 var searchInput = $("#SearchInput");
 
 var MixERPApp = angular.module('MixERPApp', []);
-///#source 1 1 /Scripts/mixerp/master-page/js-tree.js
 
-///#source 1 1 /Scripts/mixerp/master-page/keyboard.js
+MixERPApp.filter('ConvertDate', function () {
+    return function (d) {
+        return window.convertDate(d);
+    };
+});
+
 $(document).ready(function () {
     var searchInput = $("#SearchInput");
 
@@ -54042,7 +54659,6 @@ $(document).ready(function () {
     searchInput.focus();
 });
 
-///#source 1 1 /Scripts/mixerp/master-page/layout.js
 (function () {
     fixLayout();
 })();
@@ -54075,7 +54691,6 @@ function fixLayout() {
         };
     };
 };
-///#source 1 1 /Scripts/mixerp/master-page/locale.js
 function urlExists(url) {
     var http = new XMLHttpRequest();
     http.open('HEAD', url, false);
@@ -54113,7 +54728,6 @@ function addScriptReference(path) {
     var element = document.body.getElementsByTagName('script')[0];
     element.parentNode.insertBefore(script, element);
 };
-///#source 1 1 /Scripts/mixerp/master-page/scrud.js
 function pageLoad() {
     initializeItemSelector();
     $(".item-selector").colorbox({ iframe: true, innerWidth: 1024, innerHeight: 450, overlayClose: false });
@@ -54162,14 +54776,12 @@ var closeItemSelector = function () {
     $('.item-selector-modal').modal('hide');
 };
 
-///#source 1 1 /Scripts/mixerp/master-page/sortable.js
 ////Widget Support
 
 $(document).ready(function() {
     $('#sortable-container').sortable({ placeholder: "ui-state-highlight", helper: 'clone', handle: 'div' });
 });
 
-///#source 1 1 /Scripts/mixerp/master-page/semantic.js
 $(document).ready(function () {
     $('.ui.checkbox').checkbox();
     $('.ui.dropdown').dropdown();
@@ -54195,7 +54807,6 @@ $.extend(true, $.fn.form.settings.rules, {
             : false;
     }
 });
-///#source 1 1 /Scripts/mixerp/master-page/menu.js
 var menus;
 var depth = 2;
 
@@ -54458,7 +55069,6 @@ function adjustSidebar(){
 window.onresize = function (event) {
 };
 
-///#source 1 1 /Scripts/mixerp/master-page/notification.js
 $(document).ready(function() {
     if (update === "1") {
         addNotification(Resources.Titles.Update(), "document.location = \"/Modules/Update.aspx\";");

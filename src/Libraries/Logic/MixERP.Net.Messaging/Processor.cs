@@ -44,6 +44,12 @@ namespace MixERP.Net.Messaging.Email
         {
             Config config = new Config(this.Catalog);
 
+            if (!config.Enabled)
+            {
+                return false;
+            }
+
+
             EmailMessage email = new EmailMessage
             {
                 FromName = config.FromName,

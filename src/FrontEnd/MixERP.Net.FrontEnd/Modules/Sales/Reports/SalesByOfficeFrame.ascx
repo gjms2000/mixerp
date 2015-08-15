@@ -16,6 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="SalesByOfficeFrame.ascx.cs" Inherits="MixERP.Net.Core.Modules.Sales.Reports.SalesByOfficeFrame"
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="SalesByOfficeFrame.ascx.cs" 
+    Inherits="MixERP.Net.Core.Modules.Sales.Reports.SalesByOfficeFrame"
     MasterPageId="MixERPReportMaster.Master" RemoveTheme="true" 
+    OverridePath="/Modules/Sales/Reports/SalesByOffice.mix"
      %>

@@ -69,9 +69,9 @@ namespace MixERP.Net.FrontEnd
             this.BindCompanies();
             this.BindBranches();
 
-            if (branchSelect.Items.Count.Equals(0))
+            if (this.branchSelect.Items.Count.Equals(0))
             {
-                this.Response.Redirect("~/Install.aspx");
+                this.Response.Redirect("~/Installation/Default.aspx");
             }
 
             if (!this.IsPostBack)
@@ -330,15 +330,6 @@ namespace MixERP.Net.FrontEnd
             }
         }
 
-        private static void AddDivider(HtmlGenericControl container)
-        {
-            using (HtmlGenericControl divider = new HtmlGenericControl("div"))
-            {
-                divider.Attributes.Add("class", "ui divider");
-                container.Controls.Add(divider);
-            }
-        }
-
         private static void AddExceptionField(HtmlGenericControl container)
         {
             using (HtmlGenericControl exceptionField = new HtmlGenericControl("div"))
@@ -502,7 +493,6 @@ namespace MixERP.Net.FrontEnd
                 form.Attributes.Add("style", "padding:24px 48px;");
 
                 CreateHeader(form);
-                AddDivider(form);
                 AddUserIdField(form);
                 AddPasswordField(form);
                 AddRememberMeField(form);

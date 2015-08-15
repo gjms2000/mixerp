@@ -1,12 +1,12 @@
 ﻿/********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This file is part of MixERP.
 
 MixERP is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, version 2 of the License.
-
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
 MixERP is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,20 +17,24 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Transactions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI.WebControls;
-using MixERP.Net.Common.Helpers;
-
+using MixERP.Net.Common;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
+using MixERP.Net.Entities;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions;
+using Serilog;
+using MixERP.Net.ApplicationState.Cache;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Inventory.Services
 {
@@ -46,7 +50,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
 
             foreach (ShippingAddressView view in ShippingAddresses.GetShippingAddressView(AppUsers.GetCurrentUserDB(), partyCode))
             {
-                string address = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{1}{3}{4}{5}{1}{6}{4}{7}", view.AddressLine1, Environment.NewLine, view.AddressLine2, view.Street, ", ", view.City, view.State, view.Country);
+                string address = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{1}{3}{4}{5}{1}{6}{4}{7}", view.AddressLine1, Environment.NewLine, view.AddressLine2, view.Street, ", ", view.City, view.StateName, view.CountryName);
 
                 values.Add(new ListItem(view.ShippingAddressCode, address));
             }
@@ -55,43 +59,16 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
         }
 
         [WebMethod]
-        public Collection<ListItem> GetParties(string book)
-        {
-            bool allowSupplierInSales = DbConfig.GetSwitch(AppUsers.GetCurrentUserDB(), "AllowSupplierInSales");
-            bool allowNonSupplierInPurchase = DbConfig.GetSwitch(AppUsers.GetCurrentUserDB(), "AllowNonSupplierInPurchase");
-
-            if (book.ToUpperInvariant().Equals("SALES"))
-            {
-                if (!allowSupplierInSales)
-                {
-                    return this.GetParties(Parties.GetNonSuppliers(AppUsers.GetCurrentUserDB()));
-                }
-            }
-
-            if (book.ToUpperInvariant().Equals("PURCHASE"))
-            {
-                if (!allowNonSupplierInPurchase)
-                {
-                    return this.GetParties(Parties.GetSuppliers(AppUsers.GetCurrentUserDB()));
-                }
-            }
-
-            return this.GetParties(Parties.GetParties(AppUsers.GetCurrentUserDB()));
-
-        }
-
-        private Collection<ListItem> GetParties(IEnumerable<Party> parties)
+        public Collection<ListItem> GetParties()
         {
             Collection<ListItem> values = new Collection<ListItem>();
 
-            foreach (Party party in parties)
+            foreach (Party party in Parties.GetParties(AppUsers.GetCurrentUserDB()))
             {
                 values.Add(new ListItem(party.PartyName, party.PartyCode));
             }
-
             return values;
         }
-
 
         [WebMethod]
         public string GetPartyCodeByPartyId(int partyId)
@@ -117,6 +94,137 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
         public IEnumerable<ShippingAddress> GetShippingAddresses(string partyCode)
         {
             return Parties.GetShippingAddresses(AppUsers.GetCurrentUserDB(), partyCode);
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetPartyTypes()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<PartyType> partyTypes = PartyTypes.GetPartyTypes(AppUsers.GetCurrentUserDB());
+
+            foreach (PartyType partyType in partyTypes)
+            {
+                values.Add(new ListItem(partyType.PartyTypeName, partyType.PartyTypeId.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetEntities()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<Entity> entities = Data.Helpers.Entities.GetEntities(AppUsers.GetCurrentUserDB());
+
+            foreach (Entity entity in entities)
+            {
+                values.Add(new ListItem(entity.EntityName, entity.EntityId.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetIndustries()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<Industry> industries = Data.Helpers.Industries.GetIndustries(AppUsers.GetCurrentUserDB());
+
+            foreach (Industry industry in industries)
+            {
+                values.Add(new ListItem(industry.IndustryName, industry.IndustryId.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetCountries()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<Country> countries = Data.Helpers.Countries.GetCountries(AppUsers.GetCurrentUserDB());
+
+            foreach (Country country in countries)
+            {
+                values.Add(new ListItem(country.CountryName, country.CountryId.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetStates()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<State> states = Data.Helpers.States.GetStates(AppUsers.GetCurrentUserDB());
+
+            foreach (State state in states)
+            {
+                values.Add(new ListItem(state.StateName, state.StateId.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetCurrencyCodes()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            IEnumerable<Currency> currencies = Data.Helpers.Currencies.GetCurrencyCodes(AppUsers.GetCurrentUserDB());
+
+            foreach (Currency currency in currencies)
+            {
+                values.Add(new ListItem(currency.CurrencySymbol + "(" + currency.CurrencyCode + "/" + currency.CurrencyName + ")", currency.CurrencyCode.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            return values;
+        }
+
+
+        [WebMethod]
+        public long SaveOrUpdate(Party party)
+        {
+            try
+            {
+                string catalog = AppUsers.GetCurrentUserDB();
+                int userId = AppUsers.GetCurrent().View.UserId.ToInt();
+
+                if (string.IsNullOrWhiteSpace(party.PartyName))
+                {
+                    party.PartyName = party.LastName + ", " + party.FirstName;
+                }
+
+                party.AuditUserId = userId;
+                party.AuditTs = DateTime.UtcNow;
+
+                if (party.PartyId > 0)
+                {
+                    Factory.Update(catalog, party, party.PartyId);
+                    return party.PartyId;
+                }
+
+                //Party code will be created on server side.
+                party.PartyCode = null;
+                long id = Conversion.TryCastLong(Factory.Insert(catalog, party));
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("Could not save items. {Exception}", ex);
+                throw;
+            }
+        }
+
+        [WebMethod]
+        public Party GetPartyData(string partyId)
+        {
+            return Parties.GetParty(AppUsers.GetCurrentUserDB(), Conversion.TryCastLong(partyId)).First();
         }
     }
 }

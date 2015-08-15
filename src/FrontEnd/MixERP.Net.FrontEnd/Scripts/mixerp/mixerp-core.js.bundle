@@ -13,8 +13,10 @@
     <file>/Scripts/mixerp/core/dom/cascading-pair.js</file>
     <file>/Scripts/mixerp/core/dom/checkable.js</file>
     <file>/Scripts/mixerp/core/dom/document.js</file>
+    <file>/Scripts/mixerp/core/dom/frame.js</file>
     <file>/Scripts/mixerp/core/dom/events.js</file>
     <file>/Scripts/mixerp/core/dom/loader.js</file>
+    <file>/Scripts/mixerp/core/dom/uploader.js</file>
     <file>/Scripts/mixerp/core/dom/popunder.js</file>
     <file>/Scripts/mixerp/core/dom/select.js</file>
     <file>/Scripts/mixerp/core/dom/visibility.js</file>
@@ -24,6 +26,7 @@
     <file>/Scripts/mixerp/core/libraries/chartjs.js</file>
     <file>/Scripts/mixerp/core/libraries/colorbox.js</file>
     <file>/Scripts/mixerp/core/libraries/jquery-notify.js</file>
+    <file>/Scripts/mixerp/core/libraries/jquery-ui.js</file>
     <file>/Scripts/mixerp/core/libraries/semantic-ui.js</file>
     <file>/Scripts/mixerp/core/prototype/string.js</file>
     <file>/Scripts/mixerp/core/aspnet-validation.js</file>

@@ -27,6 +27,7 @@
             };
 
             function updateReportHiddenPdf() {
+                $('#ReportHidden').val("");
                 var temp = $(".container div .hide");
                 temp.remove();
 
@@ -45,6 +46,7 @@
             };
 
             function updateReportHidden() {
+                $('#ReportHidden').val("");
                 var temp = $(".container div .hide");
                 temp.remove();
 

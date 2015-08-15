@@ -1142,3 +1142,64 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+   DECLARE i integer;
+BEGIN
+    FOR i IN 1 .. 5
+    LOOP
+        UPDATE core.parties SET photo = 'sample/man-838636_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/meet-696077_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/model-299694_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/old-man-692807_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/businessman-805770_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/chinese-572945_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/beautiful-19075_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/beautiful-653317_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/cowboy-67630_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/eyes-622355_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/fairy-tales-636649_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/friend-762590_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-102829_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-518321_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-518331_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-602177_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-637568_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-803179_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girl-846991_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/girls-602168_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/guy-549173_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/indian-627831_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/james-stewart-392932_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/male-777913_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-140547_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-324103_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-407084_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/beauty-739667_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/beauty-20150_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/21-38-48-104_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/brunette-15963_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-504453_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-56087_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/man-783701_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/people-850949_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/people-875597_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/person-783780_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/person-822552_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/person-827608_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/person-829966_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/person-854095_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/portrait-597173_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/portrait-642528_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/portrait-750781_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/professor-836151_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/teenager-398355_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/woman-422706_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/woman-487067_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/woman-858003_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+        UPDATE core.parties SET photo = 'sample/woman-868522_640.jpg' WHERE party_id IN (SELECT party_id FROM core.parties WHERE COALESCE(photo, '') = ''   ORDER BY RANDOM() OFFSET 6 LIMIT 6);
+    END LOOP;
+END
+$$
+language plpgsql;
