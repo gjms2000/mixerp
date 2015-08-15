@@ -1185,6 +1185,7 @@ SELECT localization.add_localized_resource('Titles', '', 'PurchaseType', 'Purcha
 SELECT localization.add_localized_resource('Titles', '', 'Quantity', 'Quantity');
 SELECT localization.add_localized_resource('Titles', '', 'QuantityAbbreviated', 'Qty');
 SELECT localization.add_localized_resource('Titles', '', 'QuantityOnHandAbbreviated', 'Qty (On Hand)');
+SELECT localization.add_localized_resource('Titles', '', 'QuotationDetails', 'Quotation Details');
 SELECT localization.add_localized_resource('Titles', '', 'QuotationValidDays', 'Quotation Valid Days');
 SELECT localization.add_localized_resource('Titles', '', 'Rate', 'Rate');
 SELECT localization.add_localized_resource('Titles', '', 'Reason', 'Reason');

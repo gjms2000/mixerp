@@ -13095,6 +13095,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Quotation Details
+		/// </summary>
+		public static string QuotationDetails 
+		{
+			get
+			{
+				return Get("QuotationDetails");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Quotation Valid Days
 		/// </summary>
 		public static string QuotationValidDays 
