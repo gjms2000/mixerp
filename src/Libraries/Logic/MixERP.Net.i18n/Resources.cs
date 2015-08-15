@@ -1321,6 +1321,17 @@ namespace MixERP.Net.i18n.Resources
 				return Get("ReferencingSidesNotEqual");
 			}
 		}
+		
+		/// <summary>
+		///   Localized string for The regional data file could not be located.
+		/// </summary>
+		public static string RegionalDataFileNotFound 
+		{
+			get
+			{
+				return Get("RegionalDataFileNotFound");
+			}
+		}
 	}
 	public class Labels
 	{
@@ -2320,7 +2331,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Your outgoig email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
+		///   Localized string for Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
 		/// </summary>
 		public static string SetupEmailDescription 
 		{
@@ -7144,6 +7155,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("sales_discount_account_id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Sales Quotation Valid Duration
+		/// </summary>
+		public static string sales_quotation_valid_duration 
+		{
+			get
+			{
+				return Get("sales_quotation_valid_duration");
 			}
 		}
 		
@@ -13278,6 +13300,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("RefererenceNumberAbbreviated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Regional Data (Including Chart of Accouts)
+		/// </summary>
+		public static string RegionalDataIncludingCOA 
+		{
+			get
+			{
+				return Get("RegionalDataIncludingCOA");
 			}
 		}
 		

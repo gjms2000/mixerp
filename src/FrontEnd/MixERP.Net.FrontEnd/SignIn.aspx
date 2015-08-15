@@ -24,15 +24,18 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <head runat="server">
     <title>Sign In</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+    </style>
 </head>
 <body id="SignInBody">
-
     <form id="form1" runat="server">
         <asp:Literal ID="TestLiteral" runat="server" />
+
         <asp:PlaceHolder runat="server" ID="Placeholder1"></asp:PlaceHolder>
         <script type="text/javascript" src="/bundles/scripts/libraries.min.js"></script>
         <script type="text/javascript" src="/Scripts/jssha1.5/src/sha.js"></script>
         <script type="text/javascript" src="/Scripts/Pages/SignIn.aspx.js"></script>
-    </form>
+    </form>    
 </body>
 </html>

@@ -5343,6 +5343,7 @@ SELECT localization.add_localized_resource('Errors', '', 'InvalidUserId', 'Inval
 SELECT localization.add_localized_resource('Errors', '', 'KeyValueMismatch', 'There is a mismatching count of key/value items in this ListControl.');
 SELECT localization.add_localized_resource('Errors', '', 'NoTransactionToPost', 'No transaction to post.');
 SELECT localization.add_localized_resource('Errors', '', 'ReferencingSidesNotEqual', 'The referencing sides are not equal.');
+SELECT localization.add_localized_resource('Errors', '', 'RegionalDataFileNotFound', 'The regional data file could not be located.');
 SELECT localization.add_localized_resource('Labels', '', 'AddNewUsersDescription', 'Create users and define various policies such as menu access policy and verification policy.');
 SELECT localization.add_localized_resource('Labels', '', 'AllFieldsRequired', 'All fields are required.');
 SELECT localization.add_localized_resource('Labels', '', 'BackingUp', 'Backing up {0}.');
@@ -6430,6 +6431,7 @@ SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoiceSetup'
 SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoices', 'Recurring Invoices');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumber', 'Reference Number');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumberAbbreviated', 'Ref#');
+SELECT localization.add_localized_resource('Titles', '', 'RegionalDataIncludingCOA', 'Regional Data (Including Chart of Accouts)');
 SELECT localization.add_localized_resource('Titles', '', 'RegistrationDate', 'Registration Date');
 SELECT localization.add_localized_resource('Titles', '', 'Reject', 'Reject');
 SELECT localization.add_localized_resource('Titles', '', 'RejectThisTransaction', 'Reject This Transaction');
@@ -10012,45 +10014,6 @@ SELECT core.create_menu_locale('SAT', 'de', 'Administrations Werkzeuge');
 SELECT core.create_menu_locale('SDS', 'de', 'Abteilungs Setup');
 SELECT core.create_menu_locale('SAA', 'de', 'API-Richtlinien');
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/en-US/custom-fields.sql --<--<--
-DO
-$$
-BEGIN
-    IF(core.get_locale() = 'en-US') THEN
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Text') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_number)
-            SELECT 'Text', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Number') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_number)
-            SELECT 'Number', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Date') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_date)
-            SELECT 'Date', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='True/False') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_boolean)
-            SELECT 'True/False', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Long Text') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_long_text)
-            SELECT 'Long Text', true;
-        END IF;
-
-
-        PERFORM core.add_custom_field_form('Accounts', 'core.accounts', 'account_id');
-        PERFORM core.add_custom_field_form('Items', 'core.items', 'item_id');
-        PERFORM core.add_custom_field_form('Parties', 'core.parties', 'party_id');
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/es/language.sql --<--<--
 --Translated using a tool
@@ -25441,6 +25404,45 @@ CREATE TRIGGER party_after_insert_trigger
 AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.sample-data/00.custom-fields.sql --<--<--
+DO
+$$
+BEGIN
+    IF(core.get_locale() = 'en-US') THEN
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Text') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_number)
+            SELECT 'Text', true;
+        END IF;
+
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Number') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_number)
+            SELECT 'Number', true;
+        END IF;
+
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Date') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_date)
+            SELECT 'Date', true;
+        END IF;
+
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='True/False') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_boolean)
+            SELECT 'True/False', true;
+        END IF;
+
+        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Long Text') THEN
+            INSERT INTO core.custom_field_data_types(data_type, is_long_text)
+            SELECT 'Long Text', true;
+        END IF;
+
+
+        PERFORM core.add_custom_field_form('Accounts', 'core.accounts', 'account_id');
+        PERFORM core.add_custom_field_form('Items', 'core.items', 'item_id');
+        PERFORM core.add_custom_field_form('Parties', 'core.parties', 'party_id');
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.sample-data/99.ownership.sql --<--<--
 DO

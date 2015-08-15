@@ -115,6 +115,7 @@ SELECT localization.add_localized_resource('Errors', '', 'InvalidUserId', 'Inval
 SELECT localization.add_localized_resource('Errors', '', 'KeyValueMismatch', 'There is a mismatching count of key/value items in this ListControl.');
 SELECT localization.add_localized_resource('Errors', '', 'NoTransactionToPost', 'No transaction to post.');
 SELECT localization.add_localized_resource('Errors', '', 'ReferencingSidesNotEqual', 'The referencing sides are not equal.');
+SELECT localization.add_localized_resource('Errors', '', 'RegionalDataFileNotFound', 'The regional data file could not be located.');
 SELECT localization.add_localized_resource('Labels', '', 'AddNewUsersDescription', 'Create users and define various policies such as menu access policy and verification policy.');
 SELECT localization.add_localized_resource('Labels', '', 'AllFieldsRequired', 'All fields are required.');
 SELECT localization.add_localized_resource('Labels', '', 'BackingUp', 'Backing up {0}.');
@@ -1202,6 +1203,7 @@ SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoiceSetup'
 SELECT localization.add_localized_resource('Titles', '', 'RecurringInvoices', 'Recurring Invoices');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumber', 'Reference Number');
 SELECT localization.add_localized_resource('Titles', '', 'ReferenceNumberAbbreviated', 'Ref#');
+SELECT localization.add_localized_resource('Titles', '', 'RegionalDataIncludingCOA', 'Regional Data (Including Chart of Accouts)');
 SELECT localization.add_localized_resource('Titles', '', 'RegistrationDate', 'Registration Date');
 SELECT localization.add_localized_resource('Titles', '', 'Reject', 'Reject');
 SELECT localization.add_localized_resource('Titles', '', 'RejectThisTransaction', 'Reject This Transaction');

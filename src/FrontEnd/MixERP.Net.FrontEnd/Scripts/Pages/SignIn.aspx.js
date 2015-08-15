@@ -27,6 +27,8 @@ $(document).ready(function () {
         $(".exception").append(message).addClass("big error");
         makeDirty();
     };
+
+    $("select").addClass("search").dropdown();
 });
 
 signInButton.click(function () {

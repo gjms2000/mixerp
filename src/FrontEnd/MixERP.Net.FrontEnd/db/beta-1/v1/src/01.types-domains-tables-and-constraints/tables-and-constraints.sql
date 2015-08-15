@@ -180,8 +180,6 @@ CREATE TABLE core.zip_code_types
 CREATE UNIQUE INDEX zip_code_types_zip_code_type_uix
 ON core.zip_code_types(UPPER(type));
 
-INSERT INTO core.zip_code_types(type) VALUES('Standard'),('PO Box'),('Unique');
-
 
 CREATE TABLE core.zip_codes
 (
@@ -965,10 +963,6 @@ CREATE TABLE core.tax_base_amount_types
 CREATE UNIQUE INDEX tax_base_amount_type_tax_base_amount_type_name_uix
 ON core.tax_base_amount_types(UPPER(tax_base_amount_type_name));
 
-INSERT INTO core.tax_base_amount_types(tax_base_amount_type_code, tax_base_amount_type_name)
-SELECT 'P', 'Item price'            UNION ALL
-SELECT 'L', 'Item price + last taxes';
-
 CREATE TABLE core.tax_rate_types
 (
     tax_rate_type_code                      national character varying(4) PRIMARY KEY,--Should not be localized
@@ -978,9 +972,6 @@ CREATE TABLE core.tax_rate_types
 CREATE UNIQUE INDEX tax_rate_type_tax_rate_type_name_uix
 ON core.tax_rate_types(UPPER(tax_rate_type_name));
 
-INSERT INTO core.tax_rate_types(tax_rate_type_code, tax_rate_type_name)
-SELECT 'P', 'Percentage'    UNION ALL
-SELECT 'F', 'Flat amount';
 
 CREATE TABLE core.rounding_methods
 (
@@ -991,10 +982,6 @@ CREATE TABLE core.rounding_methods
 CREATE UNIQUE INDEX rounding_methods_rounding_method_name_uix
 ON core.rounding_methods(UPPER(rounding_method_name));
 
-INSERT INTO core.rounding_methods(rounding_method_code, rounding_method_name)
-SELECT 'R', 'Round to specified decimal places.' UNION ALL
-SELECT 'F', 'Floor' UNION ALL
-SELECT 'C', 'Ceiling';
 
 
 CREATE TABLE core.state_sales_taxes

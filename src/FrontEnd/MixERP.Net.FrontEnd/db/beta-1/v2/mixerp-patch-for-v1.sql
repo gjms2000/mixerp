@@ -54,7 +54,7 @@ ORDER BY pg_attribute.attnum;
 /********************************************************************************
 The PostgreSQL License
 
-Copyright (c) 2014, MixERP Inc. (http://mixof.org).
+Copyright (c) 2014, Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 Permission to use, copy, modify, and distribute this software and its documentation 
 for any purpose, without fee, and without a written agreement is hereby granted, 
@@ -82,7 +82,7 @@ DROP DOMAIN IF EXISTS public.test_result CASCADE;
 /********************************************************************************
 The PostgreSQL License
 
-Copyright (c) 2014, MixERP Inc. (http://mixof.org).
+Copyright (c) 2014, Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 Permission to use, copy, modify, and distribute this software and its documentation 
 for any purpose, without fee, and without a written agreement is hereby granted, 
@@ -9553,28 +9553,6 @@ EXECUTE PROCEDURE transactions.verify_book_date_trigger();
 UPDATE core.frequency_setups
 SET frequency_setup_code= 'Sep-Oct'
 WHERE frequency_setup_code= 'Sep-Oc';
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/04.default-values/card-types-payment-cards.sql --<--<--
-SELECT * FROM core.create_card_type(1, 'CRC', 'Credit Card'          );
-SELECT * FROM core.create_card_type(2, 'DRC', 'Debit Card'           );
-SELECT * FROM core.create_card_type(3, 'CHC', 'Charge Card'          );
-SELECT * FROM core.create_card_type(4, 'ATM', 'ATM Card'             );
-SELECT * FROM core.create_card_type(5, 'SVC', 'Store-value Card'     );
-SELECT * FROM core.create_card_type(6, 'FLC', 'Fleet Card'           );
-SELECT * FROM core.create_card_type(7, 'GFC', 'Gift Card'            );
-SELECT * FROM core.create_card_type(8, 'SCR', 'Scrip'                );
-SELECT * FROM core.create_card_type(9, 'ELP', 'Electronic Purse'     );
-
-
-SELECT * FROM core.create_payment_card('CR-VSA', 'Visa',                1);
-SELECT * FROM core.create_payment_card('CR-AME', 'American Express',    1);
-SELECT * FROM core.create_payment_card('CR-MAS', 'MasterCard',          1);
-SELECT * FROM core.create_payment_card('DR-MAE', 'Maestro',             2);
-SELECT * FROM core.create_payment_card('DR-MAS', 'MasterCard Debit',    2);
-SELECT * FROM core.create_payment_card('DR-VSE', 'Visa Electron',       2);
-SELECT * FROM core.create_payment_card('DR-VSD', 'Visa Debit',          2);
-SELECT * FROM core.create_payment_card('DR-DEL', 'Delta',               2);
-
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/04.default-values/http-actions.sql --<--<--
 --This table should not be localized.
@@ -26251,7 +26229,7 @@ WHERE menu_code = 'TRA';
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/currencies.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26280,7 +26258,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/fiscal_year.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26309,7 +26287,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/frequencies.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26353,7 +26331,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/frequency_setups.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26457,7 +26435,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/sys-user-test.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26530,7 +26508,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/core/verification_statuses.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 
@@ -26584,7 +26562,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/beta-1/v2/src/12.plpgunit-tests/office/is_parent_office_test.sql --<--<--
 /********************************************************************************
-Copyright (C) MixERP Inc. (http://mixof.org).
+Copyright (C) Binod Nepal, Mix Open Foundation (http://mixof.org).
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
 If a copy of the MPL was not distributed  with this file, You can obtain one at 

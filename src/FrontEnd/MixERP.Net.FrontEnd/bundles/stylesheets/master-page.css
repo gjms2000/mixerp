@@ -38055,9 +38055,6 @@ body {
   background-color: #ffffff;
   margin: 0;
 }
-#SignInBody {
-  background-color: #67238b;
-}
 #RightMenu {
   padding: 12px 12px 0 0 !important;
 }
@@ -38241,16 +38238,6 @@ h6:hover {
 }
 .dropdown li a {
   font-size: 11px;
-}
-#signin-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  margin-top: -300px;
-  /*set to a negative number 1/2 of your height*/
-  margin-left: -200px;
-  /*set to a negative number 1/2 of your width*/
 }
 .widget {
   height: 100%;
@@ -38442,7 +38429,7 @@ td input[type=text],
 .fields input,
 .button,
 input[type=text][readonly] {
-  height: 30px!important;
+  height: 30px !important;
 }
 .inline .checkbox {
   margin-top: 9px !important;
@@ -38629,6 +38616,16 @@ body {
   padding: 12px 0 0 12px !important;
   max-height: 54px;
 }
+#signin-form {
+  width: 400px;
+  height: 800px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
 .theme,
 #SignInBody {
   background-color: #67238B !important;
@@ -38667,4 +38664,4 @@ body {
 .text.right {
   text-align: right !important;
 }
-/*# sourceMappingURL=mixerp.css.map */
+

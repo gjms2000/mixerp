@@ -52,10 +52,6 @@ body {
     margin: 0;
 }
 
-#SignInBody {
-    background-color: @sidebar-background-color;
-}
-
 #RightMenu {
     padding: 12px 12px 0 0 !important;
 }
@@ -285,15 +281,6 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     font-size: 11px;
 }
 
-#signin-form {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    margin-top: -300px; /*set to a negative number 1/2 of your height*/
-    margin-left: -200px; /*set to a negative number 1/2 of your width*/
-}
-
 .widget {
     height: 100%;
     cursor: move;
@@ -511,12 +498,11 @@ table.borderless td {
 
 /*Semantic UI Override Start */
 
-td input[type=text], 
+td input[type=text],
 .fields input,
 .button,
-input[type=text][readonly]
-{
-    height: 30px!important;
+input[type=text][readonly] {
+    height: 30px !important;
 }
 
 
@@ -731,6 +717,16 @@ body {
     max-height: 54px;
 }
 
+#signin-form {
+    width: 400px;
+    height: 800px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
 
 
 .theme, #SignInBody {
