@@ -9595,7 +9595,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RestoringMigr
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RestrictedTransactionMode', 'Eingeschränkter Transaktions Modus');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RetainedEarnings', 'Gewinnrücklagen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'Return', 'Zurück');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReturnBack', 'Gehezurück');
+SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReturnBack', 'Gehe zurück');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReturnHome', 'Zurück  zum Ausgangsverzeichnis');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReturnToView', 'Zurück zur Ansicht');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'Role', 'Rolle');
