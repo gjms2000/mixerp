@@ -18,7 +18,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 
 <%@ Page Title="" Language="C#" Async="true" MasterPageFile="~/BackendMaster.Master"
-    AutoEventWireup="true" CodeBehind="Update.aspx.cs" Inherits="MixERP.Net.FrontEnd.Modules.Update" %>
+    AutoEventWireup="true" CodeBehind="Update.aspx.cs" Inherits="MixERP.Net.FrontEnd.Modules.Update"
+    IsLandingPage="true"
+     %>
 
 <%@ Import Namespace="MixERP.Net.i18n.Resources" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ScriptContentPlaceholder" runat="server">

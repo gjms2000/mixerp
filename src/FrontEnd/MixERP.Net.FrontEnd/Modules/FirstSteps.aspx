@@ -16,7 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ Page Title="" Language="C#" MasterPageFile="~/BackendMaster.Master" AutoEventWireup="true" CodeBehind="FirstSteps.aspx.cs" Inherits="MixERP.Net.FrontEnd.Modules.FirstSteps" %>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/BackendMaster.Master"
+    AutoEventWireup="true"
+    CodeBehind="FirstSteps.aspx.cs"
+    Inherits="MixERP.Net.FrontEnd.Modules.FirstSteps"
+    IsLandingPage="true" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ScriptContentPlaceholder" runat="server">
     <script src="../Scripts/underscore/underscore-min.js"></script>
 </asp:Content>

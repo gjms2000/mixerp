@@ -17,7 +17,12 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 
-<%@ Page Title="" Language="C#" MasterPageFile="~/BackendMaster.Master" AutoEventWireup="true" CodeBehind="WidgetManager.aspx.cs" Inherits="MixERP.Net.FrontEnd.Modules.WidgetManager" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/BackendMaster.Master" 
+    AutoEventWireup="true" 
+    CodeBehind="WidgetManager.aspx.cs" 
+    Inherits="MixERP.Net.FrontEnd.Modules.WidgetManager"
+    IsLandingPage="true"
+     %>
 
 <%@ Import Namespace="MixERP.Net.i18n.Resources" %>
 

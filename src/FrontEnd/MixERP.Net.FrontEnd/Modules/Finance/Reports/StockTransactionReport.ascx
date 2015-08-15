@@ -18,5 +18,5 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="StockTransactionReport.ascx.cs"
     Inherits="MixERP.Net.Core.Modules.Finance.Reports.StockTransactionReport"
-    RemoveTheme="true"
+    RemoveTheme="true" IsLandingPage="true"
     MasterPageId="MixERPReportMaster.Master" %>

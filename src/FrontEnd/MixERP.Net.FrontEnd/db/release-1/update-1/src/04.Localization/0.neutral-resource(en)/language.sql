@@ -1440,6 +1440,7 @@ SELECT localization.add_localized_resource('Warnings', '', 'CannotMergeAlreadyMe
 SELECT localization.add_localized_resource('Warnings', '', 'CannotMergeDifferentPartyTransaction', 'Cannot merge transactions of different parties into a single batch. Please try again.');
 SELECT localization.add_localized_resource('Warnings', '', 'CannotMergeIncompatibleTax', 'Cannot merge transactions having incompatible tax types. Please try again.');
 SELECT localization.add_localized_resource('Warnings', '', 'CannotMergeUrlNull', 'Cannot merge transactions. The merge url was not provided.');
+SELECT localization.add_localized_resource('Warnings', '', 'CannotSendEmailSMTPInvalid', 'Cannot send the email. The SMTP configuration is invalid.');
 SELECT localization.add_localized_resource('Warnings', '', 'CashTransactionCannotContainBankInfo', 'A cash transaction cannot contain bank transaction details.');
 SELECT localization.add_localized_resource('Warnings', '', 'CompareAmountErrorMessage', 'The amount to should be greater than the amount from.');
 SELECT localization.add_localized_resource('Warnings', '', 'CompareDaysErrorMessage', 'From days should be less than to days.');

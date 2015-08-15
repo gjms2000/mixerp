@@ -15896,6 +15896,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Cannot send the email. The SMTP configuration is invalid.
+		/// </summary>
+		public static string CannotSendEmailSMTPInvalid 
+		{
+			get
+			{
+				return Get("CannotSendEmailSMTPInvalid");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for A cash transaction cannot contain bank transaction details.
 		/// </summary>
 		public static string CashTransactionCannotContainBankInfo 

@@ -18,7 +18,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartiesPopup.ascx.cs" 
     Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartiesPopup" 
-    MasterPageId="MixERPBlankMaster.Master" %>
+    MasterPageId="MixERPBlankMaster.Master"
+    OverridePath="/Modules/Inventory/Setup/Parties.mix"
+     %>
 
 <script src="/Scripts/mixerp/utitlities/countries.js"></script>
 <script src="/Scripts/underscore/underscore-min.js"></script>

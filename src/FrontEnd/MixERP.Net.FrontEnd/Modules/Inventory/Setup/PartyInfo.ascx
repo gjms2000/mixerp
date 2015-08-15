@@ -16,7 +16,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartyInfo.ascx.cs" Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartyInfo" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartyInfo.ascx.cs" 
+    Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartyInfo"
+        OverridePath="/Modules/Inventory/Setup/Parties.mix" %>
 
 <script src="/Scripts/mixerp/utitlities/countries.js"></script>
 <script src="/Scripts/underscore/underscore-min.js"></script>

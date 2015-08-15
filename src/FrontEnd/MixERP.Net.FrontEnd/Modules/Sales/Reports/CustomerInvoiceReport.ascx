@@ -18,4 +18,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CustomerInvoiceReport.ascx.cs"
     Inherits="MixERP.Net.Core.Modules.Sales.Reports.CustomerInvoiceReport"
-    MasterPageId="MixERPReportMaster.Master" RemoveTheme="true" %>
+    MasterPageId="MixERPReportMaster.Master" RemoveTheme="true"
+    IsLandingPage="true"
+     %>

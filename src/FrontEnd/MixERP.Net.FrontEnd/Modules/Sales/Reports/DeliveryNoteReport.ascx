@@ -17,4 +17,4 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DeliveryNoteReport.ascx.cs" Inherits="MixERP.Net.Core.Modules.Sales.Reports.DeliveryNoteReport"
-    MasterPageId="MixERPReportMaster.Master" RemoveTheme="true" %>
+    MasterPageId="MixERPReportMaster.Master" RemoveTheme="true" IsLandingPage="true" %>

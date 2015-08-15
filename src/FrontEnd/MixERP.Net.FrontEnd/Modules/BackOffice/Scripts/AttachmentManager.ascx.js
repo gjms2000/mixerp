@@ -42,7 +42,7 @@ function LoadImages(model) {
         };
 
         if (mod === 1) {
-            connectedItems += '<div class="ui three doubling cards">';
+            connectedItems += "<div class=\"ui three stackable cards\">";
         };
 
         connectedItems += LoadImageGroup(model[i]);

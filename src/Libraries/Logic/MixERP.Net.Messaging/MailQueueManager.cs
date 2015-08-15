@@ -60,7 +60,7 @@ namespace MixERP.Net.Messaging.Email
             return config.Enabled;
         }
 
-        public async Task ProcessMailQueue()
+        public async Task ProcessMailQueueAsync()
         {
             IEnumerable<EmailQueue> queue = Database.MailQueue.GetMailInQueue(this.Catalog);
 

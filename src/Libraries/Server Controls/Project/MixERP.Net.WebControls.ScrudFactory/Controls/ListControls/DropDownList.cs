@@ -20,6 +20,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Data;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -187,6 +188,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 
                 string schema = viewRelation.Split('.').First();
                 string view = viewRelation.Split('.').Last();
+                var currentPage = HttpContext.Current.Request.Url.AbsolutePath;
 
                 //Sanitize the schema and the view
                 schema = Sanitizer.SanitizeIdentifierName(schema);
@@ -207,7 +209,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 
                 itemSelectorAnchor.HRef = itemSelectorPath + "?Schema=" + schema + "&View=" + view +
                                           "&AssociatedControlId=" + associatedControlId + "&ResourceClassName=" +
-                                          resourceClassName;
+                                          resourceClassName + "&OverridePath=" + currentPage;
 
                 return itemSelectorAnchor;
             }

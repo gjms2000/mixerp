@@ -24,6 +24,7 @@ using MixERP.Net.Entities.Core;
 using MixERP.Net.Framework.Controls;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -31,13 +32,13 @@ using System.Threading;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
+using MixERP.Net.FrontEnd.Models;
 
 namespace MixERP.Net.FrontEnd.Base
 {
     public class MixERPWebpage : MixERPWebPageBase
     {
         private string currentPage;
-        private Menu[] menus;
 
         /// <summary>
         ///     The pages, having no actual entry on database menu table, can have an OverridePath
@@ -87,6 +88,7 @@ namespace MixERP.Net.FrontEnd.Base
             string loginUrl = (page).ResolveUrl(FormsAuthentication.LoginUrl);
 
             this.currentPage = HttpContext.Current.Request.Url.AbsolutePath;
+
             if (this.currentPage != loginUrl)
             {
                 FormsAuthentication.RedirectToLoginPage(this.currentPage);
@@ -128,9 +130,11 @@ namespace MixERP.Net.FrontEnd.Base
                     if (AppUsers.GetCurrent().View.LoginId.ToLong().Equals(0))
                     {
                         AppUsers.SetCurrentLogin();
+
                         if (AppUsers.GetCurrent().View.LoginId.ToLong().Equals(0))
                         {
                             this.RequestLoginPage();
+                            return;
                         }
                     }
                 }
@@ -139,6 +143,7 @@ namespace MixERP.Net.FrontEnd.Base
                     if (!this.SkipLoginCheck)
                     {
                         this.RequestLoginPage();
+                        return;
                     }
                 }
             }
@@ -147,19 +152,31 @@ namespace MixERP.Net.FrontEnd.Base
             base.OnInit(e);
         }
 
-        private bool VerifyAccess()
+        protected override void OnLoad(EventArgs e)
         {
+            this.VerifyAccess();
+            base.OnLoad(e);
+        }
+
+        private void VerifyAccess()
+        {
+            IEnumerable<Menu> menus = this.GetMenus();
             bool policyExists = false;
+            this.currentPage = HttpContext.Current.Request.Url.AbsolutePath;
+
+            if (!string.IsNullOrWhiteSpace(this.OverridePath))
+            {
+                this.currentPage = this.OverridePath;
+            }
 
             if (this.IsLandingPage)
             {
-                return true;
+                return;
             }
-
-            foreach (Menu menu in this.menus)
+            
+            foreach (Menu menu in menus)
             {
-                if (menu != null && !string.IsNullOrWhiteSpace(menu.Url) &&
-                    menu.Url.Replace("~", "").Equals(this.OverridePath))
+                if (!string.IsNullOrWhiteSpace(menu?.Url) && menu.Url.Replace("~", "").Equals(this.currentPage))
                 {
                     policyExists = true;
                     break;
@@ -168,74 +185,20 @@ namespace MixERP.Net.FrontEnd.Base
 
             if (!policyExists)
             {
-                Server.Transfer("~/Site/AccessIsDenied.aspx");
+                this.Server.Transfer("~/Site/AccessIsDenied.aspx");
             }
-
-            return policyExists;
         }
 
-        private string GetMenu(int menuId)
+        private IEnumerable<Menu> GetMenus()
         {
-            string menu = string.Empty;
-            if (menuId.Equals(0))
-            {
-                return menu;
-            }
+            string catalog = AppUsers.GetCurrentUserDB();
+            var view = AppUsers.GetCurrent().View;
 
-            Menu[] items = menus.Where(m => m.ParentMenuId.Equals(menuId)).ToArray();
+            int userId = view.UserId.ToInt();
+            int officeId = view.OfficeId.ToInt();
+            string culture = view.Culture;
 
-            if (items.Length > 0)
-            {
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (i == 0)
-                    {
-                        menu += "<ul>";
-                    }
-
-                    //If this menu has any children, fetch them.
-                    string childMenu = GetMenu(items[i].MenuId);
-                    string id = items[i].MenuId.ToString(CultureInfo.InvariantCulture);
-                    string url = string.IsNullOrWhiteSpace(items[i].Url)
-                        ? "javascript:void(0);"
-                        : this.Page.ResolveUrl(items[i].Url);
-
-                    string cssClass = string.Empty;
-                    string dataJSTree = string.Empty;
-                    string dataSelected = string.Empty;
-
-                    if (string.IsNullOrWhiteSpace(childMenu))
-                    {
-                        dataJSTree = "data-jstree='{\"type\":\"file\"}'";
-                    }
-
-                    if (url.Equals(this.OverridePath))
-                    {
-                        dataSelected = "data-selected='true'";
-                        cssClass = "class='expanded'";
-                        dataJSTree = "data-jstree='{\"type\":\"active\"}'";
-                    }
-
-                    string anchor = "<a href='" + url + "'>" + items[i].MenuText + "</a>";
-
-                    menu += string.Format(Thread.CurrentThread.CurrentCulture,
-                        "<li id='node{0}' {1} {2} data-menucode='{3}' {4}>",
-                        id, cssClass, dataSelected, items[i].MenuCode, dataJSTree);
-
-
-                    menu += anchor;
-                    menu += childMenu;
-                    menu += "</li>";
-
-                    if (i == items.Length - 1)
-                    {
-                        menu += "</ul>";
-                    }
-                }
-            }
-
-
-            return menu;
+            return Navigation.GetMenuCollection(catalog, officeId, userId, culture);
         }
 
         private static void SetCulture()
@@ -267,20 +230,14 @@ namespace MixERP.Net.FrontEnd.Base
             Collection<FrequencyDates> applicationDates =
                 Dates.GetFrequencyDates(AppUsers.GetCurrentUserDB());
 
-            if (applicationDates != null)
-            {
-                FrequencyDates model = applicationDates.FirstOrDefault(c => c.OfficeId.Equals(officeId));
+            FrequencyDates model = applicationDates?.FirstOrDefault(c => c.OfficeId.Equals(officeId));
 
-                if (model != null)
+            if (model?.ForcedLogOffTimestamp != null && !model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
+            {
+                if (model.ForcedLogOffTimestamp <= DateTime.Now &&
+                    model.ForcedLogOffTimestamp >= AppUsers.GetCurrent().View.LoginDateTime)
                 {
-                    if (model.ForcedLogOffTimestamp != null && !model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
-                    {
-                        if (model.ForcedLogOffTimestamp <= DateTime.Now &&
-                            model.ForcedLogOffTimestamp >= AppUsers.GetCurrent().View.LoginDateTime)
-                        {
-                            this.RequestLoginPage();
-                        }
-                    }
+                    this.RequestLoginPage();
                 }
             }
         }

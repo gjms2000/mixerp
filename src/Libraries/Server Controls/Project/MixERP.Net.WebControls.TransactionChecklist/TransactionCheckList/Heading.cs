@@ -25,9 +25,9 @@ namespace MixERP.Net.WebControls.TransactionChecklist
 {
     public partial class TransactionChecklistForm
     {
-        private Literal subTitleLiteral;
         private Literal titleLiteral;
         private Label verificationLabel;
+        private HtmlGenericControl subTitleHeading;
 
         private void AddBreak(HtmlGenericControl p)
         {
@@ -59,14 +59,10 @@ namespace MixERP.Net.WebControls.TransactionChecklist
 
         private void AddSubtitle(HtmlGenericControl p)
         {
-            using (HtmlGenericControl subTitleHeading = new HtmlGenericControl())
-            {
-                subTitleHeading.TagName = "h2";
-                this.subTitleLiteral = new Literal();
-                this.subTitleLiteral.Text = Labels.TransactionPostedSuccessfully;
-                subTitleHeading.Controls.Add(this.subTitleLiteral);
-                p.Controls.Add(subTitleHeading);
-            }
+            this.subTitleHeading = new HtmlGenericControl();
+            this.subTitleHeading.TagName = "h2";
+            this.subTitleHeading.InnerText = Labels.TransactionPostedSuccessfully;
+            p.Controls.Add(this.subTitleHeading);
         }
 
         private void AddTitle(HtmlGenericControl p)

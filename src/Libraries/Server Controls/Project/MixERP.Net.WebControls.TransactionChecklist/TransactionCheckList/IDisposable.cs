@@ -45,10 +45,10 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 this.checkListContainer = null;
             }
 
-            if (this.subTitleLiteral != null)
+            if (this.subTitleHeading != null)
             {
-                this.subTitleLiteral.Dispose();
-                this.subTitleLiteral = null;
+                this.subTitleHeading.Dispose();
+                this.subTitleHeading= null;
             }
 
             if (this.titleLiteral != null)

@@ -69,7 +69,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services.DayOperation
             MailQueueManager manager = new MailQueueManager();
             manager.Catalog = AppUsers.GetCurrentUserDB();
 
-            ThreadPool.QueueUserWorkItem(async callback => { await manager.ProcessMailQueue(); });
+            ThreadPool.QueueUserWorkItem(async callback => { await manager.ProcessMailQueueAsync(); });
         }
 
         [WebMethod]
