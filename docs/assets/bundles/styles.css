@@ -6199,6 +6199,7 @@ th.hide-for-touch {
 
   th.show-for-print {
     display: table-cell !important; } }
+
 /* 
  * Foundation Icons v 3.0
  * Made by ZURB 2013 http://zurb.com/playground/foundation-icon-fonts-3
@@ -6207,11 +6208,11 @@ th.hide-for-touch {
 
 @font-face {
   font-family: "foundation-icons";
-  src: url(../scripts/foundation/foundation-icons/foundation-icons.eot);
-  src: url(../scripts/foundation/foundation-icons/foundation-icons.eot?#iefix) format("embedded-opentype"),
-       url(../scripts/foundation/foundation-icons/foundation-icons.woff) format("woff"),
-       url(../scripts/foundation/foundation-icons/foundation-icons.ttf) format("truetype"),
-       url(../scripts/foundation/foundation-icons/foundation-icons.svg#fontcustom) format("svg");
+  src: url("/docs/assets/scripts/foundation/foundation-icons/foundation-icons.eot");
+  src: url("/docs/assets/scripts/foundation/foundation-icons/foundation-icons.eot?#iefix") format("embedded-opentype"),
+       url("/docs/assets/scripts/foundation/foundation-icons/foundation-icons.woff") format("woff"),
+       url("/docs/assets/scripts/foundation/foundation-icons/foundation-icons.ttf") format("truetype"),
+       url("/docs/assets/scripts/foundation/foundation-icons/foundation-icons.svg#fontcustom") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -6793,9 +6794,13 @@ th.hide-for-touch {
 .fi-yen:before { content: "\f218"; }
 .fi-zoom-in:before { content: "\f219"; }
 .fi-zoom-out:before { content: "\f21a"; }
-html, body, nav, ul, li, div, a, th, td, p {
-  font-size: 14px;
-  line-height: 166%; }
+
+html, body, nav, ul, li, div, a, th, td, p, .alert-box, .label, div {
+  font-size: 14px !important;
+  line-height: 166% !important; }
+
+th {
+  font-weight: bold !important; }
 
 html, body, nav, ul, li {
   color: #434544; }
@@ -6806,8 +6811,7 @@ html, body, table, tr, th, td, div, h1, h2, h3, h4, h5, a, nav, ul, li, p {
 
 @media only screen and (min-width: 960px) {
   #content {
-    min-height: 600px; }
- }
+    min-height: 600px; } }
 
 #content h1, #content h2, #content h3, #content h4, #content h5 {
   font-family: Raleway, Ubuntu, "Open Sans", sans-serif !important;
@@ -6815,24 +6819,24 @@ html, body, table, tr, th, td, div, h1, h2, h3, h4, h5, a, nav, ul, li, p {
   margin: 24px 0;
   padding-bottom: 16px;
   border-bottom: 1px dotted #cbc8c8; }
+
 #content ul li {
   margin-left: 16px; }
 
-pre {
-  background-color: #F8F8F8;
-  padding: 16px;
-  margin: 8px 0;
-  border: 1px solid #DDD; }
-
 pre, code {
+  padding: 4px 12px;
+  margin: 8px 0;
+  background-color: #f1f0f0;
+  border-color: #f1f0f0;
   font-family: Consolas, monospace;
-  color: red;
   overflow: auto; }
 
 .sticky.contain-to-grid {
   height: 50px; }
 
-aside, .sticky.contain-to-grid, .sticky.contain-to-grid * {
+aside,
+.sticky.contain-to-grid,
+.sticky.contain-to-grid * {
   background-color: #773F98 !important; }
 
 aside a, aside a:hover {
@@ -6870,8 +6874,7 @@ a:hover {
 @media only screen and (min-width: 40.063em) {
   .footer .columns:nth-child(n+2) {
     border-left: 1px solid #7F45A1;
-    min-height: 280px; }
- }
+    min-height: 280px; } }
 
 .footer-links {
   list-style-type: none; }
@@ -6881,7 +6884,7 @@ a:hover {
   font-weight: 300; }
 
 .footer-links li {
-  margin-top: 0.5rem; }
+  margin-top: .5rem; }
 
 img {
   max-width: 100%; }
@@ -6900,4 +6903,3 @@ img {
   border-color: #FABBF9;
   color: #8C0A8A; }
 
-/*# sourceMappingURL=mixdoc.css.map */

@@ -1,16 +1,15 @@
-#DbParameters.xml
+#DB Parameters
 
 This configuration file is related to the module [ScrudFactory](../user-guide/core-concepts/scrud-factory.md).
-ScrudFactory uses this file to populate [DisplayFields](../../developer/scrud/display-fields.md).
+ScrudFactory uses this file to populate dropdown box display fields.
 
-```xml
-<?xml version="1.0"?>
-<configuration>
-  <appSettings>
-    <add key="?" value="?" />
-  </appSettings>
-</configuration>
+```sql
+SELECT * FROM config.db_parameters;
 ```
+
+| Key                         | Value |
+|-----------------------------| -------------|
+| ...                          | ... |
 
 ##Example 1: Item Display Field
 

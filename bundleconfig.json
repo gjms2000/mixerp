@@ -1,0 +1,15 @@
+[
+  {
+    "outputFileName": "docs/assets/bundles/styles.css",
+    "inputFiles": [
+      "docs/assets/scripts/foundation/css/foundation.css",
+      "docs/assets/scripts/foundation/foundation-icons/foundation-icons.css",
+      "docs/assets/styles/mixdoc.css"
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "sourceMaps": false
+  }
+]

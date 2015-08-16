@@ -1,26 +1,22 @@
 #Deploying MixERP on IIS
 
-This document provides you relevant information regarding MixERP deployment and guides system administrators to properly setup MixERP 
-in your organization.
+This document provides you relevant information regarding MixERP deployment and guides system administrators to properly setup MixERP in your organization.
 
-##Publish MixERP
+##Download the Latest Release
 
-<div class="label">
-Skip this section if you already got MixERP publish package from our delivery channel.
-</div>
+Download the latest MixERP release from [GitHub](https://github.com/mixerp/mixerp/releases).
 
-* [Clone MixERP](../developer/clone-mixerp.md)
-* Open MixERP in Microsoft Visual Studio Express.
-* Publish using MixERP Publish Profile in Visual Studio Express to your desired location.
-![MixERP Published](iis/mixerp-published.jpg)
+![MixERP Update](iis/update.png)
 
 
-##Copy Published Directory to Application Server 
-This document assumes that MixERP application root directory is 
+##Copy Extracted Directory to Application Server
+
+This document assumes that MixERP application root directory is
 
 <span class="label">C:\inetpub\wwwroot\mixerp\</span>
+
 * Create a directory "mixerp" under "C:\inetpub\wwwroot\".
-* Copy all the contents under the published directory to the application root.
+* Copy all the contents under the extracted directory to the application root.
 
 ##Create IIS Website
 
@@ -35,96 +31,126 @@ Right click "Sites" and click "Add Website"
 Now enter the following details:
 
 <table>
-<tr>
-    <th>
-        Section
-    </th>
-    <th>
-        Description
-    </th>
-</tr>
-<tr>
-    <td>
-        Site Name
-    </td>
-    <td>
-        The name of your MixERP Application, usually "mixerp".
-    </td>
-</tr>
-<tr>
-    <td>
-        Application Pool
-    </td>
-    <td>
-        A new application pool will be created if you do not select an already existing application pool. Do not select this.
-    </td>
-</tr>
-<tr>
-    <td>
-        Physical Path
-    </td>
-    <td>
-        The physical path where you copied the published directory to. In this document, it is <br />
-        <p class="label">C:\inetpub\wwwroot\mixerp</p>
-    </td>
-</tr>
-<tr>
-    <td>
-        Binding Type
-    </td>
-    <td>
-        The binding type should be "https" and SSL certificate should be chosen. If you do not have SSL certificate, select "http".
-    </td>
-</tr>
-<tr>
-    <td>
-        Binding IP Address
-    </td>
-    <td>
-        Select "All Unassigned" unless you want to bind your MixERP Application to a specific IP Address.
-    </td>
-</tr>
-<tr>
-    <td>
-        Binding Port
-    </td>
-    <td>
-        Select "80" for port number unless you want to change the port binding of your MixERP Application to an unusual number.
-    </td>
-</tr>
-<tr>
-    <td>
-        Binding Host Name
-    </td>
-    <td>
-        If you have your DNS requests forwarded to your Application Server, put that in the host name section.
-        If you leave this blank, you will have to access MixERP application using the Application Server IP Address or Network name. 
-    </td>
-</tr>
+    <tr>
+        <th>
+            Section
+        </th>
+        <th>
+            Description
+        </th>
+    </tr>
+    <tr>
+        <td>
+            Site Name
+        </td>
+        <td>
+            The name of your MixERP Application, usually "mixerp".
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Application Pool
+        </td>
+        <td>
+            A new application pool will be created if you do not select an already existing application pool. Do not select this.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Physical Path
+        </td>
+        <td>
+            The physical path where you copied the published directory to. In this document, it is <br />
+            <p class="label">C:\inetpub\wwwroot\mixerp</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Binding Type
+        </td>
+        <td>
+            The binding type should be "https" and SSL certificate should be chosen. If you do not have SSL certificate, select "http".
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Binding IP Address
+        </td>
+        <td>
+            Select "All Unassigned" unless you want to bind your MixERP Application to a specific IP Address.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Binding Port
+        </td>
+        <td>
+            Select "80" for port number unless you want to change the port binding of your MixERP Application to an unusual number.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Binding Host Name
+        </td>
+        <td>
+            If you have your DNS requests forwarded to your Application Server, put that in the host name section.
+            If you leave this blank, you will have to access MixERP application using the Application Server IP Address or Network name.
+        </td>
+    </tr>
 </table>
 
 ![New Web Site](iis/iis-new-web-site.jpg)
 
 ##Target App Pool .net Version
-Once you are done creating the website, navigate to the "Application Pools" container in IIS. Find and double click 
+Once you are done creating the website, navigate to the "Application Pools" container in IIS. Find and double click
 the application pool "mixerp".
 
 ![IIS Application Pool](iis/iis-app-pool.jpg)
 
-Change the ".NET Framework Version" or ".NET CLR version" to "V.4.0.3019".
+Change the ".NET Framework Version" or ".NET CLR version" to "V.4.0.3019". Select the applicatication pool and click advanced settings.
+
+![Advanced Application Pool Settings](iis/application-pool-advanced-settings.jpg)
+
+Make sure that you select **ApplicationPoolIdentity**.
 
 Done!
 
 
 ##Setting up Directory Permission
-The following directories should be writable to the user account used by IIS for MixERP website. Depending upon the version of your IIS 
-and Windows, it will be one of the following users:
+
+The following directories should be writable to the user account used by IIS for MixERP website.
+Depending on the version of your IIS and Windows, it could be one of the following users:
 
 * IIS_USRS
 * Network Service
 * IIS AppPool\mixerp
 
-**Directories**
+**Writable Directories**
+
+<div class="alert-box info radius">
+    Skip this and continue with the next section if you want to apply restrictive file permission for your
+    ERP instance.
+</div>
+
+MixERP can update itself when a new release is available. The update feature will
+download, install, and patch your ERP instance to the latest version without needing you to sit next
+to the operating system and do the update all by yourself. Be assured that you are notified
+whenever there is a new update available. MixERP will update to the latest version
+only when you click the button to do so.
+
+To enable update, you must provide the following directories write access:
+
+* C:\inetpub\www\mixerp
+* [ApplicationLogDirectory--MixERP Configuration](../configs/mixerp.md)
+* [TempPath--Updater.config](../configs/updater.config.md)
+
+
+**Writable Directories (Strict mode)**
+
+Allowing the write access only to the following directories is the minimum-required and
+the most-restrictive permission you can configure for MixERP application.
+Having said that, it does not allow you to update your instance of MixERP if a new release is available.
+
 <table>
     <tr>
         <th style="min-width:380px;">
@@ -136,81 +162,113 @@ and Windows, it will be one of the following users:
     </tr>
     <tr>
         <td>
-            C:\mixerp-published\Resource\Temp
+            <a href="../configs/db-server.config.md">DatabaseBackupDirectory--DBServer.config</a>
         </td>
         <td>
-            MixERP uses this directory to temporarily save documents and images. It is absolutely safe to remove 
+            This directory is used to store database backups.
+            You should not delete anything inside this directory.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../configs/mixerp.md">ApplicationLogDirectory--MixERP Configuration</a>
+        </td>
+        <td>
+            MixERP uses this directory to write log files.
+            You should not delete anything inside this directory.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            C:\inetpub\wwwroot\mixerp\Resource\Temp
+        </td>
+        <td>
+            MixERP uses this directory to temporarily save documents and images. It is absolutely safe to remove
             the files under this directory.
         </td>
     </tr>
     <tr>
         <td>
-            C:\mixerp-published\Resource\Temp\Images
+            C:\inetpub\wwwroot\mixerp\Resource\CustomReports
         </td>
         <td>
-            This directory is also used to temporarily save image files. It is safe to remove files under this directory. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\mixerp-published\Resource\Static\Attachments
-        </td>
-        <td>
-            This directory is used as a file-system repository of document attachments. You should not delete anything inside this directory.
+            This directory is used to automatically download and store new reports as they become
+            available in our GitHub repository.
+            You should not delete anything inside this directory.
         </td>
     </tr>
     <tr>
         <td>
-            C:\mixerp-published\Resource\Static\Emails
+            <a href="../configs/attachment-factory-parameters.md">AttachmentsDirectory--AttachmentFactory Parameters</a>
         </td>
         <td>
-            This directory contains emails and is used as pickup directory for SMTP Server. 
+            This directory is used as a file-system repository of document attachments.
+            You should not delete anything inside this directory.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            C:\inetpub\wwwroot\mixerp\Resource\Static\Emails
+        </td>
+        <td>
+            This directory contains emails and is used as pickup directory for SMTP Server.
+            You should not delete anything inside this directory.
         </td>
     </tr>
 </table>
 
-##Install PostgreSQL Server
 
-Follow the guidelines in this article on how to install PostgreSQL Server on your Windows machine. [Click Here](install-postgresql)
+## Install PostgreSQL Server
 
-##Compile MixERP Database
+You will need to install PostgreSQL Server, 9.3 or higher. Get the latest PostgreSQL server installer here:
 
-Once you complete installing PostgreSQL Server in your Application Server, run the PostgreSQL GUI tool "PgAdmin". 
-Connect to the PostgerSQL Server by using your credentials.
+[http://www.postgresql.org/download/](http://www.postgresql.org/download/)
 
-
-    Select "Databases" --> Click Edit --> New Object --> New Database --> Type "mixerp" and hit RETURN key.
-    
 ![PgAdmin](iis/pgAdmin.jpg)
 
-    Select "mixerp" database --> Click Tools --> Query Tool
+## Create a New Database
+
+Create a new PostgreSQL database, name it anything you want. 
+Lowercase database name is preferred without any special character or symbol.
+
+### Collation & Encoding
+When you create your database, navigate to the tab "Definition". Make sure that you have the following settings:
+
+* **Encoding**- UTF8
+* **Template**- Template0
+* **Collation**- C or POSIX
+* **Character Type**- C or Posix
+
+![ERP Collation](../../docs/developer/quickstart/images/collation.png)
+
+Select your newly created database, and then click **Tools** --> **Query Tool**
 
 Now open the MixERP SQL Script from this location:
 
-    C:\inetpub\wwwroot\mixerp\db\mixerp.en-US.sql
-    
-or your language specific SQL Script.
-
-
+```C:\inetpub\wwwroot\mixerp\db\blank-db.sql```
 
 ![PgAdmin Query](iis/pgAdmin-query.jpg)
 
 Press F5.
 
-##Securing Your PostgreSQL Database
+## Securing Your PostgreSQL Database
 
-Securing your installation is out of the scope of this article. However, keep in mind that  MixERP creates the following database roles:
+Securing your installation is out of the scope of this article. However, keep in mind that 
+MixERP creates the following restricted database roles:
 
 * mix_erp
 * report_user
 
 **mix_erp**
-* change the password of this role. For more information, [click here](http://www.postgresql.org/docs/9.0/static/sql-alterrole.html)
-* is used to perform SCRUD operations on the database
+* When this role is created, the default password is set to "change-on-deployment".
+* You must change the password of this role. For more information, [click here](http://www.postgresql.org/docs/9.0/static/sql-alterrole.html)
+* This user is the default database user of MixERP application
 
 **report_user**
-* the user used by MixERP ReportEngine Application for performing ad-hoc queries.
-* this user **must have a readonly access** on the database.
+* When this role is created, the default password is set to "change-on-deployment".
+* You must change the password of this role. For more information, [click here](http://www.postgresql.org/docs/9.0/static/sql-alterrole.html)
+* The user used by MixERP ReportEngine Application for performing ad-hoc queries.
+* This user **must have a readonly access** on the database.
 
 Use these articles as a reference to secure your PostgreSQL installation:
 * http://www.ibm.com/developerworks/library/os-postgresecurity/
@@ -219,138 +277,11 @@ Use these articles as a reference to secure your PostgreSQL installation:
 * http://dbaportal.eu/2013/11/11/securing-postgresql/
 
 
-##Web Configuration File
-Edit these appsettings key in the root web.config file:
+## Edit DBServer.config
+Edit the configuration file [DBServer.config](../configs/db-server.config.md) to provide MixERP application
+access to the database.
 
-<table class="ui celled table segment">
-    <tr>
-        <th>Key</th>
-        <th>Default Value</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>
-            Server
-        </td>
-        <td>
-            localhost
-        </td>
-        <td>
-            The NetBIOS name or IP Address of computer where database server (PostgreSQL) is installed. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Database
-        </td>
-        <td>
-            mixerp
-        </td>
-        <td>
-            The name of database which contains MixERP schemas and objects.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            User Id
-        </td>
-        <td>
-            mix_erp
-        </td>
-        <td>
-            The PostgreSQL role created by MixERP DB Script. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Password
-        </td>
-        <td>
-            change-on-deployment
-        </td>
-        <td>
-            The password for mix_erp PostgreSQL role.
-        </td>
-    </tr>
-</table>
 
-##MixERP Configuration Files:
-MixERP provides a highly parameterized design, so that you can parameterize almost everything:
-
-<table class="ui celled table segement">
-    <tr>
-        <th style="min-width:550px;">
-            Configuration File Location
-        </th>
-        <th>
-            Description
-        </th>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\DbParameters.xml
-        </td>
-        <td>
-            This configuration file provides overrides to use column expressions as "DisplayFields" for your primary key lookups and other parameters.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\MessagingParameters.xml
-        </td>
-        <td>
-            This configuration file provides overrides to Email credentials and other parameters.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\PartyControlParameters.xml
-        </td>
-        <td>
-            This configuration file provides parameter overrides related to PartyControl.         
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\ReportParameters.xml
-        </td>
-        <td>
-            This configuration file provides parameter overrides related to PartyControl.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\ScrudParameters.xml
-        
-        </td>
-        <td>
-            This configuration file provides parameter overrides related to ScrudFactory.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\Switches.xml
-        
-        </td>
-        <td>
-            This configuration file provides overrides for various application level switches.
-        
-        </td>
-    </tr>
-    <tr>
-        <td>
-            C:\inetpub\wwwroot\mixerp\Resource\Configuration\TransactionChecklistParameters.xml
-        
-        </td>
-        <td>
-            This configuration file provides parameter overrides related to TransactionChecklist.
-        </td>
-    </tr>
-</table>
-
-<div class="alert-box warn radius">
-    This article is likely to become outdated for future releases.
-</div>
 
 ##Related Topics
-* [Deployment Documentation](../admin.md)
+* [Administrator Documentation](../admin.md)

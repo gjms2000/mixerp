@@ -1,6 +1,11 @@
-﻿html, body, nav, ul, li, div, a, th, td, p {
-    font-size: 14px;
-    line-height: 166%;
+﻿html, body, nav, ul, li, div, a, th, td, p, .alert-box, .label, div {
+    font-size: 14px!important;
+    line-height: 166%!important;
+}
+
+th
+{
+    font-weight:bold!important;
 }
 
 html, body, nav, ul, li {
@@ -37,16 +42,13 @@ html, body, table, tr, th, td, div, h1, h2, h3, h4, h5, a, nav, ul, li, p {
 }
 
 
-pre {
-    background-color: #F8F8F8;
-    padding: 16px;
-    margin: 8px 0;
-    border: 1px solid #DDD;
-}
 
 pre, code {
+    padding:4px 12px;
+    margin: 8px 0;
+    background-color:#f1f0f0;
+    border-color: #f1f0f0;
     font-family: Consolas, monospace;
-    color: red;
     overflow: auto;
 }
 
