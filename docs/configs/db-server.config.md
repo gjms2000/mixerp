@@ -1,4 +1,4 @@
-#DbParameters.xml
+#DBServer.config
 
 This configuration file is contains information about your PostgreSQL server instance.
 
