@@ -15,17 +15,12 @@ namespace MixERP.Net.Updater
             //return new Version("1.0.0.0");
         }
 
-        public async Task<Release> GetLatestRelease()
+        public async Task<Release> GetLatestReleaseAsync()
         {
             IEnumerable<Release> releases = await Releases.GetReleases();
 
-            if (releases == null)
-            {
-                return null;
-            }
-
             Release release =
-                releases.OrderBy(x => x.PublishedAt).First(x => new Version(x.TagName) > GetCurrentVersion());
+                releases?.OrderBy(x => x.PublishedAt).First(x => new Version(x.TagName) > GetCurrentVersion());
             return release;
         }
     }
