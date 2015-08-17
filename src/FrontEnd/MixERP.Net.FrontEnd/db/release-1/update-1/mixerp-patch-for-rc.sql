@@ -6778,8 +6778,6 @@ END
 $$
 LANGUAGE plpgsql;
 
-
-
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeGreaterThan', 'تاريخ غير صحيح. يجب أن تكون أكبر من "{0}".');--Invalid date. Must be greater than "{0}"."
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeLessThan', 'تاريخ غير صحيح. يجب أن تكون أقل من "{0}".');--Invalid date. Must be less than "{0}"."
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'InvalidDate', 'تاريخ غير صحيح.');--Invalid date."
@@ -8255,8 +8253,6 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'RestrictedT
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'ReturnButtonUrlNull', 'لا يمكن العودة . لم يتم توفير رابط العودة.');--Cannot return this entry. The return url was not provided."
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'StartDateGreaterThanEndDate', 'تاريخ البدء لا يمكن أن يكون أكبر من تاريخ انتهاء.');--The start date cannot be greater than end date."
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPasswordIncorrect', 'اسم المستخدم أو كلمة المرور غير صحيحة.');--User id or password incorrect."
-
-
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ar/menus.sql --<--<--
 --Contributors for this translation:
