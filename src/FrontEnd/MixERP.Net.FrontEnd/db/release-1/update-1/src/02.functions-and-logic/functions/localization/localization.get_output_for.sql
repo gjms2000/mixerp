@@ -13,7 +13,7 @@ BEGIN
             'SELECT * FROM localization.add_localized_resource(''' ||
             localization.resources.resource_class || ''', ''' || $1 || ''', ''' ||
             localization.resources.key || ''', ''' ||
-            localization.localized_resources.value || ''');--' ||
+            REPLACE(localization.localized_resources.value, '''', '''''') || ''');--' ||
             localization.resources.value AS resource
         FROM localization.localized_resources
         LEFT JOIN localization.resources
@@ -27,3 +27,4 @@ $$
 LANGUAGE plpgsql;
 
 --SELECT * FROM localization.get_output_for('de');
+--SELECT * FROM localization.get_output_for('es');
