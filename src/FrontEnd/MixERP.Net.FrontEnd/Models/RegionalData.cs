@@ -56,8 +56,8 @@ namespace MixERP.Net.FrontEnd.Models
             return sampleCompanies;
         }
 
-        public string Culture { get; }
-        public string FileName { get; }
+        public string Culture { get; private set; }
+        public string FileName { get; private set;}
         public string FilePath { get; private set; }
         public string Name { get; private set; }
     }
