@@ -10,7 +10,7 @@ namespace MixERP.Net.i18n
 {
     public class ResourceManager
     {
-        private static readonly bool supressException = ConfigurationManager.AppSettings["SupressMissingResourceException"].ToUpperInvariant().Equals("TRUE");
+        private static readonly bool suppressException = ConfigurationManager.AppSettings["SuppressMissingResourceException"].ToUpperInvariant().Equals("TRUE");
 
         public static string GetString(string resourceClass, string resourceKey, string cultureCode = null)
         {
@@ -23,7 +23,7 @@ namespace MixERP.Net.i18n
 
             if (result == null)
             {
-                if (supressException)
+                if (suppressException)
                 {
                     return resourceKey;
                 }

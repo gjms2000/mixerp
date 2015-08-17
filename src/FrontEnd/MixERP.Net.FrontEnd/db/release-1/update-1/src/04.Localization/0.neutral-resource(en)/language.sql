@@ -357,7 +357,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'compound_unit_i
 SELECT localization.add_localized_resource('ScrudResource', '', 'compound_units_chk', 'The base unit id cannot be same as compare unit id.');
 SELECT localization.add_localized_resource('ScrudResource', '', 'compounding_frequency', 'Compounding Frequency');
 SELECT localization.add_localized_resource('ScrudResource', '', 'confidential', 'Confidential');
-SELECT localization.add_localized_resource('ScrudResource', '', 'configuration_name', 'ConfigurationName');
+SELECT localization.add_localized_resource('ScrudResource', '', 'configuration_name', 'Configuration Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_address_line_1', 'Contact Address Line 1');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_address_line_2', 'Contact Address Line 2');
 SELECT localization.add_localized_resource('ScrudResource', '', 'contact_cell', 'Contact Cell');
@@ -443,8 +443,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_name'
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_setup_code', 'Frequency Setup Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'frequency_setup_id', 'Frequency Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'from_days', 'From Days');
-SELECT localization.add_localized_resource('ScrudResource', '', 'from_display_name', 'FromDisplayName');
-SELECT localization.add_localized_resource('ScrudResource', '', 'from_email_address', 'FromEmailAddress');
+SELECT localization.add_localized_resource('ScrudResource', '', 'from_display_name', 'From Display Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'from_email_address', 'From Email Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'full_name', 'Full Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'gl_head', 'GL Head');
 SELECT localization.add_localized_resource('ScrudResource', '', 'gl_verification_limit', 'GL Verification Limit');
@@ -687,12 +687,12 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_packag
 SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_package_shape_id', 'Shipping Package Shape Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'shipping_package_shape_name', 'Shipping Package Shape Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'slab_name', 'Slab Name');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smp_host', 'SmpHost');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_enable_ssl', 'SmtpEnableSsl');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_id', 'SmtpId');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_password', 'SmtpPassword');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_port', 'SmtpPort');
-SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_username', 'SmtpUsername');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_host', 'SMTP Host');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_enable_ssl', 'SMTP Enable SSL');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_id', 'SMTP Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_password', 'SMTP Password');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_port', 'SMTP Port');
+SELECT localization.add_localized_resource('ScrudResource', '', 'smtp_username', 'SMTP Username');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sst_number', 'SST Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'starts_from', 'Starts From');
 SELECT localization.add_localized_resource('ScrudResource', '', 'state', 'State');

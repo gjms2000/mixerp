@@ -39,7 +39,7 @@ namespace MixERP.Net.Messaging.Email.Helpers
             this.Enabled = smtp.Enabled;
             this.FromName = smtp.FromDisplayName;
             this.FromEmail = smtp.FromEmailAddress;
-            this.SmtpHost = smtp.SmpHost;
+            this.SmtpHost = smtp.SmtpHost;
             this.EnableSsl = smtp.SmtpEnableSsl;
             this.SmtpPort = smtp.SmtpPort;
             this.SmtpUsername = smtp.SmtpUsername;

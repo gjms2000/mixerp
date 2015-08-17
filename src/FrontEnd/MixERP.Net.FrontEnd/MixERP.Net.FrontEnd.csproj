@@ -809,7 +809,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Resource\Configs\StockTransactionFactoryParameters.config" />
-    <Content Include="Resource\Configs\TransactionChecklistParameters.config" />
     <Content Include="Backups\web.config" />
     <Content Include="bundles\stylesheets\master-page.rtl.css.bundle" />
     <Content Include="Handlers\LogoHandler.ashx" />

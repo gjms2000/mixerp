@@ -19,8 +19,13 @@ namespace MixERP.Net.Updater
         {
             IEnumerable<Release> releases = await Releases.GetReleases();
 
+            if (releases == null)
+            {
+                return null;
+            }
+
             Release release =
-                releases?.OrderBy(x => x.PublishedAt).First(x => new Version(x.TagName) > GetCurrentVersion());
+                releases.OrderBy(x => x.PublishedAt).First(x => new Version(x.TagName) > GetCurrentVersion());
             return release;
         }
     }

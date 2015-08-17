@@ -685,7 +685,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'shippi
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'shipping_package_shape_id', 'Versandpaketart Code');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'shipping_package_shape_name', 'Versandpaketart  Name');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'slab_name', 'Tafel Name');
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'smp_host', 'SmpHost');
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'smtp_host', 'SMTP Host');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'smtp_enable_ssl', 'Smtp -  Ssl aktiviert ');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'smtp_id', 'Smtp Id');
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'de', 'smtp_password', 'Smtp Passwort');

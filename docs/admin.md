@@ -4,9 +4,7 @@ This document provides you insight with deploying, installing, and configuring M
 
 #Deployment Documentation
 
-Please follow the following platform specific deployment information:
-* [Deploying MixERP in Windows (IIS)](deployment/iis.md)
-* [Deploying MixERP in Windows using Deployment Utility](deployment/deployment-utility.md)
+[Deployment documentation](deployment/iis.md)
 
 #Configuration
 
@@ -41,21 +39,54 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                ApiConfiguration.xml
+                <a href="configs/db-server.config.md">DbServer.config</a>
             </td>
             <td>
-                /Resource/Configuration
+                /Resource/Configs
             </td>
             <td>
-                MixERP Restful API
+                Used by several MixERP modules, contains information about your database server
             </td>
         </tr>
         <tr>
             <td>
-                <a href="configs/attachment-factory-parameters.xml.md">AttachmentFactoryParameters.xml</a>
+                <a href="configs/updater.config.md">Updater.config</a>
             </td>
             <td>
-                /Resource/Configuration
+                /Resource/Configs
+            </td>
+            <td>
+                Used by MixERP updater module to update your application instance whenever a new ERP release is available.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Parameters.config
+            </td>
+            <td>
+                /Resource/Configs
+            </td>
+            <td>
+                MixERP core configuration file
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ReportParameters.config
+            </td>
+            <td>
+                /Resource/Configs
+            </td>
+            <td>
+                Used by ReportingEngine HTML Helper (MVC) or ReportingEngine Module (WebForms)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="configs/attachment-factory-parameters.md">AttachmentFactoryParameters</a>
+            </td>
+            <td>
+                Database Table (config.attachment_factory)
             </td>
             <td>
                 AttachmentFactory HTML Helper (MVC) or AttachmentFactory Module (WebForms)
@@ -63,10 +94,10 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                <a href="configs/db-parameters.xml.md">DbParameters.xml</a>
+                <a href="configs/db-parameters.md">DbParameters</a>
             </td>
             <td>
-                /Resource/Configuration
+                Database Table (config.db_parameters)
             </td>
             <td>
                 Used by ScrudFactory HTML Helper (MVC) or ScrudFactory Module (WebForms) for
@@ -75,21 +106,10 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                <a href="configs/db-server.xml.md">DbServer.xml</a>
+                <a href="configs/smtp.md">SMTP</a>
             </td>
             <td>
-                /Resource/Configuration
-            </td>
-            <td>
-                Used by several MixERP modules, contains information about your database server
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="configs/messaging-parameters.xml.md">MessagingParameters.xml</a>
-            </td>
-            <td>
-                /Resource/Configuration
+                Database Table (config.smtp)                
             </td>
             <td>
                 Used by <a href="../developer/core/messaging/index.md">MixERP.Net.Messaging</a> module for sending
@@ -98,21 +118,10 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                MixERP.xml
+                <a href="configs/mixerp.md">MixERP</a>
             </td>
             <td>
-                /Resource/Configuration
-            </td>
-            <td>
-                MixERP core configuration file
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Parameters.xml
-            </td>
-            <td>
-                /Resource/Configuration
+                Database Table (config.mixerp)                
             </td>
             <td>
                 MixERP core configuration file
@@ -120,21 +129,10 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                ReportParameters.xml
+                ScrudFactory
             </td>
             <td>
-                /Resource/Configuration
-            </td>
-            <td>
-                Used by ReportingEngine HTML Helper (MVC) or ReportingEngine Module (WebForms)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                ScrudParameters.xml
-            </td>
-            <td>
-                /Resource/Configuration
+                Database Table (config.scrud_factory)                
             </td>
             <td>
                 Used by ScrudFactory HTML Helper (MVC) or ScrudFactory Module (WebForms)
@@ -142,24 +140,13 @@ very important to understand how MixERP uses these configuration files.
         </tr>
         <tr>
             <td>
-                Switches.xml
+                Switches
             </td>
             <td>
-                /Resource/Configuration
+                Database Table (config.switches)                
             </td>
             <td>
                 Used by several MixERP modules, contains parameters that can be switched on (true) or off(false)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                TransactionChecklistParameters.xml
-            </td>
-            <td>
-                /Resource/Configuration
-            </td>
-            <td>
-                Used by TransactionsactionChecklist module
             </td>
         </tr>
     </tbody>

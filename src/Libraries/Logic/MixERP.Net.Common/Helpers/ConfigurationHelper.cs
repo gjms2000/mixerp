@@ -77,11 +77,6 @@ namespace MixERP.Net.Common.Helpers
             return GetConfigurationValue("StockTransactionFactoryConfigFileLocation", key);
         }
 
-        public static string GetTransactionChecklistParameter(string key)
-        {
-            return GetConfigurationValue("TransactionChecklistConfigFileLocation", key);
-        }
-
         public static string GetUpdaterParameter(string key)
         {
             return GetConfigurationValue("UpdaterConfigFileLocation", key);
