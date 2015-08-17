@@ -57,7 +57,7 @@ namespace MixERP.Net.FrontEnd.Hubs
             try
             {
                 UpdateManager updater = new UpdateManager();
-                Task task = Task.Run(async () => { release = await updater.GetLatestRelease(); });
+                Task task = Task.Run(async () => { release = await updater.GetLatestReleaseAsync(); });
                 task.Wait();
             }
             catch

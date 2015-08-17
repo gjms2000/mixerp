@@ -38,7 +38,7 @@ namespace MixERP.Net.FrontEnd.Application
                 try
                 {
                     Updater.UpdateManager updater = new Updater.UpdateManager();
-                    Release release = await updater.GetLatestRelease();
+                    Release release = await updater.GetLatestReleaseAsync();
 
                     if (release != null)
                     {

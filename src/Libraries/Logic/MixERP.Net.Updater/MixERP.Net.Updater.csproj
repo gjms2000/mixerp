@@ -81,12 +81,11 @@
     <Compile Include="Installation\Tasks\RunPatch.cs" />
     <Compile Include="Installation\Tasks\RestoreDirectories.cs" />
     <Compile Include="Installation\Tasks\BackupDirectories.cs" />
-    <Compile Include="Installation\Tasks\CopyUpdate.cs" />
     <Compile Include="Installation\Tasks\DownloadUpdate.cs" />
     <Compile Include="Installation\Tasks\ExtractDownload.cs" />
     <Compile Include="Installation\Tasks\MigrationRestore.cs" />
     <Compile Include="Installation\Tasks\MigrationBackup.cs" />
-    <Compile Include="Installation\Tasks\RemoveApplication.cs" />
+    <Compile Include="Installation\Tasks\ReplaceApplicationFiles.cs" />
     <Compile Include="Installation\UpdaterConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Installation\UpdateInstaller.cs" />

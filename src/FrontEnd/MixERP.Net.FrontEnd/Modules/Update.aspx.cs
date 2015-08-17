@@ -20,6 +20,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.Updater;
 using MixERP.Net.Updater.Api;
@@ -36,7 +37,7 @@ namespace MixERP.Net.FrontEnd.Modules
         protected string _downloadUrl = string.Empty;
         protected Release _release = new Release();
 
-        protected async void Page_Init(object sender, EventArgs e)
+        protected void Page_Init(object sender, EventArgs e)
         {
             string userName = AppUsers.GetCurrent().View.UserName;
             string ipAddress = AppUsers.GetCurrent().View.IpAddress;
@@ -44,6 +45,8 @@ namespace MixERP.Net.FrontEnd.Modules
             bool isDevelopmentMode = DbConfig.GetMixERPParameter(AppUsers.GetCurrentUserDB(), "Mode").ToUpperInvariant().Equals("DEVELOPMENT");
             bool isLocalHost = PageUtility.IsLocalhost(this.Page);
             bool isAdmin = AppUsers.GetCurrent().View.IsAdmin.ToBool();
+
+            //isLocalHost = false;
 
             bool hasAccess = false;
 
@@ -64,15 +67,17 @@ namespace MixERP.Net.FrontEnd.Modules
             {
                 Log.Information("Access to {Page} is denied to {User} from {IP}.", this,
                     userName, ipAddress);
-
-                this.Page.Server.Execute("~/Site/AccessIsDenied.aspx", false);
+                this.ReleasePanel.Visible = false;
+                this.Page.Server.Transfer("~/Site/AccessIsDenied.aspx", false);
                 return;
             }
 
+            UpdateManager updater = new UpdateManager();
+
             try
             {
-                UpdateManager updater = new UpdateManager();
-                this._release = await updater.GetLatestRelease();
+                Task<Release> task = Task.Run(() => updater.GetLatestReleaseAsync());
+                this._release = task.Result;
             }
             catch
             {
@@ -95,7 +100,7 @@ namespace MixERP.Net.FrontEnd.Modules
                 if (ass != null)
                 {
                     this._downloadUrl = ass.DownloadUrl;
-                }                
+                }
             }
 
             if (string.IsNullOrWhiteSpace(this._downloadUrl))
