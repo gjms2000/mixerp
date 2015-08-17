@@ -9,19 +9,6 @@ using System.Web;
 namespace MixERP.Net.Entities.Localization
 {
 
-    [TableName("localization.cultures")]
-    [PrimaryKey("culture_code", autoIncrement=false)]
-    [ExplicitColumns]
-    public class Culture : PetaPocoDB.Record<Culture> , IPoco
-    {
-        [Column("culture_code")] 
-        public string CultureCode { get; set; }
-
-        [Column("culture_name")] 
-        public string CultureName { get; set; }
-
-    }
-
     [TableName("localization.resources")]
     [PrimaryKey("resource_id")]
     [ExplicitColumns]
@@ -38,6 +25,19 @@ namespace MixERP.Net.Entities.Localization
 
         [Column("value")] 
         public string Value { get; set; }
+
+    }
+
+    [TableName("localization.cultures")]
+    [PrimaryKey("culture_code", autoIncrement=false)]
+    [ExplicitColumns]
+    public class Culture : PetaPocoDB.Record<Culture> , IPoco
+    {
+        [Column("culture_code")] 
+        public string CultureCode { get; set; }
+
+        [Column("culture_name")] 
+        public string CultureName { get; set; }
 
     }
 

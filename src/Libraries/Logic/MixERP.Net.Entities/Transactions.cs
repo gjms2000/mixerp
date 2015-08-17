@@ -1479,57 +1479,6 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [FunctionName("get_journal_view")]
-    [ExplicitColumns]
-    public class DbGetJournalViewResult : PetaPocoDB.Record<DbGetJournalViewResult> , IPoco
-    {
-        [Column("transaction_master_id")] 
-        public long TransactionMasterId { get; set; }
-
-        [Column("transaction_code")] 
-        public string TransactionCode { get; set; }
-
-        [Column("book")] 
-        public string Book { get; set; }
-
-        [Column("value_date")] 
-        public DateTime ValueDate { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("posted_by")] 
-        public string PostedBy { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("status")] 
-        public string Status { get; set; }
-
-        [Column("verified_by")] 
-        public string VerifiedBy { get; set; }
-
-        [Column("verified_on")] 
-        public DateTime VerifiedOn { get; set; }
-
-        [Column("reason")] 
-        public string Reason { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime TransactionTs { get; set; }
-
-        [Column("flag_bg")] 
-        public string FlagBg { get; set; }
-
-        [Column("flag_fg")] 
-        public string FlagFg { get; set; }
-
-    }
-
     [FunctionName("get_stock_account_statement")]
     [ExplicitColumns]
     public class DbGetStockAccountStatementResult : PetaPocoDB.Record<DbGetStockAccountStatementResult> , IPoco
@@ -1578,6 +1527,57 @@ namespace MixERP.Net.Entities.Transactions
 
         [Column("verification_status")] 
         public int VerificationStatus { get; set; }
+
+        [Column("flag_bg")] 
+        public string FlagBg { get; set; }
+
+        [Column("flag_fg")] 
+        public string FlagFg { get; set; }
+
+    }
+
+    [FunctionName("get_journal_view")]
+    [ExplicitColumns]
+    public class DbGetJournalViewResult : PetaPocoDB.Record<DbGetJournalViewResult> , IPoco
+    {
+        [Column("transaction_master_id")] 
+        public long TransactionMasterId { get; set; }
+
+        [Column("transaction_code")] 
+        public string TransactionCode { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("value_date")] 
+        public DateTime ValueDate { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("posted_by")] 
+        public string PostedBy { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("status")] 
+        public string Status { get; set; }
+
+        [Column("verified_by")] 
+        public string VerifiedBy { get; set; }
+
+        [Column("verified_on")] 
+        public DateTime VerifiedOn { get; set; }
+
+        [Column("reason")] 
+        public string Reason { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime TransactionTs { get; set; }
 
         [Column("flag_bg")] 
         public string FlagBg { get; set; }
@@ -2067,30 +2067,6 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [FunctionName("list_closing_stock")]
-    [ExplicitColumns]
-    public class DbListClosingStockResult : PetaPocoDB.Record<DbListClosingStockResult> , IPoco
-    {
-        [Column("item_id")] 
-        public int ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("unit_id")] 
-        public int UnitId { get; set; }
-
-        [Column("unit_name")] 
-        public string UnitName { get; set; }
-
-        [Column("quantity")] 
-        public int Quantity { get; set; }
-
-    }
-
     [FunctionName("get_non_gl_product_view")]
     [ExplicitColumns]
     public class DbGetNonGlProductViewResult : PetaPocoDB.Record<DbGetNonGlProductViewResult> , IPoco
@@ -2133,6 +2109,30 @@ namespace MixERP.Net.Entities.Transactions
 
         [Column("flag_foreground_color")] 
         public string FlagForegroundColor { get; set; }
+
+    }
+
+    [FunctionName("list_closing_stock")]
+    [ExplicitColumns]
+    public class DbListClosingStockResult : PetaPocoDB.Record<DbListClosingStockResult> , IPoco
+    {
+        [Column("item_id")] 
+        public int ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("unit_id")] 
+        public int UnitId { get; set; }
+
+        [Column("unit_name")] 
+        public string UnitName { get; set; }
+
+        [Column("quantity")] 
+        public int Quantity { get; set; }
 
     }
 
@@ -2494,6 +2494,24 @@ namespace MixERP.Net.Entities.Transactions
     [ExplicitColumns]
     public class TrialBalanceView : PetaPocoDB.Record<TrialBalanceView> , IPoco
     {
+        [Column("tableoid")] 
+        public string Tableoid { get; set; }
+
+        [Column("cmax")] 
+        public cid Cmax { get; set; }
+
+        [Column("xmax")] 
+        public xid Xmax { get; set; }
+
+        [Column("cmin")] 
+        public cid Cmin { get; set; }
+
+        [Column("xmin")] 
+        public xid Xmin { get; set; }
+
+        [Column("ctid")] 
+        public tid Ctid { get; set; }
+
         [Column("get_account_name")] 
         public string GetAccountName { get; set; }
 
@@ -2509,6 +2527,24 @@ namespace MixERP.Net.Entities.Transactions
     [ExplicitColumns]
     public class VerifiedStockTransactionView : PetaPocoDB.Record<VerifiedStockTransactionView> , IPoco
     {
+        [Column("tableoid")] 
+        public string Tableoid { get; set; }
+
+        [Column("cmax")] 
+        public cid Cmax { get; set; }
+
+        [Column("xmax")] 
+        public xid Xmax { get; set; }
+
+        [Column("cmin")] 
+        public cid Cmin { get; set; }
+
+        [Column("xmin")] 
+        public xid Xmin { get; set; }
+
+        [Column("ctid")] 
+        public tid Ctid { get; set; }
+
         [Column("transaction_master_id")] 
         public long TransactionMasterId { get; set; }
 
@@ -2641,6 +2677,24 @@ namespace MixERP.Net.Entities.Transactions
     [ExplicitColumns]
     public class VerifiedTransactionMatView : PetaPocoDB.Record<VerifiedTransactionMatView> , IPoco
     {
+        [Column("tableoid")] 
+        public string Tableoid { get; set; }
+
+        [Column("cmax")] 
+        public cid Cmax { get; set; }
+
+        [Column("xmax")] 
+        public xid Xmax { get; set; }
+
+        [Column("cmin")] 
+        public cid Cmin { get; set; }
+
+        [Column("xmin")] 
+        public xid Xmin { get; set; }
+
+        [Column("ctid")] 
+        public tid Ctid { get; set; }
+
         [Column("transaction_master_id")] 
         public long TransactionMasterId { get; set; }
 
@@ -2746,6 +2800,24 @@ namespace MixERP.Net.Entities.Transactions
     [ExplicitColumns]
     public class VerifiedCashTransactionMatView : PetaPocoDB.Record<VerifiedCashTransactionMatView> , IPoco
     {
+        [Column("tableoid")] 
+        public string Tableoid { get; set; }
+
+        [Column("cmax")] 
+        public cid Cmax { get; set; }
+
+        [Column("xmax")] 
+        public xid Xmax { get; set; }
+
+        [Column("cmin")] 
+        public cid Cmin { get; set; }
+
+        [Column("xmin")] 
+        public xid Xmin { get; set; }
+
+        [Column("ctid")] 
+        public tid Ctid { get; set; }
+
         [Column("transaction_master_id")] 
         public long TransactionMasterId { get; set; }
 

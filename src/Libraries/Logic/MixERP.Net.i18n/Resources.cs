@@ -1191,7 +1191,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Cannot determine filename from the download url.
+		///   Localized string for Cannot determine filename from the download URL.
 		/// </summary>
 		public static string CannotDetermineFileFromDownloadUrl 
 		{
@@ -3991,7 +3991,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for ConfigurationName
+		///   Localized string for Configuration Name
 		/// </summary>
 		public static string configuration_name 
 		{
@@ -4937,7 +4937,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for FromDisplayName
+		///   Localized string for From Display Name
 		/// </summary>
 		public static string from_display_name 
 		{
@@ -4948,7 +4948,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for FromEmailAddress
+		///   Localized string for From Email Address
 		/// </summary>
 		public static string from_email_address 
 		{
@@ -7632,18 +7632,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for SmpHost
-		/// </summary>
-		public static string smp_host 
-		{
-			get
-			{
-				return Get("smp_host");
-			}
-		}
-		
-		/// <summary>
-		///   Localized string for SmtpEnableSsl
+		///   Localized string for SMTP Enable SSL
 		/// </summary>
 		public static string smtp_enable_ssl 
 		{
@@ -7654,7 +7643,18 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for SmtpId
+		///   Localized string for SMTP Host
+		/// </summary>
+		public static string smtp_host 
+		{
+			get
+			{
+				return Get("smtp_host");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for SMTP Id
 		/// </summary>
 		public static string smtp_id 
 		{
@@ -7665,7 +7665,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for SmtpPassword
+		///   Localized string for SMTP Password
 		/// </summary>
 		public static string smtp_password 
 		{
@@ -7676,7 +7676,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for SmtpPort
+		///   Localized string for SMTP Port
 		/// </summary>
 		public static string smtp_port 
 		{
@@ -7687,7 +7687,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for SmtpUsername
+		///   Localized string for SMTP Username
 		/// </summary>
 		public static string smtp_username 
 		{
@@ -8878,6 +8878,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("AmountInHomeCurrency");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Analyze Database
+		/// </summary>
+		public static string AnalyzeDatabase 
+		{
+			get
+			{
+				return Get("AnalyzeDatabase");
 			}
 		}
 		
@@ -11258,7 +11269,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for GoToBottom
+		///   Localized string for Go to Bottom
 		/// </summary>
 		public static string GoToBottom 
 		{
@@ -13315,7 +13326,7 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Regional Data (Including Chart of Accouts)
+		///   Localized string for Regional Data (Including Chart of Accounts)
 		/// </summary>
 		public static string RegionalDataIncludingCOA 
 		{

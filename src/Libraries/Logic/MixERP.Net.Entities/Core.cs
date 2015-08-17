@@ -9,111 +9,6 @@ using System.Web;
 namespace MixERP.Net.Entities.Core
 {
 
-    [TableName("core.party_scrud_view")]
-    [ExplicitColumns]
-    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
-    {
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        public string LastName { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("party_name")] 
-        public string PartyName { get; set; }
-
-        [Column("company_name")] 
-        public string CompanyName { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        public string GlHead { get; set; }
-
-        [Column("photo")] 
-        public string Photo { get; set; }
-
-    }
-
     [TableName("core.flag_types")]
     [PrimaryKey("flag_type_id")]
     [ExplicitColumns]
@@ -5575,6 +5470,111 @@ namespace MixERP.Net.Entities.Core
 
         [Column("statement_reference")] 
         public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.party_scrud_view")]
+    [ExplicitColumns]
+    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
+    {
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        public string LastName { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("party_name")] 
+        public string PartyName { get; set; }
+
+        [Column("company_name")] 
+        public string CompanyName { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        public string GlHead { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
 
     }
 

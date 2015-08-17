@@ -971,7 +971,7 @@ BEGIN
             is_default                          boolean NOT NULL DEFAULT(false),
             from_display_name                   national character varying(256) NOT NULL,
             from_email_address                  national character varying(256) NOT NULL,
-            smp_host                            national character varying(256) NOT NULL,
+            smtp_host                           national character varying(256) NOT NULL,
             smtp_port                           public.integer_strict NOT NULL,
             smtp_enable_ssl                     boolean NOT NULL DEFAULT(true),
             smtp_username                       national character varying(256) NOT NULL,
@@ -1059,3 +1059,21 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+DO
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'config.smtp'::regclass
+        AND    attname = 'smp_host'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE config.smtp
+        RENAME COLUMN smp_host TO smtp_host;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
