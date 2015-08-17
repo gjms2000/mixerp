@@ -247,7 +247,7 @@ Select a store from where you want to deliver goods.
 
 Select the customer who sent the PO.
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     This is a cascading field. When you enter a valid party code in the text box, the associated party
     will be automatically chosen in the drop down control.
 </div>

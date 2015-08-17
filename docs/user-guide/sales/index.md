@@ -1,6 +1,6 @@
 #Sales Module
 
-<div class="alert-box warn radius">
+<div class="ui warning message">
     This document is a work in progress. There may be issues such as typographical errors, 
     grammar mistakes, and incorrect information which need to addressed.
 </div>

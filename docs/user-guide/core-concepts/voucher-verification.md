@@ -14,7 +14,7 @@ Furthermore, as seen in the above diagram, a transaction can be automatically ve
 the TransactionGovernor module will automatically take actions to reject or approve vouchers in verification queue. This could be beneficial for
 offices having a relatively tight budget, since you would not need to appoint additional employee(s) to check the queue.
 
-<div class="alert-box secondary radius">
+<div class="ui info message">
 The automatic verification feature can be a real time-saver for certain scenarios where you could "mix" the automatic and manual
 verification system. For example, you could turn on the auto-verification for transactions less than a specified amount, and for larger 
 transactions you can *examine what's going on under the hood* in the real time.

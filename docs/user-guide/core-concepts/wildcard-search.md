@@ -16,7 +16,7 @@ to perform a pattern matching along with plain old text based searches.
 | abc                | a%         | Yes |
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Please note that MixERP appends the character "%" on the start and the end of the search term.
 </div>
 

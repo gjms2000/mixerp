@@ -53,7 +53,7 @@ has to ensure that the backup files are properly being served as static contents
 </system.webServer>
 ```
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     This document assumes that your organization's policy allows downloading backups using a web browser
     software. If your organization does not allow backup files to be served via http(s),
     you may have to undertake extra steps to configure that, which is out of the scope of this document.
@@ -83,7 +83,7 @@ AttachmentFactory exposes a couple of HTTP handlers and WebServices.
 </system.webServer>
 ```
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     <p>
         You need to instruct IIS to serve the above handlers on the paths you configured in
         <a href="attachment-factory-parameters.md">AttachmentFactoryParameters</a>, namely:

@@ -58,7 +58,7 @@ Select the payment term or search by clicking the icon <i class="item-selector">
 Brief narration for the transaction
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Since this form implements ScrudFactory helper module, the detailed explanation of this feature is not provided
     in this document. View <a href="../../core-concepts/scrud-factory.md">ScrudFactory Helper Module Documentation</a>
     for more information.

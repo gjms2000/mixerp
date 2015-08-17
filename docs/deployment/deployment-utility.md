@@ -142,7 +142,7 @@ Everything in this form is required. Fill-up the details and click install.
     </tr>
 </table>
 
-<div class="alert-box warn radius">
+<div class="ui warning message">
     <p>
         Please make absolutely sure that you provide a secure password here. PostgreSQL is one of
         the best modern database management systems with built-in rich security features. But

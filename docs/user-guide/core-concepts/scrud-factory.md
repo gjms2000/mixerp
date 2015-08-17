@@ -73,7 +73,7 @@ Similarly, clicking another row will toggle your selection from previous row to 
 **"selectable"**. Once you select the record you're interested in, you can then perform some other tasks
 such as editing or deleting the entry.
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     MixERP will keep an audit trail of the user performing the Scrud operation.
 </div>
 
@@ -115,7 +115,7 @@ As soon as you enter all required and relevant fields, you are good to go.
 Click **Save** to add the new record. For whatever reason you want **not to save**
 the entry, click **Cancel**. Similarly click **Reset** to reset the form fields to their original state.
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     When you are adding a new record and then resetting, the form fields will generally fall back to
     an empty or the default value. Editing a form and then resetting, on the other hand, would reset the fields to the existing
     value(s) they were initialized with.

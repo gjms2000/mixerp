@@ -3,37 +3,34 @@
 function isExternal(url) {
     var match = url.match(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
     if (typeof match[1] === "string" && match[1].length > 0 && match[1].toLowerCase() !== location.protocol) return true;
-    if (typeof match[2] === "string" && match[2].length > 0 && match[2].replace(new RegExp(":("+{"http:":80,"https:":443}[location.protocol]+")?$"), "") !== location.host) return true;
+    if (typeof match[2] === "string" && match[2].length > 0 && match[2].replace(new RegExp(":(" + { "http:": 80, "https:": 443 }[location.protocol] + ")?$"), "") !== location.host) return true;
     return false;
 };
 
-function convertDocument(text)
-{
+function convertDocument(text) {
     return marked(text);
 };
 
-function processDocument(url)
-{
-    var xhr= new XMLHttpRequest();
+function processDocument(url) {
+    var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
-    xhr.onreadystatechange= function() {
-        if (this.readyState!==4) return;
-        if (this.status!==200) return;
-        
-        var content = $("#content");
+    xhr.onreadystatechange = function () {
+        if (this.readyState !== 4) return;
+        if (this.status !== 200) return;
+
+        var story = $("#story");
         var html = convertDocument(this.responseText);
         html = processImages(html);
 
-        content.html(html);
-        var header = content.find("h1, h2, h3").html();
+        story.html(html);
+        var header = story.find("h1, h2, h3").html();
 
-        if(header)
-        {
-            document.title = header;            
+        if (header) {
+            document.title = header;
         }
 
         $(".footer").show();
-        content.show();
+        story.show();
 
         createSubTopics();
         processAnchors();
@@ -62,7 +59,7 @@ function processImages(html) {
 };
 
 function processVideos() {
-    var videos = $("#content").find("video");
+    var videos = $("#story").find("video");
     var path = getPath();
 
 
@@ -73,41 +70,35 @@ function processVideos() {
     });
 };
 
-function getPath()
-{
+function getPath() {
     var path = window.location.hash.replace("#", "");
-    path = path.substring(0,path.lastIndexOf("/")+1);
-    return path;    
+    path = path.substring(0, path.lastIndexOf("/") + 1);
+    return path;
 }
 
-function processAnchors()
-{
-    var anchors = $("#content").find("a");
+function processAnchors() {
+    var anchors = $("#story").find("a");
     var path = getPath();
-    
-    anchors.each(function(){
+
+    anchors.each(function () {
         var el = $(this);
         var href = el.attr("href");
-        
-        if(href)
-        {
-            if(isExternal(href))
-            {
-                el.attr("target", "_blank");                
+
+        if (href) {
+            if (isExternal(href)) {
+                el.attr("target", "_blank");
             }
-            else
-            {
+            else {
                 href = path + href;
                 href = URI(href).normalizePathname()._parts.path
-                el.attr("href", "#" + href);                
+                el.attr("href", "#" + href);
             }
         }
     });
-    
-    anchors.click(function(){
+
+    anchors.click(function () {
         var href = $(this).attr("href");
-        if(!isExternal(href))
-        {
+        if (!isExternal(href)) {
             window.location = href;
             window.location.reload();
         }
@@ -115,39 +106,36 @@ function processAnchors()
 };
 
 
-window.onload = function()
-{
+window.onload = function () {
     loadDocument();
     $(document).foundation();
-    $("#content").css("min-height", $(window).height() + "px");
+    $("#story").css("min-height", $(window).height() + "px");
 };
 
 function createSubTopics() {
-$("#content").find("h1, h2, h3").each(function () {
-    var topics = $(".topics");
-    var $section = $(this);
-    var safeName = $section.attr("id");
-    var id;
-    var text = $section.text();
+    $("#story").find("h1, h2, h3").each(function () {
+        var topics = $(".topics");
+        var $section = $(this);
+        var safeName = $section.attr("id");
+        var id;
+        var text = $section.text();
 
-    if (!safeName) {
-        safeName = text.trim().replace(/\s+/g, '-').replace(/[^-,'A-Za-z0-9]+/g, '').toLowerCase();
+        if (!safeName) {
+            safeName = text.trim().replace(/\s+/g, '-').replace(/[^-,'A-Za-z0-9]+/g, '').toLowerCase();
+            id = window.escape(safeName);
+            $section.attr("id", id);
+        };
+
         id = window.escape(safeName);
-        $section.attr("id", id);
-    };
-
-    id = window.escape(safeName);
-    var anchor = "<li><a class='item' href='#" + id + "'>" + text + "</a></li>";
-    topics.append(anchor);            
-});
+        var anchor = "<li><a class='item' href='#" + id + "'>" + text + "</a></li>";
+        topics.append(anchor);
+    });
 };
 
-function loadDocument()
-{
+function loadDocument() {
     var url = window.location.hash.replace("#", "");
 
-    if (!url)
-    {
+    if (!url) {
         url = "index.md";
         window.location.hash = url;
     }
@@ -156,9 +144,8 @@ function loadDocument()
 };
 
 window.onhashchange = function (event) {
-    if(window.location.hash)
-    {
+    if (window.location.hash) {
         loadDocument();
         top.scroll(0, 0);
     };
-};        
+};

@@ -13,7 +13,7 @@ Download the latest MixERP release from [GitHub](https://github.com/mixerp/mixer
 
 This document assumes that MixERP application root directory is
 
-<span class="label">C:\inetpub\wwwroot\mixerp\</span>
+<div class="ui label">C:\inetpub\wwwroot\mixerp\</div>
 
 * Create a directory "mixerp" under "C:\inetpub\wwwroot\".
 * Copy all the contents under the extracted directory to the application root.
@@ -61,7 +61,7 @@ Now enter the following details:
         </td>
         <td>
             The physical path where you copied the published directory to. In this document, it is <br />
-            <p class="label">C:\inetpub\wwwroot\mixerp</p>
+            <p class="ui label">C:\inetpub\wwwroot\mixerp</p>
         </td>
     </tr>
     <tr>
@@ -127,7 +127,7 @@ Depending on the version of your IIS and Windows, it could be one of the followi
 
 **Writable Directories**
 
-<div class="alert-box info radius">
+<div class="ui yellow message">
     Skip this and continue with the next section if you want to apply restrictive file permission for your
     ERP instance.
 </div>

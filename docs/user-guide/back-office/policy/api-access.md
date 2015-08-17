@@ -36,7 +36,7 @@ Select one of the following HTTP verbs or action codes though which access is al
 The date until this policy is valid; thenceforth, having no effect.
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Since this form implements ScrudFactory helper module, the detailed explanation of this feature is not provided
     in this document. View <a href="../../core-concepts/scrud-factory.md">ScrudFactory Helper Module Documentation</a>
     for more information.

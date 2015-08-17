@@ -10,7 +10,7 @@ In order to change your password, click your name on the top right of the screen
 * Click the button **Change Password**.
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Consult with your administrator if you want help with changing or resetting your password.
 </div>
 

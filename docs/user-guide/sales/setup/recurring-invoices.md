@@ -3,7 +3,7 @@
 When your business needs to generate invoices on a regular basis, **Recurring Invoices** feature comes handy.
 Not only recurring invoices saves hours of manual posting task, but also it reduces human mistakes.
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
         Recurring invoices is a workflow which automatically posts invoices on a periodic basis until the
         term (total duration) is over.
 </div>
@@ -241,7 +241,7 @@ operation.
 
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Since this form implements ScrudFactory helper module, the detailed explanation of this feature is not provided
     in this document. View <a href="../../core-concepts/scrud-factory.md">ScrudFactory Helper Module Documentation</a>
     for more information.

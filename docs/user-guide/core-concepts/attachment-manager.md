@@ -11,7 +11,7 @@ You can attach unlimited number of attachments to a transaction in a batch.
 ![Attachment Manager](images/attachment-manager.jpg)
 
 
-<div class="alert-box secondary radius">
+<div class="ui info message">
 <p>Please Note</p>
 
 <p>The images used in this topic are a courtesy of pixabay users and used under the [terms of pixabay.com](http://pixabay.com/en/service/terms/) and license [Creative Common Deed CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en)</p>
