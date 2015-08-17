@@ -49,7 +49,7 @@ Check this on if the sales tax type you are creating is a Value Added Tax.
 
 
 
-<div class="alert-box scrud radius">
+<div class="ui info message">
     Since this form implements ScrudFactory helper module, the detailed explanation of this feature is not provided
     in this document. View <a href="../../core-concepts/scrud-factory.md">ScrudFactory Helper Module Documentation</a>
     for more information.
