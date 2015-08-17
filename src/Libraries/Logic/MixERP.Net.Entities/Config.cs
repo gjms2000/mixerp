@@ -50,6 +50,25 @@ namespace MixERP.Net.Entities.Config
 
     }
 
+    [TableName("config.db_parameters")]
+    [PrimaryKey("key", autoIncrement=false)]
+    [ExplicitColumns]
+    public class DbParameter : PetaPocoDB.Record<DbParameter> , IPoco
+    {
+        [Column("key")] 
+        public string Key { get; set; }
+
+        [Column("value")] 
+        public string Value { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
     [TableName("config.mixerp")]
     [PrimaryKey("key", autoIncrement=false)]
     [ExplicitColumns]
@@ -72,16 +91,19 @@ namespace MixERP.Net.Entities.Config
 
     }
 
-    [TableName("config.db_parameters")]
+    [TableName("config.open_exchange_rates")]
     [PrimaryKey("key", autoIncrement=false)]
     [ExplicitColumns]
-    public class DbParameter : PetaPocoDB.Record<DbParameter> , IPoco
+    public class OpenExchangeRate : PetaPocoDB.Record<OpenExchangeRate> , IPoco
     {
         [Column("key")] 
         public string Key { get; set; }
 
         [Column("value")] 
         public string Value { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
 
         [Column("audit_user_id")] 
         public int? AuditUserId { get; set; }
@@ -155,6 +177,9 @@ namespace MixERP.Net.Entities.Config
         [Column("smtp_host")] 
         public string SmtpHost { get; set; }
 
+        [Column("smtp_port")] 
+        public int SmtpPort { get; set; }
+
         [Column("smtp_enable_ssl")] 
         public bool SmtpEnableSsl { get; set; }
 
@@ -163,28 +188,6 @@ namespace MixERP.Net.Entities.Config
 
         [Column("smtp_password")] 
         public string SmtpPassword { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("config.open_exchange_rates")]
-    [PrimaryKey("key", autoIncrement=false)]
-    [ExplicitColumns]
-    public class OpenExchangeRate : PetaPocoDB.Record<OpenExchangeRate> , IPoco
-    {
-        [Column("key")] 
-        public string Key { get; set; }
-
-        [Column("value")] 
-        public string Value { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
 
         [Column("audit_user_id")] 
         public int? AuditUserId { get; set; }

@@ -6043,6 +6043,21 @@ namespace MixERP.Net.Entities.Core
 
     }
 
+    [FunctionName("get_associated_units_from_item_code")]
+    [ExplicitColumns]
+    public class DbGetAssociatedUnitsFromItemCodeResult : PetaPocoDB.Record<DbGetAssociatedUnitsFromItemCodeResult> , IPoco
+    {
+        [Column("unit_id")] 
+        public int UnitId { get; set; }
+
+        [Column("unit_code")] 
+        public string UnitCode { get; set; }
+
+        [Column("unit_name")] 
+        public string UnitName { get; set; }
+
+    }
+
     [FunctionName("get_workflow_model")]
     [ExplicitColumns]
     public class DbGetWorkflowModelResult : PetaPocoDB.Record<DbGetWorkflowModelResult> , IPoco
@@ -6067,6 +6082,21 @@ namespace MixERP.Net.Entities.Core
 
         [Column("withdrawn")] 
         public int Withdrawn { get; set; }
+
+    }
+
+    [FunctionName("get_account_view_by_account_master_id")]
+    [ExplicitColumns]
+    public class DbGetAccountViewByAccountMasterIdResult : PetaPocoDB.Record<DbGetAccountViewByAccountMasterIdResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("account_id")] 
+        public long AccountId { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
 
     }
 
@@ -6124,36 +6154,6 @@ namespace MixERP.Net.Entities.Core
 
         [Column("computed_tax")] 
         public decimal ComputedTax { get; set; }
-
-    }
-
-    [FunctionName("get_associated_units_from_item_code")]
-    [ExplicitColumns]
-    public class DbGetAssociatedUnitsFromItemCodeResult : PetaPocoDB.Record<DbGetAssociatedUnitsFromItemCodeResult> , IPoco
-    {
-        [Column("unit_id")] 
-        public int UnitId { get; set; }
-
-        [Column("unit_code")] 
-        public string UnitCode { get; set; }
-
-        [Column("unit_name")] 
-        public string UnitName { get; set; }
-
-    }
-
-    [FunctionName("get_account_view_by_account_master_id")]
-    [ExplicitColumns]
-    public class DbGetAccountViewByAccountMasterIdResult : PetaPocoDB.Record<DbGetAccountViewByAccountMasterIdResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("account_id")] 
-        public long AccountId { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
 
     }
 
