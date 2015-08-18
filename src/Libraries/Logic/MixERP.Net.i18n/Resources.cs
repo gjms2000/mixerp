@@ -1539,6 +1539,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Create a list of states where your employees, customers, and suppliers are.
+		/// </summary>
+		public static string CreateStateDescription 
+		{
+			get
+			{
+				return Get("CreateStateDescription");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.
 		/// </summary>
 		public static string CreateStateSalesTaxDescription 
@@ -1935,6 +1946,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for {0} states found.
+		/// </summary>
+		public static string NStatesFound 
+		{
+			get
+			{
+				return Get("NStatesFound");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for There are {0} stores in this office.
 		/// </summary>
 		public static string NStoresInThisOffice 
@@ -2052,6 +2074,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("NoShipperFound");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for No state found.
+		/// </summary>
+		public static string NoStateFound 
+		{
+			get
+			{
+				return Get("NoStateFound");
 			}
 		}
 		
@@ -9813,6 +9846,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("CreateShippingCompany");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create State
+		/// </summary>
+		public static string CreateState 
+		{
+			get
+			{
+				return Get("CreateState");
 			}
 		}
 		

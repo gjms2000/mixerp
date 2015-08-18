@@ -32,7 +32,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
 
             if (count > 0)
             {
-                this.Message = "No supplier found.";
+                this.Message = Labels.NoSupplierFound;
                 return;
             }
 

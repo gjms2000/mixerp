@@ -177,9 +177,6 @@ namespace MixERP.Net.Entities.Config
         [Column("smtp_host")] 
         public string SmtpHost { get; set; }
 
-        [Column("smtp_port")] 
-        public int SmtpPort { get; set; }
-
         [Column("smtp_enable_ssl")] 
         public bool SmtpEnableSsl { get; set; }
 

@@ -176,10 +176,16 @@ namespace MixERP.Net.FrontEnd.Base
 
             foreach (Menu menu in menus)
             {
-                if (!string.IsNullOrWhiteSpace(menu?.Url) && menu.Url.Replace("~", "").Equals(this.currentPage))
+                if (menu != null)
                 {
-                    policyExists = true;
-                    break;
+                    if (!string.IsNullOrWhiteSpace(menu.Url))
+                    {
+                        if (menu.Url.Replace("~", "").Equals(this.currentPage))
+                        {
+                            policyExists = true;
+                            break;
+                        }
+                    }
                 }
             }
 

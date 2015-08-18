@@ -134,6 +134,7 @@ SELECT localization.add_localized_resource('Labels', '', 'CreatePartiesDescripti
 SELECT localization.add_localized_resource('Labels', '', 'CreateSalespersonsDescription', 'Salespersons are the sales guys who sell your products and bring business to your company.');
 SELECT localization.add_localized_resource('Labels', '', 'CreateSalesTaxFormDescription', 'Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.');
 SELECT localization.add_localized_resource('Labels', '', 'CreateShippingCompanyDescription', 'Shipping companies transfer the goods through land, sea, and/or air to your customers.');
+SELECT localization.add_localized_resource('Labels', '', 'CreateStateDescription', 'Create a list of states where your employees, customers, and suppliers are.');
 SELECT localization.add_localized_resource('Labels', '', 'CreateStateSalesTaxDescription', 'State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.');
 SELECT localization.add_localized_resource('Labels', '', 'CreateStoresDescription', 'Store is a place where you keep your goods. Example: Shop, Go-down, Warehouse.');
 SELECT localization.add_localized_resource('Labels', '', 'CreateTaxAuthorityDescription', 'Tax authority is the government body or agency to whom you file your periodic tax reports to.');
@@ -175,6 +176,7 @@ SELECT localization.add_localized_resource('Labels', '', 'NoSalespersonFound', '
 SELECT localization.add_localized_resource('Labels', '', 'NoSalesTaxFormDefined', 'No sales tax form defined.');
 SELECT localization.add_localized_resource('Labels', '', 'NoShipperFound', 'No shipper found.');
 SELECT localization.add_localized_resource('Labels', '', 'NoStateSalesTaxDefined', 'No state sales tax defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NoStateFound', 'No state found.');
 SELECT localization.add_localized_resource('Labels', '', 'NoStorePresent', 'No store present.');
 SELECT localization.add_localized_resource('Labels', '', 'NoSupplierFound', 'No supplier found.');
 SELECT localization.add_localized_resource('Labels', '', 'NoTaxAuthorityDefined', 'No tax authority defined.');
@@ -187,6 +189,7 @@ SELECT localization.add_localized_resource('Labels', '', 'NSalespersonsFound', '
 SELECT localization.add_localized_resource('Labels', '', 'NSalesTaxFormsDefined', '{0} sales tax forms defined.');
 SELECT localization.add_localized_resource('Labels', '', 'NShippersFound', '{0} shippers found.');
 SELECT localization.add_localized_resource('Labels', '', 'NStateSalesTaxesDefined', '{0} state sales taxes defined.');
+SELECT localization.add_localized_resource('Labels', '', 'NStatesFound', '{0} states found.');
 SELECT localization.add_localized_resource('Labels', '', 'NStoresInThisOffice', 'There are {0} stores in this office.');
 SELECT localization.add_localized_resource('Labels', '', 'NTaxAuthoritiesFound', '{0} tax authorities found.');
 SELECT localization.add_localized_resource('Labels', '', 'NTaxMasterFound', '{0} tax master(s) found.');
@@ -886,6 +889,7 @@ SELECT localization.add_localized_resource('Titles', '', 'CreateNewFiscalYear', 
 SELECT localization.add_localized_resource('Titles', '', 'CreateSalespersons', 'Create Salespersons');
 SELECT localization.add_localized_resource('Titles', '', 'CreateSalesTaxForm', 'Create Sales Tax Form');
 SELECT localization.add_localized_resource('Titles', '', 'CreateShippingCompany', 'Create Shipping Company');
+SELECT localization.add_localized_resource('Titles', '', 'CreateState', 'Create State');
 SELECT localization.add_localized_resource('Titles', '', 'CreateStateSalesTax', 'Create State Sales Tax');
 SELECT localization.add_localized_resource('Titles', '', 'CreateStores', 'Create Stores');
 SELECT localization.add_localized_resource('Titles', '', 'CreateTaxAuthority', 'Create Tax Authority');

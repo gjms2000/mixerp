@@ -9,6 +9,81 @@ using System.Web;
 namespace MixERP.Net.Entities.Core
 {
 
+    [TableName("core.exchange_rate_details")]
+    [PrimaryKey("exchange_rate_detail_id")]
+    [ExplicitColumns]
+    public class ExchangeRateDetail : PetaPocoDB.Record<ExchangeRateDetail> , IPoco
+    {
+        [Column("exchange_rate_detail_id")] 
+        public long ExchangeRateDetailId { get; set; }
+
+        [Column("exchange_rate_id")] 
+        public long ExchangeRateId { get; set; }
+
+        [Column("local_currency_code")] 
+        public string LocalCurrencyCode { get; set; }
+
+        [Column("foreign_currency_code")] 
+        public string ForeignCurrencyCode { get; set; }
+
+        [Column("unit")] 
+        public int Unit { get; set; }
+
+        [Column("exchange_rate")] 
+        public decimal ExchangeRate { get; set; }
+
+    }
+
+    [TableName("core.menu_locale")]
+    [PrimaryKey("menu_locale_id")]
+    [ExplicitColumns]
+    public class MenuLocale : PetaPocoDB.Record<MenuLocale> , IPoco
+    {
+        [Column("menu_locale_id")] 
+        public int MenuLocaleId { get; set; }
+
+        [Column("menu_id")] 
+        public int MenuId { get; set; }
+
+        [Column("culture")] 
+        public string Culture { get; set; }
+
+        [Column("menu_text")] 
+        public string MenuText { get; set; }
+
+    }
+
+    [TableName("core.menus")]
+    [PrimaryKey("menu_id")]
+    [ExplicitColumns]
+    public class Menu : PetaPocoDB.Record<Menu> , IPoco
+    {
+        [Column("menu_id")] 
+        public int MenuId { get; set; }
+
+        [Column("menu_text")] 
+        public string MenuText { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("menu_code")] 
+        public string MenuCode { get; set; }
+
+        [Column("level")] 
+        public short Level { get; set; }
+
+        [Column("parent_menu_id")] 
+        public int? ParentMenuId { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
     [TableName("core.flag_types")]
     [PrimaryKey("flag_type_id")]
     [ExplicitColumns]
@@ -196,81 +271,6 @@ namespace MixERP.Net.Entities.Core
 
         [Column("status")] 
         public bool Status { get; set; }
-
-    }
-
-    [TableName("core.exchange_rate_details")]
-    [PrimaryKey("exchange_rate_detail_id")]
-    [ExplicitColumns]
-    public class ExchangeRateDetail : PetaPocoDB.Record<ExchangeRateDetail> , IPoco
-    {
-        [Column("exchange_rate_detail_id")] 
-        public long ExchangeRateDetailId { get; set; }
-
-        [Column("exchange_rate_id")] 
-        public long ExchangeRateId { get; set; }
-
-        [Column("local_currency_code")] 
-        public string LocalCurrencyCode { get; set; }
-
-        [Column("foreign_currency_code")] 
-        public string ForeignCurrencyCode { get; set; }
-
-        [Column("unit")] 
-        public int Unit { get; set; }
-
-        [Column("exchange_rate")] 
-        public decimal ExchangeRate { get; set; }
-
-    }
-
-    [TableName("core.menu_locale")]
-    [PrimaryKey("menu_locale_id")]
-    [ExplicitColumns]
-    public class MenuLocale : PetaPocoDB.Record<MenuLocale> , IPoco
-    {
-        [Column("menu_locale_id")] 
-        public int MenuLocaleId { get; set; }
-
-        [Column("menu_id")] 
-        public int MenuId { get; set; }
-
-        [Column("culture")] 
-        public string Culture { get; set; }
-
-        [Column("menu_text")] 
-        public string MenuText { get; set; }
-
-    }
-
-    [TableName("core.menus")]
-    [PrimaryKey("menu_id")]
-    [ExplicitColumns]
-    public class Menu : PetaPocoDB.Record<Menu> , IPoco
-    {
-        [Column("menu_id")] 
-        public int MenuId { get; set; }
-
-        [Column("menu_text")] 
-        public string MenuText { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("menu_code")] 
-        public string MenuCode { get; set; }
-
-        [Column("level")] 
-        public short Level { get; set; }
-
-        [Column("parent_menu_id")] 
-        public int? ParentMenuId { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
 
     }
 
