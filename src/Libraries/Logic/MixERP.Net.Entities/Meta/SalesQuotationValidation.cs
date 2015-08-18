@@ -5,15 +5,15 @@ using PetaPoco;
 namespace MixERP.Net.Entities.Meta
 {
     [TableName("public.sales_quotation_validation")]
-    [PrimaryKey("tran_id", autoIncrement = false)]
+    [PrimaryKey("validation_id", autoIncrement = false)]
     [ExplicitColumns]
     public class SalesQuotationValidation : PetaPocoDB.Record<SalesQuotationValidation>, IPoco
     {
-        [Column("tran_id")]
-        public long TranId { get; set; }
-
         [Column("validation_id")]
         public string ValidationId { get; set; }
+
+        [Column("tran_id")]
+        public long TranId { get; set; }
 
         [Column("catalog")]
         public string Catalog { get; set; }
@@ -45,13 +45,15 @@ namespace MixERP.Net.Entities.Meta
                                     ) THEN
                                         CREATE TABLE public.sales_quotation_validation
                                         (
-                                            tran_id                 bigint NOT NULL PRIMARY KEY,
-                                            validation_id           text NOT NULL UNIQUE,
+                                            validation_id           text NOT NULL PRIMARY KEY,
+                                            tran_id                 bigint NOT NULL,
                                             catalog                 text NOT NULL,
                                             added_on                TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
                                             valid_till              TIMESTAMP WITH TIME ZONE NOT NULL,
                                             accepted                boolean NOT NULL DEFAULT(false),
-                                            accepted_on             TIMESTAMP WITH TIME ZONE
+                                            accepted_on             TIMESTAMP WITH TIME ZONE,
+                                                                    CONSTRAINT sales_quotation_validation_unq
+                                                                    UNIQUE(tran_id, catalog)
                                         );
                                     END IF;
                                 END
