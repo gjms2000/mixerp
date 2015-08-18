@@ -14370,7 +14370,6 @@ SELECT * FROM core.create_menu_locale('STXT', 'fr', 'Types de taxe de vente');--
 SELECT * FROM core.create_menu_locale('STX', 'fr', 'Taxes de vente');--Sales Taxes
 SELECT * FROM core.create_menu_locale('SST', 'fr', 'Équipes de vente');--Sales Teams
 SELECT * FROM core.create_menu_locale('SAR-SBO', 'fr', 'Ventes de Bureau');--Sales by Office
-SELECT * FROM core.create_menu_locale('SPR', 'fr', 'Rapport salesperson');--Salesperson Report
 SELECT * FROM core.create_menu_locale('SSA', 'fr', 'Vendeurs/vendeuses');--Salespersons
 SELECT * FROM core.create_menu_locale('OTSSFP', 'fr', 'ScrudFactory Paramètres');--ScrudFactory Parameters
 SELECT * FROM core.create_menu_locale('ISP', 'fr', 'Prix de vente');--Selling Prices

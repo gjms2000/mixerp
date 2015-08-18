@@ -9,6 +9,28 @@ using System.Web;
 namespace MixERP.Net.Entities.Office
 {
 
+    [TableName("office.departments")]
+    [PrimaryKey("department_id")]
+    [ExplicitColumns]
+    public class Department : PetaPocoDB.Record<Department> , IPoco
+    {
+        [Column("department_id")] 
+        public int DepartmentId { get; set; }
+
+        [Column("department_code")] 
+        public string DepartmentCode { get; set; }
+
+        [Column("department_name")] 
+        public string DepartmentName { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
     [TableName("office.roles")]
     [PrimaryKey("role_id")]
     [ExplicitColumns]
@@ -28,28 +50,6 @@ namespace MixERP.Net.Entities.Office
 
         [Column("is_system")] 
         public bool IsSystem { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("office.departments")]
-    [PrimaryKey("department_id")]
-    [ExplicitColumns]
-    public class Department : PetaPocoDB.Record<Department> , IPoco
-    {
-        [Column("department_id")] 
-        public int DepartmentId { get; set; }
-
-        [Column("department_code")] 
-        public string DepartmentCode { get; set; }
-
-        [Column("department_name")] 
-        public string DepartmentName { get; set; }
 
         [Column("audit_user_id")] 
         public int? AuditUserId { get; set; }
@@ -283,49 +283,6 @@ namespace MixERP.Net.Entities.Office
 
     }
 
-    [TableName("office.users")]
-    [PrimaryKey("user_id")]
-    [ExplicitColumns]
-    public class User : PetaPocoDB.Record<User> , IPoco
-    {
-        [Column("user_id")] 
-        public int UserId { get; set; }
-
-        [Column("role_id")] 
-        public int RoleId { get; set; }
-
-        [Column("department_id")] 
-        public int DepartmentId { get; set; }
-
-        [Column("office_id")] 
-        public int OfficeId { get; set; }
-
-        [Column("user_name")] 
-        public string UserName { get; set; }
-
-        [Column("full_name")] 
-        public string FullName { get; set; }
-
-        [Column("can_change_password")] 
-        public bool CanChangePassword { get; set; }
-
-        [Column("password")] 
-        public string Password { get; set; }
-
-        [Column("elevated")] 
-        public bool Elevated { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-        [Column("store_id")] 
-        public int? StoreId { get; set; }
-
-    }
-
     [TableName("office.holidays")]
     [PrimaryKey("holiday_id", autoIncrement=false)]
     [ExplicitColumns]
@@ -454,6 +411,49 @@ namespace MixERP.Net.Entities.Office
 
         [Column("logo_file")] 
         public string LogoFile { get; set; }
+
+    }
+
+    [TableName("office.users")]
+    [PrimaryKey("user_id")]
+    [ExplicitColumns]
+    public class User : PetaPocoDB.Record<User> , IPoco
+    {
+        [Column("user_id")] 
+        public int UserId { get; set; }
+
+        [Column("role_id")] 
+        public int RoleId { get; set; }
+
+        [Column("department_id")] 
+        public int DepartmentId { get; set; }
+
+        [Column("office_id")] 
+        public int OfficeId { get; set; }
+
+        [Column("user_name")] 
+        public string UserName { get; set; }
+
+        [Column("full_name")] 
+        public string FullName { get; set; }
+
+        [Column("can_change_password")] 
+        public bool CanChangePassword { get; set; }
+
+        [Column("password")] 
+        public string Password { get; set; }
+
+        [Column("elevated")] 
+        public bool Elevated { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+        [Column("store_id")] 
+        public int? StoreId { get; set; }
 
     }
 
@@ -1159,36 +1159,6 @@ namespace MixERP.Net.Entities.Office
 
     }
 
-    [FunctionName("get_offices")]
-    [ExplicitColumns]
-    public class DbGetOfficesResult : PetaPocoDB.Record<DbGetOfficesResult> , IPoco
-    {
-        [Column("office_id")] 
-        public int OfficeId { get; set; }
-
-        [Column("office_code")] 
-        public string OfficeCode { get; set; }
-
-        [Column("office_name")] 
-        public string OfficeName { get; set; }
-
-        [Column("address")] 
-        public string Address { get; set; }
-
-    }
-
-    [FunctionName("sign_in")]
-    [ExplicitColumns]
-    public class DbSignInResult : PetaPocoDB.Record<DbSignInResult> , IPoco
-    {
-        [Column("login_id")] 
-        public long LoginId { get; set; }
-
-        [Column("message")] 
-        public string Message { get; set; }
-
-    }
-
     [FunctionName("get_stores")]
     [ExplicitColumns]
     public class DbGetStoresResult : PetaPocoDB.Record<DbGetStoresResult> , IPoco
@@ -1228,6 +1198,36 @@ namespace MixERP.Net.Entities.Office
 
         [Column("audit_ts")] 
         public DateTime AuditTs { get; set; }
+
+    }
+
+    [FunctionName("get_offices")]
+    [ExplicitColumns]
+    public class DbGetOfficesResult : PetaPocoDB.Record<DbGetOfficesResult> , IPoco
+    {
+        [Column("office_id")] 
+        public int OfficeId { get; set; }
+
+        [Column("office_code")] 
+        public string OfficeCode { get; set; }
+
+        [Column("office_name")] 
+        public string OfficeName { get; set; }
+
+        [Column("address")] 
+        public string Address { get; set; }
+
+    }
+
+    [FunctionName("sign_in")]
+    [ExplicitColumns]
+    public class DbSignInResult : PetaPocoDB.Record<DbSignInResult> , IPoco
+    {
+        [Column("login_id")] 
+        public long LoginId { get; set; }
+
+        [Column("message")] 
+        public string Message { get; set; }
 
     }
 

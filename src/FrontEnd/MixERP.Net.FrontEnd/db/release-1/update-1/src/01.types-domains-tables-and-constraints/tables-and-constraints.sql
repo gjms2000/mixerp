@@ -1077,3 +1077,21 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'config.smtp'::regclass
+        AND    attname = 'smtp_port'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE config.smtp
+        ADD COLUMN smtp_port public.integer_strict NOT NULL DEFAULT(587);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
