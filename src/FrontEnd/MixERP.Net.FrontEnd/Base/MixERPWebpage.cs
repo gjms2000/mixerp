@@ -173,7 +173,7 @@ namespace MixERP.Net.FrontEnd.Base
             {
                 return;
             }
-            
+
             foreach (Menu menu in menus)
             {
                 if (!string.IsNullOrWhiteSpace(menu?.Url) && menu.Url.Replace("~", "").Equals(this.currentPage))
@@ -230,15 +230,27 @@ namespace MixERP.Net.FrontEnd.Base
             Collection<FrequencyDates> applicationDates =
                 Dates.GetFrequencyDates(AppUsers.GetCurrentUserDB());
 
-            FrequencyDates model = applicationDates?.FirstOrDefault(c => c.OfficeId.Equals(officeId));
-
-            if (model?.ForcedLogOffTimestamp != null && !model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
+            if (applicationDates == null)
             {
-                if (model.ForcedLogOffTimestamp <= DateTime.Now &&
-                    model.ForcedLogOffTimestamp >= AppUsers.GetCurrent().View.LoginDateTime)
-                {
-                    this.RequestLoginPage();
-                }
+                return;
+            }
+            FrequencyDates model = applicationDates.FirstOrDefault(c => c.OfficeId.Equals(officeId));
+
+
+            if (model == null)
+            {
+                return;
+            }
+
+            if (model.ForcedLogOffTimestamp == null || model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
+            {
+                return;
+            }
+
+            if (model.ForcedLogOffTimestamp <= DateTime.Now &&
+                model.ForcedLogOffTimestamp >= AppUsers.GetCurrent().View.LoginDateTime)
+            {
+                this.RequestLoginPage();
             }
         }
     }
