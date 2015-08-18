@@ -870,7 +870,9 @@
     <Content Include="Scripts\jquery-ui\css\custom-theme\images\ui-icons_8b2abe_256x240.png" />
     <Content Include="Scripts\jquery-ui\css\custom-theme\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Scripts\jquery-ui\css\custom-theme\jquery-ui.css" />
-    <Content Include="Scripts\jquery-ui\css\custom-theme\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui\css\custom-theme\jquery-ui.min.css">
+      <DependentUpon>jquery-ui.css</DependentUpon>
+    </Content>
     <Content Include="Scripts\jquery-ui\i18n\datepicker-af.js" />
     <Content Include="Scripts\jquery-ui\i18n\datepicker-ar-DZ.js" />
     <Content Include="Scripts\jquery-ui\i18n\datepicker-ar.js" />

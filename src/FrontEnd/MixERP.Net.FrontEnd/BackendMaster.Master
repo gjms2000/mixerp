@@ -33,7 +33,7 @@
         <asp:ScriptManager runat="server" ID="ScriptManager1" />
 
 
-        <div class="ui stackable grid">
+        <div class="ui stackable doubling grid">
             <div class="sixteen wide brand column" id="Top">
                 <div class="ui stackable grid">
                     <div class="four wide column">
@@ -167,7 +167,6 @@
                 </div>
             </div>
         </div>
-
         <script src="/signalr/hubs"></script>
         <script type="text/javascript">
             $(function () {
@@ -205,7 +204,6 @@
                 });;
             });
         </script>
-
     </form>
 </body>
 </html>

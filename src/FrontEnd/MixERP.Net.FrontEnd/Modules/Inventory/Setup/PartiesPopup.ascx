@@ -25,7 +25,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <script src="/Scripts/mixerp/utitlities/countries.js"></script>
 <script src="/Scripts/underscore/underscore-min.js"></script>
 
-<div id="PartyController" class="ui attached segment" style="border: none; max-width: 900px;" data-ng-controller="PartyController">
+<div id="PartyController" class="ui attached segment" style="border: none; max-width: 900px;" data-ng-controller="PartyController" data-ng-cloak>
     <div class="ui large purple header">{{getResource('Resources.Titles.Parties')}}</div>
     <div class="ui stackable grid">
         <div class="ten wide column">

@@ -85,7 +85,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         <h1><%=Titles.PLAppropriation %></h1>
         <div class="ui divider"></div>
 
-        <table class="ui striped celled table" data-ng-controller="EOYController">
+        <table class="ui striped celled table" data-ng-controller="EOYController" data-ng-cloak>
             <thead>
                 <tr>
                     <th><%= Titles.AccountId %></th>

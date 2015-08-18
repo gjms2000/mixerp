@@ -66,22 +66,13 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
             return true;
         }
 
-        public static void Verify(string catalog, long tranId, int officeId, int userId, long loginId,
+        public static long Verify(string catalog, long tranId, int officeId, int userId, long loginId,
             short verificationStatusId, string reason)
         {
             const string sql =
-                "SELECT * FROM transactions.verify_transaction(@TranId::bigint, @OfficeId::integer, @UserId::integer, @LoginId::bigint, @VerificationStatusId::smallint, @Reason::national character varying);";
-            using (NpgsqlCommand command = new NpgsqlCommand(sql))
-            {
-                command.Parameters.AddWithValue("@TranId", tranId);
-                command.Parameters.AddWithValue("@OfficeId", officeId);
-                command.Parameters.AddWithValue("@UserId", userId);
-                command.Parameters.AddWithValue("@LoginId", loginId);
-                command.Parameters.AddWithValue("@VerificationStatusId", verificationStatusId);
-                command.Parameters.AddWithValue("@Reason", reason);
+                "SELECT * FROM transactions.verify_transaction(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::smallint, @5::national character varying);";
 
-                DbOperation.ExecuteNonQuery(catalog, command);
-            }
+            return Factory.Scalar<long>(catalog, sql, tranId, officeId, userId, loginId, verificationStatusId, reason);
         }
 
         public static long Add(string catalog, DateTime valueDate, DateTime bookDate, int officeId, int userId,

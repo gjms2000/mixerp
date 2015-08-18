@@ -33,7 +33,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 <script src="PartyInfo/shipping-addresses/controller.js"></script>
 <script src="PartyInfo/trend/chart.js"></script>
 
-<asp:Panel runat="server" ID="InfoPanel" data-ng-controller="GeneralInfoController">
+<asp:Panel runat="server" ID="InfoPanel" data-ng-controller="GeneralInfoController" data-ng-cloak>
 
     <div class="ui purple header">
         <img src="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{partyView.Photo}}&H=200&W=200" class="ui circular image" alt="{{partyView.PartyName}}" />
@@ -63,10 +63,10 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         <div data-ng-include src="'/Modules/Inventory/Setup/PartyInfo/popular-items/index.html'"></div>
     </div>
 
-    <div class="ui tab attached segment" data-tab="account-statement-tab" data-ng-controller="AccountStatementController">
+    <div class="ui tab attached segment" data-tab="account-statement-tab" data-ng-controller="AccountStatementController" data-ng-cloak>
         <div data-ng-include src="'/Modules/Inventory/Setup/PartyInfo/account-statement/index.html'"></div>
     </div>
-    <div class="ui tab attached segment" data-tab="shipping-addresses-tab" data-ng-controller="ShippingAddressController">
+    <div class="ui tab attached segment" data-tab="shipping-addresses-tab" data-ng-controller="ShippingAddressController" data-ng-cloak>
         <div data-ng-include src="'/Modules/Inventory/Setup/PartyInfo/shipping-addresses/index.html'"></div>
     </div>
     <div class="ui tab attached segment" data-tab="trend-tab">

@@ -99,7 +99,7 @@ $(document).ready(function () {
 
         var frame = $("#ChecklistFrame");
 
-        frame.load(function() {
+        frame.load(function () {
             if (typeof (callBack) === "function") {
                 callBack(book, tranId);
             };
@@ -150,6 +150,20 @@ $(document).ready(function () {
         return getAjax(url, data);
     };
 
+    function removeRow(index, callback) {
+        transactionGridView.find("tr").eq(index + 1).addClass("negative").fadeOut(500, function () {
+            $(this).remove();
+
+            if (typeof (callback) === "function") {
+                callback();
+            };
+        });
+    };
+
+    function hideModal() {
+        modal.modal("hide");
+    };
+
     verifyButton.click(function () {
         var reason = reasonTextArea.val();
         var ajaxAction;
@@ -160,14 +174,22 @@ $(document).ready(function () {
             ajaxAction = ajaxReject(tranId, reason);
         }
 
-        ajaxAction.success(function () {
+        ajaxAction.success(function (msg) {
+            var cascadingTranId = parseFloat(msg.d);
+            if (cascadingTranId) {
+
+                transactionGridView.find("tr td:nth-child(3)").each(function (i) {
+                    var tranId = parseFloat($(this).text() || 0);
+
+                    if (cascadingTranId === tranId) {
+                        removeRow(i);
+                    };
+                });
+            };
+
             //Need to load the checklist page in order to create a PDF document.
             loadCheckList(tranId, sendEmailNotification);
-
-            transactionGridView.find("tr").eq(selectedIndex + 1).addClass("negative").fadeOut(500, function () {
-                $(this).remove();
-                modal.modal("hide");
-            });
+            removeRow(selectedIndex, hideModal);
         });
 
         ajaxAction.fail(function (xhr) {
@@ -175,8 +197,7 @@ $(document).ready(function () {
         });
 
         return false;
-    });
-
+    });;;
 
     $(document).keyup(function (e) {
         if (e.ctrlKey) {

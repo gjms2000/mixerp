@@ -39,7 +39,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
     public class Transactions : WebService
     {
         [WebMethod]
-        public void Approve(long tranId, string reason)
+        public long Approve(long tranId, string reason)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
                 const int verificationStatusId = 2;
 
-                Transaction.Verify(AppUsers.GetCurrentUserDB(), tranId, officeId, userId, loginId, verificationStatusId,
+                return Transaction.Verify(AppUsers.GetCurrentUserDB(), tranId, officeId, userId, loginId, verificationStatusId,
                     reason);
             }
             catch (Exception ex)
@@ -57,6 +57,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                     ex);
                 throw;
             }
+
+            return 0;
         }
 
         [WebMethod]
@@ -69,7 +71,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
         }
 
         [WebMethod]
-        public void Reject(long tranId, string reason)
+        public long Reject(long tranId, string reason)
         {
             try
             {
@@ -78,7 +80,7 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
                 const int verificationStatusId = -3;
 
-                Transaction.Verify(AppUsers.GetCurrentUserDB(), tranId, officeId, userId, loginId, verificationStatusId,
+                return Transaction.Verify(AppUsers.GetCurrentUserDB(), tranId, officeId, userId, loginId, verificationStatusId,
                     reason);
             }
             catch (Exception ex)
@@ -87,6 +89,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services
                     ex);
                 throw;
             }
+
+            return 0;
         }
 
         [WebMethod]
