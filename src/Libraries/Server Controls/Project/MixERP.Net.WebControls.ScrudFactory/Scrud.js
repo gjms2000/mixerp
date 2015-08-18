@@ -295,6 +295,10 @@ $(document).ready(function () {
             return;
         };
 
+        if ($("#colorbox").next().hasClass('active')) {
+            return;
+        }
+
         if ($("body").attr("class") === "modal-open") {
             return;
         };
