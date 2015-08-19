@@ -481,6 +481,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'is_employee', '
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exempt', 'Is Exempt');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exemption', 'Is Exemption');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_flat_amount', 'Is Flat Amount');
+SELECT localization.add_localized_resource('ScrudResource', '', 'is_frequency', 'Is Frequency');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_merchant_account', 'Is Merchant Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_party', 'Is Party');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_purchase', 'Is Purchase');
@@ -614,6 +615,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_verifi
 SELECT localization.add_localized_resource('ScrudResource', '', 'quantity', 'Quantity');
 SELECT localization.add_localized_resource('ScrudResource', '', 'rate', 'Rate');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_id', 'Recurrence Type Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_code', 'Recurrence Type Code');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_name', 'Recurrence Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_amount', 'Recurring Amount');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_duration', 'Recurring Duration');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_frequency', 'Recurring Frequency');

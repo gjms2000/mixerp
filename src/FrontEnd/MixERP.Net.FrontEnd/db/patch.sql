@@ -6045,6 +6045,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'is_employee', '
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exempt', 'Is Exempt');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_exemption', 'Is Exemption');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_flat_amount', 'Is Flat Amount');
+SELECT localization.add_localized_resource('ScrudResource', '', 'is_frequency', 'Is Frequency');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_merchant_account', 'Is Merchant Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_party', 'Is Party');
 SELECT localization.add_localized_resource('ScrudResource', '', 'is_purchase', 'Is Purchase');
@@ -6178,6 +6179,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_verifi
 SELECT localization.add_localized_resource('ScrudResource', '', 'quantity', 'Quantity');
 SELECT localization.add_localized_resource('ScrudResource', '', 'rate', 'Rate');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_id', 'Recurrence Type Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_code', 'Recurrence Type Code');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_name', 'Recurrence Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_amount', 'Recurring Amount');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_duration', 'Recurring Duration');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurring_frequency', 'Recurring Frequency');
@@ -6215,7 +6218,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method
 SELECT localization.add_localized_resource('ScrudResource', '', 'rounding_method_name', 'Rounding Method Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_account_id', 'Sales Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_discount_account_id', 'Sales Discount Account Id');
-SELECT localization.add_localized_resource('ScrudResource', '', 'sales_quotation_valid_duration', 'Sales Quotation Valid Duration');SELECT localization.add_localized_resource('ScrudResource', '', 'sales_return_account_id', 'Sales Return Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_quotation_valid_duration', 'Sales Quotation Valid Duration');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_return_account_id', 'Sales Return Account Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax', 'Sales Tax');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_code', 'Sales Tax Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_detail_code', 'Sales Tax Detail Code');
