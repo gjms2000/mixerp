@@ -2276,6 +2276,39 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for This is a required field.
+		/// </summary>
+		public static string RequiredField 
+		{
+			get
+			{
+				return Get("RequiredField");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for The fields marked with asterisk (*) are required.
+		/// </summary>
+		public static string RequiredFieldDetails 
+		{
+			get
+			{
+				return Get("RequiredFieldDetails");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for  *
+		/// </summary>
+		public static string RequiredFieldIndicator 
+		{
+			get
+			{
+				return Get("RequiredFieldIndicator");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Restoring directory : {0}.
 		/// </summary>
 		public static string RestoringDirectory 
@@ -13491,6 +13524,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Request
+		/// </summary>
+		public static string Request 
+		{
+			get
+			{
+				return Get("Request");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for This is a required field.
 		/// </summary>
 		public static string RequiredField 
@@ -13982,6 +14026,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Select");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Select API
+		/// </summary>
+		public static string SelectApi 
+		{
+			get
+			{
+				return Get("SelectApi");
 			}
 		}
 		
@@ -15192,6 +15247,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("UpdateConsole");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Update Exchange Rates
+		/// </summary>
+		public static string UpdatedExchangeRates 
+		{
+			get
+			{
+				return Get("UpdatedExchangeRates");
 			}
 		}
 		

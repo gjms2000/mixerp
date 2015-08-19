@@ -56,7 +56,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
                         RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(radioButtonList,
                             errorCssClass))
                     {
-                        ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, radioButtonList,
+                        ScrudFactoryHelper.AddRow(htmlTable, label + Labels.RequiredFieldIndicator, radioButtonList,
                             required);
                         return;
                     }

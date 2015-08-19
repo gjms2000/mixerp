@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'pt', 'RememberMe', 'Lembre
 SELECT localization.add_localized_resource('Titles', 'pt', 'ReorderLevel', 'Reordenar Nível');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'pt', 'ReorderQuantityAbbreviated', 'Reordenar Quantidade');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'pt', 'ReorderUnitName', 'Nome da Unidade de reabastecimento');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'pt', 'RequiredField', 'Este é um campo obrigatório.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'pt', 'RequiredFieldDetails', 'Os campos marcados com asterisco (*) são obrigatórios.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'pt', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'pt', 'RequiredField', 'Este é um campo obrigatório.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'pt', 'RequiredFieldDetails', 'Os campos marcados com asterisco (*) são obrigatórios.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'pt', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'pt', 'Reset', 'restabelecer');--Reset
 SELECT localization.add_localized_resource('Titles', 'pt', 'RestrictedTransactionMode', 'Este estabelecimento não permite postagem transação.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'pt', 'RetainedEarnings', 'Lucros Acumulados');--Retained Earnings

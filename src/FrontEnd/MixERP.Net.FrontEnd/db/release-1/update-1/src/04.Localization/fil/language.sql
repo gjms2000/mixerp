@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'fil', 'RememberMe', 'Tanda
 SELECT localization.add_localized_resource('Titles', 'fil', 'ReorderLevel', 'Muling mag-order ng Antas');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'fil', 'ReorderQuantityAbbreviated', 'Muling mag-order Dami');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'fil', 'ReorderUnitName', 'Muling mag-order pangalan yunit');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'fil', 'RequiredField', 'Ito ay isang kinakailangang patlang.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'fil', 'RequiredFieldDetails', 'Ang mga patlang na minarkahan ng asterisk (*) ay kinakailangan.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'fil', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'fil', 'RequiredField', 'Ito ay isang kinakailangang patlang.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'fil', 'RequiredFieldDetails', 'Ang mga patlang na minarkahan ng asterisk (*) ay kinakailangan.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'fil', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'fil', 'Reset', 'I-reset ang');--Reset
 SELECT localization.add_localized_resource('Titles', 'fil', 'RestrictedTransactionMode', 'Hindi pinapayagan ng establisimentong ito sa pag-post ng transaksyon.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'fil', 'RetainedEarnings', 'Napanatiling Mga Kita');--Retained Earnings

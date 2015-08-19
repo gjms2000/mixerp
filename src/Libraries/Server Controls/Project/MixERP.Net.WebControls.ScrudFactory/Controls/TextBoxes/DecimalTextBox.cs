@@ -53,7 +53,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes
                     {
                         RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(textBox,
                             errorCssClass);
-                        ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, textBox, validator,
+                        ScrudFactoryHelper.AddRow(htmlTable, label + Labels.RequiredFieldIndicator, textBox, validator,
                             required);
                         return;
                     }

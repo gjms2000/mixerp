@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'nl', 'RememberMe', 'Onthou
 SELECT localization.add_localized_resource('Titles', 'nl', 'ReorderLevel', 'Re orde Niveau');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'nl', 'ReorderQuantityAbbreviated', 'Re ordehoeveelheid');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'nl', 'ReorderUnitName', 'Naam Reorder Unit');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'nl', 'RequiredField', 'Dit is een verplicht veld.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'nl', 'RequiredFieldDetails', 'De velden met een asterisk (*) zijn verplicht.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'nl', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'nl', 'RequiredField', 'Dit is een verplicht veld.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'nl', 'RequiredFieldDetails', 'De velden met een asterisk (*) zijn verplicht.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'nl', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'nl', 'Reset', 'resetten');--Reset
 SELECT localization.add_localized_resource('Titles', 'nl', 'RestrictedTransactionMode', 'Dit etablissement staat niet toe dat de transactie posting.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'nl', 'RetainedEarnings', 'ingehouden winsten');--Retained Earnings

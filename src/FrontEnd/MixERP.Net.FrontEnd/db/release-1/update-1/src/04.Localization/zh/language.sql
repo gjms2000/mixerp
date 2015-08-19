@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'zh', 'RememberMe', '记得
 SELECT localization.add_localized_resource('Titles', 'zh', 'ReorderLevel', '重新排序级别');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'zh', 'ReorderQuantityAbbreviated', '再订购数量');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'zh', 'ReorderUnitName', '重新排序单位名称');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'zh', 'RequiredField', '这是一个必填字段。');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'zh', 'RequiredFieldDetails', '标有星号（*）的字段是必需的。');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'zh', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'zh', 'RequiredField', '这是一个必填字段。');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'zh', 'RequiredFieldDetails', '标有星号（*）的字段是必需的。');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'zh', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'zh', 'Reset', '重置');--Reset
 SELECT localization.add_localized_resource('Titles', 'zh', 'RestrictedTransactionMode', '这个成立不允许交易张贴。');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'zh', 'RetainedEarnings', '留存收益');--Retained Earnings

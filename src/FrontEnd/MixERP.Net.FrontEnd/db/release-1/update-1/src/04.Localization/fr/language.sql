@@ -1221,9 +1221,9 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderLevel', 'Réorganiser Niveau');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderQuantityAbbreviated', 'Réorganiser Quantité');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderUnitName', 'Nom Réorganiser Unité');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredField', 'Ce est un champ obligatoire.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredFieldDetails', 'Les champs marqués d''un astérisque (*) sont obligatoires.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredFieldIndicator', ' *');-- *
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredField', 'Ce est un champ obligatoire.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldDetails', 'Les champs marqués d''un astérisque (*) sont obligatoires.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Reset', 'Réinitialiser');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RestoringDirectories', 'Restauration Annuaires');--Restoring Directories
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RestoringMigrationFiles', 'Restauration de fichiers Migration');--Restoring Migration Files

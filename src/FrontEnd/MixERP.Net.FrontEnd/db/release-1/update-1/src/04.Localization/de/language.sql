@@ -1206,9 +1206,9 @@ SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReorderLevel', 'Mindestbestand');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReorderQuantityAbbreviated', 'Nachbestellung Menge');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'ReorderUnitName', 'Nachbestellungs Einheit Name');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RequiredField', 'Dies ist ein Pflichtfeld.');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RequiredFieldDetails', 'Die mit Stern (*) gekennzeichneten Felder sind Pflichtfelder.');
-SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RequiredFieldIndicator', '*');
+SELECT * FROM localization.add_localized_resource('Labels', 'de', 'RequiredField', 'Dies ist ein Pflichtfeld.');
+SELECT * FROM localization.add_localized_resource('Labels', 'de', 'RequiredFieldDetails', 'Die mit Stern (*) gekennzeichneten Felder sind Pflichtfelder.');
+SELECT * FROM localization.add_localized_resource('Labels', 'de', 'RequiredFieldIndicator', '*');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'Reset', 'Reset');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RestoringDirectories', 'Directories wiederherstellen');
 SELECT * FROM localization.add_localized_resource('Titles', 'de', 'RestoringMigrationFiles', 'Migrations Files wiederherstellen');

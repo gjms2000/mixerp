@@ -203,6 +203,9 @@ SELECT localization.add_localized_resource('Labels', '', 'PercentageSymbol', '%'
 SELECT localization.add_localized_resource('Labels', '', 'PleaseSelectAFormFirst', 'Please select a form first.');
 SELECT localization.add_localized_resource('Labels', '', 'ReceiptEmailSubject', 'Receipt #{0} notification, {1}');--Receipt #777 confirmation, waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'ReleaseContainsNoUpdates', 'This release does not contain any update.');
+SELECT localization.add_localized_resource('Labels', '', 'RequiredField', 'This is a required field.');
+SELECT localization.add_localized_resource('Labels', '', 'RequiredFieldDetails', 'The fields marked with asterisk (*) are required.');
+SELECT localization.add_localized_resource('Labels', '', 'RequiredFieldIndicator', ' *');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringDirectory', 'Restoring directory : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'RestoringFile', 'Restoring file : {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SalesDeliveryEmailSubject', 'Sales delivery #{0} confirmation, {1}');--Sales delivery #777 confirmation, waltbishop trading inc.
@@ -1219,9 +1222,7 @@ SELECT localization.add_localized_resource('Titles', '', 'RemovingApplication', 
 SELECT localization.add_localized_resource('Titles', '', 'ReorderLevel', 'Reorder Level');
 SELECT localization.add_localized_resource('Titles', '', 'ReorderQuantityAbbreviated', 'Reorder Qty');
 SELECT localization.add_localized_resource('Titles', '', 'ReorderUnitName', 'Reorder Unit Name');
-SELECT localization.add_localized_resource('Titles', '', 'RequiredField', 'This is a required field.');
-SELECT localization.add_localized_resource('Titles', '', 'RequiredFieldDetails', 'The fields marked with asterisk (*) are required.');
-SELECT localization.add_localized_resource('Titles', '', 'RequiredFieldIndicator', ' *');
+SELECT localization.add_localized_resource('Titles', '', 'Request', 'Request');
 SELECT localization.add_localized_resource('Titles', '', 'Reset', 'Reset');
 SELECT localization.add_localized_resource('Titles', '', 'RestoringDirectories', 'Restoring Directories');
 SELECT localization.add_localized_resource('Titles', '', 'RestoringMigrationFiles', 'Restoring Migration Files');
@@ -1263,6 +1264,7 @@ SELECT localization.add_localized_resource('Titles', '', 'Saving', 'Saving');
 SELECT localization.add_localized_resource('Titles', '', 'ScrudFactoryParameters', 'ScrudFactory Parameters');
 SELECT localization.add_localized_resource('Titles', '', 'Search', 'Search');
 SELECT localization.add_localized_resource('Titles', '', 'Select', 'Select');
+SELECT localization.add_localized_resource('Titles', '', 'SelectApi', 'Select API');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCompany', 'Select Company');
 SELECT localization.add_localized_resource('Titles', '', 'SelectCustomer', 'Select Customer');
 SELECT localization.add_localized_resource('Titles', '', 'SelectExpensesGL', 'Select Expenses GL');
@@ -1376,6 +1378,7 @@ SELECT localization.add_localized_resource('Titles', '', 'UnitsOfMeasure', 'Unit
 SELECT localization.add_localized_resource('Titles', '', 'UnknownError', 'Operation failed due to an unknown error.');
 SELECT localization.add_localized_resource('Titles', '', 'Update', 'Update');
 SELECT localization.add_localized_resource('Titles', '', 'UpdatedOn', 'Updated On');
+SELECT localization.add_localized_resource('Titles', '', 'UpdatedExchangeRates', 'Update Exchange Rates');
 SELECT localization.add_localized_resource('Titles', '', 'UpdateConsole', 'Update Console');
 SELECT localization.add_localized_resource('Titles', '', 'Upload', 'Upload');
 SELECT localization.add_localized_resource('Titles', '', 'UploadLogo', 'Upload Logo');

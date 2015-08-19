@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'ms', 'RememberMe', 'Ingatk
 SELECT localization.add_localized_resource('Titles', 'ms', 'ReorderLevel', 'pesanan semula Aras');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'ms', 'ReorderQuantityAbbreviated', 'Kuantiti pesanan semula');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'ms', 'ReorderUnitName', 'Nama Unit pesanan semula');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'ms', 'RequiredField', 'Ini adalah medan yang diperlukan.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'ms', 'RequiredFieldDetails', 'Bahagian yang bertanda dengan asterisk (*) adalah diperlukan.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'ms', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'ms', 'RequiredField', 'Ini adalah medan yang diperlukan.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'ms', 'RequiredFieldDetails', 'Bahagian yang bertanda dengan asterisk (*) adalah diperlukan.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'ms', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'ms', 'Reset', 'Set semula');--Reset
 SELECT localization.add_localized_resource('Titles', 'ms', 'RestrictedTransactionMode', 'Pertubuhan ini tidak membenarkan urus niaga dicatatkan.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'ms', 'RetainedEarnings', 'Pendapatan tertahan');--Retained Earnings

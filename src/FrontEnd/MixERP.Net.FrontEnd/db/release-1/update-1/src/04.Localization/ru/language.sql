@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'ru', 'RememberMe', 'Зап
 SELECT localization.add_localized_resource('Titles', 'ru', 'ReorderLevel', 'Изменить порядок Уровень');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'ru', 'ReorderQuantityAbbreviated', 'количество повторного заказа');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'ru', 'ReorderUnitName', 'Имя Изменить порядок Раздел');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'ru', 'RequiredField', 'Это обязательное поле.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'ru', 'RequiredFieldDetails', 'Поля, отмеченные звездочкой (*) обязательны для заполнения.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'ru', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'ru', 'RequiredField', 'Это обязательное поле.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'ru', 'RequiredFieldDetails', 'Поля, отмеченные звездочкой (*) обязательны для заполнения.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'ru', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'ru', 'Reset', 'сброс');--Reset
 SELECT localization.add_localized_resource('Titles', 'ru', 'RestrictedTransactionMode', 'Это учреждение не позволяет объявление транзакций.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'ru', 'RetainedEarnings', 'Нераспределенная Прибыль');--Retained Earnings

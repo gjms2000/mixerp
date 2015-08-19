@@ -1238,9 +1238,9 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderLevel', 'مستوي اعادة الطلب');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderQuantityAbbreviated', 'كمية اعادة الطلب');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderUnitName', 'اسم وحدة إعادة الطلب');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldIndicator', ' *');-- *
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Reset', 'إعادة تعيين');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringDirectories', 'استعادة الملفات');--Restoring Directories
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringMigrationFiles', 'استعادة الملفات المحدثة');--Restoring Migration Files

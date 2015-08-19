@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'sv', 'RememberMe', 'Kom ih
 SELECT localization.add_localized_resource('Titles', 'sv', 'ReorderLevel', 'Ändra ordning Nivå');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'sv', 'ReorderQuantityAbbreviated', 'Beställnings Kvantitet');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'sv', 'ReorderUnitName', 'Ändra ordning Enhet Namn');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'sv', 'RequiredField', 'Detta är ett obligatoriskt fält.');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'sv', 'RequiredFieldDetails', 'Fält markerade med asterisk (*) är obligatoriska.');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'sv', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'sv', 'RequiredField', 'Detta är ett obligatoriskt fält.');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'sv', 'RequiredFieldDetails', 'Fält markerade med asterisk (*) är obligatoriska.');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'sv', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'sv', 'Reset', 'Återställ');--Reset
 SELECT localization.add_localized_resource('Titles', 'sv', 'RestrictedTransactionMode', 'Denna anläggning tillåter inte transaktions utstationering.');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'sv', 'RetainedEarnings', 'Balanserade Resultat');--Retained Earnings

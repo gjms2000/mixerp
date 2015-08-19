@@ -220,7 +220,7 @@ namespace MixERP.Net.Entities.Policy
     }
 
     [TableName("policy.auto_verification_policy")]
-    [PrimaryKey("office_id", autoIncrement=false)]
+    [PrimaryKey("user_id", autoIncrement=false)]
     [ExplicitColumns]
     public class AutoVerificationPolicy : PetaPocoDB.Record<AutoVerificationPolicy> , IPoco
     {

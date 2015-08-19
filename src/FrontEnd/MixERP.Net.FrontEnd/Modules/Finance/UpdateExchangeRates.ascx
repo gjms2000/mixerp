@@ -18,6 +18,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="UpdateExchangeRates.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.UpdateExchangeRates" %>
+<%@ Import Namespace="MixERP.Net.i18n.Resources" %>
 <style type="text/css">
     #ExchangeRatesGridView th:nth-child(5) {
         width: 125px;
@@ -27,53 +28,56 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
         width: 250px;
     }
 </style>
-<h1>Update Exchange Rates</h1>
+<h1>
+    <%=Titles.UpdatedExchangeRates %>
+</h1>
 <div class="ui divider"></div>
 
 <div class="ui form">
     <div class="fields">
         <div class="field">
             <label for="OfficeInputText">
-                Office
+                <%=Titles.Office %>
             </label>
             <input type="text" id="OfficeInputText" readonly="readonly" runat="server" />
         </div>
         <div class="field">
             <label for="CurrencyInputText">
-                Base Currency
+                <%=Titles.BaseCurrency %>
             </label>
             <input type="text" id="CurrencyInputText" readonly="readonly" runat="server" />
         </div>
 
         <div class="field">
             <label for="OfficeInputText">
-                Select API
+                <%=Titles.SelectApi %>
             </label>
             <select id="ModuleSelect" class="ui dropdown"></select>
         </div>
         <div class="field">
-            <label for="RequestButton">Request</label>
-            <input type="button" id="RequestButton" value="Request" class="ui pink button" />
+            <label for="RequestButton">
+                &nbsp;
+            </label>
+            <input type="button" id="RequestButton" value="<%=Titles.Request %>" class="ui pink button" />
         </div>
-
     </div>
 </div>
 
 <table class="ui very compact small striped collapsing table" id="ExchangeRatesGridView">
     <thead>
         <tr>
-            <th>Currency Code</th>
-            <th>Currency Symbol</th>
-            <th>Currency Name</th>
-            <th>Hundredth Name</th>
-            <th>Exchange Rate</th>
-            <th>Description</th>
+            <th><%=Titles.CurrencyCode %></th>
+            <th><%=Titles.CurrencySymbol %></th>
+            <th><%=Titles.CurrencyName %></th>
+            <th><%=Titles.HundredthName %></th>
+            <th><%=Titles.ExchangeRate %></th>
+            <th><%=Titles.Description %></th>
         </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
 
-<input type="button" id="SaveButton" value="Save" class="ui green button" />
+<input type="button" id="SaveButton" value="<%=Titles.Save %>" class="ui green button" />
 
 <script src="Scripts/UpdateExchangeRates.js"></script>

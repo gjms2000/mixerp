@@ -1201,6 +1201,18 @@ namespace MixERP.Net.Entities.Office
 
     }
 
+    [FunctionName("can_login")]
+    [ExplicitColumns]
+    public class DbCanLoginResult : PetaPocoDB.Record<DbCanLoginResult> , IPoco
+    {
+        [Column("result")] 
+        public bool Result { get; set; }
+
+        [Column("message")] 
+        public string Message { get; set; }
+
+    }
+
     [FunctionName("get_offices")]
     [ExplicitColumns]
     public class DbGetOfficesResult : PetaPocoDB.Record<DbGetOfficesResult> , IPoco
@@ -1225,18 +1237,6 @@ namespace MixERP.Net.Entities.Office
     {
         [Column("login_id")] 
         public long LoginId { get; set; }
-
-        [Column("message")] 
-        public string Message { get; set; }
-
-    }
-
-    [FunctionName("can_login")]
-    [ExplicitColumns]
-    public class DbCanLoginResult : PetaPocoDB.Record<DbCanLoginResult> , IPoco
-    {
-        [Column("result")] 
-        public bool Result { get; set; }
 
         [Column("message")] 
         public string Message { get; set; }

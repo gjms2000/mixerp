@@ -980,9 +980,9 @@ SELECT localization.add_localized_resource('Titles', 'ja', 'RememberMe', '私を
 SELECT localization.add_localized_resource('Titles', 'ja', 'ReorderLevel', '再注文レベル');--Reorder Level
 SELECT localization.add_localized_resource('Titles', 'ja', 'ReorderQuantityAbbreviated', '再注文数量');--Reorder Qty
 SELECT localization.add_localized_resource('Titles', 'ja', 'ReorderUnitName', '再注文単位名');--Reorder Unit Name
-SELECT localization.add_localized_resource('Titles', 'ja', 'RequiredField', 'これは、必須フィールドです。');--This is a required field.
-SELECT localization.add_localized_resource('Titles', 'ja', 'RequiredFieldDetails', 'アスタリスク（*）の付いたフィールドは必須です。');--The fields marked with asterisk (*) are required.
-SELECT localization.add_localized_resource('Titles', 'ja', 'RequiredFieldIndicator', '*');-- *
+SELECT localization.add_localized_resource('Labels', 'ja', 'RequiredField', 'これは、必須フィールドです。');--This is a required field.
+SELECT localization.add_localized_resource('Labels', 'ja', 'RequiredFieldDetails', 'アスタリスク（*）の付いたフィールドは必須です。');--The fields marked with asterisk (*) are required.
+SELECT localization.add_localized_resource('Labels', 'ja', 'RequiredFieldIndicator', '*');-- *
 SELECT localization.add_localized_resource('Titles', 'ja', 'Reset', 'リセット');--Reset
 SELECT localization.add_localized_resource('Titles', 'ja', 'RestrictedTransactionMode', '彼の設立は、取引の投稿を許可していません。');--Restricted Transaction Mode
 SELECT localization.add_localized_resource('Titles', 'ja', 'RetainedEarnings', '留保所得');--Retained Earnings

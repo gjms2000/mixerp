@@ -45,7 +45,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
             if (!isNullable)
             {
                 RequiredFieldValidator required = ScrudFactoryHelper.GetRequiredFieldValidator(fileUpload, errorCssClass);
-                ScrudFactoryHelper.AddRow(htmlTable, label + Titles.RequiredFieldIndicator, fileUpload, required,
+                ScrudFactoryHelper.AddRow(htmlTable, label + Labels.RequiredFieldIndicator, fileUpload, required,
                     validator);
                 return;
             }

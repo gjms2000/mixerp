@@ -242,7 +242,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
             using (RequiredFieldValidator validator = new RequiredFieldValidator())
             {
                 validator.ID = controlToValidate.ID + "RequiredValidator";
-                validator.ErrorMessage = @"<br/>" + Titles.RequiredField;
+                validator.ErrorMessage = @"<br/>" + Labels.RequiredField;
                 validator.CssClass = cssClass;
                 validator.ControlToValidate = controlToValidate.ID;
                 validator.EnableClientScript = true;

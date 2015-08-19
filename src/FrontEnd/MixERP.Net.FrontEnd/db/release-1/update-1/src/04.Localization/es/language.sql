@@ -985,9 +985,9 @@ SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RememberMe', 
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'ReorderLevel', 'Nivel de Reabastecimiento');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'ReorderQuantityAbbreviated', 'Reordenar Cantidad');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'ReorderUnitName', 'Nombre Unidad Reordenar');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RequiredField', 'Este es un campo obligatorio.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RequiredFieldDetails', 'Los campos marcados con asterisco (*) son obligatorios.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RequiredFieldIndicator', '*');-- *
+SELECT * FROM localization.add_localized_resource('Labels', 'es', 'RequiredField', 'Este es un campo obligatorio.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'es', 'RequiredFieldDetails', 'Los campos marcados con asterisco (*) son obligatorios.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'es', 'RequiredFieldIndicator', '*');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'Reset', 'reajustar');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RestrictedTransactionMode', 'Este establecimiento no permite la publicación de transacciones.');--Restricted Transaction Mode
 SELECT * FROM localization.add_localized_resource('Titles', 'es', 'RetainedEarnings', 'ganancias Retenidas');--Retained Earnings
