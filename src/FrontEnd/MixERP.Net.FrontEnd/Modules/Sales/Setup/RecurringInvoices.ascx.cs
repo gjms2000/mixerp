@@ -68,8 +68,7 @@ namespace MixERP.Net.Core.Modules.Sales.Setup
         private static string GetDisplayViews()
         {
             List<string> displayViews = new List<string>();
-            ScrudHelper.AddDisplayView(displayViews, "core.recurrence_types.recurrence_type_id", "core.recurrence_types");
-                //Todo:Change to scrud view
+            ScrudHelper.AddDisplayView(displayViews, "core.recurrence_types.recurrence_type_id", "core.recurrence_type_scrud_view");            
             ScrudHelper.AddDisplayView(displayViews, "core.frequencies.frequency_id", "core.frequencies");
             ScrudHelper.AddDisplayView(displayViews, "core.items.item_id", "core.item_scrud_view");
             ScrudHelper.AddDisplayView(displayViews, "core.payment_terms.payment_term_id",
