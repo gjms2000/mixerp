@@ -1066,7 +1066,7 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
         selected = false;
 
         if (selectedValue) {
-            if (this[dataValueField] === selectedValue) {
+            if (this[dataValueField].toString() === selectedValue.toString()) {
                 selected = true;
             };
         };
@@ -1079,7 +1079,7 @@ var appendItem = function (dropDownList, value, text, selected) {
     option.val(value).html(text).trigger('change');
 
     if (selected) {
-        option.prop("selected", true);
+        option.attr("selected", true);
     };
 
     dropDownList.append(option);

@@ -9,6 +9,294 @@ using System.Web;
 namespace MixERP.Net.Entities.Transactions
 {
 
+    [TableName("transactions.party_item_chart_view")]
+    [ExplicitColumns]
+    public class PartyItemChartView : PetaPocoDB.Record<PartyItemChartView> , IPoco
+    {
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("total")] 
+        public decimal? Total { get; set; }
+
+    }
+
+    [TableName("transactions.party_purchase_chart_view")]
+    [ExplicitColumns]
+    public class PartyPurchaseChartView : PetaPocoDB.Record<PartyPurchaseChartView> , IPoco
+    {
+        [Column("row_number")] 
+        public long? RowNumber { get; set; }
+
+        [Column("transaction_master_id")] 
+        public long? TransactionMasterId { get; set; }
+
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("amount")] 
+        public decimal? Amount { get; set; }
+
+    }
+
+    [TableName("transactions.party_sales_chart_view")]
+    [ExplicitColumns]
+    public class PartySalesChartView : PetaPocoDB.Record<PartySalesChartView> , IPoco
+    {
+        [Column("row_number")] 
+        public long? RowNumber { get; set; }
+
+        [Column("transaction_master_id")] 
+        public long? TransactionMasterId { get; set; }
+
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("amount")] 
+        public decimal? Amount { get; set; }
+
+    }
+
+    [TableName("transactions.receipt_view")]
+    [ExplicitColumns]
+    public class ReceiptView : PetaPocoDB.Record<ReceiptView> , IPoco
+    {
+        [Column("tran_id")] 
+        public long? TranId { get; set; }
+
+        [Column("office_id")] 
+        public int? OfficeId { get; set; }
+
+        [Column("office_code")] 
+        public string OfficeCode { get; set; }
+
+        [Column("transaction_master_id")] 
+        public long? TransactionMasterId { get; set; }
+
+        [Column("transaction_code")] 
+        public string TransactionCode { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime? TransactionTs { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("entered_by")] 
+        public string EnteredBy { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("status")] 
+        public string Status { get; set; }
+
+        [Column("verification_reason")] 
+        public string VerificationReason { get; set; }
+
+        [Column("verified_by")] 
+        public string VerifiedBy { get; set; }
+
+        [Column("customer_id")] 
+        public long? CustomerId { get; set; }
+
+        [Column("customer_code")] 
+        public string CustomerCode { get; set; }
+
+        [Column("customer_name")] 
+        public string CustomerName { get; set; }
+
+        [Column("address")] 
+        public string Address { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("amount")] 
+        public decimal? Amount { get; set; }
+
+        [Column("er_debit")] 
+        public decimal? ErDebit { get; set; }
+
+        [Column("home_currency_code")] 
+        public string HomeCurrencyCode { get; set; }
+
+        [Column("amount_in_home_currency")] 
+        public decimal? AmountInHomeCurrency { get; set; }
+
+        [Column("er_credit")] 
+        public decimal? ErCredit { get; set; }
+
+        [Column("base_currency_code")] 
+        public string BaseCurrencyCode { get; set; }
+
+        [Column("amount_in_base_currency")] 
+        public decimal? AmountInBaseCurrency { get; set; }
+
+    }
+
+    [TableName("transactions.sales_delivery_view")]
+    [ExplicitColumns]
+    public class SalesDeliveryView : PetaPocoDB.Record<SalesDeliveryView> , IPoco
+    {
+        [Column("tran_id")] 
+        public long? TranId { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime? TransactionTs { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("entered_by")] 
+        public string EnteredBy { get; set; }
+
+        [Column("status")] 
+        public string Status { get; set; }
+
+        [Column("due_date")] 
+        public DateTime? DueDate { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("customer_code")] 
+        public string CustomerCode { get; set; }
+
+        [Column("customer_name")] 
+        public string CustomerName { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("store_name")] 
+        public string StoreName { get; set; }
+
+        [Column("shipping_address")] 
+        public string ShippingAddress { get; set; }
+
+        [Column("shipper_name")] 
+        public string ShipperName { get; set; }
+
+        [Column("shipping_charge")] 
+        public decimal? ShippingCharge { get; set; }
+
+        [Column("invoice_amount")] 
+        public decimal? InvoiceAmount { get; set; }
+
+    }
+
+    [TableName("transactions.sales_order_view")]
+    [ExplicitColumns]
+    public class SalesOrderView : PetaPocoDB.Record<SalesOrderView> , IPoco
+    {
+        [Column("non_gl_stock_master_id")] 
+        public long? NonGlStockMasterId { get; set; }
+
+        [Column("tran_id")] 
+        public long? TranId { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime? TransactionTs { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("quotation_valid_duration")] 
+        public int? QuotationValidDuration { get; set; }
+
+        [Column("entered_by")] 
+        public string EnteredBy { get; set; }
+
+        [Column("office_name")] 
+        public string OfficeName { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("customer_name")] 
+        public string CustomerName { get; set; }
+
+        [Column("price_type_name")] 
+        public string PriceTypeName { get; set; }
+
+    }
+
+    [TableName("transactions.sales_quotation_view")]
+    [ExplicitColumns]
+    public class SalesQuotationView : PetaPocoDB.Record<SalesQuotationView> , IPoco
+    {
+        [Column("non_gl_stock_master_id")] 
+        public long? NonGlStockMasterId { get; set; }
+
+        [Column("tran_id")] 
+        public long? TranId { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime? TransactionTs { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("quotation_valid_duration")] 
+        public int? QuotationValidDuration { get; set; }
+
+        [Column("entered_by")] 
+        public string EnteredBy { get; set; }
+
+        [Column("office_name")] 
+        public string OfficeName { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("customer_name")] 
+        public string CustomerName { get; set; }
+
+        [Column("price_type_name")] 
+        public string PriceTypeName { get; set; }
+
+    }
+
     [TableName("transactions.customer_receipts")]
     [PrimaryKey("receipt_id")]
     [ExplicitColumns]
@@ -514,6 +802,7 @@ namespace MixERP.Net.Entities.Transactions
     }
 
     [TableName("transactions.late_fee")]
+    [PrimaryKey("transaction_master_id", autoIncrement=false)]
     [ExplicitColumns]
     public class LateFee : PetaPocoDB.Record<LateFee> , IPoco
     {
@@ -1190,447 +1479,24 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [TableName("transactions.party_item_chart_view")]
+    [FunctionName("get_pl_appropriation_data")]
     [ExplicitColumns]
-    public class PartyItemChartView : PetaPocoDB.Record<PartyItemChartView> , IPoco
+    public class DbGetPlAppropriationDataResult : PetaPocoDB.Record<DbGetPlAppropriationDataResult> , IPoco
     {
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("total")] 
-        public decimal? Total { get; set; }
-
-    }
-
-    [TableName("transactions.party_purchase_chart_view")]
-    [ExplicitColumns]
-    public class PartyPurchaseChartView : PetaPocoDB.Record<PartyPurchaseChartView> , IPoco
-    {
-        [Column("row_number")] 
-        public long? RowNumber { get; set; }
-
-        [Column("transaction_master_id")] 
-        public long? TransactionMasterId { get; set; }
-
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("book")] 
-        public string Book { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("amount")] 
-        public decimal? Amount { get; set; }
-
-    }
-
-    [TableName("transactions.party_sales_chart_view")]
-    [ExplicitColumns]
-    public class PartySalesChartView : PetaPocoDB.Record<PartySalesChartView> , IPoco
-    {
-        [Column("row_number")] 
-        public long? RowNumber { get; set; }
-
-        [Column("transaction_master_id")] 
-        public long? TransactionMasterId { get; set; }
-
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("book")] 
-        public string Book { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("amount")] 
-        public decimal? Amount { get; set; }
-
-    }
-
-    [TableName("transactions.receipt_view")]
-    [ExplicitColumns]
-    public class ReceiptView : PetaPocoDB.Record<ReceiptView> , IPoco
-    {
-        [Column("tran_id")] 
-        public long? TranId { get; set; }
-
-        [Column("office_id")] 
-        public int? OfficeId { get; set; }
-
-        [Column("office_code")] 
-        public string OfficeCode { get; set; }
-
-        [Column("transaction_master_id")] 
-        public long? TransactionMasterId { get; set; }
-
-        [Column("transaction_code")] 
-        public string TransactionCode { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime? TransactionTs { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("entered_by")] 
-        public string EnteredBy { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("status")] 
-        public string Status { get; set; }
-
-        [Column("verification_reason")] 
-        public string VerificationReason { get; set; }
-
-        [Column("verified_by")] 
-        public string VerifiedBy { get; set; }
-
-        [Column("customer_id")] 
-        public long? CustomerId { get; set; }
-
-        [Column("customer_code")] 
-        public string CustomerCode { get; set; }
-
-        [Column("customer_name")] 
-        public string CustomerName { get; set; }
-
-        [Column("address")] 
-        public string Address { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("amount")] 
-        public decimal? Amount { get; set; }
-
-        [Column("er_debit")] 
-        public decimal? ErDebit { get; set; }
-
-        [Column("home_currency_code")] 
-        public string HomeCurrencyCode { get; set; }
-
-        [Column("amount_in_home_currency")] 
-        public decimal? AmountInHomeCurrency { get; set; }
-
-        [Column("er_credit")] 
-        public decimal? ErCredit { get; set; }
-
-        [Column("base_currency_code")] 
-        public string BaseCurrencyCode { get; set; }
-
-        [Column("amount_in_base_currency")] 
-        public decimal? AmountInBaseCurrency { get; set; }
-
-    }
-
-    [TableName("transactions.sales_delivery_view")]
-    [ExplicitColumns]
-    public class SalesDeliveryView : PetaPocoDB.Record<SalesDeliveryView> , IPoco
-    {
-        [Column("tran_id")] 
-        public long? TranId { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime? TransactionTs { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("entered_by")] 
-        public string EnteredBy { get; set; }
-
-        [Column("status")] 
-        public string Status { get; set; }
-
-        [Column("due_date")] 
-        public DateTime? DueDate { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("customer_code")] 
-        public string CustomerCode { get; set; }
-
-        [Column("customer_name")] 
-        public string CustomerName { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("store_name")] 
-        public string StoreName { get; set; }
-
-        [Column("shipping_address")] 
-        public string ShippingAddress { get; set; }
-
-        [Column("shipper_name")] 
-        public string ShipperName { get; set; }
-
-        [Column("shipping_charge")] 
-        public decimal? ShippingCharge { get; set; }
-
-        [Column("invoice_amount")] 
-        public decimal? InvoiceAmount { get; set; }
-
-    }
-
-    [TableName("transactions.sales_order_view")]
-    [ExplicitColumns]
-    public class SalesOrderView : PetaPocoDB.Record<SalesOrderView> , IPoco
-    {
-        [Column("non_gl_stock_master_id")] 
-        public long? NonGlStockMasterId { get; set; }
-
-        [Column("tran_id")] 
-        public long? TranId { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime? TransactionTs { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("quotation_valid_duration")] 
-        public int? QuotationValidDuration { get; set; }
-
-        [Column("entered_by")] 
-        public string EnteredBy { get; set; }
-
-        [Column("office_name")] 
-        public string OfficeName { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("customer_name")] 
-        public string CustomerName { get; set; }
-
-        [Column("price_type_name")] 
-        public string PriceTypeName { get; set; }
-
-    }
-
-    [TableName("transactions.sales_quotation_view")]
-    [ExplicitColumns]
-    public class SalesQuotationView : PetaPocoDB.Record<SalesQuotationView> , IPoco
-    {
-        [Column("non_gl_stock_master_id")] 
-        public long? NonGlStockMasterId { get; set; }
-
-        [Column("tran_id")] 
-        public long? TranId { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime? TransactionTs { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("quotation_valid_duration")] 
-        public int? QuotationValidDuration { get; set; }
-
-        [Column("entered_by")] 
-        public string EnteredBy { get; set; }
-
-        [Column("office_name")] 
-        public string OfficeName { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("customer_name")] 
-        public string CustomerName { get; set; }
-
-        [Column("price_type_name")] 
-        public string PriceTypeName { get; set; }
-
-    }
-
-    [FunctionName("get_top_selling_products_by_office")]
-    [ExplicitColumns]
-    public class DbGetTopSellingProductsByOfficeResult : PetaPocoDB.Record<DbGetTopSellingProductsByOfficeResult> , IPoco
-    {
-        [Column("id")] 
-        public int Id { get; set; }
-
-        [Column("office_id")] 
-        public int OfficeId { get; set; }
-
-        [Column("office_code")] 
-        public string OfficeCode { get; set; }
-
-        [Column("office_name")] 
-        public string OfficeName { get; set; }
-
-        [Column("item_id")] 
-        public int ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("total_sales")] 
-        public decimal TotalSales { get; set; }
-
-    }
-
-    [FunctionName("get_inventory_transfer_request_view")]
-    [ExplicitColumns]
-    public class DbGetInventoryTransferRequestViewResult : PetaPocoDB.Record<DbGetInventoryTransferRequestViewResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("value_date")] 
-        public DateTime ValueDate { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("user_name")] 
-        public string UserName { get; set; }
-
-        [Column("store")] 
-        public string Store { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("authorized")] 
-        public string Authorized { get; set; }
-
-        [Column("delivered")] 
-        public string Delivered { get; set; }
-
-        [Column("received")] 
-        public string Received { get; set; }
-
-        [Column("flag_background_color")] 
-        public string FlagBackgroundColor { get; set; }
-
-        [Column("flag_foreground_color")] 
-        public string FlagForegroundColor { get; set; }
-
-    }
-
-    [FunctionName("get_receipt_view")]
-    [ExplicitColumns]
-    public class DbGetReceiptViewResult : PetaPocoDB.Record<DbGetReceiptViewResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("value_date")] 
-        public DateTime ValueDate { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("party")] 
-        public string Party { get; set; }
-
-        [Column("user")] 
-        public string User { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("amount")] 
-        public decimal Amount { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime TransactionTs { get; set; }
-
-        [Column("flag_background_color")] 
-        public string FlagBackgroundColor { get; set; }
-
-        [Column("flag_foreground_color")] 
-        public string FlagForegroundColor { get; set; }
-
-    }
-
-    [FunctionName("get_balance_sheet")]
-    [ExplicitColumns]
-    public class DbGetBalanceSheetResult : PetaPocoDB.Record<DbGetBalanceSheetResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("item")] 
-        public string Item { get; set; }
-
-        [Column("previous_period")] 
-        public decimal PreviousPeriod { get; set; }
-
-        [Column("current_period")] 
-        public decimal CurrentPeriod { get; set; }
-
         [Column("account_id")] 
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
 
         [Column("account_number")] 
         public string AccountNumber { get; set; }
 
-        [Column("is_retained_earning")] 
-        public bool IsRetainedEarning { get; set; }
+        [Column("account_name")] 
+        public string AccountName { get; set; }
 
-    }
+        [Column("debit")] 
+        public decimal Debit { get; set; }
 
-    [FunctionName("get_eoy_profit_summary")]
-    [ExplicitColumns]
-    public class DbGetEoyProfitSummaryResult : PetaPocoDB.Record<DbGetEoyProfitSummaryResult> , IPoco
-    {
-        [Column("profit_before_tax")] 
-        public decimal ProfitBeforeTax { get; set; }
-
-        [Column("tax_rate")] 
-        public decimal TaxRate { get; set; }
-
-        [Column("tax")] 
-        public decimal Tax { get; set; }
+        [Column("credit")] 
+        public decimal Credit { get; set; }
 
     }
 
@@ -1679,126 +1545,9 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [FunctionName("get_top_selling_products_of_all_time")]
+    [FunctionName("get_trial_balance")]
     [ExplicitColumns]
-    public class DbGetTopSellingProductsOfAllTimeResult : PetaPocoDB.Record<DbGetTopSellingProductsOfAllTimeResult> , IPoco
-    {
-        [Column("id")] 
-        public int Id { get; set; }
-
-        [Column("item_id")] 
-        public int ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("total_sales")] 
-        public decimal TotalSales { get; set; }
-
-    }
-
-    [FunctionName("get_salesperson_report")]
-    [ExplicitColumns]
-    public class DbGetSalespersonReportResult : PetaPocoDB.Record<DbGetSalespersonReportResult> , IPoco
-    {
-        [Column("id")] 
-        public int Id { get; set; }
-
-        [Column("salesperson_id")] 
-        public int SalespersonId { get; set; }
-
-        [Column("salesperson_name")] 
-        public string SalespersonName { get; set; }
-
-        [Column("total_sales")] 
-        public decimal TotalSales { get; set; }
-
-    }
-
-    [FunctionName("get_total_sales_by_office")]
-    [ExplicitColumns]
-    public class DbGetTotalSalesByOfficeResult : PetaPocoDB.Record<DbGetTotalSalesByOfficeResult> , IPoco
-    {
-        [Column("office_id")] 
-        public int OfficeId { get; set; }
-
-        [Column("office_code")] 
-        public string OfficeCode { get; set; }
-
-        [Column("office_name")] 
-        public string OfficeName { get; set; }
-
-        [Column("total_sales")] 
-        public decimal TotalSales { get; set; }
-
-    }
-
-    [FunctionName("get_product_view")]
-    [ExplicitColumns]
-    public class DbGetProductViewResult : PetaPocoDB.Record<DbGetProductViewResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("value_date")] 
-        public DateTime ValueDate { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("party")] 
-        public string Party { get; set; }
-
-        [Column("price_type")] 
-        public string PriceType { get; set; }
-
-        [Column("amount")] 
-        public decimal Amount { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime TransactionTs { get; set; }
-
-        [Column("user")] 
-        public string User { get; set; }
-
-        [Column("reference_number")] 
-        public string ReferenceNumber { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("book")] 
-        public string Book { get; set; }
-
-        [Column("salesperson")] 
-        public string Salesperson { get; set; }
-
-        [Column("is_credit")] 
-        public bool IsCredit { get; set; }
-
-        [Column("shipper")] 
-        public string Shipper { get; set; }
-
-        [Column("shipping_address_code")] 
-        public string ShippingAddressCode { get; set; }
-
-        [Column("store")] 
-        public string Store { get; set; }
-
-        [Column("flag_background_color")] 
-        public string FlagBackgroundColor { get; set; }
-
-        [Column("flag_foreground_color")] 
-        public string FlagForegroundColor { get; set; }
-
-    }
-
-    [FunctionName("get_income_expenditure_statement")]
-    [ExplicitColumns]
-    public class DbGetIncomeExpenditureStatementResult : PetaPocoDB.Record<DbGetIncomeExpenditureStatementResult> , IPoco
+    public class DbGetTrialBalanceResult : PetaPocoDB.Record<DbGetTrialBalanceResult> , IPoco
     {
         [Column("id")] 
         public int Id { get; set; }
@@ -1818,26 +1567,17 @@ namespace MixERP.Net.Entities.Transactions
         [Column("previous_credit")] 
         public decimal PreviousCredit { get; set; }
 
-        [Column("previous_balance")] 
-        public decimal PreviousBalance { get; set; }
-
         [Column("debit")] 
         public decimal Debit { get; set; }
 
         [Column("credit")] 
         public decimal Credit { get; set; }
 
-        [Column("balance")] 
-        public decimal Balance { get; set; }
-
         [Column("closing_debit")] 
         public decimal ClosingDebit { get; set; }
 
         [Column("closing_credit")] 
         public decimal ClosingCredit { get; set; }
-
-        [Column("closing_balance")] 
-        public decimal ClosingBalance { get; set; }
 
     }
 
@@ -1880,33 +1620,21 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [FunctionName("get_stock_account_statement")]
+    [FunctionName("get_top_selling_products_by_office")]
     [ExplicitColumns]
-    public class DbGetStockAccountStatementResult : PetaPocoDB.Record<DbGetStockAccountStatementResult> , IPoco
+    public class DbGetTopSellingProductsByOfficeResult : PetaPocoDB.Record<DbGetTopSellingProductsByOfficeResult> , IPoco
     {
         [Column("id")] 
         public int Id { get; set; }
 
-        [Column("value_date")] 
-        public DateTime ValueDate { get; set; }
+        [Column("office_id")] 
+        public int OfficeId { get; set; }
 
-        [Column("tran_code")] 
-        public string TranCode { get; set; }
+        [Column("office_code")] 
+        public string OfficeCode { get; set; }
 
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-        [Column("debit")] 
-        public decimal Debit { get; set; }
-
-        [Column("credit")] 
-        public decimal Credit { get; set; }
-
-        [Column("balance")] 
-        public decimal Balance { get; set; }
-
-        [Column("book")] 
-        public string Book { get; set; }
+        [Column("office_name")] 
+        public string OfficeName { get; set; }
 
         [Column("item_id")] 
         public int ItemId { get; set; }
@@ -1917,54 +1645,18 @@ namespace MixERP.Net.Entities.Transactions
         [Column("item_name")] 
         public string ItemName { get; set; }
 
-        [Column("posted_on")] 
-        public DateTime PostedOn { get; set; }
-
-        [Column("posted_by")] 
-        public string PostedBy { get; set; }
-
-        [Column("approved_by")] 
-        public string ApprovedBy { get; set; }
-
-        [Column("verification_status")] 
-        public int VerificationStatus { get; set; }
-
-        [Column("flag_bg")] 
-        public string FlagBg { get; set; }
-
-        [Column("flag_fg")] 
-        public string FlagFg { get; set; }
+        [Column("total_sales")] 
+        public decimal TotalSales { get; set; }
 
     }
 
-    [FunctionName("get_party_transaction_summary")]
+    [FunctionName("get_top_selling_products_of_all_time")]
     [ExplicitColumns]
-    public class DbGetPartyTransactionSummaryResult : PetaPocoDB.Record<DbGetPartyTransactionSummaryResult> , IPoco
+    public class DbGetTopSellingProductsOfAllTimeResult : PetaPocoDB.Record<DbGetTopSellingProductsOfAllTimeResult> , IPoco
     {
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
+        [Column("id")] 
+        public int Id { get; set; }
 
-        [Column("currency_symbol")] 
-        public string CurrencySymbol { get; set; }
-
-        [Column("total_due_amount")] 
-        public decimal TotalDueAmount { get; set; }
-
-        [Column("office_due_amount")] 
-        public decimal OfficeDueAmount { get; set; }
-
-        [Column("last_receipt_date")] 
-        public DateTime LastReceiptDate { get; set; }
-
-        [Column("transaction_value")] 
-        public decimal TransactionValue { get; set; }
-
-    }
-
-    [FunctionName("list_closing_stock")]
-    [ExplicitColumns]
-    public class DbListClosingStockResult : PetaPocoDB.Record<DbListClosingStockResult> , IPoco
-    {
         [Column("item_id")] 
         public int ItemId { get; set; }
 
@@ -1974,77 +1666,32 @@ namespace MixERP.Net.Entities.Transactions
         [Column("item_name")] 
         public string ItemName { get; set; }
 
-        [Column("unit_id")] 
-        public int UnitId { get; set; }
-
-        [Column("unit_name")] 
-        public string UnitName { get; set; }
-
-        [Column("quantity")] 
-        public int Quantity { get; set; }
+        [Column("total_sales")] 
+        public decimal TotalSales { get; set; }
 
     }
 
-    [FunctionName("get_pl_appropriation_data")]
+    [FunctionName("get_salesperson_report")]
     [ExplicitColumns]
-    public class DbGetPlAppropriationDataResult : PetaPocoDB.Record<DbGetPlAppropriationDataResult> , IPoco
-    {
-        [Column("account_id")] 
-        public long AccountId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("debit")] 
-        public decimal Debit { get; set; }
-
-        [Column("credit")] 
-        public decimal Credit { get; set; }
-
-    }
-
-    [FunctionName("get_trial_balance")]
-    [ExplicitColumns]
-    public class DbGetTrialBalanceResult : PetaPocoDB.Record<DbGetTrialBalanceResult> , IPoco
+    public class DbGetSalespersonReportResult : PetaPocoDB.Record<DbGetSalespersonReportResult> , IPoco
     {
         [Column("id")] 
         public int Id { get; set; }
 
-        [Column("account_id")] 
-        public int AccountId { get; set; }
+        [Column("salesperson_id")] 
+        public int SalespersonId { get; set; }
 
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
+        [Column("salesperson_name")] 
+        public string SalespersonName { get; set; }
 
-        [Column("account")] 
-        public string Account { get; set; }
-
-        [Column("previous_debit")] 
-        public decimal PreviousDebit { get; set; }
-
-        [Column("previous_credit")] 
-        public decimal PreviousCredit { get; set; }
-
-        [Column("debit")] 
-        public decimal Debit { get; set; }
-
-        [Column("credit")] 
-        public decimal Credit { get; set; }
-
-        [Column("closing_debit")] 
-        public decimal ClosingDebit { get; set; }
-
-        [Column("closing_credit")] 
-        public decimal ClosingCredit { get; set; }
+        [Column("total_sales")] 
+        public decimal TotalSales { get; set; }
 
     }
 
-    [FunctionName("get_non_gl_product_view")]
+    [FunctionName("get_inventory_transfer_request_view")]
     [ExplicitColumns]
-    public class DbGetNonGlProductViewResult : PetaPocoDB.Record<DbGetNonGlProductViewResult> , IPoco
+    public class DbGetInventoryTransferRequestViewResult : PetaPocoDB.Record<DbGetInventoryTransferRequestViewResult> , IPoco
     {
         [Column("id")] 
         public long Id { get; set; }
@@ -2055,20 +1702,11 @@ namespace MixERP.Net.Entities.Transactions
         [Column("office")] 
         public string Office { get; set; }
 
-        [Column("party")] 
-        public string Party { get; set; }
+        [Column("user_name")] 
+        public string UserName { get; set; }
 
-        [Column("price_type")] 
-        public string PriceType { get; set; }
-
-        [Column("amount")] 
-        public decimal Amount { get; set; }
-
-        [Column("transaction_ts")] 
-        public DateTime TransactionTs { get; set; }
-
-        [Column("user")] 
-        public string User { get; set; }
+        [Column("store")] 
+        public string Store { get; set; }
 
         [Column("reference_number")] 
         public string ReferenceNumber { get; set; }
@@ -2076,8 +1714,14 @@ namespace MixERP.Net.Entities.Transactions
         [Column("statement_reference")] 
         public string StatementReference { get; set; }
 
-        [Column("book")] 
-        public string Book { get; set; }
+        [Column("authorized")] 
+        public string Authorized { get; set; }
+
+        [Column("delivered")] 
+        public string Delivered { get; set; }
+
+        [Column("received")] 
+        public string Received { get; set; }
 
         [Column("flag_background_color")] 
         public string FlagBackgroundColor { get; set; }
@@ -2153,6 +1797,111 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
+    [FunctionName("get_receipt_view")]
+    [ExplicitColumns]
+    public class DbGetReceiptViewResult : PetaPocoDB.Record<DbGetReceiptViewResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("value_date")] 
+        public DateTime ValueDate { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("party")] 
+        public string Party { get; set; }
+
+        [Column("user")] 
+        public string User { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("amount")] 
+        public decimal Amount { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime TransactionTs { get; set; }
+
+        [Column("flag_background_color")] 
+        public string FlagBackgroundColor { get; set; }
+
+        [Column("flag_foreground_color")] 
+        public string FlagForegroundColor { get; set; }
+
+    }
+
+    [FunctionName("get_total_sales_by_office")]
+    [ExplicitColumns]
+    public class DbGetTotalSalesByOfficeResult : PetaPocoDB.Record<DbGetTotalSalesByOfficeResult> , IPoco
+    {
+        [Column("office_id")] 
+        public int OfficeId { get; set; }
+
+        [Column("office_code")] 
+        public string OfficeCode { get; set; }
+
+        [Column("office_name")] 
+        public string OfficeName { get; set; }
+
+        [Column("total_sales")] 
+        public decimal TotalSales { get; set; }
+
+    }
+
+    [FunctionName("get_non_gl_product_view")]
+    [ExplicitColumns]
+    public class DbGetNonGlProductViewResult : PetaPocoDB.Record<DbGetNonGlProductViewResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("value_date")] 
+        public DateTime ValueDate { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("party")] 
+        public string Party { get; set; }
+
+        [Column("price_type")] 
+        public string PriceType { get; set; }
+
+        [Column("amount")] 
+        public decimal Amount { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime TransactionTs { get; set; }
+
+        [Column("user")] 
+        public string User { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("flag_background_color")] 
+        public string FlagBackgroundColor { get; set; }
+
+        [Column("flag_foreground_color")] 
+        public string FlagForegroundColor { get; set; }
+
+    }
+
     [FunctionName("get_journal_view")]
     [ExplicitColumns]
     public class DbGetJournalViewResult : PetaPocoDB.Record<DbGetJournalViewResult> , IPoco
@@ -2201,6 +1950,189 @@ namespace MixERP.Net.Entities.Transactions
 
         [Column("flag_fg")] 
         public string FlagFg { get; set; }
+
+    }
+
+    [FunctionName("get_stock_account_statement")]
+    [ExplicitColumns]
+    public class DbGetStockAccountStatementResult : PetaPocoDB.Record<DbGetStockAccountStatementResult> , IPoco
+    {
+        [Column("id")] 
+        public int Id { get; set; }
+
+        [Column("value_date")] 
+        public DateTime ValueDate { get; set; }
+
+        [Column("tran_code")] 
+        public string TranCode { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("debit")] 
+        public decimal Debit { get; set; }
+
+        [Column("credit")] 
+        public decimal Credit { get; set; }
+
+        [Column("balance")] 
+        public decimal Balance { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("item_id")] 
+        public int ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("posted_on")] 
+        public DateTime PostedOn { get; set; }
+
+        [Column("posted_by")] 
+        public string PostedBy { get; set; }
+
+        [Column("approved_by")] 
+        public string ApprovedBy { get; set; }
+
+        [Column("verification_status")] 
+        public int VerificationStatus { get; set; }
+
+        [Column("flag_bg")] 
+        public string FlagBg { get; set; }
+
+        [Column("flag_fg")] 
+        public string FlagFg { get; set; }
+
+    }
+
+    [FunctionName("get_product_view")]
+    [ExplicitColumns]
+    public class DbGetProductViewResult : PetaPocoDB.Record<DbGetProductViewResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("value_date")] 
+        public DateTime ValueDate { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("party")] 
+        public string Party { get; set; }
+
+        [Column("price_type")] 
+        public string PriceType { get; set; }
+
+        [Column("amount")] 
+        public decimal Amount { get; set; }
+
+        [Column("transaction_ts")] 
+        public DateTime TransactionTs { get; set; }
+
+        [Column("user")] 
+        public string User { get; set; }
+
+        [Column("reference_number")] 
+        public string ReferenceNumber { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+        [Column("book")] 
+        public string Book { get; set; }
+
+        [Column("salesperson")] 
+        public string Salesperson { get; set; }
+
+        [Column("is_credit")] 
+        public bool IsCredit { get; set; }
+
+        [Column("shipper")] 
+        public string Shipper { get; set; }
+
+        [Column("shipping_address_code")] 
+        public string ShippingAddressCode { get; set; }
+
+        [Column("store")] 
+        public string Store { get; set; }
+
+        [Column("flag_background_color")] 
+        public string FlagBackgroundColor { get; set; }
+
+        [Column("flag_foreground_color")] 
+        public string FlagForegroundColor { get; set; }
+
+    }
+
+    [FunctionName("get_eoy_profit_summary")]
+    [ExplicitColumns]
+    public class DbGetEoyProfitSummaryResult : PetaPocoDB.Record<DbGetEoyProfitSummaryResult> , IPoco
+    {
+        [Column("profit_before_tax")] 
+        public decimal ProfitBeforeTax { get; set; }
+
+        [Column("tax_rate")] 
+        public decimal TaxRate { get; set; }
+
+        [Column("tax")] 
+        public decimal Tax { get; set; }
+
+    }
+
+    [FunctionName("get_balance_sheet")]
+    [ExplicitColumns]
+    public class DbGetBalanceSheetResult : PetaPocoDB.Record<DbGetBalanceSheetResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("item")] 
+        public string Item { get; set; }
+
+        [Column("previous_period")] 
+        public decimal PreviousPeriod { get; set; }
+
+        [Column("current_period")] 
+        public decimal CurrentPeriod { get; set; }
+
+        [Column("account_id")] 
+        public int AccountId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("is_retained_earning")] 
+        public bool IsRetainedEarning { get; set; }
+
+    }
+
+    [FunctionName("list_closing_stock")]
+    [ExplicitColumns]
+    public class DbListClosingStockResult : PetaPocoDB.Record<DbListClosingStockResult> , IPoco
+    {
+        [Column("item_id")] 
+        public int ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("unit_id")] 
+        public int UnitId { get; set; }
+
+        [Column("unit_name")] 
+        public string UnitName { get; set; }
+
+        [Column("quantity")] 
+        public int Quantity { get; set; }
 
     }
 
@@ -2324,24 +2256,72 @@ namespace MixERP.Net.Entities.Transactions
 
     }
 
-    [TableName("transactions.opening_stock_type")]
+    [FunctionName("get_income_expenditure_statement")]
     [ExplicitColumns]
-    public class OpeningStockType : PetaPocoDB.Record<OpeningStockType> , IPoco
+    public class DbGetIncomeExpenditureStatementResult : PetaPocoDB.Record<DbGetIncomeExpenditureStatementResult> , IPoco
     {
-        [Column("store_name")] 
-        public string StoreName { get; set; }
+        [Column("id")] 
+        public int Id { get; set; }
 
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
+        [Column("account_id")] 
+        public int AccountId { get; set; }
 
-        [Column("quantity")] 
-        public int Quantity { get; set; }
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
 
-        [Column("unit_name")] 
-        public string UnitName { get; set; }
+        [Column("account")] 
+        public string Account { get; set; }
 
-        [Column("amount")] 
-        public decimal Amount { get; set; }
+        [Column("previous_debit")] 
+        public decimal PreviousDebit { get; set; }
+
+        [Column("previous_credit")] 
+        public decimal PreviousCredit { get; set; }
+
+        [Column("previous_balance")] 
+        public decimal PreviousBalance { get; set; }
+
+        [Column("debit")] 
+        public decimal Debit { get; set; }
+
+        [Column("credit")] 
+        public decimal Credit { get; set; }
+
+        [Column("balance")] 
+        public decimal Balance { get; set; }
+
+        [Column("closing_debit")] 
+        public decimal ClosingDebit { get; set; }
+
+        [Column("closing_credit")] 
+        public decimal ClosingCredit { get; set; }
+
+        [Column("closing_balance")] 
+        public decimal ClosingBalance { get; set; }
+
+    }
+
+    [FunctionName("get_party_transaction_summary")]
+    [ExplicitColumns]
+    public class DbGetPartyTransactionSummaryResult : PetaPocoDB.Record<DbGetPartyTransactionSummaryResult> , IPoco
+    {
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("currency_symbol")] 
+        public string CurrencySymbol { get; set; }
+
+        [Column("total_due_amount")] 
+        public decimal TotalDueAmount { get; set; }
+
+        [Column("office_due_amount")] 
+        public decimal OfficeDueAmount { get; set; }
+
+        [Column("last_receipt_date")] 
+        public DateTime LastReceiptDate { get; set; }
+
+        [Column("transaction_value")] 
+        public decimal TransactionValue { get; set; }
 
     }
 
@@ -2420,6 +2400,27 @@ namespace MixERP.Net.Entities.Transactions
 
         [Column("quantity")] 
         public int Quantity { get; set; }
+
+    }
+
+    [TableName("transactions.opening_stock_type")]
+    [ExplicitColumns]
+    public class OpeningStockType : PetaPocoDB.Record<OpeningStockType> , IPoco
+    {
+        [Column("store_name")] 
+        public string StoreName { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("quantity")] 
+        public int Quantity { get; set; }
+
+        [Column("unit_name")] 
+        public string UnitName { get; set; }
+
+        [Column("amount")] 
+        public decimal Amount { get; set; }
 
     }
 

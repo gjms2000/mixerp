@@ -161,7 +161,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
             {
             Collection<ListItem> values = new Collection<ListItem>();
 
-            IEnumerable<State> states = Data.Helpers.States.GetStates(AppUsers.GetCurrentUserDB(), countryId);
+            IEnumerable<State> states = States.GetStates(AppUsers.GetCurrentUserDB(), countryId);
 
             foreach (State state in states)
             {

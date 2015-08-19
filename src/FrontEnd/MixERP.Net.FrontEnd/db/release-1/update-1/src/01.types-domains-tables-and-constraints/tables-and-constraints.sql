@@ -1103,3 +1103,6 @@ DROP VIEW IF EXISTS core.item_scrud_view;
 
 ALTER TABLE core.items
 ALTER COLUMN cost_price TYPE public.money_strict2;
+
+ALTER TABLE core.parties
+ALTER COLUMN state_id DROP NOT NULL;

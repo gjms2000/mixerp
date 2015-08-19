@@ -9,6 +9,1220 @@ using System.Web;
 namespace MixERP.Net.Entities.Core
 {
 
+    [TableName("core.items")]
+    [PrimaryKey("item_id")]
+    [ExplicitColumns]
+    public class Item : PetaPocoDB.Record<Item> , IPoco
+    {
+        [Column("item_id")] 
+        public int ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group_id")] 
+        public int ItemGroupId { get; set; }
+
+        [Column("item_type_id")] 
+        public int ItemTypeId { get; set; }
+
+        [Column("brand_id")] 
+        public int BrandId { get; set; }
+
+        [Column("preferred_supplier_id")] 
+        public long PreferredSupplierId { get; set; }
+
+        [Column("lead_time_in_days")] 
+        public int LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        public double WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        public double WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        public double HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        public double LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        public bool Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type_id")] 
+        public int? PreferredShippingMailTypeId { get; set; }
+
+        [Column("shipping_package_shape_id")] 
+        public int? ShippingPackageShapeId { get; set; }
+
+        [Column("unit_id")] 
+        public int UnitId { get; set; }
+
+        [Column("hot_item")] 
+        public bool HotItem { get; set; }
+
+        [Column("cost_price")] 
+        public decimal CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        public decimal SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        public bool SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax_id")] 
+        public int SalesTaxId { get; set; }
+
+        [Column("reorder_unit_id")] 
+        public int ReorderUnitId { get; set; }
+
+        [Column("reorder_level")] 
+        public int ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        public int ReorderQuantity { get; set; }
+
+        [Column("maintain_stock")] 
+        public bool MaintainStock { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.parties")]
+    [PrimaryKey("party_id")]
+    [ExplicitColumns]
+    public class Party : PetaPocoDB.Record<Party> , IPoco
+    {
+        [Column("party_id")] 
+        public long PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        public int PartyTypeId { get; set; }
+
+        [Column("party_code")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        public string LastName { get; set; }
+
+        [Column("company_name")] 
+        public string CompanyName { get; set; }
+
+        [Column("date_of_birth")] 
+        public DateTime? DateOfBirth { get; set; }
+
+        [Column("entity_id")] 
+        public int? EntityId { get; set; }
+
+        [Column("industry_id")] 
+        public int? IndustryId { get; set; }
+
+        [Column("country_id")] 
+        public int CountryId { get; set; }
+
+        [Column("state_id")] 
+        public int? StateId { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+        [Column("phone")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("allow_credit")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+        [Column("party_name")] 
+        public string PartyName { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.bank_account_scrud_view")]
+    [ExplicitColumns]
+    public class BankAccountScrudView : PetaPocoDB.Record<BankAccountScrudView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("maintained_by_user_id")] 
+        public string MaintainedByUserId { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("bank_name")] 
+        public string BankName { get; set; }
+
+        [Column("bank_branch")] 
+        public string BankBranch { get; set; }
+
+        [Column("bank_contact_number")] 
+        public string BankContactNumber { get; set; }
+
+        [Column("bank_address")] 
+        public string BankAddress { get; set; }
+
+        [Column("bank_account_number")] 
+        public string BankAccountNumber { get; set; }
+
+        [Column("bank_account_type")] 
+        public string BankAccountType { get; set; }
+
+        [Column("relationship_officer_name")] 
+        public string RelationshipOfficerName { get; set; }
+
+        [Column("is_merchant_account")] 
+        public bool? IsMerchantAccount { get; set; }
+
+    }
+
+    [TableName("core.bonus_slab_scrud_view")]
+    [ExplicitColumns]
+    public class BonusSlabScrudView : PetaPocoDB.Record<BonusSlabScrudView> , IPoco
+    {
+        [Column("bonus_slab_id")] 
+        public int? BonusSlabId { get; set; }
+
+        [Column("bonus_slab_code")] 
+        public string BonusSlabCode { get; set; }
+
+        [Column("bonus_slab_name")] 
+        public string BonusSlabName { get; set; }
+
+        [Column("effective_from")] 
+        public DateTime? EffectiveFrom { get; set; }
+
+        [Column("ends_on")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("checking_frequency")] 
+        public string CheckingFrequency { get; set; }
+
+    }
+
+    [TableName("core.frequency_setup_scrud_view")]
+    [ExplicitColumns]
+    public class FrequencySetupScrudView : PetaPocoDB.Record<FrequencySetupScrudView> , IPoco
+    {
+        [Column("frequency_setup_id")] 
+        public int? FrequencySetupId { get; set; }
+
+        [Column("frequency_setup_code")] 
+        public string FrequencySetupCode { get; set; }
+
+        [Column("fiscal_year_code")] 
+        public string FiscalYearCode { get; set; }
+
+        [Column("value_date")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("frequency_code")] 
+        public string FrequencyCode { get; set; }
+
+    }
+
+    [TableName("core.item_scrud_view")]
+    [ExplicitColumns]
+    public class ItemScrudView : PetaPocoDB.Record<ItemScrudView> , IPoco
+    {
+        [Column("item_id")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group")] 
+        public string ItemGroup { get; set; }
+
+        [Column("maintain_stock")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("brand")] 
+        public string Brand { get; set; }
+
+        [Column("preferred_supplier")] 
+        public string PreferredSupplier { get; set; }
+
+        [Column("lead_time_in_days")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type")] 
+        public string PreferredShippingMailType { get; set; }
+
+        [Column("preferred_shipping_package_shape")] 
+        public string PreferredShippingPackageShape { get; set; }
+
+        [Column("unit")] 
+        public string Unit { get; set; }
+
+        [Column("hot_item")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax")] 
+        public string SalesTax { get; set; }
+
+        [Column("reorder_unit")] 
+        public string ReorderUnit { get; set; }
+
+        [Column("reorder_level")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        public int? ReorderQuantity { get; set; }
+
+    }
+
+    [TableName("core.merchant_fee_setup_scrud_view")]
+    [ExplicitColumns]
+    public class MerchantFeeSetupScrudView : PetaPocoDB.Record<MerchantFeeSetupScrudView> , IPoco
+    {
+        [Column("merchant_fee_setup_id")] 
+        public int? MerchantFeeSetupId { get; set; }
+
+        [Column("merchant_account")] 
+        public string MerchantAccount { get; set; }
+
+        [Column("payment_card")] 
+        public string PaymentCard { get; set; }
+
+        [Column("rate")] 
+        public decimal? Rate { get; set; }
+
+        [Column("customer_pays_fee")] 
+        public bool? CustomerPaysFee { get; set; }
+
+        [Column("account")] 
+        public string Account { get; set; }
+
+        [Column("statement_reference")] 
+        public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.party_scrud_view")]
+    [ExplicitColumns]
+    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
+    {
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        public string LastName { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("party_name")] 
+        public string PartyName { get; set; }
+
+        [Column("company_name")] 
+        public string CompanyName { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        public string GlHead { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.payment_term_scrud_view")]
+    [ExplicitColumns]
+    public class PaymentTermScrudView : PetaPocoDB.Record<PaymentTermScrudView> , IPoco
+    {
+        [Column("payment_term_id")] 
+        public int? PaymentTermId { get; set; }
+
+        [Column("payment_term_code")] 
+        public string PaymentTermCode { get; set; }
+
+        [Column("payment_term_name")] 
+        public string PaymentTermName { get; set; }
+
+        [Column("due_on_date")] 
+        public bool? DueOnDate { get; set; }
+
+        [Column("due_days")] 
+        public int? DueDays { get; set; }
+
+        [Column("due_frequency")] 
+        public string DueFrequency { get; set; }
+
+        [Column("grace_period")] 
+        public int? GracePeriod { get; set; }
+
+        [Column("late_fee")] 
+        public string LateFee { get; set; }
+
+        [Column("late_fee_posting_frequency")] 
+        public string LateFeePostingFrequency { get; set; }
+
+    }
+
+    [TableName("core.recurring_invoice_setup_scrud_view")]
+    [ExplicitColumns]
+    public class RecurringInvoiceSetupScrudView : PetaPocoDB.Record<RecurringInvoiceSetupScrudView> , IPoco
+    {
+        [Column("recurring_invoice_setup_id")] 
+        public int? RecurringInvoiceSetupId { get; set; }
+
+        [Column("recurring_invoice")] 
+        public string RecurringInvoice { get; set; }
+
+        [Column("party")] 
+        public string Party { get; set; }
+
+        [Column("starts_from")] 
+        public DateTime? StartsFrom { get; set; }
+
+        [Column("ends_on")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("recurring_amount")] 
+        public decimal? RecurringAmount { get; set; }
+
+        [Column("payment_term")] 
+        public string PaymentTerm { get; set; }
+
+    }
+
+    [TableName("core.discount_received_account_selector_view")]
+    [ExplicitColumns]
+    public class DiscountReceivedAccountSelectorView : PetaPocoDB.Record<DiscountReceivedAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.expenses_account_selector_view")]
+    [ExplicitColumns]
+    public class ExpensesAccountSelectorView : PetaPocoDB.Record<ExpensesAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.item_selector_view")]
+    [ExplicitColumns]
+    public class ItemSelectorView : PetaPocoDB.Record<ItemSelectorView> , IPoco
+    {
+        [Column("item_id")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group_id")] 
+        public int? ItemGroupId { get; set; }
+
+        [Column("item_type_id")] 
+        public int? ItemTypeId { get; set; }
+
+        [Column("brand_id")] 
+        public int? BrandId { get; set; }
+
+        [Column("preferred_supplier_id")] 
+        public long? PreferredSupplierId { get; set; }
+
+        [Column("lead_time_in_days")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type_id")] 
+        public int? PreferredShippingMailTypeId { get; set; }
+
+        [Column("shipping_package_shape_id")] 
+        public int? ShippingPackageShapeId { get; set; }
+
+        [Column("unit_id")] 
+        public int? UnitId { get; set; }
+
+        [Column("hot_item")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax_id")] 
+        public int? SalesTaxId { get; set; }
+
+        [Column("reorder_unit_id")] 
+        public int? ReorderUnitId { get; set; }
+
+        [Column("reorder_level")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        public int? ReorderQuantity { get; set; }
+
+        [Column("maintain_stock")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.merchant_account_selector_view")]
+    [ExplicitColumns]
+    public class MerchantAccountSelectorView : PetaPocoDB.Record<MerchantAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("maintained_by_user_id")] 
+        public string MaintainedByUserId { get; set; }
+
+        [Column("office")] 
+        public string Office { get; set; }
+
+        [Column("bank_name")] 
+        public string BankName { get; set; }
+
+        [Column("bank_branch")] 
+        public string BankBranch { get; set; }
+
+        [Column("bank_contact_number")] 
+        public string BankContactNumber { get; set; }
+
+        [Column("bank_address")] 
+        public string BankAddress { get; set; }
+
+        [Column("bank_account_number")] 
+        public string BankAccountNumber { get; set; }
+
+        [Column("bank_account_type")] 
+        public string BankAccountType { get; set; }
+
+        [Column("relationship_officer_name")] 
+        public string RelationshipOfficerName { get; set; }
+
+        [Column("is_merchant_account")] 
+        public bool? IsMerchantAccount { get; set; }
+
+    }
+
+    [TableName("core.purchase_account_selector_view")]
+    [ExplicitColumns]
+    public class PurchaseAccountSelectorView : PetaPocoDB.Record<PurchaseAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.sales_return_account_selector_view")]
+    [ExplicitColumns]
+    public class SalesReturnAccountSelectorView : PetaPocoDB.Record<SalesReturnAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.supplier_selector_view")]
+    [ExplicitColumns]
+    public class SupplierSelectorView : PetaPocoDB.Record<SupplierSelectorView> , IPoco
+    {
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        public string LastName { get; set; }
+
+        [Column("party_name")] 
+        public string PartyName { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        public string GlHead { get; set; }
+
+    }
+
+    [TableName("core.default_widget_setup_view")]
+    [ExplicitColumns]
+    public class DefaultWidgetSetupView : PetaPocoDB.Record<DefaultWidgetSetupView> , IPoco
+    {
+        [Column("widget_setup_id")] 
+        public int? WidgetSetupId { get; set; }
+
+        [Column("widget_order")] 
+        public int? WidgetOrder { get; set; }
+
+        [Column("widget_group_name")] 
+        public string WidgetGroupName { get; set; }
+
+        [Column("widget_name")] 
+        public string WidgetName { get; set; }
+
+        [Column("widget_source")] 
+        public string WidgetSource { get; set; }
+
+    }
+
+    [TableName("core.item_view")]
+    [ExplicitColumns]
+    public class ItemView : PetaPocoDB.Record<ItemView> , IPoco
+    {
+        [Column("item_id")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group")] 
+        public string ItemGroup { get; set; }
+
+        [Column("item_type")] 
+        public string ItemType { get; set; }
+
+        [Column("maintain_stock")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("brand")] 
+        public string Brand { get; set; }
+
+        [Column("preferred_supplier")] 
+        public string PreferredSupplier { get; set; }
+
+        [Column("lead_time_in_days")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type")] 
+        public string PreferredShippingMailType { get; set; }
+
+        [Column("preferred_shipping_package_shape")] 
+        public string PreferredShippingPackageShape { get; set; }
+
+        [Column("unit")] 
+        public string Unit { get; set; }
+
+        [Column("base_unit")] 
+        public string BaseUnit { get; set; }
+
+        [Column("hot_item")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax")] 
+        public string SalesTax { get; set; }
+
+        [Column("reorder_unit")] 
+        public string ReorderUnit { get; set; }
+
+        [Column("reorder_level")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        public int? ReorderQuantity { get; set; }
+
+    }
+
+    [TableName("core.party_view")]
+    [ExplicitColumns]
+    public class PartyView : PetaPocoDB.Record<PartyView> , IPoco
+    {
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        public string LastName { get; set; }
+
+        [Column("party_name")] 
+        public string PartyName { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        public string Url { get; set; }
+
+        [Column("photo")] 
+        public string Photo { get; set; }
+
+        [Column("account_id")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        public string GlHead { get; set; }
+
+    }
+
+    [TableName("core.shipping_address_view")]
+    [ExplicitColumns]
+    public class ShippingAddressView : PetaPocoDB.Record<ShippingAddressView> , IPoco
+    {
+        [Column("shipping_address_id")] 
+        public long? ShippingAddressId { get; set; }
+
+        [Column("shipping_address_code")] 
+        public string ShippingAddressCode { get; set; }
+
+        [Column("zip_code")] 
+        public string ZipCode { get; set; }
+
+        [Column("party_id")] 
+        public long? PartyId { get; set; }
+
+        [Column("country_id")] 
+        public int? CountryId { get; set; }
+
+        [Column("state_id")] 
+        public int? StateId { get; set; }
+
+        [Column("country_name")] 
+        public string CountryName { get; set; }
+
+        [Column("state_name")] 
+        public string StateName { get; set; }
+
+        [Column("address_line_1")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        public string City { get; set; }
+
+    }
+
+    [TableName("core.widget_setup_view")]
+    [ExplicitColumns]
+    public class WidgetSetupView : PetaPocoDB.Record<WidgetSetupView> , IPoco
+    {
+        [Column("widget_setup_id")] 
+        public int? WidgetSetupId { get; set; }
+
+        [Column("widget_order")] 
+        public int? WidgetOrder { get; set; }
+
+        [Column("widget_group_name")] 
+        public string WidgetGroupName { get; set; }
+
+        [Column("widget_name")] 
+        public string WidgetName { get; set; }
+
+        [Column("widget_source")] 
+        public string WidgetSource { get; set; }
+
+    }
+
     [TableName("core.flag_types")]
     [PrimaryKey("flag_type_id")]
     [ExplicitColumns]
@@ -1837,7 +3051,6 @@ namespace MixERP.Net.Entities.Core
     }
 
     [TableName("core.late_fee")]
-    [PrimaryKey("late_fee_id")]
     [ExplicitColumns]
     public class LateFee : PetaPocoDB.Record<LateFee> , IPoco
     {
@@ -2252,252 +3465,6 @@ namespace MixERP.Net.Entities.Core
 
     }
 
-    [TableName("core.items")]
-    [PrimaryKey("item_id")]
-    [ExplicitColumns]
-    public class Item : PetaPocoDB.Record<Item> , IPoco
-    {
-        [Column("item_id")] 
-        public int ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group_id")] 
-        public int ItemGroupId { get; set; }
-
-        [Column("item_type_id")] 
-        public int ItemTypeId { get; set; }
-
-        [Column("brand_id")] 
-        public int BrandId { get; set; }
-
-        [Column("preferred_supplier_id")] 
-        public long PreferredSupplierId { get; set; }
-
-        [Column("lead_time_in_days")] 
-        public int LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        public double WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        public double WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        public double HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        public double LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        public bool Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type_id")] 
-        public int? PreferredShippingMailTypeId { get; set; }
-
-        [Column("shipping_package_shape_id")] 
-        public int? ShippingPackageShapeId { get; set; }
-
-        [Column("unit_id")] 
-        public int UnitId { get; set; }
-
-        [Column("hot_item")] 
-        public bool HotItem { get; set; }
-
-        [Column("cost_price")] 
-        public decimal CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        public decimal SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        public bool SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax_id")] 
-        public int SalesTaxId { get; set; }
-
-        [Column("reorder_unit_id")] 
-        public int ReorderUnitId { get; set; }
-
-        [Column("reorder_level")] 
-        public int ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        public int ReorderQuantity { get; set; }
-
-        [Column("maintain_stock")] 
-        public bool MaintainStock { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-        [Column("photo")] 
-        public string Photo { get; set; }
-
-    }
-
-    [TableName("core.accounts")]
-    [PrimaryKey("account_id")]
-    [ExplicitColumns]
-    public class Account : PetaPocoDB.Record<Account> , IPoco
-    {
-        [Column("account_id")] 
-        public long AccountId { get; set; }
-
-        [Column("account_master_id")] 
-        public short AccountMasterId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        public bool Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        public bool IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        public bool SysType { get; set; }
-
-        [Column("parent_account_id")] 
-        public long? ParentAccountId { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.parties")]
-    [PrimaryKey("party_id")]
-    [ExplicitColumns]
-    public class Party : PetaPocoDB.Record<Party> , IPoco
-    {
-        [Column("party_id")] 
-        public long PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        public int PartyTypeId { get; set; }
-
-        [Column("party_code")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        public string LastName { get; set; }
-
-        [Column("company_name")] 
-        public string CompanyName { get; set; }
-
-        [Column("date_of_birth")] 
-        public DateTime? DateOfBirth { get; set; }
-
-        [Column("entity_id")] 
-        public int? EntityId { get; set; }
-
-        [Column("industry_id")] 
-        public int? IndustryId { get; set; }
-
-        [Column("country_id")] 
-        public int CountryId { get; set; }
-
-        [Column("state_id")] 
-        public int StateId { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-        [Column("phone")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("allow_credit")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
-
-        [Column("party_name")] 
-        public string PartyName { get; set; }
-
-        [Column("photo")] 
-        public string Photo { get; set; }
-
-    }
-
     [TableName("core.bank_accounts_scrud_view")]
     [ExplicitColumns]
     public class BankAccountsScrudView : PetaPocoDB.Record<BankAccountsScrudView> , IPoco
@@ -2690,6 +3657,52 @@ namespace MixERP.Net.Entities.Core
 
         [Column("country_name")] 
         public string CountryName { get; set; }
+
+    }
+
+    [TableName("core.accounts")]
+    [PrimaryKey("account_id")]
+    [ExplicitColumns]
+    public class Account : PetaPocoDB.Record<Account> , IPoco
+    {
+        [Column("account_id")] 
+        public long AccountId { get; set; }
+
+        [Column("account_master_id")] 
+        public short AccountMasterId { get; set; }
+
+        [Column("account_number")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency_code")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        public bool Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        public bool IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        public bool SysType { get; set; }
+
+        [Column("parent_account_id")] 
+        public long? ParentAccountId { get; set; }
+
+        [Column("audit_user_id")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        public DateTime? AuditTs { get; set; }
 
     }
 
@@ -4385,84 +5398,6 @@ namespace MixERP.Net.Entities.Core
 
     }
 
-    [TableName("core.item_scrud_view")]
-    [ExplicitColumns]
-    public class ItemScrudView : PetaPocoDB.Record<ItemScrudView> , IPoco
-    {
-        [Column("item_id")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group")] 
-        public string ItemGroup { get; set; }
-
-        [Column("maintain_stock")] 
-        public bool? MaintainStock { get; set; }
-
-        [Column("brand")] 
-        public string Brand { get; set; }
-
-        [Column("preferred_supplier")] 
-        public string PreferredSupplier { get; set; }
-
-        [Column("lead_time_in_days")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type")] 
-        public string PreferredShippingMailType { get; set; }
-
-        [Column("preferred_shipping_package_shape")] 
-        public string PreferredShippingPackageShape { get; set; }
-
-        [Column("unit")] 
-        public string Unit { get; set; }
-
-        [Column("hot_item")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax")] 
-        public string SalesTax { get; set; }
-
-        [Column("reorder_unit")] 
-        public string ReorderUnit { get; set; }
-
-        [Column("reorder_level")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        public int? ReorderQuantity { get; set; }
-
-    }
-
     [TableName("core.payment_card_scrud_view")]
     [ExplicitColumns]
     public class PaymentCardScrudView : PetaPocoDB.Record<PaymentCardScrudView> , IPoco
@@ -4715,93 +5650,6 @@ namespace MixERP.Net.Entities.Core
 
         [Column("parent")] 
         public string Parent { get; set; }
-
-    }
-
-    [TableName("core.item_selector_view")]
-    [ExplicitColumns]
-    public class ItemSelectorView : PetaPocoDB.Record<ItemSelectorView> , IPoco
-    {
-        [Column("item_id")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group_id")] 
-        public int? ItemGroupId { get; set; }
-
-        [Column("item_type_id")] 
-        public int? ItemTypeId { get; set; }
-
-        [Column("brand_id")] 
-        public int? BrandId { get; set; }
-
-        [Column("preferred_supplier_id")] 
-        public long? PreferredSupplierId { get; set; }
-
-        [Column("lead_time_in_days")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type_id")] 
-        public int? PreferredShippingMailTypeId { get; set; }
-
-        [Column("shipping_package_shape_id")] 
-        public int? ShippingPackageShapeId { get; set; }
-
-        [Column("unit_id")] 
-        public int? UnitId { get; set; }
-
-        [Column("hot_item")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax_id")] 
-        public int? SalesTaxId { get; set; }
-
-        [Column("reorder_unit_id")] 
-        public int? ReorderUnitId { get; set; }
-
-        [Column("reorder_level")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        public int? ReorderQuantity { get; set; }
-
-        [Column("maintain_stock")] 
-        public bool? MaintainStock { get; set; }
-
-        [Column("audit_user_id")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        public DateTime? AuditTs { get; set; }
 
     }
 
@@ -5183,852 +6031,6 @@ namespace MixERP.Net.Entities.Core
 
     }
 
-    [TableName("core.item_view")]
-    [ExplicitColumns]
-    public class ItemView : PetaPocoDB.Record<ItemView> , IPoco
-    {
-        [Column("item_id")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group")] 
-        public string ItemGroup { get; set; }
-
-        [Column("item_type")] 
-        public string ItemType { get; set; }
-
-        [Column("maintain_stock")] 
-        public bool? MaintainStock { get; set; }
-
-        [Column("brand")] 
-        public string Brand { get; set; }
-
-        [Column("preferred_supplier")] 
-        public string PreferredSupplier { get; set; }
-
-        [Column("lead_time_in_days")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type")] 
-        public string PreferredShippingMailType { get; set; }
-
-        [Column("preferred_shipping_package_shape")] 
-        public string PreferredShippingPackageShape { get; set; }
-
-        [Column("unit")] 
-        public string Unit { get; set; }
-
-        [Column("base_unit")] 
-        public string BaseUnit { get; set; }
-
-        [Column("hot_item")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax")] 
-        public string SalesTax { get; set; }
-
-        [Column("reorder_unit")] 
-        public string ReorderUnit { get; set; }
-
-        [Column("reorder_level")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        public int? ReorderQuantity { get; set; }
-
-    }
-
-    [TableName("core.bank_account_scrud_view")]
-    [ExplicitColumns]
-    public class BankAccountScrudView : PetaPocoDB.Record<BankAccountScrudView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("maintained_by_user_id")] 
-        public string MaintainedByUserId { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("bank_name")] 
-        public string BankName { get; set; }
-
-        [Column("bank_branch")] 
-        public string BankBranch { get; set; }
-
-        [Column("bank_contact_number")] 
-        public string BankContactNumber { get; set; }
-
-        [Column("bank_address")] 
-        public string BankAddress { get; set; }
-
-        [Column("bank_account_number")] 
-        public string BankAccountNumber { get; set; }
-
-        [Column("bank_account_type")] 
-        public string BankAccountType { get; set; }
-
-        [Column("relationship_officer_name")] 
-        public string RelationshipOfficerName { get; set; }
-
-        [Column("is_merchant_account")] 
-        public bool? IsMerchantAccount { get; set; }
-
-    }
-
-    [TableName("core.bonus_slab_scrud_view")]
-    [ExplicitColumns]
-    public class BonusSlabScrudView : PetaPocoDB.Record<BonusSlabScrudView> , IPoco
-    {
-        [Column("bonus_slab_id")] 
-        public int? BonusSlabId { get; set; }
-
-        [Column("bonus_slab_code")] 
-        public string BonusSlabCode { get; set; }
-
-        [Column("bonus_slab_name")] 
-        public string BonusSlabName { get; set; }
-
-        [Column("effective_from")] 
-        public DateTime? EffectiveFrom { get; set; }
-
-        [Column("ends_on")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("checking_frequency")] 
-        public string CheckingFrequency { get; set; }
-
-    }
-
-    [TableName("core.frequency_setup_scrud_view")]
-    [ExplicitColumns]
-    public class FrequencySetupScrudView : PetaPocoDB.Record<FrequencySetupScrudView> , IPoco
-    {
-        [Column("frequency_setup_id")] 
-        public int? FrequencySetupId { get; set; }
-
-        [Column("frequency_setup_code")] 
-        public string FrequencySetupCode { get; set; }
-
-        [Column("fiscal_year_code")] 
-        public string FiscalYearCode { get; set; }
-
-        [Column("value_date")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("frequency_code")] 
-        public string FrequencyCode { get; set; }
-
-    }
-
-    [TableName("core.merchant_fee_setup_scrud_view")]
-    [ExplicitColumns]
-    public class MerchantFeeSetupScrudView : PetaPocoDB.Record<MerchantFeeSetupScrudView> , IPoco
-    {
-        [Column("merchant_fee_setup_id")] 
-        public int? MerchantFeeSetupId { get; set; }
-
-        [Column("merchant_account")] 
-        public string MerchantAccount { get; set; }
-
-        [Column("payment_card")] 
-        public string PaymentCard { get; set; }
-
-        [Column("rate")] 
-        public decimal? Rate { get; set; }
-
-        [Column("customer_pays_fee")] 
-        public bool? CustomerPaysFee { get; set; }
-
-        [Column("account")] 
-        public string Account { get; set; }
-
-        [Column("statement_reference")] 
-        public string StatementReference { get; set; }
-
-    }
-
-    [TableName("core.party_scrud_view")]
-    [ExplicitColumns]
-    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
-    {
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        public string LastName { get; set; }
-
-        [Column("currency_code")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("party_name")] 
-        public string PartyName { get; set; }
-
-        [Column("company_name")] 
-        public string CompanyName { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        public string GlHead { get; set; }
-
-        [Column("photo")] 
-        public string Photo { get; set; }
-
-    }
-
-    [TableName("core.payment_term_scrud_view")]
-    [ExplicitColumns]
-    public class PaymentTermScrudView : PetaPocoDB.Record<PaymentTermScrudView> , IPoco
-    {
-        [Column("payment_term_id")] 
-        public int? PaymentTermId { get; set; }
-
-        [Column("payment_term_code")] 
-        public string PaymentTermCode { get; set; }
-
-        [Column("payment_term_name")] 
-        public string PaymentTermName { get; set; }
-
-        [Column("due_on_date")] 
-        public bool? DueOnDate { get; set; }
-
-        [Column("due_days")] 
-        public int? DueDays { get; set; }
-
-        [Column("due_frequency")] 
-        public string DueFrequency { get; set; }
-
-        [Column("grace_period")] 
-        public int? GracePeriod { get; set; }
-
-        [Column("late_fee")] 
-        public string LateFee { get; set; }
-
-        [Column("late_fee_posting_frequency")] 
-        public string LateFeePostingFrequency { get; set; }
-
-    }
-
-    [TableName("core.recurring_invoice_setup_scrud_view")]
-    [ExplicitColumns]
-    public class RecurringInvoiceSetupScrudView : PetaPocoDB.Record<RecurringInvoiceSetupScrudView> , IPoco
-    {
-        [Column("recurring_invoice_setup_id")] 
-        public int? RecurringInvoiceSetupId { get; set; }
-
-        [Column("recurring_invoice")] 
-        public string RecurringInvoice { get; set; }
-
-        [Column("party")] 
-        public string Party { get; set; }
-
-        [Column("starts_from")] 
-        public DateTime? StartsFrom { get; set; }
-
-        [Column("ends_on")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("recurring_amount")] 
-        public decimal? RecurringAmount { get; set; }
-
-        [Column("payment_term")] 
-        public string PaymentTerm { get; set; }
-
-    }
-
-    [TableName("core.discount_received_account_selector_view")]
-    [ExplicitColumns]
-    public class DiscountReceivedAccountSelectorView : PetaPocoDB.Record<DiscountReceivedAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.expenses_account_selector_view")]
-    [ExplicitColumns]
-    public class ExpensesAccountSelectorView : PetaPocoDB.Record<ExpensesAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.merchant_account_selector_view")]
-    [ExplicitColumns]
-    public class MerchantAccountSelectorView : PetaPocoDB.Record<MerchantAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("maintained_by_user_id")] 
-        public string MaintainedByUserId { get; set; }
-
-        [Column("office")] 
-        public string Office { get; set; }
-
-        [Column("bank_name")] 
-        public string BankName { get; set; }
-
-        [Column("bank_branch")] 
-        public string BankBranch { get; set; }
-
-        [Column("bank_contact_number")] 
-        public string BankContactNumber { get; set; }
-
-        [Column("bank_address")] 
-        public string BankAddress { get; set; }
-
-        [Column("bank_account_number")] 
-        public string BankAccountNumber { get; set; }
-
-        [Column("bank_account_type")] 
-        public string BankAccountType { get; set; }
-
-        [Column("relationship_officer_name")] 
-        public string RelationshipOfficerName { get; set; }
-
-        [Column("is_merchant_account")] 
-        public bool? IsMerchantAccount { get; set; }
-
-    }
-
-    [TableName("core.purchase_account_selector_view")]
-    [ExplicitColumns]
-    public class PurchaseAccountSelectorView : PetaPocoDB.Record<PurchaseAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.sales_return_account_selector_view")]
-    [ExplicitColumns]
-    public class SalesReturnAccountSelectorView : PetaPocoDB.Record<SalesReturnAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.supplier_selector_view")]
-    [ExplicitColumns]
-    public class SupplierSelectorView : PetaPocoDB.Record<SupplierSelectorView> , IPoco
-    {
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        public string LastName { get; set; }
-
-        [Column("party_name")] 
-        public string PartyName { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        public string GlHead { get; set; }
-
-    }
-
-    [TableName("core.default_widget_setup_view")]
-    [ExplicitColumns]
-    public class DefaultWidgetSetupView : PetaPocoDB.Record<DefaultWidgetSetupView> , IPoco
-    {
-        [Column("widget_setup_id")] 
-        public int? WidgetSetupId { get; set; }
-
-        [Column("widget_order")] 
-        public int? WidgetOrder { get; set; }
-
-        [Column("widget_group_name")] 
-        public string WidgetGroupName { get; set; }
-
-        [Column("widget_name")] 
-        public string WidgetName { get; set; }
-
-        [Column("widget_source")] 
-        public string WidgetSource { get; set; }
-
-    }
-
-    [TableName("core.party_view")]
-    [ExplicitColumns]
-    public class PartyView : PetaPocoDB.Record<PartyView> , IPoco
-    {
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        public string LastName { get; set; }
-
-        [Column("party_name")] 
-        public string PartyName { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        public string Url { get; set; }
-
-        [Column("photo")] 
-        public string Photo { get; set; }
-
-        [Column("account_id")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        public string GlHead { get; set; }
-
-    }
-
-    [TableName("core.shipping_address_view")]
-    [ExplicitColumns]
-    public class ShippingAddressView : PetaPocoDB.Record<ShippingAddressView> , IPoco
-    {
-        [Column("shipping_address_id")] 
-        public long? ShippingAddressId { get; set; }
-
-        [Column("shipping_address_code")] 
-        public string ShippingAddressCode { get; set; }
-
-        [Column("zip_code")] 
-        public string ZipCode { get; set; }
-
-        [Column("party_id")] 
-        public long? PartyId { get; set; }
-
-        [Column("country_id")] 
-        public int? CountryId { get; set; }
-
-        [Column("state_id")] 
-        public int? StateId { get; set; }
-
-        [Column("country_name")] 
-        public string CountryName { get; set; }
-
-        [Column("state_name")] 
-        public string StateName { get; set; }
-
-        [Column("address_line_1")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        public string City { get; set; }
-
-    }
-
-    [TableName("core.widget_setup_view")]
-    [ExplicitColumns]
-    public class WidgetSetupView : PetaPocoDB.Record<WidgetSetupView> , IPoco
-    {
-        [Column("widget_setup_id")] 
-        public int? WidgetSetupId { get; set; }
-
-        [Column("widget_order")] 
-        public int? WidgetOrder { get; set; }
-
-        [Column("widget_group_name")] 
-        public string WidgetGroupName { get; set; }
-
-        [Column("widget_name")] 
-        public string WidgetName { get; set; }
-
-        [Column("widget_source")] 
-        public string WidgetSource { get; set; }
-
-    }
-
     [FunctionName("get_associated_units_from_item_id")]
     [ExplicitColumns]
     public class DbGetAssociatedUnitsFromItemIdResult : PetaPocoDB.Record<DbGetAssociatedUnitsFromItemIdResult> , IPoco
@@ -6041,6 +6043,63 @@ namespace MixERP.Net.Entities.Core
 
         [Column("unit_name")] 
         public string UnitName { get; set; }
+
+    }
+
+    [FunctionName("get_associated_units_from_item_code")]
+    [ExplicitColumns]
+    public class DbGetAssociatedUnitsFromItemCodeResult : PetaPocoDB.Record<DbGetAssociatedUnitsFromItemCodeResult> , IPoco
+    {
+        [Column("unit_id")] 
+        public int UnitId { get; set; }
+
+        [Column("unit_code")] 
+        public string UnitCode { get; set; }
+
+        [Column("unit_name")] 
+        public string UnitName { get; set; }
+
+    }
+
+    [FunctionName("get_workflow_model")]
+    [ExplicitColumns]
+    public class DbGetWorkflowModelResult : PetaPocoDB.Record<DbGetWorkflowModelResult> , IPoco
+    {
+        [Column("flagged_transactions")] 
+        public int FlaggedTransactions { get; set; }
+
+        [Column("in_verification_stack")] 
+        public int InVerificationStack { get; set; }
+
+        [Column("auto_approved")] 
+        public int AutoApproved { get; set; }
+
+        [Column("approved")] 
+        public int Approved { get; set; }
+
+        [Column("rejected")] 
+        public int Rejected { get; set; }
+
+        [Column("closed")] 
+        public int Closed { get; set; }
+
+        [Column("withdrawn")] 
+        public int Withdrawn { get; set; }
+
+    }
+
+    [FunctionName("get_account_view_by_account_master_id")]
+    [ExplicitColumns]
+    public class DbGetAccountViewByAccountMasterIdResult : PetaPocoDB.Record<DbGetAccountViewByAccountMasterIdResult> , IPoco
+    {
+        [Column("id")] 
+        public long Id { get; set; }
+
+        [Column("account_id")] 
+        public long AccountId { get; set; }
+
+        [Column("account_name")] 
+        public string AccountName { get; set; }
 
     }
 
@@ -6098,63 +6157,6 @@ namespace MixERP.Net.Entities.Core
 
         [Column("computed_tax")] 
         public decimal ComputedTax { get; set; }
-
-    }
-
-    [FunctionName("get_account_view_by_account_master_id")]
-    [ExplicitColumns]
-    public class DbGetAccountViewByAccountMasterIdResult : PetaPocoDB.Record<DbGetAccountViewByAccountMasterIdResult> , IPoco
-    {
-        [Column("id")] 
-        public long Id { get; set; }
-
-        [Column("account_id")] 
-        public long AccountId { get; set; }
-
-        [Column("account_name")] 
-        public string AccountName { get; set; }
-
-    }
-
-    [FunctionName("get_associated_units_from_item_code")]
-    [ExplicitColumns]
-    public class DbGetAssociatedUnitsFromItemCodeResult : PetaPocoDB.Record<DbGetAssociatedUnitsFromItemCodeResult> , IPoco
-    {
-        [Column("unit_id")] 
-        public int UnitId { get; set; }
-
-        [Column("unit_code")] 
-        public string UnitCode { get; set; }
-
-        [Column("unit_name")] 
-        public string UnitName { get; set; }
-
-    }
-
-    [FunctionName("get_workflow_model")]
-    [ExplicitColumns]
-    public class DbGetWorkflowModelResult : PetaPocoDB.Record<DbGetWorkflowModelResult> , IPoco
-    {
-        [Column("flagged_transactions")] 
-        public int FlaggedTransactions { get; set; }
-
-        [Column("in_verification_stack")] 
-        public int InVerificationStack { get; set; }
-
-        [Column("auto_approved")] 
-        public int AutoApproved { get; set; }
-
-        [Column("approved")] 
-        public int Approved { get; set; }
-
-        [Column("rejected")] 
-        public int Rejected { get; set; }
-
-        [Column("closed")] 
-        public int Closed { get; set; }
-
-        [Column("withdrawn")] 
-        public int Withdrawn { get; set; }
 
     }
 

@@ -70,7 +70,22 @@ $(document).ajaxStop(function () {
     $("#FormPanel").fadeIn(500);
     if (!loaded) {
         showParty();
-        $("select").addClass("search").dropdown();
+
+        var select = $("select");
+
+        select.each(function() {
+            var el = $(this);
+            var selectedValue = el.attr("data-value");
+
+            el.addClass("search").dropdown("refresh");
+
+            if (selectedValue) {
+                setTimeout(function() {
+                    el.dropdown("set selected", selectedValue);
+                }, 100);
+            };
+        });
+
     };
 
     if (!window.uploaderInitialized) {
@@ -129,7 +144,7 @@ function showParty() {
     entitySelect.val(party.EntityId);
     industrySelect.val(party.IndustryId);
     countrySelect.val(party.CountryId);
-    stateSelect.val(party.StateId);
+    stateSelect.attr("data-value", party.StateId);
     zipCodeInputText.val(party.ZipCode);
     addressLine1InputText.val(party.AddressLine1);
     addressLine2InputText.val(party.AddressLine2);
@@ -237,18 +252,23 @@ function loadCountries() {
 };
 
 countrySelect.change(function () {
-    $('#StateSelect').siblings(".text").text("");
-    var countryId = countrySelect.val();
-    loadStates(countryId);
+    loadStates();
 });
 
 
-function loadStates(countryId) {
+
+function loadStates() {
     if (stateSelect.length) {
+        stateSelect.html("");
+
+        var countryId = parseInt(countrySelect.val() || 0);
+
+        var selectedValue = stateSelect.attr("data-value");
+
         url = "/Modules/Inventory/Services/PartyData.asmx/GetStates";
-        data = appendParameter("", "countryId", parseInt(countryId));
+        data = appendParameter("", "countryId", countryId);
         data = getData(data);
-        ajaxDataBind(url, stateSelect, data);
+        ajaxDataBind(url, stateSelect, data, selectedValue, null);
     };
 };
 
@@ -287,7 +307,7 @@ saveButton.click(function () {
     party.EntityId = parseInt(entitySelect.getSelectedValue());
     party.IndustryId = parseInt(industrySelect.getSelectedValue());
     party.CountryId = parseInt(countrySelect.getSelectedValue());
-    party.StateId = parseInt(stateSelect.getSelectedValue());
+    party.StateId = parseInt(stateSelect.getSelectedValue() || 0);
 
     if (party.EntityId === 0) {
         party.EntityId = "";

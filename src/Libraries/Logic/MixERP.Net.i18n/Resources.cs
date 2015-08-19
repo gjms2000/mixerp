@@ -5355,6 +5355,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Is Frequency
+		/// </summary>
+		public static string is_frequency 
+		{
+			get
+			{
+				return Get("is_frequency");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Is Merchant Account
 		/// </summary>
 		public static string is_merchant_account 
@@ -6807,6 +6818,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Recurrence Type Code
+		/// </summary>
+		public static string recurrence_type_code 
+		{
+			get
+			{
+				return Get("recurrence_type_code");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Recurrence Type Id
 		/// </summary>
 		public static string recurrence_type_id 
@@ -6814,6 +6836,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("recurrence_type_id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Recurrence Type Name
+		/// </summary>
+		public static string recurrence_type_name 
+		{
+			get
+			{
+				return Get("recurrence_type_name");
 			}
 		}
 		
