@@ -86,20 +86,21 @@ MixERP has a very wide range of features which are tightly integrated with each 
 * <a href="http://mixerp.org/forum/" target="_blank">Community Forum</a>
 * [Project Milestone](https://github.com/mixerp/mixerp/milestones)
 
-##List of Supported Languages in Beta Version
-* English
-* Deutsch (Deutschland)
-* español (España, alfabetización internacional)
-* Filipino (Pilipinas)
-* français (France)
-* Bahasa Indonesia (Indonesia)
-* 日本語 (日本)
-* Bahasa Melayu (Malaysia)
-* Nederlands (Nederland)
-* português (Portugal)
-* русский (Россия)
-* svenska (Sverige)
-* 中文(中华人民共和国)
+##List of Supported Languages
+
+* English (MixERP Global Developers)
+* Deutsch ([Johann Schwarz, Austria](https://github.com/Johann-Schwarz))
+* español ([Jonathan Valle, Nicaragua](https://github.com/JonathanValle))
+* français ([Nubiancc, Egypt](https://github.com/nubiancc))
+* Bahasa Indonesia
+* 日本語
+* Bahasa Melayu
+* Nederlands
+* português
+* русский
+* svenska
+* 中文
+*  العربية ([Nubiancc, Egypt](https://github.com/nubiancc))
 
 ##How Can I Support MixERP?
 
