@@ -109,6 +109,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\CheckUpdates.ascx" />
     <Content Include="Admin\DatabaseBackupFrame.ascx" />
     <Content Include="Admin\ReportWriter.ascx" />
     <Content Include="Counters.ascx" />
@@ -208,6 +209,13 @@
     </Compile>
     <Compile Include="Admin\ChangePassword.ascx.designer.cs">
       <DependentUpon>ChangePassword.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\CheckUpdates.ascx.cs">
+      <DependentUpon>CheckUpdates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\CheckUpdates.ascx.designer.cs">
+      <DependentUpon>CheckUpdates.ascx</DependentUpon>
     </Compile>
     <Compile Include="Admin\DatabaseBackup.ascx.cs">
       <DependentUpon>DatabaseBackup.ascx</DependentUpon>
