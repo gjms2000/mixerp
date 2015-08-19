@@ -17,7 +17,9 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Header.aspx.cs" Inherits="MixERP.Net.FrontEnd.Reports.Assets.Header" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Header.aspx.cs" Inherits="MixERP.Net.FrontEnd.Reports.Assets.Header"
+    IsLandingPage="true"
+     %>
 
 <!DOCTYPE html>
 

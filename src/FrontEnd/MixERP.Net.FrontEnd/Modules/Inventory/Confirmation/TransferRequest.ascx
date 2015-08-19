@@ -16,5 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TransferRequest.ascx.cs" Inherits="MixERP.Net.Core.Modules.Inventory.Confirmation.TransferRequest" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TransferRequest.ascx.cs" Inherits="MixERP.Net.Core.Modules.Inventory.Confirmation.TransferRequest"
+    OverridePath="/Modules/Inventory/TransferRequest.mix" %>
 <asp:PlaceHolder runat="server" ID="Placeholder1"></asp:PlaceHolder>
