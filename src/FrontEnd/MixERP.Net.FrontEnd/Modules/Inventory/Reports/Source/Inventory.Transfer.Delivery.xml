@@ -20,7 +20,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <MixERPReport>
-  <Title>{Resources.Titles.StockTransferRequest}</Title>
+  <Title>{Resources.Titles.StockTransferDelivery}</Title>
   <TopSection>
     <table class="table horizontal">
       <tr>

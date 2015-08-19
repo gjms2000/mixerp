@@ -36,6 +36,7 @@ namespace MixERP.Net.WebControls.Flag
         {
             this.flagDropDownlist.DataSource = FlagType.GetFlagTypes(this.Catalog);
             this.flagDropDownlist.DataTextField = "FlagTypeName";
+            this.flagDropDownlist.CssClass = "ui fluid search dropdown";
             this.flagDropDownlist.DataValueField = "FlagTypeId";
             this.flagDropDownlist.DataBind();
         }
@@ -74,7 +75,7 @@ namespace MixERP.Net.WebControls.Flag
 
                 using (HtmlGenericControl buttonContainer = new HtmlGenericControl("p"))
                 {
-                    buttonContainer.Attributes.Add("class", "ui buttons");
+                    buttonContainer.Attributes.Add("class", "ui buttons tpad8");
                     this.updateButton = new Button();
 
                     this.updateButton.Text = Titles.Update;

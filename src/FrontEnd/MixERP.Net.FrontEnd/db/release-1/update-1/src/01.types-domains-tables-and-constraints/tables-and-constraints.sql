@@ -1095,3 +1095,11 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
+DROP VIEW IF EXISTS core.item_view;
+DROP VIEW IF EXISTS core.item_selector_view;
+DROP VIEW IF EXISTS core.item_scrud_view;
+
+ALTER TABLE core.items
+ALTER COLUMN cost_price TYPE public.money_strict2;
