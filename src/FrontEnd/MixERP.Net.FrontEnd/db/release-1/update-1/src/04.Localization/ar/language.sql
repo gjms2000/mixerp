@@ -251,7 +251,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UpdateOperati
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogo', ' تحميل الشعار.');--Upload logo.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogoDescription', '   jpeg, gif, png, او bmp. هذا الشعار سيظهرعلي التقارير والمستندات الخاصة بالشركة.');--Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UserGreeting', 'مرحبا {0}!');--Hi {0}!
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'VoucherVerificationPolicyDescription', 'تعيين سياسات  تحقق القسائم للمسؤولين عن الموافقة أو رفض صفقة.');--Assisgn voucher verification policies to administrators for approving or rejecting transactions.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'VoucherVerificationPolicyDescription', 'تعيين سياسات  تحقق مستندات القيد للمسؤولين عن الموافقة أو رفض صفقة.');--Assisgn voucher verification policies to administrators for approving or rejecting transactions.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'YourPasswordWasChanged', 'تم تغيير كلمة المرور الخاصة بك.');--Your password was changed.
 SELECT * FROM localization.add_localized_resource('Messages', 'ar', 'AreYouSure', 'هل أنت متأكد؟');--Are you sure?
 SELECT * FROM localization.add_localized_resource('Messages', 'ar', 'CouldNotDetermineVirtualPathError', 'لا يمكن تحديد المسار الظاهري لإنشاء صورة.');--Could not determine virtual path to create an image.
@@ -1082,8 +1082,8 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemType', '�
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemTypes', 'انواع الصنف');--Item Types
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Items', 'الاصناف');--Items
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemsBelowReorderLevel', 'الاصناف التالية وصلت لمستوي اعادة الطلب');--Items Below Reorder Level
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucher', 'قسيمة يومية');--Journal Voucher
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucherEntry', 'ادخال قسيمة بومية');--Journal Voucher Entry
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucher', 'سند قيد يومية');--Journal Voucher
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucherEntry', 'ادخال سند قيد بومية');--Journal Voucher Entry
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'KeyColumnEmptyExceptionMessage', 'الخاصية "KeyColumn" لا يمكن أن تترك فارغة.');--The property 'KeyColumn' cannot be left empty.
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'LCCredit', 'دائن ( بالعملة المحلية )');--LC Credit
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'LCDebit', 'مدين ( بالعملة المحلية )');--LC Debit
@@ -1433,8 +1433,8 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisQuota
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisRequest', 'عرض هذا الطلب');--View This Request
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisReturn', 'عرض هذه المردودات');--View This Return
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisTransfer', 'عرض هذا التحويل');--View This Transfer
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerification', 'تحقق القسيمة');--Voucher Verification
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerificationPolicy', 'سياسة تحقق القسيمة');--Voucher Verification Policy
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerification', 'تحقق سند قيد يومية');--Voucher Verification
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerificationPolicy', 'سياسة تحقق سند قيد اليومية');--Voucher Verification Policy
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Warning', 'تحذير');--Warning
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Wednesday', 'الاربعاء');--Wednesday
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'WeekStartsOn', 'يبدأ الاسبوع في');--Week Starts On
