@@ -681,6 +681,10 @@ function parseDate(str) {
     return new Date(Date.parse(str));
 };
 
+function parseLocalizedDate(str) {
+    return Date.parseExact(str, window.shortDateFormat);
+};
+
 function parseSerializedDate(str) {
     str = str.replace(/[^0-9 +]/g, '');
     return new Date(parseInt(str));

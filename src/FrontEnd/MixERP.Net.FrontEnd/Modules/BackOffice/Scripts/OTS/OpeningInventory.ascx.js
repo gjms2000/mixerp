@@ -31,7 +31,7 @@ var valueDateTextBox = $("#ValueDateTextBox");
 var amount;
 var data;
 var itemCode;
-var itemId;
+var itemName;
 var quantity;
 var storeId;
 var store;
@@ -122,47 +122,47 @@ addRowButton.click(function () {
 
     removeDirty(itemCodeInputText);
 
-    itemId = itemSelect.getSelectedText();
-    storeId = parseInt(storeSelect.getSelectedValue());
+    itemName = itemSelect.getSelectedText();
+    storeId = parseInt(storeSelect.getSelectedValue() || 0);
 
-    if (storeId <=0) {
+    if (storeId <= 0) {
         makeDirty(storeSelect);
         return;
-    }
+    };
 
     store = storeSelect.getSelectedText();
     removeDirty(storeSelect);
 
-    quantity = quantityInputText.val();
+    quantity = parseFloat(quantityInputText.val() || 0);
 
     if (quantity <= 0) {
         makeDirty(quantityInputText);
         return;
-    }
+    };
 
-    unitId = parseInt(unitSelect.getSelectedValue());
+    unitId = parseInt(unitSelect.getSelectedValue() || 0);
 
     if (unitId <= 0) {
         makeDirty(unitSelect);
         return;
-    }
+    };
 
     unit = unitSelect.getSelectedText();
     removeDirty(unitSelect);
 
 
-    amount = amountInputText.val();
+    amount = parseFloat(amountInputText.val() || 0);
 
     if (amount <= 0) {
         makeDirty(amountInputText);
         return;
-    }
+    };
 
     removeDirty(amountInputText);
 
     total = amount * quantity;
 
-    addRowToTable(itemCode, itemId, store, quantity, unit, amount, total);
+    addRowToTable(itemCode, itemName, store, quantity, unit, amount, total);
 
     itemCodeInputText.val("");
     quantityInputText.val("");
@@ -173,7 +173,7 @@ addRowButton.click(function () {
 });
 
 
-function addRowToTable(itemCode, itemId, storeId, quantity, unitId, amount, total) {
+function addRowToTable(itemCode, itemName, storeName, quantity, unitName, amount, total) {
     var grid = openingInventoryGridView;
     var rows = grid.find("tbody tr:not(:last-child)");
     var result = quantity * amount;
@@ -183,11 +183,12 @@ function addRowToTable(itemCode, itemId, storeId, quantity, unitId, amount, tota
         var row = $(this);
 
         if (getColumnText(row, 0) === itemCode &&
-                 getColumnText(row, 1) === itemId &&
-                 getColumnText(row, 2) === storeId &&
-                 getColumnText(row, 4) === unitId &&
+                 getColumnText(row, 1) === itemName &&
+                 getColumnText(row, 2) === storeName &&
+                 getColumnText(row, 4) === unitName &&
                  parseFloat2(getColumnText(row, 5)) === amount) {
-            setColumnText(row, 3, getFormattedNumber(parseInt2(getColumnText(row, 3)) + (quantity)));
+
+            setColumnText(row, 3, getFormattedNumber(parseInt2(getColumnText(row, 3)) + quantity));
             setColumnText(row, 6, getFormattedNumber(parseFloat2(getColumnText(row, 6)) + result));
             setColumnText(row, 5, getFormattedNumber(parseFloat2(getColumnText(row, 5))));
 
@@ -200,10 +201,10 @@ function addRowToTable(itemCode, itemId, storeId, quantity, unitId, amount, tota
 
     if (!match) {
         var html = "<tr><td>" + itemCode + "</td>" +
-            "<td>" + itemId + "</td>" +
-            "<td>" + storeId + "</td>" +
+            "<td>" + itemName + "</td>" +
+            "<td>" + storeName + "</td>" +
             "<td class='text-right'>" + getFormattedNumber(quantity) + "</td>" +
-            "<td>" + unitId + "</td>" +
+            "<td>" + unitName + "</td>" +
             "<td class='text-right'>" + getFormattedNumber(amount) + "</td>" +
             "<td class='text-right'>" + getFormattedNumber(total) + "</td>" +
             "<td><a class='pointer' onclick='removeRow($(this));summate();'><i class='ui delete icon'></i></a><a class='pointer' onclick='toggleDanger($(this));'>" +
@@ -241,8 +242,8 @@ var calculateTotal = function () {
     totalInputText.val(total);
 };
 
-saveButton.click(function() {
-    var valueDate = parseDate(valueDateTextBox.val());
+saveButton.click(function () {
+    var valueDate = Date.parseExact(valueDateTextBox.val(), window.shortDateFormat);
     var referenceNumber = referenceNumberInputText.val();
     var statementReference = statementReferenceTextArea.val();
 
@@ -261,11 +262,11 @@ saveButton.click(function() {
 
     var ajaxSave = save(valueDate, referenceNumber, statementReference, json);
 
-    ajaxSave.success(function() {
+    ajaxSave.success(function () {
         window.location = "/";
     });
 
-    ajaxSave.fail(function(xhr) {
+    ajaxSave.fail(function (xhr) {
         logAjaxErrorMessage(xhr);
     });
 });
