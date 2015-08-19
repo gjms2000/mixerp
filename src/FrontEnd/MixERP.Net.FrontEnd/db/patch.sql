@@ -1125,6 +1125,9 @@ DROP VIEW IF EXISTS core.item_scrud_view;
 ALTER TABLE core.items
 ALTER COLUMN cost_price TYPE public.money_strict2;
 
+ALTER TABLE core.parties
+ALTER COLUMN state_id DROP NOT NULL;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/audit/audit.get_office_information_model.sql --<--<--
 DROP FUNCTION IF EXISTS audit.get_office_information_model(integer);
 
@@ -7343,7 +7346,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UpdateOperati
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogo', ' تحميل الشعار.');--Upload logo.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UploadLogoDescription', '   jpeg, gif, png, او bmp. هذا الشعار سيظهرعلي التقارير والمستندات الخاصة بالشركة.');--Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'UserGreeting', 'مرحبا {0}!');--Hi {0}!
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'VoucherVerificationPolicyDescription', 'تعيين سياسات  تحقق القسائم للمسؤولين عن الموافقة أو رفض صفقة.');--Assisgn voucher verification policies to administrators for approving or rejecting transactions.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'VoucherVerificationPolicyDescription', 'تعيين سياسات  تحقق مستندات القيد للمسؤولين عن الموافقة أو رفض صفقة.');--Assisgn voucher verification policies to administrators for approving or rejecting transactions.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'YourPasswordWasChanged', 'تم تغيير كلمة المرور الخاصة بك.');--Your password was changed.
 SELECT * FROM localization.add_localized_resource('Messages', 'ar', 'AreYouSure', 'هل أنت متأكد؟');--Are you sure?
 SELECT * FROM localization.add_localized_resource('Messages', 'ar', 'CouldNotDetermineVirtualPathError', 'لا يمكن تحديد المسار الظاهري لإنشاء صورة.');--Could not determine virtual path to create an image.
@@ -8174,8 +8177,8 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemType', '�
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemTypes', 'انواع الصنف');--Item Types
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Items', 'الاصناف');--Items
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ItemsBelowReorderLevel', 'الاصناف التالية وصلت لمستوي اعادة الطلب');--Items Below Reorder Level
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucher', 'قسيمة يومية');--Journal Voucher
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucherEntry', 'ادخال قسيمة بومية');--Journal Voucher Entry
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucher', 'سند قيد يومية');--Journal Voucher
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'JournalVoucherEntry', 'ادخال سند قيد بومية');--Journal Voucher Entry
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'KeyColumnEmptyExceptionMessage', 'الخاصية "KeyColumn" لا يمكن أن تترك فارغة.');--The property 'KeyColumn' cannot be left empty.
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'LCCredit', 'دائن ( بالعملة المحلية )');--LC Credit
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'LCDebit', 'مدين ( بالعملة المحلية )');--LC Debit
@@ -8525,8 +8528,8 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisQuota
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisRequest', 'عرض هذا الطلب');--View This Request
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisReturn', 'عرض هذه المردودات');--View This Return
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ViewThisTransfer', 'عرض هذا التحويل');--View This Transfer
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerification', 'تحقق القسيمة');--Voucher Verification
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerificationPolicy', 'سياسة تحقق القسيمة');--Voucher Verification Policy
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerification', 'تحقق سند قيد يومية');--Voucher Verification
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'VoucherVerificationPolicy', 'سياسة تحقق سند قيد اليومية');--Voucher Verification Policy
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Warning', 'تحذير');--Warning
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Wednesday', 'الاربعاء');--Wednesday
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'WeekStartsOn', 'يبدأ الاسبوع في');--Week Starts On
@@ -8626,7 +8629,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPas
 --Contributors for this translation:
 --https://github.com/nubiancc
 SELECT * FROM core.create_menu_locale('AS', 'ar', 'كشف حساب');--Account Statement
-SELECT * FROM core.create_menu_locale('SAT', 'ar', 'أدوات المشرف');--Admin Tools
+SELECT * FROM core.create_menu_locale('SAT', 'ar', 'أدوات النظام');--Admin Tools
 SELECT * FROM core.create_menu_locale('AGS', 'ar', 'شرائح العمولة');--Ageing Slabs
 SELECT * FROM core.create_menu_locale('SAA', 'ar', 'سياسة الوصول API');--Api Access Policy
 SELECT * FROM core.create_menu_locale('OTSAP', 'ar', 'متغيرات المرفقات');--Attachment Parameters
@@ -8645,8 +8648,8 @@ SELECT * FROM core.create_menu_locale('CFH', 'ar', 'عناوين التدفق ا
 SELECT * FROM core.create_menu_locale('CFS', 'ar', 'إعداد التدفقات النقدية');--Cash Flow Setup
 SELECT * FROM core.create_menu_locale('SCR', 'ar', 'إعداد الخزائن النقدية');--Cash Repository Setup
 SELECT * FROM core.create_menu_locale('PWD', 'ar', 'تغيير كلمة المرور');--Change User Password
-SELECT * FROM core.create_menu_locale('COA', 'ar', 'شجرة الحسابات');--Chart of Accounts
-SELECT * FROM core.create_menu_locale('UPD', 'ar', 'تحقق من التحديثات');--Check Updates
+SELECT * FROM core.create_menu_locale('COA', 'ar', 'دليل الحسابات');--Chart of Accounts
+SELECT * FROM core.create_menu_locale('UPD', 'ar', 'التحقق من التحديثات');--Check Updates
 SELECT * FROM core.create_menu_locale('SSCD', 'ar', 'تفاصيل الاصناف المركبة');--Compound Item Details
 SELECT * FROM core.create_menu_locale('SSC', 'ar', 'الاصناف المركبة');--Compound Items
 SELECT * FROM core.create_menu_locale('CUOM', 'ar', 'مجمع وحدات القياس');--Compound Units of Measure
@@ -8661,7 +8664,7 @@ SELECT * FROM core.create_menu_locale('OTSCLP', 'ar', 'Currencylayer متغير�
 SELECT * FROM core.create_menu_locale('CUF', 'ar', 'الحقول المخصصة');--Custom Fields
 SELECT * FROM core.create_menu_locale('OTSDBP', 'ar', 'متغيرات قاعدة البيانات');--Database Parameters
 SELECT * FROM core.create_menu_locale('DBSTAT', 'ar', 'احصائيات قاعدة البيانات');--Database Statistics
-SELECT * FROM core.create_menu_locale('SDS', 'ar', 'إعداد قسماعدادات الاقسام والادارات');--Department Setup
+SELECT * FROM core.create_menu_locale('SDS', 'ar', 'إعداد  الاقسام والادارات');--Department Setup
 SELECT * FROM core.create_menu_locale('DRP', 'ar', 'الشراء المباشر');--Direct Purchase
 SELECT * FROM core.create_menu_locale('DRS', 'ar', 'مبيعات مباشرة');--Direct Sales
 SELECT * FROM core.create_menu_locale('EOD', 'ar', 'عملية نهاية اليوم');--End of Day Operation
@@ -8679,16 +8682,16 @@ SELECT * FROM core.create_menu_locale('IIM', 'ar', 'حركات المخزون');
 SELECT * FROM core.create_menu_locale('SIG', 'ar', 'مجموعات الاصناف');--Item Groups
 SELECT * FROM core.create_menu_locale('SSI', 'ar', 'صيانة الاصناف');--Item Maintenance
 SELECT * FROM core.create_menu_locale('SIT', 'ar', 'أنواع الأصناف');--Item Types
-SELECT * FROM core.create_menu_locale('JVN', 'ar', 'مجادخال قسيمة يومية');--Journal Voucher Entry
+SELECT * FROM core.create_menu_locale('JVN', 'ar', 'ادخال قسيمة يومية');--Journal Voucher Entry
 SELECT * FROM core.create_menu_locale('LF', 'ar', 'الرسوم المتأخرة');--Late Fees
-SELECT * FROM core.create_menu_locale('SEAR-LV', 'ar', 'تسجيل الدخول عرض');--Login View
+SELECT * FROM core.create_menu_locale('SEAR-LV', 'ar', 'عرض تسجيل الدخول');--Login View
 SELECT * FROM core.create_menu_locale('SMA', 'ar', 'سياسة الوصول للقائمة');--Menu Access Policy
 SELECT * FROM core.create_menu_locale('MFS', 'ar', 'إعداد الرسوم التاجر');--Merchant Fee Setup
-SELECT * FROM core.create_menu_locale('SMP', 'ar', 'متغيرات المتنوعة');--Miscellaneous Parameters
+SELECT * FROM core.create_menu_locale('SMP', 'ar', 'المتغيرات المتنوعة');--Miscellaneous Parameters
 SELECT * FROM core.create_menu_locale('OTSMIX', 'ar', 'MixERP متغيرات');--MixERP Parameters
 SELECT * FROM core.create_menu_locale('SOB', 'ar', 'اعدادات الشركة والفروع');--Office & Branch Setup
 SELECT * FROM core.create_menu_locale('SOS', 'ar', 'اعدادات الشركة Office');--Office Setup
-SELECT * FROM core.create_menu_locale('OTS', 'ar', 'تعدادات اول تشغيل');--One Time Setup
+SELECT * FROM core.create_menu_locale('OTS', 'ar', 'اعدادات اول تشغيل');--One Time Setup
 SELECT * FROM core.create_menu_locale('OTSOER', 'ar', 'OpenExchangeRates متغيرات');--OpenExchangeRates Parameters
 SELECT * FROM core.create_menu_locale('OTSI', 'ar', 'الارصدة الافتتاحية للمخزون');--Opening Inventory
 SELECT * FROM core.create_menu_locale('PA', 'ar', 'حسابات الاطراف');--Party Accounts
@@ -8758,8 +8761,8 @@ SELECT * FROM core.create_menu_locale('TB', 'ar', 'ميزان المراجعة')
 SELECT * FROM core.create_menu_locale('UOM', 'ar', 'وحدات القياس');--Units of Measure
 SELECT * FROM core.create_menu_locale('UER', 'ar', 'تحديث أسعار الصرف');--Update Exchange Rates
 SELECT * FROM core.create_menu_locale('SUM', 'ar', 'إدارةالمستخدمين');--User Management
-SELECT * FROM core.create_menu_locale('FVV', 'ar', 'تحقق القسائم');--Voucher Verification
-SELECT * FROM core.create_menu_locale('SVV', 'ar', 'سياسة التحقق من القسيمة');--Voucher Verification Policy
+SELECT * FROM core.create_menu_locale('FVV', 'ar', 'تحقق مستند القيد');--Voucher Verification
+SELECT * FROM core.create_menu_locale('SVV', 'ar', 'سياسة التحقق من مستندات القيد');--Voucher Verification Policy
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/de/language.sql --<--<--
@@ -25700,6 +25703,20 @@ ON core.payment_terms.late_fee_posting_frequency_id=late_fee_posting_frequency.f
 LEFT JOIN core.late_fee
 ON core.payment_terms.late_fee_id=core.late_fee.late_fee_id;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurrence_type_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.recurrence_type_scrud_view;
+
+CREATE VIEW core.recurrence_type_scrud_view
+AS
+SELECT
+core.recurrence_types.recurrence_type_id,
+core.recurrence_types.recurrence_type_code,
+core.recurrence_types.recurrence_type_name,
+core.recurrence_types.is_frequency
+
+FROM
+core.recurrence_types;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurring_invoice_setup_scrud_view.sql --<--<--
 DROP VIEW core.recurring_invoice_setup_scrud_view;
