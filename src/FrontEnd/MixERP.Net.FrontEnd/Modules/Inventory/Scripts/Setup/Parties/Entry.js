@@ -30,6 +30,7 @@ var CSTNumberInputText = $("#CSTNumberInputText");
 
 var currencySelect = $("#CurrencyCodeSelect");
 
+var creditDiv = $(".allowcredit");
 var allowCreditCheckbox = $("#AllowCreditCheckbox");
 var maximumCreditPeriodInputText = $("#MaximumCreditPeriodInputText");
 var maximumCreditAmountInputText = $("#MaximumCreditAmountInputText");
@@ -50,6 +51,19 @@ var loaded = false;
 
 $(document).ready(function () {
     initializeAjaxData();
+    checkAllowCredit();
+});
+
+function checkAllowCredit() {
+    if ($(allowCreditCheckbox).is(":checked")) {
+        $(creditDiv).attr("style", "display:block");
+    } else {
+        $(creditDiv).attr("style", "display:none");
+    }
+};
+
+$(allowCreditCheckbox).change(function () {
+    checkAllowCredit();
 });
 
 $(document).ajaxStop(function () {
@@ -64,6 +78,7 @@ $(document).ajaxStop(function () {
     };
 
 });
+
 
 function getParty() {
     partyId = parseFloat(getQueryStringByName("PartyId") || 0);
@@ -182,7 +197,6 @@ function initializeAjaxData() {
     loadEntities();
     loadIndustries();
     loadCountries();
-    loadStates();
     loadCurrencyCodes();
 };
 
@@ -222,10 +236,19 @@ function loadCountries() {
     };
 };
 
-function loadStates() {
+countrySelect.change(function () {
+    $('#StateSelect').siblings(".text").text("");
+    var countryId = countrySelect.val();
+    loadStates(countryId);
+});
+
+
+function loadStates(countryId) {
     if (stateSelect.length) {
         url = "/Modules/Inventory/Services/PartyData.asmx/GetStates";
-        ajaxDataBind(url, stateSelect);
+        data = appendParameter("", "countryId", parseInt(countryId));
+        data = getData(data);
+        ajaxDataBind(url, stateSelect, data);
     };
 };
 
@@ -237,6 +260,9 @@ function loadCurrencyCodes() {
     };
 };
 
+companyNameInputText.on('blur', function () {
+    partyNameInputText.val(lastNameInputText.val() + ", " + firstNameInputText.val());
+});
 
 saveButton.click(function () {
     if (!isValid()) {

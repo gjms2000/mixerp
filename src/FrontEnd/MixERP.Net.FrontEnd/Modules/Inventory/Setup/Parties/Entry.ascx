@@ -38,7 +38,7 @@
                     <div class="field">
                         <label for="FirstNameInputText">
                             <span data-localize="ScrudResource.first_name"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <input type="text" id="FirstNameInputText" required />
                     </div>
@@ -51,7 +51,7 @@
                     <div class="field">
                         <label for="LastNameInputText">
                             <span data-localize="ScrudResource.last_name"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <input type="text" id="LastNameInputText" required />
                     </div>
@@ -66,7 +66,7 @@
                     <div class="field">
                         <label for="PartyNameInputText">
                             <span data-localize="ScrudResource.party_name"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <input type="text" id="PartyNameInputText" required />
                     </div>
@@ -81,14 +81,14 @@
                     <div class="field">
                         <label for="PartyTypeSelect">
                             <span data-localize="ScrudResource.party_type_id"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <select id="PartyTypeSelect" required></select>
                     </div>
                     <div class="field">
                         <label for="CurrencyCodeSelect">
                             <span data-localize="ScrudResource.currency_code"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <select id="CurrencyCodeSelect" required></select>
                     </div>
@@ -164,16 +164,15 @@
                     <div class="field">
                         <label for="CountrySelect">
                             <span data-localize="ScrudResource.country_id"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
+                            <span data-localize="Titles.RequiredFieldIndicator"></span>
                         </label>
                         <select id="CountrySelect" required></select>
                     </div>
                     <div class="field">
                         <label for="StateSelect">
                             <span data-localize="ScrudResource.state_id"></span>
-                            <span data-localize="Labels.RequiredFieldIndicator"></span>
                         </label>
-                        <select id="StateSelect" required></select>
+                        <select id="StateSelect"></select>
                     </div>
 
                 </div>
@@ -206,20 +205,20 @@
                             <input name="public" type="checkbox" id="AllowCreditCheckbox" />
                         </div>
                     </div>
-
-                    <div class="seven wide field">
+                    <div class="seven wide field allowcredit">
                         <label for="MaximumCreditPeriodInputText">
                             <span data-localize="ScrudResource.maximum_credit_period"></span>
                         </label>
                         <input type="text" id="MaximumCreditPeriodInputText" class="integer" />
                     </div>
-                    <div class="seven wide field">
+                    <div class="seven wide field allowcredit">
                         <label for="MaximumCreditAmountInputText">
                             <span data-localize="ScrudResource.maximum_credit_amount"></span>
                         </label>
                         <input type="text" id="MaximumCreditAmountInputText" class="currency" />
                     </div>
                 </div>
+
                 <div class="two fields">
                     <div class="field">
                         <label for="EntitySelect">
@@ -236,7 +235,7 @@
 
                 </div>
                 <input type="hidden" id="PartyAccountIdHiddenField" />
-                <div class="big error vpad8 initially hidden"><span data-localize="Labels.RequiredFieldDetails"></span></div>
+                <div class="big error vpad8 initially hidden"><span data-localize="Titles.RequiredFieldDetails"></span></div>
                 <div class="ui buttons">
                     <a id="SaveButton" class="ui basic green button">
                         <span data-localize="Titles.Save"></span>
@@ -253,3 +252,4 @@
 </div>
 
 <script src="/Modules/Inventory/Scripts/Setup/Parties/Entry.js"></script>
+

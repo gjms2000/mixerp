@@ -295,7 +295,7 @@ $(document).ready(function () {
             return;
         };
 
-        if ($("#colorbox").next().hasClass('active')) {
+        if ($("#colorbox").siblings().hasClass('active')) {
             return;
         }
 

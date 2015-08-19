@@ -157,11 +157,11 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
         }
 
         [WebMethod]
-        public Collection<ListItem> GetStates()
-        {
+        public Collection<ListItem> GetStates(int countryId)
+            {
             Collection<ListItem> values = new Collection<ListItem>();
 
-            IEnumerable<State> states = Data.Helpers.States.GetStates(AppUsers.GetCurrentUserDB());
+            IEnumerable<State> states = Data.Helpers.States.GetStates(AppUsers.GetCurrentUserDB(), countryId);
 
             foreach (State state in states)
             {
