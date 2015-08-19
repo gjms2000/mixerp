@@ -24,6 +24,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 <div class="basic ui buttons">
     <input id="AddNewButton" value="<%= Titles.AddNew %>" class="ui button" onclick=" window.location = 'Entry/TransferRequest.mix' " type="button">
     <input id="FlagButton" value="<%= Titles.Flag %>" class="ui button" type="button">
+	<input id="PrintButton" value="<%= Titles.Print %>" class="ui button" type="button">
 </div>
 
 <div id="FilterDiv" class="ui segment">
@@ -79,3 +80,21 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 <asp:PlaceHolder ID="GridViewPlaceholder" runat="server"/>
 <script src="Scripts/TransferRequest.js"></script>
+
+<script type="text/javascript">
+    var printButton = $("#PrintButton");
+
+    printButton.click(function () {
+        var templatePath = "/Reports/Print.html";
+        var headerPath = "/Reports/Assets/Header.aspx";
+        var title = $("h2").html();
+        var targetControlId = "TransferRequestGridView";
+        var date = now;
+        var windowName = "TransferRequestGridView";
+        var offsetFirst = 2;
+        var offsetLast = 2;
+
+        printGridView(templatePath, headerPath, title, targetControlId, date, user, office, windowName, offsetFirst, offsetLast);
+    });
+</script>
+
