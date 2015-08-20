@@ -22,6 +22,7 @@ using MixERP.Net.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Hosting;
+using MixERP.Net.ApplicationState.Cache;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Models
 {
@@ -65,6 +66,8 @@ namespace MixERP.Net.Core.Modules.BackOffice.Models
             string contents = builder.Build();
 
             File.WriteAllText(path, contents);
+
+            Data.ReportWriter.SaveReport(this.FileName, this.MenuCode, this.ParentMenuCode, this.Title);
         }
 
         public ReportDefinition Get(string fileName)

@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
+using MixERP.Net.ReportManager;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Data
 {
@@ -73,6 +74,19 @@ namespace MixERP.Net.Core.Modules.BackOffice.Data
             }
 
             return DbFactory.DbConnection.GetConnectionString(host, catalog, userName, password, port);
+        }
+
+        public static void SaveReport(string fileName, string menuCode, string parentMenuCode, string text)
+        {
+            ReportMenu menu = new ReportMenu
+            {
+                FileName = fileName,
+                MenuCode = menuCode,
+                ParentMenuCode = parentMenuCode,
+                Text = text
+            };
+
+            DataLayer.AddMenus(new[] {menu});
         }
 
         public class DataSource

@@ -168,6 +168,10 @@ namespace MixERP.Net.Core.Modules.BackOffice.Models
 
         private void WriteParameter(XmlTextWriter xml, ReportWriter.ReportParameter parameter)
         {
+            if (string.IsNullOrWhiteSpace(parameter.Name))
+            {
+                return;
+            }
             xml.WriteStartElement("Parameter");
             xml.WriteAttributeString("Name", parameter.Name);
             xml.WriteAttributeString("Type", parameter.Type);

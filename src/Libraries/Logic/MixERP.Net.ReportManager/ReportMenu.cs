@@ -1,10 +1,10 @@
 ﻿namespace MixERP.Net.ReportManager
 {
-    internal class ReportMenu
+    public class ReportMenu
     {
-        internal string FileName { get; set; }
-        internal string Text { get; set; }
-        internal string MenuCode { get; set; }
-        internal string ParentMenuCode { get; set; }
+        public string FileName { get; set; }
+        public string Text { get; set; }
+        public string MenuCode { get; set; }
+        public string ParentMenuCode { get; set; }
     }
 }

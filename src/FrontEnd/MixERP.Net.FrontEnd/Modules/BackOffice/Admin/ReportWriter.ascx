@@ -211,7 +211,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
                     <input type="text" id="GridViewStyleInputText">
                 </div>
             </div>
-            <button class="ui small positive button" id="SaveGridViewButton">Save</button>
+            <button class="ui small positive close button" id="SaveGridViewButton">Save</button>
         </div>
     </div>
 </div>
@@ -278,7 +278,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         </table>
     </div>
     <div class="actions">
-        <div class="ui black button">Close</div>
+        <div class="ui black close button">Close</div>
     </div>
 </div>
 

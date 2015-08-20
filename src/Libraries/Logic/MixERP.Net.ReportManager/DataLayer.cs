@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace MixERP.Net.ReportManager
 {
-    internal static class DataLayer
+    public static class DataLayer
     {
-        internal static void AddMenus(IEnumerable<ReportMenu> menus)
+        public static void AddMenus(IEnumerable<ReportMenu> menus)
         {
             menus = menus.Where(m => !string.IsNullOrWhiteSpace(m.MenuCode) && !string.IsNullOrWhiteSpace(m.ParentMenuCode));
 
