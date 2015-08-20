@@ -592,7 +592,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'phone', 'Phone'
 SELECT localization.add_localized_resource('ScrudResource', '', 'photo', 'Photo');
 SELECT localization.add_localized_resource('ScrudResource', '', 'po_box', 'Po Box');
 SELECT localization.add_localized_resource('ScrudResource', '', 'poco_type_name', 'Poco Type Name');
-SELECT localization.add_localized_resource('ScrudResource', '', 'policy_id', 'Policy id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'policy_id', 'Policy Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_mail_type', 'Preferred Shipping Mail Type');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_mail_type_id', 'Preferred Shipping Mail Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_package_shape', 'Preferred Shipping Package Shape');

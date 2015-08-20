@@ -1128,6 +1128,84 @@ ALTER COLUMN cost_price TYPE public.money_strict2;
 ALTER TABLE core.parties
 ALTER COLUMN state_id DROP NOT NULL;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'policy.auto_verification_policy'::regclass
+        AND    attname = 'policy_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE IF EXISTS policy.auto_verification_policy
+        RENAME TO auto_verification_policy_temp;
+
+
+        CREATE TABLE policy.auto_verification_policy
+        (
+          policy_id                     SERIAL NOT NULL PRIMARY KEY,
+          user_id                       integer NOT NULL REFERENCES office.users (user_id),
+          office_id                     integer NOT NULL REFERENCES office.offices (office_id),
+          verify_sales_transactions     boolean NOT NULL DEFAULT false,
+          sales_verification_limit      public.money_strict2 NOT NULL DEFAULT 0,
+          verify_purchase_transactions  boolean NOT NULL DEFAULT false,
+          purchase_verification_limit   public.money_strict2 NOT NULL DEFAULT 0,
+          verify_gl_transactions        boolean NOT NULL DEFAULT false,
+          gl_verification_limit         public.money_strict2 NOT NULL DEFAULT 0,
+          effective_from                date NOT NULL,
+          ends_on                       date NOT NULL,
+          is_active                     boolean NOT NULL,
+          audit_user_id                 integer REFERENCES office.users (user_id),
+          audit_ts                      timestamp with time zone DEFAULT now()
+        );
+
+        CREATE UNIQUE INDEX auto_verification_policy_office_id_user_id_uix
+        ON policy.auto_verification_policy(office_id, user_id)
+        WHERE is_active;
+        
+        INSERT INTO policy.auto_verification_policy
+        (
+            user_id, 
+            office_id,
+            verify_sales_transactions, 
+            sales_verification_limit, 
+            verify_purchase_transactions, 
+            purchase_verification_limit, 
+            verify_gl_transactions,  
+            gl_verification_limit,
+            effective_from,
+            ends_on,
+            is_active,
+            audit_user_id,
+            audit_ts
+        )
+        SELECT
+            user_id, 
+            office_id,
+            verify_sales_transactions, 
+            sales_verification_limit, 
+            verify_purchase_transactions, 
+            purchase_verification_limit, 
+            verify_gl_transactions,  
+            gl_verification_limit,
+            effective_from,
+            ends_on,
+            is_active,
+            audit_user_id,
+            audit_ts
+        FROM policy.auto_verification_policy_temp;
+
+        DROP TABLE policy.auto_verification_policy_temp CASCADE;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/audit/audit.get_office_information_model.sql --<--<--
 DROP FUNCTION IF EXISTS audit.get_office_information_model(integer);
 
@@ -6166,7 +6244,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'phone', 'Phone'
 SELECT localization.add_localized_resource('ScrudResource', '', 'photo', 'Photo');
 SELECT localization.add_localized_resource('ScrudResource', '', 'po_box', 'Po Box');
 SELECT localization.add_localized_resource('ScrudResource', '', 'poco_type_name', 'Poco Type Name');
-SELECT localization.add_localized_resource('ScrudResource', '', 'policy_id', 'Policy id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'policy_id', 'Policy Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_mail_type', 'Preferred Shipping Mail Type');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_mail_type_id', 'Preferred Shipping Mail Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'preferred_shipping_package_shape', 'Preferred Shipping Package Shape');
@@ -25738,6 +25816,31 @@ JOIN core.parties ON recurring_invoice_setup.party_id = parties.party_id
 JOIN core.payment_terms ON recurring_invoice_setup.payment_term_id = payment_terms.payment_term_id;
 
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/policy/policy.auto_verification_policy_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS policy.auto_verification_policy_scrud_view;
+
+CREATE VIEW policy.auto_verification_policy_scrud_view
+AS
+SELECT
+    policy.auto_verification_policy.policy_id,
+    policy.auto_verification_policy.user_id,
+    office.users.user_name,
+    office.offices.office_name,
+    policy.auto_verification_policy.verify_sales_transactions,
+    policy.auto_verification_policy.sales_verification_limit,
+    policy.auto_verification_policy.verify_purchase_transactions,
+    policy.auto_verification_policy.purchase_verification_limit,
+    policy.auto_verification_policy.verify_gl_transactions,
+    policy.auto_verification_policy.gl_verification_limit,
+    policy.auto_verification_policy.effective_from,
+    policy.auto_verification_policy.ends_on,
+    policy.auto_verification_policy.is_active
+FROM policy.auto_verification_policy
+INNER JOIN office.users
+ON policy.auto_verification_policy.user_id=office.users.user_id
+INNER JOIN office.offices
+ON policy.auto_verification_policy.office_id=office.offices.office_id;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/policy/policy.voucher_verification_policy_scrud_view.sql --<--<--
 

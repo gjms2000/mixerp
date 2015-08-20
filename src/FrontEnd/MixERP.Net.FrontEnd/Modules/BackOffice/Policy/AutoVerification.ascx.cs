@@ -48,7 +48,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
 
                 scrud.ExcludeEdit = "user_id";
 
-                scrud.KeyColumn = "user_id";
+                scrud.KeyColumn = "policy_id";
 
                 scrud.TableSchema = "policy";
                 scrud.Table = "auto_verification_policy";

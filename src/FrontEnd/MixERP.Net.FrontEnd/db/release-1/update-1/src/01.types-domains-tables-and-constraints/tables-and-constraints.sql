@@ -1106,3 +1106,80 @@ ALTER COLUMN cost_price TYPE public.money_strict2;
 
 ALTER TABLE core.parties
 ALTER COLUMN state_id DROP NOT NULL;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'policy.auto_verification_policy'::regclass
+        AND    attname = 'policy_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE IF EXISTS policy.auto_verification_policy
+        RENAME TO auto_verification_policy_temp;
+
+
+        CREATE TABLE policy.auto_verification_policy
+        (
+          policy_id                     SERIAL NOT NULL PRIMARY KEY,
+          user_id                       integer NOT NULL REFERENCES office.users (user_id),
+          office_id                     integer NOT NULL REFERENCES office.offices (office_id),
+          verify_sales_transactions     boolean NOT NULL DEFAULT false,
+          sales_verification_limit      public.money_strict2 NOT NULL DEFAULT 0,
+          verify_purchase_transactions  boolean NOT NULL DEFAULT false,
+          purchase_verification_limit   public.money_strict2 NOT NULL DEFAULT 0,
+          verify_gl_transactions        boolean NOT NULL DEFAULT false,
+          gl_verification_limit         public.money_strict2 NOT NULL DEFAULT 0,
+          effective_from                date NOT NULL,
+          ends_on                       date NOT NULL,
+          is_active                     boolean NOT NULL,
+          audit_user_id                 integer REFERENCES office.users (user_id),
+          audit_ts                      timestamp with time zone DEFAULT now()
+        );
+
+        CREATE UNIQUE INDEX auto_verification_policy_office_id_user_id_uix
+        ON policy.auto_verification_policy(office_id, user_id)
+        WHERE is_active;
+        
+        INSERT INTO policy.auto_verification_policy
+        (
+            user_id, 
+            office_id,
+            verify_sales_transactions, 
+            sales_verification_limit, 
+            verify_purchase_transactions, 
+            purchase_verification_limit, 
+            verify_gl_transactions,  
+            gl_verification_limit,
+            effective_from,
+            ends_on,
+            is_active,
+            audit_user_id,
+            audit_ts
+        )
+        SELECT
+            user_id, 
+            office_id,
+            verify_sales_transactions, 
+            sales_verification_limit, 
+            verify_purchase_transactions, 
+            purchase_verification_limit, 
+            verify_gl_transactions,  
+            gl_verification_limit,
+            effective_from,
+            ends_on,
+            is_active,
+            audit_user_id,
+            audit_ts
+        FROM policy.auto_verification_policy_temp;
+
+        DROP TABLE policy.auto_verification_policy_temp CASCADE;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
