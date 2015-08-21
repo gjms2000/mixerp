@@ -5103,6 +5103,30 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM office.get_stores(2, 1);
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.are_purchase_orders_already_merged.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[]);
+
+CREATE FUNCTION transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[])
+RETURNS boolean
+AS
+$$
+BEGIN
+    IF
+    (
+        SELECT 
+        COUNT(*) 
+        FROM transactions.stock_master_non_gl_relations
+        WHERE non_gl_stock_master_id = any($1)
+    ) > 0 THEN
+        RETURN true;
+    END IF;
+
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;   
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.get_verification_status.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_verification_status
 (
@@ -5951,6 +5975,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_id', 
 SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_name', 'Base Unit Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'based_on_shipping_address', 'Based On Shipping Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_rate', 'Bonus Rate');
+SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab', 'Bonus Slab');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_code', 'Bonus Slab Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_detail_id', 'Bonus Slab Detail Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_details_amounts_chk', 'The field "AmountTo" must be greater than "AmountFrom".');
@@ -6060,7 +6085,9 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'current_period'
 SELECT localization.add_localized_resource('ScrudResource', '', 'customer_pays_fee', 'Customer Pays Fee');
 SELECT localization.add_localized_resource('ScrudResource', '', 'date_of_birth', 'Date Of Birth');
 SELECT localization.add_localized_resource('ScrudResource', '', 'debit', 'Debit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account', 'Default Cash Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account_id', 'Default Cash Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository', 'Default Cash Repository');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository_id', 'Default Cash Repository Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_code', 'Department Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_id', 'Department Id');
@@ -6266,6 +6293,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_discou
 SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_verification_limit', 'Purchase Verification Limit');
 SELECT localization.add_localized_resource('ScrudResource', '', 'quantity', 'Quantity');
 SELECT localization.add_localized_resource('ScrudResource', '', 'rate', 'Rate');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type', 'Recurrence Type');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_id', 'Recurrence Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_code', 'Recurrence Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_name', 'Recurrence Type Name');
@@ -6326,10 +6354,12 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type'
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_code', 'Sales Tax Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_id', 'Sales Tax Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_name', 'Sales Tax Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team', 'Sales Team');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_code', 'Sales Team Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_id', 'Sales Team Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_name', 'Sales Team Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_verification_limit', 'Sales Verification Limit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson', 'Salesperson');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_bonus_setup_id', 'Salesperson Bonus Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_code', 'Salesperson Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_id', 'Salesperson Id');
@@ -25606,8 +25636,27 @@ INNER JOIN office.offices
 ON core.bank_accounts.office_id = office.offices.office_id;
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.bonus_slab_detail_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.bonus_slab_detail_scrud_view;
+
+CREATE VIEW core.bonus_slab_detail_scrud_view
+AS
+SELECT
+    core.bonus_slab_details.bonus_slab_detail_id,
+    core.bonus_slabs.bonus_slab_code || ' (' || core.bonus_slabs.bonus_slab_name || ')' AS bonus_slab,
+    core.bonus_slab_details.amount_from,
+    core.bonus_slab_details.amount_to,
+    core.bonus_slab_details.bonus_rate
+FROM
+    core.bonus_slab_details
+INNER JOIN core.bonus_slabs
+ON core.bonus_slab_details.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
+
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.bonus_slab_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.bonus_slab_scrud_view CASCADE;
+DROP VIEW IF EXISTS core.bonus_slab_scrud_view;
+
 CREATE VIEW core.bonus_slab_scrud_view
 AS
 SELECT
@@ -25616,11 +25665,17 @@ SELECT
     core.bonus_slabs.bonus_slab_name,
     core.bonus_slabs.effective_from,
     core.bonus_slabs.ends_on,
-    core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name || ')' AS checking_frequency
+    core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name || ')' AS checking_frequency,
+    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
+    core.bonus_slabs.statement_reference
+    
 FROM
 core.bonus_slabs
 INNER JOIN core.frequencies
-ON core.bonus_slabs.checking_frequency_id = core.frequencies.frequency_id;
+ON core.bonus_slabs.checking_frequency_id = core.frequencies.frequency_id
+INNER JOIN core.accounts
+ON core.bonus_slabs.account_id = core.accounts.account_id;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.frequency_setup_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.frequency_setup_scrud_view;
@@ -25683,6 +25738,25 @@ LEFT JOIN core.shipping_mail_types
 ON core.items.preferred_shipping_mail_type_id = core.shipping_mail_types.shipping_mail_type_id
 LEFT JOIN core.shipping_package_shapes
 ON core.items.shipping_package_shape_id = core.shipping_package_shapes.shipping_package_shape_id;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.late_fee_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.late_fee_scrud_view;
+
+CREATE VIEW core.late_fee_scrud_view
+AS
+SELECT 
+  core.late_fee.late_fee_id, 
+  core.late_fee.late_fee_code, 
+  core.late_fee.late_fee_name, 
+  core.late_fee.is_flat_amount, 
+  core.late_fee.rate,
+  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
+FROM 
+core.late_fee
+INNER JOIN core.accounts
+ON core.late_fee.account_id = core.accounts.account_id;
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.merchant_fee_setup_scrud_view.sql --<--<--
@@ -25758,6 +25832,21 @@ ON parties.party_type_id = party_types.party_type_id
 INNER JOIN core.accounts 
 ON parties.account_id = accounts.account_id;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.party_type_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.party_type_scrud_view;
+
+CREATE VIEW core.party_type_scrud_view
+AS
+SELECT 
+        core.party_types.party_type_id,
+        core.party_types.party_type_code,
+        core.party_types.party_type_name,
+        core.party_types.is_supplier,
+        core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
+FROM core.party_types
+INNER JOIN core.accounts
+ON core.party_types.account_id = core.accounts.account_id;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.payment_term_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.payment_term_scrud_view;
 
@@ -25796,24 +25885,191 @@ core.recurrence_types.is_frequency
 FROM
 core.recurrence_types;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurring_invoice_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.recurring_invoice_scrud_view;
+
+CREATE VIEW core.recurring_invoice_scrud_view
+AS
+SELECT 
+  core.recurring_invoices.recurring_invoice_id, 
+  core.recurring_invoices.recurring_invoice_code, 
+  core.recurring_invoices.recurring_invoice_name,
+  core.items.item_code || ' (' || core.items.item_name || ')' AS item,
+  core.recurring_invoices.total_duration,
+  core.recurrence_types.recurrence_type_code || ' (' || core.recurrence_types.recurrence_type_name || ')' AS recurrence_type,
+  core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name ||')' AS recurring_frequency,
+  core.recurring_invoices.recurring_duration,
+  core.recurring_invoices.recurs_on_same_calendar_date,
+  core.recurring_invoices.recurring_amount,
+  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
+  core.payment_terms.payment_term_code || ' (' || core.payment_terms.payment_term_name || ')' AS payment_term, 
+  core.recurring_invoices.auto_trigger_on_sales,
+  core.recurring_invoices.is_active,
+  core.recurring_invoices.statement_reference 
+FROM 
+core.recurring_invoices
+LEFT JOIN core.items 
+ON core.recurring_invoices.item_id = core.items.item_id
+INNER JOIN core.recurrence_types
+ON core.recurring_invoices.recurrence_type_id = core.recurrence_types.recurrence_type_id 
+LEFT JOIN core.frequencies
+ON core.recurring_invoices.recurring_frequency_id = core.frequencies.frequency_id
+INNER JOIN core.accounts
+ON core.recurring_invoices.account_id = core.accounts.account_id
+INNER JOIN core.payment_terms
+ON core.recurring_invoices.payment_term_id = core.payment_terms.payment_term_id;
+
+
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurring_invoice_setup_scrud_view.sql --<--<--
-DROP VIEW core.recurring_invoice_setup_scrud_view;
-CREATE OR REPLACE VIEW core.recurring_invoice_setup_scrud_view 
-AS 
-SELECT recurring_invoice_setup.recurring_invoice_setup_id,
- ((recurring_invoices.recurring_invoice_code::text || ' ('::text) || recurring_invoices.recurring_invoice_name::text) || ')'::text AS recurring_invoice,
- ((parties.party_code::text || ' ('::text) || 
-  CASE WHEN parties.company_name IS NULL THEN parties.party_name
-           ELSE parties.company_name
-           END) || ')'::text AS party,
-recurring_invoice_setup.starts_from,
-recurring_invoice_setup.ends_on,
-recurring_invoice_setup.recurring_amount,
-((payment_terms.payment_term_code::text || ' ('::text) || payment_terms.payment_term_name::text) || ')'::text AS payment_term
-FROM core.recurring_invoice_setup
-JOIN core.recurring_invoices ON recurring_invoice_setup.recurring_invoice_id = recurring_invoices.recurring_invoice_id
-JOIN core.parties ON recurring_invoice_setup.party_id = parties.party_id
-JOIN core.payment_terms ON recurring_invoice_setup.payment_term_id = payment_terms.payment_term_id;
+DROP VIEW IF EXISTS core.recurring_invoice_setup_scrud_view;
+
+CREATE VIEW core.recurring_invoice_setup_scrud_view
+AS
+SELECT 
+  core.recurring_invoice_setup.recurring_invoice_setup_id, 
+  core.recurring_invoices.recurring_invoice_code || ' (' || core.recurring_invoices.recurring_invoice_name || ')' AS recurring_invoice,
+  core.parties.party_code || ' (' || core.parties.party_name || ')' AS party,
+  core.recurring_invoice_setup.starts_from,
+  core.recurring_invoice_setup.ends_on, 
+  core.recurrence_types.recurrence_type_code || ' (' || core.recurrence_types.recurrence_type_name || ')' AS recurrence_type,
+  core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name ||')' AS recurring_frequency,
+  core.recurring_invoice_setup.recurring_duration,
+  core.recurring_invoice_setup.recurs_on_same_calendar_date,
+  core.recurring_invoice_setup.recurring_amount,
+  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
+  core.payment_terms.payment_term_code || ' (' || core.payment_terms.payment_term_name || ')' AS payment_term, 
+  core.recurring_invoice_setup.is_active,
+  core.recurring_invoice_setup.statement_reference 
+FROM 
+core.recurring_invoice_setup
+INNER JOIN core.recurring_invoices
+ON core.recurring_invoice_setup.recurring_invoice_id = core.recurring_invoices.recurring_invoice_id
+INNER JOIN core.parties 
+ON core.recurring_invoice_setup.party_id = core.parties.party_id
+INNER JOIN core.recurrence_types
+ON core.recurring_invoice_setup.recurrence_type_id = core.recurrence_types.recurrence_type_id 
+LEFT JOIN core.frequencies
+ON core.recurring_invoice_setup.recurring_frequency_id = core.frequencies.frequency_id
+INNER JOIN core.accounts
+ON core.recurring_invoice_setup.account_id = core.accounts.account_id
+INNER JOIN core.payment_terms 
+ON core.recurring_invoice_setup.payment_term_id = core.payment_terms.payment_term_id;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.salesperson_bonus_setup_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.salesperson_bonus_setup_scrud_view;
+
+CREATE VIEW core.salesperson_bonus_setup_scrud_view
+AS
+SELECT
+    core.salesperson_bonus_setups.salesperson_bonus_setup_id,
+    core.salespersons.salesperson_code || ' (' || core.salespersons.salesperson_name || ')' AS salesperson,
+    core.bonus_slabs.bonus_slab_code || ' (' || core.bonus_slabs.bonus_slab_name || ')' AS bonus_slab
+FROM
+    core.salesperson_bonus_setups
+     
+INNER JOIN core.salespersons
+ON core.salesperson_bonus_setups.salesperson_id = core.salespersons.salesperson_id
+INNER JOIN core.bonus_slabs
+ON core.salesperson_bonus_setups.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.salesperson_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.salesperson_scrud_view;
+
+CREATE VIEW core.salesperson_scrud_view
+AS
+SELECT
+    core.salespersons.salesperson_id,
+    core.sales_teams.sales_team_code || ' (' || core.sales_teams.sales_team_name || ')' AS sales_team,
+    core.salespersons.salesperson_code,
+    core.salespersons.salesperson_name,
+    core.salespersons.address,
+    core.salespersons.contact_number,
+    core.salespersons.commission_rate,
+    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
+FROM
+    core.salespersons
+INNER JOIN core.sales_teams
+ON core.salespersons.sales_team_id = core.sales_teams.sales_team_id
+INNER JOIN core.accounts
+ON core.salespersons.account_id = core.accounts.account_id;
+
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.shipping_address_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.shipping_address_scrud_view;
+
+CREATE VIEW core.shipping_address_scrud_view
+AS
+SELECT
+    core.shipping_addresses.shipping_address_id,
+    core.shipping_addresses.shipping_address_code,
+    core.parties.party_code || ' (' || core.parties.party_name || ')' AS party,
+    core.get_state_name_by_state_id(core.shipping_addresses.state_id) AS state,
+    core.get_country_name_by_country_id(core.shipping_addresses.country_id) AS country,
+    core.shipping_addresses.zip_code,
+    core.shipping_addresses.address_line_1,
+    core.shipping_addresses.address_line_2,
+    core.shipping_addresses.street,
+    core.shipping_addresses.city  
+FROM core.shipping_addresses
+INNER JOIN core.parties
+ON core.shipping_addresses.party_id=core.parties.party_id;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/office/office.counter_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS office.counter_scrud_view;
+
+CREATE VIEW office.counter_scrud_view
+AS
+SELECT 
+  office.counters.counter_id, 
+  office.stores.store_code || ' (' || office.stores.store_name || ')' AS store,
+  office.cash_repositories.cash_repository_code || ' (' || office.cash_repositories.cash_repository_name || ')' AS cash_repository,
+  office.counters.counter_code,
+  office.counters.counter_name
+FROM 
+ office.counters
+INNER JOIN office.cash_repositories
+ON office.counters.cash_repository_id = office.cash_repositories.cash_repository_id 
+INNER JOIN office.stores
+ON office.counters.store_id = office.stores.store_id;
+
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/office/office.store_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS office.store_scrud_view;
+
+CREATE VIEW office.store_scrud_view
+AS
+SELECT 
+  office.stores.store_id, 
+  office.offices.office_code || ' (' || office.offices.office_name || ')' AS office, 
+  office.stores.store_code, 
+  office.stores.store_name, 
+  office.stores.address, 
+  office.store_types.store_type_code || ' (' || office.store_types.store_type_name || ')' AS store_type, 
+  office.stores.allow_sales, 
+  core.sales_taxes.sales_tax_code || ' ('|| core.sales_taxes.sales_tax_name || ')' AS sales_tax,
+  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS default_cash_account,
+  office.cash_repositories.cash_repository_code || ' (' || office.cash_repositories.cash_repository_name || ')' AS default_cash_repository 
+FROM 
+office.stores
+INNER JOIN office.offices
+ON office.stores.office_id = office.offices.office_id
+INNER JOIN office.store_types
+ON office.stores.store_type_id = office.store_types.store_type_id
+INNER JOIN core.sales_taxes
+ON office.stores.sales_tax_id = core.sales_taxes.sales_tax_id
+INNER JOIN core.accounts
+ON office.stores.default_cash_account_id = core.accounts.account_id
+INNER JOIN office.cash_repositories
+ON office.stores.default_cash_repository_id = office.cash_repositories.cash_repository_id;
 
 
 

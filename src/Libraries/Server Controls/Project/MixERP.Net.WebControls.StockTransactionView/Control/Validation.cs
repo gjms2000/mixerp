@@ -32,7 +32,7 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory
             {
                 return true;
             }
-            if (this.AreSalesOrdersAlreadyMerged(catalog, values))
+            if (this.AreOrdersAlreadyMerged(catalog, values))
             {
                 return true;
             }
@@ -40,18 +40,29 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory
             return false;
         }
 
-        private bool AreSalesOrdersAlreadyMerged(string catalog, Collection<long> values)
+        private bool AreOrdersAlreadyMerged(string catalog, Collection<long> values)
         {
-            if (this.Book == TranBook.Sales && this.SubBook == SubTranBook.Order)
+            bool merged = false;
+
+            if (this.SubBook == SubTranBook.Order)
             {
-                if (NonGlStockTransaction.AreSalesOrdersAlreadyMerged(catalog, values))
+                if (this.Book == TranBook.Sales)
                 {
-                    this.errorLabel.InnerText = Warnings.CannotMergeAlreadyMerged;
-                    return true;
+                    merged = NonGlStockTransaction.AreSalesOrdersAlreadyMerged(catalog, values);
+                }
+
+                if (this.Book == TranBook.Purchase)
+                {
+                    merged = NonGlStockTransaction.ArePurchaseOrdersAlreadyMerged(catalog, values);
                 }
             }
 
-            return false;
+            if (merged)
+            {
+                this.errorLabel.InnerText = Warnings.CannotMergeAlreadyMerged;
+            }
+
+            return merged;
         }
 
         private bool AreSalesQuotationsAlreadyMerged(string catalog, Collection<long> values)

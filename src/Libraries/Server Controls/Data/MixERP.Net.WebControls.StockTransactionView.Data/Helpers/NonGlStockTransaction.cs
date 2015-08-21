@@ -38,6 +38,17 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory.Data.Helpers
             return Factory.Scalar<bool>(catalog, sql, ids);
         }
 
+        public static bool ArePurchaseOrdersAlreadyMerged(string catalog, Collection<long> ids)
+        {
+            if (ids == null)
+            {
+                return false;
+            }
+
+            const string sql = @"SELECT transactions.are_purchase_orders_already_merged(@0);";
+            return Factory.Scalar<bool>(catalog, sql, ids);
+        }
+
         public static bool AreSalesQuotationsAlreadyMerged(string catalog, Collection<long> ids)
         {
             if (ids == null)

@@ -22,6 +22,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.Framework;
 
 namespace MixERP.Net.WebControls.StockTransactionViewFactory
 {
@@ -50,10 +51,10 @@ namespace MixERP.Net.WebControls.StockTransactionViewFactory
             {
                 if (string.IsNullOrWhiteSpace(this.MergeToOrderButtonUrl))
                 {
-                    throw new Exception(Warnings.CannotMergeUrlNull);
+                    throw new MixERPException(Warnings.CannotMergeUrlNull);
                 }
 
-                this.Merge(values, MergeToOrderButtonUrl);
+                this.Merge(values, this.MergeToOrderButtonUrl);
             }
         }
 

@@ -53288,7 +53288,7 @@ function prepareChart(datasourceId, canvasId, legendId, type, log) {
 
         if (log) {
             console.log(JSON.stringify(datasets));
-        }
+        };
 
         index++;
     });
@@ -53312,11 +53312,78 @@ function prepareChart(datasourceId, canvasId, legendId, type, log) {
         default:
             new Chart(ctx).Bar(reportData);
             break;
-    }
+    };
 
     legend(document.getElementById(legendId), reportData);
     table.hide();
-}
+};
+
+function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleColumnIndex, valueColumnIndex) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var labels = [];
+    var datasets = [];
+
+    labels.push("");
+
+    table.find("tr").not(":first").each(function (i) {
+        //Get an instance of the current row
+        var row = $(this);
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
+
+        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
+
+        var dataset =
+        {
+            fillColor: getFillColor(i),
+            strokeColor: chartColors[i],
+            pointColor: chartColors[i],
+            data: [value],
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        datasets.push(dataset);
+
+    });
+
+
+    if (remove) {
+        table.remove();
+    };
+
+    var reportData = {
+        labels: labels,
+        datasets: datasets
+    };
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    switch (type) {
+        case "line":
+            new Chart(ctx).Line(reportData);
+            break;
+        case "radar":
+            new Chart(ctx).Radar(reportData);
+            break;
+        default:
+            new Chart(ctx).Bar(reportData);
+            break;
+    };
+
+    legend(document.getElementById(legendId), reportData);
+};
+
+function prepareReportChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
+    var pieCharts = ["polar", "pie", "doughnut"];
+
+    if ($.inArray(type, pieCharts) === -1) {
+        prepare1DChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex);
+        return;
+    };
+
+    preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex);
+};
 
 function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
     chartColors = shuffle(chartColors);
@@ -53341,10 +53408,10 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         var row = $(this);
 
         //The first column of each row is the legend.
-        var title = row.find("td:eq(" + parseInt2(titleColumnIndex) + ")").html();
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
 
         //The first column of each row is the legend.
-        value = parseInt(row.find("td:eq(" + parseInt2(valueColumnIndex) + ")").html());
+        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
 
         var dataset = {
             value: value,
@@ -53379,7 +53446,7 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         default:
             new Chart(ctx).Pie(data, options);
             break;
-    }
+    };
 
     legend(document.getElementById(legendId), data);
     if (hide) {
@@ -54419,7 +54486,7 @@ function prepareChart(datasourceId, canvasId, legendId, type, log) {
 
         if (log) {
             console.log(JSON.stringify(datasets));
-        }
+        };
 
         index++;
     });
@@ -54443,11 +54510,78 @@ function prepareChart(datasourceId, canvasId, legendId, type, log) {
         default:
             new Chart(ctx).Bar(reportData);
             break;
-    }
+    };
 
     legend(document.getElementById(legendId), reportData);
     table.hide();
-}
+};
+
+function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleColumnIndex, valueColumnIndex) {
+    chartColors = shuffle(chartColors);
+    var table = $("#" + datasourceId);
+    var labels = [];
+    var datasets = [];
+
+    labels.push("");
+
+    table.find("tr").not(":first").each(function (i) {
+        //Get an instance of the current row
+        var row = $(this);
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
+
+        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
+
+        var dataset =
+        {
+            fillColor: getFillColor(i),
+            strokeColor: chartColors[i],
+            pointColor: chartColors[i],
+            data: [value],
+            title: title
+        };
+
+        //Add the dataset object to the array object.
+        datasets.push(dataset);
+
+    });
+
+
+    if (remove) {
+        table.remove();
+    };
+
+    var reportData = {
+        labels: labels,
+        datasets: datasets
+    };
+
+    var ctx = document.getElementById(canvasId).getContext("2d");
+
+    switch (type) {
+        case "line":
+            new Chart(ctx).Line(reportData);
+            break;
+        case "radar":
+            new Chart(ctx).Radar(reportData);
+            break;
+        default:
+            new Chart(ctx).Bar(reportData);
+            break;
+    };
+
+    legend(document.getElementById(legendId), reportData);
+};
+
+function prepareReportChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
+    var pieCharts = ["polar", "pie", "doughnut"];
+
+    if ($.inArray(type, pieCharts) === -1) {
+        prepare1DChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex);
+        return;
+    };
+
+    preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex);
+};
 
 function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
     chartColors = shuffle(chartColors);
@@ -54472,10 +54606,10 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         var row = $(this);
 
         //The first column of each row is the legend.
-        var title = row.find("td:eq(" + parseInt2(titleColumnIndex) + ")").html();
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
 
         //The first column of each row is the legend.
-        value = parseInt(row.find("td:eq(" + parseInt2(valueColumnIndex) + ")").html());
+        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
 
         var dataset = {
             value: value,
@@ -54510,7 +54644,7 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         default:
             new Chart(ctx).Pie(data, options);
             break;
-    }
+    };
 
     legend(document.getElementById(legendId), data);
     if (hide) {
