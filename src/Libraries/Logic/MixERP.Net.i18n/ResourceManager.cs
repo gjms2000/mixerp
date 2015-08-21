@@ -36,7 +36,7 @@ namespace MixERP.Net.i18n
 
         public static string TryGetResourceFromCache(string resourceClass, string resourceKey, string cultureCode = null)
         {
-            CultureInfo culture = Thread.CurrentThread.CurrentCulture;
+            CultureInfo culture = CurrentCulture.GetCurrentCulture();
 
             if (!string.IsNullOrWhiteSpace(cultureCode))
             {
