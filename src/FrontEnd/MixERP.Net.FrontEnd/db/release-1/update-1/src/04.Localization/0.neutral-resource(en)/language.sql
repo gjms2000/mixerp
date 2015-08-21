@@ -409,7 +409,9 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'current_period'
 SELECT localization.add_localized_resource('ScrudResource', '', 'customer_pays_fee', 'Customer Pays Fee');
 SELECT localization.add_localized_resource('ScrudResource', '', 'date_of_birth', 'Date Of Birth');
 SELECT localization.add_localized_resource('ScrudResource', '', 'debit', 'Debit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account', 'Default Cash Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account_id', 'Default Cash Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository', 'Default Cash Repository');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository_id', 'Default Cash Repository Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_code', 'Department Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_id', 'Department Id');
