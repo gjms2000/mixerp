@@ -299,6 +299,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_id', 
 SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_name', 'Base Unit Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'based_on_shipping_address', 'Based On Shipping Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_rate', 'Bonus Rate');
+SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab', 'Bonus Slab');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_code', 'Bonus Slab Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_detail_id', 'Bonus Slab Detail Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_details_amounts_chk', 'The field "AmountTo" must be greater than "AmountFrom".');
@@ -408,7 +409,9 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'current_period'
 SELECT localization.add_localized_resource('ScrudResource', '', 'customer_pays_fee', 'Customer Pays Fee');
 SELECT localization.add_localized_resource('ScrudResource', '', 'date_of_birth', 'Date Of Birth');
 SELECT localization.add_localized_resource('ScrudResource', '', 'debit', 'Debit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account', 'Default Cash Account');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_account_id', 'Default Cash Account Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository', 'Default Cash Repository');
 SELECT localization.add_localized_resource('ScrudResource', '', 'default_cash_repository_id', 'Default Cash Repository Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_code', 'Department Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'department_id', 'Department Id');
@@ -614,6 +617,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_discou
 SELECT localization.add_localized_resource('ScrudResource', '', 'purchase_verification_limit', 'Purchase Verification Limit');
 SELECT localization.add_localized_resource('ScrudResource', '', 'quantity', 'Quantity');
 SELECT localization.add_localized_resource('ScrudResource', '', 'rate', 'Rate');
+SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type', 'Recurrence Type');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_id', 'Recurrence Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_code', 'Recurrence Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'recurrence_type_name', 'Recurrence Type Name');
@@ -674,10 +678,12 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type'
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_code', 'Sales Tax Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_id', 'Sales Tax Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_name', 'Sales Tax Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team', 'Sales Team');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_code', 'Sales Team Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_id', 'Sales Team Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_name', 'Sales Team Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_verification_limit', 'Sales Verification Limit');
+SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson', 'Salesperson');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_bonus_setup_id', 'Salesperson Bonus Setup Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_code', 'Salesperson Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'salesperson_id', 'Salesperson Id');
