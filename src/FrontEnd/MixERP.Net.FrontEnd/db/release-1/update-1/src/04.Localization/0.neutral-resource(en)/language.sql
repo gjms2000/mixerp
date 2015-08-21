@@ -299,6 +299,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_id', 
 SELECT localization.add_localized_resource('ScrudResource', '', 'base_unit_name', 'Base Unit Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'based_on_shipping_address', 'Based On Shipping Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_rate', 'Bonus Rate');
+SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab', 'Bonus Slab');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_code', 'Bonus Slab Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_detail_id', 'Bonus Slab Detail Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'bonus_slab_details_amounts_chk', 'The field "AmountTo" must be greater than "AmountFrom".');
@@ -674,6 +675,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type'
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_code', 'Sales Tax Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_id', 'Sales Tax Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_tax_type_name', 'Sales Tax Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team', 'Sales Team');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_code', 'Sales Team Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_id', 'Sales Team Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'sales_team_name', 'Sales Team Name');
