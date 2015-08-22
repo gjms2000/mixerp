@@ -23,6 +23,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Web.Hosting;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Models
 {
@@ -53,9 +54,9 @@ namespace MixERP.Net.Core.Modules.BackOffice.Models
                             Report model = new Report();
 
                             model.FileName = fileInfo.Name;
-                            model.CreatedOn = fileInfo.CreationTime.ToString(CultureInfo.CurrentCulture);
-                            model.LastWrittenOn = fileInfo.LastWriteTime.ToString(CultureInfo.CurrentCulture);
-                            model.LastAccessedOn = fileInfo.LastAccessTime.ToString(CultureInfo.CurrentCulture);
+                            model.CreatedOn = fileInfo.CreationTime.ToString(CultureManager.GetCurrent());
+                            model.LastWrittenOn = fileInfo.LastWriteTime.ToString(CultureManager.GetCurrent());
+                            model.LastAccessedOn = fileInfo.LastAccessTime.ToString(CultureManager.GetCurrent());
 
                             models.Add(model);
                         }

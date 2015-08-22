@@ -27,6 +27,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.ScrudFactory
 {
@@ -46,7 +47,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
             //Load the form again.
             using (DataTable table = new DataTable())
             {
-                table.Locale = Thread.CurrentThread.CurrentCulture;
+                table.Locale = CultureManager.GetCurrent();
                 this.LoadForm(this.formContainer, table);
             }
         }
@@ -192,7 +193,7 @@ namespace MixERP.Net.WebControls.ScrudFactory
                         //Load the form again.
                         using (DataTable table = new DataTable())
                         {
-                            table.Locale = Thread.CurrentThread.CurrentCulture;
+                            table.Locale = CultureManager.GetCurrent();
 
                             this.LoadForm(this.formContainer, table);
                         }

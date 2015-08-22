@@ -137,7 +137,7 @@ namespace MixERP.Net.WebControls.ReportEngine.Helpers
             expression = expression.Replace("{LogoPath}",
                 PageUtility.GetCurrentDomainName() + PageUtility.ResolveUrl(logo));
                 //Or else logo will not be exported into excel.
-            expression = expression.Replace("{PrintDate}", DateTime.Now.ToString(CurrentCulture.GetCurrentUICulture()));
+            expression = expression.Replace("{PrintDate}", DateTime.Now.ToString(CultureManager.GetCurrentUICulture()));
 
             foreach (var match in Regex.Matches(expression, "{.*?}"))
             {

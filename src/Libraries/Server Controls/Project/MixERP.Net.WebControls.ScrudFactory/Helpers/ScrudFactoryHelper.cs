@@ -22,6 +22,7 @@ using System.Threading;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.ScrudFactory.Controls.ListControls;
 using MixERP.Net.WebControls.ScrudFactory.Controls.TextBoxes;
@@ -49,7 +50,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
                 {
                     using (Literal labelLiteral = new Literal())
                     {
-                        labelLiteral.Text = string.Format(Thread.CurrentThread.CurrentCulture,
+                        labelLiteral.Text = string.Format(CultureManager.GetCurrent(),
                             "<label for='{0}'>{1}</label>", dropDownList.ID, label);
                         labelCell.Attributes.Add("class", "label-cell");
 
@@ -196,7 +197,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Helpers
                 {
                     using (Literal labelLiteral = new Literal())
                     {
-                        labelLiteral.Text = string.Format(Thread.CurrentThread.CurrentCulture,
+                        labelLiteral.Text = string.Format(CultureManager.GetCurrent(),
                             "<label for='{0}'>{1}</label>", controls[0].ID, label);
                         labelCell.Attributes.Add("class", "label-cell");
 

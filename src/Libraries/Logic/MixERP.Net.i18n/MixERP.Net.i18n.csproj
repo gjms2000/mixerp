@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="CacheFactory.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
-    <Compile Include="CurrentCulture.cs" />
+    <Compile Include="CultureManager.cs" />
     <Compile Include="LocalizedResource.cs" />
     <Compile Include="Resources.cs">
       <DependentUpon>Resources.tt</DependentUpon>

@@ -32,6 +32,7 @@ using System.Linq;
 using System.Threading;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Entities.Core;
+using MixERP.Net.i18n;
 using PetaPoco;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Data
@@ -189,7 +190,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Data
                 {
                     if (!string.IsNullOrWhiteSpace(column))
                     {
-                        command.Parameters.AddWithValue("@" + DbFactory.Sanitizer.SanitizeIdentifierName(column.Trim()), "%" + values[counter].ToLower(Thread.CurrentThread.CurrentCulture) + "%");
+                        command.Parameters.AddWithValue("@" + DbFactory.Sanitizer.SanitizeIdentifierName(column.Trim()), "%" + values[counter].ToLower(CultureManager.GetCurrent()) + "%");
                         counter++;
                     }
                 }

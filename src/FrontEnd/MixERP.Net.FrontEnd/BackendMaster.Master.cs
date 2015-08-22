@@ -37,7 +37,7 @@ namespace MixERP.Net.FrontEnd
             {
                 string path = "/bundles/stylesheets/master-page.min.css";
 
-                if (CurrentCulture.IsRtl())
+                if (CultureManager.IsRtl())
                 {
                     path = path.Replace("min.css", "rtl.css");
                 }
@@ -56,7 +56,7 @@ namespace MixERP.Net.FrontEnd
             this.CatalogLiteral.Text = AppUsers.GetCurrentUserDB();
             this.BranchNameLiteral.Text = AppUsers.GetCurrent().View.OfficeName;
             this.SignOutLiteral.Text = Titles.SignOut;
-            this.UserGreetingLiteral.Text = String.Format(CultureInfo.CurrentCulture, Labels.UserGreeting,
+            this.UserGreetingLiteral.Text = String.Format(CultureManager.GetCurrent(), Labels.UserGreeting,
                 AppUsers.GetCurrent().View.UserName);
             this.ChangePasswordLiteral.Text = Titles.ChangePassword;
             this.ManageProfileLiteral.Text = Titles.ManageProfile;

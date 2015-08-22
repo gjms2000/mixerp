@@ -26,6 +26,7 @@ using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
@@ -68,16 +69,16 @@ namespace MixERP.Net.WebControls.StockTransactionFactory
 
                     colData[0] = row.ItemCode;
                     colData[1] = row.ItemName;
-                    colData[2] = row.Quantity.ToString(CultureInfo.CurrentCulture);
+                    colData[2] = row.Quantity.ToString(CultureManager.GetCurrent());
                     colData[3] = row.Unit;
-                    colData[4] = row.Price.ToString(CultureInfo.CurrentCulture);
-                    colData[5] = row.Amount.ToString(CultureInfo.CurrentCulture);
-                    colData[6] = row.Discount.ToString(CultureInfo.CurrentCulture);
-                    colData[7] = row.ShippingCharge.ToString(CultureInfo.CurrentCulture);
-                    colData[8] = row.Subtotal.ToString(CultureInfo.CurrentCulture);
-                    colData[9] = row.TaxCode.ToString(CultureInfo.CurrentCulture);
-                    colData[10] = row.Tax.ToString(CultureInfo.CurrentCulture);
-                    colData[11] = row.Total.ToString(CultureInfo.CurrentCulture);
+                    colData[4] = row.Price.ToString(CultureManager.GetCurrent());
+                    colData[5] = row.Amount.ToString(CultureManager.GetCurrent());
+                    colData[6] = row.Discount.ToString(CultureManager.GetCurrent());
+                    colData[7] = row.ShippingCharge.ToString(CultureManager.GetCurrent());
+                    colData[8] = row.Subtotal.ToString(CultureManager.GetCurrent());
+                    colData[9] = row.TaxCode.ToString(CultureManager.GetCurrent());
+                    colData[10] = row.Tax.ToString(CultureManager.GetCurrent());
+                    colData[11] = row.Total.ToString(CultureManager.GetCurrent());
 
                     rowData.Add(colData);
                 }

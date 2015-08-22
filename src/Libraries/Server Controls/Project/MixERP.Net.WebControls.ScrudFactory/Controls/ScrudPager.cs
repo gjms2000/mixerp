@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Web.UI.HtmlControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls
 {
@@ -71,7 +72,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
                 {
                     using (HtmlAnchor anchor = this.GetIconAnchor("icon item", "", start - 1))
                     {
-                        title = string.Format(Thread.CurrentThread.CurrentCulture, Titles.PageN, start - 1);
+                        title = string.Format(CultureManager.GetCurrent(), Titles.PageN, start - 1);
                         anchor.Attributes.Add("title", title);
 
                         anchor.InnerText = "...";
@@ -100,7 +101,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
                 {
                     using (HtmlAnchor anchor = this.GetIconAnchor("icon item", "", end + 1))
                     {
-                        title = string.Format(Thread.CurrentThread.CurrentCulture, Titles.PageN, end + 1);
+                        title = string.Format(CultureManager.GetCurrent(), Titles.PageN, end + 1);
                         anchor.Attributes.Add("title", title);
 
                         anchor.InnerText = "...";
@@ -193,7 +194,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
                     anchor.Attributes.Add("class", "item");
                 }
 
-                anchor.InnerText = pageNumber.ToString(Thread.CurrentThread.CurrentCulture);
+                anchor.InnerText = pageNumber.ToString(CultureManager.GetCurrent());
 
                 if (this.QueryString == "modal=1&CallBackFunctionName=processCallBackActions&AssociatedControlId=PartyIdHidden")
                 {
@@ -209,7 +210,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls
                 }
 
 
-                string title = string.Format(Thread.CurrentThread.CurrentCulture, Titles.PageN, pageNumber);
+                string title = string.Format(CultureManager.GetCurrent(), Titles.PageN, pageNumber);
                 anchor.Attributes.Add("title", title);
 
                 return anchor;

@@ -23,6 +23,7 @@ using MixERP.Net.WebControls.TransactionChecklist.Helpers;
 using System;
 using System.Globalization;
 using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.i18n;
 using MixERP.Net.TransactionGovernor.Verification;
 
 namespace MixERP.Net.WebControls.TransactionChecklist
@@ -55,7 +56,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 EmailHelper email = new EmailHelper(this.Catalog, emailTemplate, this.Text + " #" + tranId, this.PartyEmailAddress, this.AttachmentFileName);
                 email.SendEmail();
 
-                this.subTitleHeading.InnerText = string.Format(CultureInfo.CurrentCulture, Labels.EmailSentConfirmation, this.PartyEmailAddress);
+                this.subTitleHeading.InnerText = string.Format(CultureManager.GetCurrent(), Labels.EmailSentConfirmation, this.PartyEmailAddress);
                 return;
             }
 
@@ -101,7 +102,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 {
                     if (Withdrawal.WithdrawTransaction(this.Catalog, this.IsStockTransferRequest, transactionMasterId, this.UserId, this.reasonTextBox.Text))
                     {
-                        this.messageLabel.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionWithdrawnMessage, transactionDate.ToShortDateString());
+                        this.messageLabel.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionWithdrawnMessage, transactionDate.ToShortDateString());
                         this.messageLabel.CssClass = "ui block message yellow vpad12";
                     }
                 }

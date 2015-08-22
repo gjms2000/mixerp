@@ -58,7 +58,7 @@ namespace MixERP.Net.Common
         {
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
             DateTime time = TimeZoneInfo.ConvertTimeFromUtc(utc, zone);
-            return String.Format(CurrentCulture.GetCurrentUICulture(), "{0} {1} {2}", time.ToLongDateString(), time.ToLongTimeString(), zone.DisplayName);
+            return String.Format(CultureManager.GetCurrentUICulture(), "{0} {1} {2}", time.ToLongDateString(), time.ToLongTimeString(), zone.DisplayName);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
@@ -93,7 +93,7 @@ namespace MixERP.Net.Common
         public static bool IsNumeric(string value)
         {
             double number;
-            return double.TryParse(value, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out number);
+            return double.TryParse(value, NumberStyles.Any, CultureManager.GetCurrent(), out number);
         }
 
         public static string MapPathReverse(string fullServerPath)
@@ -181,7 +181,7 @@ namespace MixERP.Net.Common
                 }
 
 
-                return Convert.ToDateTime(value, CultureInfo.DefaultThreadCurrentCulture);
+                return Convert.ToDateTime(value, CultureManager.GetCurrent());
             }
             catch (FormatException)
             {
@@ -209,7 +209,7 @@ namespace MixERP.Net.Common
                 string numberToParse = value.ToString();
 
 
-                if (decimal.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (decimal.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -254,7 +254,7 @@ namespace MixERP.Net.Common
 
                 string numberToParse = value.ToString();
 
-                if (double.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (double.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -285,7 +285,7 @@ namespace MixERP.Net.Common
 
                 string numberToParse = value.ToString();
 
-                if (int.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (int.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -307,7 +307,7 @@ namespace MixERP.Net.Common
 
                 string numberToParse = value.ToString();
 
-                if (long.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (long.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -329,7 +329,7 @@ namespace MixERP.Net.Common
 
                 string numberToParse = value.ToString();
 
-                if (short.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (short.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -351,7 +351,7 @@ namespace MixERP.Net.Common
 
                 string numberToParse = value.ToString();
 
-                if (float.TryParse(numberToParse, NumberStyles.Any, CultureInfo.DefaultThreadCurrentCulture, out retVal))
+                if (float.TryParse(numberToParse, NumberStyles.Any, CultureManager.GetCurrent(), out retVal))
                 {
                     return retVal;
                 }
@@ -401,7 +401,7 @@ namespace MixERP.Net.Common
             }
 
 
-            return Unit.Parse(value.ToString(), CultureInfo.DefaultThreadCurrentCulture);
+            return Unit.Parse(value.ToString(), CultureManager.GetCurrent());
         }
 
         public static DateTime? TryCastNullableDate(object value)
@@ -416,7 +416,7 @@ namespace MixERP.Net.Common
                 return null;
             }
 
-            return Convert.ToDateTime(value, CultureInfo.DefaultThreadCurrentCulture);
+            return Convert.ToDateTime(value, CultureManager.GetCurrent());
         }
     }
 }

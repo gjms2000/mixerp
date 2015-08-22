@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Web.Hosting;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.Common.Helpers
 {
@@ -48,7 +49,7 @@ namespace MixERP.Net.Common.Helpers
         {
             string template =
                 HostingEnvironment.MapPath(path.Replace("html", "") +
-                                           CultureInfo.DefaultThreadCurrentCulture.TwoLetterISOLanguageName
+                                           CultureManager.GetCurrent().TwoLetterISOLanguageName
                                                .ToLowerInvariant() + ".html");
 
             if (!File.Exists(template))

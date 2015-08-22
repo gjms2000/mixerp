@@ -30,6 +30,7 @@ using System.Linq;
 using System.Threading;
 using System.Web.UI.WebControls;
 using System.Xml;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.ReportEngine
 {
@@ -46,7 +47,7 @@ namespace MixERP.Net.WebControls.ReportEngine
 
                 this.reportTitleLiteral.Text = this.ReportNotFoundErrorMessage;
                 this.reportTitleHidden.Value = this.reportTitleLiteral.Text;
-                this.topSectionLiteral.Text = string.Format(Thread.CurrentThread.CurrentCulture,
+                this.topSectionLiteral.Text = string.Format(CultureManager.GetCurrent(),
                     this.InvalidLocationErrorMessage, this.reportPath);
                 return;
             }

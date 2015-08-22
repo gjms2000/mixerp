@@ -22,6 +22,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
 {
@@ -44,7 +45,7 @@ namespace MixERP.Net.WebControls.ScrudFactory.Controls.ListControls
                 return;
             }
 
-            char separator = ",".ToString(Thread.CurrentThread.CurrentCulture).ToCharArray()[0];
+            char separator = ",".ToString(CultureManager.GetCurrent()).ToCharArray()[0];
 
             string[] key = keys.Split(separator);
             string[] value = values.Split(',');

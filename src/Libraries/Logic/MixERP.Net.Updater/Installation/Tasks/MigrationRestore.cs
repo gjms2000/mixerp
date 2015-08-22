@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Updater.Installation.Models;
 
@@ -27,7 +28,7 @@ namespace MixERP.Net.Updater.Installation.Tasks
         {
             foreach (MigrationFile file in this.MigrationFiles)
             {
-                string message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.RestoringFile, file.FilePath);
+                string message = string.Format(CultureManager.GetCurrent(), Labels.RestoringFile, file.FilePath);
                 this.OnProgress(new ProgressInfo(this.Description, message));
 
                 File.Delete(file.FilePath);

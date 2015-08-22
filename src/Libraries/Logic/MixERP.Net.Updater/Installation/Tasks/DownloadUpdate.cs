@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MixERP.Net.Common;
 using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.Updater.Installation.Tasks
@@ -36,7 +37,7 @@ namespace MixERP.Net.Updater.Installation.Tasks
                 Directory.CreateDirectory(temp);
             }
 
-            string message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.DownloadingUpdateFrom, downloadFrom);
+            string message = string.Format(CultureManager.GetCurrent(), Labels.DownloadingUpdateFrom, downloadFrom);
 
             this.OnProgress(new ProgressInfo(this.Description, message));
 
@@ -69,7 +70,7 @@ namespace MixERP.Net.Updater.Installation.Tasks
 
         private void OnDownloadProgress(object sender, DownloadProgressChangedEventArgs e)
         {
-            string message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.PercentCompleted, e.ProgressPercentage);
+            string message = string.Format(CultureManager.GetCurrent(), Labels.PercentCompleted, e.ProgressPercentage);
 
             this.OnProgress(new ProgressInfo(this.Description, message));
         }

@@ -22,6 +22,7 @@ using MixERP.Net.i18n.Resources;
 using System;
 using System.Globalization;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.Common
 {
@@ -101,7 +102,8 @@ namespace MixERP.Net.WebControls.Common
 
                                     if (!value.Equals(0))
                                     {
-                                        cell.Text = value.ToString("N", CultureInfo.CurrentCulture);
+                                        CultureInfo culture = CultureManager.GetCurrent();
+                                        cell.Text = value.ToString("C", culture).Replace(culture.NumberFormat.CurrencySymbol, "");
                                     }
                                 }
                                 break;
@@ -112,11 +114,11 @@ namespace MixERP.Net.WebControls.Common
 
                                     if (date.Date == date)
                                     {
-                                        cell.Text = Conversion.TryCastDate(cell.Text).ToString("D", CultureInfo.CurrentCulture);
+                                        cell.Text = Conversion.TryCastDate(cell.Text).ToString("D", CultureManager.GetCurrent());
                                     }
                                     else
                                     {
-                                        cell.Text = Conversion.TryCastDate(cell.Text).ToString("F", CultureInfo.CurrentCulture);
+                                        cell.Text = Conversion.TryCastDate(cell.Text).ToString("F", CultureManager.GetCurrent());
                                     }
                                 }
 

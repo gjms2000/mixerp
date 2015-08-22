@@ -45,7 +45,7 @@ namespace MixERP.Net.FrontEnd
             {
                 string path = "/bundles/stylesheets/master-page.min.css";
 
-                if (CurrentCulture.IsRtl())
+                if (CultureManager.IsRtl())
                 {
                     path = path.Replace("min.css", "rtl.min.css");
                 }
@@ -156,10 +156,10 @@ namespace MixERP.Net.FrontEnd
             this.Session["Challenge"] = challenge;
 
             string script = JSUtility.GetVar("challenge", challenge);
-            script += JSUtility.GetVar("shortDateFormat", CurrentCulture.GetShortDateFormat());
-            script += JSUtility.GetVar("thousandSeparator", CurrentCulture.GetThousandSeparator());
-            script += JSUtility.GetVar("decimalSeparator", CurrentCulture.GetDecimalSeparator());
-            script += JSUtility.GetVar("currencyDecimalPlaces", CurrentCulture.GetCurrencyDecimalPlaces());
+            script += JSUtility.GetVar("shortDateFormat", CultureManager.GetShortDateFormat());
+            script += JSUtility.GetVar("thousandSeparator", CultureManager.GetThousandSeparator());
+            script += JSUtility.GetVar("decimalSeparator", CultureManager.GetDecimalSeparator());
+            script += JSUtility.GetVar("currencyDecimalPlaces", CultureManager.GetCurrencyDecimalPlaces());
 
 
             PageUtility.RegisterJavascript("SignInPage_Vars", script, this.Page, true);

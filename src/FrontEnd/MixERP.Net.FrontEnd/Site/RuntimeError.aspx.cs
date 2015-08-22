@@ -41,6 +41,7 @@ using System;
 using System.Configuration;
 using System.Text;
 using System.Threading;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.FrontEnd.Site
 {
@@ -83,7 +84,7 @@ namespace MixERP.Net.FrontEnd.Site
 
                 Log.Verbose("Exception displayed to user.");
 
-                s.Append(string.Format(Thread.CurrentThread.CurrentCulture, "<h2>{0}</h2>", ex.Message));
+                s.Append(string.Format(CultureManager.GetCurrent(), "<h2>{0}</h2>", ex.Message));
 
                 Log.Warning("{Exception}.", ex);
 

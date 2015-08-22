@@ -30,6 +30,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {
@@ -67,7 +68,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 
                         if (available < model.Quantity)
                         {
-                            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
+                            throw new InvalidOperationException(string.Format(CultureManager.GetCurrent(),
                                 Warnings.InsufficientStockWarning, available, model.UnitName, model.ItemCode));
                         }
                     }

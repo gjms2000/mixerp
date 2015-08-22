@@ -26,6 +26,7 @@ using System;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.WebControls.Common
 {
@@ -125,7 +126,7 @@ namespace MixERP.Net.WebControls.Common
 
 
             this.maxDateCompareValidator.ValueToCompare = this.MaxDate.ToString();
-            this.maxDateCompareValidator.ErrorMessage = string.Format(CultureInfo.CurrentCulture, CommonResource.DateMustBeLessThan, this.MinDate);
+            this.maxDateCompareValidator.ErrorMessage = string.Format(CultureManager.GetCurrent(), CommonResource.DateMustBeLessThan, this.MinDate);
         }
 
         private void AddMinDateValidator()
@@ -146,7 +147,7 @@ namespace MixERP.Net.WebControls.Common
             if (this.MinDate != null)
             {
                 this.compareValidator.ValueToCompare = this.MinDate.ToString();
-                this.compareValidator.ErrorMessage = string.Format(CultureInfo.CurrentCulture, CommonResource.DateMustBeGreaterThan, this.MinDate);
+                this.compareValidator.ErrorMessage = string.Format(CultureManager.GetCurrent(), CommonResource.DateMustBeGreaterThan, this.MinDate);
             }
             else
             {

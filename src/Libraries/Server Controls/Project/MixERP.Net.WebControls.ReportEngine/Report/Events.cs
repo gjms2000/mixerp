@@ -73,7 +73,9 @@ namespace MixERP.Net.WebControls.ReportEngine
                         }
                     }
 
-                    grid.FooterRow.Cells[index].Text = string.Format(Thread.CurrentThread.CurrentCulture, "{0:N}", total);
+
+                    var culture = CultureManager.GetCurrent();
+                    grid.FooterRow.Cells[index].Text = total.ToString("C", culture).Replace(culture.NumberFormat.CurrencySymbol, "");
                     grid.FooterRow.Cells[index].CssClass = "text right";
                     grid.FooterRow.Cells[index].Font.Bold = true;
                 }
@@ -114,7 +116,7 @@ namespace MixERP.Net.WebControls.ReportEngine
                 {
                     int index = Conversion.TryCastInteger(fieldIndex);
                     decimal value = Conversion.TryCastDecimal(e.Row.Cells[index].Text);
-                    e.Row.Cells[index].Text = string.Format(Thread.CurrentThread.CurrentCulture, "{0:N}", value);
+                    e.Row.Cells[index].Text = string.Format(CultureManager.GetCurrent(), "{0:N}", value);
                     e.Row.Cells[index].CssClass = "text right";
                 }
             }

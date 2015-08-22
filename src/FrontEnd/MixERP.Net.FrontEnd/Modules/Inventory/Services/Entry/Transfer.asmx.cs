@@ -34,6 +34,7 @@ using System.Globalization;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
 {
@@ -59,7 +60,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
 
                         if (existingQuantity < model.Quantity)
                         {
-                            throw new MixERPException(string.Format(CultureInfo.CurrentCulture,
+                            throw new MixERPException(string.Format(CultureManager.GetCurrent(),
                                 Errors.InsufficientStockWarning, Conversion.TryCastInteger(existingQuantity),
                                 model.UnitName, model.ItemName));
                         }

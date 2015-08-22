@@ -48,7 +48,7 @@ namespace MixERP.Net.i18n
                     {
                         using (DataTable dataTable = new DataTable())
                         {
-                            dataTable.Locale = Thread.CurrentThread.CurrentCulture;
+                            dataTable.Locale = CultureManager.GetCurrent();
                             adapter.Fill(dataTable);
 
                             if (dataTable.Rows.Count > 0)
@@ -86,7 +86,7 @@ namespace MixERP.Net.i18n
                 {
                     using (DataTable dataTable = new DataTable())
                     {
-                        dataTable.Locale = Thread.CurrentThread.CurrentCulture;
+                        dataTable.Locale = CultureManager.GetCurrent();
                         adapter.Fill(dataTable);
                         return dataTable;
                     }

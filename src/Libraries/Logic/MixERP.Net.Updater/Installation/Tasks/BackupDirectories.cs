@@ -2,6 +2,7 @@
 using System.IO;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.Updater.Installation.Tasks
@@ -31,13 +32,13 @@ namespace MixERP.Net.Updater.Installation.Tasks
 
             foreach (string directory in this.Config.DirectoriesToBackup)
             {
-                string path = PathHelper.Combine(Config.ApplicationPath, directory);
+                string path = PathHelper.Combine(this.Config.ApplicationPath, directory);
                 string directoryName = new DirectoryInfo(directory).Name;
 
                 destination = PathHelper.Combine(this.Config.GetBackupDirectoryDestination(), directoryName);
 
 
-                string message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.BackingUp, path);
+                string message = string.Format(CultureManager.GetCurrent(), Labels.BackingUp, path);
 
 
                 this.OnProgress(new ProgressInfo(this.Description, message));

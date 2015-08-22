@@ -97,7 +97,7 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
                 throw new InvalidOperationException(Errors.ReferencingSidesNotEqual);
             }
 
-            var decimalPlaces = CurrentCulture.GetCurrencyDecimalPlaces();
+            var decimalPlaces = CultureManager.GetCurrencyDecimalPlaces();
 
             if ((from detail in details
                 where

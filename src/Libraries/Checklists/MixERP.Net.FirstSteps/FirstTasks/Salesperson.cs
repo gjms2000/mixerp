@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Framework.Contracts.Checklist;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using PetaPoco;
 
@@ -24,7 +25,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
             if (count > 0)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NSalespersonsFound, count);
+                this.Message = string.Format(CultureManager.GetCurrent(), Labels.NSalespersonsFound, count);
                 return;
             }
 

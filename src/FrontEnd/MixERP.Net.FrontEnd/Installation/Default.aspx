@@ -18,8 +18,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="MixERP.Net.FrontEnd.Installation.Default" %>
-
-<%@ Import Namespace="System.Globalization" %>
+<%@ Import Namespace="MixERP.Net.i18n" %>
 <%@ Import Namespace="MixERP.Net.i18n.Resources" %>
 
 <!DOCTYPE html>
@@ -33,7 +32,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 </head>
 <body>
     <form id="form1" runat="server">
-        <script src="/Resources.js?Culture=<%= CultureInfo.CurrentCulture.TwoLetterISOLanguageName %>"></script>
+        <script src="/Resources.js?Culture=<%= CultureManager.GetCurrent().TwoLetterISOLanguageName %>"></script>
         <div class="ui page grid">
             <div class="column">
                 <div class="ui purple segment">

@@ -32,7 +32,7 @@ namespace MixERP.Net.FrontEnd
             {
                 string path = "/bundles/stylesheets/master-page.min.css";
 
-                if (CurrentCulture.IsRtl())
+                if (CultureManager.IsRtl())
                 {
                     path = path.Replace("min.css", "rtl.css");
                 }

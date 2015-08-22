@@ -53076,8 +53076,9 @@ function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleCol
         var row = $(this);
         var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
 
+        //alert(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
         value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
-
+        //alert(value);
         var dataset =
         {
             fillColor: getFillColor(i),
@@ -54274,8 +54275,9 @@ function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleCol
         var row = $(this);
         var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
 
+        //alert(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
         value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
-
+        //alert(value);
         var dataset =
         {
             fillColor: getFillColor(i),

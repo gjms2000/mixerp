@@ -58,16 +58,16 @@ namespace MixERP.Net.WebControls.TransactionChecklist
             {
                 case -3:
                     label.CssClass = "ui block message red";
-                    label.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionRejectedDetails, model.VerifierName, model.VerifiedDate.ToString(CurrentCulture.GetCurrentUICulture()), model.VerificationReason);
+                    label.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionRejectedDetails, model.VerifierName, model.VerifiedDate.ToString(CultureManager.GetCurrentUICulture()), model.VerificationReason);
                     break;
 
                 case -2:
                     label.CssClass = "ui block message yellow";
-                    label.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionClosedDetails, model.VerifierName, model.VerifiedDate.ToString(CurrentCulture.GetCurrentUICulture()), model.VerificationReason);
+                    label.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionClosedDetails, model.VerifierName, model.VerifiedDate.ToString(CultureManager.GetCurrentUICulture()), model.VerificationReason);
                     break;
 
                 case -1:
-                    label.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionWithdrawnDetails, model.VerifierName, model.VerifiedDate.ToString(CurrentCulture.GetCurrentUICulture()), model.VerificationReason);
+                    label.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionWithdrawnDetails, model.VerifierName, model.VerifiedDate.ToString(CultureManager.GetCurrentUICulture()), model.VerificationReason);
                     label.CssClass = "ui block message yellow";
                     break;
 
@@ -77,12 +77,12 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                     break;
 
                 case 1:
-                    label.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionAutoApprovedDetails, model.VerifierName, model.VerifiedDate.ToString(CurrentCulture.GetCurrentUICulture()));
+                    label.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionAutoApprovedDetails, model.VerifierName, model.VerifiedDate.ToString(CultureManager.GetCurrentUICulture()));
                     label.CssClass = "ui block message green";
                     break;
 
                 case 2:
-                    label.Text = string.Format(CultureInfo.CurrentCulture, Labels.TransactionApprovedDetails, model.VerifierName, model.VerifiedDate.ToString(CurrentCulture.GetCurrentUICulture()));
+                    label.Text = string.Format(CultureManager.GetCurrent(), Labels.TransactionApprovedDetails, model.VerifierName, model.VerifiedDate.ToString(CultureManager.GetCurrentUICulture()));
                     label.CssClass = "ui block message green";
                     break;
             }

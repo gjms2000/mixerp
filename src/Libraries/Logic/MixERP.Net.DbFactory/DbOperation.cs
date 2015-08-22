@@ -215,7 +215,7 @@ namespace MixERP.Net.DbFactory
                             {
                                 using (DataTable dataTable = new DataTable())
                                 {
-                                    dataTable.Locale = Thread.CurrentThread.CurrentCulture;
+                                    dataTable.Locale = CultureManager.GetCurrent();
                                     adapter.Fill(dataTable);
                                     return dataTable;
                                 }
@@ -407,7 +407,7 @@ namespace MixERP.Net.DbFactory
 
                 if (!match)
                 {
-                    throw new InvalidOperationException(string.Format(CurrentCulture.GetCurrentUICulture(),
+                    throw new InvalidOperationException(string.Format(CultureManager.GetCurrentUICulture(),
                         Warnings.InvalidParameterName, npgsqlParameter.ParameterName));
                 }
             }

@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace MixERP.Net.i18n
 {
-    public static class CurrentCulture
+    public static class CultureManager
     {
         public static int GetCurrencyDecimalPlaces()
         {
@@ -37,7 +37,7 @@ namespace MixERP.Net.i18n
 
         public static bool IsRtl()
         {
-            CultureInfo culture = GetCurrentCulture();
+            CultureInfo culture = GetCurrent();
 
             if (culture == null)
             {
@@ -60,7 +60,7 @@ namespace MixERP.Net.i18n
             return culture;
         }
 
-        public static CultureInfo GetCurrentCulture()
+        public static CultureInfo GetCurrent()
         {
             return CultureInfo.DefaultThreadCurrentCulture ?? CultureInfo.CurrentCulture;
         }

@@ -1,6 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="BackendMaster.master.cs" Inherits="MixERP.Net.FrontEnd.BackendMaster" %>
-
-<%@ Import Namespace="System.Globalization" %>
+<%@ Import Namespace="MixERP.Net.i18n" %>
 
 <!DOCTYPE html>
 <html data-ng-app="MixERPApp">
@@ -27,7 +26,7 @@
 </head>
 <body>
     <form id="form1" runat="server" enctype="multipart/form-data" method="post" submitdisabledcontrols="true" defaultbutton="SwallowSubmit">
-        <script src="/Resources.js?Culture=<%= CultureInfo.CurrentCulture.TwoLetterISOLanguageName %>"></script>
+        <script src="/Resources.js?Culture=<%= CultureManager.GetCurrent().TwoLetterISOLanguageName %>"></script>
         <script src="/bundles/scripts/master-page.js"></script>
         <asp:Button runat="server" ID="SwallowSubmit" OnClientClick=" return false; " Style="display: none;" />
         <asp:ScriptManager runat="server" ID="ScriptManager1" />

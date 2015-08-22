@@ -23,7 +23,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Setup
         public List<PartyScrudView> GetParties(string filter, int partyTypeId, int page)
         {
             string catalog = AppUsers.GetCurrentUserDB();
-            filter = "%" + filter.ToLower(CurrentCulture.GetCurrentCulture()) + "%";
+            filter = "%" + filter.ToLower(CultureManager.GetCurrent()) + "%";
 
             int offset = (page - 1) * PAGE_SIZE;
 
@@ -65,7 +65,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Setup
         public int GetCount(string filter, int partyTypeId)
         {
             string catalog = AppUsers.GetCurrentUserDB();
-            filter = "%" + filter.ToLower(CurrentCulture.GetCurrentCulture()) + "%";
+            filter = "%" + filter.ToLower(CultureManager.GetCurrent()) + "%";
 
             const string sql = @"SELECT COUNT(*) / @0 FROM core.party_scrud_view
                 WHERE (@1 = 0 OR party_type_id = @1) 

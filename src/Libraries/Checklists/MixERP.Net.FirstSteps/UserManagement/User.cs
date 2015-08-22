@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Framework.Contracts.Checklist;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using PetaPoco;
 
@@ -25,7 +26,7 @@ namespace MixERP.Net.FirstSteps.NewUser.UserManagment
             if (count > 2)
             {
                 this.Status = true;
-                this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.TotalUsersN, count);
+                this.Message = string.Format(CultureManager.GetCurrent(), Labels.TotalUsersN, count);
                 return;
             }
 

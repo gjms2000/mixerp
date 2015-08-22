@@ -40,8 +40,8 @@ namespace MixERP.Net.FrontEnd.Base
 
         private void RegisterJavascript()
         {
-            string script = JSUtility.GetVar("culture", Thread.CurrentThread.CurrentCulture.Name);
-            script += JSUtility.GetVar("language", Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName);
+            string script = JSUtility.GetVar("culture", CultureManager.GetCurrent().Name);
+            script += JSUtility.GetVar("language", CultureManager.GetCurrent().TwoLetterISOLanguageName);
             script += JSUtility.GetVar("jqueryUIi18nPath", this.Page.ResolveUrl("~/Scripts/jquery-ui/i18n/"));
 
             script += JSUtility.GetVar("today", DateTime.Now.ToShortDateString());
@@ -50,20 +50,20 @@ namespace MixERP.Net.FrontEnd.Base
             script += JSUtility.GetVar("user", AppUsers.GetCurrent().View.UserName);
             script += JSUtility.GetVar("office", AppUsers.GetCurrent().View.OfficeName);
 
-            script += JSUtility.GetVar("shortDateFormat", CurrentCulture.GetShortDateFormat());
-            script += JSUtility.GetVar("longDateFormat", CurrentCulture.GetLongDateFormat());
+            script += JSUtility.GetVar("shortDateFormat", CultureManager.GetShortDateFormat());
+            script += JSUtility.GetVar("longDateFormat", CultureManager.GetLongDateFormat());
 
-            script += JSUtility.GetVar("thousandSeparator", CurrentCulture.GetThousandSeparator());
-            script += JSUtility.GetVar("decimalSeparator", CurrentCulture.GetDecimalSeparator());
-            script += JSUtility.GetVar("currencyDecimalPlaces", CurrentCulture.GetCurrencyDecimalPlaces());
-            script += JSUtility.GetVar("currencySymbol", CurrentCulture.GetCurrencySymbol());
+            script += JSUtility.GetVar("thousandSeparator", CultureManager.GetThousandSeparator());
+            script += JSUtility.GetVar("decimalSeparator", CultureManager.GetDecimalSeparator());
+            script += JSUtility.GetVar("currencyDecimalPlaces", CultureManager.GetCurrencyDecimalPlaces());
+            script += JSUtility.GetVar("currencySymbol", CultureManager.GetCurrencySymbol());
 
 
             script += JSUtility.GetVar("today", DateTime.Now.ToShortDateString());
-            script += JSUtility.GetVar("shortDateFormat", CurrentCulture.GetShortDateFormat());
-            script += JSUtility.GetVar("thousandSeparator", CurrentCulture.GetThousandSeparator());
-            script += JSUtility.GetVar("decimalSeparator", CurrentCulture.GetDecimalSeparator());
-            script += JSUtility.GetVar("currencyDecimalPlaces", CurrentCulture.GetCurrencyDecimalPlaces());
+            script += JSUtility.GetVar("shortDateFormat", CultureManager.GetShortDateFormat());
+            script += JSUtility.GetVar("thousandSeparator", CultureManager.GetThousandSeparator());
+            script += JSUtility.GetVar("decimalSeparator", CultureManager.GetDecimalSeparator());
+            script += JSUtility.GetVar("currencyDecimalPlaces", CultureManager.GetCurrencyDecimalPlaces());
             script += JSUtility.GetVar("baseCurrencyCode", AppUsers.GetCurrent().View.CurrencyCode);
 
 

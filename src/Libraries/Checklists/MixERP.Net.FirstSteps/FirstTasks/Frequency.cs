@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Framework.Contracts.Checklist;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using PetaPoco;
 
@@ -28,7 +29,7 @@ namespace MixERP.Net.FirstSteps.FirstTasks
                 return;
             }
 
-            this.Message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.NOutOfNFrequenciesDefined,
+            this.Message = string.Format(CultureManager.GetCurrent(), Labels.NOutOfNFrequenciesDefined,
                 count);
         }
 

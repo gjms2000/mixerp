@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
+using MixERP.Net.i18n;
 using MixERP.Net.ReportManager;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Data
@@ -48,7 +49,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Data
                     {
                         using (DataTable dataTable = new DataTable())
                         {
-                            dataTable.Locale = Thread.CurrentThread.CurrentCulture;
+                            dataTable.Locale = CultureManager.GetCurrent();
                             dataTable.TableName = "Report";
                             adapter.Fill(dataTable);
                             return dataTable;

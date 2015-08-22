@@ -3,6 +3,7 @@ using System.IO;
 using MixERP.Net.Common;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.Updater.Installation.Tasks
@@ -32,7 +33,7 @@ namespace MixERP.Net.Updater.Installation.Tasks
                 string source = PathHelper.Combine(sourceDirectory, directoryName);
 
 
-                string message = string.Format(CultureInfo.DefaultThreadCurrentCulture, Labels.RestoringDirectory, destination);
+                string message = string.Format(CultureManager.GetCurrent(), Labels.RestoringDirectory, destination);
 
                 this.OnProgress(new ProgressInfo(this.Description, message));
                 DirectoryHelper.CopyDirectory(source, destination);

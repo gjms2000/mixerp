@@ -12,7 +12,6 @@ namespace MixERP.Net.Updater
         private static Version GetCurrentVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version;
-            //return new Version("1.0.0.0");
         }
 
         public async Task<Release> GetLatestReleaseAsync()
