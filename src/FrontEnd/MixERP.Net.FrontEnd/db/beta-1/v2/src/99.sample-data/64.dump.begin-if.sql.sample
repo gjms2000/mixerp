@@ -1,5 +1,0 @@
-DO
-$$
-BEGIN
-    IF(core.get_locale() = 'en-US') THEN
-    --Continued to "65.dump.sql.sample"

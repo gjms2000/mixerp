@@ -1,5 +1,0 @@
-    --Continued from "65.dump.sql.sample"
-    END IF;
-END
-$$
-LANGUAGE plpgsql;    

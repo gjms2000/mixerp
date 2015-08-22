@@ -350,24 +350,10 @@
     <Content Include="bundles\stylesheets\master-page.rtl.min.css">
       <DependentUpon>master-page.rtl.css</DependentUpon>
     </Content>
-    <Content Include="db\beta-1\v1\mixerp-blank.sql" />
-    <Content Include="db\beta-1\v1\mixerp-sample.sql" />
-    <Content Include="db\beta-1\v1\mixerp.sql" />
-    <Content Include="db\beta-1\v2\mixerp-incremental-blank-db.sql" />
-    <Content Include="db\beta-1\v2\mixerp-incremental-sample.sql" />
-    <Content Include="db\beta-1\v2\mixerp-patch-for-v1.sql" />
-    <Content Include="db\blank-db.sql" />
-    <Content Include="db\index.html" />
-    <Content Include="db\patch.sql" />
-    <Content Include="db\release-1\update-1\mixerp-incremental-blank-db.sql" />
-    <Content Include="db\release-1\update-1\mixerp-incremental-sample.sql" />
-    <Content Include="db\release-1\update-1\mixerp-patch-for-rc.sql" />
-    <Content Include="db\sample-db.sql" />
     <Content Include="Installation\Default.aspx" />
     <Content Include="Installation\regional\en-US\Retail Industry.sql" />
     <Content Include="License.txt" />
     <Content Include="Modules\Default.aspx" />
-    <Content Include="db\web.config" />
     <Content Include="Modules\FirstSteps.aspx" />
     <Content Include="Modules\Update.aspx" />
     <Content Include="Modules\web.config" />

@@ -1,8 +1,8 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/00.db core/2.mixerp-db-schema.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/00.db core/2.mixerp-db-schema.sql --<--<--
 CREATE SCHEMA IF NOT EXISTS config AUTHORIZATION mix_erp;
 COMMENT ON SCHEMA config IS 'Contains configuration objects.';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/00.db core/plpgunit-privileges.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/00.db core/plpgunit-privileges.sql --<--<--
 REVOKE ALL ON SCHEMA config FROM public;
 
 GRANT USAGE ON SCHEMA config TO mix_erp;
@@ -18,7 +18,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA config TO mix_erp;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA config TO mix_erp;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA config TO mix_erp;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP INDEX IF EXISTS policy.menu_access_uix;
 
 
@@ -1206,7 +1206,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/audit/audit.get_office_information_model.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/audit/audit.get_office_information_model.sql --<--<--
 DROP FUNCTION IF EXISTS audit.get_office_information_model(integer);
 
 CREATE FUNCTION audit.get_office_information_model(integer)
@@ -1311,7 +1311,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
 DROP FUNCTION IF EXISTS core.add_custom_field_form
 (
     _form_name              national character varying(100),
@@ -1351,7 +1351,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
 (
     _menu_code          text,
@@ -1377,7 +1377,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_custom_field_form_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_custom_field_form_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_custom_field_form_name
 (
     _schema_name national character varying(100), 
@@ -1401,7 +1401,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_custom_field_setup_id_by_table_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_custom_field_setup_id_by_table_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_custom_field_setup_id_by_table_name
 (
     _schema_name national character varying(100), 
@@ -1427,7 +1427,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_quotation_valid_duration.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_quotation_valid_duration.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer) CASCADE;
 
 CREATE FUNCTION core.get_quotation_valid_duration(_office_id integer)
@@ -1447,7 +1447,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM core.get_quotation_valid_duration(2);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_root_account_id.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_root_account_id.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_second_root_account_id(integer, integer);
 DROP FUNCTION IF EXISTS core.get_root_account_id(integer, integer);
 DROP FUNCTION IF EXISTS core.get_root_account_id(bigint, bigint);
@@ -1475,7 +1475,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.get_shipping_address_by_shipping_address_id.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_shipping_address_by_shipping_address_id.sql --<--<--
 CREATE OR REPLACE FUNCTION core.get_shipping_address_by_shipping_address_id(bigint)
 RETURNS text
 AS
@@ -1507,7 +1507,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM core.get_shipping_address_by_shipping_address_id(1);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/core/core.is_parent_account.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.is_parent_account.sql --<--<--
 DROP FUNCTION IF EXISTS core.is_parent_account(parent bigint, child bigint) CASCADE;
 
 CREATE FUNCTION core.is_parent_account(parent bigint, child bigint)
@@ -1552,7 +1552,7 @@ ALTER TABLE core.accounts
 ADD CONSTRAINT accounts_parent_account_id_chk
 CHECK(parent_account_id IS NULL OR NOT core.is_parent_account(account_id, parent_account_id));
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/localization/localization.add_localized_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.add_localized_resource.sql --<--<--
 DROP FUNCTION IF EXISTS localization.add_localized_resource
 (
     _culture_code    text,
@@ -1613,7 +1613,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/localization/localization.get_menu_table.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.get_menu_table.sql --<--<--
 DROP FUNCTION IF EXISTS localization.get_menu_table(_culture_code text);
 
 CREATE FUNCTION localization.get_menu_table(_culture_code text)
@@ -1640,7 +1640,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/localization/localization.get_output_for.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.get_output_for.sql --<--<--
 DROP FUNCTION IF EXISTS localization.get_output_for(national character varying(3));
 
 CREATE FUNCTION localization.get_output_for(national character varying(3))
@@ -1672,7 +1672,7 @@ LANGUAGE plpgsql;
 --SELECT * FROM localization.get_output_for('de');
 --SELECT * FROM localization.get_output_for('es');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.create_new_fiscal_year.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.create_new_fiscal_year.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_new_fiscal_year
 (
     _office_id                          integer,
@@ -1737,7 +1737,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.dates.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.dates.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_date(_office_id integer);
 
 CREATE FUNCTION core.get_date(_office_id integer)
@@ -1943,7 +1943,7 @@ LANGUAGE plpgsql;
 --SELECT core.get_date(1), core.get_month_start_date(1),core.get_month_end_date(1), core.get_quarter_start_date(1), core.get_quarter_end_date(1), core.get_fiscal_half_start_date(1), core.get_fiscal_half_end_date(1), core.get_fiscal_year_start_date(1), core.get_fiscal_year_end_date(1);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_account_id_by_account_name(text);
 
 CREATE FUNCTION core.get_account_id_by_account_name(text)
@@ -1961,7 +1961,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_current_fiscal_year_code().sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_current_fiscal_year_code().sql --<--<--
 DROP FUNCTION IF EXISTS core.get_current_fiscal_year_code(_office_id integer);
 
 CREATE FUNCTION core.get_current_fiscal_year_code(_office_id integer)
@@ -1980,7 +1980,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.get_party_code.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_party_code.sql --<--<--
 CREATE OR REPLACE FUNCTION core.get_party_code
 (
     text, --First Name
@@ -2067,7 +2067,7 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/core/core.is_new_fiscal_year_created.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.is_new_fiscal_year_created.sql --<--<--
 DROP FUNCTION IF EXISTS core.is_new_fiscal_year_created
 (
     _office_id              integer
@@ -2097,7 +2097,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/office/office.add_office.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/office/office.add_office.sql --<--<--
 DROP FUNCTION IF EXISTS office.add_office
 (
     _office_code            national character varying(12),
@@ -2356,7 +2356,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/policy/policy.get_menu.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/policy/policy.get_menu.sql --<--<--
 DROP FUNCTION IF EXISTS policy.get_menu
 (
     _user_id    integer, 
@@ -2437,7 +2437,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/public/public.poco_get_table_function_definition.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/public/public.poco_get_table_function_definition.sql --<--<--
 DROP FUNCTION IF EXISTS public.poco_get_table_function_definition
 (
     _schema         text,
@@ -2568,7 +2568,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.auto_verify.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.auto_verify.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.auto_verify
 (
     _tran_id        bigint,
@@ -3254,7 +3254,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_account_statement.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_account_statement.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_account_statement
 (
     _value_date_from        date,
@@ -3456,7 +3456,7 @@ LANGUAGE plpgsql;
 --SELECT * FROM transactions.get_account_statement('1-1-2010','1-1-2020',1,1,1);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_due_date.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_due_date.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_due_date(_value_date date, _payment_term_id integer) CASCADE;
 
 CREATE FUNCTION transactions.get_due_date(_value_date date, _payment_term_id integer)
@@ -3489,7 +3489,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_eoy_profit_summary.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_eoy_profit_summary.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_eoy_profit_summary
 (
     _office_id              integer
@@ -3528,7 +3528,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_income_expenditure_statement.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_income_expenditure_statement.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_income_expenditure_statement
 (
     _date_from              date,
@@ -3757,7 +3757,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_inventory_transfer_request_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_inventory_transfer_request_view.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_inventory_transfer_request_view
 (
     _user_id                integer,
@@ -3894,7 +3894,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_inventory_transfer_request_view(2, 5, 1,'2010-1-1','2020-1-1','','','','','','','','');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_pl_appropriation_data.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_pl_appropriation_data.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_pl_appropriation_data(_office_id integer);
 
 CREATE FUNCTION transactions.get_pl_appropriation_data(_office_id integer)
@@ -4013,7 +4013,195 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_pl_appropriation_data(2);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_total_sales_by_office.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_top_selling_products_by_office.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_top_selling_products_by_office(_office_id integer, top integer);
+
+CREATE FUNCTION transactions.get_top_selling_products_by_office(_office_id integer, top integer)
+RETURNS TABLE
+(
+        id              integer,
+        office_id       integer,
+        office_code     text,
+        office_name     text,
+        item_id         integer,
+        item_code       text,
+        item_name       text,
+        total_sales     numeric
+)
+AS
+$$
+BEGIN
+        CREATE TEMPORARY TABLE top_selling_products
+        (
+                item_id integer
+        ) ON COMMIT DROP;
+
+        INSERT INTO top_selling_products
+        SELECT t.item_id FROM transactions.get_top_selling_products_of_all_time(top) AS t;
+
+
+        CREATE TEMPORARY TABLE top_selling_products_by_office
+        (
+                id              SERIAL,
+                office_id       integer,
+                office_code     text,
+                office_name     text,
+                item_id         integer,
+                item_code       text,
+                item_name       text,
+                total_sales     numeric
+        ) ON COMMIT DROP;
+
+
+        INSERT INTO top_selling_products_by_office(office_id, item_id, total_sales)
+        SELECT
+                transactions.verified_stock_transaction_view.office_id,
+                transactions.verified_stock_transaction_view.item_id, 
+                SUM((price * quantity) - discount + tax) AS sales_amount
+        FROM transactions.verified_stock_transaction_view
+        WHERE left(book, 5) = 'Sales'
+        AND transactions.verified_stock_transaction_view.item_id IN (SELECT top_selling_products.item_id FROM top_selling_products)
+        AND transactions.verified_stock_transaction_view.office_id IN (SELECT * FROM office.get_office_ids(_office_id))
+        GROUP BY 
+                transactions.verified_stock_transaction_view.office_id, 
+                transactions.verified_stock_transaction_view.item_id
+        ORDER BY sales_amount DESC, item_id ASC;
+
+
+        UPDATE top_selling_products_by_office AS t
+        SET 
+                item_code = core.items.item_code,
+                item_name = core.items.item_name
+        FROM core.items
+        WHERE t.item_id = core.items.item_id;
+
+
+        UPDATE top_selling_products_by_office AS t
+        SET 
+                office_code = office.offices.office_code,
+                office_name= office.offices.office_name
+        FROM office.offices
+        WHERE t.office_id = office.offices.office_id;
+
+
+        RETURN QUERY 
+        SELECT * FROM top_selling_products_by_office;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS transactions.get_top_selling_products_by_office();
+
+CREATE FUNCTION transactions.get_top_selling_products_by_office()
+RETURNS TABLE
+(
+        id              integer,
+        office_id       integer,
+        office_code     text,
+        office_name     text,
+        item_id         integer,
+        item_code       text,
+        item_name       text,
+        total_sales     numeric
+)
+AS
+$$
+    DECLARE root_office_id integer = 0;
+BEGIN
+    SELECT office.offices.office_id INTO root_office_id
+    FROM office.offices
+    WHERE parent_office_id IS NULL
+    LIMIT 1;
+
+        RETURN QUERY 
+        SELECT * FROM transactions.get_top_selling_products_by_office(root_office_id, 5);
+END
+$$
+LANGUAGE plpgsql;
+
+
+--SELECT  id, office_code, item_name, total_sales FROM transactions.get_top_selling_products_by_office()
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_top_selling_products_of_all_time.sql --<--<--
+
+DROP FUNCTION IF EXISTS transactions.get_top_selling_products_of_all_time(top int);
+
+CREATE FUNCTION transactions.get_top_selling_products_of_all_time(top int)
+RETURNS TABLE
+(
+        id              integer,
+        item_id         integer,
+        item_code       text,
+        item_name       text,
+        total_sales     numeric
+)
+AS
+$$
+BEGIN
+        CREATE TEMPORARY TABLE IF NOT EXISTS top_selling_products_of_all_time
+        (
+                id              integer,
+                item_id         integer,
+                item_code       text,
+                item_name       text,
+                total_sales     numeric
+        ) ON COMMIT DROP;
+
+        INSERT INTO top_selling_products_of_all_time(id, item_id, total_sales)
+        SELECT ROW_NUMBER() OVER(), *
+        FROM
+        (
+                SELECT         
+                        transactions.verified_stock_transaction_view.item_id, 
+                        SUM((price * quantity) - discount + tax) AS sales_amount
+                FROM transactions.verified_stock_transaction_view
+                WHERE left(book, 5) = 'Sales'
+                GROUP BY transactions.verified_stock_transaction_view.item_id
+                ORDER BY 2 DESC
+                LIMIT $1
+        ) t;
+
+        UPDATE top_selling_products_of_all_time AS t
+        SET 
+                item_code = core.items.item_code,
+                item_name = core.items.item_name
+        FROM core.items
+        WHERE t.item_id = core.items.item_id;
+        
+
+        RETURN QUERY
+        SELECT * FROM top_selling_products_of_all_time;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS transactions.get_top_selling_products_of_all_time();
+
+CREATE FUNCTION transactions.get_top_selling_products_of_all_time()
+RETURNS TABLE
+(
+        id              integer,
+        item_id         integer,
+        item_code       text,
+        item_name       text,
+        total_sales     numeric
+)
+AS
+$$
+BEGIN
+        RETURN QUERY
+        SELECT * FROM transactions.get_top_selling_products_of_all_time(5);
+END
+$$
+LANGUAGE plpgsql;
+
+
+--SELECT * FROM transactions.get_top_selling_products_of_all_time();
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_total_sales_by_office.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_total_sales_by_office(_office_id integer);
 
 CREATE FUNCTION transactions.get_total_sales_by_office(_office_id integer)
@@ -4071,7 +4259,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM transactions.get_total_sales_by_office(2);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_trial_balance.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_trial_balance.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_trial_balance
 (
     _date_from                      date,
@@ -4303,7 +4491,7 @@ LANGUAGE plpgsql;
 --SELECT * FROM transactions.get_trial_balance('12-1-2014','12-31-2014',1,1, false, 1000, false, false);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.get_value_date.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_value_date.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_value_date(_office_id integer);
 
 CREATE FUNCTION transactions.get_value_date(_office_id integer)
@@ -4344,7 +4532,7 @@ LANGUAGE plpgsql;
 
 --select transactions.get_value_date(2);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_delivery.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_delivery.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_delivery
 (
     _office_id                              integer,
@@ -4543,7 +4731,7 @@ LANGUAGE plpgsql;
 -- 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_request.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_request.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_request
 (
     _office_id                              integer,
@@ -4709,7 +4897,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.post_stock_transfer_acknowledgement.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_stock_transfer_acknowledgement.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.post_stock_transfer_acknowledgement
 (
     _office_id                              integer,
@@ -4855,7 +5043,7 @@ LANGUAGE plpgsql;
 -- 
 -- ROLLBACK;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/logic/transactions/transactions.verify_transaction.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.verify_transaction.sql --<--<--
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/FrontEnd/MixERP.Net.FrontEnd/db/src/02. functions and logic/logic/functions/transactions/transactions.verify_transaction.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.verify_transaction
 (
@@ -5065,7 +5253,7 @@ LANGUAGE plpgsql;
 --------------------------------------------------------------------------------------------------------------------------
 **************************************************************************************************************************/
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/office/office.get_stores.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/office/office.get_stores.sql --<--<--
 DROP FUNCTION IF EXISTS office.get_stores
 (
     _office_id  integer,
@@ -5103,7 +5291,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM office.get_stores(2, 1);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.are_purchase_orders_already_merged.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.are_purchase_orders_already_merged.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[]);
 
 CREATE FUNCTION transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[])
@@ -5127,7 +5315,7 @@ $$
 LANGUAGE plpgsql;   
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.get_verification_status.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.get_verification_status.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.get_verification_status
 (
     _tran_id              BIGINT
@@ -5151,7 +5339,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.party_item_chart_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_item_chart_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.party_item_chart_view;
 
 CREATE VIEW transactions.party_item_chart_view
@@ -5168,7 +5356,7 @@ ON transactions.stock_details.item_id = core.items.item_id
 GROUP BY party_id, core.items.item_name
 ORDER BY party_id, total DESC;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.party_purchase_chart_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_purchase_chart_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.party_purchase_chart_view;
 
 CREATE VIEW transactions.party_purchase_chart_view
@@ -5193,7 +5381,7 @@ GROUP BY
     transactions.transaction_master.value_date, 
     transactions.transaction_master.transaction_master_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/functions/transactions/transactions.party_sales_chart_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_sales_chart_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.party_sales_chart_view;
 
 CREATE VIEW transactions.party_sales_chart_view
@@ -5218,7 +5406,7 @@ GROUP BY
     transactions.transaction_master.value_date, 
     transactions.transaction_master.transaction_master_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/02.functions-and-logic/triggers/transactions.verification_trigger.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/triggers/transactions.verification_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS transactions.verification_trigger() CASCADE;
 CREATE FUNCTION transactions.verification_trigger()
 RETURNS TRIGGER
@@ -5476,7 +5664,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE transactions.verification_trigger();
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/03.menus/0.menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/03.menus/0.menus.sql --<--<--
 --This table should not be localized.
 
 SELECT * FROM core.create_menu('Sales', '~/Modules/Sales/Index.mix', 'SA', 0, NULL);
@@ -5617,7 +5805,7 @@ SELECT * FROM core.create_menu('OpenExchangeRates Parameters', '~/Modules/BackOf
 SELECT * FROM core.create_menu('ScrudFactory Parameters', '~/Modules/BackOffice/OTS/ScrudFactoryParameters.mix', 'OTSSFP', 2, core.get_menu_id('OTS'));
 SELECT * FROM core.create_menu('Switches', '~/Modules/BackOffice/OTS/Switches.mix', 'OTSSW', 2, core.get_menu_id('OTS'));;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.default-values/01.default-values.sql --<--<--
 DO
 $$
 BEGIN
@@ -5673,7 +5861,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--
 SELECT localization.add_localized_resource('CommonResource', '', 'DateMustBeGreaterThan', 'Invalid date. Must be greater than "{0}".');
 SELECT localization.add_localized_resource('CommonResource', '', 'DateMustBeLessThan', 'Invalid date. Must be less than "{0}".');
 SELECT localization.add_localized_resource('CommonResource', '', 'InvalidDate', 'Invalid date.');
@@ -7200,7 +7388,7 @@ SELECT localization.add_localized_resource('Warnings', '', 'ReturnButtonUrlNull'
 SELECT localization.add_localized_resource('Warnings', '', 'StartDateGreaterThanEndDate', 'The start date cannot be greater than end date.');
 SELECT localization.add_localized_resource('Warnings', '', 'UserIdOrPasswordIncorrect', 'User id or password incorrect.');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ar/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ar/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
@@ -8733,7 +8921,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPas
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ar/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ar/menus.sql --<--<--
 --Contributors for this translation:
 --https://github.com/nubiancc
 SELECT * FROM core.create_menu_locale('AS', 'ar', 'كشف حساب');--Account Statement
@@ -8873,7 +9061,7 @@ SELECT * FROM core.create_menu_locale('FVV', 'ar', 'تحقق مستند القي
 SELECT * FROM core.create_menu_locale('SVV', 'ar', 'سياسة التحقق من مستندات القيد');--Voucher Verification Policy
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/de/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/de/language.sql --<--<--
 --This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
 SELECT * FROM localization.add_localized_resource('CommonResource', 'de', 'DateMustBeGreaterThan', 'Ungültiges Datum. Muss größer sein als "{0}".');
@@ -10371,7 +10559,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'de', 'StartDateGr
 SELECT * FROM localization.add_localized_resource('Warnings', 'de', 'UserIdOrPasswordIncorrect', 'Benutzerkennung oder Passwort falsch.');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/de/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/de/menus.sql --<--<--
 --This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
 SELECT core.create_menu_locale('ERR', 'de', 'Wechselkurse');
@@ -10512,7 +10700,7 @@ SELECT core.create_menu_locale('SDS', 'de', 'Abteilungs Setup');
 SELECT core.create_menu_locale('SAA', 'de', 'API-Richtlinien');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/es/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/es/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Jonathan Valle https://github.com/JonathanValle
@@ -11733,7 +11921,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'es', 'ReturnButto
 SELECT * FROM localization.add_localized_resource('Warnings', 'es', 'UserIdOrPasswordIncorrect', 'Identificador de usuario o contraseña incorrecta.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/es/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/es/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'es', 'Losa bonificación sobre los Vendedores');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'es', 'Losas Envejecimiento');--Ageing Slabs
@@ -11852,7 +12040,7 @@ SELECT core.create_menu_locale('MFS', 'es', 'Configuración Fee Merchant');--Mer
 SELECT core.create_menu_locale('RW', 'es', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/fil/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fil/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'fil', 'DateMustBeGreaterThan', 'Di-wastong petsa. Dapat ay mas higit "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'fil', 'DateMustBeLessThan', 'Di-wastong petsa. Dapat na mas mababa sa "{0}".');--Invalid date. Must be less than "{0}".
@@ -13068,7 +13256,7 @@ SELECT localization.add_localized_resource('Warnings', 'fil', 'ReturnButtonUrlNu
 SELECT localization.add_localized_resource('Warnings', 'fil', 'UserIdOrPasswordIncorrect', 'Pantukoy o maling password ng user.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/fil/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fil/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'fil', 'Bonus laha para sa Salesperson');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'fil', 'Pagtanda Slabs');--Ageing Slabs
@@ -13187,7 +13375,7 @@ SELECT core.create_menu_locale('MFS', 'fil', 'Setup Bayarin sa Merchant');--Merc
 SELECT core.create_menu_locale('RW', 'fil', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/fr/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fr/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
@@ -14702,7 +14890,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'StartDateGr
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'UserIdOrPasswordIncorrect', 'ID utilisateur ou mot de passe incorrect.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/fr/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fr/menus.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
@@ -14846,7 +15034,7 @@ SELECT * FROM core.create_menu_locale('FVV', 'fr', 'Vérification du bon');--Vou
 SELECT * FROM core.create_menu_locale('SVV', 'fr', 'Politique sur la vérification bon');--Voucher Verification Policy
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/id/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/id/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'id', 'DateMustBeGreaterThan', 'Tanggal tidak valid. Harus lebih besar dari "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'id', 'DateMustBeLessThan', 'Tanggal tidak valid. Harus kurang dari "{0}".');--Invalid date. Must be less than "{0}".
@@ -16062,7 +16250,7 @@ SELECT localization.add_localized_resource('Warnings', 'id', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'id', 'UserIdOrPasswordIncorrect', 'Identifier pengguna dan password yang salah.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/id/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/id/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'id', 'Slab bonus untuk Staf Penjualan');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'id', 'Lempengan Penuaan');--Ageing Slabs
@@ -16181,7 +16369,7 @@ SELECT core.create_menu_locale('MFS', 'id', 'Merchant Fee Pengaturan');--Merchan
 SELECT core.create_menu_locale('RW', 'id', 'laporan Penulis');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ja/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ja/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ja', 'DateMustBeGreaterThan', '無効な日付。よりも大きくなければなりません"{0}"。');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ja', 'DateMustBeLessThan', '無効な日付。未満でなければなりません"{0}"。');--Invalid date. Must be less than "{0}".
@@ -17397,7 +17585,7 @@ SELECT localization.add_localized_resource('Warnings', 'ja', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ja', 'UserIdOrPasswordIncorrect', 'ユーザ識別子またはパスワードが正しくない。');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ja/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ja/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'ja', '販売員のためのボーナススラブ');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'ja', '高齢スラブ');--Ageing Slabs
@@ -17516,7 +17704,7 @@ SELECT core.create_menu_locale('MFS', 'ja', '加盟店手数料の設定');--Mer
 SELECT core.create_menu_locale('RW', 'ja', '報告書作成');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ms/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ms/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ms', 'DateMustBeGreaterThan', 'Tarikh tidak sah. Mesti lebih besar daripada "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ms', 'DateMustBeLessThan', 'Tarikh tidak sah. Mesti kurang daripada "{0}".');--Invalid date. Must be less than "{0}".
@@ -18732,7 +18920,7 @@ SELECT localization.add_localized_resource('Warnings', 'ms', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ms', 'UserIdOrPasswordIncorrect', 'Pengecam pengguna atau kata laluan salah.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ms/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ms/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('CTST', 'ms', 'Daerah-daerah Jualan Cukai');--Counties Sales Taxes
 SELECT core.create_menu_locale('ABS', 'ms', 'Slab Bonus untuk jurujual');--Bonus Slab for Salespersons
@@ -18851,7 +19039,7 @@ SELECT core.create_menu_locale('MFS', 'ms', 'Bayaran Merchant Persediaan');--Mer
 SELECT core.create_menu_locale('RW', 'ms', 'Laporan Penulis');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/nl/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/nl/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'nl', 'DateMustBeGreaterThan', 'Ongeldige datum. Moet groter zijn dan "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'nl', 'DateMustBeLessThan', 'Ongeldige datum. Moet kleiner zijn dan "{0}".');--Invalid date. Must be less than "{0}".
@@ -20067,7 +20255,7 @@ SELECT localization.add_localized_resource('Warnings', 'nl', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'nl', 'UserIdOrPasswordIncorrect', 'Gebruiker Identifier of wachtwoord onjuist.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/nl/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/nl/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'nl', 'Bonus Slab voor Verkopers');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'nl', 'Vergrijzing Platen');--Ageing Slabs
@@ -20186,7 +20374,7 @@ SELECT core.create_menu_locale('MFS', 'nl', 'Merchant Fee Setup');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'nl', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/pt/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/pt/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'pt', 'DateMustBeGreaterThan', 'Data inválida. Deve ser maior que "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'pt', 'DateMustBeLessThan', 'Data inválida. Deve ser inferior a "{0}".');--Invalid date. Must be less than "{0}".
@@ -21402,7 +21590,7 @@ SELECT localization.add_localized_resource('Warnings', 'pt', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'pt', 'UserIdOrPasswordIncorrect', 'Identificador de usuário ou senha incorreta.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/pt/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/pt/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'pt', 'Slab Bonus para vendedores');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'pt', 'Lajes Envelhecimento');--Ageing Slabs
@@ -21521,7 +21709,7 @@ SELECT core.create_menu_locale('MFS', 'pt', 'Setup Fee Merchant');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'pt', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ru/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ru/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ru', 'DateMustBeGreaterThan', 'Неправильная дата. Должно быть больше, чем "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ru', 'DateMustBeLessThan', 'Неправильная дата. Должна быть меньше, чем "{0}".');--Invalid date. Must be less than "{0}".
@@ -22737,7 +22925,7 @@ SELECT localization.add_localized_resource('Warnings', 'ru', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ru', 'UserIdOrPasswordIncorrect', 'Идентификатор пользователя или пароль неверен.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/ru/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ru/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'ru', 'Бонус Плиты для продавцов');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'ru', 'Старение плиты');--Ageing Slabs
@@ -22856,7 +23044,7 @@ SELECT core.create_menu_locale('MFS', 'ru', 'Торговец Стоимость
 SELECT core.create_menu_locale('RW', 'ru', 'генератор отчетов');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/sv/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/sv/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'sv', 'DateMustBeGreaterThan', 'ogiltigt datum. Måste vara större än "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'sv', 'DateMustBeLessThan', 'Ogiltigt datum. Måste vara mindre än "{0}".');--Invalid date. Must be less than "{0}".
@@ -24072,7 +24260,7 @@ SELECT localization.add_localized_resource('Warnings', 'sv', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'sv', 'UserIdOrPasswordIncorrect', 'Användar identifierare eller lösenord felaktigt.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/sv/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/sv/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'sv', 'Bonus Slab för Försäljare');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'sv', 'åldrande Plattor');--Ageing Slabs
@@ -24191,7 +24379,7 @@ SELECT core.create_menu_locale('MFS', 'sv', 'Merchant Fee Setup');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'sv', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/zh/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/zh/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'zh', 'DateMustBeGreaterThan', '无效的日期。必须大于“{0}”。');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'zh', 'DateMustBeLessThan', '无效的日期。必须小于“{0}”。');--Invalid date. Must be less than "{0}".
@@ -25407,7 +25595,7 @@ SELECT localization.add_localized_resource('Warnings', 'zh', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'zh', 'UserIdOrPasswordIncorrect', '用户标识符或密码不正确。');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/04.Localization/zh/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/zh/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'zh', '奖金为平板销售人员');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'zh', '老龄板坯');--Ageing Slabs
@@ -25525,7 +25713,7 @@ SELECT core.create_menu_locale('PAC', 'zh', '支付卡');--Payment Cards
 SELECT core.create_menu_locale('MFS', 'zh', '商家安装费');--Merchant Fee Setup
 SELECT core.create_menu_locale('RW', 'zh', '报表生成器');--Report Writer
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.attachment_factory.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.attachment_factory.sql --<--<--
 DROP VIEW IF EXISTS config.attachment_factory_scrud_view;
 
 CREATE VIEW config.attachment_factory_scrud_view
@@ -25537,7 +25725,7 @@ FROM
 config.attachment_factory;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.currency_layer_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.currency_layer_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS config.currency_layer_scrud_view;
 
 CREATE VIEW config.currency_layer_scrud_view
@@ -25550,7 +25738,7 @@ FROM
 config.currency_layer;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.db_parameter.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.db_parameter.sql --<--<--
 DROP VIEW IF EXISTS config.db_parameter_scrud_view;
 
 CREATE VIEW config.db_parameter_scrud_view
@@ -25562,7 +25750,7 @@ FROM
 config.db_parameters;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS config.mixerp_scrud_view;
 
 CREATE VIEW config.mixerp_scrud_view
@@ -25575,7 +25763,7 @@ FROM
 config.mixerp;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.open_exchange_rate_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.open_exchange_rate_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS config.open_exchange_rate_scrud_view;
 
 CREATE VIEW config.open_exchange_rate_scrud_view
@@ -25588,7 +25776,7 @@ FROM
 config.open_exchange_rates;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.scrud_factory_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.scrud_factory_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS config.scrud_factory_scrud_view;
 
 CREATE VIEW config.scrud_factory_scrud_view
@@ -25600,7 +25788,7 @@ FROM
 config.scrud_factory;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/config/config.switch_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.switch_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS config.switch_scrud_view;
 
 CREATE VIEW config.switch_scrud_view
@@ -25612,7 +25800,7 @@ FROM
 config.switches;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/1.core.bank_account_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/1.core.bank_account_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.bank_account_scrud_view CASCADE;
 
 CREATE OR REPLACE VIEW core.bank_account_scrud_view
@@ -25636,7 +25824,7 @@ INNER JOIN office.offices
 ON core.bank_accounts.office_id = office.offices.office_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.bonus_slab_detail_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.bonus_slab_detail_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.bonus_slab_detail_scrud_view;
 
 CREATE VIEW core.bonus_slab_detail_scrud_view
@@ -25654,7 +25842,7 @@ ON core.bonus_slab_details.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.bonus_slab_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.bonus_slab_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.bonus_slab_scrud_view;
 
 CREATE VIEW core.bonus_slab_scrud_view
@@ -25677,7 +25865,7 @@ INNER JOIN core.accounts
 ON core.bonus_slabs.account_id = core.accounts.account_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.frequency_setup_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.frequency_setup_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.frequency_setup_scrud_view;
 
 CREATE VIEW core.frequency_setup_scrud_view
@@ -25691,7 +25879,7 @@ SELECT
 FROM core.frequency_setups;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.item_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.item_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.item_scrud_view;
 
 CREATE VIEW core.item_scrud_view
@@ -25740,7 +25928,7 @@ LEFT JOIN core.shipping_package_shapes
 ON core.items.shipping_package_shape_id = core.shipping_package_shapes.shipping_package_shape_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.late_fee_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.late_fee_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.late_fee_scrud_view;
 
 CREATE VIEW core.late_fee_scrud_view
@@ -25759,7 +25947,7 @@ ON core.late_fee.account_id = core.accounts.account_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.merchant_fee_setup_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.merchant_fee_setup_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.merchant_fee_setup_scrud_view CASCADE;
 
 CREATE VIEW core.merchant_fee_setup_scrud_view
@@ -25784,7 +25972,7 @@ INNER JOIN
 core.accounts
 ON core.merchant_fee_setup.account_id = core.accounts.account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.party_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.party_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.party_scrud_view;
 
 CREATE VIEW core.party_scrud_view
@@ -25832,7 +26020,7 @@ ON parties.party_type_id = party_types.party_type_id
 INNER JOIN core.accounts 
 ON parties.account_id = accounts.account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.party_type_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.party_type_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.party_type_scrud_view;
 
 CREATE VIEW core.party_type_scrud_view
@@ -25847,7 +26035,7 @@ FROM core.party_types
 INNER JOIN core.accounts
 ON core.party_types.account_id = core.accounts.account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.payment_term_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.payment_term_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.payment_term_scrud_view;
 
 CREATE VIEW core.payment_term_scrud_view
@@ -25871,7 +26059,7 @@ LEFT JOIN core.late_fee
 ON core.payment_terms.late_fee_id=core.late_fee.late_fee_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurrence_type_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurrence_type_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.recurrence_type_scrud_view;
 
 CREATE VIEW core.recurrence_type_scrud_view
@@ -25885,7 +26073,7 @@ core.recurrence_types.is_frequency
 FROM
 core.recurrence_types;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurring_invoice_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurring_invoice_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.recurring_invoice_scrud_view;
 
 CREATE VIEW core.recurring_invoice_scrud_view
@@ -25922,7 +26110,7 @@ ON core.recurring_invoices.payment_term_id = core.payment_terms.payment_term_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.recurring_invoice_setup_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurring_invoice_setup_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.recurring_invoice_setup_scrud_view;
 
 CREATE VIEW core.recurring_invoice_setup_scrud_view
@@ -25958,7 +26146,7 @@ INNER JOIN core.payment_terms
 ON core.recurring_invoice_setup.payment_term_id = core.payment_terms.payment_term_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.salesperson_bonus_setup_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.salesperson_bonus_setup_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.salesperson_bonus_setup_scrud_view;
 
 CREATE VIEW core.salesperson_bonus_setup_scrud_view
@@ -25976,7 +26164,7 @@ INNER JOIN core.bonus_slabs
 ON core.salesperson_bonus_setups.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.salesperson_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.salesperson_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.salesperson_scrud_view;
 
 CREATE VIEW core.salesperson_scrud_view
@@ -26000,7 +26188,7 @@ ON core.salespersons.account_id = core.accounts.account_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/core/core.shipping_address_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.shipping_address_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.shipping_address_scrud_view;
 
 CREATE VIEW core.shipping_address_scrud_view
@@ -26021,7 +26209,7 @@ INNER JOIN core.parties
 ON core.shipping_addresses.party_id=core.parties.party_id;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/office/office.counter_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/office/office.counter_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS office.counter_scrud_view;
 
 CREATE VIEW office.counter_scrud_view
@@ -26042,7 +26230,7 @@ ON office.counters.store_id = office.stores.store_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/office/office.store_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/office/office.store_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS office.store_scrud_view;
 
 CREATE VIEW office.store_scrud_view
@@ -26073,7 +26261,7 @@ ON office.stores.default_cash_repository_id = office.cash_repositories.cash_repo
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/policy/policy.auto_verification_policy_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/policy/policy.auto_verification_policy_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS policy.auto_verification_policy_scrud_view;
 
 CREATE VIEW policy.auto_verification_policy_scrud_view
@@ -26098,7 +26286,7 @@ ON policy.auto_verification_policy.user_id=office.users.user_id
 INNER JOIN office.offices
 ON policy.auto_verification_policy.office_id=office.offices.office_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.scrud-views/policy/policy.voucher_verification_policy_scrud_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/policy/policy.voucher_verification_policy_scrud_view.sql --<--<--
 
 DROP VIEW IF EXISTS policy.voucher_verification_policy_scrud_view CASCADE;
 
@@ -26123,7 +26311,7 @@ FROM policy.voucher_verification_policy
 INNER JOIN office.users
 ON policy.voucher_verification_policy.user_id=office.users.user_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.discount_received_account_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.discount_received_account_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.discount_received_account_selector_view;
 
 CREATE VIEW core.discount_received_account_selector_view
@@ -26134,7 +26322,7 @@ WHERE account_master_id >= 20100
 AND account_master_id < 20400
 ORDER BY account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.expenses_account_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.expenses_account_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.expenses_account_selector_view;
 
 CREATE VIEW core.expenses_account_selector_view
@@ -26143,7 +26331,7 @@ SELECT * FROM core.account_scrud_view
 WHERE account_master_id > 20400
 ORDER BY account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.item_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.item_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.item_selector_view;
 
 CREATE VIEW core.item_selector_view
@@ -26151,7 +26339,7 @@ AS
 SELECT * FROM core.items
 ORDER BY item_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.merchant_account_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.merchant_account_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.merchant_account_selector_view;
 
 CREATE VIEW core.merchant_account_selector_view
@@ -26160,7 +26348,7 @@ SELECT * FROM core.bank_account_scrud_view
 WHERE is_merchant_account = true
 ORDER BY account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.purchase_account_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.purchase_account_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.purchase_account_selector_view;
 
 CREATE VIEW core.purchase_account_selector_view
@@ -26169,7 +26357,7 @@ SELECT * FROM core.account_scrud_view
 WHERE account_master_id = 15010
 ORDER BY account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.sales_return_account_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.sales_return_account_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.sales_return_account_selector_view;
 
 CREATE VIEW core.sales_return_account_selector_view
@@ -26179,7 +26367,7 @@ SELECT * FROM core.account_scrud_view
 WHERE account_master_id = ANY(ARRAY[15000, 15010])
 ORDER BY account_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.selector-views/core/core.supplier_selector_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.supplier_selector_view.sql --<--<--
 DROP VIEW IF EXISTS core.supplier_selector_view;
 CREATE VIEW core.supplier_selector_view
 AS
@@ -26226,7 +26414,7 @@ INNER JOIN core.accounts
 ON core.parties.account_id=core.accounts.account_id
 WHERE is_supplier=true;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/core/core.default_widget_setup_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.default_widget_setup_view.sql --<--<--
 DROP VIEW IF EXISTS core.default_widget_setup_view;
 
 CREATE VIEW core.default_widget_setup_view
@@ -26248,7 +26436,7 @@ WHERE widget_group_name =
     LIMIT 1
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/core/core.item_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.item_view.sql --<--<--
 DROP VIEW IF EXISTS core.item_view;
 
 CREATE VIEW core.item_view
@@ -26302,7 +26490,7 @@ ON core.items.preferred_shipping_mail_type_id = core.shipping_mail_types.shippin
 LEFT JOIN core.shipping_package_shapes
 ON core.items.shipping_package_shape_id = core.shipping_package_shapes.shipping_package_shape_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/core/core.party_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.party_view.sql --<--<--
 DROP VIEW IF EXISTS core.party_view;
 
 CREATE VIEW core.party_view
@@ -26352,7 +26540,7 @@ ON core.parties.account_id=core.accounts.account_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/core/core.shipping_address_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.shipping_address_view.sql --<--<--
 DROP VIEW IF EXISTS core.shipping_address_view;
 
 CREATE VIEW core.shipping_address_view
@@ -26376,7 +26564,7 @@ ON core.shipping_addresses.state_id = core.states.state_id
 INNER JOIN core.countries
 ON core.shipping_addresses.country_id = core.countries.country_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/core/core.widget_setup_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.widget_setup_view.sql --<--<--
 DROP VIEW IF EXISTS core.widget_setup_view;
 
 CREATE OR REPLACE VIEW core.widget_setup_view
@@ -26391,7 +26579,7 @@ FROM core.widget_setup
 INNER JOIN core.widgets
 ON core.widgets.widget_name = core.widget_setup.widget_name;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/office/office.sign_in_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/office/office.sign_in_view.sql --<--<--
 DROP VIEW IF EXISTS office.sign_in_view;
 
 CREATE VIEW office.sign_in_view
@@ -26448,7 +26636,7 @@ WHERE
   logins.office_id = offices.office_id AND
   users.role_id = roles.role_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/transactions/transactions.receipt_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.receipt_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.receipt_view;
 
 CREATE VIEW transactions.receipt_view
@@ -26500,7 +26688,7 @@ WHERE transactions.transaction_master.book = 'Sales.Receipt'
 AND transactions.transaction_master.verification_status_id > 0;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/transactions/transactions.sales_delivery_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_delivery_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.sales_delivery_view;
 
 CREATE VIEW transactions.sales_delivery_view
@@ -26543,7 +26731,7 @@ AND transactions.transaction_master.verification_status_id > 0;
 
 --SELECT * FROM transactions.sales_delivery_view;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/transactions/transactions.sales_order_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_order_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.sales_order_view;
 
 CREATE VIEW transactions.sales_order_view
@@ -26570,7 +26758,7 @@ INNER JOIN core.price_types
 ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id
 WHERE transactions.non_gl_stock_master.book = 'Sales.Order';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/05.views/transactions/transactions.sales_quotation_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_quotation_view.sql --<--<--
 DROP VIEW IF EXISTS transactions.sales_quotation_view;
 
 CREATE VIEW transactions.sales_quotation_view
@@ -26597,7 +26785,7 @@ INNER JOIN core.price_types
 ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id
 WHERE transactions.non_gl_stock_master.book = 'Sales.Quotation';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS core.party_after_insert_trigger() CASCADE;
 
 CREATE FUNCTION core.party_after_insert_trigger()
@@ -26650,7 +26838,7 @@ AFTER INSERT
 ON core.parties
 FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.sample-data/00.custom-fields.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/00.custom-fields.sql --<--<--
 DO
 $$
 BEGIN
@@ -26689,7 +26877,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.sample-data/99.ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;
@@ -26797,5 +26985,5 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/release-1/update-1/src/99.sample-data/99.refresh-materialized-views.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/99.refresh-materialized-views.sql --<--<--
 SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');
