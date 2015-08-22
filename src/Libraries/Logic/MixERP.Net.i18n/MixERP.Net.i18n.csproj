@@ -60,6 +60,7 @@
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="CultureManager.cs" />
     <Compile Include="LocalizedResource.cs" />
+    <Compile Include="MixERPCultureInfo.cs" />
     <Compile Include="Resources.cs">
       <DependentUpon>Resources.tt</DependentUpon>
       <AutoGen>True</AutoGen>

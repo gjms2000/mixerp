@@ -44,8 +44,8 @@ namespace MixERP.Net.FrontEnd.Base
             script += JSUtility.GetVar("language", CultureManager.GetCurrent().TwoLetterISOLanguageName);
             script += JSUtility.GetVar("jqueryUIi18nPath", this.Page.ResolveUrl("~/Scripts/jquery-ui/i18n/"));
 
-            script += JSUtility.GetVar("today", DateTime.Now.ToShortDateString());
-            script += JSUtility.GetVar("now", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            script += JSUtility.GetVar("today", string.Format(CultureManager.GetCurrent(), CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern, DateTime.Now));
+            script += JSUtility.GetVar("now", DateTime.Now.ToString(CultureManager.GetCurrent()));
 
             script += JSUtility.GetVar("user", AppUsers.GetCurrent().View.UserName);
             script += JSUtility.GetVar("office", AppUsers.GetCurrent().View.OfficeName);

@@ -33,6 +33,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using MixERP.Net.FrontEnd.Models;
+using MixERP.Net.i18n;
 
 namespace MixERP.Net.FrontEnd.Base
 {
@@ -223,12 +224,14 @@ namespace MixERP.Net.FrontEnd.Base
                 return;
             }
 
-            CultureInfo culture = new CultureInfo(cultureName);
+            CultureInfo culture = new MixERPCultureInfo(cultureName);
+
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }
+
 
         private void CheckForceLogOffFlags()
         {
