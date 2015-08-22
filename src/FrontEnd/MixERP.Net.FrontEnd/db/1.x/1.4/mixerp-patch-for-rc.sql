@@ -6176,6 +6176,7 @@ SELECT localization.add_localized_resource('Labels', '', 'SalesDeliveryEmailSubj
 SELECT localization.add_localized_resource('Labels', '', 'SalesOrderEmailSubject', 'We received your PO #{0}, {1}');--We received your PO #777, waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationEmailSubject', 'Quotation #{0} from {1}');--Quotation #777 from waltbishop trading inc.
 SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationAlreadyAccepted', 'This quotation was already accepted on {0}.');
+SELECT localization.add_localized_resource('Labels', '', 'SalesQuotationExpired', 'This quotation expired on {0}.');
 SELECT localization.add_localized_resource('Labels', '', 'SelectAFlag', 'Select a flag.');
 SELECT localization.add_localized_resource('Labels', '', 'SetupEmailDescription', 'Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.');
 SELECT localization.add_localized_resource('Labels', '', 'SMTPIsDisabled', 'SMTP is disabled.');

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MixERP.Net.Entities.Meta;
 using MixERP.Net.FrontEnd.Controls;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.FrontEnd.Public
@@ -39,25 +40,25 @@ namespace MixERP.Net.FrontEnd.Public
                 return;
             }
 
-            quotation = Data.Public.ApproveQuotation.GetQuotation(validationId);
+            this.quotation = Data.Public.ApproveQuotation.GetQuotation(validationId);
 
-            if (quotation == null || quotation.TranId <= 0)
+            if (this.quotation == null || this.quotation.TranId <= 0)
             {
                 this.DisplayError(Warnings.AccessIsDenied);
                 return;
             }
 
-            if (quotation.Accepted)
+            if (this.quotation.Accepted)
             {
-                this.DisplayError(string.Format(Labels.SalesQuotationAlreadyAccepted, quotation.AcceptedOn));
+                this.DisplayError(string.Format(Labels.SalesQuotationAlreadyAccepted, this.quotation.AcceptedOn));
                 return;
             }
 
 
-            string catalog = quotation.Catalog;
+            string catalog = this.quotation.Catalog;
 
             Collection<KeyValuePair<string, object>> list = new Collection<KeyValuePair<string, object>>();
-            list.Add(new KeyValuePair<string, object>("@non_gl_stock_master_id", quotation.TranId));
+            list.Add(new KeyValuePair<string, object>("@non_gl_stock_master_id", this.quotation.TranId));
 
             using (WebReport report = new WebReport())
             {
@@ -92,8 +93,9 @@ namespace MixERP.Net.FrontEnd.Public
 
         private bool IsValid()
         {
-            if (quotation.ValidTill < DateTime.Now)
+            if (this.quotation.ValidTill < DateTime.Now)
             {
+                this.DisplayError(string.Format(CultureManager.GetCurrent(), Labels.SalesQuotationExpired, this.quotation.ValidTill));
                 return false;
             }
 
@@ -108,7 +110,7 @@ namespace MixERP.Net.FrontEnd.Public
             }
 
 
-            Data.Public.ApproveQuotation.AcceptQuote(quotation.ValidationId);
+            Data.Public.ApproveQuotation.AcceptQuote(this.quotation.ValidationId);
             this.DisplayMessage(Titles.ThankYou);
             this.AcceptButton.Visible = false;
         }

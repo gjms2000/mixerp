@@ -2386,6 +2386,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for This quotation expired on {0}.
+		/// </summary>
+		public static string SalesQuotationExpired 
+		{
+			get
+			{
+				return Get("SalesQuotationExpired");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Select a flag.
 		/// </summary>
 		public static string SelectAFlag 
@@ -3349,6 +3360,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("bonus_rate");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Bonus Slab
+		/// </summary>
+		public static string bonus_slab 
+		{
+			get
+			{
+				return Get("bonus_slab");
 			}
 		}
 		
@@ -4552,6 +4574,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Default Cash Account
+		/// </summary>
+		public static string default_cash_account 
+		{
+			get
+			{
+				return Get("default_cash_account");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Default Cash Account Id
 		/// </summary>
 		public static string default_cash_account_id 
@@ -4559,6 +4592,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("default_cash_account_id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Default Cash Repository
+		/// </summary>
+		public static string default_cash_repository 
+		{
+			get
+			{
+				return Get("default_cash_repository");
 			}
 		}
 		
@@ -6818,6 +6862,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Recurrence Type
+		/// </summary>
+		public static string recurrence_type 
+		{
+			get
+			{
+				return Get("recurrence_type");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Recurrence Type Code
 		/// </summary>
 		public static string recurrence_type_code 
@@ -7478,6 +7533,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Sales Team
+		/// </summary>
+		public static string sales_team 
+		{
+			get
+			{
+				return Get("sales_team");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Sales Team Code
 		/// </summary>
 		public static string sales_team_code 
@@ -7518,6 +7584,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("sales_verification_limit");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salesperson
+		/// </summary>
+		public static string salesperson 
+		{
+			get
+			{
+				return Get("salesperson");
 			}
 		}
 		
