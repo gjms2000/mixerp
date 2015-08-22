@@ -186,10 +186,10 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
         private void CreateGridPanel(Control container)
         {
             this.grid = new MixERPGridView();
-            grid.ID = "MenuAccessGridView";
-            grid.RowDataBound += this.Grid_RowDataBound;
+            this.grid.ID = "MenuAccessGridView";
+            this.grid.RowDataBound += this.Grid_RowDataBound;
 
-            container.Controls.Add(grid);
+            container.Controls.Add(this.grid);
         }
 
         private void BindGrid()
@@ -203,8 +203,8 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
                 return;
             }
 
-            grid.DataSource = Menu.GetMenuPolicy(AppUsers.GetCurrentUserDB(), userId, officeId, culture);
-            grid.DataBind();
+            this.grid.DataSource = Menu.GetMenuPolicy(AppUsers.GetCurrentUserDB(), userId, officeId, culture);
+            this.grid.DataBind();
         }
 
         private void Grid_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -221,7 +221,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
             {
                 string url = e.Row.Cells[5].Text;
 
-                url = Server.HtmlDecode(url).Trim();
+                url = this.Server.HtmlDecode(url).Trim();
 
                 using (HtmlAnchor anchor = new HtmlAnchor())
                 {
@@ -280,7 +280,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
 
             if (this.grid != null)
             {
-                this.grid.RowDataBound -= Grid_RowDataBound;
+                this.grid.RowDataBound -= this.Grid_RowDataBound;
                 this.grid.Dispose();
                 this.grid = null;
             }

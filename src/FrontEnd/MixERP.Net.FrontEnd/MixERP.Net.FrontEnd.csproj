@@ -350,6 +350,24 @@
     <Content Include="bundles\stylesheets\master-page.rtl.min.css">
       <DependentUpon>master-page.rtl.css</DependentUpon>
     </Content>
+    <Content Include="db\1.x\1.1\index.html" />
+    <Content Include="db\1.x\1.1\mixerp-blank.sql" />
+    <Content Include="db\1.x\1.1\mixerp-sample.sql" />
+    <Content Include="db\1.x\1.1\mixerp.sql" />
+    <Content Include="db\1.x\1.2\index.html" />
+    <Content Include="db\1.x\1.2\mixerp-incremental-blank-db.sql" />
+    <Content Include="db\1.x\1.2\mixerp-incremental-sample.sql" />
+    <Content Include="db\1.x\1.2\mixerp-patch-for-v1.sql" />
+    <Content Include="db\1.x\1.3\index.html" />
+    <Content Include="db\1.x\1.4\index.html" />
+    <Content Include="db\1.x\1.4\mixerp-incremental-blank-db.sql" />
+    <Content Include="db\1.x\1.4\mixerp-incremental-sample.sql" />
+    <Content Include="db\1.x\1.4\mixerp-patch-for-rc.sql" />
+    <Content Include="db\blank-db.sql" />
+    <Content Include="db\index.html" />
+    <Content Include="db\patch.sql" />
+    <Content Include="db\sample-db.sql" />
+    <Content Include="db\web.config" />
     <Content Include="Installation\Default.aspx" />
     <Content Include="Installation\regional\en-US\Retail Industry.sql" />
     <Content Include="License.txt" />
@@ -808,6 +826,11 @@
     <None Include="bundleconfig.json" />
     <Content Include="Resource\Static\Attachments\sample\readme.md" />
     <None Include="compilerconfig.json" />
+    <Content Include="db\1.x\1.1\readme.md" />
+    <Content Include="db\1.x\1.2\readme.md" />
+    <Content Include="db\1.x\1.4\readme.md" />
+    <Content Include="db\readme.md" />
+    <Content Include="db\1.x\1.3\readme.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\colorpicker\.gitignore" />

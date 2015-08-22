@@ -25,11 +25,33 @@ DROP INDEX IF EXISTS policy.menu_access_uix;
 CREATE UNIQUE INDEX menu_access_uix
 ON policy.menu_access(office_id, menu_id, user_id);
 
-ALTER TABLE policy.auto_verification_policy
-DROP CONSTRAINT IF EXISTS auto_verification_policy_pkey;
+DO
+$$
+    DECLARE index_name      text;
+    DECLARE sql             text;
+BEGIN
+    SELECT i.relname::text INTO index_name
+    FROM pg_class
+    INNER JOIN pg_attribute
+    ON pg_attribute.attrelid = pg_class.oid
+    INNER JOIN pg_index
+    ON pg_class.oid = pg_index.indrelid 
+    AND pg_attribute.attnum = ANY(pg_index.indkey)
+    INNER JOIN pg_class i
+    ON i.oid = pg_index.indexrelid
+    WHERE pg_index.indrelid = 'policy.auto_verification_policy'::regclass
+    AND pg_index.indisprimary;
 
-ALTER TABLE policy.auto_verification_policy
-ADD PRIMARY KEY(user_id, office_id);
+    IF(index_name IS NOT NULL) THEN
+        sql := 'ALTER TABLE policy.auto_verification_policy DROP CONSTRAINT IF EXISTS ' || quote_ident(index_name) || ';';
+        EXECUTE sql;
+    END IF;
+
+    ALTER TABLE policy.auto_verification_policy
+    ADD PRIMARY KEY(user_id, office_id);    
+END
+$$
+LANGUAGE plpgsql;
 
 DO
 $$
@@ -2433,6 +2455,84 @@ BEGIN
         AND policy.menu_access.office_id=$2;
     END IF;
 
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/policy/policy.get_menu_policy.sql --<--<--
+DROP FUNCTION IF EXISTS policy.get_menu_policy
+(
+    _user_id        integer,
+    _office_id      integer,
+    _culture        text
+);
+
+CREATE FUNCTION policy.get_menu_policy
+(
+    _user_id        integer,
+    _office_id      integer,
+    _culture        text
+)
+RETURNS TABLE
+(
+    row_number      bigint,
+    access          boolean,
+    menu_id         integer,
+    menu_code       text,
+    menu_text       text,
+    url             text
+)
+STABLE AS
+$$
+    DECLARE culture_exists boolean = false;
+BEGIN
+    IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=$3) THEN
+        culture_exists := true;
+    END IF;
+
+
+    IF culture_exists THEN
+        RETURN QUERY 
+        SELECT
+            row_number() OVER(ORDER BY core.menus.menu_id),
+            CASE WHEN policy.menu_access.access_id IS NOT NULL THEN true ELSE false END as access,
+            core.menus.menu_id,
+            core.menus.menu_code::text, 
+            CASE 
+                WHEN core.menu_locale.menu_text IS NULL
+                THEN core.menus.menu_text::text
+                ELSE core.menu_locale.menu_text::text
+            END as menu_text, 
+            core.menus.url::text
+        FROM core.menus
+        LEFT JOIN core.menu_locale
+        ON core.menus.menu_id = core.menu_locale.menu_id
+        AND core.menu_locale.culture = $3
+        LEFT OUTER JOIN policy.menu_access
+        ON core.menus.menu_id = policy.menu_access.menu_id
+        AND policy.menu_access.user_id = $1
+        AND policy.menu_access.office_id = $2
+        ORDER BY core.menus.menu_id;
+
+        RETURN;
+    END IF;
+    
+    RETURN QUERY
+    SELECT
+        row_number() OVER(ORDER BY core.menus.menu_id),
+        CASE WHEN policy.menu_access.access_id IS NOT NULL THEN true ELSE false END as access,
+        core.menus.menu_id,
+        core.menus.menu_code::text, 
+        core.menus.menu_text::text, 
+        core.menus.url::text
+    FROM core.menus
+    LEFT JOIN policy.menu_access
+    ON core.menus.menu_id = policy.menu_access.menu_id
+    AND policy.menu_access.user_id = $1
+    AND policy.menu_access.office_id = $2
+    ORDER BY core.menus.menu_id;
+
+    RETURN;
 END
 $$
 LANGUAGE plpgsql;

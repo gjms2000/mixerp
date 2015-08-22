@@ -4,11 +4,33 @@ DROP INDEX IF EXISTS policy.menu_access_uix;
 CREATE UNIQUE INDEX menu_access_uix
 ON policy.menu_access(office_id, menu_id, user_id);
 
-ALTER TABLE policy.auto_verification_policy
-DROP CONSTRAINT IF EXISTS auto_verification_policy_pkey;
+DO
+$$
+    DECLARE index_name      text;
+    DECLARE sql             text;
+BEGIN
+    SELECT i.relname::text INTO index_name
+    FROM pg_class
+    INNER JOIN pg_attribute
+    ON pg_attribute.attrelid = pg_class.oid
+    INNER JOIN pg_index
+    ON pg_class.oid = pg_index.indrelid 
+    AND pg_attribute.attnum = ANY(pg_index.indkey)
+    INNER JOIN pg_class i
+    ON i.oid = pg_index.indexrelid
+    WHERE pg_index.indrelid = 'policy.auto_verification_policy'::regclass
+    AND pg_index.indisprimary;
 
-ALTER TABLE policy.auto_verification_policy
-ADD PRIMARY KEY(user_id, office_id);
+    IF(index_name IS NOT NULL) THEN
+        sql := 'ALTER TABLE policy.auto_verification_policy DROP CONSTRAINT IF EXISTS ' || quote_ident(index_name) || ';';
+        EXECUTE sql;
+    END IF;
+
+    ALTER TABLE policy.auto_verification_policy
+    ADD PRIMARY KEY(user_id, office_id);    
+END
+$$
+LANGUAGE plpgsql;
 
 DO
 $$
