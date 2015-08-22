@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MixERP Inc.")]
 [assembly: AssemblyProduct("MixERP.Net.Core.Modules.Finance")]
-[assembly: AssemblyCopyright("Copyright ©  2014-2015")]
+[assembly: AssemblyCopyright("Copyright ©  2013-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
@@ -49,6 +49,6 @@ using System.Runtime.InteropServices;
 // 
 // You can specify all the values or you can default the Revision and Build Numbers by using the '*'
 // as shown below:
-[assembly: AssemblyVersion("1.2.0.1")]
-[assembly: AssemblyFileVersion("1.2.0.1")]
-[assembly: AssemblyInformationalVersion("1.2.0.1 RC")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]
+[assembly: AssemblyInformationalVersion("1.4.0.0")]
