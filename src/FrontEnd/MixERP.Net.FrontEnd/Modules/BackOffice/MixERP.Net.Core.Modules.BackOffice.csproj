@@ -602,6 +602,10 @@
       <Project>{61AB8B69-2097-4595-97B7-4A930A70163D}</Project>
       <Name>MixERP.Net.ApplicationState</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
+      <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
+      <Name>MixERP.Net.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
       <Project>{bde918b1-dd9b-41c9-a41f-f3ddec18b6d8}</Project>
       <Name>MixERP.Net.Entities</Name>
@@ -630,10 +634,6 @@
       <Project>{07DDCE95-A18F-4A35-B892-CE09EAD2AA65}</Project>
       <Name>MixERP.Net.WebControls.ScrudFactory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
-      <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
-      <Name>MixERP.Net.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Server Controls\Project\MixERP.Net.WebControls.StockTransactionFactory\MixERP.Net.WebControls.StockTransactionFactory.csproj">
       <Project>{1C84E528-87ED-4B69-BFC3-81D675CB153E}</Project>
       <Name>MixERP.Net.WebControls.StockTransactionFactory</Name>
@@ -647,7 +647,7 @@
       <Name>MixERP.Net.WebJobs.BackupDatabase</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MixERP.Net.FrontEnd.csproj">
-      <Project>{ACE1017D-71BC-4417-A906-72C4B9C55823}</Project>
+      <Project>{ace1017d-71bc-4417-a906-72c4b9c55823}</Project>
       <Name>MixERP.Net.FrontEnd</Name>
     </ProjectReference>
     <ProjectReference Include="..\BackOffice.Data\MixERP.Net.Core.Modules.BackOffice.Data.csproj">
@@ -672,7 +672,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>20839</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -680,9 +680,8 @@
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost:9000/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:8000</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

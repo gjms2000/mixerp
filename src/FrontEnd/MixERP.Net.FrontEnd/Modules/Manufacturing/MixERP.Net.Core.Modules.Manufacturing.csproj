@@ -23,6 +23,7 @@
     </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,7 +95,6 @@
   <ItemGroup>
     <Compile Include="Index.ascx.cs">
       <DependentUpon>Index.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Index.ascx.designer.cs">
       <DependentUpon>Index.ascx</DependentUpon>
@@ -102,7 +102,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup\WorkCentes.ascx.cs">
       <DependentUpon>WorkCentes.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\WorkCentes.ascx.designer.cs">
       <DependentUpon>WorkCentes.ascx</DependentUpon>
@@ -115,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
-      <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
+      <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.Framework\MixERP.Net.Framework.csproj">
@@ -125,10 +124,6 @@
     <ProjectReference Include="..\..\..\..\Libraries\Server Controls\Project\MixERP.Net.WebControls.StockTransactionView\MixERP.Net.WebControls.StockTransactionViewFactory.csproj">
       <Project>{E82752DA-F0D2-4987-B011-6B2623937DEA}</Project>
       <Name>MixERP.Net.WebControls.StockTransactionViewFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MixERP.Net.FrontEnd.csproj">
-      <Project>{ACE1017D-71BC-4417-A906-72C4B9C55823}</Project>
-      <Name>MixERP.Net.FrontEnd</Name>
     </ProjectReference>
     <ProjectReference Include="..\Manufacturing.Data\MixERP.Net.Core.Modules.Manufacturing.Data.csproj">
       <Project>{71676cba-e060-4eba-a50b-7eb8a7beee1c}</Project>
@@ -152,7 +147,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>20806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -160,9 +155,8 @@
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost:9000/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:8000</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

@@ -1260,7 +1260,7 @@
       <Name>MixERP.Net.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Server Controls\Project\MixERP.Net.WebControls.TransactionChecklist\MixERP.Net.WebControls.TransactionChecklist.csproj">
-      <Project>{64490b89-b228-4188-8235-71744a94c9ae}</Project>
+      <Project>{64490B89-B228-4188-8235-71744A94C9AE}</Project>
       <Name>MixERP.Net.WebControls.TransactionChecklist</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\WebJobs\MixERP.Net.WebJobs.BackupDatabase\MixERP.Net.WebJobs.BackupDatabase.csproj">
@@ -1289,7 +1289,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2904</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -1297,8 +1297,8 @@
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>https://localhost:44301/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>http://demo.mixerp.org</CustomServerUrl>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:8000</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
