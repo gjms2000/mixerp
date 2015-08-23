@@ -131,11 +131,11 @@
     <Error Condition="!Exists('packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\*.dll" "..\..\..\FrontEnd\MixERP.Net.FrontEnd\bin\"
-xcopy /y "$(ProjectDir)bin\*.pdb" "..\..\..\FrontEnd\MixERP.Net.FrontEnd\bin\"
-xcopy /y /E "$(ProjectDir)*.ascx" "..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"
-xcopy /y /E "$(ProjectDir)*.config" "..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"
-xcopy /y /E "$(ProjectDir)*.xml" "..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\*.dll" "..\..\..\..\FrontEnd\MixERP.Net.FrontEnd\bin\"
+xcopy /y "$(ProjectDir)bin\*.pdb" "..\..\..\..\FrontEnd\MixERP.Net.FrontEnd\bin\"
+xcopy /y /E "$(ProjectDir)*.ascx" "..\..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"
+xcopy /y /E "$(ProjectDir)*.config" "..\..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"
+xcopy /y /E "$(ProjectDir)*.xml" "..\..\..\..\FrontEnd\MixERP.Net.FrontEnd\Modules\HRM\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
