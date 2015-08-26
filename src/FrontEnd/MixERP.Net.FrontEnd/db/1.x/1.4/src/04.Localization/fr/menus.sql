@@ -3,10 +3,10 @@ Contributors for this translation:
 Nubiancc https://github.com/nubiancc
 French   fr  Français
 ********************************************************************************************************************************************************/
-
 SELECT * FROM core.create_menu_locale('AS', 'fr', 'Relevé de compte');--Account Statement
 SELECT * FROM core.create_menu_locale('SAT', 'fr', 'Outils d''administration');--Admin Tools
 SELECT * FROM core.create_menu_locale('AGS', 'fr', 'Vieillissement des dalles');--Ageing Slabs
+SELECT * FROM core.create_menu_locale('ALLITMS', 'fr', 'Tous les articles');--All Items
 SELECT * FROM core.create_menu_locale('SAA', 'fr', 'API Stratégie d''accès');--Api Access Policy
 SELECT * FROM core.create_menu_locale('OTSAP', 'fr', 'Paramètres de rattachement');--Attachment Parameters
 SELECT * FROM core.create_menu_locale('SEAR', 'fr', 'Rapports d''audit');--Audit Reports
@@ -87,8 +87,8 @@ SELECT * FROM core.create_menu_locale('RFC', 'fr', 'Les recettes provenant de cl
 SELECT * FROM core.create_menu_locale('RIS', 'fr', 'Paramètres des factures récurrentes');--Recurring Invoice Setup
 SELECT * FROM core.create_menu_locale('RI', 'fr', 'Factures récurrentes');--Recurring Invoices
 SELECT * FROM core.create_menu_locale('RW', 'fr', 'Report Writer');--Report Writer
-SELECT * FROM core.create_menu_locale('IR', 'fr', 'Rapports');--Reports
 SELECT * FROM core.create_menu_locale('FIR', 'fr', 'Rapports');--Reports
+SELECT * FROM core.create_menu_locale('IR', 'fr', 'Rapports');--Reports
 SELECT * FROM core.create_menu_locale('RET', 'fr', 'Des Bénéfices Non Répartis');--Retained Earnings Statement
 SELECT * FROM core.create_menu_locale('SRM', 'fr', 'Gestion des rôles');--Role Management
 SELECT * FROM core.create_menu_locale('OTSSMTP', 'fr', 'Paramètres SMTP');--SMTP Parameters
@@ -106,13 +106,14 @@ SELECT * FROM core.create_menu_locale('STXT', 'fr', 'Types de taxe de vente');--
 SELECT * FROM core.create_menu_locale('STX', 'fr', 'Taxes de vente');--Sales Taxes
 SELECT * FROM core.create_menu_locale('SST', 'fr', 'Équipes de vente');--Sales Teams
 SELECT * FROM core.create_menu_locale('SAR-SBO', 'fr', 'Ventes de Bureau');--Sales by Office
+SELECT * FROM core.create_menu_locale('SPR', 'fr', 'Rapport Salesperson ');--Salesperson Report
 SELECT * FROM core.create_menu_locale('SSA', 'fr', 'Vendeurs/vendeuses');--Salespersons
 SELECT * FROM core.create_menu_locale('OTSSFP', 'fr', 'ScrudFactory Paramètres');--ScrudFactory Parameters
 SELECT * FROM core.create_menu_locale('ISP', 'fr', 'Prix de vente');--Selling Prices
 SELECT * FROM core.create_menu_locale('SET', 'fr', 'Paramètres');--Settings
 SELECT * FROM core.create_menu_locale('SSM', 'fr', 'Installation & entretien');--Setup & Maintenance
-SELECT * FROM core.create_menu_locale('FSM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
 SELECT * FROM core.create_menu_locale('ISM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
+SELECT * FROM core.create_menu_locale('FSM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
 SELECT * FROM core.create_menu_locale('SHI', 'fr', 'Informations de l''expéditeur');--Shipper Information
 SELECT * FROM core.create_menu_locale('PSA', 'fr', 'Adresses d''expédition');--Shipping Addresses
 SELECT * FROM core.create_menu_locale('STST', 'fr', 'État des Taxes de vente');--State Sales Taxes
@@ -132,6 +133,7 @@ SELECT * FROM core.create_menu_locale('BOTC', 'fr', 'Configuration de l''impôt'
 SELECT * FROM core.create_menu_locale('TXEXT', 'fr', 'Types exonérés de taxe');--Tax Exempt Types
 SELECT * FROM core.create_menu_locale('TXM', 'fr', 'Maître de l''impôt');--Tax Master
 SELECT * FROM core.create_menu_locale('SAR-TSI', 'fr', 'Haut de la page points de vente');--Top Selling Items
+SELECT * FROM core.create_menu_locale('TOPSUP', 'fr', 'supérieur fournisseurs');--Top Suppliers
 SELECT * FROM core.create_menu_locale('FTT', 'fr', 'Modèles de & de transactions');--Transactions & Templates
 SELECT * FROM core.create_menu_locale('TB', 'fr', 'Balance de vérification');--Trial Balance
 SELECT * FROM core.create_menu_locale('UOM', 'fr', 'Unités de mesure');--Units of Measure
