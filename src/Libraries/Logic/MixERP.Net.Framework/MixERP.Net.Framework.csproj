@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="CacheFactory.cs" />
     <Compile Include="Contracts\Checklist\FirstStep.cs" />
     <Compile Include="Contracts\Currency\CurrencyConversionResult.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Controls\AccessLevel.cs" />
     <Compile Include="Controls\IControl.cs" />
     <Compile Include="Controls\IWidget.cs" />
+    <Compile Include="Extensions\ObectExtensions.cs" />
     <Compile Include="MixERPException.cs" />
     <Compile Include="Controls\MixERPUserControlBase.cs">
       <SubType>ASPXCodeBehind</SubType>

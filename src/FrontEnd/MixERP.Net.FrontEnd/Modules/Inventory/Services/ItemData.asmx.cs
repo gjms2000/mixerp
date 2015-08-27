@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI.WebControls;
@@ -207,11 +208,11 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
         }
 
         [WebMethod]
-        public IEnumerable<DbGetCompoundItemDetailsResult> GetCompoundItemDetails(string compoundItemCode,
+        public List<DbGetCompoundItemDetailsResult> GetCompoundItemDetails(string compoundItemCode,
             string salesTaxCode, string tranBook, int storeId, string partyCode, int priceTypeId)
         {
             return Items.GetCompoundItemDetails(AppUsers.GetCurrentUserDB(), compoundItemCode, salesTaxCode, tranBook,
-                storeId, partyCode, priceTypeId);
+                storeId, partyCode, priceTypeId).ToList();
         }
 
         private static Collection<SalesItem> GetItems()
@@ -255,6 +256,23 @@ namespace MixERP.Net.Core.Modules.Inventory.Services
                     ItemCode = item.ItemCode,
                     ItemName = item.ItemName,
                     IsCompoundItem = false
+                });
+            }
+
+            return values;
+        }
+
+        [WebMethod]
+        public Collection<ListItem> GetItemGroups()
+        {
+            Collection<ListItem> values = new Collection<ListItem>();
+
+            foreach (ItemGroup item in ItemGroups.GetItemGroups(AppUsers.GetCurrentUserDB()))
+            {
+                values.Add(new ListItem
+                {
+                    Text = item.ItemGroupCode + " (" + item.ItemGroupName + ")",
+                    Value = item.ItemGroupId.ToString(CultureInfo.InvariantCulture)
                 });
             }
 

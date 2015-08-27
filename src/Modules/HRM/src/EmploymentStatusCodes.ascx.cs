@@ -7,6 +7,7 @@ namespace MixERP.Net.Core.Modules.HRM
     {
         public override void OnControlLoad(object sender, EventArgs e)
         {
+            var a = "asdf";
         }
     }
 }

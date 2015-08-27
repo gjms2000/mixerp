@@ -9,14 +9,17 @@ $(document).ready(function () {
 
 //Fired on ASP.net Ajax Postback
 function Page_EndRequest() {
-    setCurrencyFormat();
-    setNumberFormat();
-
+    setRegionalFormat();
     if (typeof (AsyncListener) === "function") {
         AsyncListener();
     };
 };
 
+function setRegionalFormat()
+{
+    setCurrencyFormat();
+    setNumberFormat();
+};
 var setCurrencyFormat = function () {
     if (typeof currencyDecimalPlaces === "undefined" || typeof decimalSeparator === "undefined" || typeof thousandSeparator === "undefined") {
         return;

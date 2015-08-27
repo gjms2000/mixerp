@@ -69,23 +69,31 @@ var appendItem = function (dropDownList, value, text, selected) {
 };
 
 var getAjax = function (url, data) {
+    var ajax;
+
     if (data) {
-        return $.ajax({
+        ajax = $.ajax({
             type: "POST",
             url: url,
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         });
+    } else {
+        ajax = $.ajax({
+            type: "POST",
+            url: url,
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
     };
 
-    return $.ajax({
-        type: "POST",
-        url: url,
-        data: "{}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
+    ajax.fail(function(xhr) {
+        logAjaxErrorMessage(xhr);
     });
+
+    return ajax;
 };
 
 var ajaxUpdateVal = function (url, data, targetControls) {

@@ -53526,14 +53526,17 @@ $(document).ready(function () {
 
 //Fired on ASP.net Ajax Postback
 function Page_EndRequest() {
-    setCurrencyFormat();
-    setNumberFormat();
-
+    setRegionalFormat();
     if (typeof (AsyncListener) === "function") {
         AsyncListener();
     };
 };
 
+function setRegionalFormat()
+{
+    setCurrencyFormat();
+    setNumberFormat();
+};
 var setCurrencyFormat = function () {
     if (typeof currencyDecimalPlaces === "undefined" || typeof decimalSeparator === "undefined" || typeof thousandSeparator === "undefined") {
         return;
@@ -53706,23 +53709,31 @@ var appendItem = function (dropDownList, value, text, selected) {
 };
 
 var getAjax = function (url, data) {
+    var ajax;
+
     if (data) {
-        return $.ajax({
+        ajax = $.ajax({
             type: "POST",
             url: url,
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         });
+    } else {
+        ajax = $.ajax({
+            type: "POST",
+            url: url,
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
     };
 
-    return $.ajax({
-        type: "POST",
-        url: url,
-        data: "{}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
+    ajax.fail(function(xhr) {
+        logAjaxErrorMessage(xhr);
     });
+
+    return ajax;
 };
 
 var ajaxUpdateVal = function (url, data, targetControls) {

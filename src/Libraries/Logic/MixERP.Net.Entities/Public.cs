@@ -14,30 +14,39 @@ namespace MixERP.Net.Entities.Public
     public class DbStat : PetaPocoDB.Record<DbStat> , IPoco
     {
         [Column("relname")] 
+        [ColumnDbType("name", 0, "")] 
         public string Relname { get; set; }
 
         [Column("last_vacuum")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? LastVacuum { get; set; }
 
         [Column("last_autovacuum")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? LastAutovacuum { get; set; }
 
         [Column("last_analyze")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? LastAnalyze { get; set; }
 
         [Column("last_autoanalyze")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? LastAutoanalyze { get; set; }
 
         [Column("vacuum_count")] 
+        [ColumnDbType("int8", 0, "")] 
         public long? VacuumCount { get; set; }
 
         [Column("autovacuum_count")] 
+        [ColumnDbType("int8", 0, "")] 
         public long? AutovacuumCount { get; set; }
 
         [Column("analyze_count")] 
+        [ColumnDbType("int8", 0, "")] 
         public long? AnalyzeCount { get; set; }
 
         [Column("autoanalyze_count")] 
+        [ColumnDbType("int8", 0, "")] 
         public long? AutoanalyzeCount { get; set; }
 
     }
@@ -47,18 +56,23 @@ namespace MixERP.Net.Entities.Public
     public class DbCrosstab4Result : PetaPocoDB.Record<DbCrosstab4Result> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
         [Column("category_3")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category3 { get; set; }
 
         [Column("category_4")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category4 { get; set; }
 
     }
@@ -68,15 +82,19 @@ namespace MixERP.Net.Entities.Public
     public class DbCrosstab3Result : PetaPocoDB.Record<DbCrosstab3Result> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
         [Column("category_3")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category3 { get; set; }
 
     }
@@ -86,9 +104,11 @@ namespace MixERP.Net.Entities.Public
     public class DbEachResult : PetaPocoDB.Record<DbEachResult> , IPoco
     {
         [Column("key")] 
+        [ColumnDbType("text", 0, "")] 
         public string Key { get; set; }
 
         [Column("value")] 
+        [ColumnDbType("text", 0, "")] 
         public string Value { get; set; }
 
     }
@@ -98,12 +118,15 @@ namespace MixERP.Net.Entities.Public
     public class DbCrosstab2Result : PetaPocoDB.Record<DbCrosstab2Result> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
     }
@@ -113,16 +136,24 @@ namespace MixERP.Net.Entities.Public
     public class DbPocoGetTableFunctionDefinitionResult : PetaPocoDB.Record<DbPocoGetTableFunctionDefinitionResult> , IPoco
     {
         [Column("column_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string ColumnName { get; set; }
 
         [Column("is_nullable")] 
+        [ColumnDbType("text", 0, "")] 
         public string IsNullable { get; set; }
 
         [Column("udt_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string UdtName { get; set; }
 
         [Column("column_default")] 
+        [ColumnDbType("text", 0, "")] 
         public string ColumnDefault { get; set; }
+
+        [Column("max_length")] 
+        [ColumnDbType("integer", 0, "")] 
+        public int MaxLength { get; set; }
 
     }
 
@@ -131,12 +162,15 @@ namespace MixERP.Net.Entities.Public
     public class TablefuncCrosstab2 : PetaPocoDB.Record<TablefuncCrosstab2> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
     }
@@ -146,15 +180,19 @@ namespace MixERP.Net.Entities.Public
     public class TablefuncCrosstab3 : PetaPocoDB.Record<TablefuncCrosstab3> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
         [Column("category_3")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category3 { get; set; }
 
     }
@@ -164,18 +202,23 @@ namespace MixERP.Net.Entities.Public
     public class TablefuncCrosstab4 : PetaPocoDB.Record<TablefuncCrosstab4> , IPoco
     {
         [Column("row_name")] 
+        [ColumnDbType("text", 0, "")] 
         public string RowName { get; set; }
 
         [Column("category_1")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category1 { get; set; }
 
         [Column("category_2")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category2 { get; set; }
 
         [Column("category_3")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category3 { get; set; }
 
         [Column("category_4")] 
+        [ColumnDbType("text", 0, "")] 
         public string Category4 { get; set; }
 
     }

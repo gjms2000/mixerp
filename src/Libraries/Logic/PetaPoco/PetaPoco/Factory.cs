@@ -31,6 +31,27 @@ namespace PetaPoco
             }
         }
 
+        public static IEnumerable<T> Get<T>(string catalog, Sql sql)
+        {
+            try
+            {
+                using (Database db = new Database(GetConnectionString(catalog), ProviderName))
+                {
+                    return db.Query<T>(sql);
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                if (ex.Code.StartsWith("P"))
+                {
+                    string errorMessage = GetDBErrorResource(ex);
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                throw;
+            }
+        }
+
         public static object Insert(string catalog, object poco)
         {
             try
@@ -80,6 +101,27 @@ namespace PetaPoco
                 using (Database db = new Database(GetConnectionString(catalog), ProviderName))
                 {
                     return db.ExecuteScalar<T>(sql, args);
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                if (ex.Code.StartsWith("P"))
+                {
+                    string errorMessage = GetDBErrorResource(ex);
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                throw;
+            }
+        }
+
+        public static T Scalar<T>(string catalog, Sql sql)
+        {
+            try
+            {
+                using (Database db = new Database(GetConnectionString(catalog), ProviderName))
+                {
+                    return db.ExecuteScalar<T>(sql);
                 }
             }
             catch (NpgsqlException ex)

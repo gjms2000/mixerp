@@ -26,7 +26,7 @@ foreach(Table tbl in from t in tables where !t.Ignore select t)
 <# }#>
 <# if (tbl.PK!=null && tbl.PK.IsAutoIncrement) { #>
 <# if (tbl.SequenceName==null) { #>
-    [PrimaryKey("<#=tbl.PK.Name#>")]
+    [PrimaryKey("<#=tbl.PK.Name#>", autoIncrement=true)]
 <# } else { #>
     [PrimaryKey("<#=tbl.PK.Name#>", sequenceName="<#=tbl.SequenceName#>")]
 <# } #>
@@ -48,7 +48,7 @@ foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
 <# } else { #>
         [Column] 
 <# } #>
-
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> 
         { 
             get
@@ -66,10 +66,12 @@ foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
 <# } else { #>
 <# if (col.Name!=col.PropertyName) { #>
         [Column("<#=col.Name#>")] 
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
 
 <# } else { #>
         [Column]
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
 <# } #>
 <# } #>

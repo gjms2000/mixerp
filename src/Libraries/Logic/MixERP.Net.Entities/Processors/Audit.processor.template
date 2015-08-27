@@ -94,6 +94,9 @@ public class Column
 	public string Name;
 	public string PropertyName;
 	public string PropertyType;
+	public string DbDataType;
+	public int MaxLength;
+	public string DefaultValue;
 	public bool IsPK;
 	public bool IsNullable;
 	public bool IsAutoIncrement;
@@ -476,6 +479,9 @@ class PostGreSqlSchemaReader : SchemaReader
 					Column col=new Column();
 					col.Name=rdr["column_name"].ToString();
 					col.PropertyName=ToPascalCase(CleanUp(col.Name));
+					col.DbDataType = rdr["udt_name"].ToString();
+					col.MaxLength = (int)rdr["max_length"];
+					col.DefaultValue = rdr["column_default"].ToString();
 					col.PropertyType=GetPropertyType(rdr["udt_name"].ToString());
 					col.IsNullable=rdr["is_nullable"].ToString()=="YES";
 					col.IsAutoIncrement = rdr["column_default"].ToString().StartsWith("nextval(");
@@ -627,18 +633,24 @@ class PostGreSqlSchemaReader : SchemaReader
 			case "_character varying":
 			case "_varying character":
 			case "_text":
+			case "_image":
+			case "_color":
 			case "_hstore":
 			case "_varchar":
 			case "character[]":
 			case "character varying[]":
 			case "varying character[]":
 			case "text[]":
+			case "image[]":
+			case "color[]":
 			case "hstore[]":
 			case "varchar[]":
 			case "character":
 			case "character varying":
 			case "varying character":
 			case "text":
+			case "image":
+			case "color":
 			case "hstore":
 			case "varchar":
 			case "json":
@@ -686,8 +698,6 @@ class PostGreSqlSchemaReader : SchemaReader
 				return sqlType;
 		}
 	}
-
-
 
 	const string TABLE_SQL=@"
 			SELECT table_schema, table_name, table_type

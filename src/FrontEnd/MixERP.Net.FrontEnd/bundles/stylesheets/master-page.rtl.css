@@ -38458,7 +38458,7 @@ input[type=text][readonly] {
 }
 /*Semantic UI Override End */
 #MainContent {
-  padding: 12px;
+  padding: 0 12px;
   min-height: 1000px;
 }
 .text-right,
@@ -38566,44 +38566,6 @@ select optgroup {
 .no-pointer-events {
   cursor: default;
   pointer-events: none;
-}
-/*!
- * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */
-html,
-body {
-  font-size: 12px;
-}
-html,
-body,
-div,
-ul,
-table,
-td,
-span,
-h1,
-h2,
-h3,
-h4,
-h5,
-select,
-input,
-option {
-  font-family: "Titillium Web", "Open Sans", "Segoe UI", Helvetica, Arial, sans-serif !important;
-}
-body {
-  background-color: #fff;
-}
-#page-wrapper {
-  padding: 24px;
-  min-height: 600px;
-  background-color: #fff;
-}
-#search {
-  padding-left: 8px;
-  width: 240px;
 }
 .sidebar {
   border-right: 1px solid #D4D4D5;

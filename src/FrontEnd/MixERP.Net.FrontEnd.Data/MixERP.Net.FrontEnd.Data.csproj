@@ -46,6 +46,10 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Npgsql.2.2.3\lib\net45\Mono.Security.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Npgsql, Version=2.2.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\Npgsql.2.2.3\lib\net45\Npgsql.dll</HintPath>
@@ -70,6 +74,10 @@
     <Compile Include="Public\ApproveQuotation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
+      <Project>{61AB8B69-2097-4595-97B7-4A930A70163D}</Project>
+      <Name>MixERP.Net.ApplicationState</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
@@ -85,6 +93,10 @@
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.Framework\MixERP.Net.Framework.csproj">
       <Project>{1509332F-AE98-44D9-9072-5BBC59A65FC4}</Project>
       <Name>MixERP.Net.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.i18n\MixERP.Net.i18n.csproj">
+      <Project>{2ECD1C2E-D7D0-4A24-896A-E625B0566DB5}</Project>
+      <Name>MixERP.Net.i18n</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Logic\PetaPoco\PetaPoco.csproj">
       <Project>{969d7960-52e2-40fc-91e5-1393b71e23b0}</Project>

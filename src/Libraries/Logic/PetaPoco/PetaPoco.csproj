@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="PetaPoco\ConfigurationHelper.cs" />
     <Compile Include="PetaPoco\Factory.cs" />
     <Compile Include="PetaPoco\Models\PetaPoco.cs" />
