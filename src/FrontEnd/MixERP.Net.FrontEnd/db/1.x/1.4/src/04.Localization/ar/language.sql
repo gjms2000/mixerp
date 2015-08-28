@@ -20,6 +20,8 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeGreaterThan', 'تاريخ غير صحيح. يجب أن تكون أكبر من "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeLessThan', 'تاريخ غير صحيح. يجب أن تكون أقل من "{0}".');--Invalid date. Must be less than "{0}".
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'InvalidDate', 'تاريخ غير صحيح.');--Invalid date.
@@ -156,7 +158,6 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateParties
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateSalesTaxFormDescription', 'نموذج ضريبة المبيعات مزيج من مختلف الكيانات مثل ضريبة العامة للدولة، ضريبة مقاطعة، الإعفاء، إلخ.');--Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateSalespersonsDescription', 'مندوبي المبيعات هم رجال  المبيعات الذين يقومون ببيع المنتجات الخاصة بك ويجلبوا الأعمال التجارية للشركة الخاصة بك.');--Salespersons are the sales guys who sell your products and bring business to your company.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateShippingCompanyDescription', 'شركات الشحن  تقوم بنقل البضائع عبر البر والبحر، و/أو الجو إلى عملائك.');--Shipping companies transfer the goods through land, sea, and/or air to your customers.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStateDescription', 'إنشاء قائمة الدول التي موظفيك والعملاء والموردين.');--Create a list of states where your employees, customers, and suppliers are.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStateSalesTaxDescription', 'ضريبة المبيعات هي ضريبة الاستهلاك المباشر تفرضها حكومة الدولة الخاص بك عندما تقوم بالشراء أوالتوريد.');--State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStoresDescription', 'المخزن هو مكان حيث يمكنك الاحتفاظ بالبضائع الخاصة بك. على سبيل المثال: متجر، بدروم، او مخازن.');--Store is a place where you keep your goods. Example: Shop, Go-down, Warehouse.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateTaxAuthorityDescription', 'مصلحة الضرائب هو الهيئة الحكومية التي تقدم لها تقرير بالاعمال من ربح او خسارة سنويا.');--Tax authority is the government body or agency to whom you file your periodic tax reports to.
@@ -193,7 +194,6 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NSalesTaxForm
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NSalespersonsFound', 'هناك {0} من رجال البيع هذه الشركة.');--{0} salespersons found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NShippersFound', 'هناك {0} من شركات الشحن هذه الشركة.');--{0} shippers found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStateSalesTaxesDefined', 'هناك {0} من نماذج ضريبة المبيعات المقاطعات محددة في هذه الشركة.');--{0} state sales taxes defined.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStatesFound', '{0} وجدت الدول.');--{0} states found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStoresInThisOffice', 'هناك {0} من المخازن هذه في الشركة.');--There are {0} stores in this office.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NTaxAuthoritiesFound', 'هناك {0} من مصالح الضرائب في هذه الشركة.');--{0} tax authorities found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NTaxMasterFound', 'هناك {0} من الضرائب العامة ( الرئيسية) في هذه الشركة.');--{0} tax master(s) found.
@@ -205,7 +205,6 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoPartyFound'
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSalesTaxFormDefined', 'لم يتم اعداد  نموذج ضريبة المبيعات.');--No sales tax form defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSalespersonFound', 'لم يتم اعداد مندوبي مبيعات.');--No salesperson found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoShipperFound', 'لم يتم اعداد شركات الشحن.');--No shipper found.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStateFound', 'لم يتم العثور على الدولة.');--No state found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStateSalesTaxDefined', 'لم يتم اعداد ضريبة المبيعات الدولة.');--No state sales tax defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStorePresent', 'لم يتم اعداد المخزن الحالي.');--No store present.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSupplierFound', 'لم يتم اعداد الموردين.');--No supplier found.
@@ -223,9 +222,6 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'PercentageSym
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'PleaseSelectAFormFirst', 'الرجاء اختيار نموذج أولاً.');--Please select a form first.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'ReceiptEmailSubject', 'تم تسليم #{0} اشعار , {1}');--Receipt #{0} notification, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'ReleaseContainsNoUpdates', 'لا يحتوي هذا الإصدار على أي تحديث.');--This release does not contain any update.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RestoringDirectory', 'استعادة الدليل: {0}.');--Restoring directory : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RestoringFile', 'استعادة الملف: {0}.');--Restoring file : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SMTPIsDisabled', 'SMTP غير مفعل.');--SMTP is disabled.
@@ -233,7 +229,6 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesDelivery
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesOrderEmailSubject', 'تم استلام امر الشراء #{0}, {1}');--We received your PO #{0}, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationAlreadyAccepted', 'التسعير تم قبوله بالفعل في {0}.');--This quotation was already accepted on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationEmailSubject', 'التسعير #{0} من {1}');--Quotation #{0} from {1}
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationExpired', 'انتهت هذا الاقتباس على {0}.');--This quotation expired on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SelectAFlag', 'حدد علامة.');--Select a flag.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SetupEmailDescription', ' اعدادات البريد الصادر غير مفعل. قم بضبط اعدادات البريد الصادر SMTP لارسال التنبيهات الي عملائك.');--Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'TaskCompletedProgress', '{0} من {1} المهام المكتملة.');--{0} out of {1} tasks completed.
@@ -320,7 +315,6 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'base_u
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'base_unit_name', 'اسم الوحدة الأساسية');--Base Unit Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'based_on_shipping_address', 'استناداً إلى عنوان الشحن');--Based On Shipping Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_rate', 'معدل مكافأة');--Bonus Rate
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab', 'مكافأة بلاطة');--Bonus Slab
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_code', 'رمز شريحة المكافأة');--Bonus Slab Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_detail_id', 'معرف تفاصيل شريحة مكافأة');--Bonus Slab Detail Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_details_amounts_chk', 'يجب أن يكون الحقل "القيمة من" أكبر من "الي القيمة".');--The field "AmountTo" must be greater than "AmountFrom".
@@ -358,7 +352,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_r
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_code', 'كود الخزينة النقدية');--Cash Repository Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_id', 'معرف الخزينة النقدية');--Cash Repository Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_name', 'اسم الخزينة النقدية');--Cash Repository Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cell', 'موبايل');--Cell
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cell', 'خلية');--Cell
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'charge_interest', 'رسوم الفائدة');--Charge Interest
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'check_nexus', 'فحص الترابط');--Check Nexus
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'checking_frequency', 'مراجعة الفترة');--Checking Frequency
@@ -385,7 +379,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compou
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compound_units_chk', 'معرف الوحدة الاساس لايجب ان تكون نفس وحدة المقارنة.');--The base unit id cannot same as compare unit id.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compounding_frequency', 'مجمع الفترات المالية');--Compounding Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'confidential', 'سري');--Confidential
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'configuration_name', 'اسم الاعدادات');--Configuration Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'configuration_name', 'اسم الاعدادات');--ConfigurationName
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_address_line_1', 'الاتصال سطر العنوان 1');--Contact Address Line 1
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_address_line_2', 'الاتصال سطر العنوان 2');--Contact Address Line 2
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_cell', 'موبايل');--Contact Cell
@@ -408,7 +402,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counte
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counter_id', 'معرف منفذ البيع');--Counter Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counter_name', 'اسم منفذ البيع');--Counter Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country', 'الدولة');--Country
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_code', 'معرف المحافظة');--Country Code
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_code', 'رمز الدولة');--Country Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_id', 'معرف الدولة');--Country Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_name', 'اسم الدولة');--Country Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'county', 'مقاطعة');--County
@@ -430,9 +424,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'curren
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'customer_pays_fee', 'يدفع العميل رسوم');--Customer Pays Fee
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'date_of_birth', 'تاريخ الميلاد');--Date Of Birth
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'debit', 'مدين');--Debit
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_account', 'الحساب النقدي الافتراضي');--Default Cash Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_account_id', 'معرف الحساب النقدي الافتراضي');--Default Cash Account Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_repository', 'افتراضي مستودع النقدية');--Default Cash Repository
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_repository_id', 'معرف الخزينة النقدية الافتراضي');--Default Cash Repository Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'department_code', 'كود الادارة');--Department Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'department_id', 'معرف إدارة');--Department Id
@@ -473,8 +465,8 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'freque
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'frequency_setup_code', 'رمز الإعداد الفترة');--Frequency Setup Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'frequency_setup_id', 'معرف الإعداد الفترة');--Frequency Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_days', 'من أيام');--From Days
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_display_name', 'اسم المرسل');--From Display Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_email_address', 'البريد الالكتروني للمرسل');--From Email Address
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_display_name', 'اسم المرسل');--FromDisplayName
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_email_address', 'البريد الالكتروني للمرسل');--FromEmailAddress
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'full_name', 'الاسم الكامل');--Full Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'gl_head', 'عنوان الاستاذ العام');--GL Head
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'gl_verification_limit', 'حد التحقق للاستاذ العام');--Gl Verification Limit
@@ -505,7 +497,6 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_emp
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_exempt', 'معفي');--Is Exempt
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_exemption', 'اعفاء');--Is Exemption
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_flat_amount', 'مبلغ ثابت');--Is Flat Amount
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_frequency', 'هو التردد');--Is Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_merchant_account', 'حساب التاجر');--Is Merchant Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_party', 'هو طرف');--Is Party
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_purchase', 'مشتريات');--Is Purchase
@@ -638,10 +629,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'purcha
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'purchase_verification_limit', 'حد تحقق المشتريات');--Purchase Verification Limit
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'quantity', 'الكمية');--Quantity
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'rate', 'معدل');--Rate
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type', 'نوع تكرار');--Recurrence Type
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_code', 'تكرار اكتب الرمز');--Recurrence Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_id', 'معرف نوع التكرار');--Recurrence Type Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_name', 'تكرار النوع الاسم');--Recurrence Type Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_amount', 'مبلغ متكرر');--Recurring Amount
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_duration', 'المدة المتكررة');--Recurring Duration
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_frequency', 'الفترة المتكرر');--Recurring Frequency
@@ -699,12 +687,10 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_code', 'كود نوع ضريبة المبيعات');--Sales Tax Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_id', 'معرف نوع ضريبة المبيعات');--Sales Tax Type Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_name', 'اسم نوع ضريبة المبيعات');--Sales Tax Type Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team', 'فريق المبيعات');--Sales Team
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_code', 'كود فريق المبيعات');--Sales Team Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_id', 'معرف فريق المبيعات');--Sales Team Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_name', 'اسم فريق المبيعات');--Sales Team Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_verification_limit', 'حد تحقق المبيعات');--Sales Verification Limit
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson', 'مندوب مبيعات');--Salesperson
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_bonus_setup_id', 'معرف إعداد مكافأة مندوب المبيعات');--Salesperson Bonus Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_code', 'كود مندوب المبيعات');--Salesperson Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_id', 'معرف مندوب المبيعات');--Salesperson Id
@@ -724,17 +710,17 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shippi
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shipping_package_shape_id', 'معرف شكل التغليف');--Shipping Package Shape Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shipping_package_shape_name', 'اسم شكل التغليف');--Shipping Package Shape Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'slab_name', 'اسم الشريحة');--Slab Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_enable_ssl', 'SMTP Enable SSL');--SMTP Enable SSL
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_host', 'SMTP المضيف');--SMTP Host
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_id', 'SMTP ID');--SMTP Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_password', 'SMTP Password');--SMTP Password
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_port', 'SMTP Port');--SMTP Port
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_username', 'SMTP Username');--SMTP Username
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smp_host', 'SMTP Host');--SmpHost
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_enable_ssl', 'SMTP Enable SSL');--SmtpEnableSsl
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_id', 'SMTP ID');--SmtpId
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_password', 'SMTP Password');--SmtpPassword
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_port', 'SMTP Port');--SmtpPort
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_username', 'SMTP Username');--SmtpUsername
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sst_number', 'رقم SST');--SST Number
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'starts_from', 'يبدأ من');--Starts From
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state', 'الدولة');--State
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_code', 'كود الدولة');--State Code
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_id', 'معرف المحافظة');--State Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_id', 'رقم الدولة');--State Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_name', 'اسم الدولة');--State Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_sales_tax', 'ضريبة المبيعات الدولة');--State Sales Tax
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_sales_tax_code', 'كود ضريبة المبيعات الدولة');--State Sales Tax Code
@@ -922,7 +908,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateParties
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateSalesTaxForm', 'إنشاء نموذج ضريبة المبيعات');--Create Sales Tax Form
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateSalespersons', 'إنشاء مندوبي المبيعات');--Create Salespersons
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateShippingCompany', 'إنشاء شركة الشحن');--Create Shipping Company
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateState', 'إنشاء الدولة');--Create State
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateStateSalesTax', 'إنشاء ضريبة المبيعات العامة');--Create State Sales Tax
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateStores', 'إنشاء المخازن');--Create Stores
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateTaxAuthority', 'إنشاء مصلحة الضرائب');--Create Tax Authority
@@ -1253,10 +1238,9 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderLevel', 'مستوي اعادة الطلب');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderQuantityAbbreviated', 'كمية اعادة الطلب');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderUnitName', 'اسم وحدة إعادة الطلب');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Request', 'طلب');--Request
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldDetails', 'مطلوبة الحقول التي تحمل علامة النجمة (*).');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldIndicator', '  *');-- *
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Reset', 'إعادة تعيين');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringDirectories', 'استعادة الملفات');--Restoring Directories
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringMigrationFiles', 'استعادة الملفات المحدثة');--Restoring Migration Files
@@ -1299,7 +1283,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Saving', 'ج�
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ScrudFactoryParameters', 'ScrudFactory معلمات');--ScrudFactory Parameters
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Search', 'بحث');--Search
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Select', 'اختيار');--Select
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectApi', 'حدد API');--Select API
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectCompany', 'اختار شركة');--Select Company
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectCustomer', 'اختار العميل');--Select Customer
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectExpensesGL', 'اختار مصروفات الاستاذ العام');--Select Expenses GL
@@ -1410,7 +1393,6 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UnitsOfMeasur
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UnknownError', 'فشلت العملية بسبب خطأ غير معروف.');--Operation failed due to an unknown error.
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Update', 'التحديث');--Update
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdateConsole', 'وحدة التحكم التحديث');--Update Console
-SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdatedExchangeRates', 'تحديث أسعار الصرف');--Update Exchange Rates
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdatedOn', 'تم التحديث في');--Updated On
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Upload', 'تحميل');--Upload
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UploadAttachments', 'تحميل المرفقات');--Upload Attachments
@@ -1545,5 +1527,4 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'RestrictedT
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'ReturnButtonUrlNull', 'لا يمكن العودة . لم يتم توفير رابط العودة.');--Cannot return this entry. The return url was not provided.
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'StartDateGreaterThanEndDate', 'تاريخ البدء لا يمكن أن يكون أكبر من تاريخ انتهاء.');--The start date cannot be greater than end date.
 SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPasswordIncorrect', 'اسم المستخدم أو كلمة المرور غير صحيحة.');--User id or password incorrect.
-
 
