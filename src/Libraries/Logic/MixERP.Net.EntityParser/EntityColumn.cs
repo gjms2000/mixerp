@@ -1,4 +1,6 @@
-﻿namespace MixERP.Net.EntityParser
+﻿using System;
+
+namespace MixERP.Net.EntityParser
 {
     public class EntityColumn
     {

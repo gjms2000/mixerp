@@ -23,6 +23,18 @@ namespace MixERP.Net.EntityParser
             return name;
         }
 
+        public static string GetKeyProperty<T>(T poco)
+        {
+            string key = GetKeyName(poco);
+
+            var a = poco.GetType()
+                .GetProperties()
+                .FirstOrDefault(p => p.GetCustomAttributes(typeof (ColumnAttribute), true)
+                            .Any(ca => ((ColumnAttribute) ca).Name.Equals(key)));
+
+            return a?.Name;
+        }
+
         public static object GetInstanceOf(string className)
         {
             Type type = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())

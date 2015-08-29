@@ -1,129 +1,5 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/00.db core/2.mixerp-db-schema.sql --<--<--
-CREATE SCHEMA IF NOT EXISTS config AUTHORIZATION mix_erp;
-COMMENT ON SCHEMA config IS 'Contains configuration objects.';
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/00.db core/plpgunit-privileges.sql --<--<--
-REVOKE ALL ON SCHEMA config FROM public;
-
-GRANT USAGE ON SCHEMA config TO mix_erp;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA config GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO mix_erp;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA config GRANT ALL ON SEQUENCES TO mix_erp;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA config GRANT EXECUTE ON FUNCTIONS TO mix_erp;
-
-GRANT ALL PRIVILEGES ON SCHEMA config TO mix_erp;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA config TO mix_erp;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA config TO mix_erp;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA config TO mix_erp;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
-DROP INDEX IF EXISTS policy.menu_access_uix;
-
-
-CREATE UNIQUE INDEX menu_access_uix
-ON policy.menu_access(office_id, menu_id, user_id);
-
-DO
-$$
-    DECLARE index_name      text;
-    DECLARE sql             text;
-BEGIN
-    SELECT i.relname::text INTO index_name
-    FROM pg_class
-    INNER JOIN pg_attribute
-    ON pg_attribute.attrelid = pg_class.oid
-    INNER JOIN pg_index
-    ON pg_class.oid = pg_index.indrelid 
-    AND pg_attribute.attnum = ANY(pg_index.indkey)
-    INNER JOIN pg_class i
-    ON i.oid = pg_index.indexrelid
-    WHERE pg_index.indrelid = 'policy.auto_verification_policy'::regclass
-    AND pg_index.indisprimary;
-
-    IF(index_name IS NOT NULL) THEN
-        sql := 'ALTER TABLE policy.auto_verification_policy DROP CONSTRAINT IF EXISTS ' || quote_ident(index_name) || ';';
-        EXECUTE sql;
-    END IF;
-
-    ALTER TABLE policy.auto_verification_policy
-    ADD PRIMARY KEY(user_id, office_id);    
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF
-    (
-        SELECT count(*)
-        FROM   pg_attribute 
-        WHERE  attrelid = 'core.parties'::regclass
-        AND    attname IN ('party_name', 'company_name')
-        AND    NOT attisdropped
-    ) = 1 THEN
-        ALTER TABLE core.parties
-        RENAME COLUMN party_name to company_name;
-        
-        ALTER TABLE core.parties
-        ADD COLUMN party_name text;
-        
-        UPDATE core.parties
-        SET party_name = company_name;
-
-        ALTER TABLE core.parties
-        ALTER COLUMN company_name DROP NOT NULL;
-        
-        UPDATE core.parties
-        SET company_name = NULL;
-
-        ALTER TABLE core.parties
-        DROP CONSTRAINT IF EXISTS parties_customer_name_chk;
-
-        ALTER TABLE core.parties
-        ADD CONSTRAINT parties_customer_name_chk
-        CHECK(CASE WHEN COALESCE(company_name, '') = '' THEN  COALESCE(first_name, '') != '' AND COALESCE(last_name, '') != '' END);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-ALTER TABLE core.parties
-ALTER COLUMN first_name DROP NOT NULL;
-
-ALTER TABLE core.parties
-ALTER COLUMN last_name DROP NOT NULL;
-
-ALTER TABLE core.parties
-ALTER COLUMN company_name DROP NOT NULL;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.users'::regclass
-        AND    attname = 'store_id'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE office.users
-        ADD COLUMN store_id integer REFERENCES office.stores(store_id)
-        CONSTRAINT users_store_id_chk 
-        CHECK
-        (
-            office.get_office_id_by_store_id(store_id) IS NULL OR
-            office.get_office_id_by_store_id(store_id) = office_id
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+--Empty
 DO
 $$
 BEGIN
@@ -131,1249 +7,32 @@ BEGIN
         SELECT 1 
         FROM   pg_catalog.pg_class c
         JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'transactions'
-        AND    c.relname = 'inventory_transfer_requests'
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'filters'
         AND    c.relkind = 'r'
     ) THEN
-        CREATE TABLE transactions.inventory_transfer_requests
+        CREATE TABLE core.filters
         (
-            inventory_transfer_request_id               BIGSERIAL NOT NULL PRIMARY KEY,
-            office_id                                   integer NOT NULL REFERENCES office.offices(office_id),
-            user_id                                     integer NOT NULL REFERENCES office.users(user_id),
-            login_id                                    bigint NOT NULL REFERENCES audit.logins(login_id),
-            store_id                                    integer NOT NULL REFERENCES office.stores(store_id),
-            value_date                                  date NOT NULL,
-            transaction_ts                              TIMESTAMP WITH TIME ZONE DEFAULT(now()),
-            reference_number                            national character varying(24) NOT NULL,
-            statement_reference                         text,
-            authorization_status_id                     smallint NOT NULL REFERENCES core.verification_statuses(verification_status_id)
-                                                        DEFAULT(0)
-                                                        CONSTRAINT inventory_transfer_requests_withdrawn_chk
-                                                        CHECK(CASE WHEN authorization_status_id = -1 THEN delivered=false AND received=false AND user_id = authorized_by_user_id END),
-            authorized_by_user_id                       integer REFERENCES office.users(user_id),
-            authorized_on                               TIMESTAMP WITH TIME ZONE,
-            authorization_reason                        national character varying(128),
-            received                                    boolean NOT NULL DEFAULT(FALSE),
-            received_by_user_id                         integer REFERENCES office.users(user_id),
-            received_on                                 TIMESTAMP WITH TIME ZONE,
-            delivered                                   boolean NOT NULL DEFAULT(FALSE),
-            delivered_by_user_id                        integer REFERENCES office.users(user_id),
-            delivered_on                                TIMESTAMP WITH TIME ZONE,
-            audit_ts                                    TIMESTAMP WITH TIME ZONE DEFAULT(now())
+            filter_id               BIGSERIAL NOT NULL PRIMARY KEY,
+            object_name             text NOT NULL,
+            filter_name             text NOT NULL,
+            is_default              boolean NOT NULL DEFAULT(false),
+            is_default_admin        boolean NOT NULL DEFAULT(false),
+            column_name             text NOT NULL,
+            filter_condition        integer NOT NULL,
+            filter_value            text,
+            filter_and_value        text
         );
-    END IF;    
-END
-$$
-LANGUAGE plpgsql;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'transactions'
-        AND    c.relname = 'inventory_transfer_request_details'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE transactions.inventory_transfer_request_details
-        (
-            inventory_transfer_request_detail_id        BIGSERIAL NOT NULL PRIMARY KEY,
-            inventory_transfer_request_id               bigint NOT NULL REFERENCES transactions.inventory_transfer_requests(inventory_transfer_request_id),
-            value_date                                  date NOT NULL,
-            item_id                                     integer NOT NULL REFERENCES core.items(item_id),
-            quantity                                    integer NOT NULL,
-            unit_id                                     integer NOT NULL REFERENCES core.units(unit_id),
-            base_quantity                               numeric NOT NULL,
-            base_unit_id                                integer NOT NULL REFERENCES core.units(unit_id)
-        );
+        CREATE INDEX filters_object_name_inx
+        ON core.filters(object_name);
     END IF;    
 END
 $$
 LANGUAGE plpgsql;
 
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'attachment_factory'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.attachment_factory
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.attachment_factory
-        SELECT 'AttachmentsDirectory',              '/Resource/Static/Attachments/' UNION ALL
-        SELECT 'UploadHandlerUrl',                  '~/FileUploadHanlder.ashx' UNION ALL
-        SELECT 'UndoUploadServiceUrl',              '~/FileUploadHanlder.asmx/UndoUpload' UNION ALL
-        SELECT 'AllowedExtensions',                 'jpg,jpeg,gif,png,tif,doc,docx,xls,xlsx,pdf';
-    END IF;
-
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'currency_layer'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.currency_layer
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            description         text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.currency_layer
-        SELECT 'Enabled',                           'true', '' UNION ALL
-        SELECT 'UserAgent',                         'MixERP', '' UNION ALL
-        SELECT 'MediaType',                         'application/json', '' UNION ALL
-        SELECT 'APIAccessKey',                      '', '' UNION ALL
-        SELECT 'APIUrl',                            'http://apilayer.net/api/live', '' UNION ALL
-        SELECT 'AccessKeyName',                     'access_key', '' UNION ALL
-        SELECT 'CurrenciesKey',                     'currencies', '' UNION ALL
-        SELECT 'SourceKey',                         'source', '' UNION ALL
-        SELECT 'FormatKey',                         'format', '' UNION ALL
-        SELECT 'DecimalPlaces',                     '4', '' UNION ALL
-        SELECT 'DefaultFormat',                     '1', '1 = JSON' UNION ALL
-        SELECT 'ResultSubKey',                      'quotes', 'The sub-key which contains list of converted currencies' UNION ALL
-        SELECT 'RemoveSourceCurrencyFromResult',    'true', 'Currencylayer prepends source currency on all result items. This must be set to true unless this behavior is changed in the future.';
-    END IF;
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'db_parameters'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.db_parameters
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.db_parameters
-        SELECT 'AccountMasterDisplayField', 'account_master_code + '' ('' + account_master_name + '')''' UNION ALL
-        SELECT 'AccountDisplayField', 'account_number + '' ('' + account_name + '')''' UNION ALL
-        SELECT 'SalespersonDisplayField', 'salesperson_code + '' ('' + salesperson_name + '')''' UNION ALL
-        SELECT 'SalesTeamDisplayField', 'sales_team_code + '' ('' + sales_team_name + '')''' UNION ALL
-        SELECT 'BankAccountDisplayField', 'bank_name + '' ('' + bank_branch + '')''' UNION ALL
-        SELECT 'BonusSlabDisplayField', 'bonus_slab_name' UNION ALL
-        SELECT 'BrandDisplayField', 'brand_code + '' ('' + brand_name + '')''' UNION ALL
-        SELECT 'CardTypeDisplayField', 'card_type_code + '' ('' + card_type_name + '')''' UNION ALL
-        SELECT 'CashRepositoryDisplayField', 'cash_repository_code + '' ('' + cash_repository_name + '')''' UNION ALL
-        SELECT 'CashFlowHeadingDisplayField', 'cash_flow_heading_code + '' ('' + cash_flow_heading_name + '')''' UNION ALL
-        SELECT 'CompoundItemDisplayField', 'compound_item_code + '' ('' + compound_item_name + '')''' UNION ALL
-        SELECT 'CostCenterDisplayField', 'cost_center_code + '' ('' + cost_center_name + '')''' UNION ALL
-        SELECT 'CountryDisplayField', 'country_code + '' ('' + country_name + '')''' UNION ALL
-        SELECT 'CountyDisplayField', 'county_code + '' ('' + county_name + '')''' UNION ALL
-        SELECT 'CountySalesTaxDisplayField', 'county_sales_tax_code + '' ('' + county_sales_tax_name + '')''' UNION ALL
-        SELECT 'CurrencyDisplayField', 'currency_symbol + '' ('' + currency_code + ''/'' + currency_name + '')''' UNION ALL
-        SELECT 'CustomerDisplayField', 'last_name + '', '' + fist_name + '' '' + middle_name' UNION ALL
-        SELECT 'DepartmentDisplayField', 'department_code + '' ('' + department_name + '')''' UNION ALL
-        SELECT 'EntityDisplayField', 'entity_name' UNION ALL
-        SELECT 'FrequencyDisplayField', 'frequency_code' UNION ALL
-        SELECT 'FiscalYearDisplayField', 'fiscal_year_code + '' ('' + fiscal_year_name + '')''' UNION ALL
-        SELECT 'IndustryDisplayField', 'industry_name' UNION ALL
-        SELECT 'ItemDisplayField', 'item_code + '' ('' + item_name + '')''' UNION ALL
-        SELECT 'ItemTypeDisplayField', 'item_type_code + '' ('' + item_type_name + '')''' UNION ALL
-        SELECT 'ItemGroupDisplayField', 'item_group_code + '' ('' + item_group_name + '')''' UNION ALL
-        SELECT 'LateFeeDisplayField', 'late_fee_code + '' ('' + late_fee_name + '')''' UNION ALL
-        SELECT 'OfficeDisplayField', 'office_code + '' ('' + office_name + '')''' UNION ALL
-        SELECT 'PartyDisplayField', 'party_code + '' ('' + party_name + '')''' UNION ALL
-        SELECT 'PartyTypeDisplayField', 'party_type_code + '' ('' + party_type_name + '')''' UNION ALL
-        SELECT 'PaymentCardDisplayField', 'payment_card_code + '' ('' + payment_card_name + '')''' UNION ALL
-        SELECT 'PaymentTermDisplayField', 'payment_term_code + '' ('' + payment_term_name + '')''' UNION ALL
-        SELECT 'PriceTypeDisplayField', 'price_type_code + '' ('' + price_type_name + '')''' UNION ALL
-        SELECT 'RecurrenceTypeDisplayField', 'recurrence_type_code + '' ('' + recurrence_type_name + '')''' UNION ALL
-        SELECT 'RecurringInvoiceDisplayField', 'recurring_invoice_code + '' ('' + recurring_invoice_name + '')''' UNION ALL
-        SELECT 'RoleDisplayField', 'role_code + '' ('' + role_name + '')''' UNION ALL
-        SELECT 'RoundingMethodCodeDisplayField', 'rounding_method_code + '' ('' + rounding_method_name + '')''' UNION ALL
-        SELECT 'SalesTaxDisplayField', 'sales_tax_code + '' ('' + sales_tax_name + '')''' UNION ALL
-        SELECT 'SalesTaxExemptDisplayField', 'sales_tax_exempt_code + '' ('' + sales_tax_exempt_name + '')''' UNION ALL
-        SELECT 'SalesTaxTypeDisplayField', 'sales_tax_type_code + '' ('' + sales_tax_type_name + '')''' UNION ALL
-        SELECT 'StateSalesTaxDisplayField', 'state_sales_tax_code + '' ('' + state_sales_tax_name + '')''' UNION ALL
-        SELECT 'ShipperDisplayField', 'company_name' UNION ALL
-        SELECT 'ShippingMailTypeDisplayField', 'shipping_mail_type_code + '' ('' + shipping_mail_type_name + '')''' UNION ALL
-        SELECT 'ShippingPackageShapeDisplayField', 'shipping_package_shape_code + '' ('' + shipping_package_shape_name + '')''' UNION ALL
-        SELECT 'StateDisplayField', 'state_code + '' ('' + state_name + '')''' UNION ALL
-        SELECT 'StoreDisplayField', 'store_name' UNION ALL
-        SELECT 'StoreTypeDisplayField', 'store_type_name' UNION ALL
-        SELECT 'TaxAuthorityDisplayField', 'tax_authority_code + '' ('' + tax_authority_name + '')''' UNION ALL
-        SELECT 'TaxBaseAmountTypeDisplayField', 'tax_base_amount_type_code + '' ('' + tax_base_amount_type_name + '')''' UNION ALL
-        SELECT 'TaxExemptTypeDisplayField', 'tax_exempt_type_code + '' ('' + tax_exempt_type_name + '')''' UNION ALL
-        SELECT 'TaxRateTypeDisplayField', 'tax_rate_type_code + '' ('' + tax_rate_type_name + '')''' UNION ALL
-        SELECT 'TaxDisplayField', 'tax_name' UNION ALL
-        SELECT 'TaxTypeDisplayField', 'tax_type_code + '' ('' + tax_type_name + '')''' UNION ALL
-        SELECT 'TaxMasterDisplayField', 'tax_master_code + '' ('' + tax_master_name + '')''' UNION ALL
-        SELECT 'TransactionTypeDisplayField', 'transaction_type_code + '' ('' + transaction_type_name + '')''' UNION ALL
-        SELECT 'UnitDisplayField', 'unit_name' UNION ALL
-        SELECT 'UserDisplayField', 'user_name';
-    END IF;
-
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'messaging'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.messaging
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.messaging
-        SELECT 'FromDisplayName',                   'MixERP' UNION ALL
-        SELECT 'FromEmailAddress',                  'mixerp@localhost' UNION ALL
-        SELECT 'SmtpDeliveryMethod',                'SpecifiedPickupDirectory' UNION ALL
-        SELECT 'SpecifiedPickupDirectoryLocation',  '~/Resource/Static/Emails' UNION ALL
-        SELECT 'SMTPHost',                          'smtp-mail.outlook.com' UNION ALL
-        SELECT 'SMTPPort',                          '587' UNION ALL
-        SELECT 'SMTPEnableSSL',                     'false' UNION ALL
-        SELECT 'SMTPUserName',                      '' UNION ALL
-        SELECT 'SMTPPassword',                      '';
-    END IF;
-
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'mixerp'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.mixerp
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            description         text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.mixerp
-        SELECT 'MinimumLogLevel', 'Information', '' UNION ALL
-        SELECT 'ApplicationLogDirectory', 'C:\mixerp-logs', 'Must be a physical path and application pool identity user must be able to write to it.' UNION ALL
-        SELECT 'Mode', 'Development', '';
-    END IF;
-
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'open_exchange_rates'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.open_exchange_rates
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            description         text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.open_exchange_rates
-        SELECT 'Enabled', 'true', '' UNION ALL
-        SELECT 'UserAgent', 'MixERP', '' UNION ALL
-        SELECT 'MediaType', 'application/json', '' UNION ALL
-        SELECT 'AppId', '', '' UNION ALL
-        SELECT 'APIUrl', 'http://openexchangerates.org/api/latest.json', '' UNION ALL
-        SELECT 'AppIdKey', 'app_id', '' UNION ALL
-        SELECT 'CurrenciesKey', 'symbols', '' UNION ALL
-        SELECT 'SpecificCurrencies', 'false', '' UNION ALL
-        SELECT 'BaseCurrencyKey', 'base', '' UNION ALL
-        SELECT 'DecimalPlaces', '4', '' UNION ALL
-        SELECT 'ResultSubKey', 'rates', 'The sub-key which contains list of converted currencies';
-    END IF;
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'scrud_factory'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.scrud_factory
-        (
-            key                 text PRIMARY KEY,
-            value               text,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.scrud_factory
-        SELECT 'CommandPanelCssClass', 'vpad16' UNION ALL
-        SELECT 'CommandPanelButtonCssClass', 'small ui button' UNION ALL
-        SELECT 'SelectButtonIconCssClass', '' UNION ALL
-        SELECT 'CompactButtonIconCssClass', '' UNION ALL
-        SELECT 'AllButtonIconCssClass', '' UNION ALL
-        SELECT 'AddButtonIconCssClass', '' UNION ALL
-        SELECT 'EditButtonIconCssClass', '' UNION ALL
-        SELECT 'DeleteButtonIconCssClass', '' UNION ALL
-        SELECT 'PrintButtonIconCssClass', '' UNION ALL
-        SELECT 'DescriptionCssClass', 'ui large purple header' UNION ALL
-        SELECT 'ErrorCssClass', 'error-message' UNION ALL
-        SELECT 'ExpressionSeparator', '-->' UNION ALL
-        SELECT 'FailiureCssClass', 'big error' UNION ALL
-        SELECT 'FormCssClass', 'form-panel ui segment' UNION ALL
-        SELECT 'FormPanelCssClass', 'ui form' UNION ALL
-        SELECT 'GridPanelCssClass', 'segment' UNION ALL
-        SELECT 'GridViewAlternateRowCssClass', '' UNION ALL
-        SELECT 'GridViewCssClass', 'ui celled striped definition sortable table segment' UNION ALL
-        SELECT 'GridViewDefaultWidth', '100%' UNION ALL
-        SELECT 'GridPanelDefaultWidth', '1000px' UNION ALL
-        SELECT 'GridPanelStyle', 'padding:2px;overflow:auto;' UNION ALL
-        SELECT 'GridViewRowCssClass', 'gridview-row pointer' UNION ALL
-        SELECT 'HeaderPath', '~/Reports/Assets/Header.aspx' UNION ALL
-        SELECT 'ItemSelectorAnchorCssClass', '' UNION ALL
-        SELECT 'ItemSelectorPath', '~/General/ItemSelector.aspx' UNION ALL
-        SELECT 'ItemSelectorSelectAnchorCssClass', 'linkbutton' UNION ALL
-        SELECT 'ItemSeparator', ',' UNION ALL
-        SELECT 'PagerCssClass', 'ui pagination menu vmargin8' UNION ALL
-        SELECT 'PagerCurrentPageCssClass', 'active item' UNION ALL
-        SELECT 'PagerPageButtonCssClass', 'item' UNION ALL
-        SELECT 'PageSize', '10' UNION ALL
-        SELECT 'ResourceClassName', 'ScrudResource' UNION ALL
-        SELECT 'ButtonCssClass', 'small ui button' UNION ALL
-        SELECT 'SaveButtonCssClass', 'small ui button' UNION ALL
-        SELECT 'SuccessCssClass', 'ui large green header' UNION ALL
-        SELECT 'TemplatePath', '~/Reports/Print.html' UNION ALL
-        SELECT 'TempMediaPath', '~/Media/Temp' UNION ALL
-        SELECT 'TitleLabelCssClass', 'title' UNION ALL
-        SELECT 'UpdateProgressSpinnerImageCssClass', 'ajax-loader' UNION ALL
-        SELECT 'UpdateProgressSpinnerImagePath', '~/Static/images/spinner.gif' UNION ALL
-        SELECT 'UpdateProgressTemplateCssClass', 'ajax-container';
-    END IF;
-
-
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'switches'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.switches
-        (
-            key                 text PRIMARY KEY,
-            value               boolean,
-            audit_user_id       integer NULL REFERENCES office.users(user_id),
-            audit_ts            TIMESTAMP WITH TIME ZONE NULL 
-                                DEFAULT(NOW())
-        );
-
-        INSERT INTO config.switches
-        SELECT 'AllowParentAccountInGLTransaction', false UNION ALL
-        SELECT 'AllowMultipleOpeningInventory', false;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'transactions'
-        AND    c.relname = 'inventory_transfer_deliveries'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE transactions.inventory_transfer_deliveries
-        (
-            inventory_transfer_delivery_id              BIGSERIAL NOT NULL PRIMARY KEY,
-            inventory_transfer_request_id               bigint NOT NULL REFERENCES transactions.inventory_transfer_requests(inventory_transfer_request_id),
-            office_id                                   integer NOT NULL REFERENCES office.offices(office_id),
-            user_id                                     integer NOT NULL REFERENCES office.users(user_id),
-            login_id                                    bigint NOT NULL REFERENCES audit.logins(login_id),
-            source_store_id                             integer NOT NULL REFERENCES office.stores(store_id),
-            destination_store_id                        integer NOT NULL REFERENCES office.stores(store_id)
-                                                        CONSTRAINT inventory_transfer_deliveries_store_chk
-                                                        CHECK(source_store_id <> destination_store_id),
-            value_date                                  date NOT NULL,
-            transaction_ts                              TIMESTAMP WITH TIME ZONE DEFAULT(now()),
-            reference_number                            national character varying(24) NOT NULL,
-            statement_reference                         text,
-            audit_ts                                    TIMESTAMP WITH TIME ZONE DEFAULT(now())
-        );
-
-        CREATE UNIQUE INDEX inventory_transfer_deliveries_inventory_transfer_request_id_uix
-        ON transactions.inventory_transfer_deliveries(inventory_transfer_request_id);
-
-    END IF;    
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'transactions'
-        AND    c.relname = 'inventory_transfer_delivery_details'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE transactions.inventory_transfer_delivery_details
-        (
-            inventory_transfer_delivery_detail_id       BIGSERIAL NOT NULL PRIMARY KEY,
-            inventory_transfer_delivery_id              bigint NOT NULL REFERENCES transactions.inventory_transfer_deliveries(inventory_transfer_delivery_id),
-            value_date                                  date NOT NULL,
-            item_id                                     integer NOT NULL REFERENCES core.items(item_id),
-            quantity                                    integer NOT NULL,
-            unit_id                                     integer NOT NULL REFERENCES core.units(unit_id),
-            base_quantity                               numeric NOT NULL,
-            base_unit_id                                integer NOT NULL REFERENCES core.units(unit_id)
-        );
-    END IF;    
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('transaction_start_date')
-        AND    NOT attisdropped
-    ) THEN
-
-        ALTER TABLE office.offices
-        ADD COLUMN transaction_start_date DATE NOT NULL DEFAULT(NOW());
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('week_start_day')
-        AND    NOT attisdropped
-    ) THEN
-
-        ALTER TABLE office.offices
-        ADD COLUMN week_start_day int NOT NULL
-        CHECK (week_start_day > 0 AND week_start_day < 8)
-        DEFAULT(2);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'office'
-        AND    c.relname = 'holidays'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE office.holidays
-        (
-            holiday_id                          integer NOT NULL PRIMARY KEY,
-            office_id                           integer NOT NULL REFERENCES office.offices(office_id),
-            falls_on                            date,
-            holiday_name                        national character varying(100) NOT NULL,
-            description                         text,
-            recurs_next_year                    boolean NOT NULL DEFAULT(true),
-            audit_user_id                       integer NULL REFERENCES office.users(user_id),
-            audit_ts                            TIMESTAMP WITH TIME ZONE NULL        
-        );
-    END IF;    
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'custom_field_data_types'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.custom_field_data_types
-        (
-            data_type               national character varying(50) NOT NULL PRIMARY KEY,
-            is_number               boolean DEFAULT(false),
-            is_date                 boolean DEFAULT(false),
-            is_boolean              boolean DEFAULT(false),
-            is_long_text            boolean DEFAULT(false)
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'custom_field_forms'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.custom_field_forms
-        (
-            form_name                   national character varying(100) NOT NULL PRIMARY KEY,
-            table_name                  national character varying(100) NOT NULL UNIQUE,
-            key_name                    national character varying(100) NOT NULL        
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'custom_field_setup'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.custom_field_setup
-        (
-            custom_field_setup_id       SERIAL NOT NULL PRIMARY KEY,
-            form_name                   national character varying(100) NOT NULL
-                                        REFERENCES core.custom_field_forms,
-            field_order                 integer NOT NULL DEFAULT(0),
-            field_name                  national character varying(100) NOT NULL,
-            field_label                 national character varying(100) NOT NULL,                   
-            data_type                   national character varying(50)
-                                        REFERENCES core.custom_field_data_types,
-            description                 text NOT NULL
-        );
-
-        CREATE UNIQUE INDEX custom_field_setup_uix
-        ON core.custom_field_setup(UPPER(form_name), UPPER(field_label));
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'custom_fields'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.custom_fields
-        (
-            custom_field_id             BIGSERIAL NOT NULL PRIMARY KEY,
-            custom_field_setup_id       integer NOT NULL REFERENCES core.custom_field_setup,
-            resource_id                 text NOT NULL,
-            value                       text
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT * FROM config.scrud_factory
-        WHERE key = 'ExportTemplatePath'
-    ) THEN
-        INSERT INTO config.scrud_factory
-        SELECT 'ExportTemplatePath', '~/Reports/Export.html';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('primary_sales_tax_is_vat')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE office.offices
-        ADD COLUMN primary_sales_tax_is_vat bool NOT NULL DEFAULT(false);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('has_state_sales_tax')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE office.offices
-        ADD COLUMN has_state_sales_tax bool NOT NULL DEFAULT(false);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('has_county_sales_tax')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE office.offices
-        ADD COLUMN has_county_sales_tax bool NOT NULL DEFAULT(false);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('logo_file')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE office.offices
-        ADD COLUMN logo_file text NOT NULL DEFAULT('');
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP INDEX IF EXISTS core.salespersons_salesperson_name_uix;
-DROP INDEX IF EXISTS core.salespersons_salesperson_code_uix;
-
-CREATE UNIQUE INDEX salespersons_salesperson_code_uix
-ON core.salespersons(salesperson_code);
-
-DROP INDEX IF EXISTS core.cash_flow_setup_cash_flow_heading_id_account_master_id_uix;
-
-CREATE UNIQUE INDEX cash_flow_setup_cash_flow_heading_id_account_master_id_uix
-ON core.cash_flow_setup (account_master_id,cash_flow_heading_id);
-
-DROP INDEX IF EXISTS core.frequency_setups_frequency_setup_code_uix;
-
-CREATE UNIQUE INDEX frequency_setups_frequency_setup_code_uix
-ON core.frequency_setups(UPPER(fiscal_year_code), UPPER(frequency_setup_code));
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'email_queue'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.email_queue
-        (
-            queue_id                BIGSERIAL NOT NULL PRIMARY KEY,
-            subject                 national character varying(256) NOT NULL,
-            send_to                 national character varying(256) NOT NULL,
-            attachments             text,
-            message                 text NOT NULL,
-            added_on                TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-            delivered               boolean NOT NULL DEFAULT(false),
-            delivered_on            TIMESTAMP WITH TIME ZONE
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP INDEX IF EXISTS office.configuration_config_id_office_id_uix;
-
-CREATE UNIQUE INDEX configuration_config_id_office_id_uix
-ON office.configuration(config_id, office_id);
-
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT typname FROM pg_catalog.pg_type 
-        WHERE typname = 'image'
-    ) THEN
-        CREATE DOMAIN public.image AS text;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'office.offices'::regclass
-        AND    attname IN ('logo_file')
-        AND    NOT attisdropped
-    ) THEN
-        DROP VIEW IF EXISTS office.sign_in_view;
-        ALTER TABLE office.offices
-        ALTER COLUMN logo_file TYPE public.image;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF
-    (
-        SELECT a.attname
-        FROM   pg_index i
-        JOIN   pg_attribute a ON a.attrelid = i.indrelid
-                             AND a.attnum = ANY(i.indkey)
-        WHERE  i.indrelid = 'core.widgets'::regclass
-        AND    i.indisprimary
-    ) = 'widget_id' THEN
-        ALTER TABLE core.widgets
-        DROP CONSTRAINT IF EXISTS widgets_pkey;
-
-        ALTER TABLE core.widgets
-        ADD PRIMARY KEY(widget_name);
-
-        ALTER TABLE core.widgets
-        DROP COLUMN IF EXISTS row_number;
-
-        ALTER TABLE core.widgets
-        DROP COLUMN IF EXISTS column_number;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'widget_groups'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.widget_groups
-        (
-            widget_group_name       national character varying(100) NOT NULL PRIMARY KEY,
-            is_default              boolean NOT NULL DEFAULT(false)
-        );
-
-        INSERT INTO core.widget_groups
-        SELECT 'Default', true;
-    END IF;
-    
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'core'
-        AND    c.relname = 'widget_setup'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE core.widget_setup
-        (
-            widget_setup_id         SERIAL NOT NULL PRIMARY KEY,
-            widget_order            integer NOT NULL,
-            widget_group_name       national character varying(100) NOT NULL REFERENCES core.widget_groups,
-            widget_name             national character varying(100) NOT NULL REFERENCES core.widgets
-        );
-
-        CREATE INDEX widget_setup_widget_order_inx
-        ON core.widget_setup(widget_order);
-
-        INSERT INTO core.widget_setup(widget_order, widget_group_name, widget_name)
-        SELECT 1, 'Default', 'SalesByGeographyWidget' UNION ALL
-        SELECT 2, 'Default', 'SalesByOfficeWidget' UNION ALL
-        SELECT 3, 'Default', 'CurrentOfficeSalesByMonthWidget' UNION ALL
-        SELECT 4, 'Default', 'OfficeInformationWidget' UNION ALL
-        SELECT 5, 'Default', 'LinksWidget' UNION ALL
-        SELECT 6, 'Default', 'WorkflowWidget' UNION ALL
-        SELECT 7, 'Default', 'TopSellingProductOfAllTimeWidget' UNION ALL
-        SELECT 8, 'Default', 'TopSellingProductOfAllTimeCurrentWidget';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP TABLE IF EXISTS config.messaging CASCADE;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM   pg_catalog.pg_class c
-        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-        WHERE  n.nspname = 'config'
-        AND    c.relname = 'smtp'
-        AND    c.relkind = 'r'
-    ) THEN
-        CREATE TABLE config.smtp
-        (
-            smtp_id                             SERIAL NOT NULL PRIMARY KEY,
-            configuration_name                  national character varying(256) NOT NULL UNIQUE,
-            enabled                             boolean NOT NULL DEFAULT(false),
-            is_default                          boolean NOT NULL DEFAULT(false),
-            from_display_name                   national character varying(256) NOT NULL,
-            from_email_address                  national character varying(256) NOT NULL,
-            smtp_host                           national character varying(256) NOT NULL,
-            smtp_port                           public.integer_strict NOT NULL,
-            smtp_enable_ssl                     boolean NOT NULL DEFAULT(true),
-            smtp_username                       national character varying(256) NOT NULL,
-            smtp_password                       national character varying(256) NOT NULL,
-            audit_user_id                       integer NULL REFERENCES office.users(user_id),
-            audit_ts                            TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())
-        );
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'core.email_queue'::regclass
-        AND    attname = 'transaction_master_id'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE core.email_queue
-        ADD COLUMN transaction_master_id bigint REFERENCES transactions.transaction_master;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'core.email_queue'::regclass
-        AND    attname = 'canceled'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE core.email_queue
-        ADD COLUMN canceled BOOLEAN NOT NULL DEFAULT(false);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'core.parties'::regclass
-        AND    attname IN ('photo')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE core.parties
-        ADD COLUMN photo public.image;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT *
-        FROM   pg_attribute 
-        WHERE  attrelid = 'core.items'::regclass
-        AND    attname IN ('photo')
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE core.items
-        ADD COLUMN photo public.image;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'config.smtp'::regclass
-        AND    attname = 'smp_host'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE config.smtp
-        RENAME COLUMN smp_host TO smtp_host;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'config.smtp'::regclass
-        AND    attname = 'smtp_port'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE config.smtp
-        ADD COLUMN smtp_port public.integer_strict NOT NULL DEFAULT(587);
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP VIEW IF EXISTS core.item_view;
-DROP VIEW IF EXISTS core.item_selector_view;
-DROP VIEW IF EXISTS core.item_scrud_view;
-
-ALTER TABLE core.items
-ALTER COLUMN cost_price TYPE public.money_strict2;
-
-ALTER TABLE core.parties
-ALTER COLUMN state_id DROP NOT NULL;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM   pg_attribute 
-        WHERE  attrelid = 'policy.auto_verification_policy'::regclass
-        AND    attname = 'policy_id'
-        AND    NOT attisdropped
-    ) THEN
-        ALTER TABLE IF EXISTS policy.auto_verification_policy
-        RENAME TO auto_verification_policy_temp;
-
-
-        CREATE TABLE policy.auto_verification_policy
-        (
-          policy_id                     SERIAL NOT NULL PRIMARY KEY,
-          user_id                       integer NOT NULL REFERENCES office.users (user_id),
-          office_id                     integer NOT NULL REFERENCES office.offices (office_id),
-          verify_sales_transactions     boolean NOT NULL DEFAULT false,
-          sales_verification_limit      public.money_strict2 NOT NULL DEFAULT 0,
-          verify_purchase_transactions  boolean NOT NULL DEFAULT false,
-          purchase_verification_limit   public.money_strict2 NOT NULL DEFAULT 0,
-          verify_gl_transactions        boolean NOT NULL DEFAULT false,
-          gl_verification_limit         public.money_strict2 NOT NULL DEFAULT 0,
-          effective_from                date NOT NULL,
-          ends_on                       date NOT NULL,
-          is_active                     boolean NOT NULL,
-          audit_user_id                 integer REFERENCES office.users (user_id),
-          audit_ts                      timestamp with time zone DEFAULT now()
-        );
-
-        CREATE UNIQUE INDEX auto_verification_policy_office_id_user_id_uix
-        ON policy.auto_verification_policy(office_id, user_id)
-        WHERE is_active;
-        
-        INSERT INTO policy.auto_verification_policy
-        (
-            user_id, 
-            office_id,
-            verify_sales_transactions, 
-            sales_verification_limit, 
-            verify_purchase_transactions, 
-            purchase_verification_limit, 
-            verify_gl_transactions,  
-            gl_verification_limit,
-            effective_from,
-            ends_on,
-            is_active,
-            audit_user_id,
-            audit_ts
-        )
-        SELECT
-            user_id, 
-            office_id,
-            verify_sales_transactions, 
-            sales_verification_limit, 
-            verify_purchase_transactions, 
-            purchase_verification_limit, 
-            verify_gl_transactions,  
-            gl_verification_limit,
-            effective_from,
-            ends_on,
-            is_active,
-            audit_user_id,
-            audit_ts
-        FROM policy.auto_verification_policy_temp;
-
-        DROP TABLE policy.auto_verification_policy_temp CASCADE;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/audit/audit.get_office_information_model.sql --<--<--
-DROP FUNCTION IF EXISTS audit.get_office_information_model(integer);
-
-CREATE FUNCTION audit.get_office_information_model(integer)
-RETURNS TABLE
-(
-    office              text,
-    logged_in_to        text,
-    last_login_ip       text,
-    last_login_on       TIMESTAMP WITH TIME ZONE,
-    current_ip          text,
-    current_login_on    TIMESTAMP WITH TIME ZONE,
-    role                text,
-    department          text
-)
-VOLATILE
-AS
-$$
-BEGIN
-    CREATE TEMPORARY TABLE temp_model
-    (
-        office              text,
-        logged_in_to        text,
-        last_login_ip       text,
-        last_login_on       TIMESTAMP WITH TIME ZONE,
-        current_ip          text,
-        current_login_on    TIMESTAMP WITH TIME ZONE,
-        role                text,
-        department          text
-    ) ON COMMIT DROP;
-
-
-    INSERT INTO temp_model(office, role, department)
-    SELECT 
-        office.offices.office_code || ' (' || office.offices.office_name || ')',
-        office.roles.role_code || ' (' || office.roles.role_name || ')',
-        office.departments.department_code || ' (' || office.departments.department_name || ')'
-    FROM office.users
-    INNER JOIN office.offices
-    ON office.users.office_id = office.users.office_id
-    INNER JOIN office.roles
-    ON office.users.role_id = office.roles.role_id
-    INNER JOIN office.departments
-    ON office.users.department_id = office.departments.department_id
-    WHERE office.users.user_id = $1;
-
-    WITH login_info
-    AS
-    (
-        SELECT 
-            office.offices.office_code || ' (' || office.offices.office_name || ')' AS logged_in_to,
-            ip_address AS current_ip,
-            login_date_time AS current_login_on
-        FROM audit.logins
-        INNER JOIN office.offices
-        ON audit.logins.office_id = office.offices.office_id
-        WHERE user_id = $1
-        AND login_date_time = 
-        (
-            SELECT max(login_date_time)
-            FROM audit.logins
-            WHERE user_id = $1
-        )
-    )
-
-    UPDATE temp_model
-    SET 
-        logged_in_to        = login_info.logged_in_to,
-        current_ip          = login_info.current_ip,
-        current_login_on    = login_info.current_login_on
-    FROM login_info;
-
-
-    WITH last_login_info
-    AS
-    (
-        SELECT 
-            ip_address          AS last_login_ip,
-            login_date_time     AS last_login_on
-        FROM audit.logins
-        WHERE user_id = $1
-        AND login_date_time < 
-        (
-            SELECT max(login_date_time)
-            FROM audit.logins
-            WHERE user_id = $1
-        )
-        ORDER BY login_date_time DESC
-        LIMIT 1
-    )
-    UPDATE temp_model
-    SET 
-        last_login_ip       = last_login_info.last_login_ip,
-        last_login_on       = last_login_info.last_login_on
-    FROM last_login_info;
-    
-    
-    RETURN QUERY
-    SELECT * FROM temp_model;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.add_custom_field_form.sql --<--<--
-DROP FUNCTION IF EXISTS core.add_custom_field_form
-(
-    _form_name              national character varying(100),
-    _table_name             national character varying(100),
-    _key_name               national character varying(100)
-);
-
-CREATE FUNCTION core.add_custom_field_form
-(
-    _form_name              national character varying(100),
-    _table_name             national character varying(100),
-    _key_name               national character varying(100)
-)
-RETURNS void
-AS
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT * FROM core.custom_field_forms
-        WHERE form_name = _form_name
-    ) THEN
-        INSERT INTO core.custom_field_forms(form_name, table_name, key_name)
-        SELECT _form_name, _table_name, _key_name;
-
-        RETURN;
-    END IF;
-
-    UPDATE core.custom_field_forms
-    SET
-        table_name = _table_name,
-        key_name = _key_name
-    WHERE
-        form_name = _form_name;
-        
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
 (
     _menu_code          text,
@@ -1393,4575 +52,14 @@ AS
 $$
     DECLARE _menu_id    integer = core.get_menu_id_by_menu_code(_menu_code);
 BEGIN
-    PERFORM core.create_menu_locale(_menu_id, _culture, _menu_text);
-END
-$$
-LANGUAGE plpgsql;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_custom_field_form_name.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_custom_field_form_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100)
-);
-
-CREATE FUNCTION core.get_custom_field_form_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100)
-)
-RETURNS national character varying(100)
-AS
-$$
-BEGIN
-    RETURN form_name 
-    FROM core.custom_field_forms
-    WHERE table_name = _schema_name || '.' || _table_name;
-END
-$$
-LANGUAGE plpgsql;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_custom_field_setup_id_by_table_name.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_custom_field_setup_id_by_table_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100),
-    _field_name national character varying(100)
-);
-
-CREATE FUNCTION core.get_custom_field_setup_id_by_table_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100),
-    _field_name national character varying(100)
-)
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN custom_field_setup_id
-    FROM core.custom_field_setup
-    WHERE form_name = core.get_custom_field_form_name(_schema_name, _table_name)
-    AND field_name = _field_name;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_quotation_valid_duration.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_quotation_valid_duration(_office_id integer) CASCADE;
-
-CREATE FUNCTION core.get_quotation_valid_duration(_office_id integer)
-RETURNS integer
-STABLE
-AS
-$$
-BEGIN
-    RETURN value::varchar::integer
-    FROM office.configuration
-    WHERE office_id = _office_id
-    AND config_id = 3
-    LIMIT 1;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM core.get_quotation_valid_duration(2);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_root_account_id.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_second_root_account_id(integer, integer);
-DROP FUNCTION IF EXISTS core.get_root_account_id(integer, integer);
-DROP FUNCTION IF EXISTS core.get_root_account_id(bigint, bigint);
-
-CREATE FUNCTION core.get_root_account_id(_account_id bigint, _parent bigint default 0)
-RETURNS integer
-AS
-$$
-    DECLARE _parent_account_id bigint;
-BEGIN
-    SELECT 
-        parent_account_id
-        INTO _parent_account_id
-    FROM core.accounts
-    WHERE account_id=$1;
-
-    
-
-    IF(_parent_account_id IS NULL) THEN
-        RETURN $1;
-    ELSE
-        RETURN core.get_root_account_id(_parent_account_id, $1);
-    END IF; 
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.get_shipping_address_by_shipping_address_id.sql --<--<--
-CREATE OR REPLACE FUNCTION core.get_shipping_address_by_shipping_address_id(bigint)
-RETURNS text
-AS
-$$
-BEGIN
-        IF($1 IS NULL OR $1 <=0) THEN
-                RETURN '';
-        END IF;
-
-
-        RETURN
-                core.append_if_not_null(zip_code, '&lt;br /&gt;') || 
-                core.append_if_not_null(address_line_1, '&lt;br /&gt;') || 
-                core.append_if_not_null(address_line_2, '&lt;br /&gt;') || 
-                core.append_if_not_null(street, '&lt;br /&gt;') ||
-                city  || '&lt;br /&gt;' ||
-                core.states.state_name  || '&lt;br /&gt;' ||
-                core.countries.country_name 
-        FROM core.shipping_addresses
-        INNER JOIN core.states
-        ON core.shipping_addresses.state_id = core.states.state_id
-        INNER JOIN core.countries
-        ON core.shipping_addresses.country_id = core.countries.country_id
-        WHERE shipping_address_id=$1;
-        
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM core.get_shipping_address_by_shipping_address_id(1);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/core/core.is_parent_account.sql --<--<--
-DROP FUNCTION IF EXISTS core.is_parent_account(parent bigint, child bigint) CASCADE;
-
-CREATE FUNCTION core.is_parent_account(parent bigint, child bigint)
-RETURNS boolean
-AS
-$$      
-BEGIN
-    IF $1!=$2 THEN
-        IF EXISTS
-        (
-            WITH RECURSIVE account_cte(account_id, path) AS 
-            (
-                SELECT
-                    tn.account_id,  
-                    tn.account_id::TEXT AS path
-                FROM core.accounts AS tn 
-                WHERE tn.parent_account_id IS NULL
-                UNION ALL
-                SELECT
-                    c.account_id, 
-                    (p.path || '->' || c.account_id::TEXT)
-                FROM account_cte AS p, core.accounts AS c 
-                WHERE parent_account_id = p.account_id
-            )
-            SELECT * FROM
-            (
-                SELECT regexp_split_to_table(path, '->')
-                FROM account_cte AS n WHERE n.account_id = $2
-            ) AS items
-            WHERE regexp_split_to_table=$1::text
-        ) THEN
-            RETURN TRUE;
-        END IF;
-    END IF;
-    RETURN false;
-END
-$$
-LANGUAGE plpgsql;
-
-
-ALTER TABLE core.accounts
-ADD CONSTRAINT accounts_parent_account_id_chk
-CHECK(parent_account_id IS NULL OR NOT core.is_parent_account(account_id, parent_account_id));
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.add_localized_resource.sql --<--<--
-DROP FUNCTION IF EXISTS localization.add_localized_resource
-(
-    _culture_code    text,
-    _key             text,
-    _value           text
-);
-
-DROP FUNCTION IF EXISTS localization.add_localized_resource
-(
-    _resource_class  text,
-    _culture_code    text,
-    _key             text,
-    _value           text
-);
-
-CREATE FUNCTION localization.add_localized_resource
-(
-    _resource_class  text,
-    _culture_code    text,
-    _key             text,
-    _value           text
-)
-RETURNS void 
-VOLATILE
-AS
-$$
-    DECLARE _resource_id    integer;
-BEGIN
-    IF(COALESCE(_culture_code, '') = '') THEN
-        PERFORM localization.add_resource(_resource_class, _key, _value);
-        RETURN;
-    END IF;
-       
-    SELECT resource_id INTO _resource_id
-    FROM localization.resources
-    WHERE UPPER(resource_class) = UPPER(_resource_class)
-    AND UPPER(key) = UPPER(_key);
-
-    IF(_resource_id IS NOT NULL) THEN
-        IF EXISTS
-        (
-            SELECT 1 FROM localization.localized_resources 
-            WHERE localization.localized_resources.resource_id=_resource_id
-            AND culture_code = _culture_code
-        ) THEN
-            UPDATE localization.localized_resources
-            SET value=_value
-            WHERE localization.localized_resources.resource_id=_resource_id
-            AND culture_code = _culture_code;
-
-            RETURN;
-        END IF;
-
-        INSERT INTO localization.localized_resources(resource_id, culture_code, value)
-        SELECT _resource_id, _culture_code, _value;
+    IF(_menu_id IS NOT NULL) THEN
+        PERFORM core.create_menu_locale(_menu_id, _culture, _menu_text);
     END IF;
 END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.get_menu_table.sql --<--<--
-DROP FUNCTION IF EXISTS localization.get_menu_table(_culture_code text);
-
-CREATE FUNCTION localization.get_menu_table(_culture_code text)
-RETURNS TABLE
-(
-    menu_code           text,
-    invariant           text,
-    localized           text
-)
-AS
-$$
-BEGIN
-    RETURN QUERY
-    SELECT
-        core.menus.menu_code::text,
-        core.menus.menu_text::text,
-        core.menu_locale.menu_text::text AS translated
-    FROM core.menus
-    LEFT JOIN core.menu_locale
-    ON core.menus.menu_id = core.menu_locale.menu_id
-    AND core.menu_locale.culture = _culture_code
-    ORDER BY 3 DESC, 2, 1;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/localization/localization.get_output_for.sql --<--<--
-DROP FUNCTION IF EXISTS localization.get_output_for(national character varying(3));
-
-CREATE FUNCTION localization.get_output_for(national character varying(3))
-RETURNS text
-AS
-$$
-BEGIN
-    RETURN array_to_string(array_agg(i18n.resource), E'\n')
-    FROM
-    (
-        SELECT
-            
-            'SELECT * FROM localization.add_localized_resource(''' ||
-            localization.resources.resource_class || ''', ''' || $1 || ''', ''' ||
-            localization.resources.key || ''', ''' ||
-            REPLACE(localization.localized_resources.value, '''', '''''') || ''');--' ||
-            localization.resources.value AS resource
-        FROM localization.localized_resources
-        LEFT JOIN localization.resources
-        ON localization.localized_resources.resource_id = localization.resources.resource_id
-        WHERE culture_code = $1
-        ORDER BY localization.resources.resource_class, localization.resources.key
-    )
-    i18n;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM localization.get_output_for('de');
---SELECT * FROM localization.get_output_for('es');
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.create_new_fiscal_year.sql --<--<--
-DROP FUNCTION IF EXISTS core.create_new_fiscal_year
-(
-    _office_id                          integer,
-    _user_id                            integer,
-    _fiscal_year_code                   national character varying(12),
-    _fiscal_year_name                   national character varying(50)
-);
-
-CREATE FUNCTION core.create_new_fiscal_year
-(
-    _office_id                          integer,
-    _user_id                            integer,
-    _fiscal_year_code                   national character varying(12),
-    _fiscal_year_name                   national character varying(50)
-)
-RETURNS void
-AS
-$$
-    DECLARE _value_date                 date;
-    DECLARE _eoy_date                   date;
-    DECLARE _current_fiscal_year_code   national character varying(12);
-BEGIN
-    _current_fiscal_year_code   := core.get_current_fiscal_year_code(_office_id);
-    _value_date                 := core.get_date(_office_id);
-    _eoy_date                   := core.get_fiscal_year_end_date(_office_id);
-
-    IF(_value_date <> _eoy_date) THEN
-        RAISE EXCEPTION 'Access is denied.'
-        USING ERRCODE='P9001';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT 1
-        FROM core.fiscal_year
-        WHERE ends_on > _eoy_date
-    ) THEN
-        --One of the other branch offices had already created a new fiscal year.
-        RETURN;
-    END IF;
-
-    INSERT INTO core.fiscal_year(fiscal_year_code, fiscal_year_name, starts_from, ends_on, audit_user_id)
-    SELECT 
-        _fiscal_year_code, 
-        _fiscal_year_name, 
-        starts_from + interval '1 year', 
-        ends_on + interval '1 year',
-        _user_id
-    FROM core.fiscal_year
-    WHERE fiscal_year_code = _current_fiscal_year_code;
-
-    INSERT INTO core.frequency_setups(fiscal_year_code, frequency_setup_code, value_date, frequency_id, audit_user_id)
-    SELECT 
-        _fiscal_year_code, 
-        frequency_setup_code, 
-        value_date + interval '1 year',
-        frequency_id,
-        _user_id
-    FROM core.frequency_setups
-    WHERE fiscal_year_code = _current_fiscal_year_code;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.dates.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_date(_office_id integer);
-
-CREATE FUNCTION core.get_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-BEGIN
-    RETURN transactions.get_value_date($1);
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS core.get_month_end_date(_office_id integer);
-
-CREATE FUNCTION core.get_month_end_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-BEGIN
-    RETURN MIN(value_date) 
-    FROM core.frequency_setups
-    WHERE value_date >= transactions.get_value_date($1)
-    AND fiscal_year_code = core.get_current_fiscal_year_code($1);
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS core.get_month_start_date(_office_id integer);
-
-CREATE FUNCTION core.get_month_start_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-    DECLARE _date               date;
-BEGIN
-    SELECT MAX(value_date) + 1
-    INTO _date
-    FROM core.frequency_setups
-    WHERE value_date < 
-    (
-        SELECT MIN(value_date)
-        FROM core.frequency_setups
-        WHERE value_date >= transactions.get_value_date($1)
-        AND fiscal_year_code = core.get_current_fiscal_year_code($1)
-    );
-
-    IF(_date IS NULL) THEN
-        SELECT starts_from 
-        INTO _date
-        FROM core.fiscal_year;
-    END IF;
-
-    RETURN _date;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS core.get_quarter_end_date(_office_id integer);
-
-CREATE FUNCTION core.get_quarter_end_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-BEGIN
-    RETURN MIN(value_date) 
-    FROM core.frequency_setups
-    WHERE value_date >= transactions.get_value_date($1)
-    AND frequency_id > 2
-    AND fiscal_year_code = core.get_current_fiscal_year_code($1);
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DROP FUNCTION IF EXISTS core.get_quarter_start_date(_office_id integer);
-
-CREATE FUNCTION core.get_quarter_start_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-    DECLARE _date               date;
-BEGIN
-    SELECT MAX(value_date) + 1
-    INTO _date
-    FROM core.frequency_setups
-    WHERE value_date < 
-    (
-        SELECT MIN(value_date)
-        FROM core.frequency_setups
-        WHERE value_date >= transactions.get_value_date($1)
-        AND fiscal_year_code = core.get_current_fiscal_year_code($1)
-    )
-    AND frequency_id > 2;
-
-    IF(_date IS NULL) THEN
-        SELECT starts_from 
-        INTO _date
-        FROM core.fiscal_year;
-    END IF;
-
-    RETURN _date;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS core.get_fiscal_half_end_date(_office_id integer);
-
-CREATE FUNCTION core.get_fiscal_half_end_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-BEGIN
-    RETURN MIN(value_date) 
-    FROM core.frequency_setups
-    WHERE value_date >= transactions.get_value_date($1)
-    AND frequency_id > 3
-    AND fiscal_year_code = core.get_current_fiscal_year_code($1);
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DROP FUNCTION IF EXISTS core.get_fiscal_half_start_date(_office_id integer);
-
-CREATE FUNCTION core.get_fiscal_half_start_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-    DECLARE _date               date;
-BEGIN
-    SELECT MAX(value_date) + 1
-    INTO _date
-    FROM core.frequency_setups
-    WHERE value_date < 
-    (
-        SELECT MIN(value_date)
-        FROM core.frequency_setups
-        WHERE value_date >= transactions.get_value_date($1)
-        AND fiscal_year_code = core.get_current_fiscal_year_code($1)
-    )
-    AND frequency_id > 3;
-
-    IF(_date IS NULL) THEN
-        SELECT starts_from 
-        INTO _date
-        FROM core.fiscal_year;
-    END IF;
-
-    RETURN _date;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP FUNCTION IF EXISTS core.get_fiscal_year_end_date(_office_id integer);
-
-CREATE FUNCTION core.get_fiscal_year_end_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-BEGIN
-    RETURN MIN(value_date) 
-    FROM core.frequency_setups
-    WHERE value_date >= transactions.get_value_date($1)
-    AND frequency_id > 4
-    AND fiscal_year_code = core.get_current_fiscal_year_code($1);
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DROP FUNCTION IF EXISTS core.get_fiscal_year_start_date(_office_id integer);
-
-CREATE FUNCTION core.get_fiscal_year_start_date(_office_id integer)
-RETURNS date
-STABLE
-AS
-$$
-    DECLARE _date               date;
-BEGIN
-
-    SELECT starts_from 
-    INTO _date
-    FROM core.fiscal_year
-    WHERE fiscal_year_code = core.get_current_fiscal_year_code($1);
-
-    RETURN _date;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT core.get_date(1), core.get_month_start_date(1),core.get_month_end_date(1), core.get_quarter_start_date(1), core.get_quarter_end_date(1), core.get_fiscal_half_start_date(1), core.get_fiscal_half_end_date(1), core.get_fiscal_year_start_date(1), core.get_fiscal_year_end_date(1);
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_account_id_by_account_name.sql --<--<--
-DROP FUNCTION IF EXISTS core.get_account_id_by_account_name(text);
-
-CREATE FUNCTION core.get_account_id_by_account_name(text)
-RETURNS bigint
-STABLE
-AS
-$$
-BEGIN
-    RETURN
-		account_id
-    FROM core.accounts
-    WHERE account_name=$1;
-END
-$$
-LANGUAGE plpgsql;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_current_fiscal_year_code().sql --<--<--
-DROP FUNCTION IF EXISTS core.get_current_fiscal_year_code(_office_id integer);
-
-CREATE FUNCTION core.get_current_fiscal_year_code(_office_id integer)
-RETURNS national character varying(12)
-AS
-$$
-    DECLARE _today date = core.get_date(_office_id);
-BEGIN
-    RETURN fiscal_year_code 
-    FROM core.fiscal_year
-    WHERE _today >= starts_from
-    AND _today <= ends_on
-    ORDER BY ends_on DESC
-    LIMIT 1;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.get_party_code.sql --<--<--
-CREATE OR REPLACE FUNCTION core.get_party_code
-(
-    text, --First Name
-    text, --Middle Name
-    text  --Last Name
-)
-RETURNS text AS
-$$
-    DECLARE _party_code TEXT;
-BEGIN
-    SELECT INTO 
-        _party_code 
-            party_code
-    FROM
-        core.parties
-    WHERE
-        party_code LIKE 
-            UPPER(left($1,2) ||
-            CASE
-                WHEN $2 IS NULL or $2 = '' 
-                THEN left($3,3)
-            ELSE 
-                left($2,1) || left($3,2)
-            END 
-            || '%')
-    ORDER BY party_code desc
-    LIMIT 1;
-
-    _party_code :=
-                    UPPER
-                    (
-                        left($1,2)||
-                        CASE
-                            WHEN $2 IS NULL or $2 = '' 
-                            THEN left($3,3)
-                        ELSE 
-                            left($2,1)||left($3,2)
-                        END
-                    ) 
-                    || '-' ||
-                    CASE
-                        WHEN _party_code IS NULL 
-                        THEN '0001'
-                    ELSE 
-                        to_char(right(_party_code,4)::national character varying::int +1,'FM0000')
-                    END;
-    RETURN _party_code;
-END;
-$$
-LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION core.get_party_code
-(
-    text --Company Name
-)
-RETURNS text AS
-$$
-    DECLARE _party_code TEXT;
-BEGIN
-    SELECT INTO 
-        _party_code 
-            party_code
-    FROM
-        core.parties
-    WHERE
-        party_code LIKE 
-            UPPER(left($1,5) || '%')
-    ORDER BY party_code desc
-    LIMIT 1;
-
-    
-    _party_code :=
-                    UPPER
-                    (left($1,5)) 
-                    || '-' ||
-                    CASE
-                        WHEN _party_code IS NULL 
-                        THEN '0001'
-                    ELSE 
-                        to_char(right(_party_code, 4)::national character varying::int +1,'FM0000')
-                    END;
-    RETURN _party_code;
-END;
-$$
-LANGUAGE 'plpgsql';
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/core/core.is_new_fiscal_year_created.sql --<--<--
-DROP FUNCTION IF EXISTS core.is_new_fiscal_year_created
-(
-    _office_id              integer
-);
-
-CREATE FUNCTION core.is_new_fiscal_year_created
-(
-    _office_id              integer
-)
-RETURNS boolean
-AS
-$$
-    DECLARE _eoy_date       date;
-BEGIN
-    _eoy_date               := core.get_fiscal_year_end_date(_office_id);
-
-    IF EXISTS
-    (
-        SELECT 1 FROM core.fiscal_year
-        WHERE ends_on > _eoy_date
-    ) THEN
-        RETURN true;
-    END IF;
-    
-    RETURN false;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/office/office.add_office.sql --<--<--
-DROP FUNCTION IF EXISTS office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-);
-
-DROP FUNCTION IF EXISTS office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _fiscal_year_code       national character varying(12),
-    _fiscal_year_name       national character varying(50),
-    _starts_from            date,
-    _ends_on                date,
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-);
-
-DROP FUNCTION IF EXISTS office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _fiscal_year_code       national character varying(12),
-    _fiscal_year_name       national character varying(50),
-    _starts_from            date,
-    _ends_on                date,
-    _income_tax_rate        decimal(24, 4),
-    _week_start_day         integer,
-    _transaction_start_date date,
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-);
-
-DROP FUNCTION IF EXISTS office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _fiscal_year_code       national character varying(12),
-    _fiscal_year_name       national character varying(50),
-    _starts_from            date,
-    _ends_on                date,
-    _sales_tax_is_vat       boolean,
-    _has_state_sales_tax    boolean,
-    _has_county_sales_tax   boolean,
-    _income_tax_rate        decimal(24, 4),
-    _week_start_day         integer,
-    _transaction_start_date date,
-    _is_perpetual           boolean,
-    _inv_valuation_method   national character varying(5),
-    _logo_file              text,
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-);
-
-DROP FUNCTION IF EXISTS office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _fiscal_year_code       national character varying(12),
-    _fiscal_year_name       national character varying(50),
-    _starts_from            date,
-    _ends_on                date,
-    _sales_tax_is_vat       boolean,
-    _has_state_sales_tax    boolean,
-    _has_county_sales_tax   boolean,
-    _quotation_valid_days   integer,
-    _income_tax_rate        decimal(24, 4),
-    _week_start_day         integer,
-    _transaction_start_date date,
-    _is_perpetual           boolean,
-    _inv_valuation_method   national character varying(5),
-    _logo_file              text,
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-);
-
-CREATE FUNCTION office.add_office
-(
-    _office_code            national character varying(12),
-    _office_name            national character varying(150),
-    _nick_name              national character varying(50),
-    _registration_date      date,
-    _currency_code          national character varying(12),
-    _currency_symbol        national character varying(12),
-    _currency_name          national character varying(48),
-    _hundredth_name         national character varying(48),
-    _fiscal_year_code       national character varying(12),
-    _fiscal_year_name       national character varying(50),
-    _starts_from            date,
-    _ends_on                date,
-    _sales_tax_is_vat       boolean,
-    _has_state_sales_tax    boolean,
-    _has_county_sales_tax   boolean,
-    _quotation_valid_days   integer,
-    _income_tax_rate        decimal(24, 4),
-    _week_start_day         integer,
-    _transaction_start_date date,
-    _is_perpetual           boolean,
-    _inv_valuation_method   national character varying(5),
-    _logo_file              text,
-    _admin_name             national character varying(100),
-    _user_name              national character varying(50),
-    _password               national character varying(48)
-)
-RETURNS void 
-VOLATILE AS
-$$
-    DECLARE _office_id          integer;
-    DECLARE _user_id		    integer;
-    DECLARE _inventory_system   national character varying(12) = 'Perpetual';
-BEGIN
-    IF(_starts_from > _ends_on) THEN
-        RAISE EXCEPTION 'The start date cannot be greater than end date.'
-        USING ERRCODE='P5208';
-    END IF;
-
-    IF(NOT _is_perpetual) THEN
-        _inventory_system := 'Periodic';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 0 
-        FROM core.currencies
-        WHERE currency_code=_currency_code
-    ) THEN
-        INSERT INTO core.currencies(currency_code, currency_symbol, currency_name, hundredth_name)
-        SELECT _currency_code, _currency_symbol, _currency_name, _hundredth_name;
-    END IF;
-
-    UPDATE core.accounts
-    SET currency_code = _currency_code;
-
-    INSERT INTO office.offices(office_code, office_name, nick_name, registration_date, currency_code, income_tax_rate, transaction_start_date, week_start_day, primary_sales_tax_is_vat, has_state_sales_tax, has_county_sales_tax, logo_file)
-    SELECT _office_code, _office_name, _nick_name, _registration_date, _currency_code, _income_tax_rate, _transaction_start_date, _week_start_day, _sales_tax_is_vat, _has_state_sales_tax, _has_county_sales_tax, _logo_file
-    RETURNING office_id INTO _office_id;
-
-    --Inventory System
-    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 1 AND office_id = _office_id) THEN
-        UPDATE office.configuration
-        SET value = _inventory_system
-        WHERE config_id = 1 AND office_id = _office_id;
-    ELSE
-        INSERT INTO office.configuration(config_id, office_id, value, configuration_details)
-        SELECT 1, _office_id, _inventory_system, '';
-    END IF;
-
-    IF(COALESCE(_quotation_valid_days, 0) = 0) THEN
-        _quotation_valid_days = 15;
-    END IF;
-    
-    --Quotation valid duration
-    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 3 AND office_id = _office_id) THEN
-        UPDATE office.configuration
-        SET value = _quotation_valid_days::text
-        WHERE config_id = 3 AND office_id = _office_id;
-    ELSE
-        INSERT INTO office.configuration(config_id, office_id, value, configuration_details)
-        SELECT 3, _office_id, _quotation_valid_days::text, '';
-    END IF;
-
-    --COGS Calculation Method/Inventory Valuation Method
-    IF EXISTS(SELECT * FROM office.configuration WHERE config_id = 2 AND office_id = _office_id) THEN
-        UPDATE office.configuration
-        SET value = _inv_valuation_method
-        WHERE config_id = 2 AND office_id = _office_id;
-    ELSE
-        INSERT INTO office.configuration(config_id, office_id, value, configuration_details)
-        SELECT 2, _office_id, _inv_valuation_method, '';
-    END IF;
-    
-    IF NOT EXISTS(SELECT 0 FROM office.users WHERE user_name='sys') THEN
-        INSERT INTO office.users(role_id, department_id, office_id, user_name, password, full_name)
-        SELECT office.get_role_id_by_role_code('SYST'), office.get_department_id_by_department_code('SUP'), _office_id, 'sys', '', 'System';
-    END IF;
-        
-    INSERT INTO office.users(role_id, department_id, office_id,user_name,password, full_name, elevated)
-    SELECT office.get_role_id_by_role_code('ADMN'), office.get_department_id_by_department_code('SUP'), _office_id, _user_name, _password, _admin_name, true
-    RETURNING user_id INTO _user_id;
-
-    INSERT INTO policy.auto_verification_policy
-    (
-        office_id,
-        user_id, 
-        verify_sales_transactions, 
-        sales_verification_limit,
-        verify_purchase_transactions,
-        purchase_verification_limit,
-        verify_gl_transactions,
-        gl_verification_limit,
-        effective_from,
-        ends_on,
-        is_active
-    )
-    SELECT 
-        _office_id,
-        _user_id,
-        true,
-        0,
-        true,
-        0,
-        true,
-        0,
-        _starts_from,
-        _ends_on,
-        true;
-        
-    INSERT INTO core.fiscal_year(fiscal_year_code, fiscal_year_name, starts_from, ends_on, audit_user_id)
-    SELECT _fiscal_year_code, _fiscal_year_name, _starts_from, _ends_on, _user_id;
-
-    INSERT INTO policy.menu_access(office_id, menu_id, user_id)
-    SELECT _office_id, core.menus.menu_id, _user_id
-    FROM core.menus;
-
-    RETURN;
-END;
-$$
-LANGUAGE plpgsql;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/policy/policy.get_menu.sql --<--<--
-DROP FUNCTION IF EXISTS policy.get_menu
-(
-    _user_id    integer, 
-    _office_id  integer, 
-    _culture_   text
-);
-
-CREATE FUNCTION policy.get_menu
-(
-    _user_id    integer, 
-    _office_id  integer, 
-    _culture_   text
-)
-RETURNS TABLE
-(
-    menu_id         integer,
-    menu_text       national character varying(250),
-    url             national character varying(250),
-    menu_code       character varying(12),
-    level           smallint,
-    parent_menu_id  integer
-)
-AS
-$$
-    DECLARE culture_exists boolean = false;
-BEGIN    
-    IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=$3) THEN
-        culture_exists := true;
-    END IF;
-
-    IF(NOT culture_exists) THEN
-        IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=split_part($3,'-', 1)) THEN
-            $3 := split_part($3,'-', 1);
-            culture_exists := true;
-        END IF;
-    END IF;
-
-    IF culture_exists THEN
-        RETURN QUERY 
-        SELECT
-            core.menus.menu_id,
-            CASE 
-                WHEN core.menu_locale.menu_text IS NOT NULL THEN core.menu_locale.menu_text
-                ELSE core.menus.menu_text
-            END AS menu_text,
-            core.menus.url,
-            core.menus.menu_code,
-            core.menus.level,
-            core.menus.parent_menu_id   
-        FROM core.menus        
-        LEFT JOIN core.menu_locale
-        ON core.menus.menu_id = core.menu_locale.menu_id
-        AND core.menu_locale.culture=$3
-        WHERE core.menus.menu_id IN
-        (
-            SELECT policy.menu_access.menu_id
-            FROM policy.menu_access
-            WHERE policy.menu_access.user_id=$1
-            AND policy.menu_access.office_id=$2           
-        );
-    ELSE
-        RETURN QUERY 
-        SELECT
-            core.menus.menu_id,
-            core.menus.menu_text,
-            core.menus.url,
-            core.menus.menu_code,
-            core.menus.level,
-            core.menus.parent_menu_id   
-        FROM core.menus
-        INNER JOIN policy.menu_access
-        ON core.menus.menu_id = policy.menu_access.menu_id
-        WHERE policy.menu_access.user_id=$1
-        AND policy.menu_access.office_id=$2;
-    END IF;
-
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/policy/policy.get_menu_policy.sql --<--<--
-DROP FUNCTION IF EXISTS policy.get_menu_policy
-(
-    _user_id        integer,
-    _office_id      integer,
-    _culture        text
-);
-
-CREATE FUNCTION policy.get_menu_policy
-(
-    _user_id        integer,
-    _office_id      integer,
-    _culture        text
-)
-RETURNS TABLE
-(
-    row_number      bigint,
-    access          boolean,
-    menu_id         integer,
-    menu_code       text,
-    menu_text       text,
-    url             text
-)
-STABLE AS
-$$
-    DECLARE culture_exists boolean = false;
-BEGIN
-    IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=$3) THEN
-        culture_exists := true;
-    END IF;
-
-
-    IF culture_exists THEN
-        RETURN QUERY 
-        SELECT
-            row_number() OVER(ORDER BY core.menus.menu_id),
-            CASE WHEN policy.menu_access.access_id IS NOT NULL THEN true ELSE false END as access,
-            core.menus.menu_id,
-            core.menus.menu_code::text, 
-            CASE 
-                WHEN core.menu_locale.menu_text IS NULL
-                THEN core.menus.menu_text::text
-                ELSE core.menu_locale.menu_text::text
-            END as menu_text, 
-            core.menus.url::text
-        FROM core.menus
-        LEFT JOIN core.menu_locale
-        ON core.menus.menu_id = core.menu_locale.menu_id
-        AND core.menu_locale.culture = $3
-        LEFT OUTER JOIN policy.menu_access
-        ON core.menus.menu_id = policy.menu_access.menu_id
-        AND policy.menu_access.user_id = $1
-        AND policy.menu_access.office_id = $2
-        ORDER BY core.menus.menu_id;
-
-        RETURN;
-    END IF;
-    
-    RETURN QUERY
-    SELECT
-        row_number() OVER(ORDER BY core.menus.menu_id),
-        CASE WHEN policy.menu_access.access_id IS NOT NULL THEN true ELSE false END as access,
-        core.menus.menu_id,
-        core.menus.menu_code::text, 
-        core.menus.menu_text::text, 
-        core.menus.url::text
-    FROM core.menus
-    LEFT JOIN policy.menu_access
-    ON core.menus.menu_id = policy.menu_access.menu_id
-    AND policy.menu_access.user_id = $1
-    AND policy.menu_access.office_id = $2
-    ORDER BY core.menus.menu_id;
-
-    RETURN;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/public/public.poco_get_table_function_definition.sql --<--<--
-DROP FUNCTION IF EXISTS public.poco_get_table_function_definition
-(
-    _schema         text,
-    _name           text
-);
-
-CREATE FUNCTION public.poco_get_table_function_definition
-(
-    _schema                 text,
-    _name                   text
-)
-RETURNS TABLE
-(
-    column_name             text,
-    is_nullable             text,
-    udt_name                text,
-    column_default          text
-)
-STABLE
-AS
-$$
-    DECLARE _oid            oid;
-    DECLARE _typoid         oid;
-BEGIN
-    SELECT 
-        pg_proc.oid,
-        pg_proc.prorettype
-    INTO 
-        _oid,
-        _typoid
-    FROM pg_proc
-    INNER JOIN pg_namespace
-    ON pg_proc.pronamespace = pg_namespace.oid
-    WHERE pg_proc.proname=_name
-    AND pg_namespace.nspname=_schema
-    LIMIT 1;
-
-    IF EXISTS
-    (
-        SELECT 1
-        FROM information_schema.columns 
-        WHERE table_schema=_schema 
-        AND table_name=_name
-    ) THEN
-        RETURN QUERY
-        SELECT 
-            information_schema.columns.column_name::text, 
-            information_schema.columns.is_nullable::text, 
-            information_schema.columns.udt_name::text, 
-            information_schema.columns.column_default::text
-        FROM information_schema.columns 
-        WHERE table_schema=_schema 
-        AND table_name=_name;
-        RETURN;
-    END IF;
-
-    IF EXISTS(SELECT * FROM pg_type WHERE oid = _typoid AND typtype='c') THEN
-        --Composite Type
-        RETURN QUERY
-        SELECT 
-            attname::text               AS column_name,
-            'NO'::text                  AS is_nullable, 
-            format_type(t.oid,NULL)     AS udt_name,
-            ''::text                    AS column_default
-        FROM pg_attribute att
-        JOIN pg_type t ON t.oid=atttypid
-        JOIN pg_namespace nsp ON t.typnamespace=nsp.oid
-        LEFT OUTER JOIN pg_type b ON t.typelem=b.oid
-        LEFT OUTER JOIN pg_collation c ON att.attcollation=c.oid
-        LEFT OUTER JOIN pg_namespace nspc ON c.collnamespace=nspc.oid
-        WHERE att.attrelid=(SELECT typrelid FROM pg_type WHERE pg_type.oid = _typoid)
-        AND att.attnum > 0
-        ORDER by attnum;
-        RETURN;
-    END IF;
-
-    IF(_oid IS NOT NULL) THEN
-        RETURN QUERY
-        WITH procs
-        AS
-        (
-            SELECT 
-            explode_array(proargnames) as column_name,
-            explode_array(proargmodes) as column_mode,
-            explode_array(proallargtypes) as argument_type
-            FROM pg_proc
-            WHERE oid = _oid
-        )
-        SELECT 
-            procs.column_name::text,
-            'NO'::text AS is_nullable, 
-            format_type(procs.argument_type, null) as udt_name,
-            ''::text AS column_default
-        FROM procs
-        WHERE column_mode=ANY(ARRAY['t', 'o']);
-
-        RETURN;
-    END IF;
-
-    RETURN QUERY
-    SELECT 
-        attname::text               AS column_name,
-        'NO'::text                  AS is_nullable, 
-        format_type(t.oid,NULL)     AS udt_name,
-        ''::text                    AS column_default
-    FROM pg_attribute att
-    JOIN pg_type t ON t.oid=atttypid
-    JOIN pg_namespace nsp ON t.typnamespace=nsp.oid
-    LEFT OUTER JOIN pg_type b ON t.typelem=b.oid
-    LEFT OUTER JOIN pg_collation c ON att.attcollation=c.oid
-    LEFT OUTER JOIN pg_namespace nspc ON c.collnamespace=nspc.oid
-    WHERE att.attrelid=
-    (
-        SELECT typrelid 
-        FROM pg_type
-        INNER JOIN pg_namespace
-        ON pg_type.typnamespace = pg_namespace.oid
-        WHERE typname=_name
-        AND pg_namespace.nspname=_schema
-    )
-    AND att.attnum > 0
-    ORDER by attnum;
-END;
-$$
-LANGUAGE plpgsql;
-
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.auto_verify.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.auto_verify
-(
-    _tran_id        bigint,
-    _office_id      integer
-) CASCADE;
-
-CREATE FUNCTION transactions.auto_verify
-(
-    _tran_id        bigint,
-    _office_id      integer
-)
-RETURNS VOID
-VOLATILE
-AS
-$$
-    DECLARE _transaction_master_id          bigint;
-    DECLARE _transaction_posted_by          integer;
-    DECLARE _verifier                       integer;
-    DECLARE _status                         integer;
-    DECLARE _reason                         national character varying(128);
-    DECLARE _rejected                       smallint=-3;
-    DECLARE _closed                         smallint=-2;
-    DECLARE _withdrawn                      smallint=-1;
-    DECLARE _unapproved                     smallint = 0;
-    DECLARE _auto_approved                  smallint = 1;
-    DECLARE _approved                       smallint=2;
-    DECLARE _book                           text;
-    DECLARE _auto_verify_sales              boolean;
-    DECLARE _sales_verification_limit       public.money_strict2;
-    DECLARE _auto_verify_purchase           boolean;
-    DECLARE _purchase_verification_limit    public.money_strict2;
-    DECLARE _auto_verify_gl                 boolean;
-    DECLARE _gl_verification_limit          public.money_strict2;
-    DECLARE _posted_amount                  public.money_strict2;
-    DECLARE _auto_verification              boolean=true;
-    DECLARE _has_policy                     boolean=false;
-    DECLARE _voucher_date                   date;
-    DECLARE _value_date                     date=transactions.get_value_date(_office_id);
-BEGIN
-    _transaction_master_id := $1;
-
-    SELECT
-        transactions.transaction_master.book,
-        transactions.transaction_master.value_date,
-        transactions.transaction_master.user_id
-    INTO
-        _book,
-        _voucher_date,
-        _transaction_posted_by  
-    FROM
-    transactions.transaction_master
-    WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id;
-
-    IF(_voucher_date <> _value_date) THEN
-        RETURN;
-    END IF;
-
-    _verifier := office.get_sys_user_id();
-    _status := 1;
-    _reason := 'Automatically verified by workflow.';
-
-    IF EXISTS
-    (
-        SELECT 1 FROM policy.voucher_verification_policy    
-        WHERE user_id=_verifier
-        AND is_active=true
-        AND now() >= effective_from
-        AND now() <= ends_on
-    ) THEN
-        RAISE INFO 'A sys cannot have a verification policy defined.';
-        RETURN;
-    END IF;
-    
-    SELECT
-        SUM(amount_in_local_currency)
-    INTO
-        _posted_amount
-    FROM
-        transactions.transaction_details
-    WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
-    AND transactions.transaction_details.tran_type='Cr';
-
-
-    SELECT
-        true,
-        verify_sales_transactions,
-        sales_verification_limit,
-        verify_purchase_transactions,
-        purchase_verification_limit,
-        verify_gl_transactions,
-        gl_verification_limit
-    INTO
-        _has_policy,
-        _auto_verify_sales,
-        _sales_verification_limit,
-        _auto_verify_purchase,
-        _purchase_verification_limit,
-        _auto_verify_gl,
-        _gl_verification_limit
-    FROM
-    policy.auto_verification_policy
-    WHERE user_id=_transaction_posted_by
-    AND office_id = _office_id
-    AND is_active=true
-    AND now() >= effective_from
-    AND now() <= ends_on;
-
-
-
-    IF(lower(_book) LIKE 'sales%') THEN
-        IF(_auto_verify_sales = false) THEN
-            _auto_verification := false;
-        END IF;
-        IF(_auto_verify_sales = true) THEN
-            IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::public.money_strict2) THEN
-                _auto_verification := false;
-            END IF;
-        END IF;         
-    END IF;
-
-
-    IF(lower(_book) LIKE 'purchase%') THEN
-        IF(_auto_verify_purchase = false) THEN
-            _auto_verification := false;
-        END IF;
-        IF(_auto_verify_purchase = true) THEN
-            IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::public.money_strict2) THEN
-                _auto_verification := false;
-            END IF;
-        END IF;         
-    END IF;
-
-
-    IF(lower(_book) LIKE 'journal%') THEN
-        IF(_auto_verify_gl = false) THEN
-            _auto_verification := false;
-        END IF;
-        IF(_auto_verify_gl = true) THEN
-            IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::public.money_strict2) THEN
-                _auto_verification := false;
-            END IF;
-        END IF;         
-    END IF;
-
-    IF(_has_policy=true) THEN
-        IF(_auto_verification = true) THEN
-            UPDATE transactions.transaction_master
-            SET 
-                last_verified_on = now(),
-                verified_by_user_id=_verifier,
-                verification_status_id=_status,
-                verification_reason=_reason
-            WHERE
-                transactions.transaction_master.transaction_master_id=_transaction_master_id
-            OR
-                transactions.transaction_master.cascading_tran_id=_transaction_master_id
-            OR
-            transactions.transaction_master.transaction_master_id = 
-            (
-                SELECT cascading_tran_id
-                FROM transactions.transaction_master
-                WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id 
-            );
-
-            PERFORM transactions.create_recurring_invoices(_transaction_master_id);
-        END IF;
-    ELSE
-        RAISE NOTICE 'No auto verification policy found for this user.';
-    END IF;
-    RETURN;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-/**************************************************************************************************************************
---------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------
-'########::'##:::::::'########:::'######:::'##::::'##:'##::: ##:'####:'########::::'########:'########::'######::'########:
- ##.... ##: ##::::::: ##.... ##:'##... ##:: ##:::: ##: ###:: ##:. ##::... ##..:::::... ##..:: ##.....::'##... ##:... ##..::
- ##:::: ##: ##::::::: ##:::: ##: ##:::..::: ##:::: ##: ####: ##:: ##::::: ##:::::::::: ##:::: ##::::::: ##:::..::::: ##::::
- ########:: ##::::::: ########:: ##::'####: ##:::: ##: ## ## ##:: ##::::: ##:::::::::: ##:::: ######:::. ######::::: ##::::
- ##.....::: ##::::::: ##.....::: ##::: ##:: ##:::: ##: ##. ####:: ##::::: ##:::::::::: ##:::: ##...:::::..... ##:::: ##::::
- ##:::::::: ##::::::: ##:::::::: ##::: ##:: ##:::: ##: ##:. ###:: ##::::: ##:::::::::: ##:::: ##:::::::'##::: ##:::: ##::::
- ##:::::::: ########: ##::::::::. ######:::. #######:: ##::. ##:'####:::: ##:::::::::: ##:::: ########:. ######::::: ##::::
-..:::::::::........::..::::::::::......:::::.......:::..::::..::....:::::..:::::::::::..:::::........:::......::::::..:::::
---------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------
-**************************************************************************************************************************/
-
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_sales_test1();
-
-CREATE FUNCTION unit_tests.auto_verify_sales_test1()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE _book_name                              national character varying(48)='Sales.Direct';
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _cost_center_id                         integer;
-    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
-    DECLARE _statement_reference                    text='Plpgunit test was here.';
-    DECLARE _is_credit                              boolean=false;
-    DECLARE _payment_term_id                        integer;
-    DECLARE _party_code                             national character varying(12);
-    DECLARE _price_type_id                          integer;
-    DECLARE _salesperson_id                         integer;
-    DECLARE _shipper_id                             integer;
-    DECLARE _shipping_address_code                  national character varying(12)='';
-    DECLARE _store_id                               integer;
-    DECLARE _is_non_taxable_sales                   boolean=true;
-    DECLARE _details                                transactions.stock_detail_type[];
-    DECLARE _attachments                            core.attachment_type[];
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-    _value_date         := transactions.get_value_date(_office_id);
-    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
-    _payment_term_id    := core.get_payment_term_id_by_payment_term_code('dummy-pt01');
-    _party_code         := 'dummy-pr01';
-    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
-    _salesperson_id     := core.get_salesperson_id_by_salesperson_code('dummy-sp01');
-    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
-    _store_id           := office.get_store_id_by_store_code('dummy-st01');
-
-    
-    _details            := ARRAY[
-                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',1800000, 0, 0, '', 0)::transactions.stock_detail_type,
-                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',1300000, 300, 0, '', 0)::transactions.stock_detail_type];
-             
-    
-    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
-
-
-    SELECT * FROM transactions.post_sales
-    (
-        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
-        _is_credit, _payment_term_id, _party_code, _price_type_id, _salesperson_id, _shipper_id,
-        _shipping_address_code,
-        _store_id,
-        _is_non_taxable_sales,
-        _details,
-        _attachments,
-        NULL
-    ) INTO _tran_id;
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id < 1) THEN
-        SELECT assert.fail('This transaction should have been verified.') INTO message;
-        RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_sales_test2();
-
-CREATE FUNCTION unit_tests.auto_verify_sales_test2()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE _book_name                              national character varying(48)='Sales.Direct';
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _cost_center_id                         integer;
-    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
-    DECLARE _statement_reference                    text='Plpgunit test was here.';
-    DECLARE _is_credit                              boolean=false;
-    DECLARE _payment_term_id                        integer;
-    DECLARE _party_code                             national character varying(12);
-    DECLARE _price_type_id                          integer;
-    DECLARE _salesperson_id                         integer;
-    DECLARE _shipper_id                             integer;
-    DECLARE _shipping_address_code                  national character varying(12)='';
-    DECLARE _store_id                               integer;
-    DECLARE _is_non_taxable_sales                   boolean=true;
-    DECLARE _details                                transactions.stock_detail_type[];
-    DECLARE _attachments                            core.attachment_type[];
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-    _value_date         := transactions.get_value_date(_office_id);
-    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
-    _payment_term_id    := core.get_payment_term_id_by_payment_term_code('dummy-pt01');
-    _party_code         := 'dummy-pr01';
-    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
-    _salesperson_id     := core.get_salesperson_id_by_salesperson_code('dummy-sp01');
-    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
-    _store_id           := office.get_store_id_by_store_code('dummy-st01');
-
-    
-    _details            := ARRAY[
-                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
-                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
-
-    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 100, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
-
-    SELECT * FROM transactions.post_sales
-    (
-        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
-        _is_credit, _payment_term_id, _party_code, _price_type_id, _salesperson_id, _shipper_id,
-        _shipping_address_code,
-        _store_id,
-        _is_non_taxable_sales,
-        _details,
-        _attachments,
-        NULL
-    ) INTO _tran_id;
-
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id > 0) THEN
-        SELECT assert.fail('This transaction should not have been verified.') INTO message;
-        RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-
-
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_purchase_test1();
-
-CREATE FUNCTION unit_tests.auto_verify_purchase_test1()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE _book_name                              national character varying(48)='Purchase.Direct';
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _cost_center_id                         integer;
-    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
-    DECLARE _statement_reference                    text='Plpgunit test was here.';
-    DECLARE _is_credit                              boolean=false;
-    DECLARE _payment_term_id                        integer;
-    DECLARE _party_code                             national character varying(12);
-    DECLARE _price_type_id                          integer;
-    DECLARE _shipper_id                             integer;
-    DECLARE _store_id                               integer;
-    DECLARE _is_non_taxable_sales                   boolean=true;
-    DECLARE _tran_ids                               bigint[];
-    DECLARE _details                                transactions.stock_detail_type[];
-    DECLARE _attachments                            core.attachment_type[];
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-    _value_date         := transactions.get_value_date(_office_id);
-    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
-    _party_code         := 'dummy-pr01';
-    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
-    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
-    _store_id           := office.get_store_id_by_store_code('dummy-st01');
-
-    
-    _details            := ARRAY[
-                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
-                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
-
-    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
-
-    SELECT * FROM transactions.post_purchase
-    (
-        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
-        _is_credit, _party_code, _price_type_id, _shipper_id,
-        _store_id, _tran_ids, _details, _attachments
-    ) INTO _tran_id;
-
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id < 1) THEN
-            SELECT assert.fail('This transaction should have been verified.') INTO message;
-            RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_purchase_test2();
-
-CREATE FUNCTION unit_tests.auto_verify_purchase_test2()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE _book_name                              national character varying(48)='Purchase.Direct';
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _cost_center_id                         integer;
-    DECLARE _reference_number                       national character varying(24)='Plpgunit.fixture';
-    DECLARE _statement_reference                    text='Plpgunit test was here.';
-    DECLARE _is_credit                              boolean=false;
-    DECLARE _payment_term_id                        integer;
-    DECLARE _party_code                             national character varying(12);
-    DECLARE _price_type_id                          integer;
-    DECLARE _shipper_id                             integer;
-    DECLARE _store_id                               integer;
-    DECLARE _is_non_taxable_sales                   boolean=true;
-    DECLARE _tran_ids                               bigint[];
-    DECLARE _details                                transactions.stock_detail_type[];
-    DECLARE _attachments                            core.attachment_type[];
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-    _value_date         := transactions.get_value_date(_office_id);
-    _cost_center_id     := office.get_cost_center_id_by_cost_center_code('dummy-cs01');
-    _party_code         := 'dummy-pr01';
-    _price_type_id      := core.get_price_type_id_by_price_type_code('dummy-pt01');
-    _shipper_id         := core.get_shipper_id_by_shipper_code('dummy-sh01');
-    _store_id           := office.get_store_id_by_store_code('dummy-st01');
-
-    
-    _details            := ARRAY[
-                             ROW(_store_id, 'dummy-it01', 1, 'Test Mock Unit',180000, 0, 0, '', 0)::transactions.stock_detail_type,
-                             ROW(_store_id, 'dummy-it02', 2, 'Test Mock Unit',130000, 300, 0, '', 0)::transactions.stock_detail_type];
-
-    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 100, true, 0, '1-1-2000', '1-1-2000', true);
-
-
-    SELECT * FROM transactions.post_purchase
-    (
-        _book_name,_office_id, _user_id, _login_id, _value_date, _cost_center_id, _reference_number, _statement_reference,
-        _is_credit, _party_code, _price_type_id, _shipper_id,
-        _store_id, _tran_ids, _details, _attachments
-    ) INTO _tran_id;
-
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id > 0) THEN
-        SELECT assert.fail('This transaction should not have been verified.') INTO message;
-        RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_journal_test1();
-
-CREATE FUNCTION unit_tests.auto_verify_journal_test1()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _value_date         := transactions.get_value_date(_office_id);
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-
-    PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 0, '1-1-2000', '1-1-2020', true);
-
-    _tran_id := nextval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id'));
-
-    INSERT INTO transactions.transaction_master
-    (
-        transaction_master_id, 
-        transaction_counter, 
-        transaction_code, 
-        book, 
-        value_date, 
-        user_id, 
-        login_id, 
-        office_id, 
-        reference_number, 
-        statement_reference
-    )
-    SELECT 
-        _tran_id, 
-        transactions.get_new_transaction_counter(_value_date), 
-        transactions.get_transaction_code(_value_date, _office_id, _user_id, 1),
-        'Journal',
-        _value_date,
-        _user_id,
-        _login_id,
-        _office_id,
-        'REF# TEST',
-        'Thou art not able to see this.';
-
-
-
-    INSERT INTO transactions.transaction_details
-    (
-        transaction_master_id, 
-        value_date,
-        tran_type, 
-        account_id, 
-        statement_reference, 
-        currency_code, 
-        amount_in_currency, 
-        local_currency_code,    
-        er, 
-        amount_in_local_currency
-    )
-
-    SELECT _tran_id, _value_date, 'Cr', core.get_account_id_by_account_number('dummy-acc01'), '', 'NPR', 12000, 'NPR', 1, 12000 UNION ALL
-    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc02'), '', 'NPR', 3000, 'NPR', 1, 3000 UNION ALL
-    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc03'), '', 'NPR', 9000, 'NPR', 1, 9000;
-
-
-    PERFORM transactions.auto_verify(currval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id')), office.get_office_id_by_office_code('dummy-off01'));
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id < 1) THEN
-        SELECT assert.fail('This transaction should have been verified.') INTO message;
-        RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DROP FUNCTION IF EXISTS unit_tests.auto_verify_journal_test2();
-
-CREATE FUNCTION unit_tests.auto_verify_journal_test2()
-RETURNS public.test_result
-AS
-$$
-    DECLARE _value_date                             date;
-    DECLARE _office_id                              integer;
-    DECLARE _user_id                                integer;
-    DECLARE _login_id                               bigint;
-    DECLARE _tran_id                                bigint;
-    DECLARE _verification_status_id                 smallint;
-    DECLARE message                                 test_result;
-BEGIN
-    PERFORM unit_tests.create_mock();
-    PERFORM unit_tests.sign_in_test();
-
-    _office_id          := office.get_office_id_by_office_code('dummy-off01');
-    _value_date         := transactions.get_value_date(_office_id);
-    _user_id            := office.get_user_id_by_user_name('plpgunit-test-user-000001');
-    _login_id           := office.get_login_id(_user_id);
-
-     PERFORM unit_tests.create_dummy_auto_verification_policy(office.get_user_id_by_user_name('plpgunit-test-user-000001'), _office_id, true, 0, true, 0, true, 100, '1-1-2000', '1-1-2020', true);
-    _tran_id := nextval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id'));
-
-    INSERT INTO transactions.transaction_master
-    (
-        transaction_master_id, 
-        transaction_counter, 
-        transaction_code, 
-        book, 
-        value_date, 
-        user_id, 
-        login_id, 
-        office_id, 
-        reference_number, 
-        statement_reference
-    )
-    SELECT 
-        _tran_id, 
-        transactions.get_new_transaction_counter(_value_date), 
-        transactions.get_transaction_code(_value_date, _office_id, _user_id, 1),
-        'Journal',
-        _value_date,
-        _user_id,
-        _login_id,
-        _office_id,
-        'REF# TEST',
-        'Thou art not able to see this.';
-
-
-
-    INSERT INTO transactions.transaction_details
-    (
-        transaction_master_id,
-        value_date,
-        tran_type, 
-        account_id, 
-        statement_reference, 
-        currency_code, 
-        amount_in_currency, 
-        local_currency_code,    
-        er, 
-        amount_in_local_currency
-    )
-    SELECT _tran_id, _value_date, 'Cr', core.get_account_id_by_account_number('dummy-acc01'), '', 'NPR', 12000, 'NPR', 1, 12000 UNION ALL
-    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc02'), '', 'NPR', 3000, 'NPR', 1, 3000 UNION ALL
-    SELECT _tran_id, _value_date, 'Dr', core.get_account_id_by_account_number('dummy-acc03'), '', 'NPR', 9000, 'NPR', 1, 9000;
-
-
-    PERFORM transactions.auto_verify(currval(pg_get_serial_sequence('transactions.transaction_master', 'transaction_master_id')), office.get_office_id_by_office_code('dummy-off01'));
-
-    SELECT verification_status_id
-    INTO _verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-
-    IF(_verification_status_id > 0) THEN
-            SELECT assert.fail('This transaction should not have been verified.') INTO message;
-            RETURN message;
-    END IF;
-
-    SELECT assert.ok('End of test.') INTO message;  
-    RETURN message;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_account_statement.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_account_statement
-(
-    _value_date_from        date,
-    _value_date_to          date,
-    _user_id                integer,
-    _account_id             bigint,
-    _office_id              integer
-);
-
-CREATE FUNCTION transactions.get_account_statement
-(
-    _value_date_from        date,
-    _value_date_to          date,
-    _user_id                integer,
-    _account_id             bigint,
-    _office_id              integer
-)
-RETURNS TABLE
-(
-    id                      integer,
-    value_date              date,
-    book_date               date,
-    tran_code               text,
-    reference_number        text,
-    statement_reference     text,
-    debit                   decimal(24, 4),
-    credit                  decimal(24, 4),
-    balance                 decimal(24, 4),
-    office                  text,
-    book                    text,
-    account_id              integer,
-    account_number          text,
-    account                 text,
-    posted_on               TIMESTAMP WITH TIME ZONE,
-    posted_by               text,
-    approved_by             text,
-    verification_status     integer,
-    flag_bg                 text,
-    flag_fg                 text
-)
-AS
-$$
-    DECLARE _normally_debit boolean;
-BEGIN
-
-    _normally_debit             := transactions.is_normally_debit(_account_id);
-
-    DROP TABLE IF EXISTS temp_account_statement;
-    CREATE TEMPORARY TABLE temp_account_statement
-    (
-        id                      SERIAL,
-        value_date              date,
-        book_date               date,
-        tran_code               text,
-        reference_number        text,
-        statement_reference     text,
-        debit                   decimal(24, 4),
-        credit                  decimal(24, 4),
-        balance                 decimal(24, 4),
-        office                  text,
-        book                    text,
-        account_id              integer,
-        account_number          text,
-        account                 text,
-        posted_on               TIMESTAMP WITH TIME ZONE,
-        posted_by               text,
-        approved_by             text,
-        verification_status     integer,
-        flag_bg                 text,
-        flag_fg                 text
-    ) ON COMMIT DROP;
-
-
-    INSERT INTO temp_account_statement(value_date, book_date, tran_code, reference_number, statement_reference, debit, credit, office, book, account_id, posted_on, posted_by, approved_by, verification_status)
-    SELECT
-        _value_date_from,
-        _value_date_from,
-        NULL,
-        NULL,
-        'Opening Balance',
-        NULL,
-        SUM
-        (
-            CASE transactions.transaction_details.tran_type
-            WHEN 'Cr' THEN amount_in_local_currency
-            ELSE amount_in_local_currency * -1 
-            END            
-        ) as credit,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    FROM transactions.transaction_master
-    INNER JOIN transactions.transaction_details
-    ON transactions.transaction_master.transaction_master_id = transactions.transaction_details.transaction_master_id
-    WHERE
-        transactions.transaction_master.verification_status_id > 0
-    AND
-        transactions.transaction_master.value_date < _value_date_from
-    AND
-       transactions.transaction_master.office_id IN (SELECT * FROM office.get_office_ids(_office_id)) 
-    AND
-       transactions.transaction_details.account_id IN (SELECT * FROM core.get_account_ids(_account_id));
-
-    DELETE FROM temp_account_statement
-    WHERE COALESCE(temp_account_statement.debit, 0) = 0
-    AND COALESCE(temp_account_statement.credit, 0) = 0;
-    
-
-    UPDATE temp_account_statement SET 
-    debit = temp_account_statement.credit * -1,
-    credit = 0
-    WHERE temp_account_statement.credit < 0;
-    
-
-    INSERT INTO temp_account_statement(value_date, book_date, tran_code, reference_number, statement_reference, debit, credit, office, book, account_id, posted_on, posted_by, approved_by, verification_status)
-    SELECT
-        transactions.transaction_master.value_date,
-        transactions.transaction_master.book_date,
-        transactions.transaction_master. transaction_code,
-        transactions.transaction_master.reference_number::text,
-        transactions.transaction_details.statement_reference,
-        CASE transactions.transaction_details.tran_type
-        WHEN 'Dr' THEN amount_in_local_currency
-        ELSE NULL END,
-        CASE transactions.transaction_details.tran_type
-        WHEN 'Cr' THEN amount_in_local_currency
-        ELSE NULL END,
-        office.get_office_name_by_id(transactions.transaction_master.office_id),
-        transactions.transaction_master.book,
-        transactions.transaction_details.account_id,
-        transactions.transaction_master.transaction_ts,
-        office.get_user_name_by_user_id(COALESCE(transactions.transaction_master.user_id, transactions.transaction_master.sys_user_id)),
-        office.get_user_name_by_user_id(transactions.transaction_master.verified_by_user_id),
-        transactions.transaction_master.verification_status_id
-    FROM transactions.transaction_master
-    INNER JOIN transactions.transaction_details
-    ON transactions.transaction_master.transaction_master_id = transactions.transaction_details.transaction_master_id
-    WHERE
-        transactions.transaction_master.verification_status_id > 0
-    AND
-        transactions.transaction_master.value_date >= _value_date_from
-    AND
-        transactions.transaction_master.value_date <= _value_date_to
-    AND
-       transactions.transaction_master.office_id IN (SELECT * FROM office.get_office_ids(_office_id)) 
-    AND
-       transactions.transaction_details.account_id IN (SELECT * FROM core.get_account_ids(_account_id))
-    ORDER BY 
-        transactions.transaction_master.book_date,
-        transactions.transaction_master.value_date,
-        transactions.transaction_master.last_verified_on;
-
-
-
-    UPDATE temp_account_statement
-    SET balance = c.balance
-    FROM
-    (
-        SELECT
-            temp_account_statement.id, 
-            SUM(COALESCE(c.credit, 0)) 
-            - 
-            SUM(COALESCE(c.debit,0)) As balance
-        FROM temp_account_statement
-        LEFT JOIN temp_account_statement AS c 
-            ON (c.id <= temp_account_statement.id)
-        GROUP BY temp_account_statement.id
-        ORDER BY temp_account_statement.id
-    ) AS c
-    WHERE temp_account_statement.id = c.id;
-
-
-    UPDATE temp_account_statement SET 
-        account_number = core.accounts.account_number,
-        account = core.accounts.account_name
-    FROM core.accounts
-    WHERE temp_account_statement.account_id = core.accounts.account_id;
-
-
-    UPDATE temp_account_statement SET
-        flag_bg = core.get_flag_background_color(core.get_flag_type_id(_user_id, 'account_statement', 'transaction_code', temp_account_statement.tran_code::text)),
-        flag_fg = core.get_flag_foreground_color(core.get_flag_type_id(_user_id, 'account_statement', 'transaction_code', temp_account_statement.tran_code::text));
-
-
-    IF(_normally_debit) THEN
-        UPDATE temp_account_statement SET balance = temp_account_statement.balance * -1;
-    END IF;
-
-    RETURN QUERY
-    SELECT * FROM temp_account_statement;
-END;
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM transactions.get_account_statement('1-1-2010','1-1-2020',1,1,1);
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_due_date.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_due_date(_value_date date, _payment_term_id integer) CASCADE;
-
-CREATE FUNCTION transactions.get_due_date(_value_date date, _payment_term_id integer)
-RETURNS date
-STABLE
-AS
-$$
-    DECLARE _frequency_id       integer;
-    DECLARE _due_days           integer;
-BEGIN
-    IF(_payment_term_id IS NULL OR _value_date IS NULL) THEN
-        RETURN NULL;
-    END IF;
-
-    SELECT
-        due_frequency_id,
-        due_days
-    INTO
-        _frequency_id,
-        _due_days
-    FROM core.payment_terms
-    WHERE payment_term_id = _payment_term_id;
-
-    IF(_frequency_id IS NOT NULL) THEN
-        RETURN core.get_frequency_end_date(_frequency_id, _value_date);
-    END IF;
-
-    RETURN _value_date + INTERVAL '1 day' * _due_days;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_eoy_profit_summary.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_eoy_profit_summary
-(
-    _office_id              integer
-);
-
-CREATE FUNCTION transactions.get_eoy_profit_summary
-(
-    _office_id              integer
-)
-RETURNS TABLE
-(
-    profit_before_tax       decimal(24, 4),
-    tax_rate                decimal(24, 4),
-    tax                     decimal(24, 4)
-)
-AS
-$$
-    DECLARE _date_from      date = core.get_fiscal_year_start_date(_office_id);
-    DECLARE _date_to        date = core.get_fiscal_year_end_date(_office_id);
-    DECLARE _profit         decimal(24, 4);
-    DECLARE _tax_rate       decimal(24, 4);
-    DECLARE _tax            decimal(24, 4);
-BEGIN
-    REFRESH MATERIALIZED VIEW transactions.verified_transaction_mat_view;
-    _profit := transactions.get_net_profit(_date_from, _date_to, _office_id, 1, true);
-
-    SELECT income_tax_rate INTO _tax_rate
-    FROM office.offices
-    WHERE office_id = _office_id;
-
-    _tax = (_profit * _tax_rate) / 100;
-
-    RETURN QUERY
-    SELECT _profit, _tax_rate, _tax;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_income_expenditure_statement.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_income_expenditure_statement
-(
-    _date_from              date,
-    _date_to                date,
-    _user_id                integer,
-    _office_id              integer,
-    _compact                boolean
-);
-
-CREATE FUNCTION transactions.get_income_expenditure_statement
-(
-    _date_from              date,
-    _date_to                date,
-    _user_id                integer,
-    _office_id              integer,
-    _compact                boolean
-)
-RETURNS TABLE
-(
-    id                      integer,
-    account_id              integer,
-    account_number          text,
-    account                 text,
-    previous_debit          decimal(24, 4),
-    previous_credit         decimal(24, 4),
-    previous_balance        decimal(24, 4),
-    debit                   decimal(24, 4),
-    credit                  decimal(24, 4),
-    balance                 decimal(24, 4),
-    closing_debit           decimal(24, 4),
-    closing_credit          decimal(24, 4),
-    closing_balance         decimal(24, 4)
-)
-AS
-$$
-    DECLARE _account_master_id  integer;
-BEGIN
-    IF(_date_from = 'infinity') THEN
-        RAISE EXCEPTION '%', 'Invalid date.'
-        USING ERRCODE='P3008';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 0 FROM office.offices
-        WHERE office_id IN 
-        (
-            SELECT * FROM office.get_office_ids(1)
-        )
-        HAVING count(DISTINCT currency_code) = 1
-   ) THEN
-        RAISE EXCEPTION 'Cannot produce P/L statement of office(s) having different base currencies.'
-        USING ERRCODE='P8001';
-   END IF;
-
-   SELECT 
-    account_master_id 
-   INTO 
-    _account_master_id
-   FROM core.account_masters
-   WHERE core.account_masters.account_master_code = 'PLA';
-
-
-    DROP TABLE IF EXISTS temp_income_expenditure_statement;
-    CREATE TEMPORARY TABLE temp_income_expenditure_statement
-    (
-        id                      integer,
-        account_id              integer,
-        account_number          text,
-        account                 text,
-        previous_debit          decimal(24, 4) DEFAULT(0),
-        previous_credit         decimal(24, 4) DEFAULT(0),
-        previous_balance        decimal(24, 4) DEFAULT(0),
-        debit                   decimal(24, 4) DEFAULT(0),
-        credit                  decimal(24, 4) DEFAULT(0),
-        balance                 decimal(24, 4) DEFAULT(0),
-        closing_debit           decimal(24, 4) DEFAULT(0),
-        closing_credit          decimal(24, 4) DEFAULT(0),
-        closing_balance         decimal(24, 4) DEFAULT(0),
-        root_account_id         integer,
-        normally_debit          boolean
-    ) ON COMMIT DROP;
-
-    INSERT INTO temp_income_expenditure_statement(account_id, previous_debit, previous_credit)    
-    SELECT 
-        verified_transaction_mat_view.account_id, 
-        SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-        SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-    FROM transactions.verified_transaction_mat_view
-    WHERE value_date < _date_from
-    AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-    AND account_master_id = _account_master_id
-    GROUP BY verified_transaction_mat_view.account_id;
-
-
-
-    IF(_date_to = 'infinity') THEN
-        INSERT INTO temp_income_expenditure_statement(account_id, debit, credit)    
-        SELECT 
-            verified_transaction_mat_view.account_id, 
-            SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-            SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-        FROM transactions.verified_transaction_mat_view
-        WHERE value_date > _date_from
-        AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-        AND account_master_id = _account_master_id
-        GROUP BY verified_transaction_mat_view.account_id;
-    ELSE
-        INSERT INTO temp_income_expenditure_statement(account_id, debit, credit)    
-        SELECT 
-            verified_transaction_mat_view.account_id, 
-            SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-            SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-        FROM transactions.verified_transaction_mat_view
-        WHERE value_date >= _date_from AND value_date <= _date_to
-        AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-        AND account_master_id = _account_master_id
-        GROUP BY verified_transaction_mat_view.account_id;    
-    END IF;
-
-    UPDATE temp_income_expenditure_statement SET root_account_id = core.get_root_account_id(temp_income_expenditure_statement.account_id);
-
-
-    DROP TABLE IF EXISTS temp_income_expenditure_statement2;
-    
-    IF(_compact) THEN
-        CREATE TEMPORARY TABLE temp_income_expenditure_statement2
-        ON COMMIT DROP
-        AS
-        SELECT
-            temp_income_expenditure_statement.root_account_id AS account_id,
-            ''::text as account_number,
-            ''::text as account,
-            SUM(temp_income_expenditure_statement.previous_debit) AS previous_debit,
-            SUM(temp_income_expenditure_statement.previous_credit) AS previous_credit,
-            0::decimal(24, 4) AS previous_balance,
-            SUM(temp_income_expenditure_statement.debit) AS debit,
-            SUM(temp_income_expenditure_statement.credit) as credit,
-            0::decimal(24, 4) AS balance,
-            SUM(temp_income_expenditure_statement.closing_debit) AS closing_debit,
-            SUM(temp_income_expenditure_statement.closing_credit) AS closing_credit,
-            0::decimal(24, 4) AS closing_balance,
-            temp_income_expenditure_statement.normally_debit
-        FROM temp_income_expenditure_statement
-        GROUP BY 
-            temp_income_expenditure_statement.root_account_id,
-            temp_income_expenditure_statement.normally_debit;
-    ELSE
-        CREATE TEMPORARY TABLE temp_income_expenditure_statement2
-        ON COMMIT DROP
-        AS
-        SELECT
-            temp_income_expenditure_statement.account_id,
-            ''::text as account_number,
-            ''::text as account,
-            SUM(temp_income_expenditure_statement.previous_debit) AS previous_debit,
-            SUM(temp_income_expenditure_statement.previous_credit) AS previous_credit,
-            0::decimal(24, 4) AS previous_balance,
-            SUM(temp_income_expenditure_statement.debit) AS debit,
-            SUM(temp_income_expenditure_statement.credit) as credit,
-            0::decimal(24, 4) AS balance,
-            SUM(temp_income_expenditure_statement.closing_debit) AS closing_debit,
-            SUM(temp_income_expenditure_statement.closing_credit) AS closing_credit,
-            0::decimal(24, 4) AS closing_balance,
-            temp_income_expenditure_statement.normally_debit
-        FROM temp_income_expenditure_statement
-        GROUP BY 
-            temp_income_expenditure_statement.account_id,
-            temp_income_expenditure_statement.normally_debit;
-    END IF;
-    
-    UPDATE temp_income_expenditure_statement2 SET
-        account_number = core.accounts.account_number,
-        account = core.accounts.account_name,
-        normally_debit = core.account_masters.normally_debit
-    FROM core.accounts
-    INNER JOIN core.account_masters
-    ON core.accounts.account_master_id = core.account_masters.account_master_id
-    WHERE temp_income_expenditure_statement2.account_id = core.accounts.account_id;
-
-    UPDATE temp_income_expenditure_statement2 SET 
-        previous_balance = temp_income_expenditure_statement2.previous_credit - temp_income_expenditure_statement2.previous_debit,
-        balance = temp_income_expenditure_statement2.credit - temp_income_expenditure_statement2.debit,
-        closing_debit = temp_income_expenditure_statement2.previous_debit + temp_income_expenditure_statement2.debit,
-        closing_credit = temp_income_expenditure_statement2.previous_credit + temp_income_expenditure_statement2.credit,
-        closing_balance = temp_income_expenditure_statement2.previous_credit + temp_income_expenditure_statement2.credit - (temp_income_expenditure_statement2.previous_debit + temp_income_expenditure_statement2.debit);
-
-
-    UPDATE temp_income_expenditure_statement2 SET 
-        previous_balance = temp_income_expenditure_statement2.previous_balance * -1,
-        balance = temp_income_expenditure_statement2.balance * -1,
-        closing_balance = temp_income_expenditure_statement2.closing_balance * -1
-    WHERE temp_income_expenditure_statement2.normally_debit;
-
-    UPDATE temp_income_expenditure_statement2 SET previous_debit   = NULL WHERE temp_income_expenditure_statement2.previous_debit     = 0;
-    UPDATE temp_income_expenditure_statement2 SET previous_credit  = NULL WHERE temp_income_expenditure_statement2.previous_credit    = 0;
-    UPDATE temp_income_expenditure_statement2 SET previous_balance = NULL WHERE temp_income_expenditure_statement2.previous_balance   = 0;
-    UPDATE temp_income_expenditure_statement2 SET debit            = NULL WHERE temp_income_expenditure_statement2.debit              = 0;
-    UPDATE temp_income_expenditure_statement2 SET credit           = NULL WHERE temp_income_expenditure_statement2.credit             = 0;
-    UPDATE temp_income_expenditure_statement2 SET balance          = NULL WHERE temp_income_expenditure_statement2.balance            = 0;
-    UPDATE temp_income_expenditure_statement2 SET closing_debit    = NULL WHERE temp_income_expenditure_statement2.closing_debit      = 0;
-    UPDATE temp_income_expenditure_statement2 SET closing_credit   = NULL WHERE temp_income_expenditure_statement2.closing_credit     = 0;
-    UPDATE temp_income_expenditure_statement2 SET closing_balance  = NULL WHERE temp_income_expenditure_statement2.closing_balance    = 0;
-
-
-    DELETE FROM temp_income_expenditure_statement2 WHERE temp_income_expenditure_statement2.closing_balance = 0;
-   
-    RETURN QUERY
-    SELECT
-        row_number() OVER(ORDER BY temp_income_expenditure_statement2.account_id)::integer AS id,
-        temp_income_expenditure_statement2.account_id,
-        temp_income_expenditure_statement2.account_number,
-        temp_income_expenditure_statement2.account,
-        temp_income_expenditure_statement2.previous_debit,
-        temp_income_expenditure_statement2.previous_credit,
-        temp_income_expenditure_statement2.previous_balance,
-        temp_income_expenditure_statement2.debit,
-        temp_income_expenditure_statement2.credit,
-        temp_income_expenditure_statement2.balance,
-        temp_income_expenditure_statement2.closing_debit,
-        temp_income_expenditure_statement2.closing_credit,
-        temp_income_expenditure_statement2.closing_balance
-    FROM temp_income_expenditure_statement2;
-END
-$$
-LANGUAGE plpgsql;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_inventory_transfer_request_view.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_inventory_transfer_request_view
-(
-    _user_id                integer,
-    _login_id               bigint,
-    _office_id              integer,
-    _from                   date,
-    _to                     date,
-    _office                 text,
-    _store                  text,
-    _authorized             text,
-    _delivered              text,
-    _received               text,
-    _user                   text,
-    _reference_number       text,
-    _statement_reference    text
-);
-
-CREATE FUNCTION transactions.get_inventory_transfer_request_view
-(
-    _user_id                integer,
-    _login_id               bigint,
-    _office_id              integer,
-    _from                   date,
-    _to                     date,
-    _office                 text,
-    _store                  text,
-    _authorized             text,
-    _delivered              text,
-    _received               text,
-    _user                   text,
-    _reference_number       text,
-    _statement_reference    text
-)
-RETURNS TABLE
-(
-    id                      bigint,
-    value_date              date,
-    office                  text,
-    user_name               text,
-    store                   text,
-    reference_number        text,
-    statement_reference     text,
-    authorized              text,
-    delivered               text,
-    received                text,
-    flag_background_color   text,
-    flag_foreground_color   text
-)
-AS
-$$
-    DECLARE _store_id       integer;
-BEGIN
-    SELECT 
-        store_id 
-    INTO 
-        _store_id
-    FROM office.users
-    WHERE user_id = _user_id
-    AND office_id = _office_id;
-
-    IF(_store_id IS NULL) THEN
-        RETURN QUERY
-        SELECT
-            transactions.inventory_transfer_requests.inventory_transfer_request_id,
-            transactions.inventory_transfer_requests.value_date,
-            office.offices.office_code || ' (' || office.offices.office_name || ')'::text AS office,
-            office.users.user_name::text,
-            office.stores.store_code || ' (' || office.stores.store_name || ')'::text AS store,
-            transactions.inventory_transfer_requests.reference_number::text,
-            transactions.inventory_transfer_requests.statement_reference::text,
-            core.verification_statuses.verification_status_id::text || ' (' || core.verification_statuses.verification_status_name || ')'::text AS authorized,
-            transactions.inventory_transfer_requests.delivered::text,
-            transactions.inventory_transfer_requests.received::text,
-            core.get_flag_background_color(core.get_flag_type_id(_user_id, 'transactions.inventory_transfer_requests', 'inventory_transfer_request_id', transactions.inventory_transfer_requests.inventory_transfer_request_id::text)) AS flag_bg,
-            core.get_flag_foreground_color(core.get_flag_type_id(_user_id, 'transactions.inventory_transfer_requests', 'inventory_transfer_request_id', transactions.inventory_transfer_requests.inventory_transfer_request_id::text)) AS flag_fg            
-        FROM transactions.inventory_transfer_requests
-        INNER JOIN office.offices
-        ON transactions.inventory_transfer_requests.office_id = office.offices.office_id
-        INNER JOIN office.users
-        ON transactions.inventory_transfer_requests.user_id = office.users.user_id
-        INNER JOIN office.stores
-        ON transactions.inventory_transfer_requests.store_id = office.stores.store_id
-        INNER JOIN core.verification_statuses
-        ON transactions.inventory_transfer_requests.authorization_status_id = core.verification_statuses.verification_status_id
-        WHERE transactions.inventory_transfer_requests.value_date >= _from
-        AND transactions.inventory_transfer_requests.value_date <= _to
-        AND lower(office_code || ' (' || office_name || ')') LIKE '%' || lower(_office) || '%'
-        AND lower(office.users.user_name) LIKE '%' || lower(_user) || '%'
-        AND lower(office.stores.store_code || ' (' || office.stores.store_name || ')') LIKE '%' || lower(_store) || '%'
-        AND lower(transactions.inventory_transfer_requests.reference_number) LIKE '%' || lower(_reference_number) || '%'
-        AND lower(transactions.inventory_transfer_requests.statement_reference) LIKE '%' || lower(_statement_reference) || '%'
-        AND CASE WHEN core.verification_statuses.verification_status_id > 0 THEN 'true' WHEN verification_status_id <= 0 AND NOT verification_status_id = -1 THEN 'false' ELSE 'withdrawn' END LIKE '%' || lower(_authorized) || '%'
-        AND lower(transactions.inventory_transfer_requests.delivered::text) LIKE '%' || lower(_delivered) || '%'
-        AND lower(transactions.inventory_transfer_requests.received::text) LIKE '%' || lower(_received) || '%';
-        RETURN;
-    END IF;
-
-    RETURN QUERY
-    SELECT
-        transactions.inventory_transfer_requests.inventory_transfer_request_id,
-        transactions.inventory_transfer_requests.value_date,
-        office.offices.office_code || ' (' || office.offices.office_name || ')'::text AS office,
-        office.users.user_name::text,
-        office.stores.store_code || ' (' || office.stores.store_name || ')'::text AS store,
-        transactions.inventory_transfer_requests.reference_number::text,
-        transactions.inventory_transfer_requests.statement_reference::text,
-        core.verification_statuses.verification_status_id::text || ' (' || core.verification_statuses.verification_status_name || ')'::text AS authorized,
-        transactions.inventory_transfer_requests.delivered::text,
-        transactions.inventory_transfer_requests.received::text,
-        core.get_flag_background_color(core.get_flag_type_id(_user_id, 'transactions.inventory_transfer_requests', 'inventory_transfer_request_id', transactions.inventory_transfer_requests.inventory_transfer_request_id::text)) AS flag_bg,
-        core.get_flag_foreground_color(core.get_flag_type_id(_user_id, 'transactions.inventory_transfer_requests', 'inventory_transfer_request_id', transactions.inventory_transfer_requests.inventory_transfer_request_id::text)) AS flag_fg            
-    FROM transactions.inventory_transfer_requests
-    INNER JOIN office.offices
-    ON transactions.inventory_transfer_requests.office_id = office.offices.office_id
-    INNER JOIN office.users
-    ON transactions.inventory_transfer_requests.user_id = office.users.user_id
-    INNER JOIN office.stores
-    ON transactions.inventory_transfer_requests.store_id = office.stores.store_id
-    INNER JOIN core.verification_statuses
-    ON transactions.inventory_transfer_requests.authorization_status_id = core.verification_statuses.verification_status_id
-    WHERE transactions.inventory_transfer_requests.value_date >= _from
-    AND transactions.inventory_transfer_requests.value_date <= _to
-    AND transactions.inventory_transfer_requests.store_id = _store_id
-    AND lower(office_code || ' (' || office_name || ')') LIKE '%' || lower(_office) || '%'
-    AND lower(office.users.user_name) LIKE '%' || lower(_user) || '%'
-    AND lower(transactions.inventory_transfer_requests.reference_number) LIKE '%' || lower(_reference_number) || '%'
-    AND lower(transactions.inventory_transfer_requests.statement_reference) LIKE '%' || lower(_statement_reference) || '%'
-    AND CASE WHEN core.verification_statuses.verification_status_id > 0 THEN 'true' WHEN verification_status_id <= 0 AND NOT verification_status_id = -1 THEN 'false' ELSE 'withdrawn' END LIKE '%' || lower(_authorized) || '%'
-    AND lower(transactions.inventory_transfer_requests.delivered::text) LIKE '%' || lower(_delivered) || '%'
-    AND lower(transactions.inventory_transfer_requests.received::text) LIKE '%' || lower(_received) || '%';
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM transactions.get_inventory_transfer_request_view(2, 5, 1,'2010-1-1','2020-1-1','','','','','','','','');
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_pl_appropriation_data.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_pl_appropriation_data(_office_id integer);
-
-CREATE FUNCTION transactions.get_pl_appropriation_data(_office_id integer)
-RETURNS TABLE
-(
-    account_id          bigint,
-    account_number      text,
-    account_name        text,
-    debit               decimal(24, 4),
-    credit              decimal(24, 4)
-)
-AS
-$$
-    DECLARE _start_date  date = core.get_fiscal_year_start_date(_office_id);
-    DECLARE _end_date    date = core.get_fiscal_year_end_date(_office_id);
-    DECLARE _value_date  date = transactions.get_value_date(_office_id);
-BEGIN
-    IF(_value_date <> _end_date) THEN
-        RAISE EXCEPTION 'Access is denied.'
-        USING ERRCODE='P9001';
-    END IF;    
-
-    IF EXISTS
-    (
-        SELECT * FROM transactions.transaction_master
-        WHERE verification_status_id = 0
-        AND value_date <= _end_date
-        LIMIT 1
-    ) THEN
-        RAISE EXCEPTION 'There are still transactions in verification queue.'
-        USING ERRCODE='P5105';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT * FROM office.offices
-        WHERE parent_office_id = _office_id
-    ) THEN
-        RAISE EXCEPTION 'You cannot perform PL appropriation on an office group.'
-        USING ERRCODE='P5106';
-    END IF;
-
-    DROP TABLE IF EXISTS temp_pl_appropriation;
-    CREATE TEMPORARY TABLE temp_pl_appropriation
-    (
-        account_id          bigint,
-        account_number      text,
-        account_name        text,
-        has_children        boolean,
-        balance             decimal(24, 4),
-        debit               decimal(24, 4),
-        credit              decimal(24, 4)
-    ) ON COMMIT DROP;
-
-    INSERT INTO temp_pl_appropriation(account_id, account_number, account_name)
-    SELECT 
-        core.accounts.account_id, 
-        core.accounts.account_number, 
-        core.accounts.account_name
-    FROM core.accounts
-    WHERE account_master_id >= 20100
-    ORDER BY account_id;
-
-    UPDATE temp_pl_appropriation
-    SET has_children = true
-    WHERE temp_pl_appropriation.account_id IN
-    (
-        SELECT distinct parent_account_id FROM core.accounts
-        WHERE parent_account_id IS NOT NULL
-    );
-
-    UPDATE temp_pl_appropriation
-    SET balance = summary.balance
-    FROM
-    (
-        SELECT
-            transactions.verified_transaction_view.account_id,
-            SUM
-            (
-                CASE tran_type 
-                WHEN 'Cr' 
-                THEN amount_in_local_currency 
-                ELSE amount_in_local_currency * -1 
-                END
-            ) AS balance
-        FROM transactions.verified_transaction_view
-        WHERE account_master_id >= 20100
-        AND office_id = _office_id
-        AND transactions.verified_transaction_view.value_date BETWEEN _start_date AND _end_date
-        GROUP BY transactions.verified_transaction_view.account_id
-    ) AS summary
-    WHERE temp_pl_appropriation.account_id = summary.account_id;
-
-    UPDATE temp_pl_appropriation
-    SET debit = balance
-    WHERE balance >=0;
-
-    UPDATE temp_pl_appropriation
-    SET credit = balance * -1
-    WHERE balance < 0;
-
-    DELETE FROM temp_pl_appropriation
-    WHERE COALESCE(balance, 0) = 0;
-    
-    RETURN QUERY
-    SELECT
-        temp_pl_appropriation.account_id,
-        temp_pl_appropriation.account_number,
-        temp_pl_appropriation.account_name,
-        temp_pl_appropriation.debit,
-        temp_pl_appropriation.credit
-    FROM temp_pl_appropriation;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM transactions.get_pl_appropriation_data(2);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_top_selling_products_by_office.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_top_selling_products_by_office(_office_id integer, top integer);
-
-CREATE FUNCTION transactions.get_top_selling_products_by_office(_office_id integer, top integer)
-RETURNS TABLE
-(
-        id              integer,
-        office_id       integer,
-        office_code     text,
-        office_name     text,
-        item_id         integer,
-        item_code       text,
-        item_name       text,
-        total_sales     numeric
-)
-AS
-$$
-BEGIN
-        CREATE TEMPORARY TABLE top_selling_products
-        (
-                item_id integer
-        ) ON COMMIT DROP;
-
-        INSERT INTO top_selling_products
-        SELECT t.item_id FROM transactions.get_top_selling_products_of_all_time(top) AS t;
-
-
-        CREATE TEMPORARY TABLE top_selling_products_by_office
-        (
-                id              SERIAL,
-                office_id       integer,
-                office_code     text,
-                office_name     text,
-                item_id         integer,
-                item_code       text,
-                item_name       text,
-                total_sales     numeric
-        ) ON COMMIT DROP;
-
-
-        INSERT INTO top_selling_products_by_office(office_id, item_id, total_sales)
-        SELECT
-                transactions.verified_stock_transaction_view.office_id,
-                transactions.verified_stock_transaction_view.item_id, 
-                SUM((price * quantity) - discount + tax) AS sales_amount
-        FROM transactions.verified_stock_transaction_view
-        WHERE left(book, 5) = 'Sales'
-        AND transactions.verified_stock_transaction_view.item_id IN (SELECT top_selling_products.item_id FROM top_selling_products)
-        AND transactions.verified_stock_transaction_view.office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-        GROUP BY 
-                transactions.verified_stock_transaction_view.office_id, 
-                transactions.verified_stock_transaction_view.item_id
-        ORDER BY sales_amount DESC, item_id ASC;
-
-
-        UPDATE top_selling_products_by_office AS t
-        SET 
-                item_code = core.items.item_code,
-                item_name = core.items.item_name
-        FROM core.items
-        WHERE t.item_id = core.items.item_id;
-
-
-        UPDATE top_selling_products_by_office AS t
-        SET 
-                office_code = office.offices.office_code,
-                office_name= office.offices.office_name
-        FROM office.offices
-        WHERE t.office_id = office.offices.office_id;
-
-
-        RETURN QUERY 
-        SELECT * FROM top_selling_products_by_office;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS transactions.get_top_selling_products_by_office();
-
-CREATE FUNCTION transactions.get_top_selling_products_by_office()
-RETURNS TABLE
-(
-        id              integer,
-        office_id       integer,
-        office_code     text,
-        office_name     text,
-        item_id         integer,
-        item_code       text,
-        item_name       text,
-        total_sales     numeric
-)
-AS
-$$
-    DECLARE root_office_id integer = 0;
-BEGIN
-    SELECT office.offices.office_id INTO root_office_id
-    FROM office.offices
-    WHERE parent_office_id IS NULL
-    LIMIT 1;
-
-        RETURN QUERY 
-        SELECT * FROM transactions.get_top_selling_products_by_office(root_office_id, 5);
-END
-$$
-LANGUAGE plpgsql;
-
-
---SELECT  id, office_code, item_name, total_sales FROM transactions.get_top_selling_products_by_office()
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_top_selling_products_of_all_time.sql --<--<--
-
-DROP FUNCTION IF EXISTS transactions.get_top_selling_products_of_all_time(top int);
-
-CREATE FUNCTION transactions.get_top_selling_products_of_all_time(top int)
-RETURNS TABLE
-(
-        id              integer,
-        item_id         integer,
-        item_code       text,
-        item_name       text,
-        total_sales     numeric
-)
-AS
-$$
-BEGIN
-        CREATE TEMPORARY TABLE IF NOT EXISTS top_selling_products_of_all_time
-        (
-                id              integer,
-                item_id         integer,
-                item_code       text,
-                item_name       text,
-                total_sales     numeric
-        ) ON COMMIT DROP;
-
-        INSERT INTO top_selling_products_of_all_time(id, item_id, total_sales)
-        SELECT ROW_NUMBER() OVER(), *
-        FROM
-        (
-                SELECT         
-                        transactions.verified_stock_transaction_view.item_id, 
-                        SUM((price * quantity) - discount + tax) AS sales_amount
-                FROM transactions.verified_stock_transaction_view
-                WHERE left(book, 5) = 'Sales'
-                GROUP BY transactions.verified_stock_transaction_view.item_id
-                ORDER BY 2 DESC
-                LIMIT $1
-        ) t;
-
-        UPDATE top_selling_products_of_all_time AS t
-        SET 
-                item_code = core.items.item_code,
-                item_name = core.items.item_name
-        FROM core.items
-        WHERE t.item_id = core.items.item_id;
-        
-
-        RETURN QUERY
-        SELECT * FROM top_selling_products_of_all_time;
-END
-$$
-LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS transactions.get_top_selling_products_of_all_time();
-
-CREATE FUNCTION transactions.get_top_selling_products_of_all_time()
-RETURNS TABLE
-(
-        id              integer,
-        item_id         integer,
-        item_code       text,
-        item_name       text,
-        total_sales     numeric
-)
-AS
-$$
-BEGIN
-        RETURN QUERY
-        SELECT * FROM transactions.get_top_selling_products_of_all_time(5);
-END
-$$
-LANGUAGE plpgsql;
-
-
---SELECT * FROM transactions.get_top_selling_products_of_all_time();
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_total_sales_by_office.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_total_sales_by_office(_office_id integer);
-
-CREATE FUNCTION transactions.get_total_sales_by_office(_office_id integer)
-RETURNS TABLE
-(
-    office_id               integer,
-    office_code             national character varying(12),
-    office_name             national character varying(150),
-    total_sales             decimal(24, 4)
-)
-AS
-$$
-    DECLARE _start_date     date;
-    DECLARE _end_date       date;
-BEGIN
-    SELECT
-        core.get_fiscal_year_start_date(_office_id),
-        core.get_fiscal_year_end_date(_office_id)
-    INTO
-        _start_date,
-        _end_date;
-    
-    DROP TABLE IF EXISTS temp_sales;
-    CREATE TEMPORARY TABLE temp_sales
-    (
-        office_id               integer,
-        office_code             national character varying(12),
-        office_name             national character varying(150),
-        total_sales             decimal(24, 4)
-    ) ON COMMIT DROP;
-
-
-    INSERT INTO temp_sales(office_id, total_sales)
-    SELECT
-        transactions.verified_transaction_mat_view.office_id,
-        SUM(amount_in_local_currency) AS total_sales
-    FROM transactions.verified_transaction_mat_view
-    WHERE book IN ('Sales.Direct', 'Sales.Delivery')
-    AND account_master_id = 20100
-    AND value_date BETWEEN _start_date AND _end_date
-    GROUP BY transactions.verified_transaction_mat_view.office_id;
-
-    UPDATE temp_sales
-    SET 
-        office_code = office.offices.office_code,
-        office_name = office.offices.office_name
-    FROM office.offices
-    WHERE office.offices.office_id = temp_sales.office_id;
-
-    RETURN QUERY
-    SELECT * FROM temp_sales;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM transactions.get_total_sales_by_office(2);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_trial_balance.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_trial_balance
-(
-    _date_from                      date,
-    _date_to                        date,
-    _user_id                        integer,
-    _office_id                      integer,
-    _compact                        boolean,
-    _factor                         decimal(24, 4),
-    _change_side_when_negative      boolean,
-    _include_zero_balance_accounts  boolean
-);
-
-CREATE FUNCTION transactions.get_trial_balance
-(
-    _date_from                      date,
-    _date_to                        date,
-    _user_id                        integer,
-    _office_id                      integer,
-    _compact                        boolean,
-    _factor                         decimal(24, 4),
-    _change_side_when_negative      boolean DEFAULT(true),
-    _include_zero_balance_accounts  boolean DEFAULT(true)
-)
-RETURNS TABLE
-(
-    id                      integer,
-    account_id              integer,
-    account_number          text,
-    account                 text,
-    previous_debit          decimal(24, 4),
-    previous_credit         decimal(24, 4),
-    debit                   decimal(24, 4),
-    credit                  decimal(24, 4),
-    closing_debit           decimal(24, 4),
-    closing_credit          decimal(24, 4)
-)
-AS
-$$
-BEGIN
-    IF(_date_from = 'infinity') THEN
-        RAISE EXCEPTION 'Invalid date.'
-        USING ERRCODE='P3008';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 0 FROM office.offices
-        WHERE office_id IN 
-        (
-            SELECT * FROM office.get_office_ids(1)
-        )
-        HAVING count(DISTINCT currency_code) = 1
-   ) THEN
-        RAISE EXCEPTION 'Cannot produce trial balance of office(s) having different base currencies.'
-        USING ERRCODE='P8002';
-   END IF;
-
-
-    DROP TABLE IF EXISTS temp_trial_balance;
-    CREATE TEMPORARY TABLE temp_trial_balance
-    (
-        id                      integer,
-        account_id              integer,
-        account_number          text,
-        account                 text,
-        previous_debit          decimal(24, 4),
-        previous_credit         decimal(24, 4),
-        debit                   decimal(24, 4),
-        credit                  decimal(24, 4),
-        closing_debit           decimal(24, 4),
-        closing_credit          decimal(24, 4),
-        root_account_id         integer,
-        normally_debit          boolean
-    ) ON COMMIT DROP;
-
-    INSERT INTO temp_trial_balance(account_id, previous_debit, previous_credit)    
-    SELECT 
-        verified_transaction_mat_view.account_id, 
-        SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-        SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-    FROM transactions.verified_transaction_mat_view
-    WHERE value_date < _date_from
-    AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-    GROUP BY verified_transaction_mat_view.account_id;
-
-    IF(_date_to = 'infinity') THEN
-        INSERT INTO temp_trial_balance(account_id, debit, credit)    
-        SELECT 
-            verified_transaction_mat_view.account_id, 
-            SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-            SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-        FROM transactions.verified_transaction_mat_view
-        WHERE value_date > _date_from
-        AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-        GROUP BY verified_transaction_mat_view.account_id;
-    ELSE
-        INSERT INTO temp_trial_balance(account_id, debit, credit)    
-        SELECT 
-            verified_transaction_mat_view.account_id, 
-            SUM(CASE tran_type WHEN 'Dr' THEN amount_in_local_currency ELSE 0 END),
-            SUM(CASE tran_type WHEN 'Cr' THEN amount_in_local_currency ELSE 0 END)        
-        FROM transactions.verified_transaction_mat_view
-        WHERE value_date >= _date_from AND value_date <= _date_to
-        AND office_id IN (SELECT * FROM office.get_office_ids(_office_id))
-        GROUP BY verified_transaction_mat_view.account_id;    
-    END IF;
-
-    UPDATE temp_trial_balance SET root_account_id = core.get_root_account_id(temp_trial_balance.account_id);
-
-
-    DROP TABLE IF EXISTS temp_trial_balance2;
-    
-    IF(_compact) THEN
-        CREATE TEMPORARY TABLE temp_trial_balance2
-        ON COMMIT DROP
-        AS
-        SELECT
-            temp_trial_balance.root_account_id AS account_id,
-            ''::text as account_number,
-            ''::text as account,
-            SUM(temp_trial_balance.previous_debit) AS previous_debit,
-            SUM(temp_trial_balance.previous_credit) AS previous_credit,
-            SUM(temp_trial_balance.debit) AS debit,
-            SUM(temp_trial_balance.credit) as credit,
-            SUM(temp_trial_balance.closing_debit) AS closing_debit,
-            SUM(temp_trial_balance.closing_credit) AS closing_credit,
-            temp_trial_balance.normally_debit
-        FROM temp_trial_balance
-        GROUP BY 
-            temp_trial_balance.root_account_id,
-            temp_trial_balance.normally_debit
-        ORDER BY temp_trial_balance.normally_debit;
-    ELSE
-        CREATE TEMPORARY TABLE temp_trial_balance2
-        ON COMMIT DROP
-        AS
-        SELECT
-            temp_trial_balance.account_id,
-            ''::text as account_number,
-            ''::text as account,
-            SUM(temp_trial_balance.previous_debit) AS previous_debit,
-            SUM(temp_trial_balance.previous_credit) AS previous_credit,
-            SUM(temp_trial_balance.debit) AS debit,
-            SUM(temp_trial_balance.credit) as credit,
-            SUM(temp_trial_balance.closing_debit) AS closing_debit,
-            SUM(temp_trial_balance.closing_credit) AS closing_credit,
-            temp_trial_balance.normally_debit
-        FROM temp_trial_balance
-        GROUP BY 
-            temp_trial_balance.account_id,
-            temp_trial_balance.normally_debit
-        ORDER BY temp_trial_balance.normally_debit;
-    END IF;
-    
-    UPDATE temp_trial_balance2 SET
-        account_number = core.accounts.account_number,
-        account = core.accounts.account_name,
-        normally_debit = core.account_masters.normally_debit
-    FROM core.accounts
-    INNER JOIN core.account_masters
-    ON core.accounts.account_master_id = core.account_masters.account_master_id
-    WHERE temp_trial_balance2.account_id = core.accounts.account_id;
-
-    UPDATE temp_trial_balance2 SET 
-        closing_debit = COALESCE(temp_trial_balance2.previous_debit, 0) + COALESCE(temp_trial_balance2.debit, 0),
-        closing_credit = COALESCE(temp_trial_balance2.previous_credit, 0) + COALESCE(temp_trial_balance2.credit, 0);
-        
-
-
-     UPDATE temp_trial_balance2 SET previous_debit = COALESCE(temp_trial_balance2.previous_debit, 0) - COALESCE(temp_trial_balance2.previous_credit, 0), previous_credit = NULL WHERE normally_debit;
-     UPDATE temp_trial_balance2 SET previous_credit = COALESCE(temp_trial_balance2.previous_credit, 0) - COALESCE(temp_trial_balance2.previous_debit, 0), previous_debit = NULL WHERE NOT normally_debit;
- 
-     UPDATE temp_trial_balance2 SET debit = COALESCE(temp_trial_balance2.debit, 0) - COALESCE(temp_trial_balance2.credit, 0), credit = NULL WHERE normally_debit;
-     UPDATE temp_trial_balance2 SET credit = COALESCE(temp_trial_balance2.credit, 0) - COALESCE(temp_trial_balance2.debit, 0), debit = NULL WHERE NOT normally_debit;
- 
-     UPDATE temp_trial_balance2 SET closing_debit = COALESCE(temp_trial_balance2.closing_debit, 0) - COALESCE(temp_trial_balance2.closing_credit, 0), closing_credit = NULL WHERE normally_debit;
-     UPDATE temp_trial_balance2 SET closing_credit = COALESCE(temp_trial_balance2.closing_credit, 0) - COALESCE(temp_trial_balance2.closing_debit, 0), closing_debit = NULL WHERE NOT normally_debit;
-
-
-    IF(NOT _include_zero_balance_accounts) THEN
-        DELETE FROM temp_trial_balance2 WHERE COALESCE(temp_trial_balance2.closing_debit) + COALESCE(temp_trial_balance2.closing_credit) = 0;
-    END IF;
-    
-    IF(_factor > 0) THEN
-        UPDATE temp_trial_balance2 SET previous_debit   = temp_trial_balance2.previous_debit/_factor;
-        UPDATE temp_trial_balance2 SET previous_credit  = temp_trial_balance2.previous_credit/_factor;
-        UPDATE temp_trial_balance2 SET debit            = temp_trial_balance2.debit/_factor;
-        UPDATE temp_trial_balance2 SET credit           = temp_trial_balance2.credit/_factor;
-        UPDATE temp_trial_balance2 SET closing_debit    = temp_trial_balance2.closing_debit/_factor;
-        UPDATE temp_trial_balance2 SET closing_credit   = temp_trial_balance2.closing_credit/_factor;
-    END IF;
-
-    --Remove Zeros
-    UPDATE temp_trial_balance2 SET previous_debit = NULL WHERE temp_trial_balance2.previous_debit = 0;
-    UPDATE temp_trial_balance2 SET previous_credit = NULL WHERE temp_trial_balance2.previous_credit = 0;
-    UPDATE temp_trial_balance2 SET debit = NULL WHERE temp_trial_balance2.debit = 0;
-    UPDATE temp_trial_balance2 SET credit = NULL WHERE temp_trial_balance2.credit = 0;
-    UPDATE temp_trial_balance2 SET closing_debit = NULL WHERE temp_trial_balance2.closing_debit = 0;
-    UPDATE temp_trial_balance2 SET closing_debit = NULL WHERE temp_trial_balance2.closing_credit = 0;
-
-    IF(_change_side_when_negative) THEN
-        UPDATE temp_trial_balance2 SET previous_debit = temp_trial_balance2.previous_credit * -1, previous_credit = NULL WHERE temp_trial_balance2.previous_credit < 0;
-        UPDATE temp_trial_balance2 SET previous_credit = temp_trial_balance2.previous_debit * -1, previous_debit = NULL WHERE temp_trial_balance2.previous_debit < 0;
-
-        UPDATE temp_trial_balance2 SET debit = temp_trial_balance2.credit * -1, credit = NULL WHERE temp_trial_balance2.credit < 0;
-        UPDATE temp_trial_balance2 SET credit = temp_trial_balance2.debit * -1, debit = NULL WHERE temp_trial_balance2.debit < 0;
-
-        UPDATE temp_trial_balance2 SET closing_debit = temp_trial_balance2.closing_credit * -1, closing_credit = NULL WHERE temp_trial_balance2.closing_credit < 0;
-        UPDATE temp_trial_balance2 SET closing_credit = temp_trial_balance2.closing_debit * -1, closing_debit = NULL WHERE temp_trial_balance2.closing_debit < 0;
-    END IF;
-    
-    RETURN QUERY
-    SELECT
-        row_number() OVER(ORDER BY temp_trial_balance2.normally_debit DESC, temp_trial_balance2.account_id)::integer AS id,
-        temp_trial_balance2.account_id,
-        temp_trial_balance2.account_number,
-        temp_trial_balance2.account,
-        temp_trial_balance2.previous_debit,
-        temp_trial_balance2.previous_credit,
-        temp_trial_balance2.debit,
-        temp_trial_balance2.credit,
-        temp_trial_balance2.closing_debit,
-        temp_trial_balance2.closing_credit
-    FROM temp_trial_balance2;
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM transactions.get_trial_balance('12-1-2014','12-31-2014',1,1, false, 1000, false, false);
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.get_value_date.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_value_date(_office_id integer);
-
-CREATE FUNCTION transactions.get_value_date(_office_id integer)
-RETURNS date
-AS
-$$
-    DECLARE this            RECORD;
-    DECLARE _value_date     date;
-BEGIN
-    SELECT * FROM transactions.day_operation
-    WHERE office_id = _office_id
-    AND value_date =
-    (
-        SELECT MAX(value_date)
-        FROM transactions.day_operation
-        WHERE office_id = _office_id
-    ) INTO this;
-
-    IF(this.day_id IS NOT NULL) THEN
-        IF(this.completed) THEN
-            _value_date  := this.value_date + interval '1' day;
-        ELSE
-            _value_date  := this.value_date;    
-        END IF;
-    END IF;
-
-    IF(_value_date IS NULL) THEN
-        SELECT transaction_start_date INTO _value_date
-        FROM office.offices
-        WHERE office_id = $1;
-    END IF;
-    
-    RETURN _value_date;
-END
-$$
-LANGUAGE plpgsql;
-
-
---select transactions.get_value_date(2);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_delivery.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_delivery
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _inventory_transfer_request_id          bigint,
-    _value_date                             date,
-    _reference_number                       national character varying(24),
-    _statement_reference                    text,
-    _shipper_id                             integer,
-    _source_store_id                        integer,
-    _details                                transactions.stock_adjustment_type[]
-);
-
-
-CREATE FUNCTION transactions.post_inventory_transfer_delivery
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _inventory_transfer_request_id          bigint,
-    _value_date                             date,
-    _reference_number                       national character varying(24),
-    _statement_reference                    text,
-    _shipper_id                             integer,
-    _source_store_id                        integer,
-    _details                                transactions.stock_adjustment_type[]
-)
-RETURNS bigint
-AS
-$$
-    DECLARE _inventory_transfer_delivery_id     bigint;
-    DECLARE _stock_master_id                    bigint;
-    DECLARE _destination_store_id               integer;
-BEGIN
-    IF(policy.can_post_transaction(_login_id, _user_id, _office_id, 'Inventory.Transfer.Delivery', _value_date) = false) THEN
-        RETURN 0;
-    END IF;
-
-
-    CREATE TEMPORARY TABLE IF NOT EXISTS temp_stock_details
-    (
-        tran_type       transaction_type,
-        store_id        integer,
-        store_name      national character varying(50),
-        item_id         integer,
-        item_code       national character varying(12),
-        unit_id         integer,
-        base_unit_id    integer,
-        unit_name       national character varying(50),
-        quantity        integer_strict,
-        base_quantity   integer,                
-        price           money_strict                             
-    ) 
-    ON COMMIT DROP; 
-
-    INSERT INTO temp_stock_details(tran_type, store_name, item_code, unit_name, quantity)
-    SELECT tran_type, store_name, item_code, unit_name, quantity FROM explode_array(_details);
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        WHERE tran_type = 'Cr'
-    ) THEN
-        RAISE EXCEPTION 'Stock transfer delivery can only contain credit entries.'
-        USING ERRCODE='P5004';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        GROUP BY item_code
-        HAVING COUNT(item_code) <> 1
-    ) THEN
-        RAISE EXCEPTION 'An item can appear only once in a store.'
-        USING ERRCODE='P5202';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        HAVING COUNT(DISTINCT store_name) <> 1
-    ) THEN
-        RAISE EXCEPTION 'You cannot provide more than one delivery destination store for this transaction.'
-        USING ERRCODE='P5206';
-    END IF;
-
-
-    UPDATE temp_stock_details SET 
-    item_id         = core.get_item_id_by_item_code(item_code),
-    unit_id         = core.get_unit_id_by_unit_name(unit_name),
-    store_id        = office.get_store_id_by_store_name(store_name);
-
-    SELECT store_id INTO _destination_store_id
-    FROM temp_stock_details
-    LIMIT 1;
-
-    IF(_destination_store_id = _source_store_id) THEN
-        RAISE EXCEPTION 'The source and the destination stores can not be the same.'
-        USING ERRCODE='P5207';
-    END IF;
-    
-    IF EXISTS
-    (
-        SELECT * FROM temp_stock_details
-        WHERE item_id IS NULL OR unit_id IS NULL OR store_id IS NULL
-    ) THEN
-        RAISE EXCEPTION 'Invalid data supplied.'
-        USING ERRCODE='P3000';
-    END IF;
-
-
-    IF NOT EXISTS
-    (
-        SELECT * FROM transactions.inventory_transfer_requests
-        WHERE inventory_transfer_request_id = _inventory_transfer_request_id
-        AND store_id = _destination_store_id
-    ) THEN
-        RAISE EXCEPTION 'Invalid store.'
-        USING ERRCODE='P3012';
-    END IF;
-    
-    UPDATE temp_stock_details SET
-    base_unit_id    = core.get_root_unit_id(unit_id),
-    base_quantity   = core.get_base_quantity_by_unit_id(unit_id, quantity),
-    price           = core.get_item_cost_price(item_id, unit_id, NULL);
-
-    INSERT INTO transactions.inventory_transfer_deliveries
-    (
-            inventory_transfer_delivery_id,
-            inventory_transfer_request_id,
-            value_date,
-            login_id,
-            user_id,
-            office_id,
-            source_store_id,
-            destination_store_id,
-            reference_number,
-            statement_reference
-    )
-    SELECT
-            nextval(pg_get_serial_sequence('transactions.inventory_transfer_deliveries', 'inventory_transfer_delivery_id')),
-            _inventory_transfer_request_id,
-            _value_date,
-            _login_id,
-            _user_id,
-            _office_id,
-            _source_store_id,
-            _destination_store_id,
-            _reference_number,
-            _statement_reference;
-
-
-    _inventory_transfer_delivery_id                          := currval(pg_get_serial_sequence('transactions.inventory_transfer_deliveries', 'inventory_transfer_delivery_id'));
-
-    INSERT INTO transactions.inventory_transfer_delivery_details
-    (
-        inventory_transfer_delivery_id,
-        value_date,
-        item_id,
-        quantity,
-        unit_id,
-        base_quantity,
-        base_unit_id
-    )
-    SELECT 
-        _inventory_transfer_delivery_id, 
-        _value_date, 
-        item_id, 
-        quantity, 
-        unit_id, 
-        base_quantity, 
-        base_unit_id
-    FROM temp_stock_details;
-
-
-    UPDATE transactions.inventory_transfer_requests SET
-        delivered = true,
-        delivered_on = NOW(),
-        delivered_by_user_id = _user_id
-    WHERE inventory_transfer_request_id = _inventory_transfer_request_id;
-    
-    RETURN _inventory_transfer_delivery_id;
-END
-$$
-LANGUAGE plpgsql;
-
-
--- SELECT * FROM transactions.post_inventory_transfer_delivery(2, 2, 5, 1, '1-1-2020', '22', 'Test', 1, 1,
--- ARRAY[
--- ROW('Dr', 'Store 1', 'RMBP', 'Dozen', 2)::transactions.stock_adjustment_type,
--- ROW('Dr', 'Store 1', 'SFIX', 'Piece', 24)::transactions.stock_adjustment_type
--- ]
--- );
--- 
--- 
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_inventory_transfer_request.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.post_inventory_transfer_request
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _value_date                             date,
-    _reference_number                       national character varying(24),
-    _statement_reference                    text,
-    _details                                transactions.stock_adjustment_type[]
-);
-
-
-CREATE FUNCTION transactions.post_inventory_transfer_request
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _value_date                             date,
-    _reference_number                       national character varying(24),
-    _statement_reference                    text,
-    _details                                transactions.stock_adjustment_type[]
-)
-RETURNS bigint
-AS
-$$
-    DECLARE _inventory_transfer_request_id          bigint;
-    DECLARE _stock_master_id                        bigint;
-    DECLARE _store_id                               integer;
-BEGIN
-    IF(policy.can_post_transaction(_login_id, _user_id, _office_id, 'Inventory.Transfer.Request', _value_date) = false) THEN
-        RETURN 0;
-    END IF;
-
-
-    CREATE TEMPORARY TABLE IF NOT EXISTS temp_stock_details
-    (
-        tran_type       transaction_type,
-        store_id        integer,
-        store_name      national character varying(50),
-        item_id         integer,
-        item_code       national character varying(12),
-        unit_id         integer,
-        base_unit_id    integer,
-        unit_name       national character varying(50),
-        quantity        integer_strict,
-        base_quantity   integer,                
-        price           money_strict                             
-    ) 
-    ON COMMIT DROP; 
-
-    INSERT INTO temp_stock_details(tran_type, store_name, item_code, unit_name, quantity)
-    SELECT tran_type, store_name, item_code, unit_name, quantity FROM explode_array(_details);
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        WHERE tran_type = 'Cr'
-    ) THEN
-        RAISE EXCEPTION 'Stock transfer request can only contain debit entries.'
-        USING ERRCODE='P5003';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        GROUP BY item_code
-        HAVING COUNT(item_code) <> 1
-    ) THEN
-        RAISE EXCEPTION 'An item can appear only once in a store.'
-        USING ERRCODE='P5202';
-    END IF;
-
-    IF EXISTS
-    (
-        SELECT 1 FROM temp_stock_details
-        HAVING COUNT(DISTINCT store_name) <> 1
-    ) THEN
-        RAISE EXCEPTION 'You cannot provide more than one store for this transaction.'
-        USING ERRCODE='P5205';
-    END IF;
-
-    UPDATE temp_stock_details SET 
-    item_id         = core.get_item_id_by_item_code(item_code),
-    unit_id         = core.get_unit_id_by_unit_name(unit_name),
-    store_id        = office.get_store_id_by_store_name(store_name);
-
-    SELECT store_id INTO _store_id
-    FROM temp_stock_details
-    LIMIT 1;
-
-    IF EXISTS
-    (
-        SELECT * FROM temp_stock_details
-        WHERE item_id IS NULL OR unit_id IS NULL OR store_id IS NULL
-    ) THEN
-        RAISE EXCEPTION 'Invalid data supplied.'
-        USING ERRCODE='P3000';
-    END IF;
-
-    UPDATE temp_stock_details SET
-    base_unit_id    = core.get_root_unit_id(unit_id),
-    base_quantity   = core.get_base_quantity_by_unit_id(unit_id, quantity),
-    price           = core.get_item_cost_price(item_id, unit_id, NULL);
-
-    INSERT INTO transactions.inventory_transfer_requests
-    (
-            inventory_transfer_request_id,
-            value_date,
-            store_id,
-            login_id,
-            user_id,
-            office_id,
-            reference_number,
-            statement_reference
-    )
-    SELECT
-            nextval(pg_get_serial_sequence('transactions.inventory_transfer_requests', 'inventory_transfer_request_id')), 
-            _value_date,
-            _store_id,
-            _login_id,
-            _user_id,
-            _office_id,
-            _reference_number,
-            _statement_reference;
-
-
-    _inventory_transfer_request_id                          := currval(pg_get_serial_sequence('transactions.inventory_transfer_requests', 'inventory_transfer_request_id'));
-
-    INSERT INTO transactions.inventory_transfer_request_details
-    (
-        inventory_transfer_request_id,
-        value_date,
-        item_id,
-        quantity,
-        unit_id,
-        base_quantity,
-        base_unit_id
-    )
-    SELECT 
-        _inventory_transfer_request_id, 
-        _value_date, 
-        item_id, 
-        quantity, 
-        unit_id, 
-        base_quantity, 
-        base_unit_id
-    FROM temp_stock_details;
-    
-    
-    RETURN _inventory_transfer_request_id;
-END
-$$
-LANGUAGE plpgsql;
-
--- 
--- SELECT * FROM transactions.post_inventory_transfer_request(2, 2, 5, '1-1-2020', '22', 'Test', 
--- ARRAY[
--- ROW('Dr', 'Store 1', 'RMBP', 'Dozen', 2)::transactions.stock_adjustment_type,
--- ROW('Dr', 'Store 1', 'SFIX', 'Piece', 24)::transactions.stock_adjustment_type
--- ]
--- );
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.post_stock_transfer_acknowledgement.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.post_stock_transfer_acknowledgement
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _request_id                             bigint
-);
-
-CREATE FUNCTION transactions.post_stock_transfer_acknowledgement
-(
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _request_id                             bigint
-)
-RETURNS bigint
-AS
-$$
-    DECLARE _value_date                             date=transactions.get_value_date(_office_id);
-    DECLARE _book_name                              text='Inventory.Transfer';
-    DECLARE _reference_number                       national character varying(24);
-    DECLARE _statement_reference                    text;
-    DECLARE _source_store_id                        integer;
-    DECLARE _destination_store_id                   integer;
-    DECLARE _details                                transactions.stock_adjustment_type[];
-    DECLARE _transaction_master_id                  bigint;
-BEGIN
-    IF(policy.can_post_transaction(_login_id, _user_id, _office_id, _book_name, _value_date) = false) THEN
-        RETURN 0;
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT * FROM transactions.inventory_transfer_requests
-        WHERE inventory_transfer_request_id = _request_id
-        AND office_id = _office_id
-    ) THEN
-        RAISE EXCEPTION 'Invalid office.'
-        USING ERRCODE='P3011';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT * FROM transactions.inventory_transfer_requests
-        WHERE inventory_transfer_request_id = _request_id
-        AND authorization_status_id > 0
-    ) THEN
-        RAISE EXCEPTION 'Acess is denied. This transaction was rejected by administrator.'
-        USING ERRCODE='P9250';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT * FROM transactions.inventory_transfer_delivery_details
-        WHERE inventory_transfer_delivery_id = 
-        (
-            SELECT inventory_transfer_delivery_id
-            FROM transactions.inventory_transfer_deliveries
-            WHERE inventory_transfer_request_id = _request_id
-        )
-    ) THEN
-        RAISE EXCEPTION 'Cannot receive a stock transfer because the delivery contains no item.'
-        USING ERRCODE='P5005';
-    END IF;
-
-    SELECT 
-        reference_number, 
-        statement_reference,
-        source_store_id,
-        destination_store_id
-    INTO
-        _reference_number, 
-        _statement_reference,
-        _source_store_id,
-        _destination_store_id
-    FROM transactions.inventory_transfer_deliveries
-    WHERE inventory_transfer_request_id = _request_id;
-
-    DROP TABLE IF EXISTS temp_details;
-
-    CREATE TEMPORARY TABLE temp_details
-    (
-        tran_type       transaction_type,
-        store_name      national character varying(50),
-        item_code       national character varying(12),
-        unit_name       national character varying(50),
-        quantity        integer_strict
-    ) ON COMMIT DROP;
-
-    INSERT INTO temp_details(tran_type, store_name, item_code, unit_name, quantity)
-    SELECT 
-        'Dr',
-        office.get_store_name_by_store_id(_destination_store_id),
-        core.get_item_code_by_item_id(item_id),
-        core.get_unit_name_by_unit_id(unit_id),
-        quantity
-    FROM transactions.inventory_transfer_delivery_details
-    WHERE inventory_transfer_delivery_id = 
-    (
-        SELECT inventory_transfer_delivery_id
-        FROM transactions.inventory_transfer_deliveries
-        WHERE inventory_transfer_request_id = _request_id
-    );
-
-    INSERT INTO temp_details(tran_type, store_name, item_code, unit_name, quantity)
-    SELECT 
-        'Cr', 
-        office.get_store_name_by_store_id(_source_store_id),
-        item_code, 
-        unit_name, 
-        quantity
-    FROM temp_details;
-
-    SELECT 
-        array_agg
-        (
-            ROW(tran_type, store_name, item_code, unit_name, quantity)::transactions.stock_adjustment_type
-        )
-    INTO
-        _details
-    FROM temp_details;
-
-    _transaction_master_id := transactions.post_stock_journal(_office_id, _user_id, _login_id, _value_date, _reference_number, _statement_reference, _details);
-    
-    UPDATE transactions.inventory_transfer_requests
-    SET received = true
-    WHERE inventory_transfer_request_id = _request_id;
-
-    RETURN _transaction_master_id;
-END
-$$
-LANGUAGE plpgsql;
-
--- 
--- SELECT * FROM transactions.post_stock_transfer_acknowledgement
--- (
---     2,
---     3,
---     5,
---     1
--- );
--- 
--- 
--- ROLLBACK;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/logic/transactions/transactions.verify_transaction.sql --<--<--
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/FrontEnd/MixERP.Net.FrontEnd/db/src/02. functions and logic/logic/functions/transactions/transactions.verify_transaction.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.verify_transaction
-(
-    _transaction_master_id                  bigint,
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _verification_status_id                 smallint,
-    _reason                                 national character varying
-) 
-CASCADE;
-
-CREATE FUNCTION transactions.verify_transaction
-(
-    _transaction_master_id                  bigint,
-    _office_id                              integer,
-    _user_id                                integer,
-    _login_id                               bigint,
-    _verification_status_id                 smallint,
-    _reason                                 national character varying
-)
-RETURNS bigint
-VOLATILE
-AS
-$$
-    DECLARE _transaction_posted_by          integer;
-    DECLARE _can_approve                    boolean=true;
-    DECLARE _book                           text;
-    DECLARE _verify_sales                   boolean;
-    DECLARE _sales_verification_limit       public.money_strict2;
-    DECLARE _verify_purchase                boolean;
-    DECLARE _purchase_verification_limit    public.money_strict2;
-    DECLARE _verify_gl                      boolean;
-    DECLARE _gl_verification_limit          public.money_strict2;
-    DECLARE _can_self_verify                boolean;
-    DECLARE _posted_amount                  public.money_strict2;
-    DECLARE _has_policy                     boolean=false;
-    DECLARE _voucher_date                   date;
-    DECLARE _voucher_office_id              integer;
-    DECLARE _value_date                     date=transactions.get_value_date(_office_id);
-    DECLARE _cascading_tran_id              bigint;
-BEGIN
-
-    SELECT
-        transactions.transaction_master.book,
-        transactions.transaction_master.value_date,
-        transactions.transaction_master.office_id,
-        transactions.transaction_master.user_id
-    INTO
-        _book,
-        _voucher_date,
-        _voucher_office_id,
-        _transaction_posted_by  
-    FROM
-    transactions.transaction_master
-    WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id;
-
-
-    IF(_voucher_office_id <> _office_id) THEN
-        RAISE EXCEPTION 'Access is denied. You cannot verify a transaction of another office.'
-        USING ERRCODE='P9014';
-    END IF;
-    
-    IF(_voucher_date <> _value_date) THEN
-        RAISE EXCEPTION 'Access is denied. You cannot verify past or futuer dated transaction.'
-        USING ERRCODE='P9015';
-    END IF;
-    
-    SELECT
-        SUM(amount_in_local_currency)
-    INTO
-        _posted_amount
-    FROM
-        transactions.transaction_details
-    WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
-    AND transactions.transaction_details.tran_type='Cr';
-
-
-    SELECT
-        true,
-        can_verify_sales_transactions,
-        sales_verification_limit,
-        can_verify_purchase_transactions,
-        purchase_verification_limit,
-        can_verify_gl_transactions,
-        gl_verification_limit,
-        can_self_verify
-    INTO
-        _has_policy,
-        _verify_sales,
-        _sales_verification_limit,
-        _verify_purchase,
-        _purchase_verification_limit,
-        _verify_gl,
-        _gl_verification_limit,
-        _can_self_verify
-    FROM
-    policy.voucher_verification_policy
-    WHERE user_id=_user_id
-    AND office_id = _office_id
-    AND is_active=true
-    AND now() >= effective_from
-    AND now() <= ends_on;
-
-    IF(lower(_book) LIKE 'sales%') THEN
-        IF(_verify_sales = false) THEN
-            _can_approve := false;
-        END IF;
-        IF(_verify_sales = true) THEN
-            IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::public.money_strict2) THEN
-                _can_approve := false;
-            END IF;
-        END IF;         
-    END IF;
-
-
-    IF(lower(_book) LIKE 'purchase%') THEN
-        IF(_verify_purchase = false) THEN
-            _can_approve := false;
-        END IF;
-        IF(_verify_purchase = true) THEN
-            IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::public.money_strict2) THEN
-                _can_approve := false;
-            END IF;
-        END IF;         
-    END IF;
-
-
-    IF(lower(_book) LIKE 'journal%') THEN
-        IF(_verify_gl = false) THEN
-            _can_approve := false;
-        END IF;
-        IF(_verify_gl = true) THEN
-            IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::public.money_strict2) THEN
-                _can_approve := false;
-            END IF;
-        END IF;         
-    END IF;
-
-    IF(NOT _can_self_verify AND _user_id = _transaction_posted_by) THEN
-        _can_approve := false;
-    END IF;
-
-    IF(_has_policy=true) THEN
-        IF(_can_approve = true) THEN
-        
-            SELECT cascading_tran_id
-            INTO _cascading_tran_id
-            FROM transactions.transaction_master
-            WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id;
-            
-            UPDATE transactions.transaction_master
-            SET 
-                last_verified_on = now(),
-                verified_by_user_id=_user_id,
-                verification_status_id=_verification_status_id,
-                verification_reason=_reason
-            WHERE
-                transactions.transaction_master.transaction_master_id=_transaction_master_id
-            OR 
-                transactions.transaction_master.cascading_tran_id =_transaction_master_id
-            OR
-            transactions.transaction_master.transaction_master_id = _cascading_tran_id;
-
-            PERFORM transactions.create_recurring_invoices(_transaction_master_id);
-
-            RAISE NOTICE 'Done.';
-
-            IF(COALESCE(_cascading_tran_id, 0) = 0) THEN
-                SELECT transaction_master_id
-                INTO _cascading_tran_id
-                FROM transactions.transaction_master
-                WHERE transactions.transaction_master.cascading_tran_id=_transaction_master_id;
-            END IF;
-            
-            RETURN COALESCE(_cascading_tran_id, 0);
-        ELSE
-            RAISE EXCEPTION 'Please ask someone else to verify your transaction.'
-            USING ERRCODE='P4031';
-        END IF;
-    ELSE
-        RAISE EXCEPTION 'No verification policy found for this user.'
-        USING ERRCODE='P4030';
-    END IF;
-
-    RETURN 0;
-END
-$$
-LANGUAGE plpgsql;
-
-
---SELECT * FROM transactions.verify_transaction(65::bigint, 2, 2, 51::bigint, -3::smallint, '');
---SELECT * FROM transactions.verify_transaction(133::bigint, 2, 2, 5::bigint, 2::smallint, 'ok'::national character varying);
-
-/**************************************************************************************************************************
---------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------
-'########::'##:::::::'########:::'######:::'##::::'##:'##::: ##:'####:'########::::'########:'########::'######::'########:
- ##.... ##: ##::::::: ##.... ##:'##... ##:: ##:::: ##: ###:: ##:. ##::... ##..:::::... ##..:: ##.....::'##... ##:... ##..::
- ##:::: ##: ##::::::: ##:::: ##: ##:::..::: ##:::: ##: ####: ##:: ##::::: ##:::::::::: ##:::: ##::::::: ##:::..::::: ##::::
- ########:: ##::::::: ########:: ##::'####: ##:::: ##: ## ## ##:: ##::::: ##:::::::::: ##:::: ######:::. ######::::: ##::::
- ##.....::: ##::::::: ##.....::: ##::: ##:: ##:::: ##: ##. ####:: ##::::: ##:::::::::: ##:::: ##...:::::..... ##:::: ##::::
- ##:::::::: ##::::::: ##:::::::: ##::: ##:: ##:::: ##: ##:. ###:: ##::::: ##:::::::::: ##:::: ##:::::::'##::: ##:::: ##::::
- ##:::::::: ########: ##::::::::. ######:::. #######:: ##::. ##:'####:::: ##:::::::::: ##:::: ########:. ######::::: ##::::
-..:::::::::........::..::::::::::......:::::.......:::..::::..::....:::::..:::::::::::..:::::........:::......::::::..:::::
---------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------
-**************************************************************************************************************************/
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/office/office.get_stores.sql --<--<--
-DROP FUNCTION IF EXISTS office.get_stores
-(
-    _office_id  integer,
-    _user_id    integer
-);
-
-CREATE FUNCTION office.get_stores
-(
-    _office_id  integer,
-    _user_id    integer
-)
-RETURNS SETOF office.stores
-AS
-$$
-    DECLARE _store_id   integer;
-BEGIN
-    SELECT store_id
-    INTO _store_id
-    FROM office.users
-    WHERE user_id = _user_id;
-
-    IF(_store_id IS NOT NULL) THEN
-        RETURN QUERY
-        SELECT * FROM office.stores
-        WHERE store_id = _store_id;
-        RETURN;
-    END IF;
-
-    RETURN QUERY
-    SELECT * FROM office.stores
-    WHERE office_id IN (SELECT office.get_office_ids(_office_id));
-END
-$$
-LANGUAGE plpgsql;
-
---SELECT * FROM office.get_stores(2, 1);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.are_purchase_orders_already_merged.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[]);
-
-CREATE FUNCTION transactions.are_purchase_orders_already_merged(VARIADIC arr bigint[])
-RETURNS boolean
-AS
-$$
-BEGIN
-    IF
-    (
-        SELECT 
-        COUNT(*) 
-        FROM transactions.stock_master_non_gl_relations
-        WHERE non_gl_stock_master_id = any($1)
-    ) > 0 THEN
-        RETURN true;
-    END IF;
-
-    RETURN false;
-END
-$$
-LANGUAGE plpgsql;   
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.get_verification_status.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.get_verification_status
-(
-    _tran_id              BIGINT
-);
-
-CREATE FUNCTION transactions.get_verification_status
-(
-    _tran_id              BIGINT
-)
-RETURNS smallint
-STABLE
-AS
-$$
-BEGIN
-    RETURN verification_status_id
-    FROM transactions.transaction_master
-    WHERE transaction_master_id = _tran_id;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_item_chart_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.party_item_chart_view;
-
-CREATE VIEW transactions.party_item_chart_view
-AS
-SELECT
-    party_id,
-    core.items.item_name,
-    SUM(base_quantity) AS total
-FROM transactions.stock_details
-INNER JOIN transactions.stock_master
-ON transactions.stock_master.stock_master_id = transactions.stock_details.stock_master_id
-INNER JOIN core.items
-ON transactions.stock_details.item_id = core.items.item_id
-GROUP BY party_id, core.items.item_name
-ORDER BY party_id, total DESC;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_purchase_chart_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.party_purchase_chart_view;
-
-CREATE VIEW transactions.party_purchase_chart_view
-AS
-SELECT
-    NULL::bigint AS row_number,
-    transactions.transaction_master.transaction_master_id,
-    transactions.stock_master.party_id,
-    transactions.transaction_master.book, 
-    transactions.transaction_master.value_date, 
-    SUM(transactions.stock_details.price * transactions.stock_details.quantity + tax - discount)::decimal(24, 4) AS amount
-FROM transactions.stock_details 
-INNER JOIN transactions.stock_master
-ON transactions.stock_master.stock_master_id = transactions.stock_details.stock_master_id
-INNER JOIN transactions.transaction_master
-ON transactions.transaction_master.transaction_master_id = transactions.stock_master.transaction_master_id
-WHERE transactions.transaction_master.verification_status_id > 0
-AND book like 'Purchase%'
-GROUP BY
-    transactions.stock_master.party_id,
-    transactions.transaction_master.book, 
-    transactions.transaction_master.value_date, 
-    transactions.transaction_master.transaction_master_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/functions/transactions/transactions.party_sales_chart_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.party_sales_chart_view;
-
-CREATE VIEW transactions.party_sales_chart_view
-AS
-SELECT
-    NULL::bigint AS row_number,
-    transactions.transaction_master.transaction_master_id,
-    transactions.stock_master.party_id,
-    transactions.transaction_master.book, 
-    transactions.transaction_master.value_date, 
-    SUM(transactions.stock_details.price * transactions.stock_details.quantity + tax - discount)::decimal(24, 4) AS amount
-FROM transactions.stock_details 
-INNER JOIN transactions.stock_master
-ON transactions.stock_master.stock_master_id = transactions.stock_details.stock_master_id
-INNER JOIN transactions.transaction_master
-ON transactions.transaction_master.transaction_master_id = transactions.stock_master.transaction_master_id
-WHERE transactions.transaction_master.verification_status_id > 0
-AND book like 'Sales%'
-GROUP BY
-    transactions.stock_master.party_id,
-    transactions.transaction_master.book, 
-    transactions.transaction_master.value_date, 
-    transactions.transaction_master.transaction_master_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/02.functions-and-logic/triggers/transactions.verification_trigger.sql --<--<--
-DROP FUNCTION IF EXISTS transactions.verification_trigger() CASCADE;
-CREATE FUNCTION transactions.verification_trigger()
-RETURNS TRIGGER
-AS
-$$
-    DECLARE _transaction_master_id bigint;
-    DECLARE _transaction_posted_by integer;
-    DECLARE _old_verifier integer;
-    DECLARE _old_status integer;
-    DECLARE _old_reason national character varying(128);
-    DECLARE _verifier integer;
-    DECLARE _status integer;
-    DECLARE _reason national character varying(128);
-    DECLARE _has_policy boolean;
-    DECLARE _is_sys boolean;
-    DECLARE _rejected smallint=-3;
-    DECLARE _closed smallint=-2;
-    DECLARE _withdrawn smallint=-1;
-    DECLARE _unapproved smallint = 0;
-    DECLARE _auto_approved smallint = 1;
-    DECLARE _approved smallint=2;
-    DECLARE _book text;
-    DECLARE _can_verify_sales_transactions boolean;
-    DECLARE _sales_verification_limit money_strict2;
-    DECLARE _can_verify_purchase_transactions boolean;
-    DECLARE _purchase_verification_limit money_strict2;
-    DECLARE _can_verify_gl_transactions boolean;
-    DECLARE _gl_verification_limit money_strict2;
-    DECLARE _can_verify_self boolean;
-    DECLARE _self_verification_limit money_strict2;
-    DECLARE _posted_amount money_strict2;
-BEGIN
-    IF TG_OP='DELETE' THEN
-        RAISE EXCEPTION 'Deleting a transaction is not allowed. Mark the transaction as rejected instead.'
-        USING ERRCODE='P5800';
-    END IF;
-
-    IF TG_OP='UPDATE' THEN
-        RAISE NOTICE 'Columns except the following will be ignored for this update: %', 'verified_by_user_id, verification_status_id, verification_reason.';
-
-        IF(OLD.transaction_master_id IS DISTINCT FROM NEW.transaction_master_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"transaction_master_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.transaction_counter IS DISTINCT FROM NEW.transaction_counter) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"transaction_counter".'
-            USING ERRCODE='P8502';            
-        END IF;
-
-        IF(OLD.transaction_code IS DISTINCT FROM NEW.transaction_code) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"transaction_code".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.book IS DISTINCT FROM NEW.book) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"book".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.value_date IS DISTINCT FROM NEW.value_date) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"value_date".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.transaction_ts IS DISTINCT FROM NEW.transaction_ts) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"transaction_ts".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.login_id IS DISTINCT FROM NEW.login_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"login_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.user_id IS DISTINCT FROM NEW.user_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"user_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.sys_user_id IS DISTINCT FROM NEW.sys_user_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"sys_user_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.office_id IS DISTINCT FROM NEW.office_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"office_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        IF(OLD.cost_center_id IS DISTINCT FROM NEW.cost_center_id) THEN
-            RAISE EXCEPTION 'Cannot update the column %', '"cost_center_id".'
-            USING ERRCODE='P8502';
-        END IF;
-
-        _transaction_master_id := OLD.transaction_master_id;
-        _book := OLD.book;
-        _old_verifier := OLD.verified_by_user_id;
-        _old_status := OLD.verification_status_id;
-        _old_reason := OLD.verification_reason;
-        _transaction_posted_by := OLD.user_id;      
-        _verifier := NEW.verified_by_user_id;
-        _status := NEW.verification_status_id;
-        _reason := NEW.verification_reason;
-        _is_sys := office.is_sys(_verifier);
-
-        
-        SELECT
-            SUM(amount_in_local_currency)
-        INTO
-            _posted_amount
-        FROM
-            transactions.transaction_details
-        WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
-        AND transactions.transaction_details.tran_type='Cr';
-
-
-        SELECT
-            true,
-            can_verify_sales_transactions,
-            sales_verification_limit,
-            can_verify_purchase_transactions,
-            purchase_verification_limit,
-            can_verify_gl_transactions,
-            gl_verification_limit,
-            can_self_verify,
-            self_verification_limit
-        INTO
-            _has_policy,
-            _can_verify_sales_transactions,
-            _sales_verification_limit,
-            _can_verify_purchase_transactions,
-            _purchase_verification_limit,
-            _can_verify_gl_transactions,
-            _gl_verification_limit,
-            _can_verify_self,
-            _self_verification_limit
-        FROM
-        policy.voucher_verification_policy
-        WHERE user_id=_verifier
-        AND is_active=true
-        AND now() >= effective_from
-        AND now() <= ends_on;
-
-        IF(_verifier IS NULL) THEN
-            RAISE EXCEPTION 'Access is denied.'
-            USING ERRCODE='P9001';
-        END IF;     
-        
-        IF(_status != _withdrawn AND _has_policy = false) THEN
-            RAISE EXCEPTION 'Access is denied. You don''t have the right to verify the transaction.'
-            USING ERRCODE='P9016';
-        END IF;
-
-        IF(_status = _withdrawn AND _has_policy = false) THEN
-            IF(_transaction_posted_by != _verifier) THEN
-                RAISE EXCEPTION 'Access is denied. You don''t have the right to withdraw the transaction.'
-                USING ERRCODE='P9017';
-            END IF;
-        END IF;
-
-        IF(_status = _auto_approved AND _is_sys = false) THEN
-            RAISE EXCEPTION 'Access is denied.'
-            USING ERRCODE='P9001';
-        END IF;
-
-
-        IF(_has_policy = false) THEN
-            RAISE EXCEPTION 'Access is denied.'
-            USING ERRCODE='P9001';
-        END IF;
-
-
-        --Is trying verify self transaction.
-        IF(NEW.verified_by_user_id = NEW.user_id) THEN
-            IF(_can_verify_self = false) THEN
-                RAISE EXCEPTION 'Please ask someone else to verify the transaction you posted.'
-                USING ERRCODE='P5901';                
-            END IF;
-            IF(_can_verify_self = true) THEN
-                IF(_posted_amount > _self_verification_limit AND _self_verification_limit > 0::money_strict2) THEN
-                    RAISE EXCEPTION 'Self verification limit exceeded. The transaction was not verified.'
-                    USING ERRCODE='P5910';
-                END IF;
-            END IF;
-        END IF;
-
-        IF(lower(_book) LIKE '%sales%') THEN
-            IF(_can_verify_sales_transactions = false) THEN
-                RAISE EXCEPTION 'Access is denied.'
-                USING ERRCODE='P9001';
-            END IF;
-            IF(_can_verify_sales_transactions = true) THEN
-                IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::money_strict2) THEN
-                    RAISE EXCEPTION 'Sales verification limit exceeded. The transaction was not verified.'
-                    USING ERRCODE='P5911';
-                END IF;
-            END IF;         
-        END IF;
-
-
-        IF(lower(_book) LIKE '%purchase%') THEN
-            IF(_can_verify_purchase_transactions = false) THEN
-                RAISE EXCEPTION 'Access is denied.'
-                USING ERRCODE='P9001';
-            END IF;
-            IF(_can_verify_purchase_transactions = true) THEN
-                IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::money_strict2) THEN
-                    RAISE EXCEPTION 'Purchase verification limit exceeded. The transaction was not verified.'
-                    USING ERRCODE='P5912';
-                END IF;
-            END IF;         
-        END IF;
-
-
-        IF(lower(_book) LIKE 'journal%') THEN
-            IF(_can_verify_gl_transactions = false) THEN
-                RAISE EXCEPTION 'Access is denied.'
-                USING ERRCODE='P9001';
-            END IF;
-            IF(_can_verify_gl_transactions = true) THEN
-                IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::money_strict2) THEN
-                    RAISE EXCEPTION 'GL verification limit exceeded. The transaction was not verified.'
-                    USING ERRCODE='P5913';
-                END IF;
-            END IF;         
-        END IF;
-
-        --This transaction is rejected. So, cancel all emails related to this transaction.
-        IF(_status < 0) THEN
-            UPDATE core.email_queue
-            SET canceled = true
-            WHERE transaction_master_id = _transaction_master_id;
-        END IF;
-        
-        NEW.last_verified_on := now();
-
-    END IF; 
-    RETURN NEW;
-END
-$$
-LANGUAGE plpgsql;
-
-
-CREATE TRIGGER verification_update_trigger
-AFTER UPDATE
-ON transactions.transaction_master
-FOR EACH ROW 
-EXECUTE PROCEDURE transactions.verification_trigger();
-
-CREATE TRIGGER verification_delete_trigger
-BEFORE DELETE
-ON transactions.transaction_master
-FOR EACH ROW 
-EXECUTE PROCEDURE transactions.verification_trigger();
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/03.menus/0.menus.sql --<--<--
---This table should not be localized.
-
-SELECT * FROM core.create_menu('Sales', '~/Modules/Sales/Index.mix', 'SA', 0, NULL);
-SELECT * FROM core.create_menu('Purchase', '~/Modules/Purchase/Index.mix', 'PU', 0, NULL);
-SELECT * FROM core.create_menu('Products & Items', '~/Modules/Inventory/Index.mix', 'ITM', 0, NULL);
-SELECT * FROM core.create_menu('Finance', '~/Modules/Finance/Index.mix', 'FI', 0, NULL);
-SELECT * FROM core.create_menu('Back Office', '~/Modules/BackOffice/Index.mix', 'BO', 0, NULL);
-SELECT * FROM core.create_menu('Settings', '#', 'SET', 0, NULL);
-
-
-SELECT * FROM core.create_menu('Sales & Quotation', NULL, 'SAQ', 1, core.get_menu_id('SA'));
-SELECT * FROM core.create_menu('Sales Quotation', '~/Modules/Sales/Quotation.mix', 'SQ', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Sales Order', '~/Modules/Sales/Order.mix', 'SO', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Sales Delivery', '~/Modules/Sales/Delivery.mix', 'SD', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Direct Sales', '~/Modules/Sales/DirectSales.mix', 'DRS', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Receipt from Customer', '~/Modules/Sales/Receipt.mix', 'RFC', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Sales Return', '~/Modules/Sales/Return.mix', 'SR', 2, core.get_menu_id('SAQ'));
-SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'SSM', 1, core.get_menu_id('SA'));
-SELECT * FROM core.create_menu('Bonus Slab for Salespersons', '~/Modules/Sales/Setup/BonusSlabs.mix', 'ABS', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Bonus Slab Details', '~/Modules/Sales/Setup/BonusSlabDetails.mix', 'BSD', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Sales Teams', '~/Modules/Sales/Setup/Teams.mix', 'SST', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Salespersons', '~/Modules/Sales/Setup/Salespersons.mix', 'SSA', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Bonus Slab Assignment', '~/Modules/Sales/Setup/BonusSlabAssignment.mix', 'BSA', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Late Fees', '~/Modules/Sales/Setup/LateFees.mix', 'LF', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Payment Terms', '~/Modules/Sales/Setup/PaymentTerms.mix', 'PAT', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Recurring Invoices', '~/Modules/Sales/Setup/RecurringInvoices.mix', 'RI', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Recurring Invoice Setup', '~/Modules/Sales/Setup/RecurringInvoiceSetup.mix', 'RIS', 2, core.get_menu_id('SSM'));
-SELECT * FROM core.create_menu('Sales Reports', NULL, 'SAR', 1, core.get_menu_id('SA'));
-SELECT * FROM core.create_menu('Top Selling Items', '~/Modules/Sales/Reports/TopSellingItems.mix', 'SAR-TSI', 2, core.get_menu_id('SAR'));
-SELECT * FROM core.create_menu('Sales by Office', '~/Modules/Sales/Reports/SalesByOffice.mix', 'SAR-SBO', 2, core.get_menu_id('SAR'));
-SELECT * FROM core.create_menu('Purchase & Quotation', NULL, 'PUQ', 1, core.get_menu_id('PU'));
-SELECT * FROM core.create_menu('Direct Purchase', '~/Modules/Purchase/DirectPurchase.mix', 'DRP', 2, core.get_menu_id('PUQ'));
-SELECT * FROM core.create_menu('Purchase Order', '~/Modules/Purchase/Order.mix', 'PO', 2, core.get_menu_id('PUQ'));
-SELECT * FROM core.create_menu('Purchase Reorder', '~/Modules/Purchase/Reorder.mix', 'PRO', 2, core.get_menu_id('PUQ'));
-SELECT * FROM core.create_menu('GRN Entry', '~/Modules/Purchase/GRN.mix', 'GRN', 2, core.get_menu_id('PUQ'));
-SELECT * FROM core.create_menu('Purchase Return', '~/Modules/Purchase/Return.mix', 'PR', 2, core.get_menu_id('PUQ'));
-SELECT * FROM core.create_menu('Purchase Reports', NULL, 'PUR', 1, core.get_menu_id('PU'));
-SELECT * FROM core.create_menu('Inventory Movements', NULL, 'IIM', 1, core.get_menu_id('ITM'));
-SELECT * FROM core.create_menu('Stock Transfer Request', '~/Modules/Inventory/TransferRequest.mix', 'STR', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Stock Transfer Authorization', '~/Modules/Inventory/TransferAuthorization.mix', 'STP', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Stock Transfer Delivery', '~/Modules/Inventory/TransferDelivery.mix', 'STD', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Stock Transfer Acknowledgement', '~/Modules/Inventory/TransferAcknowledgement.mix', 'STK', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Stock Transfer Journal', '~/Modules/Inventory/Transfer.mix', 'STJ', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Stock Adjustments', '~/Modules/Inventory/Adjustment.mix', 'STA', 2, core.get_menu_id('IIM'));
-SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'ISM', 1, core.get_menu_id('ITM'));
-SELECT * FROM core.create_menu('Store Types', '~/Modules/Inventory/Setup/StoreTypes.mix', 'STT', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Stores', '~/Modules/Inventory/Setup/Stores.mix', 'STO', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Counter Setup', '~/Modules/BackOffice/Counters.mix', 'SCS', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Party Types', '~/Modules/Inventory/Setup/PartyTypes.mix', 'PT', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Party Accounts', '~/Modules/Inventory/Setup/Parties.mix', 'PA', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Shipping Addresses', '~/Modules/Inventory/Setup/ShippingAddresses.mix', 'PSA', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Item Maintenance', '~/Modules/Inventory/Setup/Items.mix', 'SSI', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Compound Items', '~/Modules/Inventory/Setup/CompoundItems.mix', 'SSC', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Compound Item Details', '~/Modules/Inventory/Setup/CompoundItemDetails.mix', 'SSCD', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Cost Prices', '~/Modules/Inventory/Setup/CostPrices.mix', 'ICP', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Selling Prices', '~/Modules/Inventory/Setup/SellingPrices.mix', 'ISP', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Item Groups', '~/Modules/Inventory/Setup/ItemGroups.mix', 'SIG', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Item Types', '~/Modules/Inventory/Setup/ItemTypes.mix', 'SIT', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Brands', '~/Modules/Inventory/Setup/Brands.mix', 'SSB', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Units of Measure', '~/Modules/Inventory/Setup/UOM.mix', 'UOM', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Compound Units of Measure', '~/Modules/Inventory/Setup/CUOM.mix', 'CUOM', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Shipper Information', '~/Modules/Inventory/Setup/Shippers.mix', 'SHI', 2, core.get_menu_id('ISM'));
-SELECT * FROM core.create_menu('Reports', NULL, 'IR', 1, core.get_menu_id('ITM'));
-SELECT * FROM core.create_menu('Inventory Account Statement', '~/Modules/Inventory/Reports/AccountStatement.mix', 'IAS', 2, core.get_menu_id('IR'));
-SELECT * FROM core.create_menu('Transactions & Templates', NULL, 'FTT', 1, core.get_menu_id('FI'));
-SELECT * FROM core.create_menu('Journal Voucher Entry', '~/Modules/Finance/JournalVoucher.mix', 'JVN', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('Update Exchange Rates', '~/Modules/Finance/UpdateExchangeRates.mix', 'UER', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('Voucher Verification', '~/Modules/Finance/VoucherVerification.mix', 'FVV', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('End of Day Operation', '~/Modules/Finance/DayOperation/EOD.mix', 'EOD', 2, core.get_menu_id('FTT'));
-SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'FSM', 1, core.get_menu_id('FI'));
-SELECT * FROM core.create_menu('Chart of Accounts', '~/Modules/Finance/Setup/COA.mix', 'COA', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Currency Management', '~/Modules/Finance/Setup/Currencies.mix', 'CUR', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Bank Accounts', '~/Modules/Finance/Setup/BankAccounts.mix', 'CBA', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Payment Cards', '~/Modules/Finance/Setup/PaymentCards.mix', 'PAC', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Merchant Fee Setup', '~/Modules/Finance/Setup/MerchantFeeSetup.mix', 'MFS', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Ageing Slabs', '~/Modules/Finance/Setup/AgeingSlabs.mix', 'AGS', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Cash Flow Headings', '~/Modules/Finance/Setup/CashFlowHeadings.mix', 'CFH', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Cash Flow Setup', '~/Modules/Finance/Setup/CashFlowSetup.mix', 'CFS', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Cost Centers', '~/Modules/Finance/Setup/CostCenters.mix', 'CC', 2, core.get_menu_id('FSM'));
-SELECT * FROM core.create_menu('Reports', NULL, 'FIR', 1, core.get_menu_id('FI'));
-SELECT * FROM core.create_menu('Exchange Rates', '~/Modules/Finance/Reports/ExchangeRates.mix', 'ERR', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Account Statement', '~/Modules/Finance/Reports/AccountStatement.mix', 'AS', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Trial Balance', '~/Modules/Finance/Reports/TrialBalance.mix', 'TB', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Profit & Loss Account', '~/Modules/Finance/Reports/ProfitAndLossAccount.mix', 'PLA', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Retained Earnings Statement', '~/Modules/Finance/Reports/RetainedEarnings.mix', 'RET', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Balance Sheet', '~/Modules/Finance/Reports/BalanceSheet.mix', 'BS', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Cash Flow', '~/Modules/Finance/Reports/CashFlow.mix', 'CF', 2, core.get_menu_id('FIR'));
-SELECT * FROM core.create_menu('Tax Configuration', NULL, 'BOTC', 1, core.get_menu_id('BO'));
-SELECT * FROM core.create_menu('Tax Master', '~/Modules/BackOffice/Tax/TaxMaster.mix', 'TXM', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Tax Authorities', '~/Modules/BackOffice/Tax/TaxAuthorities.mix', 'TXA', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Sales Tax Types', '~/Modules/BackOffice/Tax/SalesTaxTypes.mix', 'STXT', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('State Sales Taxes', '~/Modules/BackOffice/Tax/StateSalesTaxes.mix', 'STST', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Counties Sales Taxes', '~/Modules/BackOffice/Tax/CountySalesTaxes.mix', 'CTST', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Sales Taxes', '~/Modules/BackOffice/Tax/SalesTaxes.mix', 'STX', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Sales Tax Details', '~/Modules/BackOffice/Tax/SalesTaxDetails.mix', 'STXD', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Tax Exempt Types', '~/Modules/BackOffice/Tax/TaxExemptTypes.mix', 'TXEXT', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Sales Tax Exempts', '~/Modules/BackOffice/Tax/SalesTaxExempts.mix', 'STXEX', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Sales Tax Exempt Details', '~/Modules/BackOffice/Tax/SalesTaxExemptDetails.mix', 'STXEXD', 2, core.get_menu_id('BOTC'));
-SELECT * FROM core.create_menu('Miscellaneous Parameters', NULL, 'SMP', 1, core.get_menu_id('BO'));
-SELECT * FROM core.create_menu('Flags', '~/Modules/BackOffice/Flags.mix', 'TRF', 2, core.get_menu_id('SMP'));
-SELECT * FROM core.create_menu('Custom Fields', '~/Modules/BackOffice/CustomFields.mix', 'CUF', 2, core.get_menu_id('SMP'));
-SELECT * FROM core.create_menu('Audit Reports', NULL, 'SEAR', 1, core.get_menu_id('BO'));
-SELECT * FROM core.create_menu('Login View', '~/Reports/Office.Login.xml', 'SEAR-LV', 2, core.get_menu_id('SEAR'));
-SELECT * FROM core.create_menu('Office Setup', NULL, 'SOS', 1, core.get_menu_id('BO'));
-SELECT * FROM core.create_menu('Office & Branch Setup', '~/Modules/BackOffice/Offices.mix', 'SOB', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Cash Repository Setup', '~/Modules/BackOffice/CashRepositories.mix', 'SCR', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Department Setup', '~/Modules/BackOffice/Departments.mix', 'SDS', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Role Management', '~/Modules/BackOffice/Roles.mix', 'SRM', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('User Management', '~/Modules/BackOffice/Users.mix', 'SUM', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Entity Setup', '~/Modules/BackOffice/Entities.mix', 'SES', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Industry Setup', '~/Modules/BackOffice/Industries.mix', 'SIS', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Country Setup', '~/Modules/BackOffice/Countries.mix', 'SCRS', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('State Setup', '~/Modules/BackOffice/States.mix', 'SSS', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('County Setup', '~/Modules/BackOffice/Counties.mix', 'SCTS', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Fiscal Year Information', '~/Modules/BackOffice/FiscalYear.mix', 'SFY', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Frequency & Fiscal Year Management', '~/Modules/BackOffice/Frequency.mix', 'SFR', 2, core.get_menu_id('SOS'));
-SELECT * FROM core.create_menu('Policy Management', NULL, 'SPM', 1, core.get_menu_id('SET'));
-SELECT * FROM core.create_menu('Voucher Verification Policy', '~/Modules/BackOffice/Policy/VoucherVerification.mix', 'SVV', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Automatic Verification Policy', '~/Modules/BackOffice/Policy/AutoVerification.mix', 'SAV', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Menu Access Policy', '~/Modules/BackOffice/Policy/MenuAccess.mix', 'SMA', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('GL Access Policy', '~/Modules/BackOffice/Policy/GLAccess.mix', 'SAP', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Store Policy', '~/Modules/BackOffice/Policy/Store.mix', 'SSP', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Api Access Policy', '~/Modules/BackOffice/Policy/ApiAccess.mix', 'SAA', 2, core.get_menu_id('SPM'));
-SELECT * FROM core.create_menu('Admin Tools', NULL, 'SAT', 1, core.get_menu_id('SET'));
-SELECT * FROM core.create_menu('Database Statistics', '~/Modules/BackOffice/Admin/DatabaseStatistics.mix', 'DBSTAT', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('Backup Database', '~/Modules/BackOffice/Admin/DatabaseBackup.mix', 'BAK', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('Report Writer', '~/Modules/BackOffice/Admin/ReportWriter.mix', 'RW', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('Change User Password', '~/Modules/BackOffice/Admin/ChangePassword.mix', 'PWD', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('Check Updates', '~/Modules/BackOffice/Admin/CheckUpdates.mix', 'UPD', 2, core.get_menu_id('SAT'));
-SELECT * FROM core.create_menu('One Time Setup', NULL, 'OTS', 1, core.get_menu_id('SET'));
-SELECT * FROM core.create_menu('Opening Inventory', '~/Modules/BackOffice/OTS/OpeningInventory.mix', 'OTSI', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Attachment Parameters', '~/Modules/BackOffice/OTS/AttachmentParameters.mix', 'OTSAP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Currencylayer Parameters', '~/Modules/BackOffice/OTS/CurrencylayerParameters.mix', 'OTSCLP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Database Parameters', '~/Modules/BackOffice/OTS/DatabaseParameters.mix', 'OTSDBP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('SMTP Parameters', '~/Modules/BackOffice/OTS/SMTP.mix', 'OTSSMTP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('MixERP Parameters', '~/Modules/BackOffice/OTS/MixERPParameters.mix', 'OTSMIX', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('OpenExchangeRates Parameters', '~/Modules/BackOffice/OTS/OpenExchangeRatesParameters.mix', 'OTSOER', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('ScrudFactory Parameters', '~/Modules/BackOffice/OTS/ScrudFactoryParameters.mix', 'OTSSFP', 2, core.get_menu_id('OTS'));
-SELECT * FROM core.create_menu('Switches', '~/Modules/BackOffice/OTS/Switches.mix', 'OTSSW', 2, core.get_menu_id('OTS'));;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.default-values/01.default-values.sql --<--<--
-DO
-$$
-BEGIN
-    IF NOT EXISTS
-    (
-        SELECT 1 FROM core.attachment_lookup
-        WHERE book = 'inventory.transfer.request'
-    ) THEN
-        INSERT INTO core.attachment_lookup(book, resource, resource_key)
-        SELECT 'inventory.transfer.request', 'transactions.inventory_transfer_requests', 'inventory_transfer_request_id';
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 1 FROM core.attachment_lookup
-        WHERE book = 'inventory.transfer.delivery'
-    ) THEN
-        INSERT INTO core.attachment_lookup(book, resource, resource_key)
-        SELECT 'inventory.transfer.delivery', 'transactions.inventory_transfer_deliveries', 'inventory_transfer_delivery_id';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM core.config WHERE config_name='Quotation Valid Duration') THEN
-        INSERT INTO core.config
-        SELECT 3, 'Quotation Valid Duration';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowSupplierInSales') THEN
-        INSERT INTO config.switches
-        SELECT 'AllowSupplierInSales', false;
-    END IF;
-
-    IF NOT EXISTS(SELECT 1 FROM config.switches WHERE key='AllowNonSupplierInPurchase') THEN
-        INSERT INTO config.switches
-        SELECT 'AllowNonSupplierInPurchase', false;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/0.neutral-resource(en)/language.sql --<--<--
 SELECT localization.add_localized_resource('CommonResource', '', 'DateMustBeGreaterThan', 'Invalid date. Must be greater than "{0}".');
 SELECT localization.add_localized_resource('CommonResource', '', 'DateMustBeLessThan', 'Invalid date. Must be less than "{0}".');
 SELECT localization.add_localized_resource('CommonResource', '', 'InvalidDate', 'Invalid date.');
@@ -7489,7 +1587,7 @@ SELECT localization.add_localized_resource('Warnings', '', 'ReturnButtonUrlNull'
 SELECT localization.add_localized_resource('Warnings', '', 'StartDateGreaterThanEndDate', 'The start date cannot be greater than end date.');
 SELECT localization.add_localized_resource('Warnings', '', 'UserIdOrPasswordIncorrect', 'User id or password incorrect.');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ar/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ar/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
@@ -7511,8 +1609,6 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
-
-
 
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeGreaterThan', 'تاريخ غير صحيح. يجب أن تكون أكبر من "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT * FROM localization.add_localized_resource('CommonResource', 'ar', 'DateMustBeLessThan', 'تاريخ غير صحيح. يجب أن تكون أقل من "{0}".');--Invalid date. Must be less than "{0}".
@@ -7650,6 +1746,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateParties
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateSalesTaxFormDescription', 'نموذج ضريبة المبيعات مزيج من مختلف الكيانات مثل ضريبة العامة للدولة، ضريبة مقاطعة، الإعفاء، إلخ.');--Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateSalespersonsDescription', 'مندوبي المبيعات هم رجال  المبيعات الذين يقومون ببيع المنتجات الخاصة بك ويجلبوا الأعمال التجارية للشركة الخاصة بك.');--Salespersons are the sales guys who sell your products and bring business to your company.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateShippingCompanyDescription', 'شركات الشحن  تقوم بنقل البضائع عبر البر والبحر، و/أو الجو إلى عملائك.');--Shipping companies transfer the goods through land, sea, and/or air to your customers.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStateDescription', 'إنشاء قائمة الدول التي موظفيك والعملاء والموردين.');--Create a list of states where your employees, customers, and suppliers are.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStateSalesTaxDescription', 'ضريبة المبيعات هي ضريبة الاستهلاك المباشر تفرضها حكومة الدولة الخاص بك عندما تقوم بالشراء أوالتوريد.');--State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateStoresDescription', 'المخزن هو مكان حيث يمكنك الاحتفاظ بالبضائع الخاصة بك. على سبيل المثال: متجر، بدروم، او مخازن.');--Store is a place where you keep your goods. Example: Shop, Go-down, Warehouse.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'CreateTaxAuthorityDescription', 'مصلحة الضرائب هو الهيئة الحكومية التي تقدم لها تقرير بالاعمال من ربح او خسارة سنويا.');--Tax authority is the government body or agency to whom you file your periodic tax reports to.
@@ -7686,6 +1783,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NSalesTaxForm
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NSalespersonsFound', 'هناك {0} من رجال البيع هذه الشركة.');--{0} salespersons found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NShippersFound', 'هناك {0} من شركات الشحن هذه الشركة.');--{0} shippers found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStateSalesTaxesDefined', 'هناك {0} من نماذج ضريبة المبيعات المقاطعات محددة في هذه الشركة.');--{0} state sales taxes defined.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStatesFound', '{0} وجدت الدول.');--{0} states found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NStoresInThisOffice', 'هناك {0} من المخازن هذه في الشركة.');--There are {0} stores in this office.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NTaxAuthoritiesFound', 'هناك {0} من مصالح الضرائب في هذه الشركة.');--{0} tax authorities found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NTaxMasterFound', 'هناك {0} من الضرائب العامة ( الرئيسية) في هذه الشركة.');--{0} tax master(s) found.
@@ -7697,6 +1795,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoPartyFound'
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSalesTaxFormDefined', 'لم يتم اعداد  نموذج ضريبة المبيعات.');--No sales tax form defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSalespersonFound', 'لم يتم اعداد مندوبي مبيعات.');--No salesperson found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoShipperFound', 'لم يتم اعداد شركات الشحن.');--No shipper found.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStateFound', 'لم يتم العثور على الدولة.');--No state found.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStateSalesTaxDefined', 'لم يتم اعداد ضريبة المبيعات الدولة.');--No state sales tax defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoStorePresent', 'لم يتم اعداد المخزن الحالي.');--No store present.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'NoSupplierFound', 'لم يتم اعداد الموردين.');--No supplier found.
@@ -7714,6 +1813,9 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'PercentageSym
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'PleaseSelectAFormFirst', 'الرجاء اختيار نموذج أولاً.');--Please select a form first.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'ReceiptEmailSubject', 'تم تسليم #{0} اشعار , {1}');--Receipt #{0} notification, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'ReleaseContainsNoUpdates', 'لا يحتوي هذا الإصدار على أي تحديث.');--This release does not contain any update.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RestoringDirectory', 'استعادة الدليل: {0}.');--Restoring directory : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RestoringFile', 'استعادة الملف: {0}.');--Restoring file : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SMTPIsDisabled', 'SMTP غير مفعل.');--SMTP is disabled.
@@ -7721,6 +1823,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesDelivery
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesOrderEmailSubject', 'تم استلام امر الشراء #{0}, {1}');--We received your PO #{0}, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationAlreadyAccepted', 'التسعير تم قبوله بالفعل في {0}.');--This quotation was already accepted on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationEmailSubject', 'التسعير #{0} من {1}');--Quotation #{0} from {1}
+SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SalesQuotationExpired', 'انتهت هذا الاقتباس على {0}.');--This quotation expired on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SelectAFlag', 'حدد علامة.');--Select a flag.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'SetupEmailDescription', ' اعدادات البريد الصادر غير مفعل. قم بضبط اعدادات البريد الصادر SMTP لارسال التنبيهات الي عملائك.');--Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
 SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'TaskCompletedProgress', '{0} من {1} المهام المكتملة.');--{0} out of {1} tasks completed.
@@ -7807,6 +1910,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'base_u
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'base_unit_name', 'اسم الوحدة الأساسية');--Base Unit Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'based_on_shipping_address', 'استناداً إلى عنوان الشحن');--Based On Shipping Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_rate', 'معدل مكافأة');--Bonus Rate
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab', 'مكافأة بلاطة');--Bonus Slab
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_code', 'رمز شريحة المكافأة');--Bonus Slab Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_detail_id', 'معرف تفاصيل شريحة مكافأة');--Bonus Slab Detail Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'bonus_slab_details_amounts_chk', 'يجب أن يكون الحقل "القيمة من" أكبر من "الي القيمة".');--The field "AmountTo" must be greater than "AmountFrom".
@@ -7844,7 +1948,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_r
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_code', 'كود الخزينة النقدية');--Cash Repository Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_id', 'معرف الخزينة النقدية');--Cash Repository Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cash_repository_name', 'اسم الخزينة النقدية');--Cash Repository Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cell', 'خلية');--Cell
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'cell', 'موبايل');--Cell
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'charge_interest', 'رسوم الفائدة');--Charge Interest
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'check_nexus', 'فحص الترابط');--Check Nexus
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'checking_frequency', 'مراجعة الفترة');--Checking Frequency
@@ -7871,7 +1975,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compou
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compound_units_chk', 'معرف الوحدة الاساس لايجب ان تكون نفس وحدة المقارنة.');--The base unit id cannot same as compare unit id.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'compounding_frequency', 'مجمع الفترات المالية');--Compounding Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'confidential', 'سري');--Confidential
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'configuration_name', 'اسم الاعدادات');--ConfigurationName
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'configuration_name', 'اسم الاعدادات');--Configuration Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_address_line_1', 'الاتصال سطر العنوان 1');--Contact Address Line 1
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_address_line_2', 'الاتصال سطر العنوان 2');--Contact Address Line 2
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'contact_cell', 'موبايل');--Contact Cell
@@ -7894,7 +1998,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counte
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counter_id', 'معرف منفذ البيع');--Counter Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'counter_name', 'اسم منفذ البيع');--Counter Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country', 'الدولة');--Country
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_code', 'رمز الدولة');--Country Code
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_code', 'معرف المحافظة');--Country Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_id', 'معرف الدولة');--Country Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'country_name', 'اسم الدولة');--Country Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'county', 'مقاطعة');--County
@@ -7916,7 +2020,9 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'curren
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'customer_pays_fee', 'يدفع العميل رسوم');--Customer Pays Fee
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'date_of_birth', 'تاريخ الميلاد');--Date Of Birth
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'debit', 'مدين');--Debit
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_account', 'الحساب النقدي الافتراضي');--Default Cash Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_account_id', 'معرف الحساب النقدي الافتراضي');--Default Cash Account Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_repository', 'افتراضي مستودع النقدية');--Default Cash Repository
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'default_cash_repository_id', 'معرف الخزينة النقدية الافتراضي');--Default Cash Repository Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'department_code', 'كود الادارة');--Department Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'department_id', 'معرف إدارة');--Department Id
@@ -7957,8 +2063,8 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'freque
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'frequency_setup_code', 'رمز الإعداد الفترة');--Frequency Setup Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'frequency_setup_id', 'معرف الإعداد الفترة');--Frequency Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_days', 'من أيام');--From Days
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_display_name', 'اسم المرسل');--FromDisplayName
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_email_address', 'البريد الالكتروني للمرسل');--FromEmailAddress
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_display_name', 'اسم المرسل');--From Display Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'from_email_address', 'البريد الالكتروني للمرسل');--From Email Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'full_name', 'الاسم الكامل');--Full Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'gl_head', 'عنوان الاستاذ العام');--GL Head
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'gl_verification_limit', 'حد التحقق للاستاذ العام');--Gl Verification Limit
@@ -7989,6 +2095,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_emp
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_exempt', 'معفي');--Is Exempt
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_exemption', 'اعفاء');--Is Exemption
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_flat_amount', 'مبلغ ثابت');--Is Flat Amount
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_frequency', 'هو التردد');--Is Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_merchant_account', 'حساب التاجر');--Is Merchant Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_party', 'هو طرف');--Is Party
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'is_purchase', 'مشتريات');--Is Purchase
@@ -8121,7 +2228,10 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'purcha
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'purchase_verification_limit', 'حد تحقق المشتريات');--Purchase Verification Limit
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'quantity', 'الكمية');--Quantity
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'rate', 'معدل');--Rate
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type', 'نوع تكرار');--Recurrence Type
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_code', 'تكرار اكتب الرمز');--Recurrence Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_id', 'معرف نوع التكرار');--Recurrence Type Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurrence_type_name', 'تكرار النوع الاسم');--Recurrence Type Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_amount', 'مبلغ متكرر');--Recurring Amount
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_duration', 'المدة المتكررة');--Recurring Duration
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'recurring_frequency', 'الفترة المتكرر');--Recurring Frequency
@@ -8179,10 +2289,12 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_code', 'كود نوع ضريبة المبيعات');--Sales Tax Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_id', 'معرف نوع ضريبة المبيعات');--Sales Tax Type Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_tax_type_name', 'اسم نوع ضريبة المبيعات');--Sales Tax Type Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team', 'فريق المبيعات');--Sales Team
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_code', 'كود فريق المبيعات');--Sales Team Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_id', 'معرف فريق المبيعات');--Sales Team Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_team_name', 'اسم فريق المبيعات');--Sales Team Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sales_verification_limit', 'حد تحقق المبيعات');--Sales Verification Limit
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson', 'مندوب مبيعات');--Salesperson
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_bonus_setup_id', 'معرف إعداد مكافأة مندوب المبيعات');--Salesperson Bonus Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_code', 'كود مندوب المبيعات');--Salesperson Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'salesperson_id', 'معرف مندوب المبيعات');--Salesperson Id
@@ -8202,17 +2314,17 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shippi
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shipping_package_shape_id', 'معرف شكل التغليف');--Shipping Package Shape Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'shipping_package_shape_name', 'اسم شكل التغليف');--Shipping Package Shape Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'slab_name', 'اسم الشريحة');--Slab Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smp_host', 'SMTP Host');--SmpHost
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_enable_ssl', 'SMTP Enable SSL');--SmtpEnableSsl
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_id', 'SMTP ID');--SmtpId
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_password', 'SMTP Password');--SmtpPassword
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_port', 'SMTP Port');--SmtpPort
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_username', 'SMTP Username');--SmtpUsername
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_enable_ssl', 'SMTP Enable SSL');--SMTP Enable SSL
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_host', 'SMTP المضيف');--SMTP Host
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_id', 'SMTP ID');--SMTP Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_password', 'SMTP Password');--SMTP Password
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_port', 'SMTP Port');--SMTP Port
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'smtp_username', 'SMTP Username');--SMTP Username
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'sst_number', 'رقم SST');--SST Number
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'starts_from', 'يبدأ من');--Starts From
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state', 'الدولة');--State
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_code', 'كود الدولة');--State Code
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_id', 'رقم الدولة');--State Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_id', 'معرف المحافظة');--State Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_name', 'اسم الدولة');--State Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_sales_tax', 'ضريبة المبيعات الدولة');--State Sales Tax
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'ar', 'state_sales_tax_code', 'كود ضريبة المبيعات الدولة');--State Sales Tax Code
@@ -8400,6 +2512,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateParties
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateSalesTaxForm', 'إنشاء نموذج ضريبة المبيعات');--Create Sales Tax Form
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateSalespersons', 'إنشاء مندوبي المبيعات');--Create Salespersons
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateShippingCompany', 'إنشاء شركة الشحن');--Create Shipping Company
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateState', 'إنشاء الدولة');--Create State
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateStateSalesTax', 'إنشاء ضريبة المبيعات العامة');--Create State Sales Tax
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateStores', 'إنشاء المخازن');--Create Stores
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'CreateTaxAuthority', 'إنشاء مصلحة الضرائب');--Create Tax Authority
@@ -8730,9 +2843,10 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderLevel', 'مستوي اعادة الطلب');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderQuantityAbbreviated', 'كمية اعادة الطلب');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ReorderUnitName', 'اسم وحدة إعادة الطلب');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldDetails', ' الحقول التي تحمل علامة النجمة (*) مطلوبة.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Labels', 'ar', 'RequiredFieldIndicator', ' *');-- *
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Request', 'طلب');--Request
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredField', 'هذا الحقل مطلوب.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldDetails', 'مطلوبة الحقول التي تحمل علامة النجمة (*).');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RequiredFieldIndicator', '  *');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Reset', 'إعادة تعيين');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringDirectories', 'استعادة الملفات');--Restoring Directories
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'RestoringMigrationFiles', 'استعادة الملفات المحدثة');--Restoring Migration Files
@@ -8775,6 +2889,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Saving', 'ج�
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'ScrudFactoryParameters', 'ScrudFactory معلمات');--ScrudFactory Parameters
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Search', 'بحث');--Search
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Select', 'اختيار');--Select
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectApi', 'حدد API');--Select API
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectCompany', 'اختار شركة');--Select Company
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectCustomer', 'اختار العميل');--Select Customer
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'SelectExpensesGL', 'اختار مصروفات الاستاذ العام');--Select Expenses GL
@@ -8885,6 +3000,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UnitsOfMeasur
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UnknownError', 'فشلت العملية بسبب خطأ غير معروف.');--Operation failed due to an unknown error.
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Update', 'التحديث');--Update
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdateConsole', 'وحدة التحكم التحديث');--Update Console
+SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdatedExchangeRates', 'تحديث أسعار الصرف');--Update Exchange Rates
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UpdatedOn', 'تم التحديث في');--Updated On
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'Upload', 'تحميل');--Upload
 SELECT * FROM localization.add_localized_resource('Titles', 'ar', 'UploadAttachments', 'تحميل المرفقات');--Upload Attachments
@@ -9022,7 +3138,8 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'ar', 'UserIdOrPas
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ar/menus.sql --<--<--
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ar/menus.sql --<--<--
 --Contributors for this translation:
 --https://github.com/nubiancc
 SELECT * FROM core.create_menu_locale('AS', 'ar', 'كشف حساب');--Account Statement
@@ -9162,7 +3279,7 @@ SELECT * FROM core.create_menu_locale('FVV', 'ar', 'تحقق مستند القي
 SELECT * FROM core.create_menu_locale('SVV', 'ar', 'سياسة التحقق من مستندات القيد');--Voucher Verification Policy
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/de/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/de/language.sql --<--<--
 --This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
 SELECT * FROM localization.add_localized_resource('CommonResource', 'de', 'DateMustBeGreaterThan', 'Ungültiges Datum. Muss größer sein als "{0}".');
@@ -10660,7 +4777,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'de', 'StartDateGr
 SELECT * FROM localization.add_localized_resource('Warnings', 'de', 'UserIdOrPasswordIncorrect', 'Benutzerkennung oder Passwort falsch.');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/de/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/de/menus.sql --<--<--
 --This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
 SELECT core.create_menu_locale('ERR', 'de', 'Wechselkurse');
@@ -10801,7 +4918,7 @@ SELECT core.create_menu_locale('SDS', 'de', 'Abteilungs Setup');
 SELECT core.create_menu_locale('SAA', 'de', 'API-Richtlinien');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/es/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/es/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Jonathan Valle https://github.com/JonathanValle
@@ -12022,7 +6139,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'es', 'ReturnButto
 SELECT * FROM localization.add_localized_resource('Warnings', 'es', 'UserIdOrPasswordIncorrect', 'Identificador de usuario o contraseña incorrecta.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/es/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/es/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'es', 'Losa bonificación sobre los Vendedores');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'es', 'Losas Envejecimiento');--Ageing Slabs
@@ -12141,7 +6258,7 @@ SELECT core.create_menu_locale('MFS', 'es', 'Configuración Fee Merchant');--Mer
 SELECT core.create_menu_locale('RW', 'es', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fil/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/fil/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'fil', 'DateMustBeGreaterThan', 'Di-wastong petsa. Dapat ay mas higit "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'fil', 'DateMustBeLessThan', 'Di-wastong petsa. Dapat na mas mababa sa "{0}".');--Invalid date. Must be less than "{0}".
@@ -13357,7 +7474,7 @@ SELECT localization.add_localized_resource('Warnings', 'fil', 'ReturnButtonUrlNu
 SELECT localization.add_localized_resource('Warnings', 'fil', 'UserIdOrPasswordIncorrect', 'Pantukoy o maling password ng user.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fil/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/fil/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'fil', 'Bonus laha para sa Salesperson');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'fil', 'Pagtanda Slabs');--Ageing Slabs
@@ -13476,7 +7593,7 @@ SELECT core.create_menu_locale('MFS', 'fil', 'Setup Bayarin sa Merchant');--Merc
 SELECT core.create_menu_locale('RW', 'fil', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fr/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/fr/language.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
@@ -13503,8 +7620,8 @@ SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3012', 'Ma
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3013', 'Référentiel de trésorerie non valide.');--Invalid cash repository.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3050', 'Partie non valide.');--Invalid party.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3051', 'Élément non valide.');--Invalid item.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3052', 'Unité non valide.');--Invalid unit.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3053', 'Unité non valide ou incompatible.');--Invalid or incompatible unit.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3052', 'unité non valide.');--Invalid unit.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3053', 'unité non valide ou incompatible.');--Invalid or incompatible unit.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3054', 'L''unité de commande n''est pas compatible avec l''unité de base.');--The reorder unit is incompatible with the base unit.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3055', 'Taux de change non valide.');--Invalid exchange rate.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3101', 'ID de connexion non valide.');--Invalid LoginId.
@@ -13513,7 +7630,7 @@ SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3201', 'In
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3202', 'Incompatibilité de formulaire fiscal.');--Tax form mismatch.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3301', 'Quantité non valide.');--Invalid quantity.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3302', 'Id de transaction non valide.');--Invalid transaction id.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3501', 'L''argument account_id colonne ne peut pas être null.');--The column account_id cannot be null.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P3501', 'l''argument account_id colonne ne peut pas être null.');--The column account_id cannot be null.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P4010', 'Taux de change entre les monnaies n''a pas été trouvée.');--Exchange rate between the currencies was not found.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P4020', 'Cet item n''est pas associé à cette transaction.');--This item is not associated with this transaction.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P4030', 'Aucune politique de vérification trouvé pour cet utilisateur.');--No verification policy found for this user.
@@ -13536,8 +7653,8 @@ SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5110', 'Vo
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5111', 'Information de transaction bancaire non valide fournie.');--Invalid bank transaction information provided.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5112', 'Informations de carte de paiement non valide.');--Invalid payment card information.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5113', 'Pas pu trouver un compte pour la validation des frais de taxe marchand.');--Could not find an account to post merchant fee expenses.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5201', 'Une écriture d''ajustement des stocks ne peut pas contenir débit article (s).');--A stock adjustment entry can not contain debit item(s).
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5202', 'Un élément peut apparaître qu''une seule fois dans un magasin.');--An item can appear only once in a store.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5201', 'une écriture d''ajustement des stocks ne peut pas contenir débit article (s).');--A stock adjustment entry can not contain debit item(s).
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5202', 'un élément peut apparaître qu''une seule fois dans un magasin.');--An item can appear only once in a store.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5203', 'La quantité retournée ne peut pas être supérieure à la quantité réelle.');--The returned quantity cannot be greater than actual quantity.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5204', 'La quantité retournée ne peut pas être supérieure à la quantité réelle.');--The returned amount cannot be greater than actual amount.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P5205', 'Vous ne pouvez pas fournir plus d''un magasin pour cette transaction.');--You cannot provide more than one store for this transaction.
@@ -13561,18 +7678,18 @@ SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8501', 'Il
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8502', 'Ne peut pas mettre à jour la colonne.');--Cannot update column.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8990', 'Vous n''êtes pas autorisé à modifier les comptes système.');--You are not allowed to change system accounts.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8991', 'Vous n''êtes pas autorisé à ajouter des comptes système.');--You are not allowed to add system accounts.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8992', 'Un utilisateur sys ne peut pas avoir un mot de passe.');--A sys user cannot have a password.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9001', 'L''accès est refusé.');--Access is denied.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9010', 'L''accès est refusé. Vous n''êtes pas autorisé à poster cette transaction.');--Access is denied. You are not authorized to post this transaction.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9011', 'L''accès est refusé. Valeurs non valides fournis.');--Access is denied. Invalid values supplied.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9012', 'L''accès est refusé ! Une transaction d''ajustement des stocks ne peuvent pas références à plusieurs branches.');--Access is denied! A stock adjustment transaction cannot references multiple branches.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9013', 'L''accès est refusé ! Une transaction journal stock ne peut pas références à plusieurs branches.');--Access is denied! A stock journal transaction cannot references multiple branches.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9014', 'L''accès est refusé. Vous ne pouvez pas vérifier une transaction d''un autre bureau.');--Access is denied. You cannot verify a transaction of another office.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9015', 'L''accès est refusé. Vous ne pouvez pas vérifier passé ou futuer date de transaction.');--Access is denied. You cannot verify past or futuer dated transaction.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9016', 'L''accès est refusé. Vous n '' t ont le droit de vérifier la transaction.');--Access is denied. You don''t have the right to verify the transaction.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9017', 'L''accès est refusé. Vous n '' t ont le droit de se retirer de la transaction.');--Access is denied. You don''t have the right to withdraw the transaction.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P8992', 'un utilisateur sys ne peut pas avoir un mot de passe.');--A sys user cannot have a password.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9001', 'l''accès est refusé.');--Access is denied.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9010', 'l''accès est refusé. Vous n''êtes pas autorisé à poster cette transaction.');--Access is denied. You are not authorized to post this transaction.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9011', 'l''accès est refusé. Valeurs non valides fournis.');--Access is denied. Invalid values supplied.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9012', 'l''accès est refusé ! Une transaction d''ajustement des stocks ne peuvent pas références à plusieurs branches.');--Access is denied! A stock adjustment transaction cannot references multiple branches.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9013', 'l''accès est refusé ! Une transaction journal stock ne peut pas références à plusieurs branches.');--Access is denied! A stock journal transaction cannot references multiple branches.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9014', 'l''accès est refusé. Vous ne pouvez pas vérifier une transaction d''un autre bureau.');--Access is denied. You cannot verify a transaction of another office.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9015', 'l''accès est refusé. Vous ne pouvez pas vérifier passé ou futuer date de transaction.');--Access is denied. You cannot verify past or futuer dated transaction.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9016', 'l''accès est refusé. Vous n '' t ont le droit de vérifier la transaction.');--Access is denied. You don''t have the right to verify the transaction.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9017', 'l''accès est refusé. Vous n '' t ont le droit de se retirer de la transaction.');--Access is denied. You don''t have the right to withdraw the transaction.
 SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9201', 'Accès est refusé. Vous ne peut pas mettre à jour le transaction_details » table ».');--Acess is denied. You cannot update the "transaction_details" table.
-SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9250', 'L''accès est refusé. Cette transaction a été rejetée par l''administrateur.');--Access is denied. This transaction was rejected by administrator.
+SELECT * FROM localization.add_localized_resource('DbErrors', 'fr', 'P9250', 'l''accès est refusé. Cette transaction a été rejetée par l''administrateur.');--Access is denied. This transaction was rejected by administrator.
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'actions', 'Actions');--Actions
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'amount', 'Montant');--Amount
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'currency', 'Devise');--Currency
@@ -13584,11 +7701,11 @@ SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'party', '
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'reference_number', 'Numéro de référence');--Reference Number
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'statement_reference', 'Référence de l''instruction');--Statement Reference
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'transaction_ts', 'Horodatage de la transaction');--Transaction Timestamp
-SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'user', 'Utilisateur');--User
+SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'user', 'utilisateur');--User
 SELECT * FROM localization.add_localized_resource('DbResource', 'fr', 'value_date', 'Date de valeur');--Value Date
 SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'BothSidesCannotHaveValue', 'Débit et crédit ne peut pas avoir de valeurs.');--Both debit and credit cannot have values.
 SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'CannotDetermineAppDirectoryPath', 'Impossible de déterminer l''application chemin du répertoire.');--Cannot determine application directory path.
-SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'CannotDetermineFileFromDownloadUrl', 'Impossible de déterminer le nom de fichier dans l''URL de téléchargement.');--Cannot determine filename from the download URL.
+SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'CannotDetermineFileFromDownloadUrl', 'Impossible de déterminer le nom de fichier dans l''uRL de téléchargement.');--Cannot determine filename from the download URL.
 SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'CompoundUnitOfMeasureErrorMessage', 'Id de l''unité de base et les id d''unité de comparaison ne peut pas être mêmes.');--Base unit id and compare unit id cannot be same.
 SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'InsufficientStockWarning', 'Seulement {0} {1} de {2} laissé en stock.');--Only {0} {1} of {2} left in stock.
 SELECT * FROM localization.add_localized_resource('Errors', 'fr', 'InvalidFileLocation', 'Lieu de fichier non valide.');--Invalid file location.
@@ -13613,15 +7730,16 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateCashRep
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateCountySalesTaxDescription', 'Comté taxe de vente est la taxe à la consommation directe imposée par votre gouvernement du comté lorsque vous faites l''achat ou de vente.');--County sales tax is the direct consumption tax imposed by your county government when you make purchase or sales.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateFiscalYearDescription', 'Exercice est une période comptable de 12 mois, utilisée pour préparer les états financiers.');--Fiscal year is an accounting period of 12 months, used to prepare financial statements.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateFrequenciesDescription', 'L''exercice est divisé en 12 fréquences, classés comme mois, trimestres, la moitié budgétaire, et l''exercice.');--The fiscal year is further divided into 12 frequencies, categorized as months, quarters, fiscal half, and fiscal year.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateItemGroupsDescription', 'Un groupe d''articles vous permet de gérer les articles en stock semblables en groupes significatifs et catégories.');--An item group allows you to manage similar inventory items into meaningful groups and categories.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateItemGroupsDescription', 'un groupe d''articles vous permet de gérer les articles en stock semblables en groupes significatifs et catégories.');--An item group allows you to manage similar inventory items into meaningful groups and categories.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateItemOrServiceDescription', 'Les articles en stock peuvent se référer à des produits ou services stockables nonstockable que vous achetez et / ou de vendre.');--Inventory items may refer to the stockable products or nonstockable services that you buy and/or sell.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreatePartiesDescription', 'Le terme «partie» désigne collectivement client, un fournisseur ou un agent vous avez affaire avec.');--The term "party" collectively refers to customer, supplier, or agent you have business with.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateSalesTaxFormDescription', 'Sous forme de taxe de vente est une combinaison de diverses entités, notamment fiscale de l''État, l''impôt sur le comté, exemption, etc.');--Sales tax form is a combination of various entities such as State Tax, County Tax, Exemption, etc.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateSalespersonsDescription', 'Vendeurs sont les gars de vente qui vendent vos produits et apporter des affaires à votre entreprise.');--Salespersons are the sales guys who sell your products and bring business to your company.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateShippingCompanyDescription', 'Les compagnies maritimes transfèrent les marchandises par terre, mer, air et / ou à vos clients.');--Shipping companies transfer the goods through land, sea, and/or air to your customers.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateStateDescription', 'Créer une liste d''États où vos employés, clients et fournisseurs sont.');--Create a list of states where your employees, customers, and suppliers are.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateStateSalesTaxDescription', 'La taxe de vente de l''État est la taxe à la consommation directe imposée par votre gouvernement de l''État lorsque vous faites l''achat ou de vente.');--State sales tax is the direct consumption tax imposed by your state government when you make purchase or sales.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateStoresDescription', 'Store est un endroit où vous conservez vos produits. Exemple: boutique, Go-bas, Warehouse.');--Store is a place where you keep your goods. Example: Shop, Go-down, Warehouse.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateTaxAuthorityDescription', 'L''autorité fiscale est l''organisme gouvernemental ou un organisme à qui vous produisez vos déclarations fiscales périodiques.');--Tax authority is the government body or agency to whom you file your periodic tax reports to.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateTaxAuthorityDescription', 'l''autorité fiscale est l''organisme gouvernemental ou un organisme à qui vous produisez vos déclarations fiscales périodiques.');--Tax authority is the government body or agency to whom you file your periodic tax reports to.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'CreateTaxMasterDescription', 'Maître d''impôt est une catégorie de regrouper vos impôts logiquement. Exemple: [Pays] Fiscalité.');--Tax master is a category to group your taxes logically. Example: [Country] Taxation.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'DatabaseBackupSuccessful', 'La sauvegarde a réussi.');--The database backup was successful.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'DateFormatYYYYMMDD', 'AAAA-M-JJ');--yyyy-mm-dd
@@ -13635,7 +7753,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'DownloadSucce
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'DownloadingUpdateFrom', 'Téléchargement mise à jour à partir de {0}.');--Downloading update from {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'EODBegunSaveYourWork', 'Veuillez fermer cette fenêtre et enregistrez votre travail actuel avant vous sera signé hors tension automatiquement.');--Please close this window and save your existing work before you will be signed off automatically.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'EmailBody', '<h2>Salut,</h2> <p>S''il vous plaît trouver le document ci-joint.</p> <p>Merci. < br / &gt; MixERP</p>');--<h2>Hi,</h2><p>Please find the attached document.</p><p>Thank you.<br />MixERP</p>
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'EmailSentConfirmation', 'Un courriel a été envoyé à {0}.');--An email was sent to {0}.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'EmailSentConfirmation', 'un courriel a été envoyé à {0}.');--An email was sent to {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'ExtractingDownloadedFile', 'Extraire le fichier téléchargé.');--Extracting the downloaded file.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'ExtractionCompleted', 'L''extraction terminée.');--Extraction completed.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'FlagLabel', 'Vous pouvez marquer cette transaction avec un drapeau, mais vous ne serez pas en mesure de voir les drapeaux créés par les utilisateurs.');--You can mark this transaction with a flag, however you will not be able to see the flags created by other users.
@@ -13643,7 +7761,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'FrequencySetu
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'GoToChecklistWindow', 'Accédez à la fenêtre Liste de vérification.');--Go to checklist window.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'GoToTop', 'Aller en haut.');--Go to top.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'InstanceIsUpToDate', 'Votre instance de MixERP est à jour.');--Your instance of MixERP is up to date.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'JustAMomentPlease', 'Un instant, s''il vous plaît !');--Just a moment, please!
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'JustAMomentPlease', 'un instant, s''il vous plaît !');--Just a moment, please!
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'MenuAccessPolicyDescription', 'La politique d''accès au menu vous permet de définir la permission pour un utilisateur d''article (s) du menu d''accès.');--Menu access policy enables you to define permission for a user to access menu item(s).
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NCashRepositoriesInThisOffice', 'Il ya {0} dépôts en espèces dans ce bureau.');--There are {0} cash repositories in this office.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NCountySalesTaxesDefined', '{0} taxes de vente de comté défini.');--{0} county sales taxes defined.
@@ -13655,6 +7773,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NSalesTaxForm
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NSalespersonsFound', '{0} vendeurs trouvés.');--{0} salespersons found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NShippersFound', '{0} expéditeurs trouvé.');--{0} shippers found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NStateSalesTaxesDefined', '{0} taxes de vente de l''Etat défini.');--{0} state sales taxes defined.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NStatesFound', 'États de {0} trouvés.');--{0} states found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NStoresInThisOffice', 'Il ya {0} magasins dans ce bureau.');--There are {0} stores in this office.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NTaxAuthoritiesFound', '{0} autorités fiscales ont trouvé.');--{0} tax authorities found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NTaxMasterFound', '{0} maître (s) d''impôt trouvé.');--{0} tax master(s) found.
@@ -13666,6 +7785,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoPartyFound'
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoSalesTaxFormDefined', 'Aucune forme de taxe de vente défini.');--No sales tax form defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoSalespersonFound', 'Aucun vendeur trouvé.');--No salesperson found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoShipperFound', 'Aucun expéditeur trouvé.');--No shipper found.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoStateFound', 'Aucun État trouvé.');--No state found.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoStateSalesTaxDefined', 'Aucune taxe de vente d''état défini.');--No state sales tax defined.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoStorePresent', 'Aucun magasin présente.');--No store present.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'NoSupplierFound', 'Aucun fournisseur trouvé.');--No supplier found.
@@ -13683,6 +7803,9 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'PercentageSym
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'PleaseSelectAFormFirst', 'S''il vous plaît sélectionner une forme première.');--Please select a form first.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'ReceiptEmailSubject', 'Reçu # {0} notification, {1}');--Receipt #{0} notification, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'ReleaseContainsNoUpdates', 'Ce communiqué ne contient pas de mise à jour.');--This release does not contain any update.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredField', 'Ce est un champ obligatoire.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldDetails', 'Les champs marqués d''un astérisque (*) sont obligatoires.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldIndicator', ' *');-- *
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RestoringDirectory', 'Répertoire Restauration: {0}.');--Restoring directory : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RestoringFile', 'Restauration du fichier: {0}.');--Restoring file : {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SMTPIsDisabled', 'SMTP est désactivé.');--SMTP is disabled.
@@ -13690,6 +7813,7 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SalesDelivery
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SalesOrderEmailSubject', 'Nous avons reçu votre PO # {0}, {1}');--We received your PO #{0}, {1}
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SalesQuotationAlreadyAccepted', 'Cette citation a été déjà acceptée sur {0}.');--This quotation was already accepted on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SalesQuotationEmailSubject', 'Citation # {0} de {1}');--Quotation #{0} from {1}
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SalesQuotationExpired', 'Cette citation a expiré le {0}.');--This quotation expired on {0}.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SelectAFlag', 'Sélectionnez un drapeau.');--Select a flag.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'SetupEmailDescription', 'La configuration de votre courrier sortant est désactivé. Configurez les paramètres SMTP pour envoyer des notifications par email à vos clients.');--Your outgoing email configuration is disabled. Configure the SMTP parameters for sending email notifications to your customers.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'TaskCompletedProgress', '{0} sur {1} tâches accomplies.');--{0} out of {1} tasks completed.
@@ -13707,11 +7831,11 @@ SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'TransactionSt
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'TransactionWithdrawalInformation', 'Lorsque vous retirez une transaction, il ne sera pas transmis au module de flux de travail. Cela signifie que vos transactions retirées sont rejetées et ne nécessitent aucune vérification supplémentaire. Toutefois, vous ne pourrez bonus cette opération plus tard.');--When you withdraw a transaction, it won't be forwarded to the workflow module. This means that your withdrawn transactions are rejected and require no further verification. However, you won't be able to unwithdraw this transaction later.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'TransactionWithdrawnDetails', 'Cette transaction a été retirée par {0} sur {1}. Motif: {2} "."');--This transaction was withdrawn by {0} on {1}. Reason: "{2}".
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'TransactionWithdrawnMessage', 'La transaction a été retirée avec succès. En outre, cette action aura une incidence sur l''ensemble des rapports diffusés sur, mais après {0} "."');--The transaction was withdrawn successfully. Moreover, this action will affect the all the reports produced on and after "{0}".
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'UpdateBackupMessage', 'Avant d''effectuer l''opération de mise à jour, s''il vous plaît assurez-vous que vous avez les dernières sauvegardes à portée de main.');--Before you perform the update operation, please make sure that you have latest backups handy.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'UpdateOperationCompletedSuccessfully', 'L''opération de mise à jour terminée avec succès.');--The update operation completed successfully.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'UploadLogo', 'Téléchargez logo.');--Upload logo.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'UploadLogoDescription', 'Téléchargez votre logo de bureau en format jpeg, gif, png, bmp ou. Ce logo sera affiché dans les rapports et lettres.');--Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'UserGreeting', 'Salut {0}!');--Hi {0}!
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'updateBackupMessage', 'Avant d''effectuer l''opération de mise à jour, s''il vous plaît assurez-vous que vous avez les dernières sauvegardes à portée de main.');--Before you perform the update operation, please make sure that you have latest backups handy.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'updateOperationCompletedSuccessfully', 'l''opération de mise à jour terminée avec succès.');--The update operation completed successfully.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'uploadLogo', 'Téléchargez logo.');--Upload logo.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'uploadLogoDescription', 'Téléchargez votre logo de bureau en format jpeg, gif, png, bmp ou. Ce logo sera affiché dans les rapports et lettres.');--Upload your office logo in jpeg, gif, png, or bmp format. This logo will be displayed in reports and letters.
+SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'userGreeting', 'Salut {0}!');--Hi {0}!
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'VoucherVerificationPolicyDescription', 'Politiques de vérification de bon Assisgn aux administrateurs pour approuver ou de rejeter les transactions.');--Assisgn voucher verification policies to administrators for approving or rejecting transactions.
 SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'YourPasswordWasChanged', 'Votre mot de passe a été changé.');--Your password was changed.
 SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'AreYouSure', 'Es-tu sûr?');--Are you sure?
@@ -13725,7 +7849,7 @@ SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'EODRoutineT
 SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'EODTransactionPosting', 'Lorsque vous effectuez l''opération EOD pour une date particulière, aucune transaction à cette date ou avant peut être modifié, modifié ou supprimé.');--When you perform EOD operation for a particular date, no transaction on that date or before can be altered, changed, or deleted.
 SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'InvalidFile', 'Fichier non valide!');--Invalid file!
 SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'TempDirectoryNullError', 'Vous ne pouvez pas créer une image lorsque le répertoire temp est nulle.');--Cannot create an image when the temp directory is null.
-SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'UploadFilesDeleted', 'Les fichiers téléchargés ont été supprimés avec succès.');--The uploaded files were successfully deleted.
+SELECT * FROM localization.add_localized_resource('Messages', 'fr', 'uploadFilesDeleted', 'Les fichiers téléchargés ont été supprimés avec succès.');--The uploaded files were successfully deleted.
 SELECT * FROM localization.add_localized_resource('Questions', 'fr', 'AreYouSure', 'Es-tu sûr?');--Are you sure?
 SELECT * FROM localization.add_localized_resource('Questions', 'fr', 'CannotAccessAccount', 'Impossible d''accéder à votre compte?');--Cannot access your account?
 SELECT * FROM localization.add_localized_resource('Questions', 'fr', 'ConfirmAnalyze', 'Ce sera verrouiller l''accès de base de données client lors de l''exécution. Etes-vous sûr que vous voulez exécuter cette action en ce moment?');--This will lock client database access during execution. Are you sure you want to execute this action right now?
@@ -13772,10 +7896,11 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bank_a
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bank_branch', 'Direction de la Banque');--Bank Branch
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bank_contact_number', 'Banque Numéro de contact');--Bank Contact Number
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bank_name', 'Nom de banque');--Bank Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'base_unit_id', 'Unité de base Id');--Base Unit Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'base_unit_id', 'unité de base Id');--Base Unit Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'base_unit_name', 'Nom de l''unité de base');--Base Unit Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'based_on_shipping_address', 'Basé sur l''adresse de livraison');--Based On Shipping Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bonus_rate', 'À taux bonifié');--Bonus Rate
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bonus_slab', 'Dalle de bonus');--Bonus Slab
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bonus_slab_code', 'Code Bonus Slab');--Bonus Slab Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bonus_slab_detail_id', 'Bonus Slab Détail Id');--Bonus Slab Detail Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'bonus_slab_details_amounts_chk', 'Le AmountTo de terrain "doit être supérieure à" AmountFrom "."');--The field "AmountTo" must be greater than "AmountFrom".
@@ -13833,14 +7958,14 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compar
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item', 'Composé article');--Compound Item
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_code', 'Composé Code de l''article');--Compound Item Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_detail_id', 'Détail de l''article composé Id');--Compound Item Detail Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_details_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_details_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_id', 'Point composé Id');--Compound Item Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_item_name', 'Composé Nom de l''article');--Compound Item Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_unit_id', 'Composé Unité Id');--Compound Unit Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compound_units_chk', 'L''ID ne peut pas comparer id même que de l''unité de l''unité de base.');--The base unit id cannot same as compare unit id.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'compounding_frequency', 'Fréquence Aggravant');--Compounding Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'confidential', 'Confidentiel');--Confidential
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'configuration_name', 'Nom de la configuration');--ConfigurationName
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'configuration_name', 'Nom de la configuration');--Configuration Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'contact_address_line_1', 'Coordonnées Adresse Ligne 1');--Contact Address Line 1
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'contact_address_line_2', 'Coordonnées Adresse Ligne 2');--Contact Address Line 2
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'contact_cell', 'Contactez cellulaire');--Contact Cell
@@ -13885,7 +8010,9 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'curren
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'customer_pays_fee', 'Le client paie Fee');--Customer Pays Fee
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'date_of_birth', 'Date De Naissance');--Date Of Birth
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'debit', 'Débit');--Debit
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'default_cash_account', 'Compte de caisse par défaut');--Default Cash Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'default_cash_account_id', 'Par défaut Compte Espèces Id');--Default Cash Account Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'default_cash_repository', 'Référentiel par défaut de la trésorerie');--Default Cash Repository
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'default_cash_repository_id', 'Par défaut trésorerie Repository Id');--Default Cash Repository Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'department_code', 'Code de département');--Department Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'department_id', 'Département Id');--Department Id
@@ -13909,7 +8036,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'exchan
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'exclude_from_purchase', 'Exclure de Achat');--Exclude From Purchase
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'exclude_from_sales', 'Exclure de ventes');--Exclude From Sales
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'external_code', 'Le code externe');--External Code
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'factory_address', 'Usine Adresse');--Factory Address
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'factory_address', 'usine Adresse');--Factory Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'fax', 'Fax');--Fax
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'first_name', 'Prénom');--First Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'fiscal_year_code', 'Année fiscale code');--Fiscal Year Code
@@ -13926,8 +8053,8 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'freque
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'frequency_setup_code', 'Code Configuration de fréquence');--Frequency Setup Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'frequency_setup_id', 'Configuration de fréquence Id');--Frequency Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'from_days', 'De Jours');--From Days
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'from_display_name', 'FromDisplayName');--FromDisplayName
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'from_email_address', 'FromEmailAddress');--FromEmailAddress
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'from_display_name', 'FromDisplayName');--From Display Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'from_email_address', 'FromEmailAddress');--From Email Address
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'full_name', 'Nom Complet');--Full Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'gl_head', 'General Ledger Head');--GL Head
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'gl_verification_limit', 'Limite General Ledger Vérification');--Gl Verification Limit
@@ -13958,6 +8085,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_emp
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_exempt', 'Est exonérée');--Is Exempt
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_exemption', 'Est Exemption');--Is Exemption
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_flat_amount', 'Montant est plat');--Is Flat Amount
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_frequency', 'Est la fréquence');--Is Frequency
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_merchant_account', 'Est compte marchand');--Is Merchant Account
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_party', 'Est Parti');--Is Party
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_purchase', 'Est-Achat');--Is Purchase
@@ -13971,16 +8099,16 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'is_vat
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item', 'Article');--Item
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_code', 'Code de l''article');--Item Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_cost_price_id', 'Coût de l''article Prix Id');--Item Cost Price Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_cost_prices_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_cost_prices_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_group', 'Groupe de l''article');--Item Group
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_group_code', 'Point Code de groupe');--Item Group Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_group_id', 'Point Group Id');--Item Group Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_group_name', 'Point Nom du groupe');--Item Group Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_id', 'Item Id');--Item Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_name', 'Nom de l''article');--Item Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_opening_inventory_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_opening_inventory_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_selling_price_id', 'Item Prix de vente Id');--Item Selling Price Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_selling_prices_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_selling_prices_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_type_code', 'Type Code article');--Item Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_type_id', 'Type d''élément Id');--Item Type Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'item_type_name', 'Article Type Nom');--Item Type Name
@@ -14012,7 +8140,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'length
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'login_date_time', 'Connexion Date Heure');--Login Date Time
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'login_id', 'Identifiant De Connexion');--Login Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'logo_file', 'Logo Fichier');--Logo File
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'machinable', 'Usinables');--Machinable
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'machinable', 'usinables');--Machinable
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'maintain_stock', 'Maintenir Stock');--Maintain Stock
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'maintained_by_user_id', 'Maintenu par utilisateur Id');--Maintained By User Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'maximum_credit_amount', 'Montant maximal de crédit');--Maximum Credit Amount
@@ -14022,7 +8150,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'mercha
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'merchant_fee_setup_id', 'Configuration de frais de Merchant Id');--Merchant Fee Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'middle_name', 'Deuxième Prénom');--Middle Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'nick_name', 'Nom Nick');--Nick Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'non_gl_stock_details_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'non_gl_stock_details_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'normally_debit', 'Normalement Débit');--Normally Debit
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'office', 'Bureau');--Office
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'office_code', 'Code de bureau');--Office Code
@@ -14090,7 +8218,10 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'purcha
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'purchase_verification_limit', 'Limite d''achat de vérification');--Purchase Verification Limit
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'quantity', 'Quantité');--Quantity
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'rate', 'Taux');--Rate
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurrence_type', 'Type de récurrence');--Recurrence Type
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurrence_type_code', 'Code de Type de récurrence');--Recurrence Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurrence_type_id', 'Type de récurrence Id');--Recurrence Type Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurrence_type_name', 'Nom de Type de récurrence');--Recurrence Type Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurring_amount', 'Montant récurrent');--Recurring Amount
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurring_duration', 'Durée récurrent');--Recurring Duration
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'recurring_frequency', 'Fréquence récurrent');--Recurring Frequency
@@ -14107,7 +8238,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'regist
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'registration_number', 'Numéro d''enregistrement');--Registration Number
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'relationship_officer_name', 'Nom Relationship Officer');--Relationship Officer Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'relname', 'Nom de la relation');--Relation Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'remote_user', 'Utilisateur distant');--Remote User
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'remote_user', 'utilisateur distant');--Remote User
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'reorder_level', 'Réorganiser Niveau');--Reorder Level
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'reorder_quantity', 'Réorganiser Quantité');--Reorder Quantity
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'reorder_unit', 'Réorganiser Unité');--Reorder Unit
@@ -14148,10 +8279,12 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_tax_type_code', 'Ventes Type d''impôt code');--Sales Tax Type Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_tax_type_id', 'Type de la taxe de vente Id');--Sales Tax Type Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_tax_type_name', 'Ventes Type d''impôt Nom');--Sales Tax Type Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_team', 'Équipe de vente');--Sales Team
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_team_code', 'Ventes code équipe');--Sales Team Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_team_id', 'Équipe de vente Id');--Sales Team Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_team_name', 'Équipe des ventes Nom');--Sales Team Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sales_verification_limit', 'Limite de vérification des ventes');--Sales Verification Limit
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'salesperson', 'Vendeur');--Salesperson
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'salesperson_bonus_setup_id', 'Configuration de Bonus Salesperson Id');--Salesperson Bonus Setup Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'salesperson_code', 'Code de Salesperson');--Salesperson Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'salesperson_id', 'Id Salesperson');--Salesperson Id
@@ -14171,13 +8304,12 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'shippi
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'shipping_package_shape_id', 'Forme de l''emballage de livraison Id');--Shipping Package Shape Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'shipping_package_shape_name', 'Expédition Forme du package Nom');--Shipping Package Shape Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'slab_name', 'Slab Nom');--Slab Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smp_host', 'SMP hôte');--SmpHost
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_enable_ssl', 'Smtp activer SSL');--SmtpEnableSsl
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_enable_ssl', 'Smtp activer SSL');--SMTP Enable SSL
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_host', 'Hôte SMTP');--SMTP Host
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_id', 'SmtpId');--SmtpId
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_password', 'Mot de passe SMTP');--SmtpPassword
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_port', 'Port SMTP');--SmtpPort
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_username', 'SmtpUsername');--SmtpUsername
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_id', 'SmtpId');--SMTP Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_password', 'Mot de passe SMTP');--SMTP Password
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_port', 'Port SMTP');--SMTP Port
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'smtp_username', 'SmtpUsername');--SMTP Username
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'sst_number', 'Nombre SST');--SST Number
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'starts_from', 'Commence à partir de');--Starts From
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'state', 'État');--State
@@ -14189,7 +8321,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'state_
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'state_sales_tax_id', 'État taxe de vente Id');--State Sales Tax Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'state_sales_tax_name', 'Etat Nom de la taxe de vente');--State Sales Tax Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'statement_reference', 'Déclaration de référence');--Statement Reference
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'stock_details_unit_chk', 'Unité fourni invalide.');--Invalid unit provided.
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'stock_details_unit_chk', 'unité fourni invalide.');--Invalid unit provided.
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'store', 'Magasin');--Store
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'store_code', 'Code magasin');--Store Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'store_id', 'Id magasin');--Store Id
@@ -14209,7 +8341,7 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_au
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_authority_name', 'Nom administration fiscale');--Tax Authority Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_base_amount', 'Montant de l''impôt de base');--Tax Base Amount
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_base_amount_type_code', 'Type de base de l''impôt Montant code');--Tax Base Amount Type Code
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_base_amount_type_name', 'L''assiette fiscale Montant en Type de Nom');--Tax Base Amount Type Name
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_base_amount_type_name', 'l''assiette fiscale Montant en Type de Nom');--Tax Base Amount Type Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_code', 'Code Fiscal');--Tax Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_exempt_type', 'Type de l''impôt exonéré');--Tax Exempt Type
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tax_exempt_type_code', 'Exonérés de taxe Code de type');--Tax Exempt Type Code
@@ -14234,14 +8366,14 @@ SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'total_
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tran_code', 'Code de Tran');--Tran Code
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'tran_type', 'Type de Tran');--Tran Type
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'transaction_start_date', 'Transaction Date de début');--Transaction Start Date
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit', 'Unité');--Unit
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit_code', 'Unité Code');--Unit Code
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit_id', 'Unité Id');--Unit Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit', 'unité');--Unit
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit_code', 'unité Code');--Unit Code
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit_id', 'unité Id');--Unit Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'unit_name', 'Nom de l''unité');--Unit Name
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'url', 'Url');--Url
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'use_tax_collecting_account', 'Utilisez Account Tax Collecte');--Use Tax Collecting Account
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'use_tax_collecting_account_id', 'Utilisez impôt Collecte compte Id');--Use Tax Collecting Account Id
-SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'user_id', 'Id De L''Utilisateur');--User Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'url', 'url');--Url
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'use_tax_collecting_account', 'utilisez Account Tax Collecte');--Use Tax Collecting Account
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'use_tax_collecting_account_id', 'utilisez impôt Collecte compte Id');--Use Tax Collecting Account Id
+SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'user_id', 'Id De l''utilisateur');--User Id
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'user_name', 'Nom d''utilisateur');--User Name
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'vacuum_count', 'Nombre de vide');--Vacuum Count
 SELECT * FROM localization.add_localized_resource('ScrudResource', 'fr', 'valid_from', 'Valide À Partir De');--Valid From
@@ -14259,7 +8391,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AboutInitiali
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AboutYourOffice', 'A propos de votre bureau');--About Your Office
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Accept', 'Accepter');--Accept
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Access', 'Accès');--Access
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AccessIsDenied', 'L''accès est refusé.');--Access is denied.
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AccessIsDenied', 'l''accès est refusé.');--Access is denied.
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Account', 'Compte');--Account
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AccountId', 'Identifiant De Compte');--Account Id
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AccountMaster', 'Maître Compte');--Account Master
@@ -14288,7 +8420,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AmountInHomeC
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AnalyzeDatabase', 'Analyser la base de données');--Analyze Database
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AnalyzeDatabse', 'Analyser Databse');--Analyze Databse
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Approve', 'Approuver');--Approve
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ApproveThisTransaction', 'D''approuver cette opération');--Approve This Transaction
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ApproveThisTransaction', 'd''approuver cette opération');--Approve This Transaction
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ApprovedTransactions', 'Transactions approuvées');--Approved Transactions
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AreYouSure', 'Es-tu sûr?');--Are you sure?
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'AssignCashier', 'Attribuer Caissier');--Assign Cashier
@@ -14370,6 +8502,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateParties
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateSalesTaxForm', 'Créer un formulaire taxe de vente');--Create Sales Tax Form
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateSalespersons', 'Créer Vendeurs');--Create Salespersons
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateShippingCompany', 'Créer Shipping Company');--Create Shipping Company
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateState', 'Création d''état');--Create State
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateStateSalesTax', 'Créer la taxe de vente État');--Create State Sales Tax
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateStores', 'Créer Magasins');--Create Stores
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'CreateTaxAuthority', 'Créer administration fiscale');--Create Tax Authority
@@ -14437,7 +8570,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Download', 'T
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'DownloadSourceCode', 'Télécharger Source Code');--Download Source Code
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'DownloadingFrom', 'Téléchargement à partir de');--Downloading From
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'DownloadingUpdate', 'Mise à jour le téléchargement');--Downloading Update
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'DueDate', 'Date D''Échéance');--Due Date
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'DueDate', 'Date d''échéance');--Due Date
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'EODBegun', 'Fin du traitement Day Has Begun');--End of Day Processing Has Begun
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'EODConsole', 'EOD Console');--EOD Console
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ER', 'ER');--ER
@@ -14591,7 +8724,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewBookDate',
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewFiscalYear', 'Nouvel exercice');--New Fiscal Year
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewJournalEntry', 'Nouvelle entrée du journal');--New Journal Entry
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewPassword', 'Nouveau Mot De Passe');--New Password
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewReleaseAvailable', 'Une nouvelle version est disponible');--A New Release Is Available
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NewReleaseAvailable', 'une nouvelle version est disponible');--A New Release Is Available
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Next', 'Suivant');--Next
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NextPage', 'Page Suivante');--Next Page
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'No', 'Non');--No
@@ -14601,14 +8734,14 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'None', 'Aucun
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NormallyDebit', 'Normalement Débit');--Normally Debit
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'NothingSelected', 'Rien sélectionnée!');--Nothing selected!
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Notifications', 'Notifications');--Notifications
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OK', 'D''ACCORD');--OK
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OK', 'd''aCCORD');--OK
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Office', 'Bureau');--Office
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeCode', 'Code de bureau');--Office Code
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeInformation', 'Bureau d''information');--Office Information
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeLogo', 'Bureau Logo');--Office Logo
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeName', 'Nom Bureau');--Office Name
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeNickName', 'Nom Bureau Nick');--Office Nick Name
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeSetup', 'Installation d''Office');--Office Setup
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OfficeSetup', 'Installation d''office');--Office Setup
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OnlyNumbersAllowed', 'S''il vous plaît entrez un numéro valide.');--Please type a valid number.
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OpenExchangeRatesParameters', 'OpenExchangeRates Paramètres');--OpenExchangeRates Parameters
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'OpeningInventory', 'Inventaire d''ouverture');--Opening Inventory
@@ -14662,7 +8795,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ProfitBeforeT
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ProfitOrLoss', 'Bénéfice ou perte');--Profit or Loss
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Progress', 'Progrès');--Progress
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PublishedOn', 'Publié le');--Published On
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PurchaseInvoice', 'Facture D''Achat');--Purchase Invoice
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PurchaseInvoice', 'Facture d''achat');--Purchase Invoice
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PurchaseOrder', 'Bon De Commande');--Purchase Order
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PurchaseReturn', 'Achat retour');--Purchase Return
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'PurchaseType', 'Type d''achat');--Purchase Type
@@ -14700,9 +8833,10 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RemovingAppli
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderLevel', 'Réorganiser Niveau');--Reorder Level
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderQuantityAbbreviated', 'Réorganiser Quantité');--Reorder Qty
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ReorderUnitName', 'Nom Réorganiser Unité');--Reorder Unit Name
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredField', 'Ce est un champ obligatoire.');--This is a required field.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldDetails', 'Les champs marqués d''un astérisque (*) sont obligatoires.');--The fields marked with asterisk (*) are required.
-SELECT * FROM localization.add_localized_resource('Labels', 'fr', 'RequiredFieldIndicator', ' *');-- *
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Request', 'Demande');--Request
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredField', 'Ce est un champ obligatoire.');--This is a required field.
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredFieldDetails', 'Les champs marqués d''un astérisque (*) sont obligatoires.');--The fields marked with asterisk (*) are required.
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RequiredFieldIndicator', '*');-- *
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Reset', 'Réinitialiser');--Reset
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RestoringDirectories', 'Restauration Annuaires');--Restoring Directories
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'RestoringMigrationFiles', 'Restauration de fichiers Migration');--Restoring Migration Files
@@ -14745,6 +8879,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Saving', 'Éc
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'ScrudFactoryParameters', 'ScrudFactory Paramètres');--ScrudFactory Parameters
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Search', 'Recherche');--Search
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Select', 'Sélectionner');--Select
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'SelectApi', 'Sélectionnez API');--Select API
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'SelectCompany', 'Sélectionnez Société');--Select Company
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'SelectCustomer', 'Sélectionnez la clientèle');--Select Customer
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'SelectExpensesGL', 'Sélectionnez dépenses GL');--Select Expenses GL
@@ -14785,7 +8920,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StateSalesTax
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StateSalesTaxes', 'ventes de l''État impôts');--State Sales Taxes
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StatementOfCashFlows', 'État des flux de trésorerie');--Statement of Cash Flows
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StatementReference', 'Déclaration de référence');--Statement Reference
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'States', 'Unis');--States
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'States', 'unis');--States
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Status', 'Statut');--Status
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StockAdjustment', 'Stock d''ajustement');--Stock Adjustment
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'StockTransaction', 'Stock Transaction');--Stock Transaction
@@ -14846,27 +8981,28 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'TransferDetai
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'TrialBalance', 'Balance');--Trial Balance
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Tuesday', 'Mardi');--Tuesday
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Type', 'Type');--Type
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UncheckAll', 'Décocher tout');--Uncheck All
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Undo', 'Défaire');--Undo
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Unit', 'Unité');--Unit
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UnitId', 'Unité Id');--Unit Id
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UnitName', 'Nom de l''unité');--Unit Name
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UnitsOfMeasure', 'Unités de mesure');--Units of Measure
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UnknownError', 'L''opération a échoué en raison d''une erreur inconnue.');--Operation failed due to an unknown error.
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Update', 'Mettre à jour');--Update
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UpdateConsole', 'Mise à jour de la console');--Update Console
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UpdatedOn', 'Mis à jour le');--Updated On
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Upload', 'Télécharger');--Upload
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UploadAttachments', 'Télécharger des pièces jointes');--Upload Attachments
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UploadAttachmentsForThisTransaction', 'Télécharger des pièces jointes pour cette transaction');--Upload Attachments for This Transaction
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UploadLogo', 'Upload Logo');--Upload Logo
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Url', 'Url');--Url
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Use', 'Utilisation');--Use
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'User', 'Utilisateur');--User
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UserId', 'ID de l''utilisateur');--User Id
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'UserManagement', 'Gestion des utilisateurs');--User Management
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Username', 'Nom d''utilisateur');--Username
-SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Users', 'Utilisateurs');--Users
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'uncheckAll', 'Décocher tout');--Uncheck All
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'undo', 'Défaire');--Undo
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'unit', 'unité');--Unit
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'unitId', 'unité Id');--Unit Id
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'unitName', 'Nom de l''unité');--Unit Name
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'unitsOfMeasure', 'unités de mesure');--Units of Measure
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'unknownError', 'l''opération a échoué en raison d''une erreur inconnue.');--Operation failed due to an unknown error.
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'update', 'Mettre à jour');--Update
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'updateConsole', 'Mise à jour de la console');--Update Console
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'updatedExchangeRates', 'Mise à jour des taux de change');--Update Exchange Rates
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'updatedOn', 'Mis à jour le');--Updated On
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'upload', 'Télécharger');--Upload
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'uploadAttachments', 'Télécharger des pièces jointes');--Upload Attachments
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'uploadAttachmentsForThisTransaction', 'Télécharger des pièces jointes pour cette transaction');--Upload Attachments for This Transaction
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'uploadLogo', 'upload Logo');--Upload Logo
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'url', 'url');--Url
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'use', 'utilisation');--Use
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'user', 'utilisateur');--User
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'userId', 'ID de l''utilisateur');--User Id
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'userManagement', 'Gestion des utilisateurs');--User Management
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'username', 'Nom d''utilisateur');--Username
+SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'users', 'utilisateurs');--Users
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'VAT', 'TVA');--VAT
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'VATOrGST', 'TVA / TPS');--VAT/GST
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'VacuumDatabase', 'Base de données de vide');--Vacuum Database
@@ -14914,7 +9050,7 @@ SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Year', 'An');
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'Yes', 'Oui');--Yes
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'YourName', 'Ton nom');--Your Name
 SELECT * FROM localization.add_localized_resource('Titles', 'fr', 'YourOffice', 'Votre bureau');--Your Office
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'AccessIsDenied', 'L''accès est refusé.');--Access is denied.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'AccessIsDenied', 'l''accès est refusé.');--Access is denied.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'BackupDirectoryNotFound', 'Répertoire de sauvegarde n''a pas été trouvé.');--Backup directory was not found.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotCreateABackup', 'Désolé, ne peut pas créer une sauvegarde de base de données à ce moment.');--Sorry, cannot create a database backup at this time.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotCreateFlagTransactionTableNull', 'Vous ne pouvez pas créer ou mettre à jour drapeau. table de transaction n''a pas été fourni.');--Cannot create or update flag. Transaction table was not provided.
@@ -14922,9 +9058,9 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotCreat
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotMergeAlreadyMerged', 'Les opérations sélectionnées contiennent des éléments qui ont déjà été fusionnées. Veuillez réessayer.');--The selected transactions contain items which have already been merged. Please try again.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotMergeDifferentPartyTransaction', 'Impossible de fusionner les opérations des différentes parties en un seul lot. Veuillez réessayer.');--Cannot merge transactions of different parties into a single batch. Please try again.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotMergeIncompatibleTax', 'Impossible de fusionner les opérations ayant différents types d''impôts incompatibles. Veuillez réessayer.');--Cannot merge transactions having incompatible tax types. Please try again.
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotMergeUrlNull', 'Impossible de fusionner les opérations. L''URL de fusion n''a pas été fourni.');--Cannot merge transactions. The merge url was not provided.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotMergeUrlNull', 'Impossible de fusionner les opérations. l''uRL de fusion n''a pas été fourni.');--Cannot merge transactions. The merge url was not provided.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CannotSendEmailSMTPInvalid', 'Vous ne pouvez pas envoyer l''email. La configuration SMTP est invalide.');--Cannot send the email. The SMTP configuration is invalid.
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CashTransactionCannotContainBankInfo', 'Une transaction de trésorerie ne peut pas contenir les détails des transactions bancaires.');--A cash transaction cannot contain bank transaction details.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CashTransactionCannotContainBankInfo', 'une transaction de trésorerie ne peut pas contenir les détails des transactions bancaires.');--A cash transaction cannot contain bank transaction details.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CompareAmountErrorMessage', 'Le montant doit être supérieur au montant de.');--The amount to should be greater than the amount from.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'CompareDaysErrorMessage', 'De jours doit être inférieure à quelques jours.');--From days should be less than to days.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'ComparePriceErrorMessage', 'Prix ​​à partir devrait être inférieur au prix de.');--Price from should be less than price to.
@@ -14971,7 +9107,7 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidSubT
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidSubTranBookSalesPayment', 'Invalid Paiement SubTranBook de vente ""');--Invalid SubTranBook "Sales Payment"
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidSubTranBookSalesSuspense', 'SubTranBook valide ventes Suspense ""');--Invalid SubTranBook "Sales Suspense"
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidSubTranBookSalesTransfer', 'Invalid Transfert SubTranBook de vente ""');--Invalid SubTranBook "Sales Transfer"
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidUser', 'Utilisateur invalide.');--Invalid user.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'InvalidUser', 'utilisateur invalide.');--Invalid user.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'ItemErrorMessage', 'Vous devez sélectionner un objet ou d''un composé article id id.');--You have to select either item id or  compound item id.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'LateFeeErrorMessage', 'Numéro d''honoraires et la fin de l''affichage de la fréquence des frais id deux doivent être soit ou non sélectionnés.');--Late fee id and late fee posting frequency id both should be either selected or not.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'NegativeValueSupplied', 'Valeur négative fourni.');--Negative value supplied.
@@ -14986,21 +9122,20 @@ SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'PleaseEnter
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'RecurringAmountErrorMessage', 'Montant récurrent ne devrait pas être inférieur ou égal à 0.');--Recurring amount should not be less than or equal to 0.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'ReferencingSidesNotEqual', 'Les côtés de référencement sont pas égaux.');--The referencing sides are not equal.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'RestrictedTransactionMode', 'Cet établissement ne permet pas l''affichage de la transaction.');--This establishment does not allow transaction posting.
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'ReturnButtonUrlNull', 'Vous ne pouvez pas revenir cette entrée. L''URL de retour n''a pas été fourni.');--Cannot return this entry. The return url was not provided.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'ReturnButtonUrlNull', 'Vous ne pouvez pas revenir cette entrée. l''uRL de retour n''a pas été fourni.');--Cannot return this entry. The return url was not provided.
 SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'StartDateGreaterThanEndDate', 'La date de début ne peut pas être supérieure à la date de fin.');--The start date cannot be greater than end date.
-SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'UserIdOrPasswordIncorrect', 'ID utilisateur ou mot de passe incorrect.');--User id or password incorrect.
+SELECT * FROM localization.add_localized_resource('Warnings', 'fr', 'userIdOrPasswordIncorrect', 'ID utilisateur ou mot de passe incorrect.');--User id or password incorrect.
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/fr/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/fr/menus.sql --<--<--
 /********************************************************************************************************************************************************
 Contributors for this translation:
 Nubiancc https://github.com/nubiancc
 French   fr  Français
 ********************************************************************************************************************************************************/
-
 SELECT * FROM core.create_menu_locale('AS', 'fr', 'Relevé de compte');--Account Statement
 SELECT * FROM core.create_menu_locale('SAT', 'fr', 'Outils d''administration');--Admin Tools
 SELECT * FROM core.create_menu_locale('AGS', 'fr', 'Vieillissement des dalles');--Ageing Slabs
+SELECT * FROM core.create_menu_locale('ALLITMS', 'fr', 'Tous les articles');--All Items
 SELECT * FROM core.create_menu_locale('SAA', 'fr', 'API Stratégie d''accès');--Api Access Policy
 SELECT * FROM core.create_menu_locale('OTSAP', 'fr', 'Paramètres de rattachement');--Attachment Parameters
 SELECT * FROM core.create_menu_locale('SEAR', 'fr', 'Rapports d''audit');--Audit Reports
@@ -15081,8 +9216,8 @@ SELECT * FROM core.create_menu_locale('RFC', 'fr', 'Les recettes provenant de cl
 SELECT * FROM core.create_menu_locale('RIS', 'fr', 'Paramètres des factures récurrentes');--Recurring Invoice Setup
 SELECT * FROM core.create_menu_locale('RI', 'fr', 'Factures récurrentes');--Recurring Invoices
 SELECT * FROM core.create_menu_locale('RW', 'fr', 'Report Writer');--Report Writer
-SELECT * FROM core.create_menu_locale('IR', 'fr', 'Rapports');--Reports
 SELECT * FROM core.create_menu_locale('FIR', 'fr', 'Rapports');--Reports
+SELECT * FROM core.create_menu_locale('IR', 'fr', 'Rapports');--Reports
 SELECT * FROM core.create_menu_locale('RET', 'fr', 'Des Bénéfices Non Répartis');--Retained Earnings Statement
 SELECT * FROM core.create_menu_locale('SRM', 'fr', 'Gestion des rôles');--Role Management
 SELECT * FROM core.create_menu_locale('OTSSMTP', 'fr', 'Paramètres SMTP');--SMTP Parameters
@@ -15100,13 +9235,14 @@ SELECT * FROM core.create_menu_locale('STXT', 'fr', 'Types de taxe de vente');--
 SELECT * FROM core.create_menu_locale('STX', 'fr', 'Taxes de vente');--Sales Taxes
 SELECT * FROM core.create_menu_locale('SST', 'fr', 'Équipes de vente');--Sales Teams
 SELECT * FROM core.create_menu_locale('SAR-SBO', 'fr', 'Ventes de Bureau');--Sales by Office
+SELECT * FROM core.create_menu_locale('SPR', 'fr', 'Rapport Salesperson ');--Salesperson Report
 SELECT * FROM core.create_menu_locale('SSA', 'fr', 'Vendeurs/vendeuses');--Salespersons
 SELECT * FROM core.create_menu_locale('OTSSFP', 'fr', 'ScrudFactory Paramètres');--ScrudFactory Parameters
 SELECT * FROM core.create_menu_locale('ISP', 'fr', 'Prix de vente');--Selling Prices
 SELECT * FROM core.create_menu_locale('SET', 'fr', 'Paramètres');--Settings
 SELECT * FROM core.create_menu_locale('SSM', 'fr', 'Installation & entretien');--Setup & Maintenance
-SELECT * FROM core.create_menu_locale('FSM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
 SELECT * FROM core.create_menu_locale('ISM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
+SELECT * FROM core.create_menu_locale('FSM', 'fr', 'Le programme d''installation & entretien');--Setup & Maintenance
 SELECT * FROM core.create_menu_locale('SHI', 'fr', 'Informations de l''expéditeur');--Shipper Information
 SELECT * FROM core.create_menu_locale('PSA', 'fr', 'Adresses d''expédition');--Shipping Addresses
 SELECT * FROM core.create_menu_locale('STST', 'fr', 'État des Taxes de vente');--State Sales Taxes
@@ -15126,6 +9262,7 @@ SELECT * FROM core.create_menu_locale('BOTC', 'fr', 'Configuration de l''impôt'
 SELECT * FROM core.create_menu_locale('TXEXT', 'fr', 'Types exonérés de taxe');--Tax Exempt Types
 SELECT * FROM core.create_menu_locale('TXM', 'fr', 'Maître de l''impôt');--Tax Master
 SELECT * FROM core.create_menu_locale('SAR-TSI', 'fr', 'Haut de la page points de vente');--Top Selling Items
+SELECT * FROM core.create_menu_locale('TOPSUP', 'fr', 'supérieur fournisseurs');--Top Suppliers
 SELECT * FROM core.create_menu_locale('FTT', 'fr', 'Modèles de & de transactions');--Transactions & Templates
 SELECT * FROM core.create_menu_locale('TB', 'fr', 'Balance de vérification');--Trial Balance
 SELECT * FROM core.create_menu_locale('UOM', 'fr', 'Unités de mesure');--Units of Measure
@@ -15135,7 +9272,7 @@ SELECT * FROM core.create_menu_locale('FVV', 'fr', 'Vérification du bon');--Vou
 SELECT * FROM core.create_menu_locale('SVV', 'fr', 'Politique sur la vérification bon');--Voucher Verification Policy
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/id/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/id/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'id', 'DateMustBeGreaterThan', 'Tanggal tidak valid. Harus lebih besar dari "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'id', 'DateMustBeLessThan', 'Tanggal tidak valid. Harus kurang dari "{0}".');--Invalid date. Must be less than "{0}".
@@ -16351,7 +10488,7 @@ SELECT localization.add_localized_resource('Warnings', 'id', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'id', 'UserIdOrPasswordIncorrect', 'Identifier pengguna dan password yang salah.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/id/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/id/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'id', 'Slab bonus untuk Staf Penjualan');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'id', 'Lempengan Penuaan');--Ageing Slabs
@@ -16470,7 +10607,7 @@ SELECT core.create_menu_locale('MFS', 'id', 'Merchant Fee Pengaturan');--Merchan
 SELECT core.create_menu_locale('RW', 'id', 'laporan Penulis');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ja/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ja/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ja', 'DateMustBeGreaterThan', '無効な日付。よりも大きくなければなりません"{0}"。');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ja', 'DateMustBeLessThan', '無効な日付。未満でなければなりません"{0}"。');--Invalid date. Must be less than "{0}".
@@ -17686,7 +11823,7 @@ SELECT localization.add_localized_resource('Warnings', 'ja', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ja', 'UserIdOrPasswordIncorrect', 'ユーザ識別子またはパスワードが正しくない。');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ja/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ja/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'ja', '販売員のためのボーナススラブ');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'ja', '高齢スラブ');--Ageing Slabs
@@ -17805,7 +11942,7 @@ SELECT core.create_menu_locale('MFS', 'ja', '加盟店手数料の設定');--Mer
 SELECT core.create_menu_locale('RW', 'ja', '報告書作成');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ms/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ms/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ms', 'DateMustBeGreaterThan', 'Tarikh tidak sah. Mesti lebih besar daripada "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ms', 'DateMustBeLessThan', 'Tarikh tidak sah. Mesti kurang daripada "{0}".');--Invalid date. Must be less than "{0}".
@@ -19021,7 +13158,7 @@ SELECT localization.add_localized_resource('Warnings', 'ms', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ms', 'UserIdOrPasswordIncorrect', 'Pengecam pengguna atau kata laluan salah.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ms/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ms/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('CTST', 'ms', 'Daerah-daerah Jualan Cukai');--Counties Sales Taxes
 SELECT core.create_menu_locale('ABS', 'ms', 'Slab Bonus untuk jurujual');--Bonus Slab for Salespersons
@@ -19140,7 +13277,7 @@ SELECT core.create_menu_locale('MFS', 'ms', 'Bayaran Merchant Persediaan');--Mer
 SELECT core.create_menu_locale('RW', 'ms', 'Laporan Penulis');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/nl/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/nl/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'nl', 'DateMustBeGreaterThan', 'Ongeldige datum. Moet groter zijn dan "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'nl', 'DateMustBeLessThan', 'Ongeldige datum. Moet kleiner zijn dan "{0}".');--Invalid date. Must be less than "{0}".
@@ -20356,7 +14493,7 @@ SELECT localization.add_localized_resource('Warnings', 'nl', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'nl', 'UserIdOrPasswordIncorrect', 'Gebruiker Identifier of wachtwoord onjuist.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/nl/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/nl/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'nl', 'Bonus Slab voor Verkopers');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'nl', 'Vergrijzing Platen');--Ageing Slabs
@@ -20475,7 +14612,7 @@ SELECT core.create_menu_locale('MFS', 'nl', 'Merchant Fee Setup');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'nl', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/pt/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/pt/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'pt', 'DateMustBeGreaterThan', 'Data inválida. Deve ser maior que "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'pt', 'DateMustBeLessThan', 'Data inválida. Deve ser inferior a "{0}".');--Invalid date. Must be less than "{0}".
@@ -21691,7 +15828,7 @@ SELECT localization.add_localized_resource('Warnings', 'pt', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'pt', 'UserIdOrPasswordIncorrect', 'Identificador de usuário ou senha incorreta.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/pt/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/pt/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'pt', 'Slab Bonus para vendedores');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'pt', 'Lajes Envelhecimento');--Ageing Slabs
@@ -21810,7 +15947,7 @@ SELECT core.create_menu_locale('MFS', 'pt', 'Setup Fee Merchant');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'pt', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ru/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ru/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'ru', 'DateMustBeGreaterThan', 'Неправильная дата. Должно быть больше, чем "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'ru', 'DateMustBeLessThan', 'Неправильная дата. Должна быть меньше, чем "{0}".');--Invalid date. Must be less than "{0}".
@@ -23026,7 +17163,7 @@ SELECT localization.add_localized_resource('Warnings', 'ru', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'ru', 'UserIdOrPasswordIncorrect', 'Идентификатор пользователя или пароль неверен.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/ru/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/ru/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'ru', 'Бонус Плиты для продавцов');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'ru', 'Старение плиты');--Ageing Slabs
@@ -23145,7 +17282,7 @@ SELECT core.create_menu_locale('MFS', 'ru', 'Торговец Стоимость
 SELECT core.create_menu_locale('RW', 'ru', 'генератор отчетов');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/sv/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/sv/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'sv', 'DateMustBeGreaterThan', 'ogiltigt datum. Måste vara större än "{0}".');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'sv', 'DateMustBeLessThan', 'Ogiltigt datum. Måste vara mindre än "{0}".');--Invalid date. Must be less than "{0}".
@@ -24361,7 +18498,7 @@ SELECT localization.add_localized_resource('Warnings', 'sv', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'sv', 'UserIdOrPasswordIncorrect', 'Användar identifierare eller lösenord felaktigt.');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/sv/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/sv/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'sv', 'Bonus Slab för Försäljare');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'sv', 'åldrande Plattor');--Ageing Slabs
@@ -24480,7 +18617,7 @@ SELECT core.create_menu_locale('MFS', 'sv', 'Merchant Fee Setup');--Merchant Fee
 SELECT core.create_menu_locale('RW', 'sv', 'Report Writer');--Report Writer
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/zh/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/zh/language.sql --<--<--
 --Translated using a tool
 SELECT localization.add_localized_resource('CommonResource', 'zh', 'DateMustBeGreaterThan', '无效的日期。必须大于“{0}”。');--Invalid date. Must be greater than "{0}".
 SELECT localization.add_localized_resource('CommonResource', 'zh', 'DateMustBeLessThan', '无效的日期。必须小于“{0}”。');--Invalid date. Must be less than "{0}".
@@ -25696,7 +19833,7 @@ SELECT localization.add_localized_resource('Warnings', 'zh', 'ReturnButtonUrlNul
 SELECT localization.add_localized_resource('Warnings', 'zh', 'UserIdOrPasswordIncorrect', '用户标识符或密码不正确。');--User id or password incorrect.
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/04.Localization/zh/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/04.Localization/zh/menus.sql --<--<--
 --Translated using a tool
 SELECT core.create_menu_locale('ABS', 'zh', '奖金为平板销售人员');--Bonus Slab for Salespersons
 SELECT core.create_menu_locale('AGS', 'zh', '老龄板坯');--Ageing Slabs
@@ -25813,1278 +19950,3 @@ SELECT core.create_menu_locale('SAA', 'zh', 'API访问策略');--API Access Poli
 SELECT core.create_menu_locale('PAC', 'zh', '支付卡');--Payment Cards
 SELECT core.create_menu_locale('MFS', 'zh', '商家安装费');--Merchant Fee Setup
 SELECT core.create_menu_locale('RW', 'zh', '报表生成器');--Report Writer
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.attachment_factory.sql --<--<--
-DROP VIEW IF EXISTS config.attachment_factory_scrud_view;
-
-CREATE VIEW config.attachment_factory_scrud_view
-AS
-SELECT 
-	key,
-	value
-FROM
-config.attachment_factory;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.currency_layer_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.currency_layer_scrud_view;
-
-CREATE VIEW config.currency_layer_scrud_view
-AS
-SELECT 
-	key,
-	value,
-	description
-FROM
-config.currency_layer;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.db_parameter.sql --<--<--
-DROP VIEW IF EXISTS config.db_parameter_scrud_view;
-
-CREATE VIEW config.db_parameter_scrud_view
-AS
-SELECT 
-	key,
-	value
-FROM
-config.db_parameters;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.mixerp_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.mixerp_scrud_view;
-
-CREATE VIEW config.mixerp_scrud_view
-AS
-SELECT 
-	key,
-	value,
-	description
-FROM
-config.mixerp;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.open_exchange_rate_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.open_exchange_rate_scrud_view;
-
-CREATE VIEW config.open_exchange_rate_scrud_view
-AS
-SELECT 
-	key,
-	value,
-	description
-FROM
-config.open_exchange_rates;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.scrud_factory_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.scrud_factory_scrud_view;
-
-CREATE VIEW config.scrud_factory_scrud_view
-AS
-SELECT 
-	key,
-	value	
-FROM
-config.scrud_factory;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/config/config.switch_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS config.switch_scrud_view;
-
-CREATE VIEW config.switch_scrud_view
-AS
-SELECT 
-	key,
-	value	
-FROM
-config.switches;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/1.core.bank_account_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.bank_account_scrud_view CASCADE;
-
-CREATE OR REPLACE VIEW core.bank_account_scrud_view
-AS
-SELECT
-    account_id,
-    office.users.user_name AS maintained_by_user_id,
-    office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
-    bank_name,
-    bank_branch,
-    bank_contact_number,
-    bank_address,
-    bank_account_number,
-    bank_account_type,
-    relationship_officer_name,
-    is_merchant_account
-FROM core.bank_accounts
-INNER JOIN office.users
-ON core.bank_accounts.maintained_by_user_id = office.users.user_id
-INNER JOIN office.offices
-ON core.bank_accounts.office_id = office.offices.office_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.bonus_slab_detail_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.bonus_slab_detail_scrud_view;
-
-CREATE VIEW core.bonus_slab_detail_scrud_view
-AS
-SELECT
-    core.bonus_slab_details.bonus_slab_detail_id,
-    core.bonus_slabs.bonus_slab_code || ' (' || core.bonus_slabs.bonus_slab_name || ')' AS bonus_slab,
-    core.bonus_slab_details.amount_from,
-    core.bonus_slab_details.amount_to,
-    core.bonus_slab_details.bonus_rate
-FROM
-    core.bonus_slab_details
-INNER JOIN core.bonus_slabs
-ON core.bonus_slab_details.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.bonus_slab_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.bonus_slab_scrud_view;
-
-CREATE VIEW core.bonus_slab_scrud_view
-AS
-SELECT
-    core.bonus_slabs.bonus_slab_id,
-    core.bonus_slabs.bonus_slab_code,
-    core.bonus_slabs.bonus_slab_name,
-    core.bonus_slabs.effective_from,
-    core.bonus_slabs.ends_on,
-    core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name || ')' AS checking_frequency,
-    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
-    core.bonus_slabs.statement_reference
-    
-FROM
-core.bonus_slabs
-INNER JOIN core.frequencies
-ON core.bonus_slabs.checking_frequency_id = core.frequencies.frequency_id
-INNER JOIN core.accounts
-ON core.bonus_slabs.account_id = core.accounts.account_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.frequency_setup_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.frequency_setup_scrud_view;
-
-CREATE VIEW core.frequency_setup_scrud_view
-AS
-SELECT 
-    frequency_setup_id,
-    frequency_setup_code,
-    fiscal_year_code,
-    value_date,
-    core.get_frequency_code_by_frequency_id(frequency_id) AS frequency_code
-FROM core.frequency_setups;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.item_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.item_scrud_view;
-
-CREATE VIEW core.item_scrud_view
-AS
-SELECT 
-        item_id,
-        item_code,
-        item_name,
-        item_group_code || ' (' || item_group_name || ')' AS item_group,
-        maintain_stock,
-        brand_code || ' (' || brand_name || ')' AS brand,
-        party_code || ' (' || party_name || ')' AS preferred_supplier,
-        lead_time_in_days,
-        weight_in_grams,
-        width_in_centimeters,
-        height_in_centimeters,
-        length_in_centimeters,
-        machinable,
-        shipping_mail_type_code || ' (' || shipping_mail_type_name || ')' AS preferred_shipping_mail_type,
-        shipping_package_shape_code || ' (' || shipping_package_shape_name || ')' AS preferred_shipping_package_shape,
-        core.units.unit_code || ' (' || core.units.unit_name || ')' AS unit,
-        hot_item,
-        cost_price,
-        selling_price,
-        selling_price_includes_tax,
-        sales_tax_code || ' (' || sales_tax_name || ')' AS sales_tax,
-        reorder_unit.unit_code || ' (' || reorder_unit.unit_name || ')' AS reorder_unit,
-        reorder_level,
-        reorder_quantity
-FROM core.items
-INNER JOIN core.item_groups
-ON core.items.item_group_id = core.item_groups.item_group_id
-INNER JOIN core.brands
-ON core.items.brand_id = core.brands.brand_id
-INNER JOIN core.parties
-ON core.items.preferred_supplier_id = core.parties.party_id
-INNER JOIN core.units
-ON core.items.unit_id = core.units.unit_id
-INNER JOIN core.units AS reorder_unit
-ON core.items.reorder_unit_id = reorder_unit.unit_id
-INNER JOIN core.sales_taxes
-ON core.items.sales_tax_id = core.sales_taxes.sales_tax_id
-LEFT JOIN core.shipping_mail_types
-ON core.items.preferred_shipping_mail_type_id = core.shipping_mail_types.shipping_mail_type_id
-LEFT JOIN core.shipping_package_shapes
-ON core.items.shipping_package_shape_id = core.shipping_package_shapes.shipping_package_shape_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.late_fee_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.late_fee_scrud_view;
-
-CREATE VIEW core.late_fee_scrud_view
-AS
-SELECT 
-  core.late_fee.late_fee_id, 
-  core.late_fee.late_fee_code, 
-  core.late_fee.late_fee_name, 
-  core.late_fee.is_flat_amount, 
-  core.late_fee.rate,
-  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
-FROM 
-core.late_fee
-INNER JOIN core.accounts
-ON core.late_fee.account_id = core.accounts.account_id;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.merchant_fee_setup_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.merchant_fee_setup_scrud_view CASCADE;
-
-CREATE VIEW core.merchant_fee_setup_scrud_view
-AS
-SELECT 
-core.merchant_fee_setup.merchant_fee_setup_id,
-core.bank_accounts.bank_name || ' (' || core.bank_accounts.bank_account_number || ')' AS merchant_account,
-core.payment_cards.payment_card_code || ' ( '|| core.payment_cards.payment_card_name || ')' AS payment_card,
-core.merchant_fee_setup.rate,
-core.merchant_fee_setup.customer_pays_fee,
-core.accounts.account_number || ' (' || core.accounts.account_name || ')' As account,
-core.merchant_fee_setup.statement_reference
-FROM
-core.merchant_fee_setup
-INNER JOIN 
-core.bank_accounts
-ON core.merchant_fee_setup.merchant_account_id = core.bank_accounts.account_id
-INNER JOIN
-core.payment_cards
-ON core.merchant_fee_setup.payment_card_id = core.payment_cards.payment_card_id
-INNER JOIN
-core.accounts
-ON core.merchant_fee_setup.account_id = core.accounts.account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.party_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.party_scrud_view;
-
-CREATE VIEW core.party_scrud_view
-AS 
-SELECT 
-    parties.party_id,
-    party_types.party_type_id,
-    party_types.is_supplier,
-    ((party_types.party_type_code::text || ' ('::text) || party_types.party_type_name::text) || ')'::text AS party_type,
-    parties.party_code,
-    parties.first_name,
-    parties.middle_name,
-    parties.last_name,
-    parties.currency_code,
-    CASE WHEN COALESCE(parties.party_name, '') = ''
-    THEN parties.company_name
-    ELSE parties.party_name 
-    END AS party_name,
-    parties.company_name,
-    parties.zip_code,
-    parties.address_line_1,
-    parties.address_line_2,
-    parties.street,
-    parties.city,
-    core.get_state_name_by_state_id(parties.state_id) AS state,
-    core.get_country_name_by_country_id(parties.country_id) AS country,
-    parties.allow_credit,
-    parties.maximum_credit_period,
-    parties.maximum_credit_amount,
-    parties.pan_number,
-    parties.sst_number,
-    parties.cst_number,
-    parties.phone,
-    parties.fax,
-    parties.cell,
-    parties.email,
-    parties.url,
-    accounts.account_id,
-    accounts.account_number,
-    ((accounts.account_number::text || ' ('::text) || accounts.account_name::text) || ')'::text AS gl_head,
-    parties.photo
-FROM core.parties
-INNER JOIN core.party_types 
-ON parties.party_type_id = party_types.party_type_id
-INNER JOIN core.accounts 
-ON parties.account_id = accounts.account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.party_type_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.party_type_scrud_view;
-
-CREATE VIEW core.party_type_scrud_view
-AS
-SELECT 
-        core.party_types.party_type_id,
-        core.party_types.party_type_code,
-        core.party_types.party_type_name,
-        core.party_types.is_supplier,
-        core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
-FROM core.party_types
-INNER JOIN core.accounts
-ON core.party_types.account_id = core.accounts.account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.payment_term_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.payment_term_scrud_view;
-
-CREATE VIEW core.payment_term_scrud_view
-AS
-SELECT
-    core.payment_terms.payment_term_id,
-    core.payment_terms.payment_term_code,
-    core.payment_terms.payment_term_name,
-    core.payment_terms.due_on_date,
-    core.payment_terms.due_days,
-    due_frequency.frequency_code || ' (' || due_frequency.frequency_name || ')' AS due_frequency,
-    core.payment_terms.grace_period,
-    core.late_fee.late_fee_code || ' (' || core.late_fee.late_fee_name || ')' AS late_fee,
-    late_fee_posting_frequency.frequency_code || ' (' || late_fee_posting_frequency.frequency_name || ')' AS late_fee_posting_frequency
-FROM core.payment_terms
-LEFT JOIN core.frequencies AS due_frequency
-ON core.payment_terms.due_frequency_id=due_frequency.frequency_id
-LEFT JOIN core.frequencies AS late_fee_posting_frequency 
-ON core.payment_terms.late_fee_posting_frequency_id=late_fee_posting_frequency.frequency_id
-LEFT JOIN core.late_fee
-ON core.payment_terms.late_fee_id=core.late_fee.late_fee_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurrence_type_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.recurrence_type_scrud_view;
-
-CREATE VIEW core.recurrence_type_scrud_view
-AS
-SELECT
-core.recurrence_types.recurrence_type_id,
-core.recurrence_types.recurrence_type_code,
-core.recurrence_types.recurrence_type_name,
-core.recurrence_types.is_frequency
-
-FROM
-core.recurrence_types;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurring_invoice_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.recurring_invoice_scrud_view;
-
-CREATE VIEW core.recurring_invoice_scrud_view
-AS
-SELECT 
-  core.recurring_invoices.recurring_invoice_id, 
-  core.recurring_invoices.recurring_invoice_code, 
-  core.recurring_invoices.recurring_invoice_name,
-  core.items.item_code || ' (' || core.items.item_name || ')' AS item,
-  core.recurring_invoices.total_duration,
-  core.recurrence_types.recurrence_type_code || ' (' || core.recurrence_types.recurrence_type_name || ')' AS recurrence_type,
-  core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name ||')' AS recurring_frequency,
-  core.recurring_invoices.recurring_duration,
-  core.recurring_invoices.recurs_on_same_calendar_date,
-  core.recurring_invoices.recurring_amount,
-  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
-  core.payment_terms.payment_term_code || ' (' || core.payment_terms.payment_term_name || ')' AS payment_term, 
-  core.recurring_invoices.auto_trigger_on_sales,
-  core.recurring_invoices.is_active,
-  core.recurring_invoices.statement_reference 
-FROM 
-core.recurring_invoices
-LEFT JOIN core.items 
-ON core.recurring_invoices.item_id = core.items.item_id
-INNER JOIN core.recurrence_types
-ON core.recurring_invoices.recurrence_type_id = core.recurrence_types.recurrence_type_id 
-LEFT JOIN core.frequencies
-ON core.recurring_invoices.recurring_frequency_id = core.frequencies.frequency_id
-INNER JOIN core.accounts
-ON core.recurring_invoices.account_id = core.accounts.account_id
-INNER JOIN core.payment_terms
-ON core.recurring_invoices.payment_term_id = core.payment_terms.payment_term_id;
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.recurring_invoice_setup_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.recurring_invoice_setup_scrud_view;
-
-CREATE VIEW core.recurring_invoice_setup_scrud_view
-AS
-SELECT 
-  core.recurring_invoice_setup.recurring_invoice_setup_id, 
-  core.recurring_invoices.recurring_invoice_code || ' (' || core.recurring_invoices.recurring_invoice_name || ')' AS recurring_invoice,
-  core.parties.party_code || ' (' || core.parties.party_name || ')' AS party,
-  core.recurring_invoice_setup.starts_from,
-  core.recurring_invoice_setup.ends_on, 
-  core.recurrence_types.recurrence_type_code || ' (' || core.recurrence_types.recurrence_type_name || ')' AS recurrence_type,
-  core.frequencies.frequency_code || ' (' || core.frequencies.frequency_name ||')' AS recurring_frequency,
-  core.recurring_invoice_setup.recurring_duration,
-  core.recurring_invoice_setup.recurs_on_same_calendar_date,
-  core.recurring_invoice_setup.recurring_amount,
-  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account,
-  core.payment_terms.payment_term_code || ' (' || core.payment_terms.payment_term_name || ')' AS payment_term, 
-  core.recurring_invoice_setup.is_active,
-  core.recurring_invoice_setup.statement_reference 
-FROM 
-core.recurring_invoice_setup
-INNER JOIN core.recurring_invoices
-ON core.recurring_invoice_setup.recurring_invoice_id = core.recurring_invoices.recurring_invoice_id
-INNER JOIN core.parties 
-ON core.recurring_invoice_setup.party_id = core.parties.party_id
-INNER JOIN core.recurrence_types
-ON core.recurring_invoice_setup.recurrence_type_id = core.recurrence_types.recurrence_type_id 
-LEFT JOIN core.frequencies
-ON core.recurring_invoice_setup.recurring_frequency_id = core.frequencies.frequency_id
-INNER JOIN core.accounts
-ON core.recurring_invoice_setup.account_id = core.accounts.account_id
-INNER JOIN core.payment_terms 
-ON core.recurring_invoice_setup.payment_term_id = core.payment_terms.payment_term_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.salesperson_bonus_setup_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.salesperson_bonus_setup_scrud_view;
-
-CREATE VIEW core.salesperson_bonus_setup_scrud_view
-AS
-SELECT
-    core.salesperson_bonus_setups.salesperson_bonus_setup_id,
-    core.salespersons.salesperson_code || ' (' || core.salespersons.salesperson_name || ')' AS salesperson,
-    core.bonus_slabs.bonus_slab_code || ' (' || core.bonus_slabs.bonus_slab_name || ')' AS bonus_slab
-FROM
-    core.salesperson_bonus_setups
-     
-INNER JOIN core.salespersons
-ON core.salesperson_bonus_setups.salesperson_id = core.salespersons.salesperson_id
-INNER JOIN core.bonus_slabs
-ON core.salesperson_bonus_setups.bonus_slab_id = core.bonus_slabs.bonus_slab_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.salesperson_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.salesperson_scrud_view;
-
-CREATE VIEW core.salesperson_scrud_view
-AS
-SELECT
-    core.salespersons.salesperson_id,
-    core.sales_teams.sales_team_code || ' (' || core.sales_teams.sales_team_name || ')' AS sales_team,
-    core.salespersons.salesperson_code,
-    core.salespersons.salesperson_name,
-    core.salespersons.address,
-    core.salespersons.contact_number,
-    core.salespersons.commission_rate,
-    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS account
-FROM
-    core.salespersons
-INNER JOIN core.sales_teams
-ON core.salespersons.sales_team_id = core.sales_teams.sales_team_id
-INNER JOIN core.accounts
-ON core.salespersons.account_id = core.accounts.account_id;
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/core/core.shipping_address_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS core.shipping_address_scrud_view;
-
-CREATE VIEW core.shipping_address_scrud_view
-AS
-SELECT
-    core.shipping_addresses.shipping_address_id,
-    core.shipping_addresses.shipping_address_code,
-    core.parties.party_code || ' (' || core.parties.party_name || ')' AS party,
-    core.get_state_name_by_state_id(core.shipping_addresses.state_id) AS state,
-    core.get_country_name_by_country_id(core.shipping_addresses.country_id) AS country,
-    core.shipping_addresses.zip_code,
-    core.shipping_addresses.address_line_1,
-    core.shipping_addresses.address_line_2,
-    core.shipping_addresses.street,
-    core.shipping_addresses.city  
-FROM core.shipping_addresses
-INNER JOIN core.parties
-ON core.shipping_addresses.party_id=core.parties.party_id;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/office/office.counter_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS office.counter_scrud_view;
-
-CREATE VIEW office.counter_scrud_view
-AS
-SELECT 
-  office.counters.counter_id, 
-  office.stores.store_code || ' (' || office.stores.store_name || ')' AS store,
-  office.cash_repositories.cash_repository_code || ' (' || office.cash_repositories.cash_repository_name || ')' AS cash_repository,
-  office.counters.counter_code,
-  office.counters.counter_name
-FROM 
- office.counters
-INNER JOIN office.cash_repositories
-ON office.counters.cash_repository_id = office.cash_repositories.cash_repository_id 
-INNER JOIN office.stores
-ON office.counters.store_id = office.stores.store_id;
-
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/office/office.store_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS office.store_scrud_view;
-
-CREATE VIEW office.store_scrud_view
-AS
-SELECT 
-  office.stores.store_id, 
-  office.offices.office_code || ' (' || office.offices.office_name || ')' AS office, 
-  office.stores.store_code, 
-  office.stores.store_name, 
-  office.stores.address, 
-  office.store_types.store_type_code || ' (' || office.store_types.store_type_name || ')' AS store_type, 
-  office.stores.allow_sales, 
-  core.sales_taxes.sales_tax_code || ' ('|| core.sales_taxes.sales_tax_name || ')' AS sales_tax,
-  core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS default_cash_account,
-  office.cash_repositories.cash_repository_code || ' (' || office.cash_repositories.cash_repository_name || ')' AS default_cash_repository 
-FROM 
-office.stores
-INNER JOIN office.offices
-ON office.stores.office_id = office.offices.office_id
-INNER JOIN office.store_types
-ON office.stores.store_type_id = office.store_types.store_type_id
-INNER JOIN core.sales_taxes
-ON office.stores.sales_tax_id = core.sales_taxes.sales_tax_id
-INNER JOIN core.accounts
-ON office.stores.default_cash_account_id = core.accounts.account_id
-INNER JOIN office.cash_repositories
-ON office.stores.default_cash_repository_id = office.cash_repositories.cash_repository_id;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/policy/policy.auto_verification_policy_scrud_view.sql --<--<--
-DROP VIEW IF EXISTS policy.auto_verification_policy_scrud_view;
-
-CREATE VIEW policy.auto_verification_policy_scrud_view
-AS
-SELECT
-    policy.auto_verification_policy.policy_id,
-    policy.auto_verification_policy.user_id,
-    office.users.user_name,
-    office.offices.office_name,
-    policy.auto_verification_policy.verify_sales_transactions,
-    policy.auto_verification_policy.sales_verification_limit,
-    policy.auto_verification_policy.verify_purchase_transactions,
-    policy.auto_verification_policy.purchase_verification_limit,
-    policy.auto_verification_policy.verify_gl_transactions,
-    policy.auto_verification_policy.gl_verification_limit,
-    policy.auto_verification_policy.effective_from,
-    policy.auto_verification_policy.ends_on,
-    policy.auto_verification_policy.is_active
-FROM policy.auto_verification_policy
-INNER JOIN office.users
-ON policy.auto_verification_policy.user_id=office.users.user_id
-INNER JOIN office.offices
-ON policy.auto_verification_policy.office_id=office.offices.office_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.scrud-views/policy/policy.voucher_verification_policy_scrud_view.sql --<--<--
-
-DROP VIEW IF EXISTS policy.voucher_verification_policy_scrud_view CASCADE;
-
-CREATE VIEW policy.voucher_verification_policy_scrud_view
-AS
-SELECT
-	policy.voucher_verification_policy.policy_id,
-    policy.voucher_verification_policy.user_id,
-    office.users.user_name,
-    policy.voucher_verification_policy.can_verify_sales_transactions,
-    policy.voucher_verification_policy.sales_verification_limit,
-    policy.voucher_verification_policy.can_verify_purchase_transactions,
-    policy.voucher_verification_policy.purchase_verification_limit,
-    policy.voucher_verification_policy.can_verify_gl_transactions,
-    policy.voucher_verification_policy.gl_verification_limit,
-    policy.voucher_verification_policy.can_self_verify,
-    policy.voucher_verification_policy.self_verification_limit,
-    policy.voucher_verification_policy.effective_from,
-    policy.voucher_verification_policy.ends_on,
-    policy.voucher_verification_policy.is_active
-FROM policy.voucher_verification_policy
-INNER JOIN office.users
-ON policy.voucher_verification_policy.user_id=office.users.user_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.discount_received_account_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.discount_received_account_selector_view;
-
-CREATE VIEW core.discount_received_account_selector_view
-AS
-SELECT * FROM core.account_scrud_view
---All income headings
-WHERE account_master_id >= 20100
-AND account_master_id < 20400
-ORDER BY account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.expenses_account_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.expenses_account_selector_view;
-
-CREATE VIEW core.expenses_account_selector_view
-AS
-SELECT * FROM core.account_scrud_view
-WHERE account_master_id > 20400
-ORDER BY account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.item_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.item_selector_view;
-
-CREATE VIEW core.item_selector_view
-AS
-SELECT * FROM core.items
-ORDER BY item_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.merchant_account_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.merchant_account_selector_view;
-
-CREATE VIEW core.merchant_account_selector_view
-AS
-SELECT * FROM core.bank_account_scrud_view
-WHERE is_merchant_account = true
-ORDER BY account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.purchase_account_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.purchase_account_selector_view;
-
-CREATE VIEW core.purchase_account_selector_view
-AS
-SELECT * FROM core.account_scrud_view
-WHERE account_master_id = 15010
-ORDER BY account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.sales_return_account_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.sales_return_account_selector_view;
-
-CREATE VIEW core.sales_return_account_selector_view
-AS
-SELECT * FROM core.account_scrud_view
---Current Liabilities, Accounts Payable
-WHERE account_master_id = ANY(ARRAY[15000, 15010])
-ORDER BY account_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.selector-views/core/core.supplier_selector_view.sql --<--<--
-DROP VIEW IF EXISTS core.supplier_selector_view;
-CREATE VIEW core.supplier_selector_view
-AS
-SELECT
-    core.parties.party_id,
-    core.party_types.party_type_id,
-    core.party_types.is_supplier,
-    core.party_types.party_type_code || ' (' || core.party_types.party_type_name || ')' AS party_type,
-    core.parties.party_code,
-    core.parties.first_name,
-    core.parties.middle_name,
-    core.parties.last_name,
-    CASE 
-        WHEN COALESCE(core.parties.party_name, '') = '' THEN core.parties.company_name
-        ELSE core.parties.party_name
-    END AS party_name,
-    core.parties.zip_code,
-    core.parties.address_line_1,
-    core.parties.address_line_2,
-    core.parties.street,
-    core.parties.city,
-    core.get_state_name_by_state_id(core.parties.state_id) AS state,
-    core.get_country_name_by_country_id(core.parties.country_id) AS country,
-    core.parties.allow_credit,
-    core.parties.maximum_credit_period,
-    core.parties.maximum_credit_amount,
-    core.parties.pan_number,
-    core.parties.sst_number,
-    core.parties.cst_number,
-    core.parties.phone,
-    core.parties.fax,
-    core.parties.cell,
-    core.parties.email,
-    core.parties.url,
-    core.accounts.account_id,
-    core.accounts.account_number,
-    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS gl_head
-FROM
-core.parties
-INNER JOIN
-core.party_types
-ON core.parties.party_type_id = core.party_types.party_type_id
-INNER JOIN core.accounts
-ON core.parties.account_id=core.accounts.account_id
-WHERE is_supplier=true;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.default_widget_setup_view.sql --<--<--
-DROP VIEW IF EXISTS core.default_widget_setup_view;
-
-CREATE VIEW core.default_widget_setup_view
-AS
-SELECT
-    core.widget_setup.widget_setup_id,
-    core.widget_setup.widget_order,
-    core.widget_setup.widget_group_name,
-    core.widget_setup.widget_name,
-    core.widgets.widget_source
-FROM core.widget_setup
-INNER JOIN core.widgets
-ON core.widgets.widget_name = core.widget_setup.widget_name
-WHERE widget_group_name =
-(
-    SELECT widget_group_name
-    FROM core.widget_groups
-    WHERE is_default
-    LIMIT 1
-);
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.item_view.sql --<--<--
-DROP VIEW IF EXISTS core.item_view;
-
-CREATE VIEW core.item_view
-AS
-SELECT 
-        item_id,
-        item_code,
-        item_name,
-        item_group_code || ' (' || item_group_name || ')' AS item_group,
-        item_type_code || ' (' || item_type_name || ')' AS item_type,
-        maintain_stock,
-        brand_code || ' (' || brand_name || ')' AS brand,
-        party_code || ' (' || party_name || ')' AS preferred_supplier,
-        lead_time_in_days,
-        weight_in_grams,
-        width_in_centimeters,
-        height_in_centimeters,
-        length_in_centimeters,
-        machinable,
-        shipping_mail_type_code || ' (' || shipping_mail_type_name || ')' AS preferred_shipping_mail_type,
-        shipping_package_shape_code || ' (' || shipping_package_shape_name || ')' AS preferred_shipping_package_shape,
-        core.units.unit_code || ' (' || core.units.unit_name || ')' AS unit,
-        base_unit.unit_code || ' (' || base_unit.unit_name || ')' AS base_unit,
-        hot_item,
-        cost_price,
-        selling_price,
-        selling_price_includes_tax,
-        sales_tax_code || ' (' || sales_tax_name || ')' AS sales_tax,
-        reorder_unit.unit_code || ' (' || reorder_unit.unit_name || ')' AS reorder_unit,
-        reorder_level,
-        reorder_quantity
-FROM core.items
-INNER JOIN core.item_groups
-ON core.items.item_group_id = core.item_groups.item_group_id
-INNER JOIN core.item_types
-ON core.items.item_type_id = core.item_types.item_type_id
-INNER JOIN core.brands
-ON core.items.brand_id = core.brands.brand_id
-INNER JOIN core.parties
-ON core.items.preferred_supplier_id = core.parties.party_id
-INNER JOIN core.units
-ON core.items.unit_id = core.units.unit_id
-INNER JOIN core.units AS base_unit
-ON core.get_root_unit_id(core.items.unit_id) = core.units.unit_id
-INNER JOIN core.units AS reorder_unit
-ON core.items.reorder_unit_id = reorder_unit.unit_id
-INNER JOIN core.sales_taxes
-ON core.items.sales_tax_id = core.sales_taxes.sales_tax_id
-LEFT JOIN core.shipping_mail_types
-ON core.items.preferred_shipping_mail_type_id = core.shipping_mail_types.shipping_mail_type_id
-LEFT JOIN core.shipping_package_shapes
-ON core.items.shipping_package_shape_id = core.shipping_package_shapes.shipping_package_shape_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.party_view.sql --<--<--
-DROP VIEW IF EXISTS core.party_view;
-
-CREATE VIEW core.party_view
-AS
-SELECT
-    core.parties.party_id,
-    core.party_types.party_type_id,
-    core.party_types.is_supplier,
-    core.party_types.party_type_code || ' (' || core.party_types.party_type_name || ')' AS party_type,
-    core.parties.party_code,
-    core.parties.first_name,
-    core.parties.middle_name,
-    core.parties.last_name,
-    CASE 
-    WHEN COALESCE(core.parties.party_name, '') = '' 
-    THEN company_name ELSE party_name END
-    AS party_name,
-    core.parties.zip_code,
-    core.parties.address_line_1,
-    core.parties.address_line_2,
-    core.parties.street,
-    core.parties.city,
-    core.get_state_name_by_state_id(core.parties.state_id) AS state,
-    core.get_country_name_by_country_id(core.parties.country_id) AS country,
-    core.parties.allow_credit,
-    core.parties.maximum_credit_period,
-    core.parties.maximum_credit_amount,
-    core.parties.pan_number,
-    core.parties.sst_number,
-    core.parties.cst_number,
-    core.parties.phone,
-    core.parties.fax,
-    core.parties.cell,
-    core.parties.email,
-    core.parties.url,
-    core.parties.photo,
-    core.accounts.account_id,
-    core.accounts.account_number,
-    core.accounts.account_number || ' (' || core.accounts.account_name || ')' AS gl_head
-FROM
-core.parties
-INNER JOIN
-core.party_types
-ON core.parties.party_type_id = core.party_types.party_type_id
-INNER JOIN core.accounts
-ON core.parties.account_id=core.accounts.account_id;
-
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.shipping_address_view.sql --<--<--
-DROP VIEW IF EXISTS core.shipping_address_view;
-
-CREATE VIEW core.shipping_address_view
-AS
-SELECT
-    core.shipping_addresses.shipping_address_id,
-    core.shipping_addresses.shipping_address_code,
-    core.shipping_addresses.zip_code,
-    core.shipping_addresses.party_id,
-    core.countries.country_id,
-    core.states.state_id,
-    core.countries.country_name,
-    core.states.state_name,
-    core.shipping_addresses.address_line_1,
-    core.shipping_addresses.address_line_2,
-    core.shipping_addresses.street,
-    core.shipping_addresses.city
-FROM core.shipping_addresses
-INNER JOIN core.states
-ON core.shipping_addresses.state_id = core.states.state_id
-INNER JOIN core.countries
-ON core.shipping_addresses.country_id = core.countries.country_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/core/core.widget_setup_view.sql --<--<--
-DROP VIEW IF EXISTS core.widget_setup_view;
-
-CREATE OR REPLACE VIEW core.widget_setup_view
-AS
-SELECT
-    core.widget_setup.widget_setup_id,
-    core.widget_setup.widget_order,
-    core.widget_setup.widget_group_name,
-    core.widget_setup.widget_name,
-    core.widgets.widget_source
-FROM core.widget_setup
-INNER JOIN core.widgets
-ON core.widgets.widget_name = core.widget_setup.widget_name;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/office/office.sign_in_view.sql --<--<--
-DROP VIEW IF EXISTS office.sign_in_view;
-
-CREATE VIEW office.sign_in_view
-AS
-SELECT 
-  logins.login_id, 
-  logins.user_id, 
-  users.role_id, 
-  roles.role_code || ' (' || roles.role_name || ')' AS role, 
-  roles.role_code, 
-  roles.role_name, 
-  roles.is_admin, 
-  roles.is_system, 
-  logins.browser, 
-  logins.ip_address, 
-  logins.login_date_time, 
-  logins.remote_user, 
-  logins.culture, 
-  users.user_name, 
-  users.full_name, 
-  users.elevated, 
-  offices.office_code || ' (' || offices.office_name || ')' AS office,
-  offices.office_id, 
-  offices.office_code, 
-  offices.office_name, 
-  offices.nick_name, 
-  offices.registration_date, 
-  offices.currency_code, 
-  offices.po_box, 
-  offices.address_line_1, 
-  offices.address_line_2, 
-  offices.street, 
-  offices.city, 
-  offices.state, 
-  offices.zip_code, 
-  offices.country, 
-  offices.phone, 
-  offices.fax, 
-  offices.email, 
-  offices.url, 
-  offices.registration_number, 
-  offices.pan_number,
-  offices.allow_transaction_posting,
-  offices.week_start_day,
-  offices.logo_file,
-  core.get_quotation_valid_duration(@3)  AS sales_quotation_valid_duration
-FROM 
-  audit.logins, 
-  office.users, 
-  office.offices, 
-  office.roles
-WHERE 
-  logins.user_id = users.user_id AND
-  logins.office_id = offices.office_id AND
-  users.role_id = roles.role_id;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.receipt_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.receipt_view;
-
-CREATE VIEW transactions.receipt_view
-AS
-SELECT
-    transactions.transaction_master.transaction_master_id as tran_id,
-    transactions.transaction_master.office_id,
-    office.offices.office_code,
-    transactions.transaction_master.transaction_master_id,
-    transactions.transaction_master.transaction_code,
-    transactions.transaction_master.transaction_ts,
-    transactions.transaction_master.value_date,
-    office.users.user_name AS entered_by,
-    transactions.transaction_master.reference_number,
-    transactions.transaction_master.statement_reference,
-    core.verification_statuses.verification_status_name AS status,
-    transactions.transaction_master.verification_reason,
-    verified_by_user.user_name AS verified_by,
-    transactions.customer_receipts.party_id AS customer_id,
-    core.parties.party_code AS customer_code,
-    core.parties.party_name AS customer_name,
-    core.append_if_not_null(core.parties.address_line_1, '&lt;br /&gt;') || core.append_if_not_null(core.parties.address_line_2, '&lt;br /&gt;') || core.append_if_not_null(core.parties.street, '&lt;br /&gt;') || core.append_if_not_null(core.parties.city, '') || '&lt;br /&gt;' || core.get_state_name_by_state_id(core.parties.state_id) || '&lt;br /&gt;' || core.get_country_name_by_country_id(core.parties.country_id) AS address,
-    core.parties.pan_number,
-    core.parties.sst_number,
-    core.parties.cst_number,
-    core.parties.email,
-    transactions.customer_receipts.currency_code,
-    transactions.customer_receipts.amount,
-    transactions.customer_receipts.er_debit,
-    office.offices.currency_code AS home_currency_code,
-    transactions.customer_receipts.amount * transactions.customer_receipts.er_debit AS amount_in_home_currency,
-    transactions.customer_receipts.er_credit,
-    core.parties.currency_code AS base_currency_code,
-    transactions.customer_receipts.amount * transactions.customer_receipts.er_debit * transactions.customer_receipts.er_credit AS amount_in_base_currency
-FROM transactions.customer_receipts
-INNER JOIN transactions.transaction_master
-ON transactions.transaction_master.transaction_master_id = transactions.customer_receipts.transaction_master_id
-INNER JOIN core.parties
-ON core.parties.party_id = transactions.customer_receipts.party_id
-INNER JOIN core.verification_statuses
-ON transactions.transaction_master.verification_status_id = core.verification_statuses.verification_status_id
-INNER JOIN office.users
-ON transactions.transaction_master.user_id = office.users.user_id
-INNER JOIN office.offices
-ON transactions.transaction_master.office_id = office.offices.office_id
-LEFT JOIN office.users AS verified_by_user
-ON transactions.transaction_master.verified_by_user_id = verified_by_user.user_id        
-WHERE transactions.transaction_master.book = 'Sales.Receipt'
-AND transactions.transaction_master.verification_status_id > 0;
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_delivery_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.sales_delivery_view;
-
-CREATE VIEW transactions.sales_delivery_view
-AS
-SELECT
-    transactions.transaction_master.transaction_master_id AS tran_id,
-    transactions.transaction_master.transaction_ts,
-    transactions.transaction_master.value_date,
-    office.users.user_name AS entered_by,
-    core.verification_statuses.verification_status_name AS status,
-    transactions.get_due_date(transactions.transaction_master.value_date, transactions.stock_master.payment_term_id) AS due_date,
-    transactions.transaction_master.reference_number,
-    transactions.transaction_master.statement_reference,
-    core.parties.party_code AS customer_code,
-    core.parties.party_name AS customer_name,
-    core.parties.pan_number,
-    core.parties.sst_number,
-    core.parties.cst_number,
-    office.stores.store_name,
-    core.get_shipping_address_by_shipping_address_id(transactions.stock_master.shipping_address_id) AS shipping_address,
-    core.shippers.shipper_name,
-    transactions.stock_master.shipping_charge,
-    transactions.get_invoice_amount(transactions.transaction_master.transaction_master_id) AS invoice_amount
-FROM transactions.transaction_master
-INNER JOIN transactions.stock_master
-ON transactions.transaction_master.transaction_master_id=transactions.stock_master.transaction_master_id
-INNER JOIN office.users
-ON transactions.transaction_master.user_id = office.users.user_id
-INNER JOIN core.verification_statuses
-ON transactions.transaction_master.verification_status_id = core.verification_statuses.verification_status_id
-INNER JOIN core.parties
-ON transactions.stock_master.party_id=core.parties.party_id
-LEFT JOIN core.shippers
-ON transactions.stock_master.shipper_id = core.shippers.shipper_id
-LEFT JOIN office.stores
-ON transactions.stock_master.store_id = office.stores.store_id
-WHERE transactions.transaction_master.book='Sales.Delivery'
-AND transactions.transaction_master.verification_status_id > 0;
-
-
---SELECT * FROM transactions.sales_delivery_view;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_order_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.sales_order_view;
-
-CREATE VIEW transactions.sales_order_view
-AS
-SELECT
-transactions.non_gl_stock_master.non_gl_stock_master_id,
-transactions.non_gl_stock_master.non_gl_stock_master_id AS tran_id,
-transactions.non_gl_stock_master.transaction_ts,
-transactions.non_gl_stock_master.value_date,
-core.get_quotation_valid_duration(transactions.non_gl_stock_master.office_id) AS quotation_valid_duration,
-office.users.user_name AS entered_by,
-office.offices.office_name,
-transactions.non_gl_stock_master.statement_reference,
-core.parties.party_name AS customer_name,
-core.price_types.price_type_name
-FROM transactions.non_gl_stock_master
-INNER JOIN office.offices
-ON transactions.non_gl_stock_master.office_id = office.offices.office_id
-INNER JOIN office.users
-ON transactions.non_gl_stock_master.user_id = office.users.user_id
-INNER JOIN core.parties
-ON transactions.non_gl_stock_master.party_id = core.parties.party_id
-INNER JOIN core.price_types
-ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id
-WHERE transactions.non_gl_stock_master.book = 'Sales.Order';
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/05.views/transactions/transactions.sales_quotation_view.sql --<--<--
-DROP VIEW IF EXISTS transactions.sales_quotation_view;
-
-CREATE VIEW transactions.sales_quotation_view
-AS
-SELECT
-transactions.non_gl_stock_master.non_gl_stock_master_id,
-transactions.non_gl_stock_master.non_gl_stock_master_id AS tran_id,
-transactions.non_gl_stock_master.transaction_ts,
-transactions.non_gl_stock_master.value_date,
-core.get_quotation_valid_duration(transactions.non_gl_stock_master.office_id) AS quotation_valid_duration,
-office.users.user_name AS entered_by,
-office.offices.office_name,
-transactions.non_gl_stock_master.statement_reference,
-core.parties.party_name AS customer_name,
-core.price_types.price_type_name
-FROM transactions.non_gl_stock_master
-INNER JOIN office.offices
-ON transactions.non_gl_stock_master.office_id = office.offices.office_id
-INNER JOIN office.users
-ON transactions.non_gl_stock_master.user_id = office.users.user_id
-INNER JOIN core.parties
-ON transactions.non_gl_stock_master.party_id = core.parties.party_id
-INNER JOIN core.price_types
-ON transactions.non_gl_stock_master.price_type_id = core.price_types.price_type_id
-WHERE transactions.non_gl_stock_master.book = 'Sales.Quotation';
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/10.triggers/core/core.party_after_insert_trigger.sql --<--<--
-DROP FUNCTION IF EXISTS core.party_after_insert_trigger() CASCADE;
-
-CREATE FUNCTION core.party_after_insert_trigger()
-RETURNS TRIGGER
-AS
-$$
-    DECLARE _parent_account_id bigint;
-    DECLARE _party_code text;
-    DECLARE _account_id bigint;
-BEGIN
-    IF(COALESCE(NEW.company_name, '') = '') THEN
-        _party_code             := core.get_party_code(NEW.first_name, NEW.middle_name, NEW.last_name);
-    ELSE
-        _party_code             := core.get_party_code(NEW.company_name);
-    END IF;
-    
-    _parent_account_id      := core.get_account_id_by_party_type_id(NEW.party_type_id);
-
-    IF(COALESCE(NEW.party_name, '') = '') THEN
-        NEW.party_name := REPLACE(TRIM(COALESCE(NEW.last_name, '') || ', ' || NEW.first_name || ' ' || COALESCE(NEW.middle_name, '')), ' ', '');
-    END IF;
-
-    --Create a new account
-    IF(NEW.account_id IS NULL) THEN
-        INSERT INTO core.accounts(account_master_id, account_number, currency_code, account_name, parent_account_id)
-        SELECT core.get_account_master_id_by_account_id(_parent_account_id), _party_code, NEW.currency_code, _party_code || ' (' || NEW.party_name || ')', _parent_account_id
-        RETURNING account_id INTO _account_id;
-    
-        UPDATE core.parties
-        SET 
-            account_id=_account_id, 
-            party_code=_party_code
-        WHERE core.parties.party_id=NEW.party_id;
-
-        RETURN NEW;
-    END IF;
-
-    UPDATE core.parties
-    SET 
-        party_code=_party_code
-    WHERE core.parties.party_id=NEW.party_id;
-
-    RETURN NEW;
-END
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER party_after_insert_trigger
-AFTER INSERT
-ON core.parties
-FOR EACH ROW EXECUTE PROCEDURE core.party_after_insert_trigger();
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/00.custom-fields.sql --<--<--
-DO
-$$
-BEGIN
-    IF(core.get_locale() = 'en-US') THEN
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Text') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_number)
-            SELECT 'Text', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Number') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_number)
-            SELECT 'Number', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Date') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_date)
-            SELECT 'Date', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='True/False') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_boolean)
-            SELECT 'True/False', true;
-        END IF;
-
-        IF NOT EXISTS(SELECT * FROM core.custom_field_data_types WHERE data_type='Long Text') THEN
-            INSERT INTO core.custom_field_data_types(data_type, is_long_text)
-            SELECT 'Long Text', true;
-        END IF;
-
-
-        PERFORM core.add_custom_field_form('Accounts', 'core.accounts', 'account_id');
-        PERFORM core.add_custom_field_form('Items', 'core.items', 'item_id');
-        PERFORM core.add_custom_field_form('Parties', 'core.parties', 'party_id');
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/99.ownership.sql --<--<--
-DO
-$$
-    DECLARE this record;
-BEGIN
-    IF(CURRENT_USER = 'mix_erp') THEN
-        RETURN;
-    END IF;
-
-    FOR this IN 
-    SELECT * FROM pg_tables 
-    WHERE NOT schemaname = ANY(ARRAY['pg_catalog', 'information_schema'])
-    AND tableowner <> 'mix_erp'
-    LOOP
-        EXECUTE 'ALTER TABLE '|| this.schemaname || '.' || this.tablename ||' OWNER TO mix_erp;';
-    END LOOP;
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-    DECLARE this record;
-BEGIN
-    IF(CURRENT_USER = 'mix_erp') THEN
-        RETURN;
-    END IF;
-
-    FOR this IN 
-    SELECT 'ALTER '
-        || CASE WHEN p.proisagg THEN 'AGGREGATE ' ELSE 'FUNCTION ' END
-        || quote_ident(n.nspname) || '.' || quote_ident(p.proname) || '(' 
-        || pg_catalog.pg_get_function_identity_arguments(p.oid) || ') OWNER TO mix_erp;' AS sql
-    FROM   pg_catalog.pg_proc p
-    JOIN   pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-    WHERE  NOT n.nspname = ANY(ARRAY['pg_catalog', 'information_schema'])
-    LOOP        
-        EXECUTE this.sql;
-    END LOOP;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-    DECLARE this record;
-BEGIN
-    IF(CURRENT_USER = 'mix_erp') THEN
-        RETURN;
-    END IF;
-
-    FOR this IN 
-    SELECT * FROM pg_views
-    WHERE NOT schemaname = ANY(ARRAY['pg_catalog', 'information_schema'])
-    AND viewowner <> 'mix_erp'
-    LOOP
-        EXECUTE 'ALTER VIEW '|| this.schemaname || '.' || this.viewname ||' OWNER TO mix_erp;';
-    END LOOP;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DO
-$$
-    DECLARE this record;
-BEGIN
-    IF(CURRENT_USER = 'mix_erp') THEN
-        RETURN;
-    END IF;
-
-    FOR this IN 
-    SELECT 'ALTER SCHEMA ' || nspname || ' OWNER TO mix_erp;' AS sql FROM pg_namespace
-    WHERE nspname NOT LIKE 'pg_%'
-    AND nspname <> 'information_schema'
-    LOOP
-        EXECUTE this.sql;
-    END LOOP;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DO
-$$
-    DECLARE this record;
-BEGIN
-    IF(CURRENT_USER = 'mix_erp') THEN
-        RETURN;
-    END IF;
-
-    FOR this IN 
-    SELECT      'ALTER TYPE ' || n.nspname || '.' || t.typname || ' OWNER TO mix_erp;' AS sql
-    FROM        pg_type t 
-    LEFT JOIN   pg_catalog.pg_namespace n ON n.oid = t.typnamespace 
-    WHERE       (t.typrelid = 0 OR (SELECT c.relkind = 'c' FROM pg_catalog.pg_class c WHERE c.oid = t.typrelid)) 
-    AND         NOT EXISTS(SELECT 1 FROM pg_catalog.pg_type el WHERE el.oid = t.typelem AND el.typarray = t.oid)
-    AND         typtype NOT IN ('b')
-    AND         n.nspname NOT IN ('pg_catalog', 'information_schema')
-    LOOP
-        EXECUTE this.sql;
-    END LOOP;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.4/src/99.sample-data/99.refresh-materialized-views.sql --<--<--
-SELECT * FROM transactions.refresh_materialized_views(2, 2, 5, '1/1/2015');

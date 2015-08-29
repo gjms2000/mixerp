@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace MixERP.Net.Framework.Extensions
@@ -11,6 +12,16 @@ namespace MixERP.Net.Framework.Extensions
                 (
                 p => p.Name.ToUpperInvariant() == propertyName.ToUpperInvariant()
                 );
+        }
+
+        public static T? Parse<T>(this string str, Func<string, T> parser) where T : struct
+        {
+            if(string.IsNullOrWhiteSpace(str))
+            {
+                return null;
+            }
+
+            return parser(str);
         }
     }
 }

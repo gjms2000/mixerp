@@ -1,4 +1,5 @@
-﻿<div class="poco view factory">
+﻿<script src="https://raw.githubusercontent.com/mholt/PapaParse/master/papaparse.min.js"></script>
+<div class="poco view factory">
     <div class="ui stackable attached segment">
         <div class="title ui huge grey header"></div>
         <div class="ui info description message"></div>
@@ -9,7 +10,7 @@
         <div class="ui stackable grid">
             <div class="twelve wide column">
 
-                <a onclick="addNew();" class="ui basic green left attached button">Add New</a>
+                <a id="AddNewButton" class="ui basic green left attached button">Add New</a>
                 <div class="ui icon top left pointing dropdown basic teal right attached button">
                     <span>Export This Document</span>
                     <div class="menu">
@@ -38,662 +39,910 @@
         </div>
     </div>
 
-<div class="ui stackable attached segment">
-    <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="view" onclick="changeTab(this)">View</a>
-        <a class="item" data-tab="filter" onclick="changeTab(this)">Manage Filters</a>
-    </div>
-
-    <div class="ui active bottom attached tab loading segment" data-tab="view">
-        <div id="json" class="vpad8" style="width: 100%; overflow: auto;">
+    <div class="ui stackable attached segment">
+        <div class="ui top attached tabular menu">
+            <a class="item" data-tab="view" onclick="changeTab(this)">View</a>
+            <a class="item" data-tab="filter" onclick="changeTab(this)">Saved Filters</a>
+            <a class="active item" data-tab="import" onclick="changeTab(this)">Data Import</a>
         </div>
-        <div class="ui stackable grid">
-            <div class="left aligned six wide column">
-                <div class="ui breadcrumb">
-                    <a class="section" id="CurrentPageAnchor"></a>
-                    <div class="divider">/ </div>
-                    <a class="section" id="TotalPagesAnchor"></a>
-                </div>
+
+        <div class="ui bottom attached tab loading segment" data-tab="view">
+            <div id="json" class="vpad8" style="width: 100%; overflow: auto;">
             </div>
-            <div class="right aligned ten wide column">
-                <a class="ui left attached labeled icon button"><i class="left arrow icon"></i>Previous</a>
-                <a class="ui right attached right labeled icon button">Next<i class="right arrow icon"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="ui bottom attached hidden tab segment" data-tab="filter">
-        <div class="ui basic buttons">
-            <div class="ui basic button">Create a Filter</div>
-            <div class="ui basic button" onclick="$('.filter.modal').modal('show');">Manage Filters</div>
-        </div>
-
-        <div class="ui huge header">
-            Filter:
-            <span id="FilterName"></span>
-        </div>
-        <div class="ui divider"></div>
-
-        <div class="ui stackable form" id="FilterForm">
-            <div class="five fields">
-                <div class="field">
-                    <label>Select Column</label>
-                    <select class="ui search dropdown" id="ColumnSelect" required></select>
+            <div class="ui divider"></div>
+            <div class="ui stackable grid">
+                <div class="left aligned six wide column">
+                    <div class="ui breadcrumb">
+                        <a class="section" id="CurrentPageAnchor"></a>
+                        <div class="divider">/ </div>
+                        <a class="section" id="TotalPagesAnchor"></a>
+                    </div>
                 </div>
-                <div class="field">
-                    <label>Filter Condition</label>
-                    <select class="ui search dropdown" id="FilterConditionSelect" required></select>
-                </div>
-                <div class="field">
-                    <label>Value</label>
-                    <input id="ValueInputText" required/>
-                </div>
-                <div class="field">
-                    <label>And</label>
-                    <input id="AndInputText" readonly="readonly"/>
-                </div>
-                <div class="field">
-                    <label>&nbsp;</label>
-                    <input class="ui button" onclick="addFilter();" type="button" value="Add">
+                <div class="right aligned ten wide column">
+                    <a class="ui left attached labeled icon button" id="PreviousButton"><i class="left arrow icon"></i>Previous</a>
+                    <a class="ui right attached right labeled icon button" id="NextButton">Next<i class="right arrow icon"></i></a>
                 </div>
             </div>
         </div>
 
-        <table class="ui striped table" id="FilterTable">
-            <thead>
-            <tr>
-                <th style="width: 100px;">Actions</th>
-                <th>Column Name</th>
-                <th>Condition</th>
-                <th>Value</th>
-                <th>And</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div id="filters" class="vpad8">
-        </div>
-
-        <div class="ui basic buttons">
-            <div class="ui basic button">Search</div>
-            <div class="ui basic button">Close</div>
-        </div>
-
-        <div class="ui large header">Save this Filter</div>
-        <div class="ui divider"></div>
-        <div class="ui form">
-            <div class="fields">
-                <div class="four wide field">
-                    <label>Filter Name</label>
-                    <input id="FilterNameInputText"/>
-                </div>
-            </div>
-            <div class="ui buttons">
-
-                <div class="ui basic green button" id="SaveFilterButton">Save</div>
-                <div class="ui button" id="SaveAndDefaultFilterButton">Save & Make Default</div>
-                <div class="ui basic red button">Cancel</div>
-            </div>
-        </div>
-
-        <div class="ui filter small modal">
-            <i class="close icon"></i>
+        <div class="ui bottom attached hidden tab segment" data-tab="filter">
             <div class="ui huge header">
-                Manage Filters
+                Filter:
+                <span id="FilterName">
+                </span>
             </div>
-            <div class="content">
-                <div class="ui form" style="max-width: 400px;">
-                    <div class="field">
-                        <label>Select a Filter</label>
-                        <select class="ui search dropdown filter" id="FilterSelect"></select>
-                    </div>
-                    <div class="ui basic buttons">
-                        <a class="ui close button" onclick="loadFilter();">Edit</a>
-                        <a class="ui close button" onclick="loadFilter();">Delete</a>
-                        <a class="ui close button">Close</a>
-                    </div>
+            <div class="ui divider"></div>
 
+            <div class="ui stackable form" id="FilterForm">
+                <div class="five fields">
+                    <div class="field">
+                        <label>Select a Column</label>
+                        <select class="ui search dropdown" id="ColumnSelect" required></select>
+                    </div>
+                    <div class="field">
+                        <label>Filter Condition</label>
+                        <select class="ui search dropdown" id="FilterConditionSelect" required></select>
+                    </div>
+                    <div class="field">
+                        <label>Value</label>
+                        <input id="ValueInputText" required />
+                    </div>
+                    <div class="field">
+                        <label>And</label>
+                        <input id="AndInputText" readonly="readonly" />
+                    </div>
+                    <div class="field">
+                        <label>&nbsp;</label>
+                        <input class="ui button" id="AddFilterButton" type="button" value="Add">
+                    </div>
                 </div>
             </div>
-            <div class="actions">
-                <div class="ui basic buttons">
-                    <a class="ui basic red close button" onclick="removeUserDefaults();">Remove User Defaults</a>
-                    <a class="ui basic purple close button" onclick="removeAdminDefaults();">Remove Admin Defaults</a>
-                    <a class="ui basic teal button" onclick="defaultUserFilter();">Default (For Users)</a>
-                    <a class="ui basic blue close button" onclick="defaultAdminFeature();">Default (For Admins)</a>
+
+            <table class="ui striped table" id="FilterTable">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">Actions</th>
+                        <th>Column Name</th>
+                        <th>Condition</th>
+                        <th>Value</th>
+                        <th>And</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="ui large header">Save this Filter</div>
+            <div class="ui divider"></div>
+            <div class="ui form">
+                <div class="fields">
+                    <div class="four wide field">
+                        <label>Filter Name</label>
+                        <input id="FilterNameInputText" />
+                    </div>
+                </div>
+                <div class="ui buttons">
+                    <div class="ui basic green button" id="SaveFilterButton">Save</div>
+                        <div class="ui basic blue button" id="ManageFiltersButton">Manage Filters</div>
+                    <div class="ui basic red button">Cancel</div>
+                </div>
+            </div>
+
+            <div class="ui filter small modal">
+                <i class="close icon"></i>
+                <div class="ui huge header">
+                    Manage Filters
+                </div>
+                <div class="content">
+                    <div class="ui form" style="max-width: 400px;">
+                        <div class="field">
+                            <label>Select a Filter</label>
+                            <select class="ui search dropdown filter" id="FilterSelect"></select>
+                        </div>
+                        <div class="ui basic buttons">
+                            <a class="ui close button" onclick="loadFilter();">Edit</a>
+                            <a class="ui close button" onclick="loadFilter();">Delete</a>
+                            <a class="ui close button">Close</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui basic buttons">
+                        <a class="ui basic red close button">Remove User Defaults</a>
+                        <a class="ui basic teal button" id="MakeUserDefaultFilterButton">Default (For Users)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui active bottom attached hidden tab segment" data-tab="import">
+            <div class="ui huge header">Data Import</div>
+
+            <div class="ui buttons">
+                <a class="ui basic green button" id="DownloadTemplateButton">Export Data</a>
+                <div  class="ui basic red button">
+                    <label for="file">Import Data</label>
+                    <input type="file" id="file" style="display:none;">
+                </div>
+            </div>
+
+            <div class="big error"></div>
+
+            <div id="ProgressBar" class="vpad16" style="display:none;">
+                <div data-percent="0" class="ui indicating progress active">
+                  <div style="transition-duration: 300ms; width: 0%;" class="bar"></div>
+                  <div class="label"></div>
                 </div>
             </div>
         </div>
 
     </div>
 
-</div>
+    <br />
+    <script>
+        var form = $(".poco.form.factory");
+        var view = $(".poco.view.factory");
+        var pocoDefinition;
 
-        <br />
-        <script>
-            var form = $(".poco.form.factory");
-            var view = $(".poco.view.factory");
-
+        $("#AddNewButton").click(function () {
             if (form.length) {
-                form.hide();
+                view.hide();
+                form.show();
+            };
+        });
+    </script>
+
+    <script>
+        var columns = [];
+        var filterConditions = [{ "value": "0", "text": "IsEqualTo" },
+        { "value": "1", "text": "IsNotEqualTo" },
+        { "value": "2", "text": "IsLessThan" },
+        { "value": "3", "text": "IsLessThanEqualTo" },
+        { "value": "4", "text": "IsGreaterThan" },
+        { "value": "5", "text": "IsGreaterThanEqualTo" },
+        { "value": "6", "text": "IsBetween" },
+        { "value": "7", "text": "IsNotBetween" },
+        { "value": "8", "text": "IsLike" },
+        { "value": "9", "text": "IsNotLike" }];
+
+        $("#FilterName").text(Resources.Titles.Untitled());
+    </script>
+    <script>
+        function tryParseLocalizedResource(text) {
+            var localized = executeFunctionByName("Resources.Titles." + text, window);
+
+            if (!localized) {
+                localized = executeFunctionByName("Resources.ScrudResource." + text, window);
             };
 
-            function addNew() {
-                if (form.length) {
-                    view.hide();
-                    form.show();
-                };
+            if (localized) {
+                return localized;
             };
 
-        </script>
+            return text;
+        };
 
-        <script>
-            var columns = [];
-            var filterConditions = [{ "value": "0", "text": "IsEqualTo" },
-            { "value": "1", "text": "IsNotEqualTo" },
-            { "value": "2", "text": "IsLessThan" },
-            { "value": "3", "text": "IsLessThanEqualTo" },
-            { "value": "4", "text": "IsGreaterThan" },
-            { "value": "5", "text": "IsGreaterThanEqualTo" },
-            { "value": "6", "text": "IsBetween" },
-            { "value": "7", "text": "IsNotBetween" },
-            { "value": "8", "text": "IsLike" },
-            { "value": "9", "text": "IsNotLike" }];
 
-            var untitledLocalized = "Untitled";
-        </script>
-        <script>
-            function tryParseLocalizedResource(text) {
-                var localized = executeFunctionByName("Resources.Titles." + text, window);
+        function localizeHeaders(el) {            
+            el.find("thead tr th").each(function () {
+                var cell = $(this);
 
-                if (!localized) {
-                    localized = executeFunctionByName("Resources.ScrudResource." + text, window);
-                };
+                var name = cell.text();
 
-                if (localized) {
-                    return localized;
-                };
+                var text = tryParseLocalizedResource(name);
+                cell.text(text);
 
-                return text;
+                var column = new Object();
+                column.name = name;
+                column.text = text;
+
+                columns.push(column);
+            });
+        };
+    </script>
+    <script>
+        json2Table = function (json, excludedColumnIndices, appendTo) {
+            if (!json) {
+                return null;
             };
 
-            function localizeHeaders(el) {
-                el.find("thead tr th").each(function () {
-                    var cell = $(this);
-
-                    var name = cell.text();
-
-                    var text = tryParseLocalizedResource(name);
-                    cell.text(text);
-
-                    var column = new Object();
-                    column.name = name;
-                    column.text = text;
-
-                    columns.push(column);
-                });
+            if (!excludedColumnIndices) {
+                excludedColumnIndices = [];
             };
-        </script>
-        <script>
-            json2Table = function (json, excludedColumnIndices) {
-                if (!json) {
-                    return null;
+
+            var el = $('<table class="ui striped nowrap table">');
+            var header = "<thead><tr>";
+
+            var index = 0;
+
+            $.each(json[0], function (name) {
+                if (excludedColumnIndices.indexOf(index) === -1) {
+                    header += "<th>" + name + "</th>";
                 };
 
-                if (!excludedColumnIndices) {
-                    excludedColumnIndices = [];
-                };
+                index++;
+            });
 
-                var el = $('<table class="ui striped nowrap table">');
-                var header = "<thead><tr>";
+            header += "</tr></thead>";
 
-                var index = 0;
-                $.each(json[0], function (name) {
+            $(header).appendTo(el);
+
+            var body = $("<tbody />");
+
+            $.each(json, function (i, value) {
+                var row = "<tr>";
+
+                index = 0;
+                $.each(value, function (key, val) {
                     if (excludedColumnIndices.indexOf(index) === -1) {
-                        header += "<th>" + name + "</th>";
+                        row += "<td>" + (val || "") + "</td>";
                     };
 
                     index++;
                 });
 
+                row += "</tr>";
 
-                header += "</tr></thead>";
-
-                $(header).appendTo(el);
-
-                var body = $("<tbody />");
-
-                $.each(json, function (i, value) {
-                    var row = "<tr>";
-
-                    index = 0;
-                    $.each(value, function (key, val) {
-                        if (excludedColumnIndices.indexOf(index) === -1) {
-                            row += "<td>" + (val || "") + "</td>";
-                        };
-
-                        index++;
-                    });
-
-                    row += "</tr>";
-
-                    body.append(row);
-                });
-
-                $(el).append(body);
-
-                return $(el);
-            };
-
-            function createJsonTable(el, json) {
-                el.html("");
-
-                var mydata = eval(json);
-                var table = json2Table(mydata, window.excludedColumnIndices);
-                $(table).appendTo(el);
-            };
-
-        </script>
-        <script>
-            //Utilities
-            function getPageNumber() {
-                var page = parseInt(getQueryStringByName("Page") || 0);
-                var totalPage = parseInt($("#TotalPagesAnchor").text() || 1);
-
-                if (!page) {
-                    return 1;
-                };
-
-                if (page > totalPage) {
-                    page = totalPage;
-                };
-
-                return page;
-            };
-
-            function getFilter() {
-                if ($("#DefaultFilterSelect").val()) {
-                    var filter = $("#DefaultFilterSelect").getSelectedValue();
-                    return filter;
-                };
-
-                return "";
-            };
-
-            function bindSelect(el, data, valueField, textField) {
-                $.each(data, function () {
-                    var option = "<option value='" + this[valueField] + "'>" + this[textField] + "</option>";
-                    el.append(option);
-                });
-            };
-        </script>
-        <script>
-            function loadPageCount(callback) {
-                $("[data-tab=view]").addClass("loading");
-                var filterName = getFilter();
-
-                var ajaxGetTotalPages = getTotalPages(pocoName, filterName, false);
-
-                ajaxGetTotalPages.success(function (msg) {
-                    var pages = parseInt(msg.d || 1);
-
-                    $("#TotalPagesAnchor").text(pages);
-
-                    if (typeof callback === "function") {
-                        callback();
-                    };
-                });
-
-                ajaxGetTotalPages.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
-                });
-
-            };
-
-            function getTotalPages(pocoName, filterName, byOffice) {
-                var url = "/Services/Modules/PocoService.asmx/GetTotalPages";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "filterName", filterName);
-                data = appendParameter(data, "byOffice", byOffice);
-
-                data = getData(data);
-                return getAjax(url, data);
-            };
-        </script>
-        <script>
-            function loadFilterConditions() {
-                bindSelect($("#FilterConditionSelect"), filterConditions, "value", "text");
-            };
-
-            function loadColumns() {
-                bindSelect($("#ColumnSelect"), columns, "name", "text");
-            };
-
-            $("#FilterNameInputText").keyup(function () {
-                $("#FilterName").html($(this).val() || untitledLocalized);
+                body.append(row);
             });
 
-            function loadFilter() {
-                var filterName = $("#FilterSelect").getSelectedText();
-                $("#FilterName").html(filterName);
-                $("#FilterNameInputText").val(filterName);
+            $(el).append(body);
+            appendTo.append(el);
+        };
 
-                var ajaxGetFilters = getFilters(pocoName, filterName);
+        function createJsonTable(el, json) {
+            el.html("");
 
-                ajaxGetFilters.success(function (msg) {
-                    createFilters(msg.d);
-                });
+            var mydata = eval(json);
+            json2Table(mydata, window.excludedColumnIndices, el);
+        };
 
-                ajaxGetFilters.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
-                });
+    </script>
+    <script>
+        //Utilities
+        function getPageNumber() {
+            var page = parseInt(getQueryStringByName("Page") || 0);
+            var totalPage = parseInt($("#TotalPagesAnchor").text() || 1);
+
+            if (!page) {
+                return 1;
             };
 
-            function getFilters(pocoName, filterName) {
-                var url = "/Services/Modules/PocoService.asmx/GetFilters";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "filterName", filterName);
-                data = getData(data);
-                return getAjax(url, data);
+            if (page > totalPage) {
+                page = totalPage;
             };
-        </script>
-        <script>
-            function loadFilterNames() {
-                var ajaxGetFilterNames = getFilterNames(pocoName);
 
-                ajaxGetFilterNames.success(function (msg) {
-                    var data = msg.d;
-                    var selected = "";
+            return page;
+        };
 
-                    var option = "<option value='0'>Select a Filter</option>";
+        function getFilter() {
+            if ($("#DefaultFilterSelect").val()) {
+                var filter = $("#DefaultFilterSelect").getSelectedValue();
+                return filter;
+            };
 
-                    $.each(data, function () {
-                        var isDefault = this[1].Value;
+            return "";
+        };
 
-                        if (isDefault) {
-                            selected = this[0].Value;
-                        };
+        function bindSelect(el, data, valueField, textField) {
+            $.each(data, function () {
+                var option = "<option value='" + this[valueField] + "'>" + this[textField] + "</option>";
+                el.append(option);
+            });
+        };
+    </script>
+    <script>
+        function loadPageCount(callback) {
+            $("[data-tab=view]").addClass("loading");
+            var filterName = getFilter();
 
-                        option += stringFormat("<option value='{0}'>{0}</option>", this[0].Value);
-                    });
+            var ajaxGetTotalPages = getTotalPages(pocoName, filterName, false);
 
+            ajaxGetTotalPages.success(function (msg) {
+                var pages = parseInt(msg.d || 1);
 
-                    $("#DefaultFilterSelect").html(option);
+                $("#TotalPagesAnchor").text(pages);
 
-                    if (selected) {
-                        $("#DefaultFilterSelect").dropdown("set selected", selected);
+                if (typeof callback === "function") {
+                    callback();
+                };
+            });
+
+            ajaxGetTotalPages.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+
+        };
+
+        function getTotalPages(pocoName, filterName, byOffice) {
+            var url = "/Services/Modules/PocoService.asmx/GetTotalPages";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "filterName", filterName);
+            data = appendParameter(data, "byOffice", byOffice);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+    </script>
+    <script>
+        function loadFilterConditions() {
+            bindSelect($("#FilterConditionSelect"), filterConditions, "value", "text");
+        };
+
+        function loadColumns() {
+            bindSelect($("#ColumnSelect"), columns, "name", "text");
+        };
+
+        $("#FilterNameInputText").keyup(function () {
+            $("#FilterName").html($(this).val() || Resources.Titles.Untitled());
+        });
+
+        function loadFilter() {
+            var filterName = $("#FilterSelect").getSelectedText();
+            $("#FilterName").html(filterName);
+            $("#FilterNameInputText").val(filterName);
+            var ajaxGetFilters = getFilters(pocoName, filterName);
+
+            ajaxGetFilters.success(function (msg) {
+                createFilters(msg.d);
+            });
+
+            ajaxGetFilters.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        };
+
+        function getFilters(pocoName, filterName) {
+            var url = "/Services/Modules/PocoService.asmx/GetFilters";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "filterName", filterName);
+            data = getData(data);
+            return getAjax(url, data);
+        };
+    </script>
+    <script>
+        function loadFilterNames() {
+            var ajaxGetFilterNames = getFilterNames(pocoName);
+            ajaxGetFilterNames.success(function (msg) {
+                var data = msg.d;
+                var selected = "";
+
+                var option = "<option value='0'>Select a Filter</option>";
+
+                $.each(data, function () {
+                    var isDefault = this[1].Value;
+
+                    if (isDefault) {
+                        selected = this[0].Value;
                     };
 
-                    $("#FilterSelect").html(option);
+                    option += stringFormat("<option value='{0}'>{0}</option>", this[0].Value);
+                });
+
+
+                $("#DefaultFilterSelect").html(option);
+
+                if (selected) {
+                    $("#DefaultFilterSelect").dropdown("set selected", selected).dropdown();
+                    loadPageCount(loadGrid);
+                };
+
+                $("#FilterSelect").html(option);
+
+
+                $("#DefaultFilterSelect").change(function () {
                     loadPageCount(loadGrid);
                 });
 
-                ajaxGetFilterNames.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
-                });
-            };
-
-            function getFilterNames(pocoName) {
-                var url = "/Services/Modules/PocoService.asmx/GetFilterNames";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = getData(data);
-                return getAjax(url, data);
-            };
-        </script>
-        <script>
-            $("#DefaultFilterSelect").change(function () {
-                loadPageCount(loadGrid);
-            });
-        </script>
-        <script>
-
-            $(document).ready(function () {
-                loadFilterNames();
-                loadFilterConditions();
-                if (window.title) {
-                    $(".title").html(window.title);
-                };
-                if (window.description) {
-                    $(".description").html(window.description);
+                if(data.length === 0){
+                    $("#DefaultFilterSelect").dropdown();
+                    loadPageCount(loadGrid);
                 };
             });
 
-            function loadGrid() {
-                var pageNumber = getPageNumber();
-                var filterName = getFilter();
+            ajaxGetFilterNames.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        };
 
-                $("#CurrentPageAnchor").text(pageNumber);
+        function getFilterNames(pocoName) {
+            var url = "/Services/Modules/PocoService.asmx/GetFilterNames";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = getData(data);
+            return getAjax(url, data);
+        };
+    </script>
+    <script>
+    </script>
+    <script>
 
-                var ajaxGetPocoView = getPocoView(pocoName, pageNumber, filterName, false);
+        $(document).ready(function () {
+            loadPoco(loadFilterNames);
+            loadFilterConditions();
 
-                ajaxGetPocoView.success(function (msg) {
-                    var el = $("#json");
+            if (window.title) {
+                $(".title").html(window.title);
+            };
+            if (window.description) {
+                $(".description").html(window.description);
+            }else{
+                $(".description").remove();
+            };
+        });
+
+        function loadPoco(callback){
+            var ajaxgetPoco = getPoco(pocoName);
+
+            ajaxgetPoco.success(function (msg) {
+                pocoDefinition = msg.d;
+                if(typeof(callback) === "function"){
+                    callback();
+                }                    
+            });            
+        };
+
+        
+        function loadGrid() {
+            var pageNumber = getPageNumber();
+            var filterName = getFilter();
+
+            $("#CurrentPageAnchor").text(pageNumber);
+
+            var ajaxGetPocoView = getPocoView(pocoName, pageNumber, filterName, false);
+
+            ajaxGetPocoView.success(function (msg) {
+                var el = $("#json");
+                var json = JSON.parse(msg.d);
+                createJsonTable(el, json);
+                localizeHeaders(el);
+                loadColumns();
+                $("[data-tab=view]").removeClass("loading");
+            });
+
+            ajaxGetPocoView.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        };
+
+        function getPocoView(pocoName, pageNumber, filterName, byOffice) {
+            var url = "/Services/Modules/PocoService.asmx/GetPocoView";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "pageNumber", pageNumber);
+            data = appendParameter(data, "filterName", filterName);
+            data = appendParameter(data, "byOffice", byOffice);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+        function getPoco(pocoName) {
+            var url = "/Services/Modules/PocoService.asmx/GetFormView";
+            var data = appendParameter("", "pocoName", pocoName);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+    </script>
+    <script>
+        var columnSelect = $("#ColumnSelect");
+        var filterConditionSelect = $("#FilterConditionSelect");
+        var valueInputText = $("#ValueInputText");
+        var andInputText = $("#AndInputText");
+        var commandItems = "<a onclick='deleteFilter(this);'><i class='delete icon'></i></a><a onclick='editFilter(this);'><i class='edit icon'></i></a><a onclick='$(this).parent().parent().toggleClass(\"warning\");'><i class='check mark icon'></i></a>";
+
+
+
+        filterConditionSelect.change(function () {
+            var val = parseFloat(filterConditionSelect.val() || 0);
+
+            if (val >= 6 && val <= 7) {
+                andInputText.removeAttr("readonly");
+                return;
+            };
+
+            andInputText.attr("readonly", "readonly");
+            andInputText.val("");
+        });
+
+        function validateFilters() {
+            var isValid = true;
+
+            $("#FilterForm [required]").each(function () {
+                var el = $(this);
+
+                if (isNullOrWhiteSpace(el.val())) {
+                    isValid = false;
+                    makeDirty(el);
+                    return;
+                };
+
+                removeDirty(el);
+            });
+
+            return isValid;
+        };
+
+        $("#AddFilterButton").click(function () {
+            var grid = $("#FilterTable");
+
+            var isValid = validateFilters();
+            if (!isValid) {
+                return;
+            };
+
+            var selectedColumn = columnSelect.getSelectedText();
+            var filterCondition = filterConditionSelect.getSelectedText();
+            var value = valueInputText.val();
+            var and = andInputText.val();
+
+            var duplicate = false;
+
+            grid.find("tbody tr").each(function () {
+                var el = $(this);
+                var columnName = el.find("td:nth-child(2)").text();
+                var condition = el.find("td:nth-child(3)").text();
+
+                if (columnName === selectedColumn &&
+                    condition === filterCondition) {
+
+                    el.find("td:nth-child(4)").text(value);
+                    el.find("td:nth-child(5)").text(and);
+
+                    el.addClass("warning");
+                    duplicate = true;
+                    return false;
+                };
+            });
+
+
+            if (!duplicate) {
+                addFilterRow(selectedColumn, filterCondition, value, and);
+            };
+        });
+
+
+        function addFilterRow(selectedColumn, filterCondition, value, and, css) {
+            var html = "<tr>";
+            html += "<td>" + commandItems + "</td>";
+            html += "<td>" + selectedColumn + "</td>";
+            html += "<td>" + filterCondition + "</td>";
+            html += "<td>" + value + "</td>";
+            html += "<td>" + and + "</td>";
+            html += "</tr>";
+
+            var row = $(html);
+
+            if (css) {
+                row.addClass(css);
+            };
+
+            $("#FilterTable").removeClass("inverted red").find("tbody").append(row);
+            columnSelect.parent().find(".search").focus();
+        };
+
+        $("#ManageFiltersButton").click(function () {
+            $('.filter.modal').modal('show');
+        });
+
+        $("#SaveFilterButton").click(function () {
+            var table = $("#FilterTable");
+            var filterNameInputText = $("#FilterNameInputText");
+
+            if (isNullOrWhiteSpace(filterNameInputText.val())) {
+                makeDirty(filterNameInputText);
+                return;
+            };
+
+            removeDirty(filterNameInputText);
+
+            if (!table.find("tbody tr").length) {
+                table.addClass("inverted red");
+                return;
+            };
+
+            table.removeClass("inverted red");
+
+            var error = table.find("tr.error td:nth-child(2)").text();
+
+            if (error.length) {
+                var message = "The column \"{0}\" is invalid and does not exist. Are you sure you want to continue?";
+
+                var confirmed = confirm(stringFormat(message, error));
+                if (!confirmed) {
+                    return;
+                };
+            };
+
+            var filters = [];
+
+            $("#FilterTable tbody tr").each(function () {
+                var el = $(this);
+                var columnName = el.find("td:nth-child(2)").text();
+                var condition = el.find("td:nth-child(3)").text();
+
+                var filter = new Object();
+
+                filter.FilterName = filterNameInputText.val();
+                filter.ColumnName = _.findWhere(columns, { text: columnName }).name;
+                filter.FilterCondition = parseInt(_.findWhere(filterConditions, { text: condition }).value || 0);
+                filter.FilterValue = el.find("td:nth-child(4)").text();
+                filter.FilterAndValue = el.find("td:nth-child(5)").text();
+                filters.push(filter);
+            });
+
+            var ajaxSaveFilter = saveFilter(pocoName, filters);
+
+            ajaxSaveFilter.success(function () {
+                displayMessage(Resources.Titles.TaskCompletedSuccessfully(), "success");
+            });
+
+            ajaxSaveFilter.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        });
+
+        function saveFilter(pocoName, filters) {
+            var url = "/Services/Modules/PocoService.asmx/SaveFilter";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "filters", filters);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+
+        function createFilters(filters) {
+            $("#FilterTable").find("tbody").html("");
+            $.each(filters, function (i, filter) {
+
+                var selectedColumn = filter.ColumnName;
+                var filterCondition = filter.FilterCondition;
+                var value = filter.FilterValue;
+                var and = (filter.FilterAndValue || "");
+
+                var css = "";
+                filterCondition = _.findWhere(filterConditions, { value: filterCondition.toString() }).text;
+                var column = _.findWhere(columns, { name: selectedColumn });
+
+                if (column) {
+                    selectedColumn = column.text;
+                } else {
+                    css = "error";
+                };
+
+                addFilterRow(selectedColumn, filterCondition, value, and, css);
+            });
+        };
+
+        function deleteFilter(el) {
+            if (confirmAction()) {
+                $(el).parent().parent().remove();
+            };
+
+        };
+
+    </script>
+
+    <script>
+        $("#MakeUserDefaultFilterButton").click(function () {
+            var filterName = $("#FilterSelect").getSelectedText();
+            var ajaxMakeDefaultFilter = makeDefaultFilter(pocoName, filterName);
+
+            ajaxMakeDefaultFilter.success(function () {
+                displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+
+                $(".filter.modal").modal("close");
+            });
+
+            ajaxMakeDefaultFilter.fail(function (xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        });
+
+        function makeDefaultFilter(pocoName, filterName) {
+            var url = "/Services/Modules/PocoService.asmx/MakeDefaultFilter";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "filterName", filterName);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+    </script>
+
+    <script>
+        function changeTab(el) {
+            el = $(el);
+            var tab = el.attr("data-tab");
+
+            $.tab('change tab', tab);
+
+            el.parent().find(".active.item").removeClass("active");
+            el.addClass("active");
+        };
+
+        function setPageNumber(pageNumber) {
+            var url = updateQueryString("Page", pageNumber);
+            window.history.pushState({ path: url }, '', url);
+        };
+
+        $("#NextButton").click(function () {
+            var totalPage = parseInt($("#TotalPagesAnchor").text() || 1);
+            var nextPage = getPageNumber() + 1;
+
+            if (nextPage > totalPage) {
+                nextPage = totalPage;
+            };
+
+            setPageNumber(nextPage);
+
+            loadPageCount(loadGrid);
+        });
+
+
+        $("#PreviousButton").click(function () {
+            var previousPage = getPageNumber() - 1;
+
+            if (previousPage < 1) {
+                previousPage = 1;
+            };
+
+            setPageNumber(previousPage);
+            
+            loadPageCount(loadGrid);
+        });        
+    </script>
+    <script>
+        $("#DownloadTemplateButton").click(function(){
+            var ajaxDownloadTemplate = downloadTemplate(importTemplatePoco, false, true);
+            var el = this;
+
+            if(!el.href){
+                $(el).addClass("loading");
+
+                ajaxDownloadTemplate.success(function(msg){
                     var json = JSON.parse(msg.d);
-                    createJsonTable(el, json);
-                    localizeHeaders(el);
-                    loadColumns();
-                    $("[data-tab=view]").removeClass("loading");
+                    var csv = jsonToCsv(json);
+                    var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
+                    el.href = uri;
+                    el.target = "_blank";
+                    el.download = title + ".csv";
+
+                    $(el).removeClass("loading");
+
+                    el.click();
                 });
 
-                ajaxGetPocoView.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
+                ajaxDownloadTemplate.fail(function(){
+                    $(el).removeClass("loading");
                 });
             };
+        });
 
-            function getPocoView(pocoName, pageNumber, filterName, byOffice) {
-                var url = "/Services/Modules/PocoService.asmx/GetPocoView";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "pageNumber", pageNumber);
-                data = appendParameter(data, "filterName", filterName);
-                data = appendParameter(data, "byOffice", byOffice);
+        function jsonToCsv(json)
+        {
 
-                data = getData(data);
-                return getAjax(url, data);
-            };
+            var header = "";
+            var rows = "";
 
-        </script>
-        <script>
-            var columnSelect = $("#ColumnSelect");
-            var filterConditionSelect = $("#FilterConditionSelect");
-            var valueInputText = $("#ValueInputText");
-            var andInputText = $("#AndInputText");
-            var commandItems = "<a onclick='deleteFilter(this);'><i class='delete icon'></i></a><a onclick='editFilter(this);'><i class='edit icon'></i></a><a onclick='$(this).parent().parent().toggleClass(\"warning\");'><i class='check mark icon'></i></a>";
-
-
-
-            filterConditionSelect.change(function () {
-                var val = parseFloat(filterConditionSelect.val() || 0);
-
-                if (val >= 6 && val <= 7) {
-                    andInputText.removeAttr("readonly");
-                    return;
+            $.each(json[0], function (name) {
+                if(header){
+                    header+= ",";
                 };
 
-                andInputText.attr("readonly", "readonly");
-                andInputText.val("");
+                header += '"' + name.replace(/"/g, '""') + '"';
             });
 
-            function validateFilters() {
-                var isValid = true;
+            header += "\r\n";
 
-                $("#FilterForm [required]").each(function () {
-                    var el = $(this);
+            $.each(json, function (i, value) {
+                var row = "";
 
-                    if (isNullOrWhiteSpace(el.val())) {
-                        isValid = false;
-                        makeDirty(el);
-                        return;
+                $.each(value, function (key, val) {
+                    if(row){
+                        row+= ",";
                     };
 
-                    removeDirty(el);
-                });
-
-                return isValid;
-            };
-
-            function addFilter() {
-                var grid = $("#FilterTable");
-
-                var isValid = validateFilters();
-                if (!isValid) {
-                    return;
-                };
-
-                var selectedColumn = columnSelect.getSelectedText();
-                var filterCondition = filterConditionSelect.getSelectedText();
-                var value = valueInputText.val();
-                var and = andInputText.val();
-
-                var duplicate = false;
-
-                grid.find("tbody tr").each(function () {
-                    var el = $(this);
-                    var columnName = el.find("td:nth-child(2)").text();
-                    var condition = el.find("td:nth-child(3)").text();
-
-                    if (columnName === selectedColumn &&
-                        condition === filterCondition) {
-
-                        el.find("td:nth-child(4)").text(value);
-                        el.find("td:nth-child(5)").text(and);
-
-                        el.addClass("warning");
-                        duplicate = true;
-                        return false;
+                    if(val == null)
+                    {
+                        row += '""';
+                    }
+                    else
+                    {
+                        row += '"' + val.toString().replace(/"/g, '""') + '"';
                     };
                 });
 
-
-                if (!duplicate) {
-                    addFilterRow(selectedColumn, filterCondition, value, and);
-                };
-            };
-
-            function addFilterRow(selectedColumn, filterCondition, value, and, css) {
-                var html = "<tr>";
-                html += "<td>" + commandItems + "</td>";
-                html += "<td>" + selectedColumn + "</td>";
-                html += "<td>" + filterCondition + "</td>";
-                html += "<td>" + value + "</td>";
-                html += "<td>" + and + "</td>";
-                html += "</tr>";
-
-                var row = $(html);
-
-                if (css) {
-                    row.addClass(css);
-                };
-
-                $("#FilterTable").find("tbody").append(row);
-                columnSelect.parent().find(".search").focus();
-            };
-
-            $("#SaveFilterButton").click(function () {
-                var table = $("#FilterTable");
-                var error = table.find("tr.error td:nth-child(2)").text();
-
-                if (error.length) {
-                    var message = "The column \"{0}\" is invalid and does not exist. Are you sure you want to continue?";
-
-                    var confirmed = confirm(stringFormat(message, error));
-                    if (!confirmed) {
-                        return;
-                    };
-                };
-
-                var filters = [];
-
-                $("#FilterTable tbody tr").each(function () {
-                    var el = $(this);
-                    var columnName = el.find("td:nth-child(2)").text();
-                    var condition = el.find("td:nth-child(3)").text();
-
-                    var filter = new Object();
-
-                    filter.FilterName = $("#FilterNameInputText").val();
-                    filter.ColumnName = _.findWhere(columns, { text: columnName }).name;
-                    filter.FilterCondition = parseInt(_.findWhere(filterConditions, { text: condition }).value || 0);
-                    filter.FilterValue = el.find("td:nth-child(4)").text();
-                    filter.FilterAndValue = el.find("td:nth-child(5)").text();
-                    filters.push(filter);
-                });
-
-                var ajaxSaveFilter = saveFilter(pocoName, filters);
-
-                ajaxSaveFilter.success(function (msg) {
-                    alert("foo");
-                });
-
-                ajaxSaveFilter.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
-                });
+                row += "\r\n";
+                rows += row;
             });
 
-            function saveFilter(pocoName, filters) {
-                var url = "/Services/Modules/PocoService.asmx/SaveFilter";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "filters", filters);
+            var csv = header + rows;
+            return csv;
+        };
 
-                data = getData(data);
-                return getAjax(url, data);
+
+        function toProperCase(str){
+            var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+            return result.charAt(0).toUpperCase() + result.slice(1);
+        };
+
+
+        function downloadTemplate(pocoName, byOffice, withData) {
+            var url = "/Services/Modules/PocoService.asmx/DownloadTemplate";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "byOffice", byOffice);
+            data = appendParameter(data, "withData", withData);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+        function importPocos(pocoName, entities) {
+            var url = "/Services/Modules/PocoService.asmx/Import";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "entities", entities);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+    </script>
+    <script>
+        $("#file").change(function(){
+            var el = $(this);
+            $(".big.error").removeClass("vpad8").html("");
+            var file = this.files[0];
+
+            if(!file){
+                return;
             };
 
+            var supportedFileTypes = ["text/csv", "application/csv"];
 
-            function createFilters(filters) {
-                $("#FilterTable").find("tbody").html("");
-                $.each(filters, function (i, filter) {
-                    var selectedColumn = filter.ColumnName;
-                    var filterCondition = filter.FilterCondition;
-                    var value = filter.FilterValue;
-                    var and = (filter.FilterAndValue || "");
+            if(supportedFileTypes.indexOf(file.type) === -1){
+                $(".big.error").addClass("vpad8").html(stringFormat("Your upload is of invalid file type \"{0}\". Please try again.", file.type));
+                return;
+            };
 
-                    var css = "";
-                    filterCondition = _.findWhere(filterConditions, { value: filterCondition.toString() }).text;
-                    var column = _.findWhere(columns, { name: selectedColumn });
+            $("#ProgressBar").show();
+            var progress = $(".progress");
 
-                    if (column) {
-                        selectedColumn = column.text;
-                    } else {
-                        css = "error";
-                    };
+            showProgress(progress, 25, "Processing  your CSV file");
 
-                    addFilterRow(selectedColumn, filterCondition, value, and, css);
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var result = reader.result;
+                showProgress(progress, 50, "Successfully processed your file.");
+                var entities = Papa.parse(result, {"header":true}).data;
+
+                showProgress(progress, 50, "Requesting import. This may take several minutes to complete.");
+
+                el.closest(".segment").find(".button").addClass("loading");
+
+                var ajaxImportPocos = importPocos(pocoName, entities);
+
+                ajaxImportPocos.success(function(msg){
+                    var message  = stringFormat("Successfully imported {0} items.", entities.length);
+                    showProgress(progress, 100, message);
+                    el.closest(".segment").find(".button").removeClass("loading");
+                });
+
+                ajaxImportPocos.fail(function(xhr){
+                    $(".big.error").addClass("vpad8").html(JSON.parse(xhr.responseText).Message);
+                    el.closest(".segment").find(".button").removeClass("loading");
+                    showProgress(progress, 0, "Rolling back changes.");
+                    $("#ProgressBar").fadeOut(2000);
                 });
             };
 
-            function deleteFilter(el) {
-                if (confirmAction()) {
-                    $(el).parent().parent().remove();
-                };
+            reader.readAsText(file);
+            
+        });
 
-            };
-
-        </script>
-
-        <script>
-            function defaultUserFilter() {
-                var filterName = $("#FilterSelect").getSelectedText();
-                var ajaxMakeDefaultFilter = makeDefaultFilter(pocoName, filterName);
-
-                ajaxMakeDefaultFilter.success(function () {
-                    displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
-
-                    $(".filter.modal").modal("close");
-                });
-
-                ajaxMakeDefaultFilter.fail(function (xhr) {
-                    logAjaxErrorMessage(xhr);
-                });
-            };
-
-            function makeDefaultFilter(pocoName, filterName) {
-                var url = "/Services/Modules/PocoService.asmx/MakeDefaultFilter";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "filterName", filterName);
-
-                data = getData(data);
-                return getAjax(url, data);
-            };
-
-        </script>
-    </div>
+        function showProgress(el, percentage, message){
+            el.attr("data-percent", percentage.toString());
+            el.find(".bar").css("width", percentage.toString() + "%");
+            el.find(".label").text(percentage.toString() + "% - " + message);
+        };
+    </script>
+</div>

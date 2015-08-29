@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.UI.WebControls;
 using MixERP.Net.Framework;
 using MixERP.Net.i18n.Resources;
 using Npgsql;
@@ -52,12 +53,17 @@ namespace PetaPoco
             }
         }
 
-        public static object Insert(string catalog, object poco)
+        public static object Insert(string catalog, object poco, string tableName = "", string primaryKeyName = "")
         {
             try
             {
                 using (Database db = new Database(GetConnectionString(catalog), ProviderName))
                 {
+                    if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
+                    {
+                        return db.Insert(tableName, primaryKeyName, poco);
+                    }
+
                     return db.Insert(poco);
                 }
             }
@@ -73,12 +79,17 @@ namespace PetaPoco
             }
         }
 
-        public static object Update(string catalog, object poco, object primaryKeyValue)
+        public static object Update(string catalog, object poco, object primaryKeyValue, string tableName = "", string primaryKeyName = "")
         {
             try
             {
                 using (Database db = new Database(GetConnectionString(catalog), ProviderName))
                 {
+                    if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
+                    {
+                        return db.Update(tableName, primaryKeyName, poco, primaryKeyValue);
+                    }
+
                     return db.Update(poco, primaryKeyValue);
                 }
             }

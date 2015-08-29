@@ -1387,6 +1387,7 @@ SELECT localization.add_localized_resource('Titles', '', 'UnitId', 'Unit Id');
 SELECT localization.add_localized_resource('Titles', '', 'UnitName', 'Unit Name');
 SELECT localization.add_localized_resource('Titles', '', 'UnitsOfMeasure', 'Units of Measure');
 SELECT localization.add_localized_resource('Titles', '', 'UnknownError', 'Operation failed due to an unknown error.');
+SELECT localization.add_localized_resource('Titles', '', 'Untitled', 'Untitled');
 SELECT localization.add_localized_resource('Titles', '', 'Update', 'Update');
 SELECT localization.add_localized_resource('Titles', '', 'UpdatedOn', 'Updated On');
 SELECT localization.add_localized_resource('Titles', '', 'UpdatedExchangeRates', 'Update Exchange Rates');

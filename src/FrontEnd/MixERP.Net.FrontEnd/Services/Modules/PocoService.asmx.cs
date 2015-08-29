@@ -20,7 +20,7 @@ namespace MixERP.Net.FrontEnd.Services.Modules
     [ScriptService]
     public class PocoService : MixERPWebService
     {
-        private const int PAGE_SIZE = 50;
+        private const int PAGE_SIZE = 25;
         private const bool SHOW_ALL = false;
 
         [WebMethod]
@@ -32,6 +32,25 @@ namespace MixERP.Net.FrontEnd.Services.Modules
             IEnumerable<object> result = Service.GetView(this.Catalog, poco, pageNumber, filters, byOffice, this.OfficeId, SHOW_ALL, PAGE_SIZE);
 
             return JsonConvert.SerializeObject(result);
+        }
+
+        [WebMethod]
+        public string DownloadTemplate(string pocoName, bool byOffice, bool withData)
+        {
+            object poco = PocoHelper.GetInstanceOf(pocoName);
+
+            IEnumerable<object> result = Service.GetView(this.Catalog, poco, 1, null, byOffice, this.OfficeId, withData, PAGE_SIZE);
+
+            return JsonConvert.SerializeObject(result);
+        }
+
+        [WebMethod]
+        public void Import(string pocoName, List<dynamic> entities)
+        {
+            object poco = PocoHelper.GetInstanceOf(pocoName);
+            EntityView entityView = this.GetFormView(pocoName);
+
+            Service.Import(this.Catalog, poco, entities, entityView, this.UserId);
         }
 
         [WebMethod]
@@ -106,11 +125,6 @@ namespace MixERP.Net.FrontEnd.Services.Modules
             Type type = poco.GetType();
             foreach (PropertyInfo info in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                if (new[] {"AuditUserId", "AuditTs"}.Contains(info.Name))
-                {
-                    continue;
-                }
-
                 EntityColumn column = new EntityColumn();
 
                 column.PropertyName = info.Name;

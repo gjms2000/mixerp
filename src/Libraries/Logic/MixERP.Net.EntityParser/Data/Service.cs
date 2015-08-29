@@ -34,10 +34,37 @@ namespace MixERP.Net.EntityParser.Data
 
             if (!showall)
             {
-                long offset = (page - 1)*pageSize;
+                long offset = (page - 1) * pageSize;
 
                 sql.Append("LIMIT @0", pageSize);
                 sql.Append("OFFSET @0", offset);
+            }
+
+            return Factory.Get<T>(catalog, sql);
+        }
+
+        public static IEnumerable<T> ForDownloadTemplate<T>(string catalog, T poco, string tableName, string keyName, bool byOffice,
+            int officeId, bool includeData)
+        {
+            Sql sql = Sql.Builder.Append("SELECT * FROM " + tableName).Where("1 = 1");
+
+            if (!includeData)
+            {
+                sql.Append("AND 1 = 0");
+            }
+
+            if (byOffice)
+            {
+                sql.Append("AND office_id IN (SELECT * FROM office.get_office_ids(@0))", officeId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(keyName))
+            {
+                sql.OrderBy(keyName);
+            }
+            else
+            {
+                sql.Append("ORDER BY 1");
             }
 
             return Factory.Get<T>(catalog, sql);

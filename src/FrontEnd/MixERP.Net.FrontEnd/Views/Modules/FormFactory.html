@@ -1,4 +1,4 @@
-﻿<div class="poco form factory">
+﻿<div class="poco form factory" style="display: none;">
     <script src="/Scripts/underscore/underscore-min.js"></script>
     <div class="ui stackable attached segment">
         <div class="ui grey huge header">
@@ -13,10 +13,11 @@
 
     <div class="ui stackable attached segment loading form" id="scrud">
     </div>
-    <div class="ui stackable attached segment">
-        <input type="button" id="SaveButton" value="Save" class="ui green button" />
-        <input type="button" id="CancelButton" value="Cancel" class="ui red button" />
-    </div>
+<div class="ui stackable attached segment">
+    <input type="button" id="SaveButton" value="Save" class="ui green button"/>
+    <input type="button" id="CancelButton" value="Cancel" class="ui red button"/>
+</div>
+
 <script>
     function initializeAjaxRequest() {
         $.each(keys, function() {
@@ -68,6 +69,15 @@
 
     <script>
         $(document).ready(function () {
+            var form = $(".poco.form.factory");
+            var view = $(".poco.view.factory");
+
+            if (view.length) {
+                form.hide();
+            } else {
+                form.show();
+            };
+
             createForm(pocoName);
         });
 

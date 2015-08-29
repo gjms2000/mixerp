@@ -15339,6 +15339,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Untitled
+		/// </summary>
+		public static string Untitled 
+		{
+			get
+			{
+				return Get("Untitled");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Update
 		/// </summary>
 		public static string Update 
