@@ -3,10 +3,11 @@
     IsLandingPage="true" %>
 
 <script>
-    var title = "Parties";
-    //var description = "Parties collectively refer to your Customers, Suppliers, Dealer, and Agents.";
-    var pocoName = "Party";
-    var importTemplatePoco = "Party";
+    var title = "Employment Status Codes";
+    //var description = "Employement status codes are useful to define various employment status later.";
+    var viewPocoName = "EmploymentStatusCode";
+    var formPocoName = "EmploymentStatusCode";
+
     excludedColumnIndices = [];//To exclude by column name
 </script>
 
@@ -26,18 +27,11 @@
 
     var keys = [
         {
-            property: "ItemGroupId",
-            url: '/Modules/Inventory/Services/ItemData.asmx/GetItemGroups',
+            property: "DefaultEmploymentStatusCodeId",
+            url: '/Modules/HRM/Services/DisplayFields/EmploymentStatusCode.asmx/GetDisplayField',
             data: null,
-            valueField: "Value",
-            textField: "Text"
-        },
-        {
-            property: "PreferredSupplierId",
-            url: '/Modules/Inventory/Services/PartyData.asmx/GetParties',
-            data: null,
-            valueField: "Value",
-            textField: "Text"
+            valueField: "Key",
+            textField: "Value"
         }
     ];
 </script>

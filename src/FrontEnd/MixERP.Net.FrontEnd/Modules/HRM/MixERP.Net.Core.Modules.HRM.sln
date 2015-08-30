@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixERP.Net.Core.Modules.HRM", "MixERP.Net.Core.Modules.HRM.csproj", "{C735512E-69AB-4852-8740-49036A1FDF9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixERP.Net.Entities.HRM", "..\HRM.Entities\MixERP.Net.Entities.HRM.csproj", "{C21D8D23-AE76-4427-B5A6-36016F01E40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixERP.Net.Core.Modules.HRM.Data", "..\HRM.Data\MixERP.Net.Core.Modules.HRM.Data.csproj", "{BAED8523-9388-42C4-881D-34720FE8E4AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C735512E-69AB-4852-8740-49036A1FDF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C735512E-69AB-4852-8740-49036A1FDF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C735512E-69AB-4852-8740-49036A1FDF9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C21D8D23-AE76-4427-B5A6-36016F01E40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C21D8D23-AE76-4427-B5A6-36016F01E40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C21D8D23-AE76-4427-B5A6-36016F01E40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C21D8D23-AE76-4427-B5A6-36016F01E40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAED8523-9388-42C4-881D-34720FE8E4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAED8523-9388-42C4-881D-34720FE8E4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAED8523-9388-42C4-881D-34720FE8E4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAED8523-9388-42C4-881D-34720FE8E4AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

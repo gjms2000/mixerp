@@ -1,0 +1,1 @@
+<%@ WebService Language="C#" CodeBehind="EmployeeType.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.EmployeeType" %>

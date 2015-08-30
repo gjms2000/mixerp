@@ -35,11 +35,12 @@ CREATE TABLE core.education_levels
                                             DEFAULT(NOW())    
 );
 
+
 CREATE TABLE hrm.employment_status_codes
 (
     employment_status_code_id               integer NOT NULL PRIMARY KEY,
-    employment_status_code                  national character varying(12) NOT NULL UNIQUE,
-    employment_status_code_name             national character varying(100) NOT NULL,
+    status_code                             national character varying(12) NOT NULL UNIQUE,
+    status_code_name                        national character varying(100) NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    

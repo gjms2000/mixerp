@@ -9,6 +9,1626 @@ using System.Web;
 namespace MixERP.Net.Entities.Core
 {
 
+    [TableName("core.bank_account_scrud_view")]
+    [ExplicitColumns]
+    public class BankAccountScrudView : PetaPocoDB.Record<BankAccountScrudView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("maintained_by_user_id")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string MaintainedByUserId { get; set; }
+
+        [Column("office")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Office { get; set; }
+
+        [Column("bank_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankName { get; set; }
+
+        [Column("bank_branch")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankBranch { get; set; }
+
+        [Column("bank_contact_number")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankContactNumber { get; set; }
+
+        [Column("bank_address")] 
+        [ColumnDbType("text", 0, "")] 
+        public string BankAddress { get; set; }
+
+        [Column("bank_account_number")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankAccountNumber { get; set; }
+
+        [Column("bank_account_type")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankAccountType { get; set; }
+
+        [Column("relationship_officer_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string RelationshipOfficerName { get; set; }
+
+        [Column("is_merchant_account")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsMerchantAccount { get; set; }
+
+    }
+
+    [TableName("core.bonus_slab_detail_scrud_view")]
+    [ExplicitColumns]
+    public class BonusSlabDetailScrudView : PetaPocoDB.Record<BonusSlabDetailScrudView> , IPoco
+    {
+        [Column("bonus_slab_detail_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? BonusSlabDetailId { get; set; }
+
+        [Column("bonus_slab")] 
+        [ColumnDbType("text", 0, "")] 
+        public string BonusSlab { get; set; }
+
+        [Column("amount_from")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? AmountFrom { get; set; }
+
+        [Column("amount_to")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? AmountTo { get; set; }
+
+        [Column("bonus_rate")] 
+        [ColumnDbType("decimal_strict", 0, "")] 
+        public decimal? BonusRate { get; set; }
+
+    }
+
+    [TableName("core.bonus_slab_scrud_view")]
+    [ExplicitColumns]
+    public class BonusSlabScrudView : PetaPocoDB.Record<BonusSlabScrudView> , IPoco
+    {
+        [Column("bonus_slab_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? BonusSlabId { get; set; }
+
+        [Column("bonus_slab_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string BonusSlabCode { get; set; }
+
+        [Column("bonus_slab_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string BonusSlabName { get; set; }
+
+        [Column("effective_from")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? EffectiveFrom { get; set; }
+
+        [Column("ends_on")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("checking_frequency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string CheckingFrequency { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+        [Column("statement_reference")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.frequency_setup_scrud_view")]
+    [ExplicitColumns]
+    public class FrequencySetupScrudView : PetaPocoDB.Record<FrequencySetupScrudView> , IPoco
+    {
+        [Column("frequency_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? FrequencySetupId { get; set; }
+
+        [Column("frequency_setup_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string FrequencySetupCode { get; set; }
+
+        [Column("fiscal_year_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string FiscalYearCode { get; set; }
+
+        [Column("value_date")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? ValueDate { get; set; }
+
+        [Column("frequency_code")] 
+        [ColumnDbType("text", 0, "")] 
+        public string FrequencyCode { get; set; }
+
+    }
+
+    [TableName("core.item_scrud_view")]
+    [ExplicitColumns]
+    public class ItemScrudView : PetaPocoDB.Record<ItemScrudView> , IPoco
+    {
+        [Column("item_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        [ColumnDbType("varchar", 150, "")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group")] 
+        [ColumnDbType("text", 0, "")] 
+        public string ItemGroup { get; set; }
+
+        [Column("maintain_stock")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("brand")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Brand { get; set; }
+
+        [Column("preferred_supplier")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredSupplier { get; set; }
+
+        [Column("lead_time_in_days")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredShippingMailType { get; set; }
+
+        [Column("preferred_shipping_package_shape")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredShippingPackageShape { get; set; }
+
+        [Column("unit")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Unit { get; set; }
+
+        [Column("hot_item")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax")] 
+        [ColumnDbType("text", 0, "")] 
+        public string SalesTax { get; set; }
+
+        [Column("reorder_unit")] 
+        [ColumnDbType("text", 0, "")] 
+        public string ReorderUnit { get; set; }
+
+        [Column("reorder_level")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderQuantity { get; set; }
+
+    }
+
+    [TableName("core.late_fee_scrud_view")]
+    [ExplicitColumns]
+    public class LateFeeScrudView : PetaPocoDB.Record<LateFeeScrudView> , IPoco
+    {
+        [Column("late_fee_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? LateFeeId { get; set; }
+
+        [Column("late_fee_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string LateFeeCode { get; set; }
+
+        [Column("late_fee_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string LateFeeName { get; set; }
+
+        [Column("is_flat_amount")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsFlatAmount { get; set; }
+
+        [Column("rate")] 
+        [ColumnDbType("numeric", 1572868, "")] 
+        public decimal? Rate { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+    }
+
+    [TableName("core.merchant_fee_setup_scrud_view")]
+    [ExplicitColumns]
+    public class MerchantFeeSetupScrudView : PetaPocoDB.Record<MerchantFeeSetupScrudView> , IPoco
+    {
+        [Column("merchant_fee_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? MerchantFeeSetupId { get; set; }
+
+        [Column("merchant_account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string MerchantAccount { get; set; }
+
+        [Column("payment_card")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PaymentCard { get; set; }
+
+        [Column("rate")] 
+        [ColumnDbType("decimal_strict", 0, "")] 
+        public decimal? Rate { get; set; }
+
+        [Column("customer_pays_fee")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? CustomerPaysFee { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+        [Column("statement_reference")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.party_scrud_view")]
+    [ExplicitColumns]
+    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
+    {
+        [Column("party_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string LastName { get; set; }
+
+        [Column("currency_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("party_name")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyName { get; set; }
+
+        [Column("company_name")] 
+        [ColumnDbType("text", 0, "")] 
+        public string CompanyName { get; set; }
+
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        [ColumnDbType("text", 0, "")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Url { get; set; }
+
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        [ColumnDbType("text", 0, "")] 
+        public string GlHead { get; set; }
+
+        [Column("photo")] 
+        [ColumnDbType("image", 0, "")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.party_type_scrud_view")]
+    [ExplicitColumns]
+    public class PartyTypeScrudView : PetaPocoDB.Record<PartyTypeScrudView> , IPoco
+    {
+        [Column("party_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("party_type_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string PartyTypeCode { get; set; }
+
+        [Column("party_type_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PartyTypeName { get; set; }
+
+        [Column("is_supplier")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+    }
+
+    [TableName("core.payment_term_scrud_view")]
+    [ExplicitColumns]
+    public class PaymentTermScrudView : PetaPocoDB.Record<PaymentTermScrudView> , IPoco
+    {
+        [Column("payment_term_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PaymentTermId { get; set; }
+
+        [Column("payment_term_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string PaymentTermCode { get; set; }
+
+        [Column("payment_term_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PaymentTermName { get; set; }
+
+        [Column("due_on_date")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? DueOnDate { get; set; }
+
+        [Column("due_days")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? DueDays { get; set; }
+
+        [Column("due_frequency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string DueFrequency { get; set; }
+
+        [Column("grace_period")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? GracePeriod { get; set; }
+
+        [Column("late_fee")] 
+        [ColumnDbType("text", 0, "")] 
+        public string LateFee { get; set; }
+
+        [Column("late_fee_posting_frequency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string LateFeePostingFrequency { get; set; }
+
+    }
+
+    [TableName("core.recurrence_type_scrud_view")]
+    [ExplicitColumns]
+    public class RecurrenceTypeScrudView : PetaPocoDB.Record<RecurrenceTypeScrudView> , IPoco
+    {
+        [Column("recurrence_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? RecurrenceTypeId { get; set; }
+
+        [Column("recurrence_type_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string RecurrenceTypeCode { get; set; }
+
+        [Column("recurrence_type_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string RecurrenceTypeName { get; set; }
+
+        [Column("is_frequency")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsFrequency { get; set; }
+
+    }
+
+    [TableName("core.recurring_invoice_scrud_view")]
+    [ExplicitColumns]
+    public class RecurringInvoiceScrudView : PetaPocoDB.Record<RecurringInvoiceScrudView> , IPoco
+    {
+        [Column("recurring_invoice_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? RecurringInvoiceId { get; set; }
+
+        [Column("recurring_invoice_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string RecurringInvoiceCode { get; set; }
+
+        [Column("recurring_invoice_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string RecurringInvoiceName { get; set; }
+
+        [Column("item")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Item { get; set; }
+
+        [Column("total_duration")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? TotalDuration { get; set; }
+
+        [Column("recurrence_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string RecurrenceType { get; set; }
+
+        [Column("recurring_frequency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string RecurringFrequency { get; set; }
+
+        [Column("recurring_duration")] 
+        [ColumnDbType("integer_strict2", 0, "")] 
+        public int? RecurringDuration { get; set; }
+
+        [Column("recurs_on_same_calendar_date")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? RecursOnSameCalendarDate { get; set; }
+
+        [Column("recurring_amount")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? RecurringAmount { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+        [Column("payment_term")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PaymentTerm { get; set; }
+
+        [Column("auto_trigger_on_sales")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? AutoTriggerOnSales { get; set; }
+
+        [Column("is_active")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsActive { get; set; }
+
+        [Column("statement_reference")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.recurring_invoice_setup_scrud_view")]
+    [ExplicitColumns]
+    public class RecurringInvoiceSetupScrudView : PetaPocoDB.Record<RecurringInvoiceSetupScrudView> , IPoco
+    {
+        [Column("recurring_invoice_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? RecurringInvoiceSetupId { get; set; }
+
+        [Column("recurring_invoice")] 
+        [ColumnDbType("text", 0, "")] 
+        public string RecurringInvoice { get; set; }
+
+        [Column("party")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Party { get; set; }
+
+        [Column("starts_from")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? StartsFrom { get; set; }
+
+        [Column("ends_on")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? EndsOn { get; set; }
+
+        [Column("recurrence_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string RecurrenceType { get; set; }
+
+        [Column("recurring_frequency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string RecurringFrequency { get; set; }
+
+        [Column("recurring_duration")] 
+        [ColumnDbType("integer_strict2", 0, "")] 
+        public int? RecurringDuration { get; set; }
+
+        [Column("recurs_on_same_calendar_date")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? RecursOnSameCalendarDate { get; set; }
+
+        [Column("recurring_amount")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? RecurringAmount { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+        [Column("payment_term")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PaymentTerm { get; set; }
+
+        [Column("is_active")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsActive { get; set; }
+
+        [Column("statement_reference")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string StatementReference { get; set; }
+
+    }
+
+    [TableName("core.salesperson_bonus_setup_scrud_view")]
+    [ExplicitColumns]
+    public class SalespersonBonusSetupScrudView : PetaPocoDB.Record<SalespersonBonusSetupScrudView> , IPoco
+    {
+        [Column("salesperson_bonus_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? SalespersonBonusSetupId { get; set; }
+
+        [Column("salesperson")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Salesperson { get; set; }
+
+        [Column("bonus_slab")] 
+        [ColumnDbType("text", 0, "")] 
+        public string BonusSlab { get; set; }
+
+    }
+
+    [TableName("core.salesperson_scrud_view")]
+    [ExplicitColumns]
+    public class SalespersonScrudView : PetaPocoDB.Record<SalespersonScrudView> , IPoco
+    {
+        [Column("salesperson_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? SalespersonId { get; set; }
+
+        [Column("sales_team")] 
+        [ColumnDbType("text", 0, "")] 
+        public string SalesTeam { get; set; }
+
+        [Column("salesperson_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string SalespersonCode { get; set; }
+
+        [Column("salesperson_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string SalespersonName { get; set; }
+
+        [Column("address")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string Address { get; set; }
+
+        [Column("contact_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string ContactNumber { get; set; }
+
+        [Column("commission_rate")] 
+        [ColumnDbType("decimal_strict2", 0, "")] 
+        public decimal? CommissionRate { get; set; }
+
+        [Column("account")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Account { get; set; }
+
+    }
+
+    [TableName("core.shipping_address_scrud_view")]
+    [ExplicitColumns]
+    public class ShippingAddressScrudView : PetaPocoDB.Record<ShippingAddressScrudView> , IPoco
+    {
+        [Column("shipping_address_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? ShippingAddressId { get; set; }
+
+        [Column("shipping_address_code")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string ShippingAddressCode { get; set; }
+
+        [Column("party")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Party { get; set; }
+
+        [Column("state")] 
+        [ColumnDbType("text", 0, "")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Country { get; set; }
+
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string City { get; set; }
+
+    }
+
+    [TableName("core.discount_received_account_selector_view")]
+    [ExplicitColumns]
+    public class DiscountReceivedAccountSelectorView : PetaPocoDB.Record<DiscountReceivedAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        [ColumnDbType("text", 0, "")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        [ColumnDbType("varchar", 200, "")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.expenses_account_selector_view")]
+    [ExplicitColumns]
+    public class ExpensesAccountSelectorView : PetaPocoDB.Record<ExpensesAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        [ColumnDbType("text", 0, "")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        [ColumnDbType("varchar", 200, "")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.item_selector_view")]
+    [ExplicitColumns]
+    public class ItemSelectorView : PetaPocoDB.Record<ItemSelectorView> , IPoco
+    {
+        [Column("item_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        [ColumnDbType("varchar", 150, "")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ItemGroupId { get; set; }
+
+        [Column("item_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ItemTypeId { get; set; }
+
+        [Column("brand_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? BrandId { get; set; }
+
+        [Column("preferred_supplier_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? PreferredSupplierId { get; set; }
+
+        [Column("lead_time_in_days")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PreferredShippingMailTypeId { get; set; }
+
+        [Column("shipping_package_shape_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ShippingPackageShapeId { get; set; }
+
+        [Column("unit_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? UnitId { get; set; }
+
+        [Column("hot_item")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? SalesTaxId { get; set; }
+
+        [Column("reorder_unit_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderUnitId { get; set; }
+
+        [Column("reorder_level")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderQuantity { get; set; }
+
+        [Column("maintain_stock")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+        [Column("photo")] 
+        [ColumnDbType("image", 0, "")] 
+        public string Photo { get; set; }
+
+    }
+
+    [TableName("core.merchant_account_selector_view")]
+    [ExplicitColumns]
+    public class MerchantAccountSelectorView : PetaPocoDB.Record<MerchantAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("maintained_by_user_id")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string MaintainedByUserId { get; set; }
+
+        [Column("office")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Office { get; set; }
+
+        [Column("bank_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankName { get; set; }
+
+        [Column("bank_branch")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankBranch { get; set; }
+
+        [Column("bank_contact_number")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankContactNumber { get; set; }
+
+        [Column("bank_address")] 
+        [ColumnDbType("text", 0, "")] 
+        public string BankAddress { get; set; }
+
+        [Column("bank_account_number")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankAccountNumber { get; set; }
+
+        [Column("bank_account_type")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string BankAccountType { get; set; }
+
+        [Column("relationship_officer_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string RelationshipOfficerName { get; set; }
+
+        [Column("is_merchant_account")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsMerchantAccount { get; set; }
+
+    }
+
+    [TableName("core.purchase_account_selector_view")]
+    [ExplicitColumns]
+    public class PurchaseAccountSelectorView : PetaPocoDB.Record<PurchaseAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        [ColumnDbType("text", 0, "")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        [ColumnDbType("varchar", 200, "")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.sales_return_account_selector_view")]
+    [ExplicitColumns]
+    public class SalesReturnAccountSelectorView : PetaPocoDB.Record<SalesReturnAccountSelectorView> , IPoco
+    {
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_master")] 
+        [ColumnDbType("text", 0, "")] 
+        public string AccountMaster { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("external_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ExternalCode { get; set; }
+
+        [Column("currency")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Currency { get; set; }
+
+        [Column("account_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string AccountName { get; set; }
+
+        [Column("description")] 
+        [ColumnDbType("varchar", 200, "")] 
+        public string Description { get; set; }
+
+        [Column("confidential")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Confidential { get; set; }
+
+        [Column("is_transaction_node")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsTransactionNode { get; set; }
+
+        [Column("sys_type")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SysType { get; set; }
+
+        [Column("account_master_id")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? AccountMasterId { get; set; }
+
+        [Column("parent")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Parent { get; set; }
+
+    }
+
+    [TableName("core.supplier_selector_view")]
+    [ExplicitColumns]
+    public class SupplierSelectorView : PetaPocoDB.Record<SupplierSelectorView> , IPoco
+    {
+        [Column("party_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string LastName { get; set; }
+
+        [Column("party_name")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyName { get; set; }
+
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        [ColumnDbType("text", 0, "")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Url { get; set; }
+
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        [ColumnDbType("text", 0, "")] 
+        public string GlHead { get; set; }
+
+    }
+
+    [TableName("core.default_widget_setup_view")]
+    [ExplicitColumns]
+    public class DefaultWidgetSetupView : PetaPocoDB.Record<DefaultWidgetSetupView> , IPoco
+    {
+        [Column("widget_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? WidgetSetupId { get; set; }
+
+        [Column("widget_order")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? WidgetOrder { get; set; }
+
+        [Column("widget_group_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string WidgetGroupName { get; set; }
+
+        [Column("widget_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string WidgetName { get; set; }
+
+        [Column("widget_source")] 
+        [ColumnDbType("text", 0, "")] 
+        public string WidgetSource { get; set; }
+
+    }
+
+    [TableName("core.item_view")]
+    [ExplicitColumns]
+    public class ItemView : PetaPocoDB.Record<ItemView> , IPoco
+    {
+        [Column("item_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ItemId { get; set; }
+
+        [Column("item_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ItemCode { get; set; }
+
+        [Column("item_name")] 
+        [ColumnDbType("varchar", 150, "")] 
+        public string ItemName { get; set; }
+
+        [Column("item_group")] 
+        [ColumnDbType("text", 0, "")] 
+        public string ItemGroup { get; set; }
+
+        [Column("item_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string ItemType { get; set; }
+
+        [Column("maintain_stock")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? MaintainStock { get; set; }
+
+        [Column("brand")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Brand { get; set; }
+
+        [Column("preferred_supplier")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredSupplier { get; set; }
+
+        [Column("lead_time_in_days")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? LeadTimeInDays { get; set; }
+
+        [Column("weight_in_grams")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WeightInGrams { get; set; }
+
+        [Column("width_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? WidthInCentimeters { get; set; }
+
+        [Column("height_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? HeightInCentimeters { get; set; }
+
+        [Column("length_in_centimeters")] 
+        [ColumnDbType("float8", 0, "")] 
+        public double? LengthInCentimeters { get; set; }
+
+        [Column("machinable")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? Machinable { get; set; }
+
+        [Column("preferred_shipping_mail_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredShippingMailType { get; set; }
+
+        [Column("preferred_shipping_package_shape")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PreferredShippingPackageShape { get; set; }
+
+        [Column("unit")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Unit { get; set; }
+
+        [Column("base_unit")] 
+        [ColumnDbType("text", 0, "")] 
+        public string BaseUnit { get; set; }
+
+        [Column("hot_item")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? HotItem { get; set; }
+
+        [Column("cost_price")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? CostPrice { get; set; }
+
+        [Column("selling_price")] 
+        [ColumnDbType("money_strict", 0, "")] 
+        public decimal? SellingPrice { get; set; }
+
+        [Column("selling_price_includes_tax")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? SellingPriceIncludesTax { get; set; }
+
+        [Column("sales_tax")] 
+        [ColumnDbType("text", 0, "")] 
+        public string SalesTax { get; set; }
+
+        [Column("reorder_unit")] 
+        [ColumnDbType("text", 0, "")] 
+        public string ReorderUnit { get; set; }
+
+        [Column("reorder_level")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderLevel { get; set; }
+
+        [Column("reorder_quantity")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? ReorderQuantity { get; set; }
+
+    }
+
+    [TableName("core.party_view")]
+    [ExplicitColumns]
+    public class PartyView : PetaPocoDB.Record<PartyView> , IPoco
+    {
+        [Column("party_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? PartyId { get; set; }
+
+        [Column("party_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? PartyTypeId { get; set; }
+
+        [Column("is_supplier")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? IsSupplier { get; set; }
+
+        [Column("party_type")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyType { get; set; }
+
+        [Column("party_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string PartyCode { get; set; }
+
+        [Column("first_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string FirstName { get; set; }
+
+        [Column("middle_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string MiddleName { get; set; }
+
+        [Column("last_name")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string LastName { get; set; }
+
+        [Column("party_name")] 
+        [ColumnDbType("text", 0, "")] 
+        public string PartyName { get; set; }
+
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
+
+        [Column("address_line_1")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string City { get; set; }
+
+        [Column("state")] 
+        [ColumnDbType("text", 0, "")] 
+        public string State { get; set; }
+
+        [Column("country")] 
+        [ColumnDbType("text", 0, "")] 
+        public string Country { get; set; }
+
+        [Column("allow_credit")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("pan_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string CstNumber { get; set; }
+
+        [Column("phone")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Phone { get; set; }
+
+        [Column("fax")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Url { get; set; }
+
+        [Column("photo")] 
+        [ColumnDbType("image", 0, "")] 
+        public string Photo { get; set; }
+
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("account_number")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string AccountNumber { get; set; }
+
+        [Column("gl_head")] 
+        [ColumnDbType("text", 0, "")] 
+        public string GlHead { get; set; }
+
+    }
+
+    [TableName("core.shipping_address_view")]
+    [ExplicitColumns]
+    public class ShippingAddressView : PetaPocoDB.Record<ShippingAddressView> , IPoco
+    {
+        [Column("shipping_address_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? ShippingAddressId { get; set; }
+
+        [Column("shipping_address_code")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string ShippingAddressCode { get; set; }
+
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
+
+        [Column("party_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? PartyId { get; set; }
+
+        [Column("country_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? CountryId { get; set; }
+
+        [Column("state_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? StateId { get; set; }
+
+        [Column("country_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string CountryName { get; set; }
+
+        [Column("state_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string StateName { get; set; }
+
+        [Column("address_line_1")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine1 { get; set; }
+
+        [Column("address_line_2")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string AddressLine2 { get; set; }
+
+        [Column("street")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Street { get; set; }
+
+        [Column("city")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string City { get; set; }
+
+    }
+
+    [TableName("core.widget_setup_view")]
+    [ExplicitColumns]
+    public class WidgetSetupView : PetaPocoDB.Record<WidgetSetupView> , IPoco
+    {
+        [Column("widget_setup_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? WidgetSetupId { get; set; }
+
+        [Column("widget_order")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? WidgetOrder { get; set; }
+
+        [Column("widget_group_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string WidgetGroupName { get; set; }
+
+        [Column("widget_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string WidgetName { get; set; }
+
+        [Column("widget_source")] 
+        [ColumnDbType("text", 0, "")] 
+        public string WidgetSource { get; set; }
+
+    }
+
     [TableName("core.filters")]
     [PrimaryKey("filter_id", autoIncrement=true)]
     [ExplicitColumns]
@@ -52,179 +1672,6 @@ namespace MixERP.Net.Entities.Core
 
     }
 
-    [TableName("core.nationalities")]
-    [PrimaryKey("nationality_code", autoIncrement=false)]
-    [ExplicitColumns]
-    public class Nationality : PetaPocoDB.Record<Nationality> , IPoco
-    {
-        [Column("nationality_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string NationalityCode { get; set; }
-
-        [Column("nationality_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string NationalityName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.genders")]
-    [PrimaryKey("gender_code", autoIncrement=false)]
-    [ExplicitColumns]
-    public class Gender : PetaPocoDB.Record<Gender> , IPoco
-    {
-        [Column("gender_code")] 
-        [ColumnDbType("bpchar", 2, "")] 
-        public string GenderCode { get; set; }
-
-        [Column("gender_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string GenderName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.identification_types")]
-    [PrimaryKey("identification_type_code", autoIncrement=false)]
-    [ExplicitColumns]
-    public class IdentificationType : PetaPocoDB.Record<IdentificationType> , IPoco
-    {
-        [Column("identification_type_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string IdentificationTypeCode { get; set; }
-
-        [Column("identification_type_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string IdentificationTypeName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.social_networks")]
-    [PrimaryKey("social_network_name", autoIncrement=false)]
-    [ExplicitColumns]
-    public class SocialNetwork : PetaPocoDB.Record<SocialNetwork> , IPoco
-    {
-        [Column("social_network_name")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string SocialNetworkName { get; set; }
-
-        [Column("semantic_css_class")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string SemanticCssClass { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.education_levels")]
-    [PrimaryKey("education_level_id", autoIncrement=true)]
-    [ExplicitColumns]
-    public class EducationLevel : PetaPocoDB.Record<EducationLevel> , IPoco
-    {
-        [Column("education_level_id")] 
-        [ColumnDbType("int4", 0, "nextval('core.education_levels_education_level_id_seq'::regclass)")] 
-        public int EducationLevelId { get; set; }
-
-        [Column("education_level_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string EducationLevelName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.countries")]
-    [PrimaryKey("country_id", autoIncrement=true)]
-    [ExplicitColumns]
-    public class Country : PetaPocoDB.Record<Country> , IPoco
-    {
-        [Column("country_id")] 
-        [ColumnDbType("int4", 0, "nextval('core.countries_country_id_seq'::regclass)")] 
-        public int CountryId { get; set; }
-
-        [Column("country_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string CountryCode { get; set; }
-
-        [Column("country_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string CountryName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.currencies")]
-    [PrimaryKey("currency_code", autoIncrement=false)]
-    [ExplicitColumns]
-    public class Currency : PetaPocoDB.Record<Currency> , IPoco
-    {
-        [Column("currency_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("currency_symbol")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string CurrencySymbol { get; set; }
-
-        [Column("currency_name")] 
-        [ColumnDbType("varchar", 48, "")] 
-        public string CurrencyName { get; set; }
-
-        [Column("hundredth_name")] 
-        [ColumnDbType("varchar", 48, "")] 
-        public string HundredthName { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
     [TableName("core.flag_types")]
     [PrimaryKey("flag_type_id", autoIncrement=true)]
     [ExplicitColumns]
@@ -251,7 +1698,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -286,7 +1733,7 @@ namespace MixERP.Net.Entities.Core
         public string ResourceId { get; set; }
 
         [Column("flagged_on")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? FlaggedOn { get; set; }
 
     }
@@ -309,7 +1756,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -364,7 +1811,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -430,11 +1877,11 @@ namespace MixERP.Net.Entities.Core
         public string FilePath { get; set; }
 
         [Column("comment")] 
-        [ColumnDbType("varchar", 96, "''::character varying")] 
+        [ColumnDbType("varchar", 96, "")] 
         public string Comment { get; set; }
 
         [Column("added_on")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime AddedOn { get; set; }
 
     }
@@ -449,7 +1896,7 @@ namespace MixERP.Net.Entities.Core
         public long ExchangeRateId { get; set; }
 
         [Column("updated_on")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime UpdatedOn { get; set; }
 
         [Column("office_id")] 
@@ -550,7 +1997,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -581,7 +2028,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -616,7 +2063,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -647,7 +2094,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -709,7 +2156,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -763,7 +2210,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -790,7 +2237,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -825,7 +2272,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -852,7 +2299,34 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
+    [TableName("core.countries")]
+    [PrimaryKey("country_id", autoIncrement=true)]
+    [ExplicitColumns]
+    public class Country : PetaPocoDB.Record<Country> , IPoco
+    {
+        [Column("country_id")] 
+        [ColumnDbType("int4", 0, "nextval('core.countries_country_id_seq'::regclass)")] 
+        public int CountryId { get; set; }
+
+        [Column("country_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string CountryCode { get; set; }
+
+        [Column("country_name")] 
+        [ColumnDbType("varchar", 100, "")] 
+        public string CountryName { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -887,7 +2361,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -918,7 +2392,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -949,7 +2423,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -995,7 +2469,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1089,7 +2563,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1131,7 +2605,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1158,7 +2632,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1181,7 +2655,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1208,7 +2682,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1279,7 +2753,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1306,7 +2780,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1333,7 +2807,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1360,7 +2834,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1391,7 +2865,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1438,7 +2912,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1465,7 +2939,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1500,7 +2974,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1559,7 +3033,38 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
+    [TableName("core.currencies")]
+    [PrimaryKey("currency_code", autoIncrement=false)]
+    [ExplicitColumns]
+    public class Currency : PetaPocoDB.Record<Currency> , IPoco
+    {
+        [Column("currency_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("currency_symbol")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string CurrencySymbol { get; set; }
+
+        [Column("currency_name")] 
+        [ColumnDbType("varchar", 48, "")] 
+        public string CurrencyName { get; set; }
+
+        [Column("hundredth_name")] 
+        [ColumnDbType("varchar", 48, "")] 
+        public string HundredthName { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1586,7 +3091,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1633,7 +3138,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1668,7 +3173,7 @@ namespace MixERP.Net.Entities.Core
         public bool IsExemption { get; set; }
 
         [Column("tax_base_amount_type_code")] 
-        [ColumnDbType("varchar", 12, "'P'::character varying")] 
+        [ColumnDbType("varchar", 12, "P")] 
         public string TaxBaseAmountTypeCode { get; set; }
 
         [Column("rate")] 
@@ -1680,7 +3185,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1735,7 +3240,7 @@ namespace MixERP.Net.Entities.Core
         public int? CountySalesTaxId { get; set; }
 
         [Column("tax_rate_type_code")] 
-        [ColumnDbType("varchar", 12, "'P'::character varying")] 
+        [ColumnDbType("varchar", 12, "P")] 
         public string TaxRateTypeCode { get; set; }
 
         [Column("rate")] 
@@ -1771,7 +3276,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1818,7 +3323,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -1865,7 +3370,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2023,7 +3528,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2078,7 +3583,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2097,7 +3602,7 @@ namespace MixERP.Net.Entities.Core
         public int ItemId { get; set; }
 
         [Column("entry_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime EntryTs { get; set; }
 
         [Column("unit_id")] 
@@ -2121,7 +3626,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2164,7 +3669,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2231,7 +3736,7 @@ namespace MixERP.Net.Entities.Core
         public bool IsActive { get; set; }
 
         [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "''::character varying")] 
+        [ColumnDbType("varchar", 100, "")] 
         public string StatementReference { get; set; }
 
         [Column("audit_user_id")] 
@@ -2239,7 +3744,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2270,7 +3775,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2352,7 +3857,7 @@ namespace MixERP.Net.Entities.Core
         public bool IsActive { get; set; }
 
         [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "''::character varying")] 
+        [ColumnDbType("varchar", 100, "")] 
         public string StatementReference { get; set; }
 
         [Column("audit_user_id")] 
@@ -2360,7 +3865,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2399,7 +3904,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
         [Column("account_id")] 
@@ -2407,7 +3912,7 @@ namespace MixERP.Net.Entities.Core
         public long AccountId { get; set; }
 
         [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "''::character varying")] 
+        [ColumnDbType("varchar", 100, "")] 
         public string StatementReference { get; set; }
 
     }
@@ -2458,7 +3963,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2492,7 +3997,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
         [Column("account_id")] 
@@ -2546,7 +4051,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2581,7 +4086,7 @@ namespace MixERP.Net.Entities.Core
         public long AccountId { get; set; }
 
         [Column("statement_reference")] 
-        [ColumnDbType("varchar", 128, "''::character varying")] 
+        [ColumnDbType("varchar", 128, "")] 
         public string StatementReference { get; set; }
 
         [Column("audit_user_id")] 
@@ -2589,7 +4094,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2620,7 +4125,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2659,7 +4164,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
         [Column("discount")] 
@@ -2718,7 +4223,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
         [Column("is_merchant_account")] 
@@ -2764,7 +4269,7 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
@@ -2956,7 +4461,7 @@ namespace MixERP.Net.Entities.Core
         public string Message { get; set; }
 
         [Column("added_on")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime AddedOn { get; set; }
 
         [Column("delivered")] 
@@ -3087,210 +4592,8 @@ namespace MixERP.Net.Entities.Core
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
-
-        [Column("photo")] 
-        [ColumnDbType("image", 0, "")] 
-        public string Photo { get; set; }
-
-    }
-
-    [TableName("core.accounts")]
-    [PrimaryKey("account_id", autoIncrement=true)]
-    [ExplicitColumns]
-    public class Account : PetaPocoDB.Record<Account> , IPoco
-    {
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "nextval('core.accounts_account_id_seq'::regclass)")] 
-        public long AccountId { get; set; }
-
-        [Column("account_master_id")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short AccountMasterId { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        [ColumnDbType("varchar", 12, "''::character varying")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("account_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        [ColumnDbType("varchar", 200, "")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        [ColumnDbType("bool", 0, "false")] 
-        public bool Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        [ColumnDbType("bool", 0, "true")] 
-        public bool IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        [ColumnDbType("bool", 0, "false")] 
-        public bool SysType { get; set; }
-
-        [Column("parent_account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? ParentAccountId { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-    }
-
-    [TableName("core.parties")]
-    [PrimaryKey("party_id", autoIncrement=true)]
-    [ExplicitColumns]
-    public class Party : PetaPocoDB.Record<Party> , IPoco
-    {
-        [Column("party_id")] 
-        [ColumnDbType("int8", 0, "nextval('core.parties_party_id_seq'::regclass)")] 
-        public long PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int PartyTypeId { get; set; }
-
-        [Column("party_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string LastName { get; set; }
-
-        [Column("company_name")] 
-        [ColumnDbType("text", 0, "")] 
-        public string CompanyName { get; set; }
-
-        [Column("date_of_birth")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? DateOfBirth { get; set; }
-
-        [Column("entity_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? EntityId { get; set; }
-
-        [Column("industry_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? IndustryId { get; set; }
-
-        [Column("country_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int CountryId { get; set; }
-
-        [Column("state_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? StateId { get; set; }
-
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string City { get; set; }
-
-        [Column("phone")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Url { get; set; }
-
-        [Column("pan_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string CstNumber { get; set; }
-
-        [Column("currency_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string CurrencyCode { get; set; }
-
-        [Column("allow_credit")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("audit_user_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? AuditUserId { get; set; }
-
-        [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
-        public DateTime? AuditTs { get; set; }
-
-        [Column("party_name")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyName { get; set; }
 
         [Column("photo")] 
         [ColumnDbType("image", 0, "")] 
@@ -6284,794 +7587,31 @@ namespace MixERP.Net.Entities.Core
 
     }
 
-    [TableName("core.bank_account_scrud_view")]
+    [TableName("core.accounts")]
+    [PrimaryKey("account_id", autoIncrement=true)]
     [ExplicitColumns]
-    public class BankAccountScrudView : PetaPocoDB.Record<BankAccountScrudView> , IPoco
+    public class Account : PetaPocoDB.Record<Account> , IPoco
     {
         [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
+        [ColumnDbType("int8", 0, "nextval('core.accounts_account_id_seq'::regclass)")] 
+        public long AccountId { get; set; }
 
-        [Column("maintained_by_user_id")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string MaintainedByUserId { get; set; }
+        [Column("account_master_id")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short AccountMasterId { get; set; }
 
-        [Column("office")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Office { get; set; }
-
-        [Column("bank_name")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankName { get; set; }
-
-        [Column("bank_branch")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankBranch { get; set; }
-
-        [Column("bank_contact_number")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankContactNumber { get; set; }
-
-        [Column("bank_address")] 
-        [ColumnDbType("text", 0, "")] 
-        public string BankAddress { get; set; }
-
-        [Column("bank_account_number")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankAccountNumber { get; set; }
-
-        [Column("bank_account_type")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankAccountType { get; set; }
-
-        [Column("relationship_officer_name")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string RelationshipOfficerName { get; set; }
-
-        [Column("is_merchant_account")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsMerchantAccount { get; set; }
-
-    }
-
-    [TableName("core.bonus_slab_detail_scrud_view")]
-    [ExplicitColumns]
-    public class BonusSlabDetailScrudView : PetaPocoDB.Record<BonusSlabDetailScrudView> , IPoco
-    {
-        [Column("bonus_slab_detail_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? BonusSlabDetailId { get; set; }
-
-        [Column("bonus_slab")] 
-        [ColumnDbType("text", 0, "")] 
-        public string BonusSlab { get; set; }
-
-        [Column("amount_from")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? AmountFrom { get; set; }
-
-        [Column("amount_to")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? AmountTo { get; set; }
-
-        [Column("bonus_rate")] 
-        [ColumnDbType("decimal_strict", 0, "")] 
-        public decimal? BonusRate { get; set; }
-
-    }
-
-    [TableName("core.bonus_slab_scrud_view")]
-    [ExplicitColumns]
-    public class BonusSlabScrudView : PetaPocoDB.Record<BonusSlabScrudView> , IPoco
-    {
-        [Column("bonus_slab_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? BonusSlabId { get; set; }
-
-        [Column("bonus_slab_code")] 
+        [Column("account_number")] 
         [ColumnDbType("varchar", 12, "")] 
-        public string BonusSlabCode { get; set; }
+        public string AccountNumber { get; set; }
 
-        [Column("bonus_slab_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string BonusSlabName { get; set; }
-
-        [Column("effective_from")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? EffectiveFrom { get; set; }
-
-        [Column("ends_on")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("checking_frequency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string CheckingFrequency { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-        [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string StatementReference { get; set; }
-
-    }
-
-    [TableName("core.frequency_setup_scrud_view")]
-    [ExplicitColumns]
-    public class FrequencySetupScrudView : PetaPocoDB.Record<FrequencySetupScrudView> , IPoco
-    {
-        [Column("frequency_setup_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? FrequencySetupId { get; set; }
-
-        [Column("frequency_setup_code")] 
+        [Column("external_code")] 
         [ColumnDbType("varchar", 12, "")] 
-        public string FrequencySetupCode { get; set; }
-
-        [Column("fiscal_year_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string FiscalYearCode { get; set; }
-
-        [Column("value_date")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? ValueDate { get; set; }
-
-        [Column("frequency_code")] 
-        [ColumnDbType("text", 0, "")] 
-        public string FrequencyCode { get; set; }
-
-    }
-
-    [TableName("core.item_scrud_view")]
-    [ExplicitColumns]
-    public class ItemScrudView : PetaPocoDB.Record<ItemScrudView> , IPoco
-    {
-        [Column("item_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        [ColumnDbType("varchar", 150, "")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group")] 
-        [ColumnDbType("text", 0, "")] 
-        public string ItemGroup { get; set; }
-
-        [Column("maintain_stock")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? MaintainStock { get; set; }
-
-        [Column("brand")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Brand { get; set; }
-
-        [Column("preferred_supplier")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredSupplier { get; set; }
-
-        [Column("lead_time_in_days")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredShippingMailType { get; set; }
-
-        [Column("preferred_shipping_package_shape")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredShippingPackageShape { get; set; }
-
-        [Column("unit")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Unit { get; set; }
-
-        [Column("hot_item")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax")] 
-        [ColumnDbType("text", 0, "")] 
-        public string SalesTax { get; set; }
-
-        [Column("reorder_unit")] 
-        [ColumnDbType("text", 0, "")] 
-        public string ReorderUnit { get; set; }
-
-        [Column("reorder_level")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderQuantity { get; set; }
-
-    }
-
-    [TableName("core.late_fee_scrud_view")]
-    [ExplicitColumns]
-    public class LateFeeScrudView : PetaPocoDB.Record<LateFeeScrudView> , IPoco
-    {
-        [Column("late_fee_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? LateFeeId { get; set; }
-
-        [Column("late_fee_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string LateFeeCode { get; set; }
-
-        [Column("late_fee_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string LateFeeName { get; set; }
-
-        [Column("is_flat_amount")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsFlatAmount { get; set; }
-
-        [Column("rate")] 
-        [ColumnDbType("numeric", 1572868, "")] 
-        public decimal? Rate { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-    }
-
-    [TableName("core.merchant_fee_setup_scrud_view")]
-    [ExplicitColumns]
-    public class MerchantFeeSetupScrudView : PetaPocoDB.Record<MerchantFeeSetupScrudView> , IPoco
-    {
-        [Column("merchant_fee_setup_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? MerchantFeeSetupId { get; set; }
-
-        [Column("merchant_account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string MerchantAccount { get; set; }
-
-        [Column("payment_card")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PaymentCard { get; set; }
-
-        [Column("rate")] 
-        [ColumnDbType("decimal_strict", 0, "")] 
-        public decimal? Rate { get; set; }
-
-        [Column("customer_pays_fee")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? CustomerPaysFee { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-        [Column("statement_reference")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string StatementReference { get; set; }
-
-    }
-
-    [TableName("core.party_scrud_view")]
-    [ExplicitColumns]
-    public class PartyScrudView : PetaPocoDB.Record<PartyScrudView> , IPoco
-    {
-        [Column("party_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string LastName { get; set; }
+        public string ExternalCode { get; set; }
 
         [Column("currency_code")] 
         [ColumnDbType("varchar", 12, "")] 
         public string CurrencyCode { get; set; }
 
-        [Column("party_name")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyName { get; set; }
-
-        [Column("company_name")] 
-        [ColumnDbType("text", 0, "")] 
-        public string CompanyName { get; set; }
-
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        [ColumnDbType("text", 0, "")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Url { get; set; }
-
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        [ColumnDbType("text", 0, "")] 
-        public string GlHead { get; set; }
-
-        [Column("photo")] 
-        [ColumnDbType("image", 0, "")] 
-        public string Photo { get; set; }
-
-    }
-
-    [TableName("core.party_type_scrud_view")]
-    [ExplicitColumns]
-    public class PartyTypeScrudView : PetaPocoDB.Record<PartyTypeScrudView> , IPoco
-    {
-        [Column("party_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("party_type_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string PartyTypeCode { get; set; }
-
-        [Column("party_type_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PartyTypeName { get; set; }
-
-        [Column("is_supplier")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-    }
-
-    [TableName("core.payment_term_scrud_view")]
-    [ExplicitColumns]
-    public class PaymentTermScrudView : PetaPocoDB.Record<PaymentTermScrudView> , IPoco
-    {
-        [Column("payment_term_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? PaymentTermId { get; set; }
-
-        [Column("payment_term_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string PaymentTermCode { get; set; }
-
-        [Column("payment_term_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PaymentTermName { get; set; }
-
-        [Column("due_on_date")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? DueOnDate { get; set; }
-
-        [Column("due_days")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? DueDays { get; set; }
-
-        [Column("due_frequency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string DueFrequency { get; set; }
-
-        [Column("grace_period")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? GracePeriod { get; set; }
-
-        [Column("late_fee")] 
-        [ColumnDbType("text", 0, "")] 
-        public string LateFee { get; set; }
-
-        [Column("late_fee_posting_frequency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string LateFeePostingFrequency { get; set; }
-
-    }
-
-    [TableName("core.recurrence_type_scrud_view")]
-    [ExplicitColumns]
-    public class RecurrenceTypeScrudView : PetaPocoDB.Record<RecurrenceTypeScrudView> , IPoco
-    {
-        [Column("recurrence_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? RecurrenceTypeId { get; set; }
-
-        [Column("recurrence_type_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string RecurrenceTypeCode { get; set; }
-
-        [Column("recurrence_type_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string RecurrenceTypeName { get; set; }
-
-        [Column("is_frequency")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsFrequency { get; set; }
-
-    }
-
-    [TableName("core.recurring_invoice_scrud_view")]
-    [ExplicitColumns]
-    public class RecurringInvoiceScrudView : PetaPocoDB.Record<RecurringInvoiceScrudView> , IPoco
-    {
-        [Column("recurring_invoice_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? RecurringInvoiceId { get; set; }
-
-        [Column("recurring_invoice_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string RecurringInvoiceCode { get; set; }
-
-        [Column("recurring_invoice_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string RecurringInvoiceName { get; set; }
-
-        [Column("item")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Item { get; set; }
-
-        [Column("total_duration")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? TotalDuration { get; set; }
-
-        [Column("recurrence_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string RecurrenceType { get; set; }
-
-        [Column("recurring_frequency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string RecurringFrequency { get; set; }
-
-        [Column("recurring_duration")] 
-        [ColumnDbType("integer_strict2", 0, "")] 
-        public int? RecurringDuration { get; set; }
-
-        [Column("recurs_on_same_calendar_date")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? RecursOnSameCalendarDate { get; set; }
-
-        [Column("recurring_amount")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? RecurringAmount { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-        [Column("payment_term")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PaymentTerm { get; set; }
-
-        [Column("auto_trigger_on_sales")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? AutoTriggerOnSales { get; set; }
-
-        [Column("is_active")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsActive { get; set; }
-
-        [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string StatementReference { get; set; }
-
-    }
-
-    [TableName("core.recurring_invoice_setup_scrud_view")]
-    [ExplicitColumns]
-    public class RecurringInvoiceSetupScrudView : PetaPocoDB.Record<RecurringInvoiceSetupScrudView> , IPoco
-    {
-        [Column("recurring_invoice_setup_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? RecurringInvoiceSetupId { get; set; }
-
-        [Column("recurring_invoice")] 
-        [ColumnDbType("text", 0, "")] 
-        public string RecurringInvoice { get; set; }
-
-        [Column("party")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Party { get; set; }
-
-        [Column("starts_from")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? StartsFrom { get; set; }
-
-        [Column("ends_on")] 
-        [ColumnDbType("date", 0, "")] 
-        public DateTime? EndsOn { get; set; }
-
-        [Column("recurrence_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string RecurrenceType { get; set; }
-
-        [Column("recurring_frequency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string RecurringFrequency { get; set; }
-
-        [Column("recurring_duration")] 
-        [ColumnDbType("integer_strict2", 0, "")] 
-        public int? RecurringDuration { get; set; }
-
-        [Column("recurs_on_same_calendar_date")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? RecursOnSameCalendarDate { get; set; }
-
-        [Column("recurring_amount")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? RecurringAmount { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-        [Column("payment_term")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PaymentTerm { get; set; }
-
-        [Column("is_active")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsActive { get; set; }
-
-        [Column("statement_reference")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string StatementReference { get; set; }
-
-    }
-
-    [TableName("core.salesperson_bonus_setup_scrud_view")]
-    [ExplicitColumns]
-    public class SalespersonBonusSetupScrudView : PetaPocoDB.Record<SalespersonBonusSetupScrudView> , IPoco
-    {
-        [Column("salesperson_bonus_setup_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? SalespersonBonusSetupId { get; set; }
-
-        [Column("salesperson")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Salesperson { get; set; }
-
-        [Column("bonus_slab")] 
-        [ColumnDbType("text", 0, "")] 
-        public string BonusSlab { get; set; }
-
-    }
-
-    [TableName("core.salesperson_scrud_view")]
-    [ExplicitColumns]
-    public class SalespersonScrudView : PetaPocoDB.Record<SalespersonScrudView> , IPoco
-    {
-        [Column("salesperson_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? SalespersonId { get; set; }
-
-        [Column("sales_team")] 
-        [ColumnDbType("text", 0, "")] 
-        public string SalesTeam { get; set; }
-
-        [Column("salesperson_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string SalespersonCode { get; set; }
-
-        [Column("salesperson_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string SalespersonName { get; set; }
-
-        [Column("address")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string Address { get; set; }
-
-        [Column("contact_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string ContactNumber { get; set; }
-
-        [Column("commission_rate")] 
-        [ColumnDbType("decimal_strict2", 0, "")] 
-        public decimal? CommissionRate { get; set; }
-
-        [Column("account")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Account { get; set; }
-
-    }
-
-    [TableName("core.shipping_address_scrud_view")]
-    [ExplicitColumns]
-    public class ShippingAddressScrudView : PetaPocoDB.Record<ShippingAddressScrudView> , IPoco
-    {
-        [Column("shipping_address_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? ShippingAddressId { get; set; }
-
-        [Column("shipping_address_code")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string ShippingAddressCode { get; set; }
-
-        [Column("party")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Party { get; set; }
-
-        [Column("state")] 
-        [ColumnDbType("text", 0, "")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Country { get; set; }
-
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string City { get; set; }
-
-    }
-
-    [TableName("core.discount_received_account_selector_view")]
-    [ExplicitColumns]
-    public class DiscountReceivedAccountSelectorView : PetaPocoDB.Record<DiscountReceivedAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        [ColumnDbType("text", 0, "")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Currency { get; set; }
-
         [Column("account_name")] 
         [ColumnDbType("varchar", 100, "")] 
         public string AccountName { get; set; }
@@ -7081,184 +7621,20 @@ namespace MixERP.Net.Entities.Core
         public string Description { get; set; }
 
         [Column("confidential")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Confidential { get; set; }
+        [ColumnDbType("bool", 0, "false")] 
+        public bool Confidential { get; set; }
 
         [Column("is_transaction_node")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsTransactionNode { get; set; }
+        [ColumnDbType("bool", 0, "true")] 
+        public bool IsTransactionNode { get; set; }
 
         [Column("sys_type")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SysType { get; set; }
+        [ColumnDbType("bool", 0, "false")] 
+        public bool SysType { get; set; }
 
-        [Column("account_master_id")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.expenses_account_selector_view")]
-    [ExplicitColumns]
-    public class ExpensesAccountSelectorView : PetaPocoDB.Record<ExpensesAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
+        [Column("parent_account_id")] 
         [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        [ColumnDbType("text", 0, "")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        [ColumnDbType("varchar", 200, "")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.item_selector_view")]
-    [ExplicitColumns]
-    public class ItemSelectorView : PetaPocoDB.Record<ItemSelectorView> , IPoco
-    {
-        [Column("item_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        [ColumnDbType("varchar", 150, "")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ItemGroupId { get; set; }
-
-        [Column("item_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ItemTypeId { get; set; }
-
-        [Column("brand_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? BrandId { get; set; }
-
-        [Column("preferred_supplier_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? PreferredSupplierId { get; set; }
-
-        [Column("lead_time_in_days")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? PreferredShippingMailTypeId { get; set; }
-
-        [Column("shipping_package_shape_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ShippingPackageShapeId { get; set; }
-
-        [Column("unit_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? UnitId { get; set; }
-
-        [Column("hot_item")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? SalesTaxId { get; set; }
-
-        [Column("reorder_unit_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderUnitId { get; set; }
-
-        [Column("reorder_level")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderQuantity { get; set; }
-
-        [Column("maintain_stock")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? MaintainStock { get; set; }
+        public long? ParentAccountId { get; set; }
 
         [Column("audit_user_id")] 
         [ColumnDbType("int4", 0, "")] 
@@ -7268,189 +7644,20 @@ namespace MixERP.Net.Entities.Core
         [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
-        [Column("photo")] 
-        [ColumnDbType("image", 0, "")] 
-        public string Photo { get; set; }
-
     }
 
-    [TableName("core.merchant_account_selector_view")]
+    [TableName("core.parties")]
+    [PrimaryKey("party_id", autoIncrement=true)]
     [ExplicitColumns]
-    public class MerchantAccountSelectorView : PetaPocoDB.Record<MerchantAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("maintained_by_user_id")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string MaintainedByUserId { get; set; }
-
-        [Column("office")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Office { get; set; }
-
-        [Column("bank_name")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankName { get; set; }
-
-        [Column("bank_branch")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankBranch { get; set; }
-
-        [Column("bank_contact_number")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankContactNumber { get; set; }
-
-        [Column("bank_address")] 
-        [ColumnDbType("text", 0, "")] 
-        public string BankAddress { get; set; }
-
-        [Column("bank_account_number")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankAccountNumber { get; set; }
-
-        [Column("bank_account_type")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string BankAccountType { get; set; }
-
-        [Column("relationship_officer_name")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string RelationshipOfficerName { get; set; }
-
-        [Column("is_merchant_account")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsMerchantAccount { get; set; }
-
-    }
-
-    [TableName("core.purchase_account_selector_view")]
-    [ExplicitColumns]
-    public class PurchaseAccountSelectorView : PetaPocoDB.Record<PurchaseAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        [ColumnDbType("text", 0, "")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        [ColumnDbType("varchar", 200, "")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.sales_return_account_selector_view")]
-    [ExplicitColumns]
-    public class SalesReturnAccountSelectorView : PetaPocoDB.Record<SalesReturnAccountSelectorView> , IPoco
-    {
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_master")] 
-        [ColumnDbType("text", 0, "")] 
-        public string AccountMaster { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("external_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ExternalCode { get; set; }
-
-        [Column("currency")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Currency { get; set; }
-
-        [Column("account_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string AccountName { get; set; }
-
-        [Column("description")] 
-        [ColumnDbType("varchar", 200, "")] 
-        public string Description { get; set; }
-
-        [Column("confidential")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Confidential { get; set; }
-
-        [Column("is_transaction_node")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsTransactionNode { get; set; }
-
-        [Column("sys_type")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SysType { get; set; }
-
-        [Column("account_master_id")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? AccountMasterId { get; set; }
-
-        [Column("parent")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Parent { get; set; }
-
-    }
-
-    [TableName("core.supplier_selector_view")]
-    [ExplicitColumns]
-    public class SupplierSelectorView : PetaPocoDB.Record<SupplierSelectorView> , IPoco
+    public class Party : PetaPocoDB.Record<Party> , IPoco
     {
         [Column("party_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? PartyId { get; set; }
+        [ColumnDbType("int8", 0, "nextval('core.parties_party_id_seq'::regclass)")] 
+        public long PartyId { get; set; }
 
         [Column("party_type_id")] 
         [ColumnDbType("int4", 0, "")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyType { get; set; }
+        public int PartyTypeId { get; set; }
 
         [Column("party_code")] 
         [ColumnDbType("varchar", 12, "")] 
@@ -7468,397 +7675,33 @@ namespace MixERP.Net.Entities.Core
         [ColumnDbType("varchar", 50, "")] 
         public string LastName { get; set; }
 
-        [Column("party_name")] 
+        [Column("company_name")] 
         [ColumnDbType("text", 0, "")] 
-        public string PartyName { get; set; }
+        public string CompanyName { get; set; }
 
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
+        [Column("date_of_birth")] 
+        [ColumnDbType("date", 0, "")] 
+        public DateTime? DateOfBirth { get; set; }
 
-        [Column("address_line_1")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        [ColumnDbType("text", 0, "")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Url { get; set; }
-
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        [ColumnDbType("text", 0, "")] 
-        public string GlHead { get; set; }
-
-    }
-
-    [TableName("core.default_widget_setup_view")]
-    [ExplicitColumns]
-    public class DefaultWidgetSetupView : PetaPocoDB.Record<DefaultWidgetSetupView> , IPoco
-    {
-        [Column("widget_setup_id")] 
+        [Column("entity_id")] 
         [ColumnDbType("int4", 0, "")] 
-        public int? WidgetSetupId { get; set; }
+        public int? EntityId { get; set; }
 
-        [Column("widget_order")] 
+        [Column("industry_id")] 
         [ColumnDbType("int4", 0, "")] 
-        public int? WidgetOrder { get; set; }
-
-        [Column("widget_group_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string WidgetGroupName { get; set; }
-
-        [Column("widget_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string WidgetName { get; set; }
-
-        [Column("widget_source")] 
-        [ColumnDbType("text", 0, "")] 
-        public string WidgetSource { get; set; }
-
-    }
-
-    [TableName("core.item_view")]
-    [ExplicitColumns]
-    public class ItemView : PetaPocoDB.Record<ItemView> , IPoco
-    {
-        [Column("item_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ItemId { get; set; }
-
-        [Column("item_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ItemCode { get; set; }
-
-        [Column("item_name")] 
-        [ColumnDbType("varchar", 150, "")] 
-        public string ItemName { get; set; }
-
-        [Column("item_group")] 
-        [ColumnDbType("text", 0, "")] 
-        public string ItemGroup { get; set; }
-
-        [Column("item_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string ItemType { get; set; }
-
-        [Column("maintain_stock")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? MaintainStock { get; set; }
-
-        [Column("brand")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Brand { get; set; }
-
-        [Column("preferred_supplier")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredSupplier { get; set; }
-
-        [Column("lead_time_in_days")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? LeadTimeInDays { get; set; }
-
-        [Column("weight_in_grams")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WeightInGrams { get; set; }
-
-        [Column("width_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? WidthInCentimeters { get; set; }
-
-        [Column("height_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? HeightInCentimeters { get; set; }
-
-        [Column("length_in_centimeters")] 
-        [ColumnDbType("float8", 0, "")] 
-        public double? LengthInCentimeters { get; set; }
-
-        [Column("machinable")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? Machinable { get; set; }
-
-        [Column("preferred_shipping_mail_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredShippingMailType { get; set; }
-
-        [Column("preferred_shipping_package_shape")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PreferredShippingPackageShape { get; set; }
-
-        [Column("unit")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Unit { get; set; }
-
-        [Column("base_unit")] 
-        [ColumnDbType("text", 0, "")] 
-        public string BaseUnit { get; set; }
-
-        [Column("hot_item")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? HotItem { get; set; }
-
-        [Column("cost_price")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? CostPrice { get; set; }
-
-        [Column("selling_price")] 
-        [ColumnDbType("money_strict", 0, "")] 
-        public decimal? SellingPrice { get; set; }
-
-        [Column("selling_price_includes_tax")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? SellingPriceIncludesTax { get; set; }
-
-        [Column("sales_tax")] 
-        [ColumnDbType("text", 0, "")] 
-        public string SalesTax { get; set; }
-
-        [Column("reorder_unit")] 
-        [ColumnDbType("text", 0, "")] 
-        public string ReorderUnit { get; set; }
-
-        [Column("reorder_level")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderLevel { get; set; }
-
-        [Column("reorder_quantity")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? ReorderQuantity { get; set; }
-
-    }
-
-    [TableName("core.party_view")]
-    [ExplicitColumns]
-    public class PartyView : PetaPocoDB.Record<PartyView> , IPoco
-    {
-        [Column("party_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? PartyId { get; set; }
-
-        [Column("party_type_id")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? PartyTypeId { get; set; }
-
-        [Column("is_supplier")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? IsSupplier { get; set; }
-
-        [Column("party_type")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyType { get; set; }
-
-        [Column("party_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string PartyCode { get; set; }
-
-        [Column("first_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string FirstName { get; set; }
-
-        [Column("middle_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string MiddleName { get; set; }
-
-        [Column("last_name")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string LastName { get; set; }
-
-        [Column("party_name")] 
-        [ColumnDbType("text", 0, "")] 
-        public string PartyName { get; set; }
-
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
-
-        [Column("address_line_1")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine1 { get; set; }
-
-        [Column("address_line_2")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string AddressLine2 { get; set; }
-
-        [Column("street")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Street { get; set; }
-
-        [Column("city")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string City { get; set; }
-
-        [Column("state")] 
-        [ColumnDbType("text", 0, "")] 
-        public string State { get; set; }
-
-        [Column("country")] 
-        [ColumnDbType("text", 0, "")] 
-        public string Country { get; set; }
-
-        [Column("allow_credit")] 
-        [ColumnDbType("bool", 0, "")] 
-        public bool? AllowCredit { get; set; }
-
-        [Column("maximum_credit_period")] 
-        [ColumnDbType("int2", 0, "")] 
-        public short? MaximumCreditPeriod { get; set; }
-
-        [Column("maximum_credit_amount")] 
-        [ColumnDbType("money_strict2", 0, "")] 
-        public decimal? MaximumCreditAmount { get; set; }
-
-        [Column("pan_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string PanNumber { get; set; }
-
-        [Column("sst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string SstNumber { get; set; }
-
-        [Column("cst_number")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string CstNumber { get; set; }
-
-        [Column("phone")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Phone { get; set; }
-
-        [Column("fax")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Fax { get; set; }
-
-        [Column("cell")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string Cell { get; set; }
-
-        [Column("email")] 
-        [ColumnDbType("varchar", 128, "")] 
-        public string Email { get; set; }
-
-        [Column("url")] 
-        [ColumnDbType("varchar", 50, "")] 
-        public string Url { get; set; }
-
-        [Column("photo")] 
-        [ColumnDbType("image", 0, "")] 
-        public string Photo { get; set; }
-
-        [Column("account_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? AccountId { get; set; }
-
-        [Column("account_number")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string AccountNumber { get; set; }
-
-        [Column("gl_head")] 
-        [ColumnDbType("text", 0, "")] 
-        public string GlHead { get; set; }
-
-    }
-
-    [TableName("core.shipping_address_view")]
-    [ExplicitColumns]
-    public class ShippingAddressView : PetaPocoDB.Record<ShippingAddressView> , IPoco
-    {
-        [Column("shipping_address_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? ShippingAddressId { get; set; }
-
-        [Column("shipping_address_code")] 
-        [ColumnDbType("varchar", 24, "")] 
-        public string ShippingAddressCode { get; set; }
-
-        [Column("zip_code")] 
-        [ColumnDbType("varchar", 12, "")] 
-        public string ZipCode { get; set; }
-
-        [Column("party_id")] 
-        [ColumnDbType("int8", 0, "")] 
-        public long? PartyId { get; set; }
+        public int? IndustryId { get; set; }
 
         [Column("country_id")] 
         [ColumnDbType("int4", 0, "")] 
-        public int? CountryId { get; set; }
+        public int CountryId { get; set; }
 
         [Column("state_id")] 
         [ColumnDbType("int4", 0, "")] 
         public int? StateId { get; set; }
 
-        [Column("country_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string CountryName { get; set; }
-
-        [Column("state_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string StateName { get; set; }
+        [Column("zip_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string ZipCode { get; set; }
 
         [Column("address_line_1")] 
         [ColumnDbType("varchar", 128, "")] 
@@ -7869,38 +7712,80 @@ namespace MixERP.Net.Entities.Core
         public string AddressLine2 { get; set; }
 
         [Column("street")] 
-        [ColumnDbType("varchar", 128, "")] 
+        [ColumnDbType("varchar", 50, "")] 
         public string Street { get; set; }
 
         [Column("city")] 
-        [ColumnDbType("varchar", 128, "")] 
+        [ColumnDbType("varchar", 50, "")] 
         public string City { get; set; }
 
-    }
+        [Column("phone")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Phone { get; set; }
 
-    [TableName("core.widget_setup_view")]
-    [ExplicitColumns]
-    public class WidgetSetupView : PetaPocoDB.Record<WidgetSetupView> , IPoco
-    {
-        [Column("widget_setup_id")] 
+        [Column("fax")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Fax { get; set; }
+
+        [Column("cell")] 
+        [ColumnDbType("varchar", 24, "")] 
+        public string Cell { get; set; }
+
+        [Column("email")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string Email { get; set; }
+
+        [Column("url")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string Url { get; set; }
+
+        [Column("pan_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string PanNumber { get; set; }
+
+        [Column("sst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string SstNumber { get; set; }
+
+        [Column("cst_number")] 
+        [ColumnDbType("varchar", 50, "")] 
+        public string CstNumber { get; set; }
+
+        [Column("currency_code")] 
+        [ColumnDbType("varchar", 12, "")] 
+        public string CurrencyCode { get; set; }
+
+        [Column("allow_credit")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool? AllowCredit { get; set; }
+
+        [Column("maximum_credit_period")] 
+        [ColumnDbType("int2", 0, "")] 
+        public short? MaximumCreditPeriod { get; set; }
+
+        [Column("maximum_credit_amount")] 
+        [ColumnDbType("money_strict2", 0, "")] 
+        public decimal? MaximumCreditAmount { get; set; }
+
+        [Column("account_id")] 
+        [ColumnDbType("int8", 0, "")] 
+        public long? AccountId { get; set; }
+
+        [Column("audit_user_id")] 
         [ColumnDbType("int4", 0, "")] 
-        public int? WidgetSetupId { get; set; }
+        public int? AuditUserId { get; set; }
 
-        [Column("widget_order")] 
-        [ColumnDbType("int4", 0, "")] 
-        public int? WidgetOrder { get; set; }
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
 
-        [Column("widget_group_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string WidgetGroupName { get; set; }
-
-        [Column("widget_name")] 
-        [ColumnDbType("varchar", 100, "")] 
-        public string WidgetName { get; set; }
-
-        [Column("widget_source")] 
+        [Column("party_name")] 
         [ColumnDbType("text", 0, "")] 
-        public string WidgetSource { get; set; }
+        public string PartyName { get; set; }
+
+        [Column("photo")] 
+        [ColumnDbType("image", 0, "")] 
+        public string Photo { get; set; }
 
     }
 

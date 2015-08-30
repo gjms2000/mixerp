@@ -10,12 +10,12 @@ namespace MixERP.Net.Entities.Localization
 {
 
     [TableName("localization.resources")]
-    [PrimaryKey("resource_id", autoIncrement=false)]
+    [PrimaryKey("resource_id", autoIncrement=true)]
     [ExplicitColumns]
     public class Resource : PetaPocoDB.Record<Resource> , IPoco
     {
         [Column("resource_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, "nextval('localization.resources_resource_id_seq'::regclass)")] 
         public int ResourceId { get; set; }
 
         [Column("resource_class")] 

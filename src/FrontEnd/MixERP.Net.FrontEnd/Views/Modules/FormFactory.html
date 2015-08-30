@@ -56,6 +56,35 @@
         };
     });
 
+    saveButton.click(function(){
+        var isValid = validate();
+
+        if(!isValid){
+            return;
+        };
+    });
+
+
+    function validate(){
+        var isValid = true;
+
+        var required = $("[required]:not(:disabled):not([readonly])");
+
+        $.each(required, function(i, v){
+            var el = $(this);
+
+            var val = el.val();
+
+            if(isNullOrWhiteSpace(val)){
+                isValid = false;
+                makeDirty(el);
+            }else{
+                removeDirty(el);
+            };
+        });
+
+        return isValid;
+    };
 
     function getFormView(pocoName) {
         var url = "/Services/Modules/PocoService.asmx/GetFormView";
@@ -78,7 +107,7 @@
                 form.show();
             };
 
-            createForm(pocoName);
+            createForm(window.formPocoName);
         });
 
         $(document).ajaxStop(function () {
@@ -156,7 +185,10 @@
 
             initializeAjaxRequest();
             initializeUploader();
+            initializeValidators();
             setRegionalFormat();
+            loadDatepicker();
+
             $(".dropdown").dropdown();
 
             var initialValue = $(".initial.value").html();
@@ -177,6 +209,29 @@
             });
         };
 
+        function initializeValidators(){
+            $("[required]:not(:disabled):not([readonly])").blur(function(){
+                var el = $(this);
+
+                var val = el.val();
+                var errorMessage = el.parent().find(".error-message");
+
+                if(!errorMessage.length){
+                    errorMessage = $("<span class='error-message' />"); 
+                    el.parent().append(errorMessage);
+                };
+
+                if(isNullOrWhiteSpace(val)){
+                    isValid = false;
+                    makeDirty(el);
+
+                    el.parent().find(".error-message").html(Resources.Labels.ThisFieldIsRequired());
+                }else{
+                    removeDirty(el);
+                    el.parent().find(".error-message").html("");
+                };
+            });
+        };
 
         function mergeArray(array) {
             var merged = [];
@@ -190,6 +245,10 @@
 
         function createColumn(el, column, cssClass) {
             if (typeof (column) === "undefined") {
+                return;
+            };
+
+            if(["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >=0){
                 return;
             };
 
@@ -270,6 +329,8 @@
             case "money_strict2":
             case "money_strict":
                 return $("<input type='text' class='currency' />");
+            case "date":
+                return $("<input type='text' class='date' />");
             case "bool":
             case "boolean":
                 var el = $("<select class='ui search dropdown' />");

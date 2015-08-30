@@ -41,12 +41,12 @@
 
     <div class="ui stackable attached segment">
         <div class="ui top attached tabular menu">
-            <a class="item" data-tab="view" onclick="changeTab(this)">View</a>
+            <a class="active item" data-tab="view" onclick="changeTab(this)">View</a>
             <a class="item" data-tab="filter" onclick="changeTab(this)">Saved Filters</a>
-            <a class="active item" data-tab="import" onclick="changeTab(this)">Data Import</a>
+            <a class="item" data-tab="import" onclick="changeTab(this)">Data Import</a>
         </div>
 
-        <div class="ui bottom attached tab loading segment" data-tab="view">
+        <div class="ui active bottom attached tab loading segment" data-tab="view">
             <div id="json" class="vpad8" style="width: 100%; overflow: auto;">
             </div>
             <div class="ui divider"></div>
@@ -154,7 +154,7 @@
             </div>
         </div>
 
-        <div class="ui active bottom attached hidden tab segment" data-tab="import">
+        <div class="ui bottom attached hidden tab segment" data-tab="import">
             <div class="ui huge header">Data Import</div>
 
             <div class="ui buttons">
@@ -292,6 +292,10 @@
         function createJsonTable(el, json) {
             el.html("");
 
+            if(isNullOrWhiteSpace(json || "")){
+                return;
+            };
+
             var mydata = eval(json);
             json2Table(mydata, window.excludedColumnIndices, el);
         };
@@ -335,7 +339,7 @@
             $("[data-tab=view]").addClass("loading");
             var filterName = getFilter();
 
-            var ajaxGetTotalPages = getTotalPages(pocoName, filterName, false);
+            var ajaxGetTotalPages = getTotalPages(window.viewPocoName, filterName, false);
 
             ajaxGetTotalPages.success(function (msg) {
                 var pages = parseInt(msg.d || 1);
@@ -380,7 +384,7 @@
             var filterName = $("#FilterSelect").getSelectedText();
             $("#FilterName").html(filterName);
             $("#FilterNameInputText").val(filterName);
-            var ajaxGetFilters = getFilters(pocoName, filterName);
+            var ajaxGetFilters = getFilters(window.viewPocoName, filterName);
 
             ajaxGetFilters.success(function (msg) {
                 createFilters(msg.d);
@@ -401,7 +405,7 @@
     </script>
     <script>
         function loadFilterNames() {
-            var ajaxGetFilterNames = getFilterNames(pocoName);
+            var ajaxGetFilterNames = getFilterNames(window.viewPocoName);
             ajaxGetFilterNames.success(function (msg) {
                 var data = msg.d;
                 var selected = "";
@@ -424,6 +428,9 @@
                 if (selected) {
                     $("#DefaultFilterSelect").dropdown("set selected", selected).dropdown();
                     loadPageCount(loadGrid);
+                }else{
+                    $("#DefaultFilterSelect").dropdown();
+                    loadPageCount(loadGrid);
                 };
 
                 $("#FilterSelect").html(option);
@@ -432,11 +439,6 @@
                 $("#DefaultFilterSelect").change(function () {
                     loadPageCount(loadGrid);
                 });
-
-                if(data.length === 0){
-                    $("#DefaultFilterSelect").dropdown();
-                    loadPageCount(loadGrid);
-                };
             });
 
             ajaxGetFilterNames.fail(function (xhr) {
@@ -470,7 +472,7 @@
         });
 
         function loadPoco(callback){
-            var ajaxgetPoco = getPoco(pocoName);
+            var ajaxgetPoco = getPoco(window.formPocoName);
 
             ajaxgetPoco.success(function (msg) {
                 pocoDefinition = msg.d;
@@ -487,7 +489,7 @@
 
             $("#CurrentPageAnchor").text(pageNumber);
 
-            var ajaxGetPocoView = getPocoView(pocoName, pageNumber, filterName, false);
+            var ajaxGetPocoView = getPocoView(window.viewPocoName, pageNumber, filterName, false);
 
             ajaxGetPocoView.success(function (msg) {
                 var el = $("#json");
@@ -669,7 +671,7 @@
                 filters.push(filter);
             });
 
-            var ajaxSaveFilter = saveFilter(pocoName, filters);
+            var ajaxSaveFilter = saveFilter(window.viewPocoName, filters);
 
             ajaxSaveFilter.success(function () {
                 displayMessage(Resources.Titles.TaskCompletedSuccessfully(), "success");
@@ -725,7 +727,7 @@
     <script>
         $("#MakeUserDefaultFilterButton").click(function () {
             var filterName = $("#FilterSelect").getSelectedText();
-            var ajaxMakeDefaultFilter = makeDefaultFilter(pocoName, filterName);
+            var ajaxMakeDefaultFilter = makeDefaultFilter(window.viewPocoName, filterName);
 
             ajaxMakeDefaultFilter.success(function () {
                 displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
@@ -793,7 +795,7 @@
     </script>
     <script>
         $("#DownloadTemplateButton").click(function(){
-            var ajaxDownloadTemplate = downloadTemplate(importTemplatePoco, false, true);
+            var ajaxDownloadTemplate = downloadTemplate(formPocoName, false, true);
             var el = this;
 
             if(!el.href){
@@ -919,7 +921,7 @@
 
                 el.closest(".segment").find(".button").addClass("loading");
 
-                var ajaxImportPocos = importPocos(pocoName, entities);
+                var ajaxImportPocos = importPocos(window.formPocoName, entities);
 
                 ajaxImportPocos.success(function(msg){
                     var message  = stringFormat("Successfully imported {0} items.", entities.length);

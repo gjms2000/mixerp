@@ -10,12 +10,12 @@ namespace MixERP.Net.Entities.CRM
 {
 
     [TableName("crm.lead_sources")]
-    [PrimaryKey("lead_source_id", autoIncrement=false)]
+    [PrimaryKey("lead_source_id", autoIncrement=true)]
     [ExplicitColumns]
     public class LeadSource : PetaPocoDB.Record<LeadSource> , IPoco
     {
         [Column("lead_source_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, "nextval('crm.lead_sources_lead_source_id_seq'::regclass)")] 
         public int LeadSourceId { get; set; }
 
         [Column("lead_source_code")] 
@@ -31,18 +31,18 @@ namespace MixERP.Net.Entities.CRM
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
 
     [TableName("crm.lead_statuses")]
-    [PrimaryKey("lead_status_id", autoIncrement=false)]
+    [PrimaryKey("lead_status_id", autoIncrement=true)]
     [ExplicitColumns]
     public class LeadStatus : PetaPocoDB.Record<LeadStatus> , IPoco
     {
         [Column("lead_status_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, "nextval('crm.lead_statuses_lead_status_id_seq'::regclass)")] 
         public int LeadStatusId { get; set; }
 
         [Column("lead_status_code")] 
@@ -58,18 +58,18 @@ namespace MixERP.Net.Entities.CRM
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }
 
     [TableName("crm.opportunity_stages")]
-    [PrimaryKey("opportunity_stage_id", autoIncrement=false)]
+    [PrimaryKey("opportunity_stage_id", autoIncrement=true)]
     [ExplicitColumns]
     public class OpportunityStage : PetaPocoDB.Record<OpportunityStage> , IPoco
     {
         [Column("opportunity_stage_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, "nextval('crm.opportunity_stages_opportunity_stage_id_seq'::regclass)")] 
         public int OpportunityStageId { get; set; }
 
         [Column("opportunity_stage_code")] 
@@ -85,7 +85,7 @@ namespace MixERP.Net.Entities.CRM
         public int? AuditUserId { get; set; }
 
         [Column("audit_ts")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime? AuditTs { get; set; }
 
     }

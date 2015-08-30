@@ -1,0 +1,1 @@
+<%@ WebService Language="C#" CodeBehind="PayGrade.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.PayGrade" %>

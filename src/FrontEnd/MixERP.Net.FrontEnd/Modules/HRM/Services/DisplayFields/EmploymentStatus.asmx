@@ -1,0 +1,1 @@
+<%@ WebService Language="C#" CodeBehind="EmploymentStatus.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.EmploymentStatus" %>

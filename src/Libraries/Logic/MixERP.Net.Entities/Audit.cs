@@ -10,12 +10,12 @@ namespace MixERP.Net.Entities.Audit
 {
 
     [TableName("audit.failed_logins")]
-    [PrimaryKey("failed_login_id", autoIncrement=false)]
+    [PrimaryKey("failed_login_id", autoIncrement=true)]
     [ExplicitColumns]
     public class FailedLogin : PetaPocoDB.Record<FailedLogin> , IPoco
     {
         [Column("failed_login_id")] 
-        [ColumnDbType("int8", 0, "")] 
+        [ColumnDbType("int8", 0, "nextval('audit.failed_logins_failed_login_id_seq'::regclass)")] 
         public long FailedLoginId { get; set; }
 
         [Column("user_id")] 
@@ -39,7 +39,7 @@ namespace MixERP.Net.Entities.Audit
         public string IpAddress { get; set; }
 
         [Column("failed_date_time")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime FailedDateTime { get; set; }
 
         [Column("remote_user")] 
@@ -53,12 +53,12 @@ namespace MixERP.Net.Entities.Audit
     }
 
     [TableName("audit.logged_actions")]
-    [PrimaryKey("event_id", autoIncrement=false)]
+    [PrimaryKey("event_id", autoIncrement=true)]
     [ExplicitColumns]
     public class LoggedAction : PetaPocoDB.Record<LoggedAction> , IPoco
     {
         [Column("event_id")] 
-        [ColumnDbType("int8", 0, "")] 
+        [ColumnDbType("int8", 0, "nextval('audit.logged_actions_event_id_seq'::regclass)")] 
         public long EventId { get; set; }
 
         [Column("schema_name")] 
@@ -132,12 +132,12 @@ namespace MixERP.Net.Entities.Audit
     }
 
     [TableName("audit.logins")]
-    [PrimaryKey("login_id", autoIncrement=false)]
+    [PrimaryKey("login_id", autoIncrement=true)]
     [ExplicitColumns]
     public class Login : PetaPocoDB.Record<Login> , IPoco
     {
         [Column("login_id")] 
-        [ColumnDbType("int8", 0, "")] 
+        [ColumnDbType("int8", 0, "nextval('audit.logins_login_id_seq'::regclass)")] 
         public long LoginId { get; set; }
 
         [Column("user_id")] 
@@ -157,7 +157,7 @@ namespace MixERP.Net.Entities.Audit
         public string IpAddress { get; set; }
 
         [Column("login_date_time")] 
-        [ColumnDbType("timestamptz", 0, "now()")] 
+        [ColumnDbType("timestamptz", 0, "")] 
         public DateTime LoginDateTime { get; set; }
 
         [Column("remote_user")] 
