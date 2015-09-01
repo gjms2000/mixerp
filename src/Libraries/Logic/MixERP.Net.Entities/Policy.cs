@@ -130,6 +130,99 @@ namespace MixERP.Net.Entities.Policy
 
     }
 
+    [TableName("policy.default_entity_access")]
+    [PrimaryKey("default_entity_access_id", autoIncrement=true)]
+    [ExplicitColumns]
+    public class DefaultEntityAccess : PetaPocoDB.Record<DefaultEntityAccess> , IPoco
+    {
+        [Column("default_entity_access_id")] 
+        [ColumnDbType("int4", 0, "nextval('policy.default_entity_access_default_entity_access_id_seq'::regclass)")] 
+        public int DefaultEntityAccessId { get; set; }
+
+        [Column("entity_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string EntityName { get; set; }
+
+        [Column("role_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int RoleId { get; set; }
+
+        [Column("access_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AccessTypeId { get; set; }
+
+        [Column("allow_access")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool AllowAccess { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
+    [TableName("policy.access_types")]
+    [PrimaryKey("access_type_id", autoIncrement=false)]
+    [ExplicitColumns]
+    public class AccessType : PetaPocoDB.Record<AccessType> , IPoco
+    {
+        [Column("access_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int AccessTypeId { get; set; }
+
+        [Column("access_type_name")] 
+        [ColumnDbType("varchar", 48, "")] 
+        public string AccessTypeName { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
+    [TableName("policy.entity_access")]
+    [PrimaryKey("entity_access_id", autoIncrement=true)]
+    [ExplicitColumns]
+    public class EntityAccess : PetaPocoDB.Record<EntityAccess> , IPoco
+    {
+        [Column("entity_access_id")] 
+        [ColumnDbType("int4", 0, "nextval('policy.entity_access_entity_access_id_seq'::regclass)")] 
+        public int EntityAccessId { get; set; }
+
+        [Column("entity_name")] 
+        [ColumnDbType("varchar", 128, "")] 
+        public string EntityName { get; set; }
+
+        [Column("user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int UserId { get; set; }
+
+        [Column("access_type_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int AccessTypeId { get; set; }
+
+        [Column("allow_access")] 
+        [ColumnDbType("bool", 0, "")] 
+        public bool AllowAccess { get; set; }
+
+        [Column("audit_user_id")] 
+        [ColumnDbType("int4", 0, "")] 
+        public int? AuditUserId { get; set; }
+
+        [Column("audit_ts")] 
+        [ColumnDbType("timestamptz", 0, "")] 
+        public DateTime? AuditTs { get; set; }
+
+    }
+
     [TableName("policy.lock_outs")]
     [PrimaryKey("lock_out_id", autoIncrement=true)]
     [ExplicitColumns]
@@ -148,7 +241,7 @@ namespace MixERP.Net.Entities.Policy
         public DateTime LockOutTime { get; set; }
 
         [Column("lock_out_till")] 
-        [ColumnDbType("timestamptz", 0, "2015-08-30 10:10:38.491+00")] 
+        [ColumnDbType("timestamptz", 0, "2015-09-01 10:05:18.557+00")] 
         public DateTime LockOutTill { get; set; }
 
     }
@@ -391,7 +484,7 @@ namespace MixERP.Net.Entities.Policy
     }
 
     [TableName("policy.auto_verification_policy")]
-    [PrimaryKey("office_id", autoIncrement=false)]
+    [PrimaryKey("policy_id", autoIncrement=true)]
     [ExplicitColumns]
     public class AutoVerificationPolicy : PetaPocoDB.Record<AutoVerificationPolicy> , IPoco
     {

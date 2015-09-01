@@ -464,6 +464,7 @@
     <Content Include="Scripts\mixerp\utitlities\countries.js" />
     <Content Include="Scripts\Pages\Modules\WidgetManager.aspx.js" />
     <Content Include="Scripts\Pages\Modules\FirstSteps.aspx.js" />
+    <Content Include="Scripts\papaparse\papaparse.min.js" />
     <Content Include="Scripts\semantic-ui\components\accordion.css" />
     <Content Include="Scripts\semantic-ui\components\accordion.js" />
     <Content Include="Scripts\semantic-ui\components\accordion.min.css" />
@@ -1209,6 +1210,7 @@
     <Content Include="Stylesheets\report.rtl.css.map">
       <DependentUpon>report.rtl.css</DependentUpon>
     </Content>
+    <Content Include="Scripts\papaparse\LICENSE" />
     <None Include="Stylesheets\report.rtl.less" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

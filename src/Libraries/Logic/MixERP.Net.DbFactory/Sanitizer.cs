@@ -50,8 +50,8 @@ namespace MixERP.Net.DbFactory
                 return string.Empty;
             }
 
-            //Only alphabets [a-zA-Z], numbers, and an underscore is allowed.
-            return Regex.Replace(identifier, @"[^a-zA-Z0-9_]", "");
+            //Only alphabets [a-zA-Z], numbers, underscore, and a period is allowed.
+            return Regex.Replace(identifier, @"[^a-zA-Z0-9_.]", "");
         }
     }
 }

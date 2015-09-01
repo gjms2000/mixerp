@@ -64,26 +64,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Policy
                 scrud.Text = "API Access Policy";
 
                 this.ScrudPlaceholder.Controls.Add(scrud);
-                this.RegisterJavascript();
             }
-        }
-
-        private void RegisterJavascript()
-        {
-            var script = "var pocos = [" + this.GetPocos() + "];";
-            PageUtility.RegisterJavascript("ApiAccess_Vars", script, this.Page, true);
-        }
-
-        private string GetPocos()
-        {
-            Type type = typeof (IPoco);
-            List<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p)).ToList();
-
-
-            List<string> items = types.Select(t => "'" + t.FullName + "'").ToList();
-            return string.Join(",", items);
         }
 
         private static string GetDisplayFields()

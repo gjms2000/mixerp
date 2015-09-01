@@ -36,7 +36,7 @@ namespace MixERP.Net.i18n
         internal static IEnumerable<LocalizedResource> GetLocalizationTable(string language)
         {
             List<LocalizedResource> resources = new List<LocalizedResource>();
-            const string sql = "SELECT * FROM localization.get_localization_table(@Language);";
+            const string sql = "SELECT * FROM localization.get_localization_table(@Language) WHERE COALESCE(key, '') != '';";
 
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionStringHelper.GetConnectionString()))
             {

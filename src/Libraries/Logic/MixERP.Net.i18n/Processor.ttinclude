@@ -34,7 +34,7 @@
 	{
 		List<DbResource> resources = new List<DbResource>();
 
-		const string sql = "SELECT resource_class, key, value FROM localization.resources ORDER BY resource_class, key;";
+		const string sql = "SELECT resource_class, key, value FROM localization.resources WHERE COALESCE(key, '') != '' ORDER BY resource_class, key;";
 		using (NpgsqlConnection connection = new NpgsqlConnection(NpgsqlConnectionString))
 		{
 			using (NpgsqlCommand command = new NpgsqlCommand(sql, connection))

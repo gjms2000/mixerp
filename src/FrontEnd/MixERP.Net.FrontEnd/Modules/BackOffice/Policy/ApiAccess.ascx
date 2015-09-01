@@ -20,9 +20,29 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 <asp:PlaceHolder runat="server" ID="ScrudPlaceholder"></asp:PlaceHolder>
 
 <script>
+    var pocos;
+
     $(document).ready(function () {
-        addPocoSelect();
+        loadPocos(addPocoSelect);
     });
+
+    function loadPocos(callback) {
+        var ajaxGetPocos = getPocos();
+
+        ajaxGetPocos.success(function(msg) {
+            pocos = msg.d;
+
+            if (typeof (callback) === "function") {
+                callback();
+            };
+        });
+    };
+
+    function getPocos() {
+        var url = "/Services/Modules/PocoService.asmx/GetPocos";
+
+        return getAjax(url);
+    };
 
     function addPocoSelect() {
         var pocoTypeNameTextbox = $("#poco_type_name_textbox");
@@ -35,10 +55,8 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
         var pocoTypeNameSelect = $("#poco_type_name_select");
 
-        var options = window.pocos.toString().split(',');
-
-        for (i = 0; i < options.length; i++) {
-            pocoTypeNameSelect.append("<option>" + options[i] + "</option>");
+        for (i = 0; i < pocos.length; i++) {
+            pocoTypeNameSelect.append("<option>" + pocos[i] + "</option>");
         };
 
 

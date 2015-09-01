@@ -1,4 +1,3 @@
-﻿<script src="https://raw.githubusercontent.com/mholt/PapaParse/master/papaparse.min.js"></script>
 <div class="poco view factory">
     <div class="ui stackable attached segment">
         <div class="title ui huge grey header"></div>
@@ -23,7 +22,7 @@
                         </div>
                         <div class="item">
                             <i class="file excel outline green icon"></i>
-                            To Word Document
+                            To Excel Document
                         </div>
                         <div class="item">
                             <i class="file pdf outline red icon"></i>
@@ -240,7 +239,16 @@
         };
     </script>
     <script>
-        json2Table = function (json, excludedColumnIndices, appendTo) {
+        function createGridView(appendTo, json) {
+            appendTo.html("");
+
+            if(isNullOrWhiteSpace(json || "")){
+                return;
+            };
+
+            var mydata = eval(json);
+            var excludedColumnIndices = []; 
+
             if (!json) {
                 return null;
             };
@@ -249,14 +257,16 @@
                 excludedColumnIndices = [];
             };
 
-            var el = $('<table class="ui striped nowrap table">');
+            var el = $('<table class="ui striped nowrap definition table">');
             var header = "<thead><tr>";
 
             var index = 0;
 
             $.each(json[0], function (name) {
-                if (excludedColumnIndices.indexOf(index) === -1) {
+                if (window.excludedColumns.indexOf(name) === -1) {
                     header += "<th>" + name + "</th>";
+                }else{
+                    excludedColumnIndices.push(index);
                 };
 
                 index++;
@@ -274,6 +284,14 @@
                 index = 0;
                 $.each(value, function (key, val) {
                     if (excludedColumnIndices.indexOf(index) === -1) {
+                        if(val === false){
+                            val = Resources.Titles.No();
+                        };
+
+                        if(val === true){
+                            val = Resources.Titles.Yes();
+                        };
+
                         row += "<td>" + (val || "") + "</td>";
                     };
 
@@ -286,18 +304,7 @@
             });
 
             $(el).append(body);
-            appendTo.append(el);
-        };
-
-        function createJsonTable(el, json) {
-            el.html("");
-
-            if(isNullOrWhiteSpace(json || "")){
-                return;
-            };
-
-            var mydata = eval(json);
-            json2Table(mydata, window.excludedColumnIndices, el);
+            $(appendTo).append(el);
         };
 
     </script>
@@ -494,9 +501,10 @@
             ajaxGetPocoView.success(function (msg) {
                 var el = $("#json");
                 var json = JSON.parse(msg.d);
-                createJsonTable(el, json);
+                createGridView(el, json);
                 localizeHeaders(el);
                 loadColumns();
+                loadActions();
                 $("[data-tab=view]").removeClass("loading");
             });
 
@@ -946,5 +954,140 @@
             el.find(".bar").css("width", percentage.toString() + "%");
             el.find(".label").text(percentage.toString() + "% - " + message);
         };
+    </script>
+    <script>
+        function loadActions()
+        {
+            var deleteTemplate = "";
+            var editTemplate = "";
+
+            var hasAction = false;
+
+            if(window.allowDelete){
+                deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", Resources.Titles.Delete());                
+            };
+
+            if(window.allowEdit){
+                editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", Resources.Titles.Edit());
+            };
+
+            if(!isNullOrWhiteSpace(editTemplate) || !isNullOrWhiteSpace(deleteTemplate)){
+                hasAction = true;
+            };
+
+            if(hasAction){
+                var grid = $(".definition.table");
+                var header = stringFormat("<th style='width:{0}px;'></th>", 25 * (!isNullOrWhiteSpace(editTemplate) + !isNullOrWhiteSpace(deleteTemplate)));
+                var column = stringFormat("<td>{0}{1}</td>", editTemplate, deleteTemplate);
+
+                grid.find("th:first-child").before(header);
+                grid.find("td:first-child").before(column);
+            };
+        };
+    </script>
+    <script>
+        function deleteRow(el){
+            var confirmed = confirmAction();
+
+            if(!confirmed){
+                return;
+            };
+
+            el = $(el);
+
+            if(typeof(window.keyColumnPosition) === "undefined"){
+                window.keyColumnPosition = "2";
+            };
+
+            var selector = "td:nth-child(" + keyColumnPosition  + ")";
+            var primaryKey = el.parent().parent().find(selector).text();
+
+            var ajaxDeleteEntity = deleteEntity(formPocoName, primaryKey);
+
+            ajaxDeleteEntity.success(function(msg){
+                var confirmed = confirm("Task completed successfully. Refresh view?");
+
+                if(confirmed){
+                    loadPageCount(loadGrid);
+                };
+            });
+        };
+
+        function editRow(el){
+            var confirmed = confirmAction();
+
+            if(!confirmed){
+                return;
+            };
+
+            el = $(el);
+
+            if(typeof(window.keyColumnPosition) === "undefined"){
+                window.keyColumnPosition = "2";
+            };
+
+            var selector = "td:nth-child(" + keyColumnPosition  + ")";
+            var primaryKey = el.parent().parent().find(selector).text();
+
+            var ajaxGetViewForEdit = getViewForEdit(formPocoName, primaryKey);
+
+            ajaxGetViewForEdit.success(function(msg){
+                var data = JSON.parse(msg.d);
+
+                if(window.form === "undefined"){
+                    alert("No instance of form handler was found.");
+                    return;
+                };
+
+                displayEdit(data)
+            });
+        };
+
+        function displayEdit(d){
+            for (var key in d) {
+                var value = d[key];
+
+                var targetEl = $("#" + key);
+
+                if(targetEl.length){
+                    targetEl.val(value);
+
+                    if(targetEl.is("select")){
+                        var type = targetEl.attr("data-type");
+                        
+                        if(type === "bool"){
+                            value = value ? "yes": "no";
+                        };
+
+                        targetEl.dropdown("set selected", value);
+                        targetEl.trigger("blur");
+                    };
+                };
+            };
+
+            form.show();
+            view.hide();
+        };
+    </script>
+    <script>
+        function deleteEntity(pocoName, primaryKeyValue){
+            var url = "/Services/Modules/PocoService.asmx/DeleteEntity";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
+
+            data = getData(data);
+
+            return getAjax(url, data);
+        };
+
+        function getViewForEdit(pocoName, primaryKeyValue){
+            var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
+
+            data = getData(data);
+
+            return getAjax(url, data);
+        };        
     </script>
 </div>

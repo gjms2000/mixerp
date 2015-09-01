@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.Framework;
 using MixERP.Net.Framework.Extensions;
 using MixERP.Net.i18n;
 using Npgsql;
 using PetaPoco;
-using static System.Boolean;
-using static System.Int16;
 
 namespace MixERP.Net.EntityParser
 {
@@ -41,10 +35,42 @@ namespace MixERP.Net.EntityParser
             string tableName = PocoHelper.GetTableName(poco);
             string keyName = PocoHelper.GetKeyName(poco);
 
-            var view = Data.Service.GetView(catalog, poco, tableName, keyName, page, filters, byOffice, officeId, showall, pageSize);
+            IEnumerable<T> view = Data.Service.GetView(catalog, poco, tableName, keyName, page, filters, byOffice,
+                officeId, showall, pageSize);
             return view;
         }
 
+        public static T GetViewForEdit<T>(string catalog, T poco, object primaryKeyValue)
+        {
+            string primaryKeyName = PocoHelper.GetKeyName(poco);
+            string tableName = PocoHelper.GetTableName(poco);
+
+            return Data.Service.GetViewForEdit<T>(catalog, tableName, primaryKeyName, primaryKeyValue);
+        }
+
+        public static void SaveOrUpdate<T>(string catalog, T poco, dynamic entity, EntityView entityView, int userId)
+        {
+            List<dynamic> entities = new List<dynamic>();
+            entities.Add(entity);
+
+            Import(catalog, poco, entities, entityView, userId);
+        }
+
+        public static bool HasAccess(string pocoNamespace, AccessTypeEnum accessTypeEnum, int userId)
+        {
+            int accessType = (int) accessTypeEnum;
+            const string sql = "SELECT * FROM policy.has_access(@0, @1, @2);";
+            //Todo
+            return true;
+        }
+
+        public static void DeleteEntity<T>(string catalog, T poco, object primaryKeyValue)
+        {
+            string primaryKeyName = PocoHelper.GetKeyName(poco);
+            string tableName = PocoHelper.GetTableName(poco);
+
+            Data.Service.Delete(catalog, tableName, primaryKeyName, primaryKeyValue);
+        }
 
         public static void Import<T>(string catalog, T poco, List<dynamic> entities, EntityView entityView, int userId)
         {
@@ -62,7 +88,7 @@ namespace MixERP.Net.EntityParser
 
                 ExpandoObject item = new ExpandoObject();
 
-                
+
                 foreach (dynamic o in entity)
                 {
                     string key = o.Key;
@@ -82,8 +108,8 @@ namespace MixERP.Net.EntityParser
                 {
                     line++;
 
-                    ((IDictionary<string, object>)item)["audit_user_id"] = userId;
-                    ((IDictionary<string, object>)item)["audit_ts"] = DateTime.UtcNow;
+                    ((IDictionary<string, object>) item)["audit_user_id"] = userId;
+                    ((IDictionary<string, object>) item)["audit_ts"] = DateTime.UtcNow;
 
                     items.Add(item);
                 }
@@ -102,7 +128,7 @@ namespace MixERP.Net.EntityParser
                         {
                             line++;
 
-                            object primaryKeyValue = ((IDictionary<string, object>)item)[primaryKeyName];
+                            object primaryKeyValue = ((IDictionary<string, object>) item)[primaryKeyName];
 
                             if (primaryKeyValue != null)
                             {
@@ -115,7 +141,6 @@ namespace MixERP.Net.EntityParser
                         }
 
                         transaction.Complete();
-
                     }
                 }
             }
@@ -133,91 +158,98 @@ namespace MixERP.Net.EntityParser
                 errorMessage += ex.Message;
                 throw new MixERPException(errorMessage, ex);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string errorMessage = string.Format(CultureManager.GetCurrent(), "Error on line {0}.", line);
                 throw new MixERPException(errorMessage, ex);
             }
         }
 
-        private static void AddProperty(ref ExpandoObject item, string dataType, bool isNullable, string key, object value)
+        private static void AddProperty(ref ExpandoObject item, string dataType, bool isNullable, string key,
+            object value)
         {
             if (!isNullable)
             {
                 switch (dataType)
                 {
                     case "System.Boolean":
-                        ((IDictionary<string, object>)item)[key] = bool.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = bool.Parse(value.ToString());
                         break;
                     case "System.Int16":
-                        ((IDictionary<string, object>)item)[key] = short.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = short.Parse(value.ToString());
                         break;
                     case "System.Int32":
-                        ((IDictionary<string, object>)item)[key] = int.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = int.Parse(value.ToString());
                         break;
                     case "System.Int64":
-                        ((IDictionary<string, object>)item)[key] = int.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = int.Parse(value.ToString());
                         break;
                     case "System.Decimal":
-                        ((IDictionary<string, object>)item)[key] = decimal.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = decimal.Parse(value.ToString());
                         break;
                     case "System.Single":
-                        ((IDictionary<string, object>)item)[key] = float.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = float.Parse(value.ToString());
                         break;
                     case "System.Double":
-                        ((IDictionary<string, object>)item)[key] = double.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = double.Parse(value.ToString());
                         break;
                     case "System.DateTime":
-                        ((IDictionary<string, object>)item)[key] = DateTime.Parse(value.ToString());
+                        ((IDictionary<string, object>) item)[key] = DateTime.Parse(value.ToString());
                         break;
                     default:
-                        ((IDictionary<string, object>)item)[key] = value;
+                        ((IDictionary<string, object>) item)[key] = value;
                         break;
                 }
 
                 return;
             }
 
+            if (value == null)
+            {
+                ((IDictionary<string, object>) item)[key] = null;
+                return;
+            }
+
             switch (dataType)
             {
                 case "System.Boolean":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(bool.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(bool.Parse);
                     break;
                 case "System.Int16":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(short.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(short.Parse);
                     break;
                 case "System.Int32":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(int.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(int.Parse);
                     break;
                 case "System.Int64":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(long.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(long.Parse);
                     break;
                 case "System.Decimal":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(decimal.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(decimal.Parse);
                     break;
                 case "System.Single":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(float.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(float.Parse);
                     break;
                 case "System.Double":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(double.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(double.Parse);
                     break;
                 case "System.DateTime":
-                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(DateTime.Parse);
+                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(DateTime.Parse);
                     break;
                 default:
-                    ((IDictionary<string, object>)item)[key] = value;
+                    ((IDictionary<string, object>) item)[key] = value;
                     break;
             }
         }
 
-
-
-        public static IEnumerable<T> ForDownloadTemplate<T>(string catalog, T poco, bool byOffice, int officeId, bool includeData)
+        public static IEnumerable<T> ForDownloadTemplate<T>(string catalog, T poco, bool byOffice, int officeId,
+            bool includeData)
         {
             string tableName = PocoHelper.GetTableName(poco);
             string keyName = PocoHelper.GetKeyName(poco);
 
-            var view = Data.Service.ForDownloadTemplate(catalog, poco, tableName, keyName, byOffice, officeId, includeData);
+            IEnumerable<T> view = Data.Service.ForDownloadTemplate(catalog, poco, tableName, keyName, byOffice, officeId,
+                includeData);
             return view;
         }
 

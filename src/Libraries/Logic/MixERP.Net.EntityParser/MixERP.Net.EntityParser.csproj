@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessTypeEnum.cs" />
     <Compile Include="Data\Service.cs" />
     <Compile Include="FilterCondition.cs" />
     <Compile Include="PocoHelper.cs" />

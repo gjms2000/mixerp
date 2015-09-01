@@ -1108,7 +1108,7 @@ var getData = function (data) {
     return null;
 };
 
-jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValueField, dataTextField) {
+jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValueField, dataTextField, isArray) {
     "use strict";
     var selected;
     var targetControl = $(this);
@@ -1133,15 +1133,30 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
     };
 
     $.each(ajaxData, function () {
-        
+        var text;
+        var value;
         selected = false;
 
+        if (typeof(isArray) === "undefined") {
+            isArray = false;
+        };
+
+        if (isArray) {
+            text = this;
+            value = this;
+        };
+    
+        if(!isArray){
+            text = this[dataTextField].toString();
+            value = this[dataValueField].toString();
+        };
+
         if (selectedValue) {
-            if (this[dataValueField].toString() === selectedValue.toString()) {
+            if (value === selectedValue.toString()) {
                 selected = true;
             };
         };
-        appendItem(targetControl, this[dataValueField], this[dataTextField], selected);
+        appendItem(targetControl, value, text, selected);
     });
 };
 
@@ -1209,7 +1224,7 @@ var ajaxUpdateVal = function (url, data, targetControls) {
     });
 };
 
-var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, dataValueField, dataTextField) {
+var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, dataValueField, dataTextField, isArray) {
    
     if (!targetControl) {
         return;
@@ -1229,12 +1244,12 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
     ajax.success(function (msg) {
         if (targetControl.length === 1) {
-            targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField);
+            targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField, isArray);
         };
 
         if (targetControl.length > 1) {
             targetControl.each(function () {
-                $(this).bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField);
+                $(this).bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField, isArray);
             });
         };
 
@@ -1337,7 +1352,6 @@ function executeFunctionByName(functionName, context /*, args */) {
 
     return undefined;
 };
-
 function createCascadingPair(select, input) {
     input.blur(function () {
         selectDropDownListByValue(this.id, select.attr("id"));

@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/Modules/HRM/db/1.5/db/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -17,7 +17,7 @@ DROP SCHEMA IF EXISTS hrm CASCADE;
 CREATE SCHEMA hrm;
 
 DROP TABLE IF EXISTS core.genders;
-DROP TABLE IF EXISTS core.education_levels;
+
 CREATE TABLE core.genders
 (
     gender_code                             character(2) NOT NULL PRIMARY KEY,
@@ -27,7 +27,7 @@ CREATE TABLE core.genders
                                             DEFAULT(NOW())    
 );
 
-CREATE TABLE core.education_levels
+CREATE TABLE hrm.education_levels
 (
     education_level_id                      SERIAL NOT NULL PRIMARY KEY,
     education_level_name                    national character varying(50) NOT NULL UNIQUE,
@@ -36,11 +36,12 @@ CREATE TABLE core.education_levels
                                             DEFAULT(NOW())    
 );
 
+
 CREATE TABLE hrm.employment_status_codes
 (
     employment_status_code_id               integer NOT NULL PRIMARY KEY,
-    employment_status_code                  national character varying(12) NOT NULL UNIQUE,
-    employment_status_code_name             national character varying(100) NOT NULL,
+    status_code                             national character varying(12) NOT NULL UNIQUE,
+    status_code_name                        national character varying(100) NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -306,25 +307,13 @@ CREATE TABLE hrm.employee_qualifications
 (
     employee_qualification_id               BIGINT NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
-    education_level_id                      integer NOT NULL REFERENCES core.education_levels(education_level_id),
+    education_level_id                      integer NOT NULL REFERENCES hrm.education_levels(education_level_id),
     institution                             national character varying(128) NOT NULL,
     majors                                  national character varying(128) NOT NULL,
     total_years                             integer,
     score                                   numeric,
     started_on                              date,
     completed_on                            date,
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),    
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
-DROP TABLE IF EXISTS office.week_setup;
-CREATE TABLE office.week_setup
-(
-    week_setup_id                           SERIAL NOT NULL PRIMARY KEY,
-    office_id                               integer NOT NULL REFERENCES office.offices(office_id),
-    week_starts_from                        smallint NOT NULL CHECK(week_starts_from BETWEEN 1 AND 7),
-    week_ends_on                            smallint NOT NULL CHECK(week_ends_on BETWEEN 1 AND 7),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -417,4 +406,21 @@ CREATE TABLE hrm.exits
 );
 
 
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/03.menus/0.menus.sql --<--<--
+--This table should not be localized.
+
+SELECT * FROM core.create_menu('HRM', '~/Modules/HRM/Index.mix', 'SA', 0, NULL);
+SELECT * FROM core.create_menu('Tasks', NULL, 'HRMTA', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Tasks/.mix', '', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Tasks/.mix', '', 2, core.get_menu_id('HRMTA'));
+
+SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'HRMSSM', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.create_menu('HRM Reports', NULL, 'HRMRPT', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.create_menu('', '~/Modules/HRM/.mix', 'IIM', 1, core.get_menu_id('HRMRPT'));
 

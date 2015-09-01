@@ -3475,6 +3475,16 @@ SELECT 0,   'Unverified'                            UNION ALL
 SELECT 1,   'Automatically Approved by Workflow'    UNION ALL
 SELECT 2,   'Approved';
 
+SELECT policy.create_access_types(1,   'Read');
+SELECT policy.create_access_types(2,   'Create');
+SELECT policy.create_access_types(3,   'Edit');
+SELECT policy.create_access_types(4,   'Delete');
+SELECT policy.create_access_types(5,   'Create Filter');
+SELECT policy.create_access_types(6,   'Delete Filter');
+SELECT policy.create_access_types(7,   'Export');
+SELECT policy.create_access_types(8,   'Export Data');
+SELECT policy.create_access_types(9,  'Import Data');
+
 INSERT INTO core.frequencies(frequency_id, frequency_code, frequency_name)
 SELECT 2, 'EOM', 'End of Month'                 UNION ALL
 SELECT 3, 'EOQ', 'End of Quarter'               UNION ALL

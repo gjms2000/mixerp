@@ -133,6 +133,8 @@
     <Content Include="OTS\SMTP.ascx" />
     <Content Include="OTS\Switches.ascx" />
     <Content Include="Policy\ApiAccess.ascx" />
+    <Content Include="Policy\DefaultEntityAccess.ascx" />
+    <Content Include="Policy\EntityAccess.ascx" />
     <Content Include="Scripts\Admin\ReportWriter.ascx..js" />
     <Content Include="Scripts\Admin\DatabaseBackup.ascx.js" />
     <Content Include="Scripts\CustomFields.ascx.js" />
@@ -141,6 +143,7 @@
     <Content Include="Services\Admin\ReportWriter.asmx" />
     <Content Include="Services\CustomFields.asmx" />
     <Content Include="Services\OTS\OpeningInventory.asmx" />
+    <Content Include="Services\Policy\EntityAccess.asmx" />
     <Content Include="Widgets\LinksWidget.ascx" />
     <Content Include="Widgets\OfficeInformationWidget.ascx" />
     <Content Include="Handlers\PartyImageHandler.ashx" />
@@ -439,6 +442,20 @@
     <Compile Include="Policy\AutoVerification.ascx.designer.cs">
       <DependentUpon>AutoVerification.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Policy\DefaultEntityAccess.ascx.cs">
+      <DependentUpon>DefaultEntityAccess.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Policy\DefaultEntityAccess.ascx.designer.cs">
+      <DependentUpon>DefaultEntityAccess.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Policy\EntityAccess.ascx.cs">
+      <DependentUpon>EntityAccess.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Policy\EntityAccess.ascx.designer.cs">
+      <DependentUpon>EntityAccess.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Policy\GLAccess.ascx.cs">
       <DependentUpon>GLAccess.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -489,6 +506,10 @@
     </Compile>
     <Compile Include="Services\OTS\OpeningInventory.asmx.cs">
       <DependentUpon>OpeningInventory.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\Policy\EntityAccess.asmx.cs">
+      <DependentUpon>EntityAccess.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Services\TaxData.asmx.cs">

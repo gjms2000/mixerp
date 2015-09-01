@@ -1,0 +1,10 @@
+SELECT policy.create_access_types(1,   'Read');
+SELECT policy.create_access_types(2,   'Create');
+SELECT policy.create_access_types(3,   'Edit');
+SELECT policy.create_access_types(4,   'Delete');
+SELECT policy.create_access_types(5,   'Create Filter');
+SELECT policy.create_access_types(6,   'Edit Filter');
+SELECT policy.create_access_types(7,   'Delete Filter');
+SELECT policy.create_access_types(8,   'Export');
+SELECT policy.create_access_types(9,   'Export Data');
+SELECT policy.create_access_types(10,  'Import Data');

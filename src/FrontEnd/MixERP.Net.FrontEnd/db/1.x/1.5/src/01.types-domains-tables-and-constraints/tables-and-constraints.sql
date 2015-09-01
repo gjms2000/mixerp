@@ -1,4 +1,23 @@
---Empty
+DO
+$$
+    DECLARE _constraint_name text;
+BEGIN
+    SELECT constraint_name INTO _constraint_name
+    FROM information_schema.table_constraints
+    WHERE table_name ='auto_verification_policy'
+    AND constraint_type = 'PRIMARY KEY';
+
+    IF(_constraint_name IS NOT NULL) THEN
+        EXECUTE 'ALTER TABLE policy.auto_verification_policy DROP CONSTRAINT ' || _constraint_name;
+    END IF;
+
+    ALTER TABLE policy.auto_verification_policy
+    ADD CONSTRAINT auto_verification_policy_pkey PRIMARY KEY(policy_id);
+END
+$$
+LANGUAGE plpgsql;
+
+
 DO
 $$
 BEGIN
@@ -12,15 +31,18 @@ BEGIN
     ) THEN
         CREATE TABLE core.filters
         (
-            filter_id               BIGSERIAL NOT NULL PRIMARY KEY,
-            object_name             text NOT NULL,
-            filter_name             text NOT NULL,
-            is_default              boolean NOT NULL DEFAULT(false),
-            is_default_admin        boolean NOT NULL DEFAULT(false),
-            column_name             text NOT NULL,
-            filter_condition        integer NOT NULL,
-            filter_value            text,
-            filter_and_value        text
+            filter_id                       BIGSERIAL NOT NULL PRIMARY KEY,
+            object_name                     text NOT NULL,
+            filter_name                     text NOT NULL,
+            is_default                      boolean NOT NULL DEFAULT(false),
+            is_default_admin                boolean NOT NULL DEFAULT(false),
+            column_name                     text NOT NULL,
+            filter_condition                integer NOT NULL,
+            filter_value                    text,
+            filter_and_value                text,
+            audit_user_id                   integer NULL REFERENCES office.users(user_id),
+            audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())
         );
 
         CREATE INDEX filters_object_name_inx
@@ -29,3 +51,85 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'policy'
+        AND    c.relname = 'access_types'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE policy.access_types
+        (
+            access_type_id                  integer NOT NULL PRIMARY KEY,
+            access_type_name                national character varying(48) NOT NULL UNIQUE
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'policy'
+        AND    c.relname = 'default_entity_access'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE policy.default_entity_access
+        (
+            default_entity_access_id        SERIAL NOT NULL PRIMARY KEY,
+            entity_name                     national character varying(128) NULL,
+            role_id                         integer NOT NULL REFERENCES office.roles(role_id),
+            access_type_id                  integer NOT NULL REFERENCES policy.access_types(access_type_id),
+            allow_access                    boolean NOT NULL,
+            audit_user_id                   integer NULL REFERENCES office.users(user_id),
+            audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'policy'
+        AND    c.relname = 'entity_access'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE policy.entity_access
+        (
+            entity_access_id                SERIAL NOT NULL PRIMARY KEY,
+            entity_name                     national character varying(128) NOT NULL,
+            user_id                         integer NOT NULL REFERENCES office.users(user_id),
+            access_type_id                  integer NOT NULL REFERENCES policy.access_types(access_type_id),
+            allow_access                    boolean NOT NULL,
+            audit_user_id                   integer NULL REFERENCES office.users(user_id),
+            audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP INDEX IF EXISTS policy.default_entity_access_entity_name_role_id_access_type_id_uix;
+
+CREATE UNIQUE INDEX default_entity_access_entity_name_role_id_access_type_id_uix
+ON policy.default_entity_access(lower(entity_name), role_id, access_type_id);
+

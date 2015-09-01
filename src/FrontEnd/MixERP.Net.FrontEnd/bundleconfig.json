@@ -89,6 +89,7 @@
       "Scripts/jquery-ui.js",
       "Scripts/shortcut.js",
       "Scripts/colorbox/jquery.colorbox.js",
+      "Scripts/papaparse/papaparse.min.js",
       "Scripts/jqueryNumber/jquery.number.js",
       "Scripts/date.js",
       "Scripts/chartjs/Chart.min.js",
