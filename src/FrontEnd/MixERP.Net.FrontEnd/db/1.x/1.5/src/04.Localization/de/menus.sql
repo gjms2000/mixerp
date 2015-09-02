@@ -1,15 +1,14 @@
 ﻿--This translation is originally a courtesy of Johann Schwarz
 --https://github.com/Johann-Schwarz
-SELECT core.create_menu_locale('ERR', 'de', 'Wechselkurse');
-SELECT core.create_menu_locale('OTSSMTP', 'de', 'SMTP Parameter');
-SELECT core.create_menu_locale('SAR-SBO', 'de', 'Verkäufe nach Büros');
-SELECT core.create_menu_locale('SET', 'de', 'Einstellungen');
+SELECT core.create_menu_locale('CUF', 'de', 'Benutzerdefinierte Felder');
+SELECT core.create_menu_locale('SPR', 'de', 'Verkäufer Report');
 SELECT core.create_menu_locale('PAT', 'de', 'Zahlungsbedingungen');
 SELECT core.create_menu_locale('CUR', 'de', 'Währungsmanagement');
 SELECT core.create_menu_locale('OTSCLP', 'de', 'Währungslayer Parameter');
 SELECT core.create_menu_locale('RI', 'de', 'Wiederkehrende Rechnungen');
 SELECT core.create_menu_locale('RIS', 'de', 'Wiederkehrende Rechnung einrichten');
 SELECT core.create_menu_locale('UER', 'de', 'Wechselkurse Updaten');
+SELECT core.create_menu_locale('ERR', 'de', 'Wechselkurse');
 SELECT core.create_menu_locale('GRN', 'de', 'Wareneingangs-Eintrag');
 SELECT core.create_menu_locale('OTSI', 'de', 'Warenanfangsbestand');
 SELECT core.create_menu_locale('PR', 'de', 'Waren-Rücksendungen');
@@ -23,8 +22,8 @@ SELECT core.create_menu_locale('SA', 'de', 'Vertrieb');
 SELECT core.create_menu_locale('SMP', 'de', 'Verschiedene Parameter');
 SELECT core.create_menu_locale('SHI', 'de', 'Versand Informationen');
 SELECT core.create_menu_locale('SSA', 'de', 'Verkäufer');
+SELECT core.create_menu_locale('SAR-SBO', 'de', 'Verkäufe nach Büros');
 SELECT core.create_menu_locale('ISP', 'de', 'Verkaufspreise');
---SELECT core.create_menu_locale('SPR', 'de', 'Verkaufspersonal Report');
 SELECT core.create_menu_locale('SAR', 'de', 'Verkaufsberichte');
 SELECT core.create_menu_locale('STXT', 'de', 'Umsatzsteuerarten');
 SELECT core.create_menu_locale('STXD', 'de', 'Umsatzsteuer Details');
@@ -98,6 +97,7 @@ SELECT core.create_menu_locale('FI', 'de', 'Finanzen');
 SELECT core.create_menu_locale('CUOM', 'de', 'Erweiterte Masseinheiten');
 SELECT core.create_menu_locale('RET', 'de', 'Erklärung zum Bilanzgewinn');
 SELECT core.create_menu_locale('RFC', 'de', 'Empfangsbestätigung Kunde');
+SELECT core.create_menu_locale('SET', 'de', 'Einstellungen');
 SELECT core.create_menu_locale('FSM', 'de', 'Einrichtung und Wartung');
 SELECT core.create_menu_locale('ISM', 'de', 'Einrichtung und Wartung');
 SELECT core.create_menu_locale('SSM', 'de', 'Einrichtung und Wartung');
