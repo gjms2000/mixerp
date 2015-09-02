@@ -466,6 +466,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'employee_type_i
 SELECT localization.add_localized_resource('ScrudResource', '', 'employee_type_name', 'Employee Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'employment_status_code', 'Employment Status Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'employment_status_code_id', 'Employment Status Code Id');
+SELECT localization.add_localized_resource('ScrudResource', '', 'employment_status_id', 'Employment Status Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'employment_status_name', 'Employment Status Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'enabled', 'Enabled');
 SELECT localization.add_localized_resource('ScrudResource', '', 'end_date', 'End Date');

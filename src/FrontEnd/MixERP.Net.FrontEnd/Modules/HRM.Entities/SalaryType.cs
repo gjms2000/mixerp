@@ -23,21 +23,21 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("salary_type_id")]
+    [PrimaryKey("salary_type_id", autoIncrement=true)]
     [TableName("hrm.salary_types")]
     [ExplicitColumns]
     public sealed class SalaryType : PetaPocoDB.Record<SalaryType>, IPoco
     {
         [Column("salary_type_id")]
-        [ColumnDbType("int4", 0, "nextval('hrm.salary_types_salary_type_id_seq'::regclass)")] 
+        [ColumnDbType("int4", 0, false, "nextval('hrm.salary_types_salary_type_id_seq'::regclass)")] 
         public int SalaryTypeId { get; set; }
     
         [Column("salary_type_code")]
-        [ColumnDbType("varchar", 12, "")] 
+        [ColumnDbType("varchar", 12, false, "")] 
         public string SalaryTypeCode { get; set; }
     
         [Column("salary_type_name")]
-        [ColumnDbType("varchar", 128, "")] 
+        [ColumnDbType("varchar", 128, false, "")] 
         public string SalaryTypeName { get; set; }
     }
 }

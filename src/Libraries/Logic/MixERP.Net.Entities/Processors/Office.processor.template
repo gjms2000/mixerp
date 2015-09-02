@@ -291,10 +291,10 @@ static string zap_password(string connectionString)
 Tables LoadTables()
 {
 	InitConnectionString();
+	Tables result;
 
 	try
 	{
-		Tables result;
 		using(NpgsqlConnection conn= new NpgsqlConnection())
 		{
 			conn.ConnectionString=ConnectionString;         
@@ -344,7 +344,7 @@ Tables LoadTables()
 	}
 	catch (Exception x)
 	{
-		var error=x.Message.Replace("\r\n", "\n").Replace("\n", " ");
+		var error=x.StackTrace.Replace("\r\n", "\n").Replace("\n", " ");
 		Warning(string.Format("Failed to read database schema - {0}", error));
 		WriteLine("");
 		WriteLine("// -----------------------------------------------------------------------------------------");

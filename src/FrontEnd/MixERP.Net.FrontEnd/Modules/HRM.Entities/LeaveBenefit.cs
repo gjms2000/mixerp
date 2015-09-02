@@ -23,25 +23,25 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("leave_benefit_id")]
+    [PrimaryKey("leave_benefit_id", autoIncrement=true)]
     [TableName("hrm.leave_benefits")]
     [ExplicitColumns]
     public sealed class LeaveBenefit : PetaPocoDB.Record<LeaveBenefit>, IPoco
     {
         [Column("leave_benefit_id")]
-        [ColumnDbType("int4", 0, "nextval('hrm.leave_benefits_leave_benefit_id_seq'::regclass)")] 
+        [ColumnDbType("int4", 0, false, "nextval('hrm.leave_benefits_leave_benefit_id_seq'::regclass)")] 
         public int LeaveBenefitId { get; set; }
     
         [Column("leave_benefit_code")]
-        [ColumnDbType("varchar", 12, "")] 
+        [ColumnDbType("varchar", 12, false, "")] 
         public string LeaveBenefitCode { get; set; }
     
         [Column("leave_benefit_name")]
-        [ColumnDbType("varchar", 128, "")] 
+        [ColumnDbType("varchar", 128, false, "")] 
         public string LeaveBenefitName { get; set; }
     
         [Column("total_days")]
-        [ColumnDbType("integer_strict", 0, "")] 
+        [ColumnDbType("integer_strict", 0, false, "")] 
         public int TotalDays { get; set; }
     }
 }

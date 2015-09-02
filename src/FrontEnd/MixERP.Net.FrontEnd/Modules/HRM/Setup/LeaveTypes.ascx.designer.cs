@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MixERP.Net.Core.Modules.HRM
+namespace MixERP.Net.Core.Modules.HRM.Setup
 {
 
 
-    public partial class EmploymentStatusCodes
+    public partial class LeaveTypes
     {
     }
 }

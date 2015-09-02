@@ -4334,6 +4334,22 @@ BEGIN
     SELECT 'VER', 'Verbal'              UNION ALL
     SELECT 'CLW', 'Closed Won'          UNION ALL
     SELECT 'CLL', 'Closed Lost';
+
+    INSERT INTO core.genders
+    SELECT 'F', 'Female' UNION ALL
+    SELECT 'M', 'Male' UNION ALL
+    SELECT 'O', 'Other';
+
+    INSERT INTO core.education_levels(education_level_name)
+    SELECT 'Some Schooling' UNION ALL
+    SELECT 'Basic Schooling' UNION ALL
+    SELECT 'Higher Schooling' UNION ALL
+    SELECT 'Associate''s Degree' UNION ALL
+    SELECT 'Bachelor''s Degrees' UNION ALL
+    SELECT 'Graduate Degrees' UNION ALL
+    SELECT 'Master''s Degrees' UNION ALL
+    SELECT 'Doctoral Degrees' UNION ALL
+    SELECT 'Professional Degrees';
 END
 $$
 LANGUAGE plpgsql;

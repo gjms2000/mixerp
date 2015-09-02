@@ -1116,12 +1116,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
 
 
     if (ajaxData.length === 0) {
-        appendItem(targetControl, "", Resources.Titles.None());
+        appendItem(targetControl, " ", Resources.Titles.None());
         return;
     };
 
     if (!skipSelect) {
-        appendItem(targetControl, "", Resources.Titles.Select());
+        appendItem(targetControl, " ", Resources.Titles.Select());
     }
    
     if (!dataValueField) {

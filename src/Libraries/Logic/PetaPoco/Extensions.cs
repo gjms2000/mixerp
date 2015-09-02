@@ -20,15 +20,17 @@ namespace PetaPoco
             this.MaxLength = maxLength;
         }
 
-        public ColumnDbType(string name, int maxLength, string defaultValue)
+        public ColumnDbType(string name, int maxLength, bool isNullable, string defaultValue)
         {
             this.Name = name;
             this.MaxLength = maxLength;
+            this.IsNullable = isNullable;
             this.DefaultValue = defaultValue;
         }
 
         public string Name { get; set; }
         public int MaxLength { get; set; }
         public string DefaultValue { get; set; }
+        public bool IsNullable { get; set; }
     }
 }

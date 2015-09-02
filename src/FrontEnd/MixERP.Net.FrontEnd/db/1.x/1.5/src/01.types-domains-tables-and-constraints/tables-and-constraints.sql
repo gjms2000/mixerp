@@ -89,7 +89,7 @@ BEGIN
             default_entity_access_id        SERIAL NOT NULL PRIMARY KEY,
             entity_name                     national character varying(128) NULL,
             role_id                         integer NOT NULL REFERENCES office.roles(role_id),
-            access_type_id                  integer NOT NULL REFERENCES policy.access_types(access_type_id),
+            access_type_id                  integer NULL REFERENCES policy.access_types(access_type_id),
             allow_access                    boolean NOT NULL,
             audit_user_id                   integer NULL REFERENCES office.users(user_id),
             audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
@@ -115,9 +115,9 @@ BEGIN
         CREATE TABLE policy.entity_access
         (
             entity_access_id                SERIAL NOT NULL PRIMARY KEY,
-            entity_name                     national character varying(128) NOT NULL,
+            entity_name                     national character varying(128) NULL,
             user_id                         integer NOT NULL REFERENCES office.users(user_id),
-            access_type_id                  integer NOT NULL REFERENCES policy.access_types(access_type_id),
+            access_type_id                  integer NULL REFERENCES policy.access_types(access_type_id),
             allow_access                    boolean NOT NULL,
             audit_user_id                   integer NULL REFERENCES office.users(user_id),
             audit_ts                        TIMESTAMP WITH TIME ZONE NULL 

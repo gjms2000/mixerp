@@ -3,7 +3,7 @@
     var title = "Entity Access Policy";
     var description = "Create entity access policy for individual users. By default, users have right to access an entity if a menu acesss policy is granted. If a <a href='{0}'>default entity access policy</a> was created to restrict access to a group of users, you can still override that policy and provide access permission to a particular user.";
     description = stringFormat(description, "EntityAccess.mix");
-    var viewPocoName = "EntityAccess";
+    var viewPocoName = "EntityAccessScrudView";
     var formPocoName = "EntityAccess";
     var allowDelete = true;
     var allowEdit = true;

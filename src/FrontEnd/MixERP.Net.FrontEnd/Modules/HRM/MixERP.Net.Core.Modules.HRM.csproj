@@ -76,7 +76,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmploymentStatusCodes.ascx" />
     <Content Include="packages.config" />
     <Content Include="Mix Open Foundation.snk" />
     <None Include="Web.Debug.config">
@@ -110,17 +109,22 @@
     <Content Include="Services\DisplayFields\SalaryType.asmx" />
     <Content Include="Services\DisplayFields\Shift.asmx" />
     <Content Include="Services\DisplayFields\Termination.asmx" />
+    <Content Include="Setup\EducationLevels.ascx" />
+    <Content Include="Setup\EmployeeTypes.ascx" />
     <Content Include="Setup\EmploymentStatuses.ascx" />
+    <Content Include="Setup\ExitTypes.ascx" />
+    <Content Include="Setup\HolidaySetup.ascx" />
+    <Content Include="Setup\JobTitles.ascx" />
+    <Content Include="Setup\LeaveBenefits.ascx" />
+    <Content Include="Setup\LeaveTypes.ascx" />
+    <Content Include="Setup\OfficeHours.ascx" />
+    <Content Include="Setup\PayGrades.ascx" />
+    <Content Include="Setup\Salaries.ascx" />
+    <Content Include="Setup\SalaryTypes.ascx" />
+    <Content Include="Setup\Shifts.ascx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmploymentStatusCodes.ascx.cs">
-      <DependentUpon>EmploymentStatusCodes.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="EmploymentStatusCodes.ascx.designer.cs">
-      <DependentUpon>EmploymentStatusCodes.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DisplayFields\Contract.asmx.cs">
       <DependentUpon>Contract.asmx</DependentUpon>
@@ -214,12 +218,96 @@
       <DependentUpon>Termination.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Setup\EducationLevels.ascx.cs">
+      <DependentUpon>EducationLevels.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\EducationLevels.ascx.designer.cs">
+      <DependentUpon>EducationLevels.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\EmployeeTypes.ascx.cs">
+      <DependentUpon>EmployeeTypes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\EmployeeTypes.ascx.designer.cs">
+      <DependentUpon>EmployeeTypes.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Setup\EmploymentStatuses.ascx.cs">
       <DependentUpon>EmploymentStatuses.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Setup\EmploymentStatuses.ascx.designer.cs">
       <DependentUpon>EmploymentStatuses.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\ExitTypes.ascx.cs">
+      <DependentUpon>ExitTypes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\ExitTypes.ascx.designer.cs">
+      <DependentUpon>ExitTypes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\HolidaySetup.ascx.cs">
+      <DependentUpon>HolidaySetup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\HolidaySetup.ascx.designer.cs">
+      <DependentUpon>HolidaySetup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\JobTitles.ascx.cs">
+      <DependentUpon>JobTitles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\JobTitles.ascx.designer.cs">
+      <DependentUpon>JobTitles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\LeaveBenefits.ascx.cs">
+      <DependentUpon>LeaveBenefits.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\LeaveBenefits.ascx.designer.cs">
+      <DependentUpon>LeaveBenefits.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\LeaveTypes.ascx.cs">
+      <DependentUpon>LeaveTypes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\LeaveTypes.ascx.designer.cs">
+      <DependentUpon>LeaveTypes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\OfficeHours.ascx.cs">
+      <DependentUpon>OfficeHours.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\OfficeHours.ascx.designer.cs">
+      <DependentUpon>OfficeHours.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\PayGrades.ascx.cs">
+      <DependentUpon>PayGrades.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\PayGrades.ascx.designer.cs">
+      <DependentUpon>PayGrades.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\Salaries.ascx.cs">
+      <DependentUpon>Salaries.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\Salaries.ascx.designer.cs">
+      <DependentUpon>Salaries.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\SalaryTypes.ascx.cs">
+      <DependentUpon>SalaryTypes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\SalaryTypes.ascx.designer.cs">
+      <DependentUpon>SalaryTypes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\Shifts.ascx.cs">
+      <DependentUpon>Shifts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\Shifts.ascx.designer.cs">
+      <DependentUpon>Shifts.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

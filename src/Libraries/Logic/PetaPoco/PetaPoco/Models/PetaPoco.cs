@@ -71,7 +71,7 @@ namespace PetaPoco
         public PrimaryKeyAttribute(string primaryKey)
         {
             Value = primaryKey;
-            autoIncrement = true;
+            autoIncrement = false;
         }
 
         public string Value { get; private set; }

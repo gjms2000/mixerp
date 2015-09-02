@@ -23,37 +23,37 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("week_day_id")]
+    [PrimaryKey("week_day_id", autoIncrement=false)]
     [TableName("hrm.office_hours")]
     [ExplicitColumns]
     public sealed class OfficeHour : PetaPocoDB.Record<OfficeHour>, IPoco
     {
         [Column("week_day_id")]
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, false, "")] 
         public int WeekDayId { get; set; }
     
         [Column("office_id")]
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, false, "")] 
         public int OfficeId { get; set; }
     
         [Column("shift_id")]
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, false, "")] 
         public int ShiftId { get; set; }
     
         [Column("begins_from")]
-        [ColumnDbType("time", 0, "")] 
+        [ColumnDbType("time", 0, false, "")] 
         public DateTime BeginsFrom { get; set; }
     
         [Column("ends_on")]
-        [ColumnDbType("time", 0, "")] 
+        [ColumnDbType("time", 0, false, "")] 
         public DateTime EndsOn { get; set; }
     
         [Column("audit_user_id")]
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, true, "")] 
         public int? AuditUserId { get; set; }
     
         [Column("audit_ts")]
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, true, "")] 
         public DateTime? AuditTs { get; set; }
     }
 }

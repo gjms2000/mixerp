@@ -86,6 +86,8 @@
 
                 if(dataType === "System.Boolean"){
                     val = val === "yes"? true: false;
+                }else{
+                    val = val.toString().trim();
                 };
             };
 
@@ -98,19 +100,22 @@
             entity[columnName] = val;
         });
 
-
         var ajaxSaveOrUpdate = saveOrUpdate(formPocoName, entity);
 
 
         ajaxSaveOrUpdate.success(function(msg){
             saveButton.removeClass("loading");
-            var confirmed = confirm("Task completed successfully. Add New?");
+            var confirmed = confirm("Task completed successfully. Return to view?");
 
             resetForm();
 
-            if(!confirmed){
+            if(confirmed){
                 form.hide();
-                view.show();
+
+                if(view.length){
+                    view.show();
+                    loadPageCount(loadGrid);
+                };
             };
         });
 
@@ -175,7 +180,7 @@
 </script>
 
     <script>
-        $(document).ready(function () {
+        $(window).load(function () {
             var form = $(".poco.form.factory");
             var view = $(".poco.view.factory");
 
@@ -376,6 +381,7 @@
 
             if (column.IsPrimaryKey) {
                 element.attr("data-primaryKey", "");
+                element.removeClass();
             };
 
             if (column.MaxLength > 0) {
@@ -398,6 +404,10 @@
         //var bool = "<select class='ui dropdown'><option value='yes'>Yes</option><option value='no'>No</option>";
 
         function getField(propertyName, dataType, nullable) {
+            if(typeof(window.keys) === "undefined"){
+                window.keys = [];
+            };
+
             var hasKey = _.findWhere(keys, { property: propertyName });
 
             if (hasKey) {

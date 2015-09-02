@@ -54,7 +54,7 @@ CREATE TABLE hrm.employment_statuses
     employment_status_name                  national character varying(100) NOT NULL,
     is_contract                             boolean NOT NULL DEFAULT(false),
     default_employment_status_code_id       integer NOT NULL REFERENCES hrm.employment_status_codes,
-    description                             text NOT NULL DEFAULT(''),    
+    description                             text DEFAULT(''),    
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -65,7 +65,7 @@ CREATE TABLE hrm.job_titles
     job_title_id                            SERIAL NOT NULL PRIMARY KEY,
     job_title_code                          national character varying(12) NOT NULL UNIQUE,
     job_title_name                          national character varying(100) NOT NULL,
-    description                             text NOT NULL DEFAULT(''),
+    description                             text DEFAULT(''),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -79,7 +79,7 @@ CREATE TABLE hrm.pay_grades
     minimum_salary                          decimal(24, 4) NOT NULL,
     maximum_salary                          decimal(24, 5) NOT NULL
                                             CHECK(maximum_salary >= minimum_salary),
-    description                             text NOT NULL DEFAULT(''),
+    description                             text DEFAULT(''),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -92,7 +92,7 @@ CREATE TABLE hrm.shifts
     shift_name                          national character varying(100) NOT NULL,
     begins_from                         time NOT NULL,
     ends_on                             time NOT NULL,
-    description                         text NOT NULL DEFAULT(''),
+    description                         text DEFAULT(''),
     audit_user_id                       integer NULL REFERENCES office.users(user_id),
     audit_ts                            TIMESTAMP WITH TIME ZONE NULL 
                                         DEFAULT(NOW())    
@@ -103,7 +103,7 @@ CREATE TABLE hrm.leave_types
     leave_type_id                           SERIAL NOT NULL PRIMARY KEY,
     leave_type_code                         national character varying(12) NOT NULL UNIQUE,
     leave_type_name                         national character varying(100) NOT NULL,
-    description                             text NOT NULL DEFAULT(''),
+    description                             text DEFAULT(''),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -159,14 +159,20 @@ CREATE TABLE hrm.leave_benefits
     leave_benefit_id                       SERIAL NOT NULL PRIMARY KEY,
     leave_benefit_code                     national character varying(12) NOT NULL UNIQUE,
     leave_benefit_name                     national character varying(128) NOT NULL,
-    total_days                              public.integer_strict NOT NULL
+    total_days                              public.integer_strict NOT NULL,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
 );
 
 CREATE TABLE hrm.employee_types
 (
     employee_type_id                        SERIAL NOT NULL PRIMARY KEY,
     employee_type_code                      national character varying(12) NOT NULL UNIQUE,
-    employee_type_name                      national character varying(128) NOT NULL
+    employee_type_name                      national character varying(128) NOT NULL,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
 );
 
 CREATE TABLE hrm.employees
@@ -269,7 +275,11 @@ CREATE TABLE hrm.salary_types
 (
     salary_type_id                          SERIAL NOT NULL PRIMARY KEY,
     salary_type_code                        national character varying(12) NOT NULL UNIQUE,
-    salary_type_name                        national character varying(128) NOT NULL
+    salary_type_name                        national character varying(128) NOT NULL,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),
+    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
 );
 
 CREATE TABLE hrm.salaries
@@ -319,10 +329,9 @@ CREATE TABLE hrm.employee_qualifications
                                             DEFAULT(NOW())    
 );
 
-DROP TABLE IF EXISTS office.holidays;
-CREATE TABLE office.holidays
+CREATE TABLE hrm.holidays
 (
-    holiday_id                              BIGINT NOT NULL PRIMARY KEY,
+    holiday_id                              BIGSERIAL NOT NULL PRIMARY KEY,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
     occurs_on                               date,
     comment                                 text,

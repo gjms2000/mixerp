@@ -15,39 +15,39 @@ namespace MixERP.Net.Entities.Audit
     public class FailedLogin : PetaPocoDB.Record<FailedLogin> , IPoco
     {
         [Column("failed_login_id")] 
-        [ColumnDbType("int8", 0, "nextval('audit.failed_logins_failed_login_id_seq'::regclass)")] 
+        [ColumnDbType("int8", 0, false, "nextval('audit.failed_logins_failed_login_id_seq'::regclass)")] 
         public long FailedLoginId { get; set; }
 
         [Column("user_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, true, "")] 
         public int? UserId { get; set; }
 
         [Column("user_name")] 
-        [ColumnDbType("varchar", 50, "")] 
+        [ColumnDbType("varchar", 50, false, "")] 
         public string UserName { get; set; }
 
         [Column("office_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, true, "")] 
         public int? OfficeId { get; set; }
 
         [Column("browser")] 
-        [ColumnDbType("varchar", 500, "")] 
+        [ColumnDbType("varchar", 500, false, "")] 
         public string Browser { get; set; }
 
         [Column("ip_address")] 
-        [ColumnDbType("varchar", 50, "")] 
+        [ColumnDbType("varchar", 50, false, "")] 
         public string IpAddress { get; set; }
 
         [Column("failed_date_time")] 
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, false, "")] 
         public DateTime FailedDateTime { get; set; }
 
         [Column("remote_user")] 
-        [ColumnDbType("varchar", 50, "")] 
+        [ColumnDbType("varchar", 50, false, "")] 
         public string RemoteUser { get; set; }
 
         [Column("details")] 
-        [ColumnDbType("varchar", 250, "")] 
+        [ColumnDbType("varchar", 250, true, "")] 
         public string Details { get; set; }
 
     }
@@ -58,75 +58,75 @@ namespace MixERP.Net.Entities.Audit
     public class LoggedAction : PetaPocoDB.Record<LoggedAction> , IPoco
     {
         [Column("event_id")] 
-        [ColumnDbType("int8", 0, "nextval('audit.logged_actions_event_id_seq'::regclass)")] 
+        [ColumnDbType("int8", 0, false, "nextval('audit.logged_actions_event_id_seq'::regclass)")] 
         public long EventId { get; set; }
 
         [Column("schema_name")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string SchemaName { get; set; }
 
         [Column("table_name")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string TableName { get; set; }
 
         [Column("relid")] 
-        [ColumnDbType("oid", 0, "")] 
+        [ColumnDbType("oid", 0, false, "")] 
         public string Relid { get; set; }
 
         [Column("session_user_name")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, true, "")] 
         public string SessionUserName { get; set; }
 
         [Column("application_user_name")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, true, "")] 
         public string ApplicationUserName { get; set; }
 
         [Column("action_tstamp_tx")] 
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, false, "")] 
         public DateTime ActionTstampTx { get; set; }
 
         [Column("action_tstamp_stm")] 
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, false, "")] 
         public DateTime ActionTstampStm { get; set; }
 
         [Column("action_tstamp_clk")] 
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, false, "")] 
         public DateTime ActionTstampClk { get; set; }
 
         [Column("transaction_id")] 
-        [ColumnDbType("int8", 0, "")] 
+        [ColumnDbType("int8", 0, true, "")] 
         public long? TransactionId { get; set; }
 
         [Column("application_name")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, true, "")] 
         public string ApplicationName { get; set; }
 
         [Column("client_addr")] 
-        [ColumnDbType("inet", 0, "")] 
+        [ColumnDbType("inet", 0, true, "")] 
         public string ClientAddr { get; set; }
 
         [Column("client_port")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, true, "")] 
         public int? ClientPort { get; set; }
 
         [Column("client_query")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, true, "")] 
         public string ClientQuery { get; set; }
 
         [Column("action")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string Action { get; set; }
 
         [Column("row_data")] 
-        [ColumnDbType("hstore", 0, "")] 
+        [ColumnDbType("hstore", 0, true, "")] 
         public string RowData { get; set; }
 
         [Column("changed_fields")] 
-        [ColumnDbType("hstore", 0, "")] 
+        [ColumnDbType("hstore", 0, true, "")] 
         public string ChangedFields { get; set; }
 
         [Column("statement_only")] 
-        [ColumnDbType("bool", 0, "")] 
+        [ColumnDbType("bool", 0, false, "")] 
         public bool StatementOnly { get; set; }
 
     }
@@ -137,35 +137,35 @@ namespace MixERP.Net.Entities.Audit
     public class Login : PetaPocoDB.Record<Login> , IPoco
     {
         [Column("login_id")] 
-        [ColumnDbType("int8", 0, "nextval('audit.logins_login_id_seq'::regclass)")] 
+        [ColumnDbType("int8", 0, false, "nextval('audit.logins_login_id_seq'::regclass)")] 
         public long LoginId { get; set; }
 
         [Column("user_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, false, "")] 
         public int UserId { get; set; }
 
         [Column("office_id")] 
-        [ColumnDbType("int4", 0, "")] 
+        [ColumnDbType("int4", 0, false, "")] 
         public int OfficeId { get; set; }
 
         [Column("browser")] 
-        [ColumnDbType("varchar", 500, "")] 
+        [ColumnDbType("varchar", 500, false, "")] 
         public string Browser { get; set; }
 
         [Column("ip_address")] 
-        [ColumnDbType("varchar", 50, "")] 
+        [ColumnDbType("varchar", 50, false, "")] 
         public string IpAddress { get; set; }
 
         [Column("login_date_time")] 
-        [ColumnDbType("timestamptz", 0, "")] 
+        [ColumnDbType("timestamptz", 0, false, "")] 
         public DateTime LoginDateTime { get; set; }
 
         [Column("remote_user")] 
-        [ColumnDbType("varchar", 50, "")] 
+        [ColumnDbType("varchar", 50, false, "")] 
         public string RemoteUser { get; set; }
 
         [Column("culture")] 
-        [ColumnDbType("varchar", 12, "")] 
+        [ColumnDbType("varchar", 12, false, "")] 
         public string Culture { get; set; }
 
     }
@@ -175,35 +175,35 @@ namespace MixERP.Net.Entities.Audit
     public class DbGetOfficeInformationModelResult : PetaPocoDB.Record<DbGetOfficeInformationModelResult> , IPoco
     {
         [Column("office")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string Office { get; set; }
 
         [Column("logged_in_to")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string LoggedInTo { get; set; }
 
         [Column("last_login_ip")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string LastLoginIp { get; set; }
 
         [Column("last_login_on")] 
-        [ColumnDbType("timestamp with time zone", 0, "")] 
+        [ColumnDbType("timestamp with time zone", 0, false, "")] 
         public DateTime LastLoginOn { get; set; }
 
         [Column("current_ip")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string CurrentIp { get; set; }
 
         [Column("current_login_on")] 
-        [ColumnDbType("timestamp with time zone", 0, "")] 
+        [ColumnDbType("timestamp with time zone", 0, false, "")] 
         public DateTime CurrentLoginOn { get; set; }
 
         [Column("role")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string Role { get; set; }
 
         [Column("department")] 
-        [ColumnDbType("text", 0, "")] 
+        [ColumnDbType("text", 0, false, "")] 
         public string Department { get; set; }
 
     }

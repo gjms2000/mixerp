@@ -49,6 +49,7 @@ BEGIN
     AND pg_namespace.nspname=_schema
     LIMIT 1;
 
+
     IF EXISTS
     (
         SELECT 1
@@ -71,6 +72,7 @@ BEGIN
         LEFT JOIN pg_index
         ON pg_attribute.ATTRELID = pg_index.indrelid
         AND pg_attribute.attnum = ANY(pg_index.indkey)
+        AND pg_index.indisprimary
         INNER JOIN pg_type
         ON pg_attribute.atttypid = pg_type.oid
         LEFT   JOIN pg_catalog.pg_attrdef
@@ -138,6 +140,7 @@ BEGIN
 
     INSERT INTO temp_poco
     SELECT 
+        row_number() OVER(ORDER BY attnum),
         attname::text               AS column_name,
         'NO'::text                  AS is_nullable, 
         format_type(t.oid,NULL)     AS udt_name,
@@ -166,4 +169,4 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM public.poco_get_table_function_definition('core', 'items');
+--SELECT * FROM public.poco_get_table_function_definition('hrm', 'employment_statuses');

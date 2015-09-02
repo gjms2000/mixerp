@@ -48,7 +48,7 @@ foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
 <# } else { #>
         [Column] 
 <# } #>
-        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, <#=col.IsNullable.ToString().ToLower() #>,"<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> 
         { 
             get
@@ -66,12 +66,12 @@ foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
 <# } else { #>
 <# if (col.Name!=col.PropertyName) { #>
         [Column("<#=col.Name#>")] 
-        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, <#=col.IsNullable.ToString().ToLower() #>, "<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
 
 <# } else { #>
         [Column]
-        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, "<#=col.DefaultValue#>")] 
+        [ColumnDbType("<#=col.DbDataType#>", <#=col.MaxLength#>, <#=col.IsNullable.ToString().ToLower() #>, "<#=col.DefaultValue#>")] 
         public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
 <# } #>
 <# } #>

@@ -54,7 +54,7 @@ namespace MixERP.Net.FrontEnd.Services.Modules
         [WebMethod]
         public List<string> GetPocos()
         {
-            Type type = typeof (IPoco);
+            Type type = typeof(IPoco);
             List<Type> types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p)).ToList();
@@ -67,12 +67,12 @@ namespace MixERP.Net.FrontEnd.Services.Modules
         [WebMethod]
         public List<string> GetTablePocos()
         {
-            Type type = typeof (IPoco);
+            Type type = typeof(IPoco);
             List<Type> types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p)).ToList();
 
-            string[] exclue = {"view", "result"};
+            string[] exclue = { "view", "result" };
 
             List<string> items =
                 types.Where(t => !exclue.Any(t.FullName.ToLower().EndsWith)).Select(t => t.FullName).ToList();
@@ -332,7 +332,13 @@ namespace MixERP.Net.FrontEnd.Services.Modules
 
             PrimaryKeyAttribute primaryKey =
                 poco.GetType().GetAttributeValue((PrimaryKeyAttribute attribute) => attribute);
-            scrud.PrimaryKey = primaryKey.Value;
+
+            scrud.PrimaryKey = String.Empty;
+
+            if (primaryKey != null)
+            {
+                scrud.PrimaryKey = primaryKey.Value;
+            }
 
             Type type = poco.GetType();
             foreach (PropertyInfo info in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -344,21 +350,22 @@ namespace MixERP.Net.FrontEnd.Services.Modules
 
                 if (column.DataType.StartsWith("System.Nullable`1["))
                 {
-                    column.IsNullable = true;
                     column.DataType = column.DataType.Replace("System.Nullable`1[", "").Replace("]", "");
                 }
 
+
                 column.ColumnName =
-                    info.GetCustomAttributes(typeof (ColumnAttribute), false)
+                    info.GetCustomAttributes(typeof(ColumnAttribute), false)
                         .Cast<ColumnAttribute>()
                         .Select(c => c.Name)
                         .FirstOrDefault();
 
                 ColumnDbType dbType =
-                    info.GetCustomAttributes(typeof (ColumnDbType), false).Cast<ColumnDbType>().FirstOrDefault();
+                    info.GetCustomAttributes(typeof(ColumnDbType), false).Cast<ColumnDbType>().FirstOrDefault();
 
                 if (dbType != null)
                 {
+                    column.IsNullable = dbType.IsNullable;
                     column.DbDataType = dbType.Name;
                     column.Value = dbType.DefaultValue;
                     column.MaxLength = dbType.MaxLength;

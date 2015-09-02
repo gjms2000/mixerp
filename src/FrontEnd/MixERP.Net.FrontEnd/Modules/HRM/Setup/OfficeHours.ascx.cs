@@ -1,9 +1,9 @@
 ﻿using System;
 using MixERP.Net.FrontEnd.Base;
 
-namespace MixERP.Net.Core.Modules.HRM
+namespace MixERP.Net.Core.Modules.HRM.Setup
 {
-    public partial class EmploymentStatusCodes : MixERPUserControl
+    public partial class OfficeHours : MixERPUserControl
     {
         public override void OnControlLoad(object sender, EventArgs e)
         {

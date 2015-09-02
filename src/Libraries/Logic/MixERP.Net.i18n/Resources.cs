@@ -5212,6 +5212,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Employment Status Id
+		/// </summary>
+		public static string employment_status_id 
+		{
+			get
+			{
+				return Get("employment_status_id");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Employment Status Name
 		/// </summary>
 		public static string employment_status_name 
