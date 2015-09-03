@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -15,17 +15,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 DROP SCHEMA IF EXISTS hrm CASCADE;
 CREATE SCHEMA hrm;
-
-DROP TABLE IF EXISTS core.genders;
-
-CREATE TABLE core.genders
-(
-    gender_code                             character(2) NOT NULL PRIMARY KEY,
-    gender_name                             national character varying(50) NOT NULL UNIQUE,
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
 
 CREATE TABLE hrm.education_levels
 (
@@ -118,40 +107,6 @@ CREATE TABLE hrm.office_hours
     ends_on                                 time NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL    
-);
-
-
-DROP TABLE IF EXISTS core.identification_types;
-
-CREATE TABLE core.identification_types
-(
-    identification_type_code                national character varying(12) NOT NULL PRIMARY KEY,
-    identification_type_name                national character varying(100) NOT NULL UNIQUE,
-    can_expire                              boolean NOT NULL DEFAULT(false),
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
-DROP TABLE IF EXISTS core.nationalities;
-
-CREATE TABLE core.nationalities
-(
-    nationality_code                        national character varying(12) NOT NULL PRIMARY KEY,
-    nationality_name                        national character varying(100) NOT NULL UNIQUE,
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
-DROP TABLE IF EXISTS core.social_networks;
-CREATE TABLE core.social_networks
-(
-    social_network_name                     national character varying(128) NOT NULL PRIMARY KEY,
-    semantic_css_class                      national character varying(128),
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
 );
 
 CREATE TABLE hrm.leave_benefits
@@ -419,17 +374,43 @@ CREATE TABLE hrm.exits
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/03.menus/0.menus.sql --<--<--
 --This table should not be localized.
+SELECT * FROM core.recreate_menu('HRM', '~/Modules/HRM/Index.mix', 'HRM', 0, NULL);
+SELECT * FROM core.recreate_menu('Tasks', NULL, 'HRMTA', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.recreate_menu('Attendance', '~/Modules/HRM/Tasks/Attendance.mix', 'ATTNDCE', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix', 'EMPL', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Contracts', '~/Modules/HRM/Tasks/Contracts.mix', 'CTRCT', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Leave Application', '~/Modules/HRM/Tasks/LeaveApplication.mix', 'LEVAPP', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Resignation', '~/Modules/HRM/Tasks/Regignation.mix', 'RESIGN', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Termination', '~/Modules/HRM/Tasks/Termination.mix', 'TERMIN', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Exit', '~/Modules/HRM/Tasks/Exit.mix', 'EXIT', 2, core.get_menu_id('HRMTA'));
 
-SELECT * FROM core.create_menu('HRM', '~/Modules/HRM/Index.mix', 'SA', 0, NULL);
-SELECT * FROM core.create_menu('Tasks', NULL, 'HRMTA', 1, core.get_menu_id('HRM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Tasks/.mix', '', 2, core.get_menu_id('HRMTA'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Tasks/.mix', '', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Payroll', NULL, 'PAYRL', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.recreate_menu('Wages', '~/Modules/HRM/Payroll/Wages.mix', 'WAGES', 2, core.get_menu_id('PAYRL'));
+SELECT * FROM core.recreate_menu('Overtime', '~/Modules/HRM/Payroll/Overtime.mix', 'OVERTM', 2, core.get_menu_id('PAYRL'));
+SELECT * FROM core.recreate_menu('Deduction', '~/Modules/HRM/Payroll/Deduction.mix', 'OVERTM', 2, core.get_menu_id('PAYRL'));
+SELECT * FROM core.recreate_menu('Salary', '~/Modules/HRM/Payroll/Salary.mix', 'SALRY', 2, core.get_menu_id('PAYRL'));
+SELECT * FROM core.recreate_menu('Bonus', '~/Modules/HRM/Payroll/Bonus.mix', 'BONUS', 2, core.get_menu_id('PAYRL'));
+SELECT * FROM core.recreate_menu('Commissions', '~/Modules/HRM/Payroll/Commissions.mix', 'COMMSN', 2, core.get_menu_id('PAYRL'));
 
-SELECT * FROM core.create_menu('Setup & Maintenance', NULL, 'HRMSSM', 1, core.get_menu_id('HRM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/Setup/.mix', '', 2, core.get_menu_id('HRMSSM'));
-SELECT * FROM core.create_menu('HRM Reports', NULL, 'HRMRPT', 1, core.get_menu_id('HRM'));
-SELECT * FROM core.create_menu('', '~/Modules/HRM/.mix', 'IIM', 1, core.get_menu_id('HRMRPT'));
 
+SELECT * FROM core.recreate_menu('Setup & Maintenance', NULL, 'HRMSSM', 1, core.get_menu_id('HRM'));
+SELECT * FROM core.recreate_menu('Holiday Setup', '~/Modules/HRM/Setup/HolidaySetup.mix', 'HOLDAY', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Salaries', '~/Modules/HRM/Setup/Salaries.mix', 'SETSAL', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Employment Statuses', '~/Modules/HRM/Setup/EmploymentStatuses.mix', 'EMPSTA', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Employee Types', '~/Modules/HRM/Setup/EmployeeTypes.mix', 'EMPTYP', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Education Levels', '~/Modules/HRM/Setup/EducationLevels.mix', 'EDULVL', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Job Titles', '~/Modules/HRM/Setup/JobTitles.mix', 'JOBTA', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Pay Grades', '~/Modules/HRM/Setup/PayGrades.mix', 'PATGR', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Salary Types', '~/Modules/HRM/Setup/SalaryTypes.mix', 'SALTYP', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Shifts', '~/Modules/HRM/Setup/Shifts.mix', 'SHIFT', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Office Hours', '~/Modules/HRM/Setup/OfficeHours.mix', 'OFFHRS', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Leave Types', '~/Modules/HRM/Setup/LeaveTypes.mix', 'LEVTYP', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Leave Benefits', '~/Modules/HRM/Setup/LeaveBenefits.mix', 'LEVBEN', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Exit Types', '~/Modules/HRM/Setup/ExitTypes.mix', 'Exit Types', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('HRM Reports', NULL, 'HRMRPT', 1, core.get_menu_id('HRM'));
+
+
+DELETE FROM policy.menu_access;
+INSERT INTO policy.menu_access(office_id, menu_id, user_id)
+SELECT office_id, menu_id, 2
+FROM office.offices, core.menus;

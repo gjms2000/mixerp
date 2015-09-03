@@ -13,22 +13,6 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-INSERT INTO core.genders
-SELECT 'F', 'Female' UNION ALL
-SELECT 'M', 'Male' UNION ALL
-SELECT 'O', 'Other';
-
-INSERT INTO core.education_levels(education_level_name)
-SELECT 'Some Schooling' UNION ALL
-SELECT 'Basic Schooling' UNION ALL
-SELECT 'Higher Schooling' UNION ALL
-SELECT 'Associate''s Degree' UNION ALL
-SELECT 'Bachelor''s Degrees' UNION ALL
-SELECT 'Graduate Degrees' UNION ALL
-SELECT 'Master''s Degrees' UNION ALL
-SELECT 'Doctoral Degrees' UNION ALL
-SELECT 'Professional Degrees';
-
 --The meaning of the following should not change
 INSERT INTO hrm.employment_status_codes
 SELECT -7, 'DEC', 'Deceased'                UNION ALL
@@ -66,22 +50,6 @@ INSERT INTO hrm.shifts(shift_code, shift_name, begins_from, ends_on)
 SELECT 'MOR', 'Morning Shift',  '6:00'::time,   '14:00'::time   UNION ALL
 SELECT 'DAY', 'Day Shift',      '14:00',        '20:00'         UNION ALL
 SELECT 'NIT', 'Night Shift',    '20:00',        '6:00';
-
-INSERT INTO core.identification_types
-SELECT 'DVL', 'Driving License', true UNION ALL
-SELECT 'SSN', 'Social Security Number', false;
-
-INSERT INTO core.social_networks(social_network_name)
-SELECT 'Twitter' UNION ALL
-SELECT 'Facebook' UNION ALL
-SELECT 'Google+' UNION ALL
-SELECT 'LinkedIn' UNION ALL
-SELECT 'Instagram' UNION ALL
-SELECT 'WeChat' UNION ALL
-SELECT 'Viber' UNION ALL
-SELECT 'WhatsApp' UNION ALL
-SELECT 'Skype' UNION ALL
-SELECT 'Hike';
 
 INSERT INTO hrm.employee_types(employee_type_code, employee_type_name)
 SELECT 'DEF', 'Default' UNION ALL

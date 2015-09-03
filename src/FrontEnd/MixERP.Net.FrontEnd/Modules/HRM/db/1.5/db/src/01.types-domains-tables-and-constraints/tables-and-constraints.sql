@@ -15,17 +15,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 DROP SCHEMA IF EXISTS hrm CASCADE;
 CREATE SCHEMA hrm;
 
-DROP TABLE IF EXISTS core.genders;
-
-CREATE TABLE core.genders
-(
-    gender_code                             character(2) NOT NULL PRIMARY KEY,
-    gender_name                             national character varying(50) NOT NULL UNIQUE,
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
 CREATE TABLE hrm.education_levels
 (
     education_level_id                      SERIAL NOT NULL PRIMARY KEY,
@@ -117,40 +106,6 @@ CREATE TABLE hrm.office_hours
     ends_on                                 time NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL    
-);
-
-
-DROP TABLE IF EXISTS core.identification_types;
-
-CREATE TABLE core.identification_types
-(
-    identification_type_code                national character varying(12) NOT NULL PRIMARY KEY,
-    identification_type_name                national character varying(100) NOT NULL UNIQUE,
-    can_expire                              boolean NOT NULL DEFAULT(false),
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
-DROP TABLE IF EXISTS core.nationalities;
-
-CREATE TABLE core.nationalities
-(
-    nationality_code                        national character varying(12) NOT NULL PRIMARY KEY,
-    nationality_name                        national character varying(100) NOT NULL UNIQUE,
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-);
-
-DROP TABLE IF EXISTS core.social_networks;
-CREATE TABLE core.social_networks
-(
-    social_network_name                     national character varying(128) NOT NULL PRIMARY KEY,
-    semantic_css_class                      national character varying(128),
-    audit_user_id                           integer NULL REFERENCES office.users(user_id),
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
 );
 
 CREATE TABLE hrm.leave_benefits

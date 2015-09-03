@@ -133,3 +133,105 @@ DROP INDEX IF EXISTS policy.default_entity_access_entity_name_role_id_access_typ
 CREATE UNIQUE INDEX default_entity_access_entity_name_role_id_access_type_id_uix
 ON policy.default_entity_access(lower(entity_name), role_id, access_type_id);
 
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'genders'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.genders
+        (
+            gender_code                             character(4) NOT NULL PRIMARY KEY,
+            gender_name                             national character varying(50) NOT NULL UNIQUE,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'identification_types'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.identification_types
+        (
+            identification_type_code                national character varying(12) NOT NULL PRIMARY KEY,
+            identification_type_name                national character varying(100) NOT NULL UNIQUE,
+            can_expire                              boolean NOT NULL DEFAULT(false),
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'nationalities'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.nationalities
+        (
+            nationality_code                        national character varying(12) NOT NULL PRIMARY KEY,
+            nationality_name                        national character varying(100) NOT NULL UNIQUE,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'social_networks'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.social_networks
+        (
+            social_network_name                     national character varying(128) NOT NULL PRIMARY KEY,
+            semantic_css_class                      national character varying(128),
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
