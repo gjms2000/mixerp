@@ -17,23 +17,26 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using MixERP.Net.Common;
 using MixERP.Net.Common.PostgresHelper;
 using MixERP.Net.Core.Modules.Sales.Data;
 using MixERP.Net.DbFactory;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using Npgsql;
-using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
 
 namespace MixERP.Net.Core.Modules.Purchase.Data.Transactions
 {
     internal static class GlTransaction
     {
-        internal static long Add(string catalog, DateTime valueDate, string book, int officeId, int userId, long loginId, int costCenterId, string referenceNumber, string statementReference, StockMaster stockMaster, Collection<StockDetail> details, Collection<long> transactionIdCollection, Collection<Attachment> attachments)
+        internal static long Add(string catalog, DateTime valueDate, string book, int officeId, int userId, long loginId,
+            int costCenterId, string referenceNumber, string statementReference, StockMaster stockMaster,
+            Collection<StockDetail> details, Collection<long> transactionIdCollection,
+            Collection<Attachment> attachments)
         {
             if (stockMaster == null)
             {
@@ -54,7 +57,9 @@ namespace MixERP.Net.Core.Modules.Purchase.Data.Transactions
             string detail = StockMasterDetailHelper.CreateStockMasterDetailParameter(details);
             string attachment = AttachmentHelper.CreateAttachmentModelParameter(attachments);
 
-            string sql = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM transactions.post_purchase(@BookName::national character varying(48), @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @CostCenterId::integer, @ReferenceNumber::national character varying(12), @StatementReference::text, @IsCredit::boolean, @PartyCode::national character varying(12), @PriceTypeId::integer, @ShipperId::integer, @StoreId::integer, ARRAY[{0}]::bigint[], ARRAY[{1}], ARRAY[{2}])", tranIds, detail, attachment);
+            string sql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM transactions.post_purchase(@BookName::national character varying(48), @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @CostCenterId::integer, @ReferenceNumber::national character varying(12), @StatementReference::text, @IsCredit::boolean, @PartyCode::national character varying(12), @PriceTypeId::integer, @ShipperId::integer, @StoreId::integer, ARRAY[{0}]::bigint[], ARRAY[{1}], ARRAY[{2}])",
+                tranIds, detail, attachment);
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
                 command.Parameters.AddWithValue("@BookName", book);
@@ -90,7 +95,8 @@ namespace MixERP.Net.Core.Modules.Purchase.Data.Transactions
 
                 command.Parameters.AddWithValue("@StoreId", stockMaster.StoreId);
 
-                command.Parameters.AddRange(ParameterHelper.AddBigintArrayParameter(transactionIdCollection, "@TranId").ToArray());
+                command.Parameters.AddRange(
+                    ParameterHelper.AddBigintArrayParameter(transactionIdCollection, "@TranId").ToArray());
                 command.Parameters.AddRange(StockMasterDetailHelper.AddStockMasterDetailParameter(details).ToArray());
                 command.Parameters.AddRange(AttachmentHelper.AddAttachmentParameter(attachments).ToArray());
 

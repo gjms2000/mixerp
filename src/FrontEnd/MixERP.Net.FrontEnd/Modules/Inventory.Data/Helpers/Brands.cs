@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MixERP.Net.Entities;
 using MixERP.Net.Entities.Core;
 using PetaPoco;
 

@@ -235,3 +235,58 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'localization.localized_resources'::regclass
+        AND    attname = 'localized_resource_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE localization.localized_resources
+        ADD COLUMN localized_resource_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'transactions.non_gl_stock_tax_details'::regclass
+        AND    attname = 'non_gl_stock_tax_detail_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE transactions.non_gl_stock_tax_details
+        ADD COLUMN non_gl_stock_tax_detail_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'transactions.stock_tax_details'::regclass
+        AND    attname = 'stock_tax_detail_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE transactions.stock_tax_details
+        ADD COLUMN stock_tax_detail_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+

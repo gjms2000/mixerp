@@ -74,9 +74,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{bde918b1-dd9b-41c9-a41f-f3ddec18b6d8}</Project>
-      <Name>MixERP.Net.Entities</Name>
+    <ProjectReference Include="..\..\Entities\Config\MixERP.Net.Entities.Config.csproj">
+      <Project>{47215BBD-4AFA-48F4-BBB4-519F3F1C78A8}</Project>
+      <Name>MixERP.Net.Entities.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0F0490A5-8065-4B0A-9844-905E32A05DC4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\PetaPoco\PetaPoco.csproj">
       <Project>{969D7960-52E2-40FC-91E5-1393B71E23B0}</Project>

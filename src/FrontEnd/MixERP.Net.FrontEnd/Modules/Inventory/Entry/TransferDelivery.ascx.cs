@@ -23,7 +23,7 @@ using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Core.Modules.Inventory.Data.Transactions;
-using MixERP.Net.Entities.Contracts;
+using MixERP.Net.Framework.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.StockAdjustmentFactory;

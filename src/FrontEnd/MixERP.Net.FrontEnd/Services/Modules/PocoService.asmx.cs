@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Script.Services;
 using System.Web.Services;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.Entities.Core;
 using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;

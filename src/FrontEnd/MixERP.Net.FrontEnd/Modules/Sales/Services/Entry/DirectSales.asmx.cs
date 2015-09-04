@@ -17,20 +17,20 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
-using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Core.Modules.Sales.Data.Helpers;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.i18n;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
+using Serilog;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {
@@ -54,16 +54,16 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 
                 bool isCredit = transactionType != null && !transactionType.ToUpperInvariant().Equals("CASH");
 
-                if (!Data.Helpers.Stores.IsSalesAllowed(AppUsers.GetCurrentUserDB(), storeId))
+                if (!Stores.IsSalesAllowed(AppUsers.GetCurrentUserDB(), storeId))
                 {
                     throw new InvalidOperationException("Sales is not allowed here.");
                 }
 
                 foreach (StockDetail model in details)
                 {
-                    if (Data.Helpers.Items.IsStockItem(AppUsers.GetCurrentUserDB(), model.ItemCode))
+                    if (Items.IsStockItem(AppUsers.GetCurrentUserDB(), model.ItemCode))
                     {
-                        decimal available = Data.Helpers.Items.CountItemInStock(AppUsers.GetCurrentUserDB(),
+                        decimal available = Items.CountItemInStock(AppUsers.GetCurrentUserDB(),
                             model.ItemCode, model.UnitName, model.StoreId);
 
                         if (available < model.Quantity)

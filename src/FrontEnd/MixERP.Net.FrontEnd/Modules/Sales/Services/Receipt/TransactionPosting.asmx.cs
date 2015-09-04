@@ -23,7 +23,8 @@ using MixERP.Net.i18n.Resources;
 using Serilog;
 using System;
 using System.Web.Services;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Receipt
 {
@@ -82,7 +83,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Receipt
                     referenceNumber, statementReference, costCenterId, cashRepositoryId, postedDate, bankAccountId,
                     paymentCardId, bankInstrumentCode, bankTransactionCode);
 
-                Verification status = TransactionGovernor.Verification.Status.GetVerificationStatus(AppUsers.GetCurrentUserDB(), tranId, false);
+                VerificationModel status = TransactionGovernor.Verification.Status.GetVerificationStatus(AppUsers.GetCurrentUserDB(), tranId, false);
 
 
                 if (status.VerificationStatusId > 0)

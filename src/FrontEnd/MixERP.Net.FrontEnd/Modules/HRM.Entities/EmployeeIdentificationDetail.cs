@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 // ReSharper disable All
-using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
 

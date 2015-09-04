@@ -17,24 +17,23 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
+using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Core.Modules.Sales.Data.Helpers;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Messaging.Email;
+using Serilog;
 using CollectionHelper = MixERP.Net.WebControls.StockTransactionFactory.Helpers.CollectionHelper;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
@@ -61,7 +60,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 {
                     foreach (string transactionId in transactionIds.Split(','))
                     {
-                        tranIds.Add(Common.Conversion.TryCastLong(transactionId));
+                        tranIds.Add(Conversion.TryCastLong(transactionId));
                     }
                 }
 
@@ -69,7 +68,8 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                long tranId = Data.Transactions.Order.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, valueDate,
+                long tranId = Data.Transactions.Order.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId,
+                    valueDate,
                     partyCode, priceTypeId, details, referenceNumber, statementReference, tranIds, attachments,
                     nonTaxable, salespersonId, shipperId, shippingAddressCode, storeId);
 
@@ -106,7 +106,6 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
             MailQueueManager queue = new MailQueueManager(AppUsers.GetCurrentUserDB(), message, attachment, sendTo,
                 subject);
             queue.Add();
-
         }
 
         private static string ProcessEmailMessage(long tranId)
@@ -119,11 +118,10 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 Data.Transactions.Order.GetSalesOrderView(AppUsers.GetCurrentUserDB(), tranId)
             };
 
-            var processor = new EmailTemplateProcessor(template, dictionary);
+            EmailTemplateProcessor processor = new EmailTemplateProcessor(template, dictionary);
             template = processor.Process();
 
             return template;
         }
-
     }
 }

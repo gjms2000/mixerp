@@ -17,25 +17,28 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
-using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Models.Transactions;
-using Npgsql;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using MixERP.Net.Common;
+using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
+using MixERP.Net.DbFactory;
+using MixERP.Net.Entities.Transactions.Models;
+using Npgsql;
 using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Inventory.Data.Transactions
 {
     public static class StockTransfer
     {
-        public static long Add(string catalog, int officeId, int userId, long loginId, DateTime valueDate, string referenceNumber, string statementReference, Collection<StockAdjustmentDetail> details)
+        public static long Add(string catalog, int officeId, int userId, long loginId, DateTime valueDate,
+            string referenceNumber, string statementReference, Collection<StockAdjustmentDetail> details)
         {
             string detailParameter = ParameterHelper.CreateStockTransferModelParameter(details);
-            string sql = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM transactions.post_stock_journal(@OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}]);", detailParameter);
+            string sql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM transactions.post_stock_journal(@OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}]);",
+                detailParameter);
 
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {

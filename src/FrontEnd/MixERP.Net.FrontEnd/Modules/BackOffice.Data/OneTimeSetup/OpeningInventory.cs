@@ -17,22 +17,23 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Transactions;
-using MixERP.Net.i18n.Resources;
-using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using MixERP.Net.Common;
+using MixERP.Net.DbFactory;
+using MixERP.Net.Entities.Transactions;
+using MixERP.Net.i18n.Resources;
+using Npgsql;
 
 namespace MixERP.Net.Core.Modules.BackOffice.Data.OneTimeSetup
 {
     public static class OpeningInventory
     {
-        public static long Save(string catalog, int officeId, int userId, long loginId, DateTime valueDate, string referenceNumber, string statementReference, Collection<OpeningStockType> details)
+        public static long Save(string catalog, int officeId, int userId, long loginId, DateTime valueDate,
+            string referenceNumber, string statementReference, Collection<OpeningStockType> details)
         {
             if (details == null)
             {
@@ -45,7 +46,9 @@ namespace MixERP.Net.Core.Modules.BackOffice.Data.OneTimeSetup
             }
 
             string detail = CreateOpeningStockParameter(details);
-            string sql = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM transactions.post_opening_inventory(@OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}])", detail);
+            string sql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM transactions.post_opening_inventory(@OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}])",
+                detail);
 
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
@@ -93,7 +96,9 @@ namespace MixERP.Net.Core.Modules.BackOffice.Data.OneTimeSetup
             Collection<string> detailCollection = new Collection<string>();
             for (int i = 0; i < details.Count; i++)
             {
-                detailCollection.Add(string.Format(CultureInfo.InvariantCulture, "ROW(@StoreName{0}, @ItemCode{0}, @Quantity{0}, @UnitName{0},@Amount{0})::transactions.opening_stock_type", i.ToString(CultureInfo.InvariantCulture)));
+                detailCollection.Add(string.Format(CultureInfo.InvariantCulture,
+                    "ROW(@StoreName{0}, @ItemCode{0}, @Quantity{0}, @UnitName{0},@Amount{0})::transactions.opening_stock_type",
+                    i.ToString(CultureInfo.InvariantCulture)));
             }
 
             return string.Join(",", detailCollection);

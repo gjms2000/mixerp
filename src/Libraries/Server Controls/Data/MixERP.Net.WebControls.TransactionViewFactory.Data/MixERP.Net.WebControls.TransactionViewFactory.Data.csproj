@@ -62,6 +62,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Entities\Transactions\MixERP.Net.Entities.Transactions.csproj">
+      <Project>{665E96EE-D5D0-426E-A8CD-22E3A9981349}</Project>
+      <Name>MixERP.Net.Entities.Transactions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
@@ -69,10 +73,6 @@
     <ProjectReference Include="..\..\..\Logic\MixERP.Net.DbFactory\MixERP.Net.DbFactory.csproj">
       <Project>{8FD9661C-2473-4581-8722-18B08D4DB252}</Project>
       <Name>MixERP.Net.DbFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{bde918b1-dd9b-41c9-a41f-f3ddec18b6d8}</Project>
-      <Name>MixERP.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixERP.Net.i18n\MixERP.Net.i18n.csproj">
       <Project>{2ecd1c2e-d7d0-4a24-896a-e625b0566db5}</Project>

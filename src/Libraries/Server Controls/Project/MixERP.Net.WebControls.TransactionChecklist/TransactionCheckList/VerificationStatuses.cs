@@ -47,7 +47,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
                 return;
             }
 
-            Entities.Models.Transactions.Verification model = Status.GetVerificationStatus(this.Catalog, transactionMasterId, this.IsStockTransferRequest);
+            Entities.Transactions.Models.VerificationModel model = Status.GetVerificationStatus(this.Catalog, transactionMasterId, this.IsStockTransferRequest);
 
             if (model == null)
             {

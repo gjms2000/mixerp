@@ -18,9 +18,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Models.Transactions;
 using System;
 using System.Collections.ObjectModel;
+using MixERP.Net.Entities.Transactions.Models;
 
 namespace MixERP.Net.WebControls.StockTransactionViewFactory.Data.Models
 {

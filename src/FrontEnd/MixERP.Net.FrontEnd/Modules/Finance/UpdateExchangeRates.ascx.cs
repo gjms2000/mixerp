@@ -18,9 +18,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using System;
+using MixERP.Net.Framework.Contracts;
 
 namespace MixERP.Net.Core.Modules.Finance
 {

@@ -21,17 +21,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
 using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Core.Modules.Sales.Data.Helpers;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.Messaging.Email;
 using Serilog;
@@ -61,7 +61,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 {
                     foreach (string transactionId in transactionIds.Split(','))
                     {
-                        tranIds.Add(Common.Conversion.TryCastInteger(transactionId));
+                        tranIds.Add(Conversion.TryCastInteger(transactionId));
                     }
                 }
 
@@ -125,7 +125,7 @@ namespace MixERP.Net.Core.Modules.Sales.Services.Entry
                 Data.Transactions.Quotation.GetSalesQuotationView(AppUsers.GetCurrentUserDB(), tranId)
             };
 
-            var processor = new EmailTemplateProcessor(template, dictionary);
+            EmailTemplateProcessor processor = new EmailTemplateProcessor(template, dictionary);
             template = processor.Process();
 
             return template;

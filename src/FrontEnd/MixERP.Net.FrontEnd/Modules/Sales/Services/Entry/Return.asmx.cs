@@ -20,7 +20,6 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.TransactionGovernor;
 using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
@@ -30,6 +29,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.Entities.Transactions.Models;
 
 namespace MixERP.Net.Core.Modules.Sales.Services.Entry
 {

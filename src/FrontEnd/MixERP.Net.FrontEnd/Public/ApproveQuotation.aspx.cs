@@ -19,7 +19,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using MixERP.Net.Entities.Meta;
+using MixERP.Net.Entities.Public.Meta;
 using MixERP.Net.FrontEnd.Controls;
 using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;

@@ -21,12 +21,12 @@ using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.TransactionViewFactory;
 using System;
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Framework.Contracts;
 
 namespace MixERP.Net.Core.Modules.Finance
 {

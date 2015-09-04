@@ -17,19 +17,19 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Extensions;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.i18n.Resources;
-using MixERP.Net.TransactionGovernor;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
-using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions.Models;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.TransactionGovernor;
+using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
+using Serilog;
 
 namespace MixERP.Net.Core.Modules.Purchase.Services.Entry
 {
@@ -64,7 +64,8 @@ namespace MixERP.Net.Core.Modules.Purchase.Services.Entry
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                return Data.Transactions.Return.PostTransaction(AppUsers.GetCurrentUserDB(), tranId, valueDate, officeId, userId, loginId, storeId,
+                return Data.Transactions.Return.PostTransaction(AppUsers.GetCurrentUserDB(), tranId, valueDate, officeId,
+                    userId, loginId, storeId,
                     partyCode, priceTypeId, referenceNumber, statementReference, details, attachments);
             }
             catch (Exception ex)
@@ -73,6 +74,5 @@ namespace MixERP.Net.Core.Modules.Purchase.Services.Entry
                 throw;
             }
         }
-
     }
 }

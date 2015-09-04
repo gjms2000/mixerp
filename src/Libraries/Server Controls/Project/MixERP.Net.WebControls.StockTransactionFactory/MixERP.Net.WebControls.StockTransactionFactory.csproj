@@ -133,6 +133,18 @@
     <None Include="Mix Open Foundation.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0f0490a5-8065-4b0a-9844-905e32a05dc4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Entities\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
+      <Project>{BDE918B1-DD9B-41C9-A41F-F3DDEC18B6D8}</Project>
+      <Name>MixERP.Net.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Entities\Transactions\MixERP.Net.Entities.Transactions.csproj">
+      <Project>{665E96EE-D5D0-426E-A8CD-22E3A9981349}</Project>
+      <Name>MixERP.Net.Entities.Transactions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
       <Project>{61ab8b69-2097-4595-97b7-4a930a70163d}</Project>
       <Name>MixERP.Net.ApplicationState</Name>
@@ -140,10 +152,6 @@
     <ProjectReference Include="..\..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{BDE918B1-DD9B-41C9-A41F-F3DDEC18B6D8}</Project>
-      <Name>MixERP.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixERP.Net.i18n\MixERP.Net.i18n.csproj">
       <Project>{2ECD1C2E-D7D0-4A24-896A-E625B0566DB5}</Project>

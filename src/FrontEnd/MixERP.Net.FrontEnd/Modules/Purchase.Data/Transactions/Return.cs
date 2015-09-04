@@ -17,27 +17,31 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.Core.Modules.Sales.Data;
-using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using Npgsql;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using MixERP.Net.Common;
+using MixERP.Net.Core.Modules.Sales.Data;
+using MixERP.Net.DbFactory;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions.Models;
+using Npgsql;
 
 namespace MixERP.Net.Core.Modules.Purchase.Data.Transactions
 {
     public static class Return
     {
-        public static long PostTransaction(string catalog, long transactionMasterId, DateTime valueDate, int officeId, int userId, long loginId, int storeId, string partyCode, int priceTypeId, string referenceNumber, string statementReference, Collection<StockDetail> details, Collection<Attachment> attachments)
+        public static long PostTransaction(string catalog, long transactionMasterId, DateTime valueDate, int officeId,
+            int userId, long loginId, int storeId, string partyCode, int priceTypeId, string referenceNumber,
+            string statementReference, Collection<StockDetail> details, Collection<Attachment> attachments)
         {
             string detail = StockMasterDetailHelper.CreateStockMasterDetailParameter(details);
             string attachment = AttachmentHelper.CreateAttachmentModelParameter(attachments);
 
-            string sql = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM transactions.post_purchase_return(@TransactionMasterId::bigint, @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @StoreId::integer, @PartyCode::national character varying(12), @PriceTypeId::integer, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}], ARRAY[{1}]);", detail, attachment);
+            string sql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM transactions.post_purchase_return(@TransactionMasterId::bigint, @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @StoreId::integer, @PartyCode::national character varying(12), @PriceTypeId::integer, @ReferenceNumber::national character varying(24), @StatementReference::text, ARRAY[{0}], ARRAY[{1}]);",
+                detail, attachment);
 
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {

@@ -68,6 +68,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0f0490a5-8065-4b0a-9844-905e32a05dc4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
       <Project>{61ab8b69-2097-4595-97b7-4a930a70163d}</Project>
       <Name>MixERP.Net.ApplicationState</Name>
@@ -75,10 +79,6 @@
     <ProjectReference Include="..\..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{bde918b1-dd9b-41c9-a41f-f3ddec18b6d8}</Project>
-      <Name>MixERP.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Logic\MixERP.Net.Framework\MixERP.Net.Framework.csproj">
       <Project>{1509332f-ae98-44d9-9072-5bbc59a65fc4}</Project>

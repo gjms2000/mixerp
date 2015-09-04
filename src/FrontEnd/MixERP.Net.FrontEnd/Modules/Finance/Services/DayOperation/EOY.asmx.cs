@@ -28,7 +28,7 @@ using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Core.Modules.Finance.Data.Helpers;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.Entities.Transactions;
 using MixERP.Net.Framework;
 using MixERP.Net.i18n.Resources;

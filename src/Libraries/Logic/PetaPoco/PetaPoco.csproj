@@ -52,11 +52,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessValidator.cs" />
+    <Compile Include="Attributes.cs" />
+    <Compile Include="DbAccess.cs" />
+    <Compile Include="DisplayField.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IDBAccess.cs" />
+    <Compile Include="IPoco.cs" />
+    <Compile Include="IPolicy.cs" />
+    <Compile Include="PetaPocoDB.cs" />
     <Compile Include="PetaPoco\ConfigurationHelper.cs" />
     <Compile Include="PetaPoco\Factory.cs" />
     <Compile Include="PetaPoco\Models\PetaPoco.cs" />
+    <Compile Include="PolicyValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnauthorizedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />

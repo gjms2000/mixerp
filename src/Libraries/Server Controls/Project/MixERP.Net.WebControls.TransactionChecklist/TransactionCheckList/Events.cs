@@ -90,7 +90,7 @@ namespace MixERP.Net.WebControls.TransactionChecklist
             DateTime transactionDate = DateTime.Now;
             long transactionMasterId = Conversion.TryCastLong(tranId);
 
-            Entities.Models.Transactions.Verification model = Status.GetVerificationStatus(this.Catalog, transactionMasterId, this.IsStockTransferRequest);
+            Entities.Transactions.Models.VerificationModel model = Status.GetVerificationStatus(this.Catalog, transactionMasterId, this.IsStockTransferRequest);
             if (
                 model.VerificationStatusId.Equals(0) //Awaiting verification
                 ||

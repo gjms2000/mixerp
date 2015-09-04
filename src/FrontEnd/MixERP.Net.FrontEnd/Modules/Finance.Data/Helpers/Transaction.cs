@@ -19,11 +19,12 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using MixERP.Net.Common;
 using MixERP.Net.DbFactory;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using Npgsql;
@@ -97,14 +98,14 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
                 throw new InvalidOperationException(Errors.ReferencingSidesNotEqual);
             }
 
-            var decimalPlaces = CultureManager.GetCurrencyDecimalPlaces();
+            int decimalPlaces = CultureManager.GetCurrencyDecimalPlaces();
 
             if ((from detail in details
                 where
-                    Decimal.Round(detail.Credit*detail.ExchangeRate, decimalPlaces) !=
-                    Decimal.Round(detail.LocalCurrencyCredit, decimalPlaces) ||
-                    Decimal.Round(detail.Debit*detail.ExchangeRate, decimalPlaces) !=
-                    Decimal.Round(detail.LocalCurrencyDebit, decimalPlaces)
+                    decimal.Round(detail.Credit*detail.ExchangeRate, decimalPlaces) !=
+                    decimal.Round(detail.LocalCurrencyCredit, decimalPlaces) ||
+                    decimal.Round(detail.Debit*detail.ExchangeRate, decimalPlaces) !=
+                    decimal.Round(detail.LocalCurrencyDebit, decimalPlaces)
                 select detail).Any())
             {
                 throw new InvalidOperationException(Errors.ReferencingSidesNotEqual);
@@ -207,7 +208,7 @@ namespace MixERP.Net.Core.Modules.Finance.Data.Helpers
                                     attachmentCommand.Parameters.AddWithValue("@OriginalFileName",
                                         attachment.OriginalFileName);
                                     attachmentCommand.Parameters.AddWithValue("@FileExtension",
-                                        System.IO.Path.GetExtension(attachment.OriginalFileName));
+                                        Path.GetExtension(attachment.OriginalFileName));
                                     attachmentCommand.Parameters.AddWithValue("@FilePath", attachment.FilePath);
                                     attachmentCommand.Parameters.AddWithValue("@Comment", attachment.Comment);
 

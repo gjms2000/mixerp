@@ -177,15 +177,12 @@ namespace MixERP.Net.FrontEnd.Base
 
             foreach (Menu menu in menus)
             {
-                if (menu != null)
+                if (!string.IsNullOrWhiteSpace(menu?.Url))
                 {
-                    if (!string.IsNullOrWhiteSpace(menu.Url))
+                    if (menu.Url.Replace("~", "").ToUpperInvariant().Equals(this.currentPage.ToUpperInvariant()))
                     {
-                        if (menu.Url.Replace("~", "").ToUpperInvariant().Equals(this.currentPage.ToUpperInvariant()))
-                        {
-                            policyExists = true;
-                            break;
-                        }
+                        policyExists = true;
+                        break;
                     }
                 }
             }
@@ -239,19 +236,10 @@ namespace MixERP.Net.FrontEnd.Base
             Collection<FrequencyDates> applicationDates =
                 Dates.GetFrequencyDates(AppUsers.GetCurrentUserDB());
 
-            if (applicationDates == null)
-            {
-                return;
-            }
-            FrequencyDates model = applicationDates.FirstOrDefault(c => c.OfficeId.Equals(officeId));
+            FrequencyDates model = applicationDates?.FirstOrDefault(c => c.OfficeId.Equals(officeId));
 
 
-            if (model == null)
-            {
-                return;
-            }
-
-            if (model.ForcedLogOffTimestamp == null || model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
+            if (model?.ForcedLogOffTimestamp == null || model.ForcedLogOffTimestamp.Equals(DateTime.MinValue))
             {
                 return;
             }

@@ -81,6 +81,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0f0490a5-8065-4b0a-9844-905e32a05dc4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\Entities\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
+      <Project>{BDE918B1-DD9B-41C9-A41F-F3DDEC18B6D8}</Project>
+      <Name>MixERP.Net.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\Entities\Transactions\MixERP.Net.Entities.Transactions.csproj">
+      <Project>{665E96EE-D5D0-426E-A8CD-22E3A9981349}</Project>
+      <Name>MixERP.Net.Entities.Transactions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{d5a09c22-8f48-4fb2-a14d-c62c8c8fcec0}</Project>
       <Name>MixERP.Net.Common</Name>
@@ -88,10 +100,6 @@
     <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.DbFactory\MixERP.Net.DbFactory.csproj">
       <Project>{8fd9661c-2473-4581-8722-18b08d4db252}</Project>
       <Name>MixERP.Net.DbFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Libraries\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{BDE918B1-DD9B-41C9-A41F-F3DDEC18B6D8}</Project>
-      <Name>MixERP.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Logic\PetaPoco\PetaPoco.csproj">
       <Project>{969d7960-52e2-40fc-91e5-1393b71e23b0}</Project>

@@ -20,11 +20,12 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.StockTransactionFactory;
 using System;
+using MixERP.Net.Framework.Contracts;
+using PetaPoco;
 
 namespace MixERP.Net.Core.Modules.Sales.Entry
 {

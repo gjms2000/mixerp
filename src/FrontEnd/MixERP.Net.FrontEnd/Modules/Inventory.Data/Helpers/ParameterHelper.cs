@@ -1,9 +1,9 @@
-﻿using MixERP.Net.Entities;
-using MixERP.Net.Entities.Models.Transactions;
-using Npgsql;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using MixERP.Net.Entities;
+using MixERP.Net.Entities.Transactions.Models;
+using Npgsql;
 
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
@@ -28,7 +28,8 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Helpers
 {
     public static class ParameterHelper
     {
-        public static IEnumerable<NpgsqlParameter> AddStockTransferModelParameter(Collection<StockAdjustmentDetail> details)
+        public static IEnumerable<NpgsqlParameter> AddStockTransferModelParameter(
+            Collection<StockAdjustmentDetail> details)
         {
             Collection<NpgsqlParameter> collection = new Collection<NpgsqlParameter>();
 
@@ -64,7 +65,9 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Helpers
 
             for (int i = 0; i < details.Count; i++)
             {
-                detailCollection.Add(string.Format(CultureInfo.InvariantCulture, "ROW(@TranType{0}, @StoreName{0}, @ItemCode{0}, @UnitName{0},@Quantity{0})::transactions.stock_adjustment_type", i.ToString(CultureInfo.InvariantCulture)));
+                detailCollection.Add(string.Format(CultureInfo.InvariantCulture,
+                    "ROW(@TranType{0}, @StoreName{0}, @ItemCode{0}, @UnitName{0},@Quantity{0})::transactions.stock_adjustment_type",
+                    i.ToString(CultureInfo.InvariantCulture)));
             }
 
             return string.Join(",", detailCollection);

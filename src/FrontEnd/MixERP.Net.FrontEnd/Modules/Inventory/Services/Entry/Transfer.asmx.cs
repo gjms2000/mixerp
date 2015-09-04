@@ -17,24 +17,23 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Web.Script.Serialization;
+using System.Web.Script.Services;
+using System.Web.Services;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
 using MixERP.Net.Core.Modules.Inventory.Data.Transactions;
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.Framework;
+using MixERP.Net.i18n;
 using MixERP.Net.i18n.Resources;
 using Serilog;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Web.Script.Serialization;
-using System.Web.Script.Services;
-using System.Web.Services;
-using MixERP.Net.i18n;
 
 namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
 {
@@ -88,7 +87,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
             JavaScriptSerializer jss = new JavaScriptSerializer();
             dynamic result = jss.Deserialize<dynamic>(json);
 
-            foreach (var item in result)
+            foreach (dynamic item in result)
             {
                 StockAdjustmentDetail detail = new StockAdjustmentDetail();
                 TransactionTypeEnum typeEnum = TransactionTypeEnum.Credit;

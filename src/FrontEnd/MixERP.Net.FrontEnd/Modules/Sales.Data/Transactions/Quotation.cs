@@ -17,20 +17,23 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Entities.Core;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MixERP.Net.Entities.Core;
 using MixERP.Net.Entities.Transactions;
 using PetaPoco;
-using StockDetail = MixERP.Net.Entities.Models.Transactions.StockDetail;
-using StockMaster = MixERP.Net.Entities.Models.Transactions.StockMaster;
+using StockDetail = MixERP.Net.Entities.Transactions.Models.StockDetail;
+using StockMaster = MixERP.Net.Entities.Transactions.Models.StockMaster;
 
 namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
 {
     public static class Quotation
     {
-        public static long Add(string catalog, int officeId, int userId, long loginId, DateTime valueDate, string partyCode, int priceTypeId, Collection<StockDetail> details, string referenceNumber, string statementReference, Collection<long> transactionIdCollection, Collection<Attachment> attachments, bool nonTaxable, int salesPersonId, int shipperId, string shippingAddressCode, int storeId)
+        public static long Add(string catalog, int officeId, int userId, long loginId, DateTime valueDate,
+            string partyCode, int priceTypeId, Collection<StockDetail> details, string referenceNumber,
+            string statementReference, Collection<long> transactionIdCollection, Collection<Attachment> attachments,
+            bool nonTaxable, int salesPersonId, int shipperId, string shippingAddressCode, int storeId)
         {
             StockMaster stockMaster = new StockMaster();
 
@@ -41,7 +44,9 @@ namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
             stockMaster.ShippingAddressCode = shippingAddressCode;
             stockMaster.StoreId = storeId;
 
-            long nonGlStockMasterId = NonGlStockTransaction.Add(catalog, "Sales.Quotation", valueDate, officeId, userId, loginId, referenceNumber, statementReference, stockMaster, details, transactionIdCollection, attachments, nonTaxable);
+            long nonGlStockMasterId = NonGlStockTransaction.Add(catalog, "Sales.Quotation", valueDate, officeId, userId,
+                loginId, referenceNumber, statementReference, stockMaster, details, transactionIdCollection, attachments,
+                nonTaxable);
             return nonGlStockMasterId;
         }
 
@@ -61,6 +66,5 @@ namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
             const string sql = "SELECT * FROM transactions.sales_quotation_view WHERE tran_id = @0;";
             return Factory.Get<SalesQuotationView>(catalog, sql, tranId).FirstOrDefault();
         }
-
     }
 }

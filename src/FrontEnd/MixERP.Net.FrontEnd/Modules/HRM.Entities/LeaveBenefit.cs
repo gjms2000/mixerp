@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 // ReSharper disable All
-using MixERP.Net.Entities.Contracts;
 using PetaPoco;
 using System;
 
@@ -43,5 +42,13 @@ namespace MixERP.Net.Entities.HRM
         [Column("total_days")]
         [ColumnDbType("integer_strict", 0, false, "")] 
         public int TotalDays { get; set; }
+    
+        [Column("audit_user_id")]
+        [ColumnDbType("int4", 0, true, "")] 
+        public int? AuditUserId { get; set; }
+    
+        [Column("audit_ts")]
+        [ColumnDbType("timestamptz", 0, true, "")] 
+        public DateTime? AuditTs { get; set; }
     }
 }

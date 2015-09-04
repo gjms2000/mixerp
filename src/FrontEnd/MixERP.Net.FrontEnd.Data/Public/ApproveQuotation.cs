@@ -17,7 +17,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Linq;
-using MixERP.Net.Entities.Meta;
+using MixERP.Net.Entities.Public.Meta;
 using PetaPoco;
 
 namespace MixERP.Net.FrontEnd.Data.Public

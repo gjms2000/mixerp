@@ -86,6 +86,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Payroll\Bonus.ascx" />
+    <Content Include="Payroll\Commissions.ascx" />
+    <Content Include="Payroll\Deduction.ascx" />
+    <Content Include="Payroll\Salary.ascx" />
+    <Content Include="Payroll\Wages.ascx" />
     <Content Include="Services\DisplayFields\Contract.asmx" />
     <Content Include="Services\DisplayFields\Employee.asmx" />
     <Content Include="Services\DisplayFields\EmployeeExperience.asmx" />
@@ -122,9 +127,52 @@
     <Content Include="Setup\Salaries.ascx" />
     <Content Include="Setup\SalaryTypes.ascx" />
     <Content Include="Setup\Shifts.ascx" />
+    <Content Include="Tasks\Attendance.ascx" />
+    <Content Include="Tasks\Contracts.ascx" />
+    <Content Include="Tasks\Employees.ascx" />
+    <Content Include="Tasks\Entry\Employees.ascx" />
+    <Content Include="Tasks\Exit.ascx" />
+    <Content Include="Tasks\LeaveApplication.ascx" />
+    <Content Include="Tasks\Resignation.ascx" />
+    <Content Include="Tasks\Termination.ascx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Payroll\Bonus.ascx.cs">
+      <DependentUpon>Bonus.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payroll\Bonus.ascx.designer.cs">
+      <DependentUpon>Bonus.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Payroll\Commissions.ascx.cs">
+      <DependentUpon>Commissions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payroll\Commissions.ascx.designer.cs">
+      <DependentUpon>Commissions.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Payroll\Deduction.ascx.cs">
+      <DependentUpon>Deduction.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payroll\Deduction.ascx.designer.cs">
+      <DependentUpon>Deduction.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Payroll\Salary.ascx.cs">
+      <DependentUpon>Salary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payroll\Salary.ascx.designer.cs">
+      <DependentUpon>Salary.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Payroll\Wages.ascx.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payroll\Wages.ascx.designer.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DisplayFields\Contract.asmx.cs">
       <DependentUpon>Contract.asmx</DependentUpon>
@@ -308,6 +356,62 @@
     </Compile>
     <Compile Include="Setup\Shifts.ascx.designer.cs">
       <DependentUpon>Shifts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Attendance.ascx.cs">
+      <DependentUpon>Attendance.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Attendance.ascx.designer.cs">
+      <DependentUpon>Attendance.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Contracts.ascx.cs">
+      <DependentUpon>Contracts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Contracts.ascx.designer.cs">
+      <DependentUpon>Contracts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Employees.ascx.cs">
+      <DependentUpon>Employees.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employees.ascx.designer.cs">
+      <DependentUpon>Employees.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Entry\Employees.ascx.cs">
+      <DependentUpon>Employees.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Entry\Employees.ascx.designer.cs">
+      <DependentUpon>Employees.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Exit.ascx.cs">
+      <DependentUpon>Exit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Exit.ascx.designer.cs">
+      <DependentUpon>Exit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\LeaveApplication.ascx.cs">
+      <DependentUpon>LeaveApplication.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\LeaveApplication.ascx.designer.cs">
+      <DependentUpon>LeaveApplication.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Resignation.ascx.cs">
+      <DependentUpon>Resignation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Resignation.ascx.designer.cs">
+      <DependentUpon>Resignation.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Termination.ascx.cs">
+      <DependentUpon>Termination.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Termination.ascx.designer.cs">
+      <DependentUpon>Termination.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

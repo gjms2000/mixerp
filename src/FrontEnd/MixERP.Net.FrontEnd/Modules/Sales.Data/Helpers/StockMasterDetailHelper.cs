@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Entities.Models.Transactions;
-using Npgsql;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using MixERP.Net.Entities.Transactions.Models;
+using Npgsql;
 
 namespace MixERP.Net.Core.Modules.Sales.Data
 {
@@ -60,7 +60,9 @@ namespace MixERP.Net.Core.Modules.Sales.Data
             Collection<string> detailCollection = new Collection<string>();
             for (int i = 0; i < details.Count; i++)
             {
-                detailCollection.Add(string.Format(CultureInfo.InvariantCulture, "ROW(@StoreId{0}, @ItemCode{0}, @Quantity{0}, @UnitName{0},@Price{0}, @Discount{0}, @ShippingCharge{0}, @TaxForm{0}, @Tax{0})::transactions.stock_detail_type", i.ToString(CultureInfo.InvariantCulture)));
+                detailCollection.Add(string.Format(CultureInfo.InvariantCulture,
+                    "ROW(@StoreId{0}, @ItemCode{0}, @Quantity{0}, @UnitName{0},@Price{0}, @Discount{0}, @ShippingCharge{0}, @TaxForm{0}, @Tax{0})::transactions.stock_detail_type",
+                    i.ToString(CultureInfo.InvariantCulture)));
             }
 
             return string.Join(",", detailCollection);

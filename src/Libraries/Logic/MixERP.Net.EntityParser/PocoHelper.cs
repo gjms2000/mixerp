@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.Framework.Extensions;
 using PetaPoco;
 

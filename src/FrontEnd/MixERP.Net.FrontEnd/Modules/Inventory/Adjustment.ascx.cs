@@ -23,7 +23,6 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Core.Modules.Inventory.Data.Reports;
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Contracts;
 using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using MixERP.Net.WebControls.Common;
@@ -31,6 +30,7 @@ using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MixERP.Net.Framework.Contracts;
 
 namespace MixERP.Net.Core.Modules.Inventory
 {

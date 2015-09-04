@@ -17,21 +17,22 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Web.Script.Serialization;
+using System.Web.Script.Services;
+using System.Web.Services;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.Core.Modules.Finance.Data.Helpers;
 using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
 using Serilog;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Web.Script.Serialization;
-using System.Web.Script.Services;
-using System.Web.Services;
 
 namespace MixERP.Net.Core.Modules.Finance.Services.Entry
 {
@@ -42,7 +43,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services.Entry
     public class JournalVoucher : WebService
     {
         [WebMethod]
-        public long Save(DateTime valueDate, DateTime bookDate, string referenceNumber, string data, int costCenterId, string attachmentsJSON)
+        public long Save(DateTime valueDate, DateTime bookDate, string referenceNumber, string data, int costCenterId,
+            string attachmentsJSON)
         {
             try
             {
@@ -106,7 +108,8 @@ namespace MixERP.Net.Core.Modules.Finance.Services.Entry
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                return Transaction.Add(AppUsers.GetCurrentUserDB(), valueDate, bookDate, officeId, userId, loginId, costCenterId,
+                return Transaction.Add(AppUsers.GetCurrentUserDB(), valueDate, bookDate, officeId, userId, loginId,
+                    costCenterId,
                     referenceNumber, details, attachments);
             }
             catch (Exception ex)
@@ -116,15 +119,15 @@ namespace MixERP.Net.Core.Modules.Finance.Services.Entry
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private static Collection<JournalDetail> GetJournalDetailCollection(string json)
         {
             Collection<JournalDetail> details = new Collection<JournalDetail>();
-            var jss = new JavaScriptSerializer();
+            JavaScriptSerializer jss = new JavaScriptSerializer();
 
             dynamic result = jss.Deserialize<dynamic>(json);
 
-            foreach (var item in result)
+            foreach (dynamic item in result)
             {
                 JournalDetail detail = new JournalDetail();
                 detail.StatementReference = item[0];

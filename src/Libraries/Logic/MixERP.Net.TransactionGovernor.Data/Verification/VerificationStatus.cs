@@ -24,7 +24,7 @@ namespace MixERP.Net.TransactionGovernor.Data.Verification
 {
     public static class VerificationStatus
     {
-        public static Entities.Models.Transactions.Verification GetVerificationStatus(string catalog,
+        public static Entities.Transactions.Models.VerificationModel GetVerificationStatus(string catalog,
             long transactionMasterId, bool isStockTransferRequest)
         {
             string sql = @"SELECT 
@@ -50,7 +50,7 @@ namespace MixERP.Net.TransactionGovernor.Data.Verification
 
 
             return
-                Factory.Get<Entities.Models.Transactions.Verification>(catalog, sql, transactionMasterId)
+                Factory.Get<Entities.Transactions.Models.VerificationModel>(catalog, sql, transactionMasterId)
                     .SingleOrDefault();
         }
     }

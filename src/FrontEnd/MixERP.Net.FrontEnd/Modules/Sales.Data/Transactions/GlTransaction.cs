@@ -17,22 +17,25 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common;
-using MixERP.Net.Core.Modules.Sales.Data.Data;
-using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Core;
-using MixERP.Net.Entities.Models.Transactions;
-using Npgsql;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using MixERP.Net.Common;
+using MixERP.Net.Core.Modules.Sales.Data.Data;
+using MixERP.Net.DbFactory;
+using MixERP.Net.Entities.Core;
+using MixERP.Net.Entities.Transactions.Models;
+using Npgsql;
 
 namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
 {
     internal static class GlTransaction
     {
-        public static long Add(string catalog, string bookName, DateTime valueDate, int officeId, int userId, long loginId, int costCenterId, string referenceNumber, string statementReference, StockMaster stockMaster, Collection<StockDetail> details, Collection<Attachment> attachments, bool nonTaxable, Collection<long> tranIds)
+        public static long Add(string catalog, string bookName, DateTime valueDate, int officeId, int userId,
+            long loginId, int costCenterId, string referenceNumber, string statementReference, StockMaster stockMaster,
+            Collection<StockDetail> details, Collection<Attachment> attachments, bool nonTaxable,
+            Collection<long> tranIds)
         {
             if (stockMaster == null)
             {
@@ -58,7 +61,9 @@ namespace MixERP.Net.Core.Modules.Sales.Data.Transactions
                 ids = string.Join(",", tranIds);
             }
 
-            string sql = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM transactions.post_sales(@BookName::national character varying(48), @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @CostCenterId::integer, @ReferenceNumber::national character varying(24), @StatementReference::text, @IsCredit::boolean, @PaymentTermId::integer, @PartyCode::national character varying(12), @PriceTypeId::integer, @SalespersonId::integer, @ShipperId::integer, @ShippingAddressCode::national character varying(12), @StoreId::integer, @NonTaxable::boolean, ARRAY[{0}], ARRAY[{1}], ARRAY[{2}])", detail, attachment, ids);
+            string sql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM transactions.post_sales(@BookName::national character varying(48), @OfficeId::integer, @UserId::integer, @LoginId::bigint, @ValueDate::date, @CostCenterId::integer, @ReferenceNumber::national character varying(24), @StatementReference::text, @IsCredit::boolean, @PaymentTermId::integer, @PartyCode::national character varying(12), @PriceTypeId::integer, @SalespersonId::integer, @ShipperId::integer, @ShippingAddressCode::national character varying(12), @StoreId::integer, @NonTaxable::boolean, ARRAY[{0}], ARRAY[{1}], ARRAY[{2}])",
+                detail, attachment, ids);
 
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {

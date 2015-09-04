@@ -30,7 +30,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Core.Modules.Inventory.Data.Domains;
 using MixERP.Net.Core.Modules.Inventory.Data.Transactions;
 using MixERP.Net.Entities;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using MixERP.Net.Framework;
 using MixERP.Net.i18n.Resources;
 using Serilog;
@@ -44,7 +44,8 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
     public class TransferDelivery : WebService
     {
         [WebMethod]
-        public long Save(DateTime valueDate, string referenceNumber, string statementReference, long requestId, int sourceStoreId, int shipperId, string data)
+        public long Save(DateTime valueDate, string referenceNumber, string statementReference, long requestId,
+            int sourceStoreId, int shipperId, string data)
         {
             try
             {
@@ -75,7 +76,8 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
                 int userId = AppUsers.GetCurrent().View.UserId.ToInt();
                 long loginId = AppUsers.GetCurrent().View.LoginId.ToLong();
 
-                return StockTransferDelivery.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, requestId, valueDate,
+                return StockTransferDelivery.Add(AppUsers.GetCurrentUserDB(), officeId, userId, loginId, requestId,
+                    valueDate,
                     referenceNumber, statementReference, shipperId, sourceStoreId, models);
             }
             catch (Exception ex)
@@ -92,7 +94,7 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
             JavaScriptSerializer jss = new JavaScriptSerializer();
             dynamic result = jss.Deserialize<dynamic>(json);
 
-            foreach (var item in result)
+            foreach (dynamic item in result)
             {
                 StockAdjustmentDetail detail = new StockAdjustmentDetail();
                 detail.TransferTypeEnum = TransactionTypeEnum.Debit;
@@ -108,7 +110,6 @@ namespace MixERP.Net.Core.Modules.Inventory.Services.Entry
 
             return models;
         }
-
 
         [WebMethod]
         public IEnumerable<StockTransferDeliveryModel> GetModel(long requestId)

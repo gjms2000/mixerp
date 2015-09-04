@@ -19,8 +19,10 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Web;
+using System.Web.Http;
 using System.Web.Routing;
-using MixERP.Net.Entities.Meta;
+using MixERP.Net.Entities.Office;
+using MixERP.Net.Entities.Public.Meta;
 using MixERP.Net.FrontEnd.Application;
 using MixERP.Net.ReportManager;
 
@@ -43,6 +45,8 @@ namespace MixERP.Net.FrontEnd
             GlobalLogin.CreateTable();
             SalesQuotationValidation.CreateTable();
             Repository.DownloadAndInstallReports();
+
+            WebApiConfig.Register(GlobalConfiguration.Configuration);
         }
     }
 }

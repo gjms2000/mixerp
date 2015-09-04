@@ -26,7 +26,7 @@ using MixERP.Net.Common;
 using MixERP.Net.Core.Modules.Inventory.Data.Domains;
 using MixERP.Net.Core.Modules.Inventory.Data.Helpers;
 using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Models.Transactions;
+using MixERP.Net.Entities.Transactions.Models;
 using Npgsql;
 using PetaPoco;
 
@@ -56,7 +56,9 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Transactions
             return Factory.Get<StockTransferDeliveryModel>(catalog, sql, requestId);
         }
 
-        public static long Add(string catalog, int officeId, int userId, long loginId, long requestId, DateTime valueDate, string referenceNumber, string statementReference, int shipperId, int sourceStoreId, Collection<StockAdjustmentDetail> details)
+        public static long Add(string catalog, int officeId, int userId, long loginId, long requestId,
+            DateTime valueDate, string referenceNumber, string statementReference, int shipperId, int sourceStoreId,
+            Collection<StockAdjustmentDetail> details)
         {
             string detailParameter = ParameterHelper.CreateStockTransferModelParameter(details);
             string sql = string.Format(CultureInfo.InvariantCulture,
@@ -80,6 +82,5 @@ namespace MixERP.Net.Core.Modules.Inventory.Data.Transactions
                 return tranId;
             }
         }
-
     }
 }

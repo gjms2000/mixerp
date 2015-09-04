@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.Entities.Models.Transactions;
-using MixERP.Net.WebControls.StockTransactionViewFactory.Data.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Entities.Transactions.Models;
+using MixERP.Net.WebControls.StockTransactionViewFactory.Data.Models;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
@@ -74,7 +74,7 @@ namespace MixERP.Net.WebControls.StockTransactionFactory
             if (this.Page != null && this.Page.Session[sessionKey] != null)
             {
                 //Get an instance of the ProductDetailsModel collection stored in session.
-                productCollection = (Collection<ProductDetail>)this.Page.Session[sessionKey];
+                productCollection = (Collection<ProductDetail>) this.Page.Session[sessionKey];
 
                 //Summate the collection.
                 productCollection = SummateProducts(productCollection);
@@ -99,7 +99,11 @@ namespace MixERP.Net.WebControls.StockTransactionFactory
 
                 if (collection.Count > 0)
                 {
-                    productInCollection = collection.FirstOrDefault(x => x.ItemCode == product.ItemCode && x.ItemName == product.ItemName && x.Unit == product.Unit && x.Price == product.Price && x.TaxCode == product.TaxCode);
+                    productInCollection =
+                        collection.FirstOrDefault(
+                            x =>
+                                x.ItemCode == product.ItemCode && x.ItemName == product.ItemName &&
+                                x.Unit == product.Unit && x.Price == product.Price && x.TaxCode == product.TaxCode);
                 }
 
                 if (productInCollection == null)

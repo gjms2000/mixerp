@@ -62,6 +62,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="MixERP.Net.Entities, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Modules\Sales\Bin\MixERP.Net.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -85,6 +89,10 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -92,14 +100,24 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\FirstSteps.cs" />
     <Compile Include="Application\LogManager.cs" />
+    <Compile Include="Application\MixERPAssemblyResolver.cs" />
     <Compile Include="Application\Routes.cs" />
     <Compile Include="Application\UpdateManager.cs" />
+    <Compile Include="Application\WebApiConfig.cs" />
     <Compile Include="Application\WebJobManager.cs" />
     <Compile Include="BackendMaster.Master.cs">
       <DependentUpon>BackendMaster.Master</DependentUpon>
@@ -1223,6 +1241,18 @@
     <Folder Include="Reports\Sources\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0F0490A5-8065-4B0A-9844-905E32A05DC4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Entities\Office\MixERP.Net.Entities.Office.csproj">
+      <Project>{ECE2EA15-08D3-46D6-8906-BEC973C0568B}</Project>
+      <Name>MixERP.Net.Entities.Office</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Entities\Public\MixERP.Net.Entities.Public.csproj">
+      <Project>{79397489-0963-42BE-B0C9-C0F715F7ECD6}</Project>
+      <Name>MixERP.Net.Entities.Public</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
       <Project>{61AB8B69-2097-4595-97B7-4A930A70163D}</Project>
       <Name>MixERP.Net.ApplicationState</Name>
@@ -1230,10 +1260,6 @@
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.DbFactory\MixERP.Net.DbFactory.csproj">
       <Project>{8FD9661C-2473-4581-8722-18B08D4DB252}</Project>
       <Name>MixERP.Net.DbFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.Entities\MixERP.Net.Entities.csproj">
-      <Project>{bde918b1-dd9b-41c9-a41f-f3ddec18b6d8}</Project>
-      <Name>MixERP.Net.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Logic\MixERP.Net.EntityParser\MixERP.Net.EntityParser.csproj">
       <Project>{eac19d71-3969-4b34-ad7b-8b05d4672861}</Project>
