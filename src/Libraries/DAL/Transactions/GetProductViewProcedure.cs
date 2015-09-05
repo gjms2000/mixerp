@@ -131,27 +131,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetProductViewResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_product_view(@0::integer, @1::text, @2::integer, @3::date, @4::date, @5::character varying, @6::text, @7::text, @8::character varying, @9::character varying, @10::text);";
-				return Factory.Get<DbGetProductViewResult>(this.Catalog, query, this.UserId, this.Book, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.PriceType, this.User, this.ReferenceNumber, this.StatementReference);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetProductViewProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_product_view(@0::integer, @1::text, @2::integer, @3::date, @4::date, @5::character varying, @6::text, @7::text, @8::character varying, @9::character varying, @10::text);";
+			return Factory.Get<DbGetProductViewResult>(this.Catalog, query, this.UserId, this.Book, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.PriceType, this.User, this.ReferenceNumber, this.StatementReference);
 		} 
 	}
 }

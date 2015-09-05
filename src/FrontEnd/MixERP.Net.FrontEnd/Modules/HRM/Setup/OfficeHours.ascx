@@ -8,6 +8,23 @@
     var excludedColumns = ["audit_user_id", "audit_ts"];
 
     var live = "OfficeHourName";
+
+    var keys = [
+        {
+            property: "OfficeId",
+            url: '/api/{v}/office/office/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "ShiftId",
+            url: '/api/{v}/hrm/shift/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
 </script>
 
 

@@ -113,27 +113,20 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		public IEnumerable<DbSignInResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM office.sign_in(@0::integer_strict, @1::text, @2::text, @3::text, @4::text, @5::text, @6::text, @7::text);";
-				return Factory.Get<DbSignInResult>(this.Catalog, query, this.OfficeId, this.UserName, this.Password, this.Browser, this.IpAddress, this.RemoteUser, this.Culture, this.Challenge);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"SignInProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM office.sign_in(@0::integer_strict, @1::text, @2::text, @3::text, @4::text, @5::text, @6::text, @7::text);";
+			return Factory.Get<DbSignInResult>(this.Catalog, query, this.OfficeId, this.UserName, this.Password, this.Browser, this.IpAddress, this.RemoteUser, this.Culture, this.Challenge);
 		} 
 	}
 }

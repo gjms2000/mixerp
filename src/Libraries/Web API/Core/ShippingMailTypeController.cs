@@ -1,0 +1,230 @@
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
+using PetaPoco;
+
+namespace MixERP.Net.Api.Core
+{
+    /// <summary>
+    ///     Provides a direct HTTP access to perform various tasks such as adding, editing, and removing Shipping Mail Types.
+    /// </summary>
+    [RoutePrefix("api/v1.5/core/shipping-mail-type")]
+    public class ShippingMailTypeController : ApiController
+    {
+        /// <summary>
+        ///     The ShippingMailType data context.
+        /// </summary>
+        private readonly MixERP.Net.Schemas.Core.Data.ShippingMailType ShippingMailTypeContext;
+
+        public ShippingMailTypeController()
+        {
+            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this.Catalog = AppUsers.GetCurrentUserDB();
+
+            this.ShippingMailTypeContext = new MixERP.Net.Schemas.Core.Data.ShippingMailType
+            {
+                Catalog = this.Catalog,
+                LoginId = this.LoginId
+            };
+        }
+
+        public long LoginId { get; }
+        public int UserId { get; private set; }
+        public int OfficeId { get; private set; }
+        public string Catalog { get; }
+
+        /// <summary>
+        ///     Counts the number of shipping mail types.
+        /// </summary>
+        /// <returns>Returns the count of the shipping mail types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count")]
+        public long Count()
+        {
+            try
+            {
+                return this.ShippingMailTypeContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns an instance of shipping mail type.
+        /// </summary>
+        /// <param name="shippingMailTypeId">Enter ShippingMailTypeId to search for.</param>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("{shippingMailTypeId}")]
+        public MixERP.Net.Entities.Core.ShippingMailType Get(int shippingMailTypeId)
+        {
+            try
+            {
+                return this.ShippingMailTypeContext.Get(shippingMailTypeId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a paginated collection containing 25 shipping mail types on each page, sorted by the property ShippingMailTypeId.
+        /// </summary>
+        /// <returns>Returns the first page from the collection.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("")]
+        public IEnumerable<MixERP.Net.Entities.Core.ShippingMailType> GetPagedResult()
+        {
+            try
+            {
+                return this.ShippingMailTypeContext.GetPagedResult();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a paginated collection containing 25 shipping mail types on each page, sorted by the property ShippingMailTypeId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <returns>Returns the requested page from the collection.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("page/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.Core.ShippingMailType> GetPagedResult(long pageNumber)
+        {
+            try
+            {
+                return this.ShippingMailTypeContext.GetPagedResult(pageNumber);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Displayfields is a lightweight key/value collection of shipping mail types.
+        /// </summary>
+        /// <returns>Returns an enumerable key/value collection of shipping mail types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("display-fields")]
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            try
+            {
+                return this.ShippingMailTypeContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Account class.
+        /// </summary>
+        /// <param name="shippingMailType">Your instance of shipping mail types class to add.</param>
+        [AcceptVerbs("POST")]
+        [Route("add/{shippingMailType}")]
+        public void Add(MixERP.Net.Entities.Core.ShippingMailType shippingMailType)
+        {
+            if (shippingMailType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShippingMailTypeContext.Add(shippingMailType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Edits existing record with your instance of Account class.
+        /// </summary>
+        /// <param name="shippingMailType">Your instance of Account class to edit.</param>
+        /// <param name="shippingMailTypeId">Enter the value for ShippingMailTypeId in order to find and edit the existing record.</param>
+        [AcceptVerbs("PUT")]
+        [Route("edit/{shippingMailTypeId}/{shippingMailType}")]
+        public void Edit(int shippingMailTypeId, MixERP.Net.Entities.Core.ShippingMailType shippingMailType)
+        {
+            if (shippingMailType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShippingMailTypeContext.Update(shippingMailType, shippingMailTypeId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Deletes an existing instance of Account class via ShippingMailTypeId.
+        /// </summary>
+        /// <param name="shippingMailTypeId">Enter the value for ShippingMailTypeId in order to find and delete the existing record.</param>
+        [AcceptVerbs("DELETE")]
+        [Route("delete/{shippingMailTypeId}")]
+        public void Delete(int shippingMailTypeId)
+        {
+            try
+            {
+                this.ShippingMailTypeContext.Delete(shippingMailTypeId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+    }
+}

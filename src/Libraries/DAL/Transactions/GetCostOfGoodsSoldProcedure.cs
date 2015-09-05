@@ -89,27 +89,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public decimal Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_cost_of_goods_sold(@0::integer, @1::integer, @2::integer, @3::integer);";
-				return Factory.Get<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.StoreId, this.Quantity).FirstOrDefault();
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetCostOfGoodsSoldProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_cost_of_goods_sold(@0::integer, @1::integer, @2::integer, @3::integer);";
+			return Factory.Get<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.StoreId, this.Quantity).FirstOrDefault();
 		} 
 	}
 }

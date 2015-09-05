@@ -71,27 +71,20 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		public int Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM office.get_role_id_by_role_code(@0::text);";
-				return Factory.Scalar<int>(this.Catalog, query, this.RoleCode);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetRoleIdByRoleCodeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM office.get_role_id_by_role_code(@0::text);";
+			return Factory.Scalar<int>(this.Catalog, query, this.RoleCode);
 		} 
 	}
 }

@@ -53,7 +53,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Services
 
         [WebMethod]
         public decimal GetSalesTax(string tranBook, int storeId, string partyCode, string shippingAddressCode, int priceTypeId, string itemCode, decimal price, int quantity, decimal discount, decimal shippingCharge, int salesTaxId)
-        {
+        {            
             return SalesTax.GetSalesTax(AppUsers.GetCurrentUserDB(), tranBook, storeId, partyCode, shippingAddressCode, priceTypeId, itemCode, price, quantity, discount, shippingCharge, salesTaxId);
         }
 

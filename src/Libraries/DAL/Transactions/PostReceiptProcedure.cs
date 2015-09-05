@@ -173,27 +173,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public long Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.post_receipt(@0::integer, @1::integer, @2::bigint, @3::character varying, @4::character varying, @5::money_strict, @6::decimal_strict, @7::decimal_strict, @8::character varying, @9::character varying, @10::integer, @11::integer, @12::date, @13::bigint, @14::integer, @15::character varying, @16::character varying, @17::bigint);";
-				return Factory.Scalar<long>(this.Catalog, query, this.UserId, this.OfficeId, this.LoginIdParameter, this.PartyCode, this.CurrencyCode, this.Amount, this.ExchangeRateDebit, this.ExchangeRateCredit, this.ReferenceNumber, this.StatementReference, this.CostCenterId, this.CashRepositoryId, this.PostedDate, this.BankAccountId, this.PaymentCardId, this.BankInstrumentCode, this.BankTranCode, this.CascadingTranId);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"PostReceiptProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.post_receipt(@0::integer, @1::integer, @2::bigint, @3::character varying, @4::character varying, @5::money_strict, @6::decimal_strict, @7::decimal_strict, @8::character varying, @9::character varying, @10::integer, @11::integer, @12::date, @13::bigint, @14::integer, @15::character varying, @16::character varying, @17::bigint);";
+			return Factory.Scalar<long>(this.Catalog, query, this.UserId, this.OfficeId, this.LoginIdParameter, this.PartyCode, this.CurrencyCode, this.Amount, this.ExchangeRateDebit, this.ExchangeRateCredit, this.ReferenceNumber, this.StatementReference, this.CostCenterId, this.CashRepositoryId, this.PostedDate, this.BankAccountId, this.PaymentCardId, this.BankInstrumentCode, this.BankTranCode, this.CascadingTranId);
 		} 
 	}
 }

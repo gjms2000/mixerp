@@ -125,27 +125,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public long Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.post_inventory_transfer_delivery(@0::integer, @1::integer, @2::bigint, @3::bigint, @4::date, @5::character varying, @6::text, @7::integer, @8::integer, @9::transactions.stock_adjustment_type[]);";
-				return Factory.Scalar<long>(this.Catalog, query, this.OfficeId, this.UserId, this.LoginIdParameter, this.InventoryTransferRequestId, this.ValueDate, this.ReferenceNumber, this.StatementReference, this.ShipperId, this.SourceStoreId, this.Details);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"PostInventoryTransferDeliveryProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.post_inventory_transfer_delivery(@0::integer, @1::integer, @2::bigint, @3::bigint, @4::date, @5::character varying, @6::text, @7::integer, @8::integer, @9::transactions.stock_adjustment_type[]);";
+			return Factory.Scalar<long>(this.Catalog, query, this.OfficeId, this.UserId, this.LoginIdParameter, this.InventoryTransferRequestId, this.ValueDate, this.ReferenceNumber, this.StatementReference, this.ShipperId, this.SourceStoreId, this.Details);
 		} 
 	}
 }

@@ -63,28 +63,21 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return 0;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT COUNT(*) FROM localization.localized_resources;";
-				return Factory.Scalar<long>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT COUNT(*) FROM localization.localized_resources;";
+			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -99,28 +92,21 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the get entity \"LocalizedResource\" filtered by \"LocalizedResourceId\" with value {LocalizedResourceId} was denied to the user with Login ID {LoginId}", localizedResourceId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM localization.localized_resources WHERE localized_resource_id=@0;";
-				return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, localizedResourceId).FirstOrDefault();
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM localization.localized_resources WHERE localized_resource_id=@0;";
+			return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, localizedResourceId).FirstOrDefault();
 		}
 
         /// <summary>
@@ -136,53 +122,46 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return displayFields;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get display field for entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT localized_resource_id AS key, culture_code as value FROM localization.localized_resources;";
-				using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			const string sql = "SELECT localized_resource_id AS key, culture_code as value FROM localization.localized_resources;";
+			using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			{
+				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
 				{
-					using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+					if (table?.Rows == null || table.Rows.Count == 0)
 					{
-						if (table?.Rows == null || table.Rows.Count == 0)
-						{
-							return displayFields;
-						}
+						return displayFields;
+					}
 
-						foreach (DataRow row in table.Rows)
+					foreach (DataRow row in table.Rows)
+					{
+						if (row != null)
 						{
-							if (row != null)
+							DisplayField displayField = new DisplayField
 							{
-								DisplayField displayField = new DisplayField
-								{
-									Key = row["key"].ToString(),
-									Value = row["value"].ToString()
-								};
+								Key = row["key"].ToString(),
+								Value = row["value"].ToString()
+							};
 
-								displayFields.Add(displayField);
-							}
+							displayFields.Add(displayField);
 						}
 					}
 				}
+			}
 
-				return displayFields;
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return displayFields;
 		}
 
 		/// <summary>
@@ -196,27 +175,20 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Create, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to add entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}. {LocalizedResource}", this.LoginId, localizedResource);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Insert(this.Catalog, localizedResource);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Insert(this.Catalog, localizedResource);
 		}
 
 		/// <summary>
@@ -231,27 +203,20 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to edit entity \"LocalizedResource\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {LocalizedResource}", localizedResourceId, this.LoginId, localizedResource);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Update(this.Catalog, localizedResource, localizedResourceId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Update(this.Catalog, localizedResource, localizedResourceId);
 		}
 
 		/// <summary>
@@ -265,28 +230,21 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to delete entity \"LocalizedResource\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", localizedResourceId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "DELETE FROM localization.localized_resources WHERE localized_resource_id=@0;";
-				Factory.NonQuery(this.Catalog, sql, localizedResourceId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "DELETE FROM localization.localized_resources WHERE localized_resource_id=@0;";
+			Factory.NonQuery(this.Catalog, sql, localizedResourceId);
 		}
 
 		/// <summary>
@@ -300,28 +258,21 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the first page of the entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM localization.localized_resources ORDER BY localized_resource_id LIMIT 25 OFFSET 0;";
-				return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM localization.localized_resources ORDER BY localized_resource_id LIMIT 25 OFFSET 0;";
+			return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -336,30 +287,23 @@ namespace MixERP.Net.Schemas.Localization.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				long offset = (pageNumber -1) * 25;
-				const string sql = "SELECT * FROM localization.localized_resources ORDER BY localized_resource_id LIMIT 25 OFFSET @0;";
+			long offset = (pageNumber -1) * 25;
+			const string sql = "SELECT * FROM localization.localized_resources ORDER BY localized_resource_id LIMIT 25 OFFSET @0;";
 				
-				return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, offset);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, offset);
 		}
 	}
 }

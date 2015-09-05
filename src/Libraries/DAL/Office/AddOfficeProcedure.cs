@@ -215,27 +215,20 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		public void Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM office.add_office(@0::character varying, @1::character varying, @2::character varying, @3::date, @4::character varying, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::date, @11::date, @12::boolean, @13::boolean, @14::boolean, @15::integer, @16::numeric, @17::integer, @18::date, @19::boolean, @20::character varying, @21::text, @22::character varying, @23::character varying, @24::character varying);";
-				Factory.NonQuery(this.Catalog, query, this.OfficeCode, this.OfficeName, this.NickName, this.RegistrationDate, this.CurrencyCode, this.CurrencySymbol, this.CurrencyName, this.HundredthName, this.FiscalYearCode, this.FiscalYearName, this.StartsFrom, this.EndsOn, this.SalesTaxIsVat, this.HasStateSalesTax, this.HasCountySalesTax, this.QuotationValidDays, this.IncomeTaxRate, this.WeekStartDay, this.TransactionStartDate, this.IsPerpetual, this.InvValuationMethod, this.LogoFile, this.AdminName, this.UserName, this.Password);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"AddOfficeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM office.add_office(@0::character varying, @1::character varying, @2::character varying, @3::date, @4::character varying, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::date, @11::date, @12::boolean, @13::boolean, @14::boolean, @15::integer, @16::numeric, @17::integer, @18::date, @19::boolean, @20::character varying, @21::text, @22::character varying, @23::character varying, @24::character varying);";
+			Factory.NonQuery(this.Catalog, query, this.OfficeCode, this.OfficeName, this.NickName, this.RegistrationDate, this.CurrencyCode, this.CurrencySymbol, this.CurrencyName, this.HundredthName, this.FiscalYearCode, this.FiscalYearName, this.StartsFrom, this.EndsOn, this.SalesTaxIsVat, this.HasStateSalesTax, this.HasCountySalesTax, this.QuotationValidDays, this.IncomeTaxRate, this.WeekStartDay, this.TransactionStartDate, this.IsPerpetual, this.InvValuationMethod, this.LogoFile, this.AdminName, this.UserName, this.Password);
 		} 
 	}
 }

@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
-using MixERP.Net.Schemas.Core.Data;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Core
 {
     /// <summary>
-    ///     Provide a direct HTTP access to perform various tasks such as adding, editing, and removing Accounts.
+    ///     Provides a direct HTTP access to perform various tasks such as adding, editing, and removing Accounts.
     /// </summary>
+    [RoutePrefix("api/v1.5/core/account")]
     public class AccountController : ApiController
     {
         /// <summary>
         ///     The Account data context.
         /// </summary>
-        private readonly Account AccountContext;
+        private readonly MixERP.Net.Schemas.Core.Data.Account AccountContext;
 
         public AccountController()
         {
@@ -26,7 +26,7 @@ namespace MixERP.Net.Api.Core
             this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
             this.Catalog = AppUsers.GetCurrentUserDB();
 
-            this.AccountContext = new Account
+            this.AccountContext = new MixERP.Net.Schemas.Core.Data.Account
             {
                 Catalog = this.Catalog,
                 LoginId = this.LoginId
@@ -43,6 +43,7 @@ namespace MixERP.Net.Api.Core
         /// </summary>
         /// <returns>Returns the count of the accounts.</returns>
         [AcceptVerbs("GET", "HEAD")]
+        [Route("count")]
         public long Count()
         {
             try
@@ -51,12 +52,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -64,29 +63,22 @@ namespace MixERP.Net.Api.Core
         /// <summary>
         ///     Returns an instance of account.
         /// </summary>
-        /// <param name="accountId">Enter an AccountId to search for.</param>
+        /// <param name="accountId">Enter AccountId to search for.</param>
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("api/account/get/{accountId:long}")]
-        public Entities.Core.Account Get(long accountId)
+        [Route("{accountId}")]
+        public MixERP.Net.Entities.Core.Account Get(long accountId)
         {
-            if (accountId <= 0)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-
             try
             {
                 return this.AccountContext.Get(accountId);
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -96,8 +88,8 @@ namespace MixERP.Net.Api.Core
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("api/account")]
-        public IEnumerable<Entities.Core.Account> GetPagedResult()
+        [Route("")]
+        public IEnumerable<MixERP.Net.Entities.Core.Account> GetPagedResult()
         {
             try
             {
@@ -105,12 +97,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -121,8 +111,8 @@ namespace MixERP.Net.Api.Core
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("api/account/page/{pageNumber:long}")]
-        public IEnumerable<Entities.Core.Account> GetPagedResult(long pageNumber)
+        [Route("page/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.Core.Account> GetPagedResult(long pageNumber)
         {
             try
             {
@@ -130,12 +120,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -145,7 +133,7 @@ namespace MixERP.Net.Api.Core
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of accounts.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("api/account/get-display-fields")]
+        [Route("display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -154,12 +142,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -167,9 +153,10 @@ namespace MixERP.Net.Api.Core
         /// <summary>
         ///     Adds your instance of Account class.
         /// </summary>
-        /// <param name="account">Your instance of Account class to add.</param>
+        /// <param name="account">Your instance of accounts class to add.</param>
         [AcceptVerbs("POST")]
-        public void Add(Entities.Core.Account account)
+        [Route("add/{account}")]
+        public void Add(MixERP.Net.Entities.Core.Account account)
         {
             if (account == null)
             {
@@ -182,12 +169,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -198,13 +183,9 @@ namespace MixERP.Net.Api.Core
         /// <param name="account">Your instance of Account class to edit.</param>
         /// <param name="accountId">Enter the value for AccountId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        public void Edit(Entities.Core.Account account, long accountId)
+        [Route("edit/{accountId}/{account}")]
+        public void Edit(long accountId, MixERP.Net.Entities.Core.Account account)
         {
-            if (accountId <= 0)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-
             if (account == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -216,12 +197,10 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
@@ -231,25 +210,19 @@ namespace MixERP.Net.Api.Core
         /// </summary>
         /// <param name="accountId">Enter the value for AccountId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
+        [Route("delete/{accountId}")]
         public void Delete(long accountId)
         {
-            if (accountId <= 0)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-
             try
             {
                 this.AccountContext.Delete(accountId);
             }
             catch (UnauthorizedException)
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
             catch
             {
-                // ReSharper disable once ThrowFromCatchWithNoInnerException
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }

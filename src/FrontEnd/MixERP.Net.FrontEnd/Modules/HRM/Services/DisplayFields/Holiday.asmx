@@ -1,1 +1,0 @@
-<%@ WebService Language="C#" CodeBehind="Holiday.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.Holiday" %>

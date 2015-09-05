@@ -185,27 +185,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public long Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.post_sales(@0::character varying, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::text, @8::boolean, @9::integer, @10::character varying, @11::integer, @12::integer, @13::integer, @14::character varying, @15::integer, @16::boolean, @17::transactions.stock_detail_type[], @18::core.attachment_type[], @19::bigint[]);";
-				return Factory.Scalar<long>(this.Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PaymentTermId, this.PartyCode, this.PriceTypeId, this.SalespersonId, this.ShipperId, this.ShippingAddressCode, this.StoreId, this.IsNonTaxableSales, this.Details, this.Attachments, this.NonGlTranIds);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"PostSalesProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.post_sales(@0::character varying, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::text, @8::boolean, @9::integer, @10::character varying, @11::integer, @12::integer, @13::integer, @14::character varying, @15::integer, @16::boolean, @17::transactions.stock_detail_type[], @18::core.attachment_type[], @19::bigint[]);";
+			return Factory.Scalar<long>(this.Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PaymentTermId, this.PartyCode, this.PriceTypeId, this.SalespersonId, this.ShipperId, this.ShippingAddressCode, this.StoreId, this.IsNonTaxableSales, this.Details, this.Attachments, this.NonGlTranIds);
 		} 
 	}
 }

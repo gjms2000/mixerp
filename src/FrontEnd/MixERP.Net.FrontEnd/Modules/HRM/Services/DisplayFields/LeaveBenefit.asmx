@@ -1,1 +1,0 @@
-<%@ WebService Language="C#" CodeBehind="LeaveBenefit.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.LeaveBenefit" %>

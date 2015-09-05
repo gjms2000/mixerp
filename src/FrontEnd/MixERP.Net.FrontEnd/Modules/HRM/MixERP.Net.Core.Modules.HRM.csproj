@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
-  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -91,29 +87,6 @@
     <Content Include="Payroll\Deduction.ascx" />
     <Content Include="Payroll\Salary.ascx" />
     <Content Include="Payroll\Wages.ascx" />
-    <Content Include="Services\DisplayFields\Contract.asmx" />
-    <Content Include="Services\DisplayFields\Employee.asmx" />
-    <Content Include="Services\DisplayFields\EmployeeExperience.asmx" />
-    <Content Include="Services\DisplayFields\EmployeeIdentificationDetail.asmx" />
-    <Content Include="Services\DisplayFields\EmployeeQualification.asmx" />
-    <Content Include="Services\DisplayFields\EmployeeSocialNetworkDetail.asmx" />
-    <Content Include="Services\DisplayFields\EmployeeType.asmx" />
-    <Content Include="Services\DisplayFields\EmploymentStatus.asmx" />
-    <Content Include="Services\DisplayFields\EmploymentStatusCode.asmx" />
-    <Content Include="Services\DisplayFields\Exit.asmx" />
-    <Content Include="Services\DisplayFields\ExitType.asmx" />
-    <Content Include="Services\DisplayFields\JobTitle.asmx" />
-    <Content Include="Services\DisplayFields\LeaveApplication.asmx" />
-    <Content Include="Services\DisplayFields\LeaveBenefit.asmx" />
-    <Content Include="Services\DisplayFields\LeaveType.asmx" />
-    <Content Include="Services\DisplayFields\OfficeHour.asmx" />
-    <Content Include="Services\DisplayFields\PayGrade.asmx" />
-    <Content Include="Services\DisplayFields\Resignation.asmx" />
-    <Content Include="Services\DisplayFields\Salary.asmx" />
-    <Content Include="Services\DisplayFields\SalaryFrequency.asmx" />
-    <Content Include="Services\DisplayFields\SalaryType.asmx" />
-    <Content Include="Services\DisplayFields\Shift.asmx" />
-    <Content Include="Services\DisplayFields\Termination.asmx" />
     <Content Include="Setup\EducationLevels.ascx" />
     <Content Include="Setup\EmployeeTypes.ascx" />
     <Content Include="Setup\EmploymentStatuses.ascx" />
@@ -174,98 +147,6 @@
       <DependentUpon>Wages.ascx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DisplayFields\Contract.asmx.cs">
-      <DependentUpon>Contract.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Employee.asmx.cs">
-      <DependentUpon>Employee.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmployeeExperience.asmx.cs">
-      <DependentUpon>EmployeeExperience.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmployeeIdentificationDetail.asmx.cs">
-      <DependentUpon>EmployeeIdentificationDetail.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmployeeQualification.asmx.cs">
-      <DependentUpon>EmployeeQualification.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmployeeSocialNetworkDetail.asmx.cs">
-      <DependentUpon>EmployeeSocialNetworkDetail.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmployeeType.asmx.cs">
-      <DependentUpon>EmployeeType.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmploymentStatus.asmx.cs">
-      <DependentUpon>EmploymentStatus.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\EmploymentStatusCode.asmx.cs">
-      <DependentUpon>EmploymentStatusCode.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Exit.asmx.cs">
-      <DependentUpon>Exit.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\ExitType.asmx.cs">
-      <DependentUpon>ExitType.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\JobTitle.asmx.cs">
-      <DependentUpon>JobTitle.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\LeaveApplication.asmx.cs">
-      <DependentUpon>LeaveApplication.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\LeaveBenefit.asmx.cs">
-      <DependentUpon>LeaveBenefit.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\LeaveType.asmx.cs">
-      <DependentUpon>LeaveType.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\OfficeHour.asmx.cs">
-      <DependentUpon>OfficeHour.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\PayGrade.asmx.cs">
-      <DependentUpon>PayGrade.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Resignation.asmx.cs">
-      <DependentUpon>Resignation.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Salary.asmx.cs">
-      <DependentUpon>Salary.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\SalaryFrequency.asmx.cs">
-      <DependentUpon>SalaryFrequency.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\SalaryType.asmx.cs">
-      <DependentUpon>SalaryType.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Shift.asmx.cs">
-      <DependentUpon>Shift.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Services\DisplayFields\Termination.asmx.cs">
-      <DependentUpon>Termination.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Setup\EducationLevels.ascx.cs">
       <DependentUpon>EducationLevels.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

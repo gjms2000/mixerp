@@ -89,27 +89,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public bool Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.perform_eod_operation(@0::integer, @1::bigint, @2::integer, @3::date);";
-				return Factory.Scalar<bool>(this.Catalog, query, this.UserId, this.LoginIdParameter, this.OfficeId, this.ValueDate);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"PerformEodOperationProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.perform_eod_operation(@0::integer, @1::bigint, @2::integer, @3::date);";
+			return Factory.Scalar<bool>(this.Catalog, query, this.UserId, this.LoginIdParameter, this.OfficeId, this.ValueDate);
 		} 
 	}
 }

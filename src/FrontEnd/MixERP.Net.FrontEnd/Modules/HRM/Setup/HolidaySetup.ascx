@@ -8,6 +8,16 @@
     var excludedColumns = ["audit_user_id", "audit_ts"];
 
     var live = "Comment";
+
+    var keys = [
+        {
+            property: "OfficeId",
+            url: '/api/{v}/office/office/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
 </script>
 
 

@@ -63,28 +63,21 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return 0;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"DefaultEntityAccess\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT COUNT(*) FROM policy.default_entity_access;";
-				return Factory.Scalar<long>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT COUNT(*) FROM policy.default_entity_access;";
+			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -99,28 +92,21 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the get entity \"DefaultEntityAccess\" filtered by \"DefaultEntityAccessId\" with value {DefaultEntityAccessId} was denied to the user with Login ID {LoginId}", defaultEntityAccessId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM policy.default_entity_access WHERE default_entity_access_id=@0;";
-				return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql, defaultEntityAccessId).FirstOrDefault();
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM policy.default_entity_access WHERE default_entity_access_id=@0;";
+			return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql, defaultEntityAccessId).FirstOrDefault();
 		}
 
         /// <summary>
@@ -136,53 +122,46 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return displayFields;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get display field for entity \"DefaultEntityAccess\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT default_entity_access_id AS key, entity_name as value FROM policy.default_entity_access;";
-				using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			const string sql = "SELECT default_entity_access_id AS key, entity_name as value FROM policy.default_entity_access;";
+			using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			{
+				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
 				{
-					using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+					if (table?.Rows == null || table.Rows.Count == 0)
 					{
-						if (table?.Rows == null || table.Rows.Count == 0)
-						{
-							return displayFields;
-						}
+						return displayFields;
+					}
 
-						foreach (DataRow row in table.Rows)
+					foreach (DataRow row in table.Rows)
+					{
+						if (row != null)
 						{
-							if (row != null)
+							DisplayField displayField = new DisplayField
 							{
-								DisplayField displayField = new DisplayField
-								{
-									Key = row["key"].ToString(),
-									Value = row["value"].ToString()
-								};
+								Key = row["key"].ToString(),
+								Value = row["value"].ToString()
+							};
 
-								displayFields.Add(displayField);
-							}
+							displayFields.Add(displayField);
 						}
 					}
 				}
+			}
 
-				return displayFields;
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return displayFields;
 		}
 
 		/// <summary>
@@ -196,27 +175,20 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Create, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to add entity \"DefaultEntityAccess\" was denied to the user with Login ID {LoginId}. {DefaultEntityAccess}", this.LoginId, defaultEntityAccess);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Insert(this.Catalog, defaultEntityAccess);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Insert(this.Catalog, defaultEntityAccess);
 		}
 
 		/// <summary>
@@ -231,27 +203,20 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to edit entity \"DefaultEntityAccess\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {DefaultEntityAccess}", defaultEntityAccessId, this.LoginId, defaultEntityAccess);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Update(this.Catalog, defaultEntityAccess, defaultEntityAccessId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Update(this.Catalog, defaultEntityAccess, defaultEntityAccessId);
 		}
 
 		/// <summary>
@@ -265,28 +230,21 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to delete entity \"DefaultEntityAccess\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", defaultEntityAccessId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "DELETE FROM policy.default_entity_access WHERE default_entity_access_id=@0;";
-				Factory.NonQuery(this.Catalog, sql, defaultEntityAccessId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "DELETE FROM policy.default_entity_access WHERE default_entity_access_id=@0;";
+			Factory.NonQuery(this.Catalog, sql, defaultEntityAccessId);
 		}
 
 		/// <summary>
@@ -300,28 +258,21 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the first page of the entity \"DefaultEntityAccess\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM policy.default_entity_access ORDER BY default_entity_access_id LIMIT 25 OFFSET 0;";
-				return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM policy.default_entity_access ORDER BY default_entity_access_id LIMIT 25 OFFSET 0;";
+			return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -336,30 +287,23 @@ namespace MixERP.Net.Schemas.Policy.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the entity \"DefaultEntityAccess\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				long offset = (pageNumber -1) * 25;
-				const string sql = "SELECT * FROM policy.default_entity_access ORDER BY default_entity_access_id LIMIT 25 OFFSET @0;";
+			long offset = (pageNumber -1) * 25;
+			const string sql = "SELECT * FROM policy.default_entity_access ORDER BY default_entity_access_id LIMIT 25 OFFSET @0;";
 				
-				return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql, offset);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return Factory.Get<MixERP.Net.Entities.Policy.DefaultEntityAccess>(this.Catalog, sql, offset);
 		}
 	}
 }

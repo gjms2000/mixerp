@@ -380,7 +380,6 @@ function updateTax() {
         return 0;
     };
 
-
     addLoader(productGridView.parent());
     var ajaxGetSalesTax = getSalesTax(tranBook, storeId, partyCode, shippingAddressCode, priceTypeId, itemCode, price, quantity, discount, shippingCharge, salesTaxId);
 

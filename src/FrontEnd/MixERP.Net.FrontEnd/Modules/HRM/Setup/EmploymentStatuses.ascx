@@ -13,7 +13,7 @@
     var keys = [
         {
             property: "DefaultEmploymentStatusCodeId",
-            url: '/Modules/HRM/Services/DisplayFields/EmploymentStatusCode.asmx/GetDisplayField',
+            url: '/api/{v}/hrm/employment-status-code/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

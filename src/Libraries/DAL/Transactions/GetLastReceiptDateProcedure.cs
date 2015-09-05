@@ -77,27 +77,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public DateTime Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_last_receipt_date(@0::integer, @1::bigint);";
-				return Factory.Scalar<DateTime>(this.Catalog, query, this.OfficeId, this.PartyId);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetLastReceiptDateProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_last_receipt_date(@0::integer, @1::bigint);";
+			return Factory.Scalar<DateTime>(this.Catalog, query, this.OfficeId, this.PartyId);
 		} 
 	}
 }

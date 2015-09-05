@@ -101,27 +101,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public long Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.verify_transaction(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::smallint, @5::character varying);";
-				return Factory.Scalar<long>(this.Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginIdParameter, this.VerificationStatusId, this.Reason);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"VerifyTransactionProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.verify_transaction(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::smallint, @5::character varying);";
+			return Factory.Scalar<long>(this.Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginIdParameter, this.VerificationStatusId, this.Reason);
 		} 
 	}
 }

@@ -6,6 +6,45 @@
     var allowDelete = true;
     var allowEdit = true;
     var excludedColumns = ["audit_user_id", "audit_ts"];
+    var keys = [
+        {
+            property: "EmployeeId",
+            url: '/api/{v}/hrm/employee/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "SalaryTypeId",
+            url: '/api/{v}/hrm/salary-type/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "PayGradeId",
+            url: '/api/{v}/hrm/pay-grade/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "SalaryFrequencyId",
+            url: '/api/{v}/hrm/salary-frequency/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrencyCode",
+            url: '/api/{v}/core/currency/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+
+
 </script>
 
 

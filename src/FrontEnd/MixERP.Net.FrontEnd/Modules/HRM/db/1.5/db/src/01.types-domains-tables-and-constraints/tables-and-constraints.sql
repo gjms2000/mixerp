@@ -287,7 +287,9 @@ CREATE TABLE hrm.holidays
 (
     holiday_id                              BIGSERIAL NOT NULL PRIMARY KEY,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
+    holiday_name                            national character varying(128) NOT NULL,
     occurs_on                               date,
+    ends_on                                 date,
     comment                                 text,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 

@@ -77,27 +77,20 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		public bool Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM office.is_parent_office(@0::integer_strict, @1::integer_strict);";
-				return Factory.Scalar<bool>(this.Catalog, query, this.Parent, this.Child);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"IsParentOfficeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM office.is_parent_office(@0::integer_strict, @1::integer_strict);";
+			return Factory.Scalar<bool>(this.Catalog, query, this.Parent, this.Child);
 		} 
 	}
 }

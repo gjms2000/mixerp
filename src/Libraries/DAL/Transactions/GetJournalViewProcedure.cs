@@ -149,27 +149,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetJournalViewResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_journal_view(@0::integer, @1::integer, @2::date, @3::date, @4::bigint, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::character varying, @11::character varying, @12::character varying, @13::character varying);";
-				return Factory.Get<DbGetJournalViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.From, this.To, this.TranId, this.TranCode, this.Book, this.ReferenceNumber, this.StatementReference, this.PostedBy, this.Office, this.Status, this.VerifiedBy, this.Reason);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetJournalViewProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_journal_view(@0::integer, @1::integer, @2::date, @3::date, @4::bigint, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::character varying, @11::character varying, @12::character varying, @13::character varying);";
+			return Factory.Get<DbGetJournalViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.From, this.To, this.TranId, this.TranCode, this.Book, this.ReferenceNumber, this.StatementReference, this.PostedBy, this.Office, this.Status, this.VerifiedBy, this.Reason);
 		} 
 	}
 }

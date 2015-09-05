@@ -131,27 +131,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetSalesTaxResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_sales_tax(@0::character varying, @1::integer, @2::character varying, @3::character varying, @4::integer, @5::character varying, @6::money_strict2, @7::integer_strict2, @8::money_strict2, @9::money_strict2, @10::integer);";
-				return Factory.Get<DbGetSalesTaxResult>(this.Catalog, query, this.TranBook, this.StoreId, this.PartyCode, this.ShippingAddressCode, this.PriceTypeId, this.ItemCode, this.Price, this.Quantity, this.Discount, this.ShippingCharge, this.SalesTaxId);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetSalesTaxProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_sales_tax(@0::character varying, @1::integer, @2::character varying, @3::character varying, @4::integer, @5::character varying, @6::money_strict2, @7::integer_strict2, @8::money_strict2, @9::money_strict2, @10::integer);";
+			return Factory.Get<DbGetSalesTaxResult>(this.Catalog, query, this.TranBook, this.StoreId, this.PartyCode, this.ShippingAddressCode, this.PriceTypeId, this.ItemCode, this.Price, this.Quantity, this.Discount, this.ShippingCharge, this.SalesTaxId);
 		} 
 	}
 }

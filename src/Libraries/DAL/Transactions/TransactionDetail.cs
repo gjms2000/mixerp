@@ -63,28 +63,21 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return 0;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"TransactionDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT COUNT(*) FROM transactions.transaction_details;";
-				return Factory.Scalar<long>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT COUNT(*) FROM transactions.transaction_details;";
+			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -99,28 +92,21 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the get entity \"TransactionDetail\" filtered by \"TransactionDetailId\" with value {TransactionDetailId} was denied to the user with Login ID {LoginId}", transactionDetailId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM transactions.transaction_details WHERE transaction_detail_id=@0;";
-				return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql, transactionDetailId).FirstOrDefault();
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM transactions.transaction_details WHERE transaction_detail_id=@0;";
+			return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql, transactionDetailId).FirstOrDefault();
 		}
 
         /// <summary>
@@ -136,53 +122,46 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return displayFields;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get display field for entity \"TransactionDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT transaction_detail_id AS key, transaction_detail_id as value FROM transactions.transaction_details;";
-				using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			const string sql = "SELECT transaction_detail_id AS key, transaction_detail_id as value FROM transactions.transaction_details;";
+			using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			{
+				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
 				{
-					using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+					if (table?.Rows == null || table.Rows.Count == 0)
 					{
-						if (table?.Rows == null || table.Rows.Count == 0)
-						{
-							return displayFields;
-						}
+						return displayFields;
+					}
 
-						foreach (DataRow row in table.Rows)
+					foreach (DataRow row in table.Rows)
+					{
+						if (row != null)
 						{
-							if (row != null)
+							DisplayField displayField = new DisplayField
 							{
-								DisplayField displayField = new DisplayField
-								{
-									Key = row["key"].ToString(),
-									Value = row["value"].ToString()
-								};
+								Key = row["key"].ToString(),
+								Value = row["value"].ToString()
+							};
 
-								displayFields.Add(displayField);
-							}
+							displayFields.Add(displayField);
 						}
 					}
 				}
+			}
 
-				return displayFields;
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return displayFields;
 		}
 
 		/// <summary>
@@ -196,27 +175,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Create, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to add entity \"TransactionDetail\" was denied to the user with Login ID {LoginId}. {TransactionDetail}", this.LoginId, transactionDetail);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Insert(this.Catalog, transactionDetail);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Insert(this.Catalog, transactionDetail);
 		}
 
 		/// <summary>
@@ -231,27 +203,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to edit entity \"TransactionDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {TransactionDetail}", transactionDetailId, this.LoginId, transactionDetail);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				Factory.Update(this.Catalog, transactionDetail, transactionDetailId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			Factory.Update(this.Catalog, transactionDetail, transactionDetailId);
 		}
 
 		/// <summary>
@@ -265,28 +230,21 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to delete entity \"TransactionDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", transactionDetailId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "DELETE FROM transactions.transaction_details WHERE transaction_detail_id=@0;";
-				Factory.NonQuery(this.Catalog, sql, transactionDetailId);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "DELETE FROM transactions.transaction_details WHERE transaction_detail_id=@0;";
+			Factory.NonQuery(this.Catalog, sql, transactionDetailId);
 		}
 
 		/// <summary>
@@ -300,28 +258,21 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the first page of the entity \"TransactionDetail\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				const string sql = "SELECT * FROM transactions.transaction_details ORDER BY transaction_detail_id LIMIT 25 OFFSET 0;";
-				return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			const string sql = "SELECT * FROM transactions.transaction_details ORDER BY transaction_detail_id LIMIT 25 OFFSET 0;";
+			return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql);
 		}
 
 		/// <summary>
@@ -336,30 +287,23 @@ namespace MixERP.Net.Schemas.Transactions.Data
 				return null;
 			}
 
-            try
+            if (!this.SkipValidation)
             {
-                if (!this.SkipValidation)
+                if (!this.Validated)
                 {
-                    if (!this.Validated)
-                    {
-                        this.Validate(AccessTypeEnum.Read, this.LoginId, false);
-                    }
-                    if (!this.HasAccess)
-                    {
-                        throw new UnauthorizedException("Access is denied.");
-                    }
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
                 }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the entity \"TransactionDetail\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
 	
-				long offset = (pageNumber -1) * 25;
-				const string sql = "SELECT * FROM transactions.transaction_details ORDER BY transaction_detail_id LIMIT 25 OFFSET @0;";
+			long offset = (pageNumber -1) * 25;
+			const string sql = "SELECT * FROM transactions.transaction_details ORDER BY transaction_detail_id LIMIT 25 OFFSET @0;";
 				
-				return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql, offset);
-            }
-            catch (UnauthorizedException ex)
-            {
-                Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-            }
+			return Factory.Get<MixERP.Net.Entities.Transactions.TransactionDetail>(this.Catalog, sql, offset);
 		}
 	}
 }

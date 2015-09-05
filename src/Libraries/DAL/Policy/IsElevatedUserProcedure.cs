@@ -71,27 +71,20 @@ namespace MixERP.Net.Schemas.Policy.Data
 		/// </summary>
 		public bool Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM policy.is_elevated_user(@0::integer);";
-				return Factory.Scalar<bool>(this.Catalog, query, this.UserId);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"IsElevatedUserProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM policy.is_elevated_user(@0::integer);";
+			return Factory.Scalar<bool>(this.Catalog, query, this.UserId);
 		} 
 	}
 }

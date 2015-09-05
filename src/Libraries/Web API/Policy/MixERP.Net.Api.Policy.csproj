@@ -36,8 +36,24 @@
     <AssemblyOriginatorKeyFile>Mix Open Foundation.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,10 +62,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessTypeController.cs" />
+    <Compile Include="ApiAccessPolicyController.cs" />
+    <Compile Include="AutoVerificationPolicyController.cs" />
+    <Compile Include="DefaultEntityAccessController.cs" />
+    <Compile Include="EntityAccessController.cs" />
+    <Compile Include="HttpActionController.cs" />
+    <Compile Include="LockOutController.cs" />
+    <Compile Include="MenuAccessController.cs" />
+    <Compile Include="MenuPolicyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorePolicyController.cs" />
+    <Compile Include="StorePolicyDetailController.cs" />
+    <Compile Include="VoucherVerificationPolicyController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DAL\Policy\MixERP.Net.Schemas.Policy.Data.csproj">
+      <Project>{383bb2aa-3bde-48cf-9941-1615257ba0c8}</Project>
+      <Name>MixERP.Net.Schemas.Policy.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Entities\Policy\MixERP.Net.Entities.Policy.csproj">
+      <Project>{ee57127a-29ab-4727-93fb-a854d860bcce}</Project>
+      <Name>MixERP.Net.Entities.Policy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logic\MixER.Net.StateServer\MixERP.Net.ApplicationState.csproj">
+      <Project>{61AB8B69-2097-4595-97B7-4A930A70163D}</Project>
+      <Name>MixERP.Net.ApplicationState</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
+      <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
+      <Name>MixERP.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logic\PetaPoco\PetaPoco.csproj">
+      <Project>{969D7960-52E2-40FC-91E5-1393B71E23B0}</Project>
+      <Name>PetaPoco</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

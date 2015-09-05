@@ -113,27 +113,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetTrialBalanceResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_trial_balance(@0::date, @1::date, @2::integer, @3::integer, @4::boolean, @5::numeric, @6::boolean, @7::boolean);";
-				return Factory.Get<DbGetTrialBalanceResult>(this.Catalog, query, this.DateFrom, this.DateTo, this.UserId, this.OfficeId, this.Compact, this.Factor, this.ChangeSideWhenNegative, this.IncludeZeroBalanceAccounts);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetTrialBalanceProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_trial_balance(@0::date, @1::date, @2::integer, @3::integer, @4::boolean, @5::numeric, @6::boolean, @7::boolean);";
+			return Factory.Get<DbGetTrialBalanceResult>(this.Catalog, query, this.DateFrom, this.DateTo, this.UserId, this.OfficeId, this.Compact, this.Factor, this.ChangeSideWhenNegative, this.IncludeZeroBalanceAccounts);
 		} 
 	}
 }

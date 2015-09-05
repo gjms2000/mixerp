@@ -53929,12 +53929,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
 
 
     if (ajaxData.length === 0) {
-        appendItem(targetControl, " ", Resources.Titles.None());
+        appendItem(targetControl, "", Resources.Titles.None());
         return;
     };
 
     if (!skipSelect) {
-        appendItem(targetControl, " ", Resources.Titles.Select());
+        appendItem(targetControl, "", Resources.Titles.Select());
     }
    
     if (!dataValueField) {
@@ -53969,6 +53969,7 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
                 selected = true;
             };
         };
+
         appendItem(targetControl, value, text, selected);
     });
 };
@@ -54012,6 +54013,32 @@ var getAjax = function (url, data) {
     return ajax;
 };
 
+var getAjaxRequest = function (url, data, verb) {
+    var isWebApiRequest = url.substring(5, 0) === "/api/";
+
+    if (!verb) {
+        verb = "GET";
+    };
+
+    if (isWebApiRequest) {
+        url = url.replace("{v}", "v" + apiVersion);
+    };
+
+    var ajax = $.ajax({
+        type: verb,
+        url: url,
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    });
+
+    ajax.fail(function (xhr) {
+        logAjaxErrorMessage(xhr);
+    });
+
+    return ajax;
+};
+
 var ajaxUpdateVal = function (url, data, targetControls) {
     var ajax;
 
@@ -54038,7 +54065,8 @@ var ajaxUpdateVal = function (url, data, targetControls) {
 };
 
 var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, dataValueField, dataTextField, isArray) {
-   
+    var isWebApiRequest = url.substring(5, 0) === "/api/";
+
     if (!targetControl) {
         return;
     };
@@ -54049,20 +54077,27 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
 
     var ajax;
 
-    if (data) {
-        ajax = new getAjax(url, data);
+    if (isWebApiRequest) {
+        ajax = new getAjaxRequest(url, data);
     } else {
-        ajax = new getAjax(url);
+        ajax = new getAjax(url, data);
     };
 
+
     ajax.success(function (msg) {
+        var result = msg.d;
+
+        if (isWebApiRequest) {
+            result = msg;
+        };
+
         if (targetControl.length === 1) {
-            targetControl.bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField, isArray);
+            targetControl.bindAjaxData(result, false, selectedValue, dataValueField, dataTextField, isArray);
         };
 
         if (targetControl.length > 1) {
             targetControl.each(function () {
-                $(this).bindAjaxData(msg.d, false, selectedValue, dataValueField, dataTextField, isArray);
+                $(this).bindAjaxData(result, false, selectedValue, dataValueField, dataTextField, isArray);
             });
         };
 

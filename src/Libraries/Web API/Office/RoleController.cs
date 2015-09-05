@@ -1,0 +1,230 @@
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using MixERP.Net.ApplicationState.Cache;
+using MixERP.Net.Common.Extensions;
+using PetaPoco;
+
+namespace MixERP.Net.Api.Office
+{
+    /// <summary>
+    ///     Provides a direct HTTP access to perform various tasks such as adding, editing, and removing Roles.
+    /// </summary>
+    [RoutePrefix("api/v1.5/office/role")]
+    public class RoleController : ApiController
+    {
+        /// <summary>
+        ///     The Role data context.
+        /// </summary>
+        private readonly MixERP.Net.Schemas.Office.Data.Role RoleContext;
+
+        public RoleController()
+        {
+            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this.Catalog = AppUsers.GetCurrentUserDB();
+
+            this.RoleContext = new MixERP.Net.Schemas.Office.Data.Role
+            {
+                Catalog = this.Catalog,
+                LoginId = this.LoginId
+            };
+        }
+
+        public long LoginId { get; }
+        public int UserId { get; private set; }
+        public int OfficeId { get; private set; }
+        public string Catalog { get; }
+
+        /// <summary>
+        ///     Counts the number of roles.
+        /// </summary>
+        /// <returns>Returns the count of the roles.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count")]
+        public long Count()
+        {
+            try
+            {
+                return this.RoleContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns an instance of role.
+        /// </summary>
+        /// <param name="roleId">Enter RoleId to search for.</param>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("{roleId}")]
+        public MixERP.Net.Entities.Office.Role Get(int roleId)
+        {
+            try
+            {
+                return this.RoleContext.Get(roleId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a paginated collection containing 25 roles on each page, sorted by the property RoleId.
+        /// </summary>
+        /// <returns>Returns the first page from the collection.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("")]
+        public IEnumerable<MixERP.Net.Entities.Office.Role> GetPagedResult()
+        {
+            try
+            {
+                return this.RoleContext.GetPagedResult();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a paginated collection containing 25 roles on each page, sorted by the property RoleId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <returns>Returns the requested page from the collection.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("page/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.Office.Role> GetPagedResult(long pageNumber)
+        {
+            try
+            {
+                return this.RoleContext.GetPagedResult(pageNumber);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Displayfields is a lightweight key/value collection of roles.
+        /// </summary>
+        /// <returns>Returns an enumerable key/value collection of roles.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("display-fields")]
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            try
+            {
+                return this.RoleContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Account class.
+        /// </summary>
+        /// <param name="role">Your instance of roles class to add.</param>
+        [AcceptVerbs("POST")]
+        [Route("add/{role}")]
+        public void Add(MixERP.Net.Entities.Office.Role role)
+        {
+            if (role == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RoleContext.Add(role);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Edits existing record with your instance of Account class.
+        /// </summary>
+        /// <param name="role">Your instance of Account class to edit.</param>
+        /// <param name="roleId">Enter the value for RoleId in order to find and edit the existing record.</param>
+        [AcceptVerbs("PUT")]
+        [Route("edit/{roleId}/{role}")]
+        public void Edit(int roleId, MixERP.Net.Entities.Office.Role role)
+        {
+            if (role == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RoleContext.Update(role, roleId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Deletes an existing instance of Account class via RoleId.
+        /// </summary>
+        /// <param name="roleId">Enter the value for RoleId in order to find and delete the existing record.</param>
+        [AcceptVerbs("DELETE")]
+        [Route("delete/{roleId}")]
+        public void Delete(int roleId)
+        {
+            try
+            {
+                this.RoleContext.Delete(roleId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+    }
+}

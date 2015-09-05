@@ -137,27 +137,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public long Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.post_purchase_return(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::integer, @8::character varying, @9::text, @10::transactions.stock_detail_type[], @11::core.attachment_type[]);";
-				return Factory.Scalar<long>(this.Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.StoreId, this.PartyCode, this.PriceTypeId, this.ReferenceNumber, this.StatementReference, this.Details, this.Attachments);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"PostPurchaseReturnProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.post_purchase_return(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::integer, @8::character varying, @9::text, @10::transactions.stock_detail_type[], @11::core.attachment_type[]);";
+			return Factory.Scalar<long>(this.Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.StoreId, this.PartyCode, this.PriceTypeId, this.ReferenceNumber, this.StatementReference, this.Details, this.Attachments);
 		} 
 	}
 }

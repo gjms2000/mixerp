@@ -71,27 +71,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetPlAppropriationDataResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_pl_appropriation_data(@0::integer);";
-				return Factory.Get<DbGetPlAppropriationDataResult>(this.Catalog, query, this.OfficeId);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetPlAppropriationDataProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_pl_appropriation_data(@0::integer);";
+			return Factory.Get<DbGetPlAppropriationDataResult>(this.Catalog, query, this.OfficeId);
 		} 
 	}
 }

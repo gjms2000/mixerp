@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,6 +43,9 @@
     <Reference Include="MixERP.Net.Entities">
       <HintPath>..\..\bin\MixERP.Net.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="MixERP.Net.Framework">
+      <HintPath>..\..\bin\MixERP.Net.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\HRM\packages\Npgsql.2.2.3\lib\net45\Mono.Security.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +56,14 @@
     </Reference>
     <Reference Include="PetaPoco">
       <HintPath>..\..\bin\PetaPoco.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\HRM\packages\Serilog.1.5.7\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\HRM\packages\Serilog.1.5.7\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract.cs" />
-    <Compile Include="DisplayField.cs" />
+    <Compile Include="EducationLevel.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeExperience.cs" />
     <Compile Include="EmployeeIdentificationDetail.cs" />
@@ -76,6 +87,7 @@
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />
     <Compile Include="ExitType.cs" />
+    <Compile Include="Holiday.cs" />
     <Compile Include="JobTitle.cs" />
     <Compile Include="LeaveApplication.cs" />
     <Compile Include="LeaveBenefit.cs" />

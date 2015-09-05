@@ -1,1 +1,0 @@
-<%@ WebService Language="C#" CodeBehind="EducationLevel.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.EducationLevel" %>

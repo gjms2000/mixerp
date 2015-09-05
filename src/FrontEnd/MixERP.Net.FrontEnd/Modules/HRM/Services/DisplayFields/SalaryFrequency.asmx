@@ -1,1 +1,0 @@
-<%@ WebService Language="C#" CodeBehind="SalaryFrequency.asmx.cs" Class="MixERP.Net.Core.Modules.HRM.Services.DisplayFields.SalaryFrequency" %>

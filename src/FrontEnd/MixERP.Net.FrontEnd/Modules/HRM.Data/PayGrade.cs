@@ -20,45 +20,125 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
+using Serilog;
 
 namespace MixERP.Net.Core.Modules.HRM.Data
 {
-    public class PayGrade
+    /// <summary>
+    /// Provides simplified data access features to perform SCRUD operation on the database table "hrm.pay_grades".
+    /// </summary>
+    public class PayGrade : DbAccess
     {
+        /// <summary>
+        /// The schema of this table. Returns literal "hrm".
+        /// </summary>
+	    public override string ObjectNamespace => "hrm";
+
+        /// <summary>
+        /// The schema unqualified name of this table. Returns literal "pay_grades".
+        /// </summary>
+	    public override string ObjectName => "pay_grades";
+
+        /// <summary>
+        /// Login id of application user accessing this table.
+        /// </summary>
+		public long LoginId { get; set; }
+
+        /// <summary>
+        /// The name of the database on which queries are being executed to.
+        /// </summary>
+        public string Catalog { get; set; }
+
 		/// <summary>
 		/// Performs SQL count on the table "hrm.pay_grades".
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <returns>Returns the number of rows of the table "hrm.pay_grades".</returns>
-		public long Count(string catalog)
+		public long Count()
 		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return 0;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"PayGrade\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			const string sql = "SELECT COUNT(*) FROM hrm.pay_grades;";
-			return Factory.Scalar<long>(catalog, sql);
+			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
 		/// <summary>
 		/// Executes a select query on the table "hrm.pay_grades" with a where filter on the column "pay_grade_id" to return a single instance of the "PayGrade" class. 
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="payGradeId">The column "pay_grade_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "PayGrade" class mapped to the database row.</returns>
-		public MixERP.Net.Entities.HRM.PayGrade Get(string catalog, int payGradeId)
+		public MixERP.Net.Entities.HRM.PayGrade Get(int payGradeId)
 		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the get entity \"PayGrade\" filtered by \"PayGradeId\" with value {PayGradeId} was denied to the user with Login ID {LoginId}", payGradeId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			const string sql = "SELECT * FROM hrm.pay_grades WHERE pay_grade_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(catalog, sql, payGradeId).FirstOrDefault();
+			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(this.Catalog, sql, payGradeId).FirstOrDefault();
 		}
 
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
-		public static IEnumerable<DisplayField> GetDisplayFields(string catalog)
+        /// <summary>
+        /// Displayfields provide a minimal name/value context for data binding the row collection of hrm.pay_grades.
+        /// </summary>
+        /// <returns>Returns an enumerable name and value collection for the table hrm.pay_grades</returns>
+		public IEnumerable<DisplayField> GetDisplayFields()
 		{
 			List<DisplayField> displayFields = new List<DisplayField>();
 
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return displayFields;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get display field for entity \"PayGrade\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			const string sql = "SELECT pay_grade_id AS key, pay_grade_code || ' (' || pay_grade_name || ')' as value FROM hrm.pay_grades;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
-				using (DataTable table = DbOperation.GetDataTable(catalog, command))
+				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
 				{
 					if (table?.Rows == null || table.Rows.Count == 0)
 					{
@@ -69,11 +149,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 					{
 						if (row != null)
 						{
-						    DisplayField displayField = new DisplayField
-						    {
-						        Key = row["key"].ToString(),
-						        Value = row["value"].ToString()
-						    };
+							DisplayField displayField = new DisplayField
+							{
+								Key = row["key"].ToString(),
+								Value = row["value"].ToString()
+							};
 
 							displayFields.Add(displayField);
 						}
@@ -87,58 +167,143 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		/// <summary>
 		/// Inserts the instance of PayGrade class on the database table "hrm.pay_grades".
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="payGrade">The instance of "PayGrade" class to insert.</param>
-		public void Add(string catalog, MixERP.Net.Entities.HRM.PayGrade payGrade)
+		public void Add(MixERP.Net.Entities.HRM.PayGrade payGrade)
 		{
-			Factory.Insert(catalog, payGrade);
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to add entity \"PayGrade\" was denied to the user with Login ID {LoginId}. {PayGrade}", this.LoginId, payGrade);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			Factory.Insert(this.Catalog, payGrade);
 		}
 
 		/// <summary>
 		/// Updates the row of the table "hrm.pay_grades" with an instance of "PayGrade" class against the primary key value.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="payGrade">The instance of "PayGrade" class to update.</param>
 		/// <param name="payGradeId">The value of the column "pay_grade_id" which will be updated.</param>
-		public void Update(string catalog, MixERP.Net.Entities.HRM.PayGrade payGrade, int payGradeId)
+		public void Update(MixERP.Net.Entities.HRM.PayGrade payGrade, int payGradeId)
 		{
-			Factory.Update(catalog, payGrade, payGradeId);
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to edit entity \"PayGrade\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {PayGrade}", payGradeId, this.LoginId, payGrade);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			Factory.Update(this.Catalog, payGrade, payGradeId);
 		}
 
 		/// <summary>
 		/// Deletes the row of the table "hrm.pay_grades" against the primary key value.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="payGradeId">The value of the column "pay_grade_id" which will be deleted.</param>
-		public void Delete(string catalog, int payGradeId)
+		public void Delete(int payGradeId)
 		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to delete entity \"PayGrade\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", payGradeId, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			const string sql = "DELETE FROM hrm.pay_grades WHERE pay_grade_id=@0;";
-			Factory.NonQuery(catalog, sql, payGradeId);
+			Factory.NonQuery(this.Catalog, sql, payGradeId);
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "hrm.pay_grades" producing a paged result of 10.
+		/// Performs a select statement on table "hrm.pay_grades" producing a paged result of 25.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <returns>Returns the first page of collection of "PayGrade" class.</returns>
-		public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult(string catalog)
+		public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult()
 		{
-			const string sql = "SELECT * FROM hrm.pay_grades ORDER BY pay_grade_id LIMIT 10 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(catalog, sql);
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the first page of the entity \"PayGrade\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			const string sql = "SELECT * FROM hrm.pay_grades ORDER BY pay_grade_id LIMIT 25 OFFSET 0;";
+			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(this.Catalog, sql);
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "hrm.pay_grades" producing a paged result of 10.
+		/// Performs a select statement on table "hrm.pay_grades" producing a paged result of 25.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "PayGrade" class.</returns>
-		public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult(string catalog, long pageNumber)
+		public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult(long pageNumber)
 		{
-			long offset = (pageNumber -1) * 10;
-			const string sql = "SELECT * FROM hrm.pay_grades ORDER BY pay_grade_id LIMIT 10 OFFSET @0;";
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the entity \"PayGrade\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			long offset = (pageNumber -1) * 25;
+			const string sql = "SELECT * FROM hrm.pay_grades ORDER BY pay_grade_id LIMIT 25 OFFSET @0;";
 				
-			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(catalog, sql, offset);
+			return Factory.Get<MixERP.Net.Entities.HRM.PayGrade>(this.Catalog, sql, offset);
 		}
 	}
 }

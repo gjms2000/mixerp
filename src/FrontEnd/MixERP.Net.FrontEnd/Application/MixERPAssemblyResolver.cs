@@ -11,13 +11,21 @@ namespace MixERP.Net.FrontEnd.Application
     {
         public override ICollection<Assembly> GetAssemblies()
         {
-            Type type = typeof (ApiController);
+            ICollection<Assembly> baseAssemblies = base.GetAssemblies();
+            List<Assembly> assemblies = new List<Assembly>(baseAssemblies);
+
+            Type type = typeof(ApiController);
 
             IEnumerable<Assembly> items = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => p.IsSubclassOf(type)).Select(t => t.Assembly);
 
-            return items.ToList();
+            foreach (var item in items)
+            {
+                baseAssemblies.Add(item);
+            }
+
+            return assemblies;
         }
     }
 }

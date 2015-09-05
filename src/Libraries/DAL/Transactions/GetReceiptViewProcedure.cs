@@ -119,27 +119,20 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		/// </summary>
 		public IEnumerable<DbGetReceiptViewResult> Execute()
 		{
-			try
+			if (!this.SkipValidation)
 			{
-				if (!this.SkipValidation)
+				if (!this.Validated)
 				{
-					if (!this.Validated)
-					{
-						this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-					}
-					if (!this.HasAccess)
-					{
-						throw new UnauthorizedException("Access is denied.");
-					}
+					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
 				}
-				const string query = "SELECT * FROM transactions.get_receipt_view(@0::integer, @1::integer, @2::date, @3::date, @4::character varying, @5::text, @6::character varying, @7::character varying, @8::text);";
-				return Factory.Get<DbGetReceiptViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.User, this.ReferenceNumber, this.StatementReference);
+				if (!this.HasAccess)
+				{
+                    Log.Information("Access to the function \"GetReceiptViewProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+					throw new UnauthorizedException("Access is denied.");
+				}
 			}
-			catch (UnauthorizedException ex)
-			{
-				Log.Error("{Exception} {@Exception}", ex.Message, ex);
-                throw new MixERPException(ex.Message, ex);
-			}
+			const string query = "SELECT * FROM transactions.get_receipt_view(@0::integer, @1::integer, @2::date, @3::date, @4::character varying, @5::text, @6::character varying, @7::character varying, @8::text);";
+			return Factory.Get<DbGetReceiptViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.User, this.ReferenceNumber, this.StatementReference);
 		} 
 	}
 }

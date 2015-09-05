@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract.cs" />
+    <Compile Include="EducationLevel.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeExperience.cs" />
     <Compile Include="EmployeeIdentificationDetail.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />
     <Compile Include="ExitType.cs" />
+    <Compile Include="Holiday.cs" />
     <Compile Include="JobTitle.cs" />
     <Compile Include="LeaveApplication.cs" />
     <Compile Include="LeaveBenefit.cs" />
