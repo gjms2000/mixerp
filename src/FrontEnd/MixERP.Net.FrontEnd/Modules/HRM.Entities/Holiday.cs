@@ -35,9 +35,17 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("int4", 0, false, "")] 
         public int OfficeId { get; set; }
     
+        [Column("holiday_name")]
+        [ColumnDbType("varchar", 128, false, "")] 
+        public string HolidayName { get; set; }
+    
         [Column("occurs_on")]
         [ColumnDbType("date", 0, true, "")] 
         public DateTime? OccursOn { get; set; }
+    
+        [Column("ends_on")]
+        [ColumnDbType("date", 0, true, "")] 
+        public DateTime? EndsOn { get; set; }
     
         [Column("comment")]
         [ColumnDbType("text", 0, true, "")] 

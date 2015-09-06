@@ -81,6 +81,10 @@
     <Compile Include="Reports\TopSellingProducts.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\DAL\Core\MixERP.Net.Schemas.Core.Data.csproj">
+      <Project>{22262e2b-4046-4bbf-8f07-86bf80de752b}</Project>
+      <Name>MixERP.Net.Schemas.Core.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Entities\Core\MixERP.Net.Entities.Core.csproj">
       <Project>{0F0490A5-8065-4B0A-9844-905E32A05DC4}</Project>
       <Name>MixERP.Net.Entities.Core</Name>

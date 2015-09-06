@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountController.cs" />
     <Compile Include="AccountMasterController.cs" />
     <Compile Include="AgeingSlabController.cs" />
     <Compile Include="AttachmentController.cs" />
@@ -109,13 +110,13 @@
     <Compile Include="MenuController.cs" />
     <Compile Include="MenuLocaleController.cs" />
     <Compile Include="MerchantFeeSetupController.cs" />
+    <Compile Include="NationalityController.cs" />
     <Compile Include="PartyController.cs" />
     <Compile Include="PartyTypeController.cs" />
     <Compile Include="PaymentCardController.cs" />
     <Compile Include="PaymentTermController.cs" />
     <Compile Include="PriceTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AccountController.cs" />
     <Compile Include="RecurrenceTypeController.cs" />
     <Compile Include="RecurringInvoiceController.cs" />
     <Compile Include="RecurringInvoiceSetupController.cs" />

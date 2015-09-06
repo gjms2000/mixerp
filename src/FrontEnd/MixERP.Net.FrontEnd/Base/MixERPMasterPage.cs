@@ -32,7 +32,7 @@ namespace MixERP.Net.FrontEnd.Base
 {
     public class MixERPMasterPage : MasterPage
     {
-        private const string ApiVersion = "1.5";
+        private const string LatestApiVersion = "1.5";
 
         protected override void OnLoad(EventArgs e)
         {
@@ -44,7 +44,7 @@ namespace MixERP.Net.FrontEnd.Base
         {
             string script = JSUtility.GetVar("culture", CultureManager.GetCurrent().Name);
             script += JSUtility.GetVar("language", CultureManager.GetCurrent().TwoLetterISOLanguageName);
-            script += JSUtility.GetVar("apiVersion", ApiVersion);
+            script += JSUtility.GetVar("apiVersion", LatestApiVersion);
 
             script += JSUtility.GetVar("jqueryUIi18nPath", this.Page.ResolveUrl("~/Scripts/jquery-ui/i18n/"));
 

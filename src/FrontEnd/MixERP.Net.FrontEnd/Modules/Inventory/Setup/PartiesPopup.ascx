@@ -44,9 +44,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                     </div>
 
                     <div class="four wide field">
-                        <div class="ui purple button" data-ng-click="search();">
-                            {{getResource('Resources.Titles.Search')}}
-                        </div>
+                        <input type="button" class="ui purple button" data-ng-click="search();" value="{{getResource('Resources.Titles.Search')}}"/>
                     </div>
                 </div>
             </div>

@@ -67,6 +67,7 @@
     <Compile Include="EmployeeQualification.cs" />
     <Compile Include="EmployeeSocialNetworkDetail.cs" />
     <Compile Include="EmployeeType.cs" />
+    <Compile Include="EmployeeView.cs" />
     <Compile Include="EmploymentStatus.cs" />
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />

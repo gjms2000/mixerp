@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using MixERP.Net.Entities.Core;
 using MixERP.Net.Framework;
 using MixERP.Net.Framework.Extensions;
 using MixERP.Net.i18n;

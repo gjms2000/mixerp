@@ -134,39 +134,38 @@ CREATE TABLE hrm.employees
 (
     employee_id                             SERIAL NOT NULL PRIMARY KEY,
     first_name                              national character varying(50) NOT NULL,
-    middle_name                             national character varying(50) NOT NULL DEFAULT(''),
-    last_name                               national character varying(50) NOT NULL DEFAULT(''),
+    middle_name                             national character varying(50) DEFAULT(''),
+    last_name                               national character varying(50) DEFAULT(''),
     employee_name                           national character varying(160) NOT NULL,
     gender_code                             character(2) NOT NULL REFERENCES core.genders(gender_code),
     joined_on                               date NULL,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
-    user_id                                 integer NOT NULL REFERENCES office.users(user_id),
+    user_id                                 integer REFERENCES office.users(user_id),
     employee_type_id                        integer NOT NULL REFERENCES hrm.employee_types(employee_type_id),
     current_department_id                   integer NOT NULL REFERENCES office.departments(department_id),
     current_role_id                         integer REFERENCES office.roles(role_id),
-    current_employment_status_code_id       integer NOT NULL REFERENCES hrm.employment_status_codes(employment_status_code_id)
-                                            DEFAULT(0),
     current_employment_status_id            integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     current_job_title_id                    integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     current_pay_grade_id                    integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
     current_shift_id                        integer NOT NULL REFERENCES hrm.shifts(shift_id),
-    nationality_code                        national character varying(12),
+    nationality_code                        national character varying(12) REFERENCES core.nationalities(nationality_code),
     date_of_birth                           date,
-    photo                                   text,
-    address_line_1                          national character varying(128) NOT NULL DEFAULT(''),
-    address_line_2                          national character varying(128) NOT NULL DEFAULT(''),
-    street                                  national character varying(128) NOT NULL DEFAULT(''),
-    city                                    national character varying(128) NOT NULL DEFAULT(''),
-    state                                   national character varying(128) NOT NULL DEFAULT(''),    
+    photo                                   image,
+    zip_code                                national character varying(128) DEFAULT(''),
+    address_line_1                          national character varying(128) DEFAULT(''),
+    address_line_2                          national character varying(128) DEFAULT(''),
+    street                                  national character varying(128) DEFAULT(''),
+    city                                    national character varying(128) DEFAULT(''),
+    state                                   national character varying(128) DEFAULT(''),    
     country_id                              integer REFERENCES core.countries(country_id),
-    phone_home                              national character varying(128) NOT NULL DEFAULT(''),
-    phone_cell                              national character varying(128) NOT NULL DEFAULT(''),
-    phone_office_extension                  national character varying(128) NOT NULL DEFAULT(''),
-    phone_emergency                         national character varying(128) NOT NULL DEFAULT(''),
-    phone_emergency2                        national character varying(128) NOT NULL DEFAULT(''),
-    email_address                           national character varying(128) NOT NULL DEFAULT(''),
-    website                                 national character varying(128) NOT NULL DEFAULT(''),
-    blog                                    national character varying(128) NOT NULL DEFAULT(''),
+    phone_home                              national character varying(128) DEFAULT(''),
+    phone_cell                              national character varying(128) DEFAULT(''),
+    phone_office_extension                  national character varying(128) DEFAULT(''),
+    phone_emergency                         national character varying(128) DEFAULT(''),
+    phone_emergency2                        national character varying(128) DEFAULT(''),
+    email_address                           national character varying(128) DEFAULT(''),
+    website                                 national character varying(128) DEFAULT(''),
+    blog                                    national character varying(128) DEFAULT(''),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -178,11 +177,11 @@ CREATE TABLE hrm.employee_identification_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     identification_type_code                national character varying(12) NOT NULL 
                                             REFERENCES core.identification_types(identification_type_code),
-    identification_type                     text,
+    identification_number                   text,
+    expires_on                              date,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-                                          
+                                            DEFAULT(NOW())                                          
 );
 
 CREATE UNIQUE INDEX employee_identification_details_employee_id_itc_uix
@@ -288,7 +287,9 @@ CREATE TABLE hrm.holidays
 (
     holiday_id                              BIGSERIAL NOT NULL PRIMARY KEY,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
+    holiday_name                            national character varying(128) NOT NULL,
     occurs_on                               date,
+    ends_on                                 date,
     comment                                 text,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -414,6 +415,84 @@ DELETE FROM policy.menu_access;
 INSERT INTO policy.menu_access(office_id, menu_id, user_id)
 SELECT office_id, menu_id, 2
 FROM office.offices, core.menus;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.views/hrm.employee_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_view;
+
+CREATE VIEW hrm.employee_view
+AS
+SELECT
+    hrm.employees.employee_id,
+    hrm.employees.first_name,
+    hrm.employees.middle_name,
+    hrm.employees.last_name,
+    hrm.employees.employee_name,
+    hrm.employees.gender_code,
+    core.genders.gender_name,
+    hrm.employees.joined_on,
+    hrm.employees.office_id,
+    office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
+    hrm.employees.user_id,
+    office.users.user_name,
+    hrm.employees.employee_type_id,
+    hrm.employee_types.employee_type_code || ' (' || hrm.employee_types.employee_type_name || ')' AS employee_type,
+    hrm.employees.current_department_id,
+    office.departments.department_code || ' (' || office.departments.department_name || ')' AS current_department,    
+    hrm.employees.current_role_id,
+    office.roles.role_code || ' (' || office.roles.role_name || ')' AS role,
+    hrm.employees.current_employment_status_id,
+    hrm.employment_statuses.employment_status_code || ' (' || employment_status_name || ')' AS employment_status,
+    hrm.employees.current_job_title_id,
+    hrm.job_titles.job_title_code || ' (' || hrm.job_titles.job_title_name || ')' AS job_title,
+    hrm.employees.current_pay_grade_id,
+    hrm.pay_grades.pay_grade_code || ' (' || hrm.pay_grades.pay_grade_name || ')' AS pay_grade,
+    hrm.employees.current_shift_id,
+    hrm.shifts.shift_code || ' (' || hrm.shifts.shift_name || ')' AS shift,
+    hrm.employees.nationality_code,
+    core.nationalities.nationality_code || ' (' || core.nationalities.nationality_name || ')' AS nationality,
+    hrm.employees.date_of_birth,
+    hrm.employees.photo,
+    hrm.employees.zip_code,
+    hrm.employees.address_line_1,
+    hrm.employees.address_line_2,
+    hrm.employees.street,
+    hrm.employees.city,
+    hrm.employees.state,
+    hrm.employees.country_id,
+    core.countries.country_code || ' (' || core.countries.country_name || ')' AS country,
+    hrm.employees.phone_home,
+    hrm.employees.phone_cell,
+    hrm.employees.phone_office_extension,
+    hrm.employees.phone_emergency,
+    hrm.employees.phone_emergency2,
+    hrm.employees.email_address,
+    hrm.employees.website,
+    hrm.employees.blog
+FROM hrm.employees
+INNER JOIN core.genders
+ON hrm.employees.gender_code = core.genders.gender_code
+INNER JOIN office.offices
+ON hrm.employees.office_id = office.offices.office_id
+INNER JOIN office.departments
+ON hrm.employees.current_department_id = office.departments.department_id
+INNER JOIN hrm.employee_types
+ON hrm.employee_types.employee_type_id = hrm.employees.employee_type_id
+INNER JOIN hrm.employment_statuses
+ON hrm.employees.current_employment_status_id = hrm.employment_statuses.employment_status_id
+INNER JOIN hrm.job_titles
+ON hrm.employees.current_job_title_id = hrm.job_titles.job_title_id
+INNER JOIN hrm.pay_grades
+ON hrm.employees.current_pay_grade_id = hrm.pay_grades.pay_grade_id
+INNER JOIN hrm.shifts
+ON hrm.employees.current_shift_id = hrm.shifts.shift_id
+LEFT JOIN office.users
+ON hrm.employees.user_id = office.users.user_id
+LEFT JOIN office.roles
+ON hrm.employees.current_role_id = office.roles.role_id
+LEFT JOIN core.nationalities
+ON hrm.employees.nationality_code = core.nationalities.nationality_code
+LEFT JOIN core.countries
+ON hrm.employees.country_id = core.countries.country_id;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/99.ownership.sql --<--<--
 DO

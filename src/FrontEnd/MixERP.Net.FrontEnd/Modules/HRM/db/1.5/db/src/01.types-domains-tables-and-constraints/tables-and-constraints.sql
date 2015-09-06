@@ -133,39 +133,38 @@ CREATE TABLE hrm.employees
 (
     employee_id                             SERIAL NOT NULL PRIMARY KEY,
     first_name                              national character varying(50) NOT NULL,
-    middle_name                             national character varying(50) NOT NULL DEFAULT(''),
-    last_name                               national character varying(50) NOT NULL DEFAULT(''),
+    middle_name                             national character varying(50) DEFAULT(''),
+    last_name                               national character varying(50) DEFAULT(''),
     employee_name                           national character varying(160) NOT NULL,
     gender_code                             character(2) NOT NULL REFERENCES core.genders(gender_code),
     joined_on                               date NULL,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
-    user_id                                 integer NOT NULL REFERENCES office.users(user_id),
+    user_id                                 integer REFERENCES office.users(user_id),
     employee_type_id                        integer NOT NULL REFERENCES hrm.employee_types(employee_type_id),
     current_department_id                   integer NOT NULL REFERENCES office.departments(department_id),
     current_role_id                         integer REFERENCES office.roles(role_id),
-    current_employment_status_code_id       integer NOT NULL REFERENCES hrm.employment_status_codes(employment_status_code_id)
-                                            DEFAULT(0),
     current_employment_status_id            integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     current_job_title_id                    integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     current_pay_grade_id                    integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
     current_shift_id                        integer NOT NULL REFERENCES hrm.shifts(shift_id),
-    nationality_code                        national character varying(12),
+    nationality_code                        national character varying(12) REFERENCES core.nationalities(nationality_code),
     date_of_birth                           date,
-    photo                                   text,
-    address_line_1                          national character varying(128) NOT NULL DEFAULT(''),
-    address_line_2                          national character varying(128) NOT NULL DEFAULT(''),
-    street                                  national character varying(128) NOT NULL DEFAULT(''),
-    city                                    national character varying(128) NOT NULL DEFAULT(''),
-    state                                   national character varying(128) NOT NULL DEFAULT(''),    
+    photo                                   image,
+    zip_code                                national character varying(128) DEFAULT(''),
+    address_line_1                          national character varying(128) DEFAULT(''),
+    address_line_2                          national character varying(128) DEFAULT(''),
+    street                                  national character varying(128) DEFAULT(''),
+    city                                    national character varying(128) DEFAULT(''),
+    state                                   national character varying(128) DEFAULT(''),    
     country_id                              integer REFERENCES core.countries(country_id),
-    phone_home                              national character varying(128) NOT NULL DEFAULT(''),
-    phone_cell                              national character varying(128) NOT NULL DEFAULT(''),
-    phone_office_extension                  national character varying(128) NOT NULL DEFAULT(''),
-    phone_emergency                         national character varying(128) NOT NULL DEFAULT(''),
-    phone_emergency2                        national character varying(128) NOT NULL DEFAULT(''),
-    email_address                           national character varying(128) NOT NULL DEFAULT(''),
-    website                                 national character varying(128) NOT NULL DEFAULT(''),
-    blog                                    national character varying(128) NOT NULL DEFAULT(''),
+    phone_home                              national character varying(128) DEFAULT(''),
+    phone_cell                              national character varying(128) DEFAULT(''),
+    phone_office_extension                  national character varying(128) DEFAULT(''),
+    phone_emergency                         national character varying(128) DEFAULT(''),
+    phone_emergency2                        national character varying(128) DEFAULT(''),
+    email_address                           national character varying(128) DEFAULT(''),
+    website                                 national character varying(128) DEFAULT(''),
+    blog                                    national character varying(128) DEFAULT(''),
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -177,11 +176,11 @@ CREATE TABLE hrm.employee_identification_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     identification_type_code                national character varying(12) NOT NULL 
                                             REFERENCES core.identification_types(identification_type_code),
-    identification_type                     text,
+    identification_number                   text,
+    expires_on                              date,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
-                                          
+                                            DEFAULT(NOW())                                          
 );
 
 CREATE UNIQUE INDEX employee_identification_details_employee_id_itc_uix

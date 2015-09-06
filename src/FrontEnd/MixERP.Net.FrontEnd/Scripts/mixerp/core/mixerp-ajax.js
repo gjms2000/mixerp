@@ -112,24 +112,35 @@ var getAjax = function (url, data) {
     return ajax;
 };
 
-var getAjaxRequest = function (url, data, verb) {
+var getAjaxRequest = function (url) {
     var isWebApiRequest = url.substring(5, 0) === "/api/";
 
-    if (!verb) {
-        verb = "GET";
-    };
-
     if (isWebApiRequest) {
-        url = url.replace("{v}", "v" + apiVersion);
+        url = url.replace("{v}", "v" + window.apiVersion);
     };
 
     var ajax = $.ajax({
-        type: verb,
+        type: "GET",
         url: url,
-        data: data,
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     });
+
+    ajax.fail(function (xhr) {
+        logAjaxErrorMessage(xhr);
+    });
+
+    return ajax;
+};
+
+var postAjaxRequest = function (url, data) {
+    var isWebApiRequest = url.substring(5, 0) === "/api/";
+
+    if (isWebApiRequest) {
+        url = url.replace("{v}", "v" + window.apiVersion);
+    };
+
+    var ajax = $.post(url, { '': data });
 
     ajax.fail(function (xhr) {
         logAjaxErrorMessage(xhr);

@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Web.Http;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
+using MixERP.Net.EntityParser;
+using Newtonsoft.Json;
 using PetaPoco;
 
 namespace MixERP.Net.Api.HRM
@@ -117,6 +119,31 @@ namespace MixERP.Net.Api.HRM
             try
             {
                 return this.EmploymentStatusCodeContext.GetPagedResult(pageNumber);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 employment status codes on each page, sorted by the property EmploymentStatusCodeId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("POST")]
+        [Route("get-where/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        {
+            try
+            {
+                List<Filter> f = JsonConvert.DeserializeObject<List<Filter>>(filters);
+                return this.EmploymentStatusCodeContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
             {

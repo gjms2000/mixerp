@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MixERP.Net.DbFactory;
-using MixERP.Net.Entities.Core;
 using MixERP.Net.i18n;
 using PetaPoco;
 
 namespace MixERP.Net.EntityParser.Data
 {
-    internal class Service
+    public static class Service
     {
         public static IEnumerable<T> GetView<T>(string catalog, T poco, string tableName, string keyName, long page,
             List<Filter> filters, bool byOffice,
@@ -89,7 +88,7 @@ namespace MixERP.Net.EntityParser.Data
             return Factory.Scalar<long>(catalog, sql);
         }
 
-        private static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
+        public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
         {
             if (filters == null || filters.Count().Equals(0))
             {

@@ -43,6 +43,10 @@
     <Reference Include="MixERP.Net.Entities">
       <HintPath>..\..\bin\MixERP.Net.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="MixERP.Net.EntityParser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.EntityParser.dll</HintPath>
+    </Reference>
     <Reference Include="MixERP.Net.Framework">
       <HintPath>..\..\bin\MixERP.Net.Framework.dll</HintPath>
     </Reference>
@@ -83,6 +87,7 @@
     <Compile Include="EmployeeQualification.cs" />
     <Compile Include="EmployeeSocialNetworkDetail.cs" />
     <Compile Include="EmployeeType.cs" />
+    <Compile Include="EmployeeView.cs" />
     <Compile Include="EmploymentStatus.cs" />
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />

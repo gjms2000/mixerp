@@ -49,6 +49,8 @@
     };
     if (window.description) {
         $(".description").html(window.description);
+    }else{
+        $(".description").remove();        
     };
 
     cancelButton.click(function() {
@@ -115,6 +117,11 @@
                 if(view.length){
                     view.show();
                     loadPageCount(loadGrid);
+                    return;
+                };
+
+                if(window.returnUrl){
+                    window.location.href = window.returnUrl;
                 };
             };
         });
@@ -368,6 +375,10 @@
                 if (column.PropertyName === live) {
                     element.addClass("live");
                 };
+            };
+
+            if(readonlyColumns.indexOf(column.PropertyName) > -1){
+                element.attr("readonly", "");
             };
 
             if (column.Value) {

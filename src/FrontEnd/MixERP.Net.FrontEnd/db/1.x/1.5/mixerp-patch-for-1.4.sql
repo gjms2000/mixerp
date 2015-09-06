@@ -236,6 +236,61 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'localization.localized_resources'::regclass
+        AND    attname = 'localized_resource_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE localization.localized_resources
+        ADD COLUMN localized_resource_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'transactions.non_gl_stock_tax_details'::regclass
+        AND    attname = 'non_gl_stock_tax_detail_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE transactions.non_gl_stock_tax_details
+        ADD COLUMN non_gl_stock_tax_detail_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'transactions.stock_tax_details'::regclass
+        AND    attname = 'stock_tax_detail_id'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE transactions.stock_tax_details
+        ADD COLUMN stock_tax_detail_id BIGSERIAL PRIMARY KEY;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
@@ -321,6 +376,186 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/localization/localization.get_output_for.sql --<--<--
+DROP FUNCTION IF EXISTS localization.get_output_for(national character varying(3));
+
+CREATE FUNCTION localization.get_output_for(_culture_code national character varying(3))
+RETURNS text
+AS
+$$
+BEGIN
+    RETURN array_to_string(array_agg(i18n.resource), E'\n')
+    FROM
+    (
+        SELECT
+            
+            'SELECT * FROM localization.add_localized_resource(''' ||
+            localization.resources.resource_class || ''', ''' || $1 || ''', ''' ||
+            localization.resources.key || ''', ''' ||
+            REPLACE(localization.localized_resources.value, '''', '''''') || ''');--' ||
+            localization.resources.value AS resource
+        FROM localization.localized_resources
+        LEFT JOIN localization.resources
+        ON localization.localized_resources.resource_id = localization.resources.resource_id
+        WHERE culture_code = $1
+        ORDER BY localization.resources.resource_class, localization.resources.key
+    )
+    i18n;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/office/office.can_login.sql --<--<--
+DROP FUNCTION IF EXISTS office.can_login(user_id integer_strict, office_id integer_strict, OUT result boolean, OUT message text);
+DROP FUNCTION IF EXISTS office.can_login(user_id integer_strict, office_id integer_strict);
+
+CREATE FUNCTION office.can_login(user_id integer_strict, office_id integer_strict)
+RETURNS TABLE
+(
+    result              boolean,
+    message             text
+)
+AS
+$$
+DECLARE _office_id      integer;
+DECLARE _result         boolean;
+DECLARE _message        text = '';
+BEGIN
+    _office_id  := office.get_office_id_by_user_id($1);
+
+    IF $1 = office.get_sys_user_id() THEN
+        _result = false;
+    END IF;
+
+    IF $2=_office_id THEN
+        _result = true;
+    ELSE
+        IF office.is_parent_office(_office_id,$2) THEN
+            _result = true;
+        END IF;
+    END IF;
+
+    IF(_result) THEN
+        IF(policy.is_restricted_mode() AND NOT policy.is_elevated_user($1)) THEN
+            _result := false;
+            _message := 'You need to have an elevated priviledge to login interactively during end of day operation';
+            RAISE WARNING '%', _message;
+        END IF;
+    END IF;
+
+    RETURN QUERY
+    SELECT _result, _message;
+END;
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/office/office.sign_in.sql --<--<--
+DROP FUNCTION IF EXISTS office.sign_in
+(
+    office_id       integer_strict, 
+    user_name       text, 
+    password        text, 
+    browser         text, 
+    ip_address      text, 
+    remote_user     text, 
+    culture         text, 
+    challenge       text, 
+    OUT login_id    bigint, 
+    OUT message     text
+);
+
+DROP FUNCTION IF EXISTS office.sign_in
+(
+    office_id       integer_strict, 
+    user_name       text, 
+    password        text, 
+    browser         text, 
+    ip_address      text, 
+    remote_user     text, 
+    culture         text, 
+    challenge       text
+);
+
+CREATE FUNCTION office.sign_in
+(
+    office_id       integer_strict, 
+    user_name       text, 
+    password        text, 
+    browser         text, 
+    ip_address      text, 
+    remote_user     text, 
+    culture         text, 
+    challenge       text
+)
+RETURNS TABLE
+(
+    login_id        bigint,
+    message         text
+)
+AS
+$$
+    DECLARE _user_id            integer;
+    DECLARE _lock_out_till      TIMESTAMP WITH TIME ZONE;
+    DECLARE result              boolean;
+    DECLARE _login_id           bigint = 0;
+    DECLARE _message            text;
+BEGIN
+    _user_id        :=office.get_user_id_by_user_name($2);
+    
+    IF _user_id IS NULL THEN
+        INSERT INTO audit.failed_logins(user_name,browser,ip_address,remote_user,details)
+        SELECT $2, $4, $5, $6, 'Invalid user name.';
+        _message := 'Invalid login attempt.';
+    ELSE
+        _lock_out_till:=policy.is_locked_out_till(_user_id);
+
+
+        IF NOT ((_lock_out_till IS NOT NULL) AND (_lock_out_till>NOW())) THEN
+            IF(office.validate_login($2,$3, $8)) THEN
+
+                SELECT * FROM office.can_login(_user_id,$1) 
+                INTO result, _message;
+
+                IF(result) THEN
+                    INSERT INTO audit.logins(office_id,user_id,browser,ip_address,remote_user, culture)
+                    SELECT $1, _user_id, $4, $5, $6, $7;
+
+                    _login_id := currval('audit.logins_login_id_seq')::bigint;
+                ELSE
+                    IF(COALESCE(_message, '') = '') THEN
+                        _message := format('A user from %1$s cannot login to %2$s.', office.get_office_name_by_id(office.get_office_id_by_user_id(_user_id)), office.get_office_name_by_id($1));
+                    END IF;
+
+                    INSERT INTO audit.failed_logins(office_id,user_id,user_name,browser,ip_address,remote_user,details)
+                    SELECT $1, _user_id, $2, $4, $5, $6, _message;
+                END IF;
+            ELSE
+                IF(COALESCE(_message, '') = '') THEN
+                    _message := 'Invalid login attempt.';
+                END IF;
+                
+                INSERT INTO audit.failed_logins(office_id,user_id,user_name,browser,ip_address,remote_user,details)
+                SELECT $1, _user_id, $2, $4, $5, $6, _message;
+            END IF;
+        ELSE
+             _message        := format('You are locked out till %1$s.', _lock_out_till);
+
+            INSERT INTO audit.failed_logins(office_id,user_id,user_name,browser,ip_address,remote_user,details)
+            SELECT $1, _user_id, $2, $4, $5, $6, _message;
+        END IF;
+    END IF;
+
+    RETURN QUERY
+    SELECT _login_id, _message;
+END
+$$
+LANGUAGE plpgsql;
+
+
+--SELECT * FROM office.sign_in(2, 'binod', '4e99cb7523794ad53b4da66c91f56d0143a679e1c6d396cda9ad0c9b41ed53e90bd5c59bf98255a4f1946b216b3ba539074a8a86cedd4af8bb208a8fad748e82', 'Firefox', '0.0.0.0', 'N/A', 'en-US', 'cd0ad7446ab64801837bfd43197d19c1');
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/public/public.parse_default.sql --<--<--
 DROP FUNCTION IF EXISTS public.parse_default(text);
@@ -523,6 +758,107 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM public.poco_get_table_function_definition('hrm', 'employment_statuses');
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/transactions/transactions.are_sales_quotations_already_merged.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.are_sales_quotations_already_merged(VARIADIC arr bigint[]);
+
+CREATE FUNCTION transactions.are_sales_quotations_already_merged(VARIADIC _stock_master_id bigint[])
+RETURNS boolean
+AS
+$$
+BEGIN
+    IF
+    (
+        SELECT 
+        COUNT(*) 
+        FROM transactions.non_gl_stock_master_relations 
+        WHERE quotation_non_gl_stock_master_id = any($1)
+    ) > 0 THEN
+        RETURN true;
+    END IF;
+
+    IF
+    (
+        SELECT 
+        COUNT(*) 
+        FROM transactions.stock_master_non_gl_relations
+        WHERE non_gl_stock_master_id = any($1)
+    ) > 0 THEN
+        RETURN true;
+    END IF;
+
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;   
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/transactions/transactions.get_party_transaction_summary.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.get_party_transaction_summary
+(
+    office_id integer, 
+    party_id bigint
+);
+
+DROP FUNCTION IF EXISTS transactions.get_party_transaction_summary
+(
+    office_id integer, 
+    party_id bigint, 
+    OUT currency_code text, 
+    OUT currency_symbol text, 
+    OUT total_due_amount decimal(24, 4), 
+    OUT office_due_amount decimal(24, 4), 
+    OUT last_receipt_date date, 
+    OUT transaction_value decimal(24, 4)
+);
+
+CREATE FUNCTION transactions.get_party_transaction_summary
+(
+    office_id integer, 
+    party_id bigint
+)
+RETURNS TABLE
+(
+    currency_code               text, 
+    currency_symbol             text, 
+    total_due_amount            decimal(24, 4), 
+    office_due_amount           decimal(24, 4), 
+    last_receipt_date           date, 
+    transaction_value           decimal(24, 4)
+)
+AS
+$$
+    DECLARE root_office_id      integer = 0;
+    DECLARE _currency_code      text; 
+    DECLARE _currency_symbol    text;
+    DECLARE _total_due_amount   decimal(24, 4); 
+    DECLARE _office_due_amount  decimal(24, 4); 
+    DECLARE _last_receipt_date  date;
+    DECLARE _transaction_value  decimal(24, 4);
+BEGIN
+    _currency_code := core.get_currency_code_by_party_id(party_id);
+
+    SELECT core.currencies.currency_symbol 
+    INTO _currency_symbol
+    FROM core.currencies
+    WHERE core.currencies.currency_code = $3;
+
+    SELECT office.offices.office_id INTO root_office_id
+    FROM office.offices
+    WHERE parent_office_id IS NULL;
+
+    _total_due_amount := transactions.get_total_due(root_office_id, party_id);
+    _office_due_amount := transactions.get_total_due(office_id, party_id);
+    _last_receipt_date := transactions.get_last_receipt_date(office_id, party_id);
+    _transaction_value := transactions.get_average_party_transaction(party_id, office_id);
+
+    RETURN QUERY
+    SELECT _currency_code, _currency_symbol, _total_due_amount, _office_due_amount, _last_receipt_date, _transaction_value;
+END
+$$
+LANGUAGE plpgsql;
+
+--select * from transactions.get_party_transaction_summary(2,1);
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/policy/policy.create_access_types.sql --<--<--
 DROP FUNCTION IF EXISTS policy.create_access_types(_access_type_id integer, _access_type_name national character varying(48));
@@ -1050,6 +1386,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'exit_interview_
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_code', 'Exit Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_id', 'Exit Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_name', 'Exit Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'expires_on', 'Expires On');
 SELECT localization.add_localized_resource('ScrudResource', '', 'external_code', 'External Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'factory_address', 'Factory Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'fax', 'Fax');
@@ -1091,7 +1428,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'hot_item', 'Hot
 SELECT localization.add_localized_resource('ScrudResource', '', 'http_action_code', 'HTTP Action Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'hundredth_name', 'Hundredth Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'id', 'Id');
-SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type', 'Identification Type');
+SELECT localization.add_localized_resource('ScrudResource', '', 'identification_number', 'Identification Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type_code', 'Identification Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type_name', 'Identification Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'includes_tax', 'Includes Tax');

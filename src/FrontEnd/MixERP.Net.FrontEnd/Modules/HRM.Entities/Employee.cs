@@ -36,11 +36,11 @@ namespace MixERP.Net.Entities.HRM
         public string FirstName { get; set; }
     
         [Column("middle_name")]
-        [ColumnDbType("varchar", 50, false, "")] 
+        [ColumnDbType("varchar", 50, true, "")] 
         public string MiddleName { get; set; }
     
         [Column("last_name")]
-        [ColumnDbType("varchar", 50, false, "")] 
+        [ColumnDbType("varchar", 50, true, "")] 
         public string LastName { get; set; }
     
         [Column("employee_name")]
@@ -60,8 +60,8 @@ namespace MixERP.Net.Entities.HRM
         public int OfficeId { get; set; }
     
         [Column("user_id")]
-        [ColumnDbType("int4", 0, false, "")] 
-        public int UserId { get; set; }
+        [ColumnDbType("int4", 0, true, "")] 
+        public int? UserId { get; set; }
     
         [Column("employee_type_id")]
         [ColumnDbType("int4", 0, false, "")] 
@@ -74,10 +74,6 @@ namespace MixERP.Net.Entities.HRM
         [Column("current_role_id")]
         [ColumnDbType("int4", 0, true, "")] 
         public int? CurrentRoleId { get; set; }
-    
-        [Column("current_employment_status_code_id")]
-        [ColumnDbType("int4", 0, false, "0")] 
-        public int CurrentEmploymentStatusCodeId { get; set; }
     
         [Column("current_employment_status_id")]
         [ColumnDbType("int4", 0, false, "")] 
@@ -104,27 +100,27 @@ namespace MixERP.Net.Entities.HRM
         public DateTime? DateOfBirth { get; set; }
     
         [Column("photo")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("image", 0, true, "")] 
         public string Photo { get; set; }
     
         [Column("address_line_1")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string AddressLine1 { get; set; }
     
         [Column("address_line_2")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string AddressLine2 { get; set; }
     
         [Column("street")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string Street { get; set; }
     
         [Column("city")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string City { get; set; }
     
         [Column("state")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string State { get; set; }
     
         [Column("country_id")]
@@ -132,35 +128,35 @@ namespace MixERP.Net.Entities.HRM
         public int? CountryId { get; set; }
     
         [Column("phone_home")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string PhoneHome { get; set; }
     
         [Column("phone_cell")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string PhoneCell { get; set; }
     
         [Column("phone_office_extension")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string PhoneOfficeExtension { get; set; }
     
         [Column("phone_emergency")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string PhoneEmergency { get; set; }
     
         [Column("phone_emergency2")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string PhoneEmergency2 { get; set; }
     
         [Column("email_address")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string EmailAddress { get; set; }
     
         [Column("website")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string Website { get; set; }
     
         [Column("blog")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, true, "")] 
         public string Blog { get; set; }
     
         [Column("audit_user_id")]
@@ -170,5 +166,9 @@ namespace MixERP.Net.Entities.HRM
         [Column("audit_ts")]
         [ColumnDbType("timestamptz", 0, true, "")] 
         public DateTime? AuditTs { get; set; }
+    
+        [Column("zip_code")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string ZipCode { get; set; }
     }
 }

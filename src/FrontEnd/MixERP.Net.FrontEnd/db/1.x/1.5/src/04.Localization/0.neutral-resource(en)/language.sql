@@ -486,6 +486,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'exit_interview_
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_code', 'Exit Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_id', 'Exit Type Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'exit_type_name', 'Exit Type Name');
+SELECT localization.add_localized_resource('ScrudResource', '', 'expires_on', 'Expires On');
 SELECT localization.add_localized_resource('ScrudResource', '', 'external_code', 'External Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'factory_address', 'Factory Address');
 SELECT localization.add_localized_resource('ScrudResource', '', 'fax', 'Fax');
@@ -527,7 +528,7 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'hot_item', 'Hot
 SELECT localization.add_localized_resource('ScrudResource', '', 'http_action_code', 'HTTP Action Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'hundredth_name', 'Hundredth Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'id', 'Id');
-SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type', 'Identification Type');
+SELECT localization.add_localized_resource('ScrudResource', '', 'identification_number', 'Identification Number');
 SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type_code', 'Identification Type Code');
 SELECT localization.add_localized_resource('ScrudResource', '', 'identification_type_name', 'Identification Type Name');
 SELECT localization.add_localized_resource('ScrudResource', '', 'includes_tax', 'Includes Tax');
