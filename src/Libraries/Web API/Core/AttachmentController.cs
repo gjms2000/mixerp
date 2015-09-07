@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Web.Http;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
+using MixERP.Net.EntityParser;
+using Newtonsoft.Json;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Core
@@ -129,6 +131,31 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 attachments on each page, sorted by the property AttachmentId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("POST")]
+        [Route("get-where/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.AttachmentContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Displayfields is a lightweight key/value collection of attachments.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of attachments.</returns>
@@ -225,6 +252,49 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+        }
+
+        [Route("document/{path}")]
+        [Route("document/{path}/{width}")]
+        [Route("document/{path}/{width}/{height}")]
+        [HttpGet]
+        public HttpResponseMessage GetImage(string path, int width = 0, int height = 0)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+
+            path = "/Resource/Static/Attachments/" + path;
+
+            if (System.IO.File.Exists(System.Web.Hosting.HostingEnvironment.MapPath(path)))
+            {
+                path = System.Web.Hosting.HostingEnvironment.MapPath(path);
+
+                if (!MixERP.Net.Common.Helpers.ImageHelper.IsValidBitmap(path))
+                {
+                    path = System.Web.Hosting.HostingEnvironment.MapPath("/Static/images/document.png");
+                }
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                System.IO.FileInfo file = new System.IO.FileInfo(path);
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                using (System.Drawing.Bitmap originalImage = new System.Drawing.Bitmap(path))
+                {
+                    byte[] buffer = MixERP.Net.Common.Helpers.ImageHelper.GetResizedImage(originalImage, width, height);
+                    HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                    response.Content = new ByteArrayContent(buffer);
+                    response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("inline");
+                    response.Content.Headers.ContentDisposition.FileName = file.Name;
+                    response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MixERP.Net.Common.Helpers.ImageHelper.GetContentType(file.Extension));
+
+                    return response;
+                }
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
     }
 }

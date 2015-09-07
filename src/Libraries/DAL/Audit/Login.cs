@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
@@ -56,6 +57,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// Performs SQL count on the table "audit.logins".
 		/// </summary>
 		/// <returns>Returns the number of rows of the table "audit.logins".</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -85,6 +87,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// </summary>
 		/// <param name="loginIdParameter">The column "login_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "Login" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public MixERP.Net.Entities.Audit.Login Get(long loginIdParameter)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -113,6 +116,7 @@ namespace MixERP.Net.Schemas.Audit.Data
         /// Displayfields provide a minimal name/value context for data binding the row collection of audit.logins.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table audit.logins</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<DisplayField> GetDisplayFields()
 		{
 			List<DisplayField> displayFields = new List<DisplayField>();
@@ -168,6 +172,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// Inserts the instance of Login class on the database table "audit.logins".
 		/// </summary>
 		/// <param name="login">The instance of "Login" class to insert.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Add(MixERP.Net.Entities.Audit.Login login)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -196,6 +201,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// </summary>
 		/// <param name="login">The instance of "Login" class to update.</param>
 		/// <param name="loginIdParameter">The value of the column "login_id" which will be updated.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Update(MixERP.Net.Entities.Audit.Login login, long loginIdParameter)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -223,6 +229,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// Deletes the row of the table "audit.logins" against the primary key value.
 		/// </summary>
 		/// <param name="loginIdParameter">The value of the column "login_id" which will be deleted.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Delete(long loginIdParameter)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -251,6 +258,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// Performs a select statement on table "audit.logins" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "Login" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Audit.Login> GetPagedResult()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -280,6 +288,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "Login" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Audit.Login> GetPagedResult(long pageNumber)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -305,5 +314,44 @@ namespace MixERP.Net.Schemas.Audit.Data
 				
 			return Factory.Get<MixERP.Net.Entities.Audit.Login>(this.Catalog, sql, offset);
 		}
+
+        /// <summary>
+		/// Performs a filtered select statement on table "audit.logins" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+		/// <returns>Returns collection of "Login" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Audit.Login> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Login\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM audit.logins WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Audit.Login(), filters);
+
+            sql.OrderBy("login_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Audit.Login>(this.Catalog, sql);
+        }
 	}
 }

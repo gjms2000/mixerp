@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
@@ -56,6 +57,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// Performs SQL count on the table "core.compound_units".
 		/// </summary>
 		/// <returns>Returns the number of rows of the table "core.compound_units".</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -85,6 +87,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// </summary>
 		/// <param name="compoundUnitId">The column "compound_unit_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "CompoundUnit" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public MixERP.Net.Entities.Core.CompoundUnit Get(int compoundUnitId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -113,6 +116,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// Displayfields provide a minimal name/value context for data binding the row collection of core.compound_units.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table core.compound_units</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<DisplayField> GetDisplayFields()
 		{
 			List<DisplayField> displayFields = new List<DisplayField>();
@@ -168,6 +172,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// Inserts the instance of CompoundUnit class on the database table "core.compound_units".
 		/// </summary>
 		/// <param name="compoundUnit">The instance of "CompoundUnit" class to insert.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Add(MixERP.Net.Entities.Core.CompoundUnit compoundUnit)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -196,6 +201,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// </summary>
 		/// <param name="compoundUnit">The instance of "CompoundUnit" class to update.</param>
 		/// <param name="compoundUnitId">The value of the column "compound_unit_id" which will be updated.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Update(MixERP.Net.Entities.Core.CompoundUnit compoundUnit, int compoundUnitId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -223,6 +229,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// Deletes the row of the table "core.compound_units" against the primary key value.
 		/// </summary>
 		/// <param name="compoundUnitId">The value of the column "compound_unit_id" which will be deleted.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Delete(int compoundUnitId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -251,6 +258,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// Performs a select statement on table "core.compound_units" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "CompoundUnit" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Core.CompoundUnit> GetPagedResult()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -280,6 +288,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "CompoundUnit" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Core.CompoundUnit> GetPagedResult(long pageNumber)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -305,5 +314,44 @@ namespace MixERP.Net.Schemas.Core.Data
 				
 			return Factory.Get<MixERP.Net.Entities.Core.CompoundUnit>(this.Catalog, sql, offset);
 		}
+
+        /// <summary>
+		/// Performs a filtered select statement on table "core.compound_units" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+		/// <returns>Returns collection of "CompoundUnit" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Core.CompoundUnit> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"CompoundUnit\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM core.compound_units WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.CompoundUnit(), filters);
+
+            sql.OrderBy("compound_unit_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Core.CompoundUnit>(this.Catalog, sql);
+        }
 	}
 }

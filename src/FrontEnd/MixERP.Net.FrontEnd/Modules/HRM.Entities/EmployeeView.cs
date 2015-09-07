@@ -48,7 +48,7 @@ namespace MixERP.Net.Entities.HRM
         public string EmployeeName { get; set; }
     
         [Column("gender_code")]
-        [ColumnDbType("bpchar", 2, true, "")] 
+        [ColumnDbType("varchar", 4, true, "")] 
         public string GenderCode { get; set; }
     
         [Column("gender_name")]
@@ -176,7 +176,7 @@ namespace MixERP.Net.Entities.HRM
         public int? CountryId { get; set; }
     
         [Column("country")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("varchar", 100, true, "")] 
         public string Country { get; set; }
     
         [Column("phone_home")]

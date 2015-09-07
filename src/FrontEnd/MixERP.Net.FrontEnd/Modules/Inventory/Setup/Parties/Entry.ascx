@@ -3,7 +3,7 @@
     OverridePath="/Modules/Inventory/Setup/Parties.mix" %>
 
 <div id="FormPanel" style="display: none;">
-    <div class="ui large purple header">
+    <div class="ui huge grey header">
         <span data-localize="Titles.Parties"></span>
     </div>
     <div class="ui message">
@@ -236,11 +236,11 @@
                 </div>
                 <input type="hidden" id="PartyAccountIdHiddenField" />
                 <div class="big error vpad8 initially hidden"><span data-localize="Titles.RequiredFieldDetails"></span></div>
-                <div class="ui buttons">
-                    <a id="SaveButton" class="ui basic green button">
+                <div class="ui basic buttons">
+                    <a id="SaveButton" class="ui basic button">
                         <span data-localize="Titles.Save"></span>
                     </a>
-                    <a class="ui basic red button" href="../Parties.mix">
+                    <a class="ui basic button" href="../Parties.mix">
                         <span data-localize="Titles.Cancel"></span>
                     </a>
                 </div>

@@ -28,7 +28,7 @@ namespace MixERP.Net.Entities.Core
     public sealed class Gender : PetaPocoDB.Record<Gender>, IPoco
     {
         [Column("gender_code")]
-        [ColumnDbType("bpchar", 4, false, "")] 
+        [ColumnDbType("varchar", 4, false, "")] 
         public string GenderCode { get; set; }
     
         [Column("gender_name")]

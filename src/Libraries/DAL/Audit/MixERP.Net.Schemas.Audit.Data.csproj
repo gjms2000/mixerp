@@ -83,6 +83,10 @@
       <Project>{8fd9661c-2473-4581-8722-18b08d4db252}</Project>
       <Name>MixERP.Net.DbFactory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Logic\MixERP.Net.EntityParser\MixERP.Net.EntityParser.csproj">
+      <Project>{eac19d71-3969-4b34-ad7b-8b05d4672861}</Project>
+      <Name>MixERP.Net.EntityParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logic\MixERP.Net.Framework\MixERP.Net.Framework.csproj">
       <Project>{1509332F-AE98-44D9-9072-5BBC59A65FC4}</Project>
       <Name>MixERP.Net.Framework</Name>

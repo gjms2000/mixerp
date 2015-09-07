@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
@@ -56,6 +57,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// Performs SQL count on the table "localization.cultures".
 		/// </summary>
 		/// <returns>Returns the number of rows of the table "localization.cultures".</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -85,6 +87,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// </summary>
 		/// <param name="cultureCode">The column "culture_code" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "Culture" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public MixERP.Net.Entities.Localization.Culture Get(string cultureCode)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -113,6 +116,7 @@ namespace MixERP.Net.Schemas.Localization.Data
         /// Displayfields provide a minimal name/value context for data binding the row collection of localization.cultures.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table localization.cultures</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<DisplayField> GetDisplayFields()
 		{
 			List<DisplayField> displayFields = new List<DisplayField>();
@@ -168,6 +172,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// Inserts the instance of Culture class on the database table "localization.cultures".
 		/// </summary>
 		/// <param name="culture">The instance of "Culture" class to insert.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Add(MixERP.Net.Entities.Localization.Culture culture)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -196,6 +201,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// </summary>
 		/// <param name="culture">The instance of "Culture" class to update.</param>
 		/// <param name="cultureCode">The value of the column "culture_code" which will be updated.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Update(MixERP.Net.Entities.Localization.Culture culture, string cultureCode)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -223,6 +229,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// Deletes the row of the table "localization.cultures" against the primary key value.
 		/// </summary>
 		/// <param name="cultureCode">The value of the column "culture_code" which will be deleted.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Delete(string cultureCode)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -251,6 +258,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// Performs a select statement on table "localization.cultures" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "Culture" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetPagedResult()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -280,6 +288,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "Culture" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetPagedResult(long pageNumber)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -305,5 +314,44 @@ namespace MixERP.Net.Schemas.Localization.Data
 				
 			return Factory.Get<MixERP.Net.Entities.Localization.Culture>(this.Catalog, sql, offset);
 		}
+
+        /// <summary>
+		/// Performs a filtered select statement on table "localization.cultures" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+		/// <returns>Returns collection of "Culture" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Culture\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM localization.cultures WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Localization.Culture(), filters);
+
+            sql.OrderBy("culture_code");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Localization.Culture>(this.Catalog, sql);
+        }
 	}
 }

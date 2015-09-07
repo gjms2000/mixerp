@@ -48,7 +48,7 @@ namespace MixERP.Net.Entities.HRM
         public string EmployeeName { get; set; }
     
         [Column("gender_code")]
-        [ColumnDbType("bpchar", 2, false, "")] 
+        [ColumnDbType("varchar", 4, false, "")] 
         public string GenderCode { get; set; }
     
         [Column("joined_on")]

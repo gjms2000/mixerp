@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Web.Http;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
+using MixERP.Net.EntityParser;
+using Newtonsoft.Json;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Core
@@ -129,6 +131,31 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 tax authorities on each page, sorted by the property TaxAuthorityId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("POST")]
+        [Route("get-where/{pageNumber}")]
+        public IEnumerable<MixERP.Net.Entities.Core.TaxAuthority> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.TaxAuthorityContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Displayfields is a lightweight key/value collection of tax authorities.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of tax authorities.</returns>
@@ -226,5 +253,7 @@ namespace MixERP.Net.Api.Core
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
+
+
     }
 }

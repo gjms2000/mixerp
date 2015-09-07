@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
@@ -56,6 +57,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// Performs SQL count on the table "office.cash_repositories".
 		/// </summary>
 		/// <returns>Returns the number of rows of the table "office.cash_repositories".</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -85,6 +87,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		/// <param name="cashRepositoryId">The column "cash_repository_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "CashRepository" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public MixERP.Net.Entities.Office.CashRepository Get(int cashRepositoryId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -113,6 +116,7 @@ namespace MixERP.Net.Schemas.Office.Data
         /// Displayfields provide a minimal name/value context for data binding the row collection of office.cash_repositories.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table office.cash_repositories</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<DisplayField> GetDisplayFields()
 		{
 			List<DisplayField> displayFields = new List<DisplayField>();
@@ -168,6 +172,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// Inserts the instance of CashRepository class on the database table "office.cash_repositories".
 		/// </summary>
 		/// <param name="cashRepository">The instance of "CashRepository" class to insert.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Add(MixERP.Net.Entities.Office.CashRepository cashRepository)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -196,6 +201,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		/// <param name="cashRepository">The instance of "CashRepository" class to update.</param>
 		/// <param name="cashRepositoryId">The value of the column "cash_repository_id" which will be updated.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Update(MixERP.Net.Entities.Office.CashRepository cashRepository, int cashRepositoryId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -223,6 +229,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// Deletes the row of the table "office.cash_repositories" against the primary key value.
 		/// </summary>
 		/// <param name="cashRepositoryId">The value of the column "cash_repository_id" which will be deleted.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public void Delete(int cashRepositoryId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -251,6 +258,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// Performs a select statement on table "office.cash_repositories" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "CashRepository" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetPagedResult()
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -280,6 +288,7 @@ namespace MixERP.Net.Schemas.Office.Data
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "CashRepository" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetPagedResult(long pageNumber)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
@@ -305,5 +314,44 @@ namespace MixERP.Net.Schemas.Office.Data
 				
 			return Factory.Get<MixERP.Net.Entities.Office.CashRepository>(this.Catalog, sql, offset);
 		}
+
+        /// <summary>
+		/// Performs a filtered select statement on table "office.cash_repositories" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+		/// <returns>Returns collection of "CashRepository" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"CashRepository\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM office.cash_repositories WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Office.CashRepository(), filters);
+
+            sql.OrderBy("cash_repository_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Office.CashRepository>(this.Catalog, sql);
+        }
 	}
 }

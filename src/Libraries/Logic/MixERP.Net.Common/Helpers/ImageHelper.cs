@@ -83,6 +83,22 @@ namespace MixERP.Net.Common.Helpers
             return ImageFormat.Jpeg;
         }
 
+        public static bool IsValidBitmap(string path)
+        {
+            try
+            {
+                using (new Bitmap(path))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         public static byte[] GetResizedImage(Image image, int width, int height)
         {
             Size thumbnailSize = new Size(width, height);

@@ -26,9 +26,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 <script src="/Scripts/underscore/underscore-min.js"></script>
 
 <div id="PartyController" class="ui attached segment" style="border: none; max-width: 900px;" data-ng-controller="PartyController" data-ng-cloak>
-    <div class="ui large purple header">{{getResource('Resources.Titles.Parties')}}</div>
+    <div class="ui huge grey header">{{getResource('Resources.Titles.Parties')}}</div>
     <div class="ui stackable grid">
-        <div class="ten wide column">
+        <div class="twelve wide column">
             <div class="ui form">
                 <div class="fields">
                     <div class="five wide field">
@@ -49,7 +49,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                 </div>
             </div>
         </div>
-        <div class="six wide right floated right aligned column">
+        <div class="four wide right floated right aligned column">
             <div class="ui buttons">
                 <a class="ui positive button" target="_parent" href="Parties/Entry.mix">
                     {{getResource('Resources.Titles.AddNew')}}

@@ -142,7 +142,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                List<Filter> f = JsonConvert.DeserializeObject<List<Filter>>(filters);
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.TerminationContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
@@ -253,5 +253,7 @@ namespace MixERP.Net.Api.HRM
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
+
+
     }
 }

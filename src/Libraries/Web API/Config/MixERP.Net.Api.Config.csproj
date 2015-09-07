@@ -63,14 +63,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachmentFactoryController.cs" />
+    <Compile Include="AttachmentFactoryScrudViewController.cs" />
     <Compile Include="CurrencyLayerController.cs" />
+    <Compile Include="CurrencyLayerScrudViewController.cs" />
     <Compile Include="DbParameterController.cs" />
+    <Compile Include="DbParameterScrudViewController.cs" />
     <Compile Include="MixerpController.cs" />
+    <Compile Include="MixerpScrudViewController.cs" />
     <Compile Include="OpenExchangeRateController.cs" />
+    <Compile Include="OpenExchangeRateScrudViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScrudFactoryController.cs" />
+    <Compile Include="ScrudFactoryScrudViewController.cs" />
     <Compile Include="SmtpController.cs" />
     <Compile Include="SwitchController.cs" />
+    <Compile Include="SwitchScrudViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />
@@ -92,6 +99,10 @@
     <ProjectReference Include="..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
       <Name>MixERP.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logic\MixERP.Net.EntityParser\MixERP.Net.EntityParser.csproj">
+      <Project>{eac19d71-3969-4b34-ad7b-8b05d4672861}</Project>
+      <Name>MixERP.Net.EntityParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logic\PetaPoco\PetaPoco.csproj">
       <Project>{969D7960-52E2-40FC-91E5-1393B71E23B0}</Project>

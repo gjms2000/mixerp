@@ -65,8 +65,11 @@
     <Compile Include="AccessTypeController.cs" />
     <Compile Include="ApiAccessPolicyController.cs" />
     <Compile Include="AutoVerificationPolicyController.cs" />
+    <Compile Include="AutoVerificationPolicyScrudViewController.cs" />
     <Compile Include="DefaultEntityAccessController.cs" />
+    <Compile Include="DefaultEntityAccessScrudViewController.cs" />
     <Compile Include="EntityAccessController.cs" />
+    <Compile Include="EntityAccessScrudViewController.cs" />
     <Compile Include="HttpActionController.cs" />
     <Compile Include="LockOutController.cs" />
     <Compile Include="MenuAccessController.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="StorePolicyController.cs" />
     <Compile Include="StorePolicyDetailController.cs" />
     <Compile Include="VoucherVerificationPolicyController.cs" />
+    <Compile Include="VoucherVerificationPolicyScrudViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />
@@ -96,6 +100,10 @@
     <ProjectReference Include="..\..\Logic\MixERP.net.Common\MixERP.Net.Common.csproj">
       <Project>{D5A09C22-8F48-4FB2-A14D-C62C8C8FCEC0}</Project>
       <Name>MixERP.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logic\MixERP.Net.EntityParser\MixERP.Net.EntityParser.csproj">
+      <Project>{eac19d71-3969-4b34-ad7b-8b05d4672861}</Project>
+      <Name>MixERP.Net.EntityParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logic\PetaPoco\PetaPoco.csproj">
       <Project>{969D7960-52E2-40FC-91E5-1393B71E23B0}</Project>

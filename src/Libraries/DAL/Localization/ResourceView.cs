@@ -20,47 +20,168 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MixERP.Net.DbFactory;
+using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Npgsql;
 using PetaPoco;
+using Serilog;
 
 namespace MixERP.Net.Schemas.Localization.Data
 {
-    public class ResourceView
+    /// <summary>
+    /// Provides simplified data access features to perform SCRUD operation on the database table "localization.resource_view".
+    /// </summary>
+    public class ResourceView : DbAccess
     {
+        /// <summary>
+        /// The schema of this table. Returns literal "localization".
+        /// </summary>
+	    public override string ObjectNamespace => "localization";
+
+        /// <summary>
+        /// The schema unqualified name of this table. Returns literal "resource_view".
+        /// </summary>
+	    public override string ObjectName => "resource_view";
+
+        /// <summary>
+        /// Login id of application user accessing this table.
+        /// </summary>
+		public long LoginId { get; set; }
+
+        /// <summary>
+        /// The name of the database on which queries are being executed to.
+        /// </summary>
+        public string Catalog { get; set; }
+
 		/// <summary>
 		/// Performs SQL count on the table "localization.resource_view".
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <returns>Returns the number of rows of the table "localization.resource_view".</returns>
-		public long Count(string catalog)
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public long Count()
 		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return 0;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"ResourceView\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			const string sql = "SELECT COUNT(*) FROM localization.resource_view;";
-			return Factory.Scalar<long>(catalog, sql);
+			return Factory.Scalar<long>(this.Catalog, sql);
 		}
+
+
 
 		/// <summary>
 		/// Performs a select statement on table "localization.resource_view" producing a paged result of 25.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <returns>Returns the first page of collection of "ResourceView" class.</returns>
-		public IEnumerable<MixERP.Net.Entities.Localization.ResourceView> GetPagedResult(string catalog)
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public IEnumerable<MixERP.Net.Entities.Localization.ResourceView> GetPagedResult()
 		{
-			const string sql = "SELECT * FROM localization.resource_view ORDER BY  LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.Localization.ResourceView>(catalog, sql);
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the first page of the entity \"ResourceView\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			const string sql = "SELECT * FROM localization.resource_view ORDER BY 1 LIMIT 25 OFFSET 0;";
+			return Factory.Get<MixERP.Net.Entities.Localization.ResourceView>(this.Catalog, sql);
 		}
 
 		/// <summary>
 		/// Performs a select statement on table "localization.resource_view" producing a paged result of 25.
 		/// </summary>
-        /// <param name="catalog">The name of the database on which queries are being executed to.</param>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "ResourceView" class.</returns>
-		public IEnumerable<MixERP.Net.Entities.Localization.ResourceView> GetPagedResult(string catalog, long pageNumber)
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public IEnumerable<MixERP.Net.Entities.Localization.ResourceView> GetPagedResult(long pageNumber)
 		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the entity \"ResourceView\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
 			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM localization.resource_view ORDER BY  LIMIT 25 OFFSET @0;";
+			const string sql = "SELECT * FROM localization.resource_view ORDER BY 1 LIMIT 25 OFFSET @0;";
 				
-			return Factory.Get<MixERP.Net.Entities.Localization.ResourceView>(catalog, sql, offset);
+			return Factory.Get<MixERP.Net.Entities.Localization.ResourceView>(this.Catalog, sql, offset);
 		}
+
+        /// <summary>
+		/// Performs a filtered select statement on table "localization.resource_view" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filters">The list of filter conditions.</param>
+		/// <returns>Returns collection of "ResourceView" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Localization.ResourceView> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"ResourceView\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM localization.resource_view WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Localization.ResourceView(), filters);
+
+            sql.OrderBy("1");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Localization.ResourceView>(this.Catalog, sql);
+        }
 	}
 }

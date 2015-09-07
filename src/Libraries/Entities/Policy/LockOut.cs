@@ -40,7 +40,7 @@ namespace MixERP.Net.Entities.Policy
         public DateTime LockOutTime { get; set; }
     
         [Column("lock_out_till")]
-        [ColumnDbType("timestamptz", 0, false, "2015-09-05 19:42:28.596+00")] 
+        [ColumnDbType("timestamptz", 0, false, "2015-09-07 15:28:35.429+00")] 
         public DateTime LockOutTill { get; set; }
     }
 }

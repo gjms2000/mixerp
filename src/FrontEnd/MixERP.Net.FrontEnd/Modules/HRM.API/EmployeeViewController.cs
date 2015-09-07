@@ -120,7 +120,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                List<Filter> f = JsonConvert.DeserializeObject<List<Filter>>(filters);
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.EmployeeViewContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)

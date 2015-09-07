@@ -152,7 +152,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <param name="filters">The list of filter conditions.</param>
 		/// <returns>Returns collection of "EmployeeView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeView> GetWhere(long pageNumber, List<Filter> filters)
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeView> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
