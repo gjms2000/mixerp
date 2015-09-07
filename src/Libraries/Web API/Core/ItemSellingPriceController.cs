@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the count of the item selling prices.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/core/item-selling-price/count")]
         public long Count()
         {
             try
@@ -54,7 +55,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Core
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{itemSellingPriceId}")]
+        [Route("~/api/core/item-selling-price/{itemSellingPriceId}")]
         public MixERP.Net.Entities.Core.ItemSellingPrice Get(long itemSellingPriceId)
         {
             try
@@ -77,7 +79,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/core/item-selling-price")]
         public IEnumerable<MixERP.Net.Entities.Core.ItemSellingPrice> GetPagedResult()
         {
             try
@@ -99,7 +102,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/core/item-selling-price/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.ItemSellingPrice> GetPagedResult(long pageNumber)
         {
             try
@@ -122,7 +126,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/core/item-selling-price/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.ItemSellingPrice> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -147,7 +152,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns an enumerable key/value collection of item selling prices.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/core/item-selling-price/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -169,7 +175,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="itemSellingPrice">Your instance of item selling prices class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{itemSellingPrice}")]
+        [Route("~/api/core/item-selling-price/add/{itemSellingPrice}")]
         public void Add(MixERP.Net.Entities.Core.ItemSellingPrice itemSellingPrice)
         {
             if (itemSellingPrice == null)
@@ -196,7 +203,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="itemSellingPriceId">Enter the value for ItemSellingPriceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{itemSellingPriceId}/{itemSellingPrice}")]
+        [Route("~/api/core/item-selling-price/edit/{itemSellingPriceId}/{itemSellingPrice}")]
         public void Edit(long itemSellingPriceId, MixERP.Net.Entities.Core.ItemSellingPrice itemSellingPrice)
         {
             if (itemSellingPrice == null)
@@ -224,7 +232,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="itemSellingPriceId">Enter the value for ItemSellingPriceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{itemSellingPriceId}")]
+        [Route("~/api/core/item-selling-price/delete/{itemSellingPriceId}")]
         public void Delete(long itemSellingPriceId)
         {
             try
@@ -246,7 +255,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {

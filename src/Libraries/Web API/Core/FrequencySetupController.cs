@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the count of the frequency setups.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/core/frequency-setup/count")]
         public long Count()
         {
             try
@@ -54,7 +55,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Core
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{frequencySetupId}")]
+        [Route("~/api/core/frequency-setup/{frequencySetupId}")]
         public MixERP.Net.Entities.Core.FrequencySetup Get(int frequencySetupId)
         {
             try
@@ -77,7 +79,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/core/frequency-setup")]
         public IEnumerable<MixERP.Net.Entities.Core.FrequencySetup> GetPagedResult()
         {
             try
@@ -99,7 +102,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/core/frequency-setup/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.FrequencySetup> GetPagedResult(long pageNumber)
         {
             try
@@ -122,7 +126,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/core/frequency-setup/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.FrequencySetup> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -147,7 +152,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns an enumerable key/value collection of frequency setups.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/core/frequency-setup/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -169,7 +175,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="frequencySetup">Your instance of frequency setups class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{frequencySetup}")]
+        [Route("~/api/core/frequency-setup/add/{frequencySetup}")]
         public void Add(MixERP.Net.Entities.Core.FrequencySetup frequencySetup)
         {
             if (frequencySetup == null)
@@ -196,7 +203,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="frequencySetupId">Enter the value for FrequencySetupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{frequencySetupId}/{frequencySetup}")]
+        [Route("~/api/core/frequency-setup/edit/{frequencySetupId}/{frequencySetup}")]
         public void Edit(int frequencySetupId, MixERP.Net.Entities.Core.FrequencySetup frequencySetup)
         {
             if (frequencySetup == null)
@@ -224,7 +232,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="frequencySetupId">Enter the value for FrequencySetupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{frequencySetupId}")]
+        [Route("~/api/core/frequency-setup/delete/{frequencySetupId}")]
         public void Delete(int frequencySetupId)
         {
             try
@@ -246,7 +255,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {

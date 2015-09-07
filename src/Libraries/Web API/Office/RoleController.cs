@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the roles.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/role/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{roleId}")]
+        [Route("~/api/office/role/{roleId}")]
         public MixERP.Net.Entities.Office.Role Get(int roleId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/role")]
         public IEnumerable<MixERP.Net.Entities.Office.Role> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/role/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Role> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/role/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Role> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of roles.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/role/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="role">Your instance of roles class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{role}")]
+        [Route("~/api/office/role/add/{role}")]
         public void Add(MixERP.Net.Entities.Office.Role role)
         {
             if (role == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="roleId">Enter the value for RoleId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{roleId}/{role}")]
+        [Route("~/api/office/role/edit/{roleId}/{role}")]
         public void Edit(int roleId, MixERP.Net.Entities.Office.Role role)
         {
             if (role == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="roleId">Enter the value for RoleId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{roleId}")]
+        [Route("~/api/office/role/delete/{roleId}")]
         public void Delete(int roleId)
         {
             try

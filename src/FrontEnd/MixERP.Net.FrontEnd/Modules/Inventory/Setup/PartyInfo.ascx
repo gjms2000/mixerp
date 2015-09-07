@@ -36,7 +36,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 <asp:Panel runat="server" ID="InfoPanel" data-ng-controller="GeneralInfoController" data-ng-cloak>
 
     <div class="ui purple header">
-        <img src="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{partyView.Photo}}&H=200&W=200" class="ui circular image" alt="{{partyView.PartyName}}" />
+        <img src="/api/core/attachment/document/200/200/{{partyView.Photo }}" class="ui circular image" alt="{{partyView.PartyName}}" />
         <div class="content">
             {{partyView.PartyName}}
             <div class="sub header">

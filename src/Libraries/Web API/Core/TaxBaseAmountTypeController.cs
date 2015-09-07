@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the count of the tax base amount types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/core/tax-base-amount-type/count")]
         public long Count()
         {
             try
@@ -54,7 +55,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Core
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{taxBaseAmountTypeCode}")]
+        [Route("~/api/core/tax-base-amount-type/{taxBaseAmountTypeCode}")]
         public MixERP.Net.Entities.Core.TaxBaseAmountType Get(string taxBaseAmountTypeCode)
         {
             try
@@ -77,7 +79,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/core/tax-base-amount-type")]
         public IEnumerable<MixERP.Net.Entities.Core.TaxBaseAmountType> GetPagedResult()
         {
             try
@@ -99,7 +102,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/core/tax-base-amount-type/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.TaxBaseAmountType> GetPagedResult(long pageNumber)
         {
             try
@@ -122,7 +126,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/core/tax-base-amount-type/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.TaxBaseAmountType> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -147,7 +152,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns an enumerable key/value collection of tax base amount types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/core/tax-base-amount-type/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -169,7 +175,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="taxBaseAmountType">Your instance of tax base amount types class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{taxBaseAmountType}")]
+        [Route("~/api/core/tax-base-amount-type/add/{taxBaseAmountType}")]
         public void Add(MixERP.Net.Entities.Core.TaxBaseAmountType taxBaseAmountType)
         {
             if (taxBaseAmountType == null)
@@ -196,7 +203,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="taxBaseAmountTypeCode">Enter the value for TaxBaseAmountTypeCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{taxBaseAmountTypeCode}/{taxBaseAmountType}")]
+        [Route("~/api/core/tax-base-amount-type/edit/{taxBaseAmountTypeCode}/{taxBaseAmountType}")]
         public void Edit(string taxBaseAmountTypeCode, MixERP.Net.Entities.Core.TaxBaseAmountType taxBaseAmountType)
         {
             if (taxBaseAmountType == null)
@@ -224,7 +232,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="taxBaseAmountTypeCode">Enter the value for TaxBaseAmountTypeCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{taxBaseAmountTypeCode}")]
+        [Route("~/api/core/tax-base-amount-type/delete/{taxBaseAmountTypeCode}")]
         public void Delete(string taxBaseAmountTypeCode)
         {
             try
@@ -246,7 +255,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {

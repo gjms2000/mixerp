@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the sales quotation views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/sales-quotation-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/sales-quotation-view")]
         public IEnumerable<MixERP.Net.Entities.Transactions.SalesQuotationView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/sales-quotation-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.SalesQuotationView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/sales-quotation-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.SalesQuotationView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

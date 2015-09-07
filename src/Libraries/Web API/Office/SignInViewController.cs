@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the sign in views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/sign-in-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/sign-in-view")]
         public IEnumerable<MixERP.Net.Entities.Office.SignInView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/sign-in-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.SignInView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/sign-in-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.SignInView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

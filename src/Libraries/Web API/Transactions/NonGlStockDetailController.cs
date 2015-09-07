@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the non gl stock details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/non-gl-stock-detail/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{nonGlStockDetailId}")]
+        [Route("~/api/transactions/non-gl-stock-detail/{nonGlStockDetailId}")]
         public MixERP.Net.Entities.Transactions.NonGlStockDetail Get(long nonGlStockDetailId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/non-gl-stock-detail")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockDetail> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-detail/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockDetail> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-detail/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockDetail> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of non gl stock details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/non-gl-stock-detail/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockDetail">Your instance of non gl stock details class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{nonGlStockDetail}")]
+        [Route("~/api/transactions/non-gl-stock-detail/add/{nonGlStockDetail}")]
         public void Add(MixERP.Net.Entities.Transactions.NonGlStockDetail nonGlStockDetail)
         {
             if (nonGlStockDetail == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockDetailId">Enter the value for NonGlStockDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{nonGlStockDetailId}/{nonGlStockDetail}")]
+        [Route("~/api/transactions/non-gl-stock-detail/edit/{nonGlStockDetailId}/{nonGlStockDetail}")]
         public void Edit(long nonGlStockDetailId, MixERP.Net.Entities.Transactions.NonGlStockDetail nonGlStockDetail)
         {
             if (nonGlStockDetail == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockDetailId">Enter the value for NonGlStockDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{nonGlStockDetailId}")]
+        [Route("~/api/transactions/non-gl-stock-detail/delete/{nonGlStockDetailId}")]
         public void Delete(long nonGlStockDetailId)
         {
             try

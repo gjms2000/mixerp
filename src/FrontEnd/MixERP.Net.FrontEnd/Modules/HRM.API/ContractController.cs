@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the contracts.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/contract/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{contractId}")]
+        [Route("~/api/hrm/contract/{contractId}")]
         public MixERP.Net.Entities.HRM.Contract Get(long contractId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/contract")]
         public IEnumerable<MixERP.Net.Entities.HRM.Contract> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/contract/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Contract> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/contract/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Contract> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of contracts.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/contract/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="contract">Your instance of contracts class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{contract}")]
+        [Route("~/api/hrm/contract/add/{contract}")]
         public void Add(MixERP.Net.Entities.HRM.Contract contract)
         {
             if (contract == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="contractId">Enter the value for ContractId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{contractId}/{contract}")]
+        [Route("~/api/hrm/contract/edit/{contractId}/{contract}")]
         public void Edit(long contractId, MixERP.Net.Entities.HRM.Contract contract)
         {
             if (contract == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="contractId">Enter the value for ContractId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{contractId}")]
+        [Route("~/api/hrm/contract/delete/{contractId}")]
         public void Delete(long contractId)
         {
             try

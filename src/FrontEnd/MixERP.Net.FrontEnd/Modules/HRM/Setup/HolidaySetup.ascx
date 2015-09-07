@@ -12,7 +12,7 @@
     var keys = [
         {
             property: "OfficeId",
-            url: '/api/{v}/office/office/display-fields',
+            url: '/api/office/office/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

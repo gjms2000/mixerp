@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the cash repository selector views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/cash-repository-selector-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/cash-repository-selector-view")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepositorySelectorView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/cash-repository-selector-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepositorySelectorView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/cash-repository-selector-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepositorySelectorView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

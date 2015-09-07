@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the non gl stock master relations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{nonGlStockMasterRelationId}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/{nonGlStockMasterRelationId}")]
         public MixERP.Net.Entities.Transactions.NonGlStockMasterRelation Get(long nonGlStockMasterRelationId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/non-gl-stock-master-relation")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMasterRelation> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMasterRelation> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMasterRelation> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of non gl stock master relations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMasterRelation">Your instance of non gl stock master relations class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{nonGlStockMasterRelation}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/add/{nonGlStockMasterRelation}")]
         public void Add(MixERP.Net.Entities.Transactions.NonGlStockMasterRelation nonGlStockMasterRelation)
         {
             if (nonGlStockMasterRelation == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMasterRelationId">Enter the value for NonGlStockMasterRelationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{nonGlStockMasterRelationId}/{nonGlStockMasterRelation}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/edit/{nonGlStockMasterRelationId}/{nonGlStockMasterRelation}")]
         public void Edit(long nonGlStockMasterRelationId, MixERP.Net.Entities.Transactions.NonGlStockMasterRelation nonGlStockMasterRelation)
         {
             if (nonGlStockMasterRelation == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMasterRelationId">Enter the value for NonGlStockMasterRelationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{nonGlStockMasterRelationId}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/delete/{nonGlStockMasterRelationId}")]
         public void Delete(long nonGlStockMasterRelationId)
         {
             try

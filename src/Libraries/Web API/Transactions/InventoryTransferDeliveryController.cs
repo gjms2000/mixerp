@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the inventory transfer deliveries.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/inventory-transfer-delivery/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{inventoryTransferDeliveryId}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/{inventoryTransferDeliveryId}")]
         public MixERP.Net.Entities.Transactions.InventoryTransferDelivery Get(long inventoryTransferDeliveryId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/inventory-transfer-delivery")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferDelivery> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferDelivery> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferDelivery> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of inventory transfer deliveries.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/inventory-transfer-delivery/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferDelivery">Your instance of inventory transfer deliveries class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{inventoryTransferDelivery}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/add/{inventoryTransferDelivery}")]
         public void Add(MixERP.Net.Entities.Transactions.InventoryTransferDelivery inventoryTransferDelivery)
         {
             if (inventoryTransferDelivery == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferDeliveryId">Enter the value for InventoryTransferDeliveryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{inventoryTransferDeliveryId}/{inventoryTransferDelivery}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/edit/{inventoryTransferDeliveryId}/{inventoryTransferDelivery}")]
         public void Edit(long inventoryTransferDeliveryId, MixERP.Net.Entities.Transactions.InventoryTransferDelivery inventoryTransferDelivery)
         {
             if (inventoryTransferDelivery == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferDeliveryId">Enter the value for InventoryTransferDeliveryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{inventoryTransferDeliveryId}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/delete/{inventoryTransferDeliveryId}")]
         public void Delete(long inventoryTransferDeliveryId)
         {
             try

@@ -2650,6 +2650,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for {0} years old
+		/// </summary>
+		public static string YearOld 
+		{
+			get
+			{
+				return Get("YearOld");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Your password was changed.
 		/// </summary>
 		public static string YourPasswordWasChanged 
@@ -5432,6 +5443,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Expires On
+		/// </summary>
+		public static string expires_on 
+		{
+			get
+			{
+				return Get("expires_on");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for External Code
 		/// </summary>
 		public static string external_code 
@@ -5879,6 +5901,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Identification Number
+		/// </summary>
+		public static string identification_number 
+		{
+			get
+			{
+				return Get("identification_number");
 			}
 		}
 		
@@ -11093,6 +11126,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Contracts
+		/// </summary>
+		public static string Contracts 
+		{
+			get
+			{
+				return Get("Contracts");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Converted to Base Currency
 		/// </summary>
 		public static string ConvertedtoBaseCurrency 
@@ -11753,6 +11797,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Date of Birth
+		/// </summary>
+		public static string DateOfBirth 
+		{
+			get
+			{
+				return Get("DateOfBirth");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Day
 		/// </summary>
 		public static string Day 
@@ -12204,6 +12259,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Education Levels
+		/// </summary>
+		public static string EducationLevels 
+		{
+			get
+			{
+				return Get("EducationLevels");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Email
 		/// </summary>
 		public static string Email 
@@ -12303,6 +12369,116 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Employee Experience
+		/// </summary>
+		public static string EmployeeExperience 
+		{
+			get
+			{
+				return Get("EmployeeExperience");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employee Identification Details
+		/// </summary>
+		public static string EmployeeIdentificationDetails 
+		{
+			get
+			{
+				return Get("EmployeeIdentificationDetails");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employee Qualification
+		/// </summary>
+		public static string EmployeeQualification 
+		{
+			get
+			{
+				return Get("EmployeeQualification");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employee Social Network Details
+		/// </summary>
+		public static string EmployeeSocialNetworkDetails 
+		{
+			get
+			{
+				return Get("EmployeeSocialNetworkDetails");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employee Type
+		/// </summary>
+		public static string EmployeeType 
+		{
+			get
+			{
+				return Get("EmployeeType");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employee Types
+		/// </summary>
+		public static string EmployeeTypes 
+		{
+			get
+			{
+				return Get("EmployeeTypes");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employees
+		/// </summary>
+		public static string Employees 
+		{
+			get
+			{
+				return Get("Employees");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employment Status
+		/// </summary>
+		public static string EmploymentStatus 
+		{
+			get
+			{
+				return Get("EmploymentStatus");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employment Status Codes
+		/// </summary>
+		public static string EmploymentStatusCodes 
+		{
+			get
+			{
+				return Get("EmploymentStatusCodes");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Employment Statuses
+		/// </summary>
+		public static string EmploymentStatuses 
+		{
+			get
+			{
+				return Get("EmploymentStatuses");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for End of Day Operation
 		/// </summary>
 		public static string EndOfDayOperation 
@@ -12398,6 +12574,39 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Execute");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Exit Types
+		/// </summary>
+		public static string ExitTypes 
+		{
+			get
+			{
+				return Get("ExitTypes");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Exits
+		/// </summary>
+		public static string Exits 
+		{
+			get
+			{
+				return Get("Exits");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Experiences
+		/// </summary>
+		public static string Experiences 
+		{
+			get
+			{
+				return Get("Experiences");
 			}
 		}
 		
@@ -12864,6 +13073,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Holidays
+		/// </summary>
+		public static string Holidays 
+		{
+			get
+			{
+				return Get("Holidays");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Home
 		/// </summary>
 		public static string Home 
@@ -12904,6 +13124,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Id");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Identification Details
+		/// </summary>
+		public static string IdentificationDetails 
+		{
+			get
+			{
+				return Get("IdentificationDetails");
 			}
 		}
 		
@@ -13271,6 +13502,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Job Title
+		/// </summary>
+		public static string JobTitle 
+		{
+			get
+			{
+				return Get("JobTitle");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Job Titles
+		/// </summary>
+		public static string JobTitles 
+		{
+			get
+			{
+				return Get("JobTitles");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Journal Voucher
 		/// </summary>
 		public static string JournalVoucher 
@@ -13454,6 +13707,39 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("LeadTime");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Leave Application
+		/// </summary>
+		public static string LeaveApplication 
+		{
+			get
+			{
+				return Get("LeaveApplication");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Leave Benefits
+		/// </summary>
+		public static string LeaveBenefits 
+		{
+			get
+			{
+				return Get("LeaveBenefits");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Leave Types
+		/// </summary>
+		public static string LeaveTypes 
+		{
+			get
+			{
+				return Get("LeaveTypes");
 			}
 		}
 		
@@ -13744,6 +14030,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Nationality
+		/// </summary>
+		public static string Nationality 
+		{
+			get
+			{
+				return Get("Nationality");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for New Book Date
 		/// </summary>
 		public static string NewBookDate 
@@ -13927,6 +14224,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("OfficeCode");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Office Hours
+		/// </summary>
+		public static string OfficeHours 
+		{
+			get
+			{
+				return Get("OfficeHours");
 			}
 		}
 		
@@ -14191,6 +14499,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("PasswordUpdated");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Pay Grade
+		/// </summary>
+		public static string PayGrade 
+		{
+			get
+			{
+				return Get("PayGrade");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Pay Grades
+		/// </summary>
+		public static string PayGrades 
+		{
+			get
+			{
+				return Get("PayGrades");
 			}
 		}
 		
@@ -14609,6 +14939,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("PurchaseType");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Qualifications
+		/// </summary>
+		public static string Qualifications 
+		{
+			get
+			{
+				return Get("Qualifications");
 			}
 		}
 		
@@ -15042,6 +15383,17 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Resignations
+		/// </summary>
+		public static string Resignations 
+		{
+			get
+			{
+				return Get("Resignations");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Restoring Directories
 		/// </summary>
 		public static string RestoringDirectories 
@@ -15203,6 +15555,50 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SSTNumber");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salaries
+		/// </summary>
+		public static string Salaries 
+		{
+			get
+			{
+				return Get("Salaries");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salary
+		/// </summary>
+		public static string Salary 
+		{
+			get
+			{
+				return Get("Salary");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salary Frequencies
+		/// </summary>
+		public static string SalaryFrequencies 
+		{
+			get
+			{
+				return Get("SalaryFrequencies");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Salary Types
+		/// </summary>
+		public static string SalaryTypes 
+		{
+			get
+			{
+				return Get("SalaryTypes");
 			}
 		}
 		
@@ -15735,6 +16131,28 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Shift
+		/// </summary>
+		public static string Shift 
+		{
+			get
+			{
+				return Get("Shift");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Shifts
+		/// </summary>
+		public static string Shifts 
+		{
+			get
+			{
+				return Get("Shifts");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Shipper
 		/// </summary>
 		public static string Shipper 
@@ -15874,6 +16292,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("SigningIn");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Social Network Details
+		/// </summary>
+		public static string SocialNetworkDetails 
+		{
+			get
+			{
+				return Get("SocialNetworkDetails");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Social Networks
+		/// </summary>
+		public static string SocialNetworks 
+		{
+			get
+			{
+				return Get("SocialNetworks");
 			}
 		}
 		
@@ -16325,6 +16765,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("Tel");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Terminations
+		/// </summary>
+		public static string Terminations 
+		{
+			get
+			{
+				return Get("Terminations");
 			}
 		}
 		
@@ -17315,6 +17766,17 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("WithdrawnTransactions");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Work Shifts
+		/// </summary>
+		public static string WorkShifts 
+		{
+			get
+			{
+				return Get("WorkShifts");
 			}
 		}
 		

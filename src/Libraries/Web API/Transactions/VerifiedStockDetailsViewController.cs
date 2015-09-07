@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the verified stock details views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/verified-stock-details-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/verified-stock-details-view")]
         public IEnumerable<MixERP.Net.Entities.Transactions.VerifiedStockDetailsView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/verified-stock-details-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.VerifiedStockDetailsView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/verified-stock-details-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.VerifiedStockDetailsView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

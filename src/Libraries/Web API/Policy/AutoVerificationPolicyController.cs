@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the auto verification policies.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/auto-verification-policy/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{policyId}")]
+        [Route("~/api/policy/auto-verification-policy/{policyId}")]
         public MixERP.Net.Entities.Policy.AutoVerificationPolicy Get(int policyId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/auto-verification-policy")]
         public IEnumerable<MixERP.Net.Entities.Policy.AutoVerificationPolicy> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/auto-verification-policy/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.AutoVerificationPolicy> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/auto-verification-policy/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.AutoVerificationPolicy> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of auto verification policies.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/auto-verification-policy/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="autoVerificationPolicy">Your instance of auto verification policies class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{autoVerificationPolicy}")]
+        [Route("~/api/policy/auto-verification-policy/add/{autoVerificationPolicy}")]
         public void Add(MixERP.Net.Entities.Policy.AutoVerificationPolicy autoVerificationPolicy)
         {
             if (autoVerificationPolicy == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="policyId">Enter the value for PolicyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{policyId}/{autoVerificationPolicy}")]
+        [Route("~/api/policy/auto-verification-policy/edit/{policyId}/{autoVerificationPolicy}")]
         public void Edit(int policyId, MixERP.Net.Entities.Policy.AutoVerificationPolicy autoVerificationPolicy)
         {
             if (autoVerificationPolicy == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="policyId">Enter the value for PolicyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{policyId}")]
+        [Route("~/api/policy/auto-verification-policy/delete/{policyId}")]
         public void Delete(int policyId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the education levels.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/education-level/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{educationLevelId}")]
+        [Route("~/api/hrm/education-level/{educationLevelId}")]
         public MixERP.Net.Entities.HRM.EducationLevel Get(int educationLevelId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/education-level")]
         public IEnumerable<MixERP.Net.Entities.HRM.EducationLevel> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/education-level/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EducationLevel> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/education-level/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EducationLevel> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of education levels.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/education-level/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="educationLevel">Your instance of education levels class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{educationLevel}")]
+        [Route("~/api/hrm/education-level/add/{educationLevel}")]
         public void Add(MixERP.Net.Entities.HRM.EducationLevel educationLevel)
         {
             if (educationLevel == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="educationLevelId">Enter the value for EducationLevelId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{educationLevelId}/{educationLevel}")]
+        [Route("~/api/hrm/education-level/edit/{educationLevelId}/{educationLevel}")]
         public void Edit(int educationLevelId, MixERP.Net.Entities.HRM.EducationLevel educationLevel)
         {
             if (educationLevel == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="educationLevelId">Enter the value for EducationLevelId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{educationLevelId}")]
+        [Route("~/api/hrm/education-level/delete/{educationLevelId}")]
         public void Delete(int educationLevelId)
         {
             try

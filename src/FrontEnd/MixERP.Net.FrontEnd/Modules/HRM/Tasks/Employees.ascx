@@ -35,7 +35,7 @@
     <div class="ui link four doubling stackable cards">
         <div class="card" data-ng-repeat="employee in employees">
             <div class="image">
-                <img src="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{employee.Photo}}&H=300&W=250" 
+                <img src="/api/core/attachment/document/250/300/{{employee.Photo}}" 
                     data-value="{{employee.EmployeeId}}" onclick="selectEmployee(this)">
             </div>
             <div class="content">
@@ -48,22 +48,22 @@
                         {{employee.City}} {{employee.State}}
                     </span>
                     <br />
-
-                    <div class="ui icon buttons right floated right aligned">
-                        <a data-ng-if="employee.Email.length > 0" class="ui basic green button" href="mailto:{{employee.Email}}">
+                    
+                    <div class="ui icon buttons right floated right aligned vpad8">
+                        <a data-ng-if="employee.EmailAddress.length > 0" class="ui basic grey button" href="mailto:{{employee.EmailAddress}}">
                             <i class="mail outline icon"></i>
                         </a>
-                        <a data-ng-if="employee.Url.length > 0" class="ui basic grey button" href="{{employee.Url}}" target="_blank">
+                        <a data-ng-if="employee.Website.length > 0" class="ui basic grey button" href="{{employee.Website}}" target="_blank">
                             <i class="linkify icon"></i>
                         </a>
-                        <a data-ng-if="employee.Phone.length > 0" class="ui basic purple button" href="tel:{{employee.Phone}}">
+                        <a data-ng-if="employee.PhoneHome.length > 0" class="ui basic grey button" href="tel:{{employee.PhoneHome}}">
                             <i class="phone icon"></i>
                         </a>
-                        <a data-ng-if="employee.Fax.length > 0" class="ui basic grey button" href="tel:{{employee.Fax}}">
-                            <i class="fax icon"></i>
-                        </a>
-                        <a data-ng-if="employee.Cell.length > 0" class="ui basic green button" href="tel:{{employee.Cell}}">
+                        <a data-ng-if="employee.PhoneCell.length > 0" class="ui basic grey button" href="tel:{{employee.PhoneCell}}">
                             <i class="mobile icon"></i>
+                        </a>
+                        <a data-ng-if="employee.PhoneEmergency.length > 0" class="ui red button" href="tel:{{employee.PhoneEmergency}}">
+                            <i class="phone icon"></i>
                         </a>
                     </div>
 
@@ -73,14 +73,14 @@
                 </div>
             </div>
             <div class="extra center content">
-                <div class="ui three buttons">
-                    <a class="ui basic green button"  target="_parent" href="Entry/Employees.mix?EmployeeId={{employee.EmployeeId}}">
+                <div class="ui three basic buttons">
+                    <a class="ui basic button"  target="_parent" href="Entry/Employees.mix?EmployeeId={{employee.EmployeeId}}">
                         {{getResource('Resources.Titles.Edit')}}
                     </a>
-                    <a class="ui basic green button"  target="_parent"  href="EmployeeInfo.mix?EmployeeId={{employee.EmployeeId}}">
+                    <a class="ui basic button"  target="_parent"  href="EmployeeInfo.mix?EmployeeId={{employee.EmployeeId}}">
                         {{getResource('Resources.Titles.View')}}
                     </a>
-                    <a class="ui basic red button" data-ng-click="delete(employee);">
+                    <a class="ui basic button" data-ng-click="delete(employee);">
                         {{getResource('Resources.Titles.Delete')}}
                     </a>
                 </div>
@@ -108,17 +108,17 @@
 
         </div>
         <div class="twelve wide right aligned right floated column">
-            <div class="ui buttons">
-                <div class="ui basic purple button" data-ng-click="showFirst()">
+            <div class="ui basic buttons">
+                <div class="ui basic button" data-ng-click="showFirst()">
                     {{getResource('Resources.Titles.First')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showPrevious()">
+                <div class="ui basic button" data-ng-click="showPrevious()">
                     {{getResource('Resources.Titles.Previous')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showNext()">
+                <div class="ui basic button" data-ng-click="showNext()">
                     {{getResource('Resources.Titles.Next')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showLast()">
+                <div class="ui basic button" data-ng-click="showLast()">
                     {{getResource('Resources.Titles.Last')}}
                 </div>
             </div>
@@ -159,12 +159,12 @@
     };
 
     function getCount(filter) {
-        url = "/api/{v}/hrm/employee/count";
+        url = "/api/hrm/employee/count";
         return getAjaxRequest(url, data);
     };
 
     function deleteEmployee(employeeId) {
-        url = "/api/{v}/hrm/employee/delete/" + employeeId;
+        url = "/api/hrm/employee/delete/" + employeeId;
 
         return getAjaxRequest(url, "DELETE");
     };
@@ -183,7 +183,7 @@
 
         var data = JSON.stringify(filters);
 
-        var url = "/api/{v}/hrm/employee-view/get-where/" + page;
+        var url = "/api/hrm/employee-view/get-where/" + page;
         return postAjaxRequest(url, data);
     };
 

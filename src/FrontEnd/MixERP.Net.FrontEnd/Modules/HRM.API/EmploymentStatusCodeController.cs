@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the employment status codes.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/employment-status-code/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{employmentStatusCodeId}")]
+        [Route("~/api/hrm/employment-status-code/{employmentStatusCodeId}")]
         public MixERP.Net.Entities.HRM.EmploymentStatusCode Get(int employmentStatusCodeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/employment-status-code")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/employment-status-code/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/employment-status-code/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of employment status codes.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/employment-status-code/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employmentStatusCode">Your instance of employment status codes class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{employmentStatusCode}")]
+        [Route("~/api/hrm/employment-status-code/add/{employmentStatusCode}")]
         public void Add(MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
         {
             if (employmentStatusCode == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employmentStatusCodeId">Enter the value for EmploymentStatusCodeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{employmentStatusCodeId}/{employmentStatusCode}")]
+        [Route("~/api/hrm/employment-status-code/edit/{employmentStatusCodeId}/{employmentStatusCode}")]
         public void Edit(int employmentStatusCodeId, MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
         {
             if (employmentStatusCode == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employmentStatusCodeId">Enter the value for EmploymentStatusCodeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{employmentStatusCodeId}")]
+        [Route("~/api/hrm/employment-status-code/delete/{employmentStatusCodeId}")]
         public void Delete(int employmentStatusCodeId)
         {
             try

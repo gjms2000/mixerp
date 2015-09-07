@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the store policy details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/store-policy-detail/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{storePolicyDetailId}")]
+        [Route("~/api/policy/store-policy-detail/{storePolicyDetailId}")]
         public MixERP.Net.Entities.Policy.StorePolicyDetail Get(long storePolicyDetailId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/store-policy-detail")]
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/store-policy-detail/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/store-policy-detail/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of store policy details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/store-policy-detail/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="storePolicyDetail">Your instance of store policy details class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{storePolicyDetail}")]
+        [Route("~/api/policy/store-policy-detail/add/{storePolicyDetail}")]
         public void Add(MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
         {
             if (storePolicyDetail == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="storePolicyDetailId">Enter the value for StorePolicyDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{storePolicyDetailId}/{storePolicyDetail}")]
+        [Route("~/api/policy/store-policy-detail/edit/{storePolicyDetailId}/{storePolicyDetail}")]
         public void Edit(long storePolicyDetailId, MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
         {
             if (storePolicyDetail == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="storePolicyDetailId">Enter the value for StorePolicyDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{storePolicyDetailId}")]
+        [Route("~/api/policy/store-policy-detail/delete/{storePolicyDetailId}")]
         public void Delete(long storePolicyDetailId)
         {
             try

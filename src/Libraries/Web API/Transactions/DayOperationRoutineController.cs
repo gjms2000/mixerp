@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the day operation routines.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/day-operation-routine/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{dayOperationRoutineId}")]
+        [Route("~/api/transactions/day-operation-routine/{dayOperationRoutineId}")]
         public MixERP.Net.Entities.Transactions.DayOperationRoutine Get(long dayOperationRoutineId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/day-operation-routine")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperationRoutine> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/day-operation-routine/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperationRoutine> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/day-operation-routine/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperationRoutine> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of day operation routines.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/day-operation-routine/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayOperationRoutine">Your instance of day operation routines class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{dayOperationRoutine}")]
+        [Route("~/api/transactions/day-operation-routine/add/{dayOperationRoutine}")]
         public void Add(MixERP.Net.Entities.Transactions.DayOperationRoutine dayOperationRoutine)
         {
             if (dayOperationRoutine == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayOperationRoutineId">Enter the value for DayOperationRoutineId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{dayOperationRoutineId}/{dayOperationRoutine}")]
+        [Route("~/api/transactions/day-operation-routine/edit/{dayOperationRoutineId}/{dayOperationRoutine}")]
         public void Edit(long dayOperationRoutineId, MixERP.Net.Entities.Transactions.DayOperationRoutine dayOperationRoutine)
         {
             if (dayOperationRoutine == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayOperationRoutineId">Enter the value for DayOperationRoutineId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{dayOperationRoutineId}")]
+        [Route("~/api/transactions/day-operation-routine/delete/{dayOperationRoutineId}")]
         public void Delete(long dayOperationRoutineId)
         {
             try

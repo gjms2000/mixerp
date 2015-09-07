@@ -61,10 +61,10 @@ function LoadImages(model) {
 };
 
 function LoadImageGroup(file) {
-    var imagePath = "/Modules/BackOffice/Handlers/ImageHandler.ashx?Path=" + file.FilePath + "&H=300&W=250";
+    var imagePath = "/api/core/attachment/document/250/300/" + file.FilePath;
 
     var html = '<div class="card">' +
-        '<div class="ui top attached blue segment">' + file.OriginalFileName + '</div>' +
+        '<div class="ui top attached segment"><div class="ui grey large header">' + file.OriginalFileName + '</div></div>' +
         '<div class="image">' + '<img src="' + imagePath + '" />' + '</div>' +
         '<div class="content">' +
         '<div class="description">' + file.Comment + '<br />' + parseSerializedDate(file.AddedOn) + '<br />' + '<br />' + '</div>' +
@@ -81,7 +81,7 @@ function LoadImageGroup(file) {
 
 function initializeModal(filePath, originalFileName, comment, initializer) {
     $('#opener .header').html("<i class='photo icon'></i>" + originalFileName);
-    $('#opener img').attr('src', '/Modules/BackOffice/Handlers/ImageHandler.ashx?&H=500&W=900&Path=' + filePath);
+    $('#opener img').attr('src', '/api/core/attachment/document/900/500/' + filePath);
     $('#opener p').html(comment);
 
     if (initializer) {

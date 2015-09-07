@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the mixerp scrud views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/mixerp-scrud-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/mixerp-scrud-view")]
         public IEnumerable<MixERP.Net.Entities.Config.MixerpScrudView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/mixerp-scrud-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.MixerpScrudView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/mixerp-scrud-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.MixerpScrudView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

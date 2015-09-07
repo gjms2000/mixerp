@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the currency layers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/currency-layer/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{key}")]
+        [Route("~/api/config/currency-layer/{key}")]
         public MixERP.Net.Entities.Config.CurrencyLayer Get(string key)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/currency-layer")]
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/currency-layer/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/currency-layer/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns an enumerable key/value collection of currency layers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/config/currency-layer/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="currencyLayer">Your instance of currency layers class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{currencyLayer}")]
+        [Route("~/api/config/currency-layer/add/{currencyLayer}")]
         public void Add(MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
         {
             if (currencyLayer == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{key}/{currencyLayer}")]
+        [Route("~/api/config/currency-layer/edit/{key}/{currencyLayer}")]
         public void Edit(string key, MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
         {
             if (currencyLayer == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{key}")]
+        [Route("~/api/config/currency-layer/delete/{key}")]
         public void Delete(string key)
         {
             try

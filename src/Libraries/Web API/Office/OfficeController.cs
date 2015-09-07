@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the offices.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/office/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{officeId}")]
+        [Route("~/api/office/office/{officeId}")]
         public MixERP.Net.Entities.Office.Office Get(int officeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/office")]
         public IEnumerable<MixERP.Net.Entities.Office.Office> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/office/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Office> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/office/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Office> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of offices.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/office/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="office">Your instance of offices class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{office}")]
+        [Route("~/api/office/office/add/{office}")]
         public void Add(MixERP.Net.Entities.Office.Office office)
         {
             if (office == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="officeId">Enter the value for OfficeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{officeId}/{office}")]
+        [Route("~/api/office/office/edit/{officeId}/{office}")]
         public void Edit(int officeId, MixERP.Net.Entities.Office.Office office)
         {
             if (office == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="officeId">Enter the value for OfficeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{officeId}")]
+        [Route("~/api/office/office/delete/{officeId}")]
         public void Delete(int officeId)
         {
             try

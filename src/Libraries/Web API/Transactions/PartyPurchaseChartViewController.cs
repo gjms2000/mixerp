@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the party purchase chart views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/party-purchase-chart-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/party-purchase-chart-view")]
         public IEnumerable<MixERP.Net.Entities.Transactions.PartyPurchaseChartView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/party-purchase-chart-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.PartyPurchaseChartView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/party-purchase-chart-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.PartyPurchaseChartView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

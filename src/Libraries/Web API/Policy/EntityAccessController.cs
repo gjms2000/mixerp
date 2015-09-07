@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the entity accesses.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/entity-access/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{entityAccessId}")]
+        [Route("~/api/policy/entity-access/{entityAccessId}")]
         public MixERP.Net.Entities.Policy.EntityAccess Get(int entityAccessId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/entity-access")]
         public IEnumerable<MixERP.Net.Entities.Policy.EntityAccess> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/entity-access/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.EntityAccess> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/entity-access/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.EntityAccess> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of entity accesses.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/entity-access/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="entityAccess">Your instance of entity accesses class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{entityAccess}")]
+        [Route("~/api/policy/entity-access/add/{entityAccess}")]
         public void Add(MixERP.Net.Entities.Policy.EntityAccess entityAccess)
         {
             if (entityAccess == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="entityAccessId">Enter the value for EntityAccessId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{entityAccessId}/{entityAccess}")]
+        [Route("~/api/policy/entity-access/edit/{entityAccessId}/{entityAccess}")]
         public void Edit(int entityAccessId, MixERP.Net.Entities.Policy.EntityAccess entityAccess)
         {
             if (entityAccess == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="entityAccessId">Enter the value for EntityAccessId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{entityAccessId}")]
+        [Route("~/api/policy/entity-access/delete/{entityAccessId}")]
         public void Delete(int entityAccessId)
         {
             try

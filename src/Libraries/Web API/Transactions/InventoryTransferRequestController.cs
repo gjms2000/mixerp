@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the inventory transfer requests.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/inventory-transfer-request/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{inventoryTransferRequestId}")]
+        [Route("~/api/transactions/inventory-transfer-request/{inventoryTransferRequestId}")]
         public MixERP.Net.Entities.Transactions.InventoryTransferRequest Get(long inventoryTransferRequestId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/inventory-transfer-request")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferRequest> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/inventory-transfer-request/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferRequest> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/inventory-transfer-request/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferRequest> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of inventory transfer requests.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/inventory-transfer-request/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferRequest">Your instance of inventory transfer requests class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{inventoryTransferRequest}")]
+        [Route("~/api/transactions/inventory-transfer-request/add/{inventoryTransferRequest}")]
         public void Add(MixERP.Net.Entities.Transactions.InventoryTransferRequest inventoryTransferRequest)
         {
             if (inventoryTransferRequest == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferRequestId">Enter the value for InventoryTransferRequestId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{inventoryTransferRequestId}/{inventoryTransferRequest}")]
+        [Route("~/api/transactions/inventory-transfer-request/edit/{inventoryTransferRequestId}/{inventoryTransferRequest}")]
         public void Edit(long inventoryTransferRequestId, MixERP.Net.Entities.Transactions.InventoryTransferRequest inventoryTransferRequest)
         {
             if (inventoryTransferRequest == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="inventoryTransferRequestId">Enter the value for InventoryTransferRequestId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{inventoryTransferRequestId}")]
+        [Route("~/api/transactions/inventory-transfer-request/delete/{inventoryTransferRequestId}")]
         public void Delete(long inventoryTransferRequestId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the routines.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/routine/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{routineId}")]
+        [Route("~/api/transactions/routine/{routineId}")]
         public MixERP.Net.Entities.Transactions.Routine Get(int routineId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/routine")]
         public IEnumerable<MixERP.Net.Entities.Transactions.Routine> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/routine/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.Routine> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/routine/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.Routine> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of routines.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/routine/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="routine">Your instance of routines class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{routine}")]
+        [Route("~/api/transactions/routine/add/{routine}")]
         public void Add(MixERP.Net.Entities.Transactions.Routine routine)
         {
             if (routine == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="routineId">Enter the value for RoutineId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{routineId}/{routine}")]
+        [Route("~/api/transactions/routine/edit/{routineId}/{routine}")]
         public void Edit(int routineId, MixERP.Net.Entities.Transactions.Routine routine)
         {
             if (routine == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="routineId">Enter the value for RoutineId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{routineId}")]
+        [Route("~/api/transactions/routine/delete/{routineId}")]
         public void Delete(int routineId)
         {
             try

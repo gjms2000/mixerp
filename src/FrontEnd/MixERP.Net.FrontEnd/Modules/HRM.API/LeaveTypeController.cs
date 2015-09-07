@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the leave types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/leave-type/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{leaveTypeId}")]
+        [Route("~/api/hrm/leave-type/{leaveTypeId}")]
         public MixERP.Net.Entities.HRM.LeaveType Get(int leaveTypeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/leave-type")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveType> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/leave-type/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveType> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/leave-type/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveType> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of leave types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/leave-type/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveType">Your instance of leave types class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{leaveType}")]
+        [Route("~/api/hrm/leave-type/add/{leaveType}")]
         public void Add(MixERP.Net.Entities.HRM.LeaveType leaveType)
         {
             if (leaveType == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveTypeId">Enter the value for LeaveTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{leaveTypeId}/{leaveType}")]
+        [Route("~/api/hrm/leave-type/edit/{leaveTypeId}/{leaveType}")]
         public void Edit(int leaveTypeId, MixERP.Net.Entities.HRM.LeaveType leaveType)
         {
             if (leaveType == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveTypeId">Enter the value for LeaveTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{leaveTypeId}")]
+        [Route("~/api/hrm/leave-type/delete/{leaveTypeId}")]
         public void Delete(int leaveTypeId)
         {
             try

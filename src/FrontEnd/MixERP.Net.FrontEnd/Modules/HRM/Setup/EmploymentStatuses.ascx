@@ -13,7 +13,7 @@
     var keys = [
         {
             property: "DefaultEmploymentStatusCodeId",
-            url: '/api/{v}/hrm/employment-status-code/display-fields',
+            url: '/api/hrm/employment-status-code/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

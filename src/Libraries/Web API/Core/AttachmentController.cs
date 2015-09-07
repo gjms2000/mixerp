@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the count of the attachments.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/core/attachment/count")]
         public long Count()
         {
             try
@@ -54,7 +55,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Core
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{attachmentId}")]
+        [Route("~/api/core/attachment/{attachmentId}")]
         public MixERP.Net.Entities.Core.Attachment Get(long attachmentId)
         {
             try
@@ -77,7 +79,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/core/attachment")]
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetPagedResult()
         {
             try
@@ -99,7 +102,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/core/attachment/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetPagedResult(long pageNumber)
         {
             try
@@ -122,7 +126,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/core/attachment/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -147,7 +152,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Core
         /// <returns>Returns an enumerable key/value collection of attachments.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/core/attachment/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -169,7 +175,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="attachment">Your instance of attachments class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{attachment}")]
+        [Route("~/api/core/attachment/add/{attachment}")]
         public void Add(MixERP.Net.Entities.Core.Attachment attachment)
         {
             if (attachment == null)
@@ -196,7 +203,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="attachmentId">Enter the value for AttachmentId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{attachmentId}/{attachment}")]
+        [Route("~/api/core/attachment/edit/{attachmentId}/{attachment}")]
         public void Edit(long attachmentId, MixERP.Net.Entities.Core.Attachment attachment)
         {
             if (attachment == null)
@@ -224,7 +232,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Core
         /// <param name="attachmentId">Enter the value for AttachmentId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{attachmentId}")]
+        [Route("~/api/core/attachment/delete/{attachmentId}")]
         public void Delete(long attachmentId)
         {
             try
@@ -246,7 +255,7 @@ namespace MixERP.Net.Api.Core
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -254,15 +263,20 @@ namespace MixERP.Net.Api.Core
             }
         }
 
-        [Route("document/{path}")]
-        [Route("document/{path}/{width}")]
-        [Route("document/{path}/{width}/{height}")]
+        [Route("document/{*path}")]
+        [Route("document/{width:int}/{*path}")]
+        [Route("document/{width:int}/{height:int}/{*path}")]
+        [Route("~/api/core/attachment/document/{*path}")]
+        [Route("~/api/core/attachment/document/{width:int}/{*path}")]
+        [Route("~/api/core/attachment/document/{width:int}/{height:int}/{*path}")]
         [HttpGet]
         public HttpResponseMessage GetImage(string path, int width = 0, int height = 0)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            bool isValid = !(string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(this.Catalog) || this.LoginId <= 0);
+
+            if (!isValid)
             {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
             }
 
             path = "/Resource/Static/Attachments/" + path;

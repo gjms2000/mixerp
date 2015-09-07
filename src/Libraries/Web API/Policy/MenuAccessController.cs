@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the menu accesses.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/menu-access/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{accessId}")]
+        [Route("~/api/policy/menu-access/{accessId}")]
         public MixERP.Net.Entities.Policy.MenuAccess Get(long accessId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/menu-access")]
         public IEnumerable<MixERP.Net.Entities.Policy.MenuAccess> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/menu-access/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.MenuAccess> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/menu-access/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.MenuAccess> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of menu accesses.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/menu-access/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="menuAccess">Your instance of menu accesses class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{menuAccess}")]
+        [Route("~/api/policy/menu-access/add/{menuAccess}")]
         public void Add(MixERP.Net.Entities.Policy.MenuAccess menuAccess)
         {
             if (menuAccess == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="accessId">Enter the value for AccessId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{accessId}/{menuAccess}")]
+        [Route("~/api/policy/menu-access/edit/{accessId}/{menuAccess}")]
         public void Edit(long accessId, MixERP.Net.Entities.Policy.MenuAccess menuAccess)
         {
             if (menuAccess == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="accessId">Enter the value for AccessId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{accessId}")]
+        [Route("~/api/policy/menu-access/delete/{accessId}")]
         public void Delete(long accessId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the employee experiences.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/employee-experience/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{employeeExperienceId}")]
+        [Route("~/api/hrm/employee-experience/{employeeExperienceId}")]
         public MixERP.Net.Entities.HRM.EmployeeExperience Get(long employeeExperienceId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/employee-experience")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeExperience> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/employee-experience/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeExperience> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/employee-experience/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeExperience> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of employee experiences.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/employee-experience/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeExperience">Your instance of employee experiences class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{employeeExperience}")]
+        [Route("~/api/hrm/employee-experience/add/{employeeExperience}")]
         public void Add(MixERP.Net.Entities.HRM.EmployeeExperience employeeExperience)
         {
             if (employeeExperience == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeExperienceId">Enter the value for EmployeeExperienceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{employeeExperienceId}/{employeeExperience}")]
+        [Route("~/api/hrm/employee-experience/edit/{employeeExperienceId}/{employeeExperience}")]
         public void Edit(long employeeExperienceId, MixERP.Net.Entities.HRM.EmployeeExperience employeeExperience)
         {
             if (employeeExperience == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeExperienceId">Enter the value for EmployeeExperienceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{employeeExperienceId}")]
+        [Route("~/api/hrm/employee-experience/delete/{employeeExperienceId}")]
         public void Delete(long employeeExperienceId)
         {
             try

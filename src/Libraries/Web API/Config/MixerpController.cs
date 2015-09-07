@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the mixerps.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/mixerp/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{key}")]
+        [Route("~/api/config/mixerp/{key}")]
         public MixERP.Net.Entities.Config.Mixerp Get(string key)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/mixerp")]
         public IEnumerable<MixERP.Net.Entities.Config.Mixerp> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/mixerp/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.Mixerp> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/mixerp/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.Mixerp> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns an enumerable key/value collection of mixerps.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/config/mixerp/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="mixerp">Your instance of mixerps class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{mixerp}")]
+        [Route("~/api/config/mixerp/add/{mixerp}")]
         public void Add(MixERP.Net.Entities.Config.Mixerp mixerp)
         {
             if (mixerp == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{key}/{mixerp}")]
+        [Route("~/api/config/mixerp/edit/{key}/{mixerp}")]
         public void Edit(string key, MixERP.Net.Entities.Config.Mixerp mixerp)
         {
             if (mixerp == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{key}")]
+        [Route("~/api/config/mixerp/delete/{key}")]
         public void Delete(string key)
         {
             try

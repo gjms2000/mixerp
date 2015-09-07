@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the job titles.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/job-title/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{jobTitleId}")]
+        [Route("~/api/hrm/job-title/{jobTitleId}")]
         public MixERP.Net.Entities.HRM.JobTitle Get(int jobTitleId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/job-title")]
         public IEnumerable<MixERP.Net.Entities.HRM.JobTitle> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/job-title/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.JobTitle> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/job-title/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.JobTitle> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of job titles.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/job-title/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="jobTitle">Your instance of job titles class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{jobTitle}")]
+        [Route("~/api/hrm/job-title/add/{jobTitle}")]
         public void Add(MixERP.Net.Entities.HRM.JobTitle jobTitle)
         {
             if (jobTitle == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="jobTitleId">Enter the value for JobTitleId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{jobTitleId}/{jobTitle}")]
+        [Route("~/api/hrm/job-title/edit/{jobTitleId}/{jobTitle}")]
         public void Edit(int jobTitleId, MixERP.Net.Entities.HRM.JobTitle jobTitle)
         {
             if (jobTitle == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="jobTitleId">Enter the value for JobTitleId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{jobTitleId}")]
+        [Route("~/api/hrm/job-title/delete/{jobTitleId}")]
         public void Delete(int jobTitleId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the work centers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/work-center/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{workCenterId}")]
+        [Route("~/api/office/work-center/{workCenterId}")]
         public MixERP.Net.Entities.Office.WorkCenter Get(int workCenterId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/work-center")]
         public IEnumerable<MixERP.Net.Entities.Office.WorkCenter> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/work-center/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.WorkCenter> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/work-center/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.WorkCenter> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of work centers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/work-center/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="workCenter">Your instance of work centers class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{workCenter}")]
+        [Route("~/api/office/work-center/add/{workCenter}")]
         public void Add(MixERP.Net.Entities.Office.WorkCenter workCenter)
         {
             if (workCenter == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="workCenterId">Enter the value for WorkCenterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{workCenterId}/{workCenter}")]
+        [Route("~/api/office/work-center/edit/{workCenterId}/{workCenter}")]
         public void Edit(int workCenterId, MixERP.Net.Entities.Office.WorkCenter workCenter)
         {
             if (workCenter == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="workCenterId">Enter the value for WorkCenterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{workCenterId}")]
+        [Route("~/api/office/work-center/delete/{workCenterId}")]
         public void Delete(int workCenterId)
         {
             try

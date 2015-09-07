@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the count of the logged actions.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/audit/logged-action/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{eventId}")]
+        [Route("~/api/audit/logged-action/{eventId}")]
         public MixERP.Net.Entities.Audit.LoggedAction Get(long eventId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/audit/logged-action")]
         public IEnumerable<MixERP.Net.Entities.Audit.LoggedAction> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/audit/logged-action/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Audit.LoggedAction> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/audit/logged-action/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Audit.LoggedAction> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns an enumerable key/value collection of logged actions.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/audit/logged-action/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="loggedAction">Your instance of logged actions class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{loggedAction}")]
+        [Route("~/api/audit/logged-action/add/{loggedAction}")]
         public void Add(MixERP.Net.Entities.Audit.LoggedAction loggedAction)
         {
             if (loggedAction == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="eventId">Enter the value for EventId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{eventId}/{loggedAction}")]
+        [Route("~/api/audit/logged-action/edit/{eventId}/{loggedAction}")]
         public void Edit(long eventId, MixERP.Net.Entities.Audit.LoggedAction loggedAction)
         {
             if (loggedAction == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="eventId">Enter the value for EventId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{eventId}")]
+        [Route("~/api/audit/logged-action/delete/{eventId}")]
         public void Delete(long eventId)
         {
             try

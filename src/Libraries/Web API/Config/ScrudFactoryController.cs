@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the scrud factories.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/scrud-factory/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{key}")]
+        [Route("~/api/config/scrud-factory/{key}")]
         public MixERP.Net.Entities.Config.ScrudFactory Get(string key)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/scrud-factory")]
         public IEnumerable<MixERP.Net.Entities.Config.ScrudFactory> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/scrud-factory/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.ScrudFactory> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/scrud-factory/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.ScrudFactory> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns an enumerable key/value collection of scrud factories.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/config/scrud-factory/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="scrudFactory">Your instance of scrud factories class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{scrudFactory}")]
+        [Route("~/api/config/scrud-factory/add/{scrudFactory}")]
         public void Add(MixERP.Net.Entities.Config.ScrudFactory scrudFactory)
         {
             if (scrudFactory == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{key}/{scrudFactory}")]
+        [Route("~/api/config/scrud-factory/edit/{key}/{scrudFactory}")]
         public void Edit(string key, MixERP.Net.Entities.Config.ScrudFactory scrudFactory)
         {
             if (scrudFactory == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{key}")]
+        [Route("~/api/config/scrud-factory/delete/{key}")]
         public void Delete(string key)
         {
             try

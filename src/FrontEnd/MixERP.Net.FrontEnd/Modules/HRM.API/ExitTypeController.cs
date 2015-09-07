@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the exit types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/exit-type/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{exitTypeId}")]
+        [Route("~/api/hrm/exit-type/{exitTypeId}")]
         public MixERP.Net.Entities.HRM.ExitType Get(int exitTypeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/exit-type")]
         public IEnumerable<MixERP.Net.Entities.HRM.ExitType> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/exit-type/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.ExitType> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/exit-type/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.ExitType> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of exit types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/exit-type/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="exitType">Your instance of exit types class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{exitType}")]
+        [Route("~/api/hrm/exit-type/add/{exitType}")]
         public void Add(MixERP.Net.Entities.HRM.ExitType exitType)
         {
             if (exitType == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="exitTypeId">Enter the value for ExitTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{exitTypeId}/{exitType}")]
+        [Route("~/api/hrm/exit-type/edit/{exitTypeId}/{exitType}")]
         public void Edit(int exitTypeId, MixERP.Net.Entities.HRM.ExitType exitType)
         {
             if (exitType == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="exitTypeId">Enter the value for ExitTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{exitTypeId}")]
+        [Route("~/api/hrm/exit-type/delete/{exitTypeId}")]
         public void Delete(int exitTypeId)
         {
             try

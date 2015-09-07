@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the lock outs.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/lock-out/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{lockOutId}")]
+        [Route("~/api/policy/lock-out/{lockOutId}")]
         public MixERP.Net.Entities.Policy.LockOut Get(long lockOutId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/lock-out")]
         public IEnumerable<MixERP.Net.Entities.Policy.LockOut> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/lock-out/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.LockOut> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/lock-out/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.LockOut> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of lock outs.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/lock-out/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="lockOut">Your instance of lock outs class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{lockOut}")]
+        [Route("~/api/policy/lock-out/add/{lockOut}")]
         public void Add(MixERP.Net.Entities.Policy.LockOut lockOut)
         {
             if (lockOut == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="lockOutId">Enter the value for LockOutId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{lockOutId}/{lockOut}")]
+        [Route("~/api/policy/lock-out/edit/{lockOutId}/{lockOut}")]
         public void Edit(long lockOutId, MixERP.Net.Entities.Policy.LockOut lockOut)
         {
             if (lockOut == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="lockOutId">Enter the value for LockOutId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{lockOutId}")]
+        [Route("~/api/policy/lock-out/delete/{lockOutId}")]
         public void Delete(long lockOutId)
         {
             try

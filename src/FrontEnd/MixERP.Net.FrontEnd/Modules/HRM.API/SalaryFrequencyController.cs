@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the salary frequencies.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/salary-frequency/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{salaryFrequencyId}")]
+        [Route("~/api/hrm/salary-frequency/{salaryFrequencyId}")]
         public MixERP.Net.Entities.HRM.SalaryFrequency Get(int salaryFrequencyId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/salary-frequency")]
         public IEnumerable<MixERP.Net.Entities.HRM.SalaryFrequency> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/salary-frequency/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.SalaryFrequency> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/salary-frequency/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.SalaryFrequency> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of salary frequencies.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/salary-frequency/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salaryFrequency">Your instance of salary frequencies class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{salaryFrequency}")]
+        [Route("~/api/hrm/salary-frequency/add/{salaryFrequency}")]
         public void Add(MixERP.Net.Entities.HRM.SalaryFrequency salaryFrequency)
         {
             if (salaryFrequency == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salaryFrequencyId">Enter the value for SalaryFrequencyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{salaryFrequencyId}/{salaryFrequency}")]
+        [Route("~/api/hrm/salary-frequency/edit/{salaryFrequencyId}/{salaryFrequency}")]
         public void Edit(int salaryFrequencyId, MixERP.Net.Entities.HRM.SalaryFrequency salaryFrequency)
         {
             if (salaryFrequency == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salaryFrequencyId">Enter the value for SalaryFrequencyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{salaryFrequencyId}")]
+        [Route("~/api/hrm/salary-frequency/delete/{salaryFrequencyId}")]
         public void Delete(int salaryFrequencyId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the non gl stock masters.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/non-gl-stock-master/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{nonGlStockMasterId}")]
+        [Route("~/api/transactions/non-gl-stock-master/{nonGlStockMasterId}")]
         public MixERP.Net.Entities.Transactions.NonGlStockMaster Get(long nonGlStockMasterId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/non-gl-stock-master")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMaster> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-master/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMaster> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/non-gl-stock-master/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMaster> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of non gl stock masters.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/non-gl-stock-master/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMaster">Your instance of non gl stock masters class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{nonGlStockMaster}")]
+        [Route("~/api/transactions/non-gl-stock-master/add/{nonGlStockMaster}")]
         public void Add(MixERP.Net.Entities.Transactions.NonGlStockMaster nonGlStockMaster)
         {
             if (nonGlStockMaster == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMasterId">Enter the value for NonGlStockMasterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{nonGlStockMasterId}/{nonGlStockMaster}")]
+        [Route("~/api/transactions/non-gl-stock-master/edit/{nonGlStockMasterId}/{nonGlStockMaster}")]
         public void Edit(long nonGlStockMasterId, MixERP.Net.Entities.Transactions.NonGlStockMaster nonGlStockMaster)
         {
             if (nonGlStockMaster == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="nonGlStockMasterId">Enter the value for NonGlStockMasterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{nonGlStockMasterId}")]
+        [Route("~/api/transactions/non-gl-stock-master/delete/{nonGlStockMasterId}")]
         public void Delete(long nonGlStockMasterId)
         {
             try

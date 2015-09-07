@@ -21,91 +21,91 @@
     var keys = [
         {
             property: "GenderCode",
-            url: '/api/{v}/core/gender/display-fields',
+            url: '/api/core/gender/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "OfficeId",
-            url: '/api/{v}/office/office/display-fields',
+            url: '/api/office/office/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "UserId",
-            url: '/api/{v}/office/user/display-fields',
+            url: '/api/office/user/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "EmployeeTypeId",
-            url: '/api/{v}/hrm/employee-type/display-fields',
+            url: '/api/hrm/employee-type/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentDepartmentId",
-            url: '/api/{v}/office/department/display-fields',
+            url: '/api/office/department/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentRoleId",
-            url: '/api/{v}/office/role/display-fields',
+            url: '/api/office/role/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentEmploymentStatusId",
-            url: '/api/{v}/hrm/employment-status/display-fields',
+            url: '/api/hrm/employment-status/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentJobTitleId",
-            url: '/api/{v}/hrm/job-title/display-fields',
+            url: '/api/hrm/job-title/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentPayGradeId",
-            url: '/api/{v}/hrm/pay-grade/display-fields',
+            url: '/api/hrm/pay-grade/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrentShiftId",
-            url: '/api/{v}/hrm/shift/display-fields',
+            url: '/api/hrm/shift/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "NationalityCode",
-            url: '/api/{v}/core/nationality/display-fields',
+            url: '/api/core/nationality/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CountryId",
-            url: '/api/{v}/core/country/display-fields',
+            url: '/api/core/country/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "StateId",
-            url: '/api/{v}/core/state/display-fields',
+            url: '/api/core/state/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

@@ -117,7 +117,6 @@
     <Content Include="Countries.ascx" />
     <Content Include="CustomFields.ascx" />
     <Content Include="Entities.ascx" />
-    <Content Include="Handlers\ImageHandler.ashx" />
     <Content Include="..\..\..\..\mixerp.licenseheader">
       <Link>mixerp.licenseheader</Link>
     </Content>
@@ -146,7 +145,6 @@
     <Content Include="Services\Policy\EntityAccess.asmx" />
     <Content Include="Widgets\LinksWidget.ascx" />
     <Content Include="Widgets\OfficeInformationWidget.ascx" />
-    <Content Include="Handlers\PartyImageHandler.ashx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -331,12 +329,6 @@
     </Compile>
     <Compile Include="Frequency.ascx.designer.cs">
       <DependentUpon>Frequency.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Handlers\ImageHandler.ashx.cs">
-      <DependentUpon>ImageHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="Handlers\PartyImageHandler.ashx.cs">
-      <DependentUpon>PartyImageHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Hubs\DbHub.cs" />
     <Compile Include="Index.ascx.cs">
@@ -616,6 +608,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Handlers\" />
     <Folder Include="Reports\" />
   </ItemGroup>
   <ItemGroup>

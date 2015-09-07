@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the default entity access scrud views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/default-entity-access-scrud-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/default-entity-access-scrud-view")]
         public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccessScrudView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/default-entity-access-scrud-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccessScrudView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/default-entity-access-scrud-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccessScrudView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

@@ -17,6 +17,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System;
+using MixERP.Net.Common;
 using MixERP.Net.FrontEnd.Base;
 
 namespace MixERP.Net.Core.Modules.Inventory.Setup
@@ -25,6 +26,12 @@ namespace MixERP.Net.Core.Modules.Inventory.Setup
     {
         public override void OnControlLoad(object sender, EventArgs e)
         {
+        	long partyId = Conversion.TryCastLong(this.Page.Request.QueryString["PartyId"]);
+
+        	if(partyId == 0)
+            {
+        		this.InfoPanel.Visible = false;
+        	}
         }
     }
 }

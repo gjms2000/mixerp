@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the users.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/user/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{userId}")]
+        [Route("~/api/office/user/{userId}")]
         public MixERP.Net.Entities.Office.User Get(int userId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/user")]
         public IEnumerable<MixERP.Net.Entities.Office.User> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/user/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.User> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/user/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.User> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of users.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/user/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="user">Your instance of users class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{user}")]
+        [Route("~/api/office/user/add/{user}")]
         public void Add(MixERP.Net.Entities.Office.User user)
         {
             if (user == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="userId">Enter the value for UserId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{userId}/{user}")]
+        [Route("~/api/office/user/edit/{userId}/{user}")]
         public void Edit(int userId, MixERP.Net.Entities.Office.User user)
         {
             if (user == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="userId">Enter the value for UserId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{userId}")]
+        [Route("~/api/office/user/delete/{userId}")]
         public void Delete(int userId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the leave applications.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/leave-application/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{leaveApplicationId}")]
+        [Route("~/api/hrm/leave-application/{leaveApplicationId}")]
         public MixERP.Net.Entities.HRM.LeaveApplication Get(long leaveApplicationId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/leave-application")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveApplication> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/leave-application/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveApplication> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/leave-application/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.LeaveApplication> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of leave applications.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/leave-application/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveApplication">Your instance of leave applications class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{leaveApplication}")]
+        [Route("~/api/hrm/leave-application/add/{leaveApplication}")]
         public void Add(MixERP.Net.Entities.HRM.LeaveApplication leaveApplication)
         {
             if (leaveApplication == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveApplicationId">Enter the value for LeaveApplicationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{leaveApplicationId}/{leaveApplication}")]
+        [Route("~/api/hrm/leave-application/edit/{leaveApplicationId}/{leaveApplication}")]
         public void Edit(long leaveApplicationId, MixERP.Net.Entities.HRM.LeaveApplication leaveApplication)
         {
             if (leaveApplication == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="leaveApplicationId">Enter the value for LeaveApplicationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{leaveApplicationId}")]
+        [Route("~/api/hrm/leave-application/delete/{leaveApplicationId}")]
         public void Delete(long leaveApplicationId)
         {
             try

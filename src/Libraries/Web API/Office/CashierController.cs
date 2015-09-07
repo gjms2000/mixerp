@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the cashiers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/cashier/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{cashierId}")]
+        [Route("~/api/office/cashier/{cashierId}")]
         public MixERP.Net.Entities.Office.Cashier Get(long cashierId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/cashier")]
         public IEnumerable<MixERP.Net.Entities.Office.Cashier> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/cashier/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Cashier> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/cashier/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Cashier> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of cashiers.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/cashier/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashier">Your instance of cashiers class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{cashier}")]
+        [Route("~/api/office/cashier/add/{cashier}")]
         public void Add(MixERP.Net.Entities.Office.Cashier cashier)
         {
             if (cashier == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashierId">Enter the value for CashierId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{cashierId}/{cashier}")]
+        [Route("~/api/office/cashier/edit/{cashierId}/{cashier}")]
         public void Edit(long cashierId, MixERP.Net.Entities.Office.Cashier cashier)
         {
             if (cashier == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashierId">Enter the value for CashierId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{cashierId}")]
+        [Route("~/api/office/cashier/delete/{cashierId}")]
         public void Delete(long cashierId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the shifts.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/shift/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{shiftId}")]
+        [Route("~/api/hrm/shift/{shiftId}")]
         public MixERP.Net.Entities.HRM.Shift Get(int shiftId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/shift")]
         public IEnumerable<MixERP.Net.Entities.HRM.Shift> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/shift/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Shift> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/shift/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Shift> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of shifts.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/shift/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="shift">Your instance of shifts class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{shift}")]
+        [Route("~/api/hrm/shift/add/{shift}")]
         public void Add(MixERP.Net.Entities.HRM.Shift shift)
         {
             if (shift == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="shiftId">Enter the value for ShiftId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{shiftId}/{shift}")]
+        [Route("~/api/hrm/shift/edit/{shiftId}/{shift}")]
         public void Edit(int shiftId, MixERP.Net.Entities.HRM.Shift shift)
         {
             if (shift == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="shiftId">Enter the value for ShiftId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{shiftId}")]
+        [Route("~/api/hrm/shift/delete/{shiftId}")]
         public void Delete(int shiftId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the holidays.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/holiday/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{holidayId}")]
+        [Route("~/api/hrm/holiday/{holidayId}")]
         public MixERP.Net.Entities.HRM.Holiday Get(long holidayId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/holiday")]
         public IEnumerable<MixERP.Net.Entities.HRM.Holiday> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/holiday/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Holiday> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/holiday/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Holiday> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of holidays.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/holiday/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="holiday">Your instance of holidays class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{holiday}")]
+        [Route("~/api/hrm/holiday/add/{holiday}")]
         public void Add(MixERP.Net.Entities.HRM.Holiday holiday)
         {
             if (holiday == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="holidayId">Enter the value for HolidayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{holidayId}/{holiday}")]
+        [Route("~/api/hrm/holiday/edit/{holidayId}/{holiday}")]
         public void Edit(long holidayId, MixERP.Net.Entities.HRM.Holiday holiday)
         {
             if (holiday == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="holidayId">Enter the value for HolidayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{holidayId}")]
+        [Route("~/api/hrm/holiday/delete/{holidayId}")]
         public void Delete(long holidayId)
         {
             try

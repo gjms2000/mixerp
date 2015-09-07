@@ -23,12 +23,12 @@ namespace MixERP.Net.Core.Modules.BackOffice.Data
             }
         }
 
-        public static IEnumerable<Attachment> GetAttachments(string catalog, string attachmentDirectory, string book,
+        public static IEnumerable<Attachment> GetAttachments(string catalog, string book,
             long id)
         {
             const string sql =
-                "SELECT attachment_id, user_id, resource, resource_key, resource_id, original_file_name, file_extension, @0 || file_path as file_path, comment, added_on FROM core.attachments WHERE resource || resource_key=core.get_attachment_lookup_info(@1) AND resource_id=@2;";
-            return Factory.Get<Attachment>(catalog, sql, attachmentDirectory, book, id);
+                "SELECT attachment_id, user_id, resource, resource_key, resource_id, original_file_name, file_extension, file_path, comment, added_on FROM core.attachments WHERE resource || resource_key=core.get_attachment_lookup_info(@0) AND resource_id=@1;";
+            return Factory.Get<Attachment>(catalog, sql, book, id);
         }
 
         public static bool Save(string catalog, int userId, string book, long id, Collection<Attachment> attachments)

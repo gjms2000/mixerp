@@ -75,7 +75,7 @@ namespace MixERP.Net.Core.Modules.BackOffice.Services
                 throw new ArgumentNullException("id");
             }
 
-            return Data.Attachments.GetAttachments(AppUsers.GetCurrentUserDB(), "/Resource/Static/Attachments/", book, id);
+            return Data.Attachments.GetAttachments(AppUsers.GetCurrentUserDB(), book, id);
         }
 
         [WebMethod]

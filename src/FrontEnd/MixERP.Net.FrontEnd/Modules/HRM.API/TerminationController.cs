@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the terminations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/termination/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{terminationId}")]
+        [Route("~/api/hrm/termination/{terminationId}")]
         public MixERP.Net.Entities.HRM.Termination Get(int terminationId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/termination")]
         public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/termination/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/termination/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of terminations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/termination/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="termination">Your instance of terminations class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{termination}")]
+        [Route("~/api/hrm/termination/add/{termination}")]
         public void Add(MixERP.Net.Entities.HRM.Termination termination)
         {
             if (termination == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="terminationId">Enter the value for TerminationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{terminationId}/{termination}")]
+        [Route("~/api/hrm/termination/edit/{terminationId}/{termination}")]
         public void Edit(int terminationId, MixERP.Net.Entities.HRM.Termination termination)
         {
             if (termination == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="terminationId">Enter the value for TerminationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{terminationId}")]
+        [Route("~/api/hrm/termination/delete/{terminationId}")]
         public void Delete(int terminationId)
         {
             try

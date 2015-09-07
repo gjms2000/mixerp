@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the smtps.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/smtp/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{smtpId}")]
+        [Route("~/api/config/smtp/{smtpId}")]
         public MixERP.Net.Entities.Config.Smtp Get(int smtpId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/smtp")]
         public IEnumerable<MixERP.Net.Entities.Config.Smtp> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/smtp/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.Smtp> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/smtp/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.Smtp> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns an enumerable key/value collection of smtps.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/config/smtp/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="smtp">Your instance of smtps class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{smtp}")]
+        [Route("~/api/config/smtp/add/{smtp}")]
         public void Add(MixERP.Net.Entities.Config.Smtp smtp)
         {
             if (smtp == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="smtpId">Enter the value for SmtpId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{smtpId}/{smtp}")]
+        [Route("~/api/config/smtp/edit/{smtpId}/{smtp}")]
         public void Edit(int smtpId, MixERP.Net.Entities.Config.Smtp smtp)
         {
             if (smtp == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Config
         /// <param name="smtpId">Enter the value for SmtpId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{smtpId}")]
+        [Route("~/api/config/smtp/delete/{smtpId}")]
         public void Delete(int smtpId)
         {
             try

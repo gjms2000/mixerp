@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the count of the failed logins.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/audit/failed-login/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{failedLoginId}")]
+        [Route("~/api/audit/failed-login/{failedLoginId}")]
         public MixERP.Net.Entities.Audit.FailedLogin Get(long failedLoginId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/audit/failed-login")]
         public IEnumerable<MixERP.Net.Entities.Audit.FailedLogin> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/audit/failed-login/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Audit.FailedLogin> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/audit/failed-login/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Audit.FailedLogin> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Audit
         /// <returns>Returns an enumerable key/value collection of failed logins.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/audit/failed-login/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="failedLogin">Your instance of failed logins class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{failedLogin}")]
+        [Route("~/api/audit/failed-login/add/{failedLogin}")]
         public void Add(MixERP.Net.Entities.Audit.FailedLogin failedLogin)
         {
             if (failedLogin == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="failedLoginId">Enter the value for FailedLoginId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{failedLoginId}/{failedLogin}")]
+        [Route("~/api/audit/failed-login/edit/{failedLoginId}/{failedLogin}")]
         public void Edit(long failedLoginId, MixERP.Net.Entities.Audit.FailedLogin failedLogin)
         {
             if (failedLogin == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Audit
         /// <param name="failedLoginId">Enter the value for FailedLoginId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{failedLoginId}")]
+        [Route("~/api/audit/failed-login/delete/{failedLoginId}")]
         public void Delete(long failedLoginId)
         {
             try

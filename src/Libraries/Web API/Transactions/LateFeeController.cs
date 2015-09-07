@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the late fees.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/late-fee/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{transactionMasterId}")]
+        [Route("~/api/transactions/late-fee/{transactionMasterId}")]
         public MixERP.Net.Entities.Transactions.LateFee Get(long transactionMasterId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/late-fee")]
         public IEnumerable<MixERP.Net.Entities.Transactions.LateFee> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/late-fee/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.LateFee> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/late-fee/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.LateFee> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of late fees.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/late-fee/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="lateFee">Your instance of late fees class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{lateFee}")]
+        [Route("~/api/transactions/late-fee/add/{lateFee}")]
         public void Add(MixERP.Net.Entities.Transactions.LateFee lateFee)
         {
             if (lateFee == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="transactionMasterId">Enter the value for TransactionMasterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{transactionMasterId}/{lateFee}")]
+        [Route("~/api/transactions/late-fee/edit/{transactionMasterId}/{lateFee}")]
         public void Edit(long transactionMasterId, MixERP.Net.Entities.Transactions.LateFee lateFee)
         {
             if (lateFee == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="transactionMasterId">Enter the value for TransactionMasterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{transactionMasterId}")]
+        [Route("~/api/transactions/late-fee/delete/{transactionMasterId}")]
         public void Delete(long transactionMasterId)
         {
             try

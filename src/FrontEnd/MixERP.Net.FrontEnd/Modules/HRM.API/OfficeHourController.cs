@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the office hours.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/office-hour/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{weekDayId}")]
+        [Route("~/api/hrm/office-hour/{weekDayId}")]
         public MixERP.Net.Entities.HRM.OfficeHour Get(int weekDayId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/office-hour")]
         public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/office-hour/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/office-hour/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of office hours.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/office-hour/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="officeHour">Your instance of office hours class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{officeHour}")]
+        [Route("~/api/hrm/office-hour/add/{officeHour}")]
         public void Add(MixERP.Net.Entities.HRM.OfficeHour officeHour)
         {
             if (officeHour == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="weekDayId">Enter the value for WeekDayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{weekDayId}/{officeHour}")]
+        [Route("~/api/hrm/office-hour/edit/{weekDayId}/{officeHour}")]
         public void Edit(int weekDayId, MixERP.Net.Entities.HRM.OfficeHour officeHour)
         {
             if (officeHour == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="weekDayId">Enter the value for WeekDayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{weekDayId}")]
+        [Route("~/api/hrm/office-hour/delete/{weekDayId}")]
         public void Delete(int weekDayId)
         {
             try

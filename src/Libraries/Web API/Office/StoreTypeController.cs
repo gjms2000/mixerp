@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the store types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/store-type/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{storeTypeId}")]
+        [Route("~/api/office/store-type/{storeTypeId}")]
         public MixERP.Net.Entities.Office.StoreType Get(int storeTypeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/store-type")]
         public IEnumerable<MixERP.Net.Entities.Office.StoreType> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/store-type/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.StoreType> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/store-type/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.StoreType> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of store types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/store-type/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="storeType">Your instance of store types class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{storeType}")]
+        [Route("~/api/office/store-type/add/{storeType}")]
         public void Add(MixERP.Net.Entities.Office.StoreType storeType)
         {
             if (storeType == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="storeTypeId">Enter the value for StoreTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{storeTypeId}/{storeType}")]
+        [Route("~/api/office/store-type/edit/{storeTypeId}/{storeType}")]
         public void Edit(int storeTypeId, MixERP.Net.Entities.Office.StoreType storeType)
         {
             if (storeType == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="storeTypeId">Enter the value for StoreTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{storeTypeId}")]
+        [Route("~/api/office/store-type/delete/{storeTypeId}")]
         public void Delete(int storeTypeId)
         {
             try

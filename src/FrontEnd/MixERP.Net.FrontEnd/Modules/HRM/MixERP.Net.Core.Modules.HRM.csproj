@@ -102,6 +102,7 @@
     <Content Include="Setup\Shifts.ascx" />
     <Content Include="Tasks\Attendance.ascx" />
     <Content Include="Tasks\Contracts.ascx" />
+    <Content Include="Tasks\EmployeeInfo.ascx" />
     <Content Include="Tasks\Employees.ascx" />
     <Content Include="Tasks\Entry\Employees.ascx" />
     <Content Include="Tasks\Exit.ascx" />
@@ -251,6 +252,13 @@
     </Compile>
     <Compile Include="Tasks\Contracts.ascx.designer.cs">
       <DependentUpon>Contracts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\EmployeeInfo.ascx.cs">
+      <DependentUpon>EmployeeInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\EmployeeInfo.ascx.designer.cs">
+      <DependentUpon>EmployeeInfo.ascx</DependentUpon>
     </Compile>
     <Compile Include="Tasks\Employees.ascx.cs">
       <DependentUpon>Employees.ascx</DependentUpon>

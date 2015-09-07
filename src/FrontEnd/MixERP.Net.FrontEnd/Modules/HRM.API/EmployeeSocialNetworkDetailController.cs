@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the employee social network details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/employee-social-network-detail/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{employeeSocialNetworkDetailId}")]
+        [Route("~/api/hrm/employee-social-network-detail/{employeeSocialNetworkDetailId}")]
         public MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail Get(long employeeSocialNetworkDetailId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/employee-social-network-detail")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/employee-social-network-detail/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/employee-social-network-detail/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of employee social network details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/employee-social-network-detail/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeSocialNetworkDetail">Your instance of employee social network details class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{employeeSocialNetworkDetail}")]
+        [Route("~/api/hrm/employee-social-network-detail/add/{employeeSocialNetworkDetail}")]
         public void Add(MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail employeeSocialNetworkDetail)
         {
             if (employeeSocialNetworkDetail == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeSocialNetworkDetailId">Enter the value for EmployeeSocialNetworkDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{employeeSocialNetworkDetailId}/{employeeSocialNetworkDetail}")]
+        [Route("~/api/hrm/employee-social-network-detail/edit/{employeeSocialNetworkDetailId}/{employeeSocialNetworkDetail}")]
         public void Edit(long employeeSocialNetworkDetailId, MixERP.Net.Entities.HRM.EmployeeSocialNetworkDetail employeeSocialNetworkDetail)
         {
             if (employeeSocialNetworkDetail == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeSocialNetworkDetailId">Enter the value for EmployeeSocialNetworkDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{employeeSocialNetworkDetailId}")]
+        [Route("~/api/hrm/employee-social-network-detail/delete/{employeeSocialNetworkDetailId}")]
         public void Delete(long employeeSocialNetworkDetailId)
         {
             try

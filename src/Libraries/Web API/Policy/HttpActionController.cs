@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the count of the http actions.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/policy/http-action/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{httpActionCode}")]
+        [Route("~/api/policy/http-action/{httpActionCode}")]
         public MixERP.Net.Entities.Policy.HttpAction Get(string httpActionCode)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/policy/http-action")]
         public IEnumerable<MixERP.Net.Entities.Policy.HttpAction> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/policy/http-action/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.HttpAction> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/policy/http-action/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Policy.HttpAction> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Policy
         /// <returns>Returns an enumerable key/value collection of http actions.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/policy/http-action/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="httpAction">Your instance of http actions class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{httpAction}")]
+        [Route("~/api/policy/http-action/add/{httpAction}")]
         public void Add(MixERP.Net.Entities.Policy.HttpAction httpAction)
         {
             if (httpAction == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="httpActionCode">Enter the value for HttpActionCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{httpActionCode}/{httpAction}")]
+        [Route("~/api/policy/http-action/edit/{httpActionCode}/{httpAction}")]
         public void Edit(string httpActionCode, MixERP.Net.Entities.Policy.HttpAction httpAction)
         {
             if (httpAction == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Policy
         /// <param name="httpActionCode">Enter the value for HttpActionCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{httpActionCode}")]
+        [Route("~/api/policy/http-action/delete/{httpActionCode}")]
         public void Delete(string httpActionCode)
         {
             try

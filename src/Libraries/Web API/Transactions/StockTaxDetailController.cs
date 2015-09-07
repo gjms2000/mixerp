@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the stock tax details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/stock-tax-detail/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{stockTaxDetailId}")]
+        [Route("~/api/transactions/stock-tax-detail/{stockTaxDetailId}")]
         public MixERP.Net.Entities.Transactions.StockTaxDetail Get(long stockTaxDetailId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/stock-tax-detail")]
         public IEnumerable<MixERP.Net.Entities.Transactions.StockTaxDetail> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/stock-tax-detail/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.StockTaxDetail> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/stock-tax-detail/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.StockTaxDetail> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of stock tax details.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/stock-tax-detail/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="stockTaxDetail">Your instance of stock tax details class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{stockTaxDetail}")]
+        [Route("~/api/transactions/stock-tax-detail/add/{stockTaxDetail}")]
         public void Add(MixERP.Net.Entities.Transactions.StockTaxDetail stockTaxDetail)
         {
             if (stockTaxDetail == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="stockTaxDetailId">Enter the value for StockTaxDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{stockTaxDetailId}/{stockTaxDetail}")]
+        [Route("~/api/transactions/stock-tax-detail/edit/{stockTaxDetailId}/{stockTaxDetail}")]
         public void Edit(long stockTaxDetailId, MixERP.Net.Entities.Transactions.StockTaxDetail stockTaxDetail)
         {
             if (stockTaxDetail == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="stockTaxDetailId">Enter the value for StockTaxDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{stockTaxDetailId}")]
+        [Route("~/api/transactions/stock-tax-detail/delete/{stockTaxDetailId}")]
         public void Delete(long stockTaxDetailId)
         {
             try

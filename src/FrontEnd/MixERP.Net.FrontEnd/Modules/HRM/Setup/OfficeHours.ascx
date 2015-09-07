@@ -12,14 +12,14 @@
     var keys = [
         {
             property: "OfficeId",
-            url: '/api/{v}/office/office/display-fields',
+            url: '/api/office/office/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "ShiftId",
-            url: '/api/{v}/hrm/shift/display-fields',
+            url: '/api/hrm/shift/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

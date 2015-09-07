@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the count of the cultures.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/localization/culture/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{cultureCode}")]
+        [Route("~/api/localization/culture/{cultureCode}")]
         public MixERP.Net.Entities.Localization.Culture Get(string cultureCode)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/localization/culture")]
         public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/localization/culture/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/localization/culture/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Localization.Culture> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns an enumerable key/value collection of cultures.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/localization/culture/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="culture">Your instance of cultures class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{culture}")]
+        [Route("~/api/localization/culture/add/{culture}")]
         public void Add(MixERP.Net.Entities.Localization.Culture culture)
         {
             if (culture == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="cultureCode">Enter the value for CultureCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{cultureCode}/{culture}")]
+        [Route("~/api/localization/culture/edit/{cultureCode}/{culture}")]
         public void Edit(string cultureCode, MixERP.Net.Entities.Localization.Culture culture)
         {
             if (culture == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="cultureCode">Enter the value for CultureCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{cultureCode}")]
+        [Route("~/api/localization/culture/delete/{cultureCode}")]
         public void Delete(string cultureCode)
         {
             try

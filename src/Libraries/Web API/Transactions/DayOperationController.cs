@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the count of the day operations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/transactions/day-operation/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{dayId}")]
+        [Route("~/api/transactions/day-operation/{dayId}")]
         public MixERP.Net.Entities.Transactions.DayOperation Get(long dayId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/transactions/day-operation")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperation> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/transactions/day-operation/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperation> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/transactions/day-operation/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Transactions.DayOperation> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Transactions
         /// <returns>Returns an enumerable key/value collection of day operations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/transactions/day-operation/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayOperation">Your instance of day operations class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{dayOperation}")]
+        [Route("~/api/transactions/day-operation/add/{dayOperation}")]
         public void Add(MixERP.Net.Entities.Transactions.DayOperation dayOperation)
         {
             if (dayOperation == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayId">Enter the value for DayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{dayId}/{dayOperation}")]
+        [Route("~/api/transactions/day-operation/edit/{dayId}/{dayOperation}")]
         public void Edit(long dayId, MixERP.Net.Entities.Transactions.DayOperation dayOperation)
         {
             if (dayOperation == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Transactions
         /// <param name="dayId">Enter the value for DayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{dayId}")]
+        [Route("~/api/transactions/day-operation/delete/{dayId}")]
         public void Delete(long dayId)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the count of the open exchange rate scrud views.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/config/open-exchange-rate-scrud-view/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/config/open-exchange-rate-scrud-view")]
         public IEnumerable<MixERP.Net.Entities.Config.OpenExchangeRateScrudView> GetPagedResult()
         {
             try
@@ -92,6 +94,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/config/open-exchange-rate-scrud-view/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.OpenExchangeRateScrudView> GetPagedResult(long pageNumber)
         {
             try
@@ -116,6 +119,7 @@ namespace MixERP.Net.Api.Config
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/config/open-exchange-rate-scrud-view/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Config.OpenExchangeRateScrudView> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try

@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the pay grades.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/pay-grade/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{payGradeId}")]
+        [Route("~/api/hrm/pay-grade/{payGradeId}")]
         public MixERP.Net.Entities.HRM.PayGrade Get(int payGradeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/pay-grade")]
         public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/pay-grade/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/pay-grade/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of pay grades.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/pay-grade/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="payGrade">Your instance of pay grades class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{payGrade}")]
+        [Route("~/api/hrm/pay-grade/add/{payGrade}")]
         public void Add(MixERP.Net.Entities.HRM.PayGrade payGrade)
         {
             if (payGrade == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="payGradeId">Enter the value for PayGradeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{payGradeId}/{payGrade}")]
+        [Route("~/api/hrm/pay-grade/edit/{payGradeId}/{payGrade}")]
         public void Edit(int payGradeId, MixERP.Net.Entities.HRM.PayGrade payGrade)
         {
             if (payGrade == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="payGradeId">Enter the value for PayGradeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{payGradeId}")]
+        [Route("~/api/hrm/pay-grade/delete/{payGradeId}")]
         public void Delete(int payGradeId)
         {
             try

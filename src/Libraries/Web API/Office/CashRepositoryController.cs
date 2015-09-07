@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the cash repositories.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/cash-repository/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{cashRepositoryId}")]
+        [Route("~/api/office/cash-repository/{cashRepositoryId}")]
         public MixERP.Net.Entities.Office.CashRepository Get(int cashRepositoryId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/cash-repository")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/cash-repository/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/cash-repository/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.CashRepository> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of cash repositories.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/cash-repository/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashRepository">Your instance of cash repositories class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{cashRepository}")]
+        [Route("~/api/office/cash-repository/add/{cashRepository}")]
         public void Add(MixERP.Net.Entities.Office.CashRepository cashRepository)
         {
             if (cashRepository == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashRepositoryId">Enter the value for CashRepositoryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{cashRepositoryId}/{cashRepository}")]
+        [Route("~/api/office/cash-repository/edit/{cashRepositoryId}/{cashRepository}")]
         public void Edit(int cashRepositoryId, MixERP.Net.Entities.Office.CashRepository cashRepository)
         {
             if (cashRepository == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="cashRepositoryId">Enter the value for CashRepositoryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{cashRepositoryId}")]
+        [Route("~/api/office/cash-repository/delete/{cashRepositoryId}")]
         public void Delete(int cashRepositoryId)
         {
             try

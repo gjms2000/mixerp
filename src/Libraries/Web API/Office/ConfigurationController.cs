@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the configurations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/configuration/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{configurationId}")]
+        [Route("~/api/office/configuration/{configurationId}")]
         public MixERP.Net.Entities.Office.Configuration Get(int configurationId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/configuration")]
         public IEnumerable<MixERP.Net.Entities.Office.Configuration> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/configuration/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Configuration> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/configuration/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Configuration> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of configurations.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/configuration/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="configuration">Your instance of configurations class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{configuration}")]
+        [Route("~/api/office/configuration/add/{configuration}")]
         public void Add(MixERP.Net.Entities.Office.Configuration configuration)
         {
             if (configuration == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="configurationId">Enter the value for ConfigurationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{configurationId}/{configuration}")]
+        [Route("~/api/office/configuration/edit/{configurationId}/{configuration}")]
         public void Edit(int configurationId, MixERP.Net.Entities.Office.Configuration configuration)
         {
             if (configuration == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="configurationId">Enter the value for ConfigurationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{configurationId}")]
+        [Route("~/api/office/configuration/delete/{configurationId}")]
         public void Delete(int configurationId)
         {
             try

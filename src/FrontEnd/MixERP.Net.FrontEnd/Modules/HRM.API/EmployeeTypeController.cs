@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the employee types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/employee-type/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{employeeTypeId}")]
+        [Route("~/api/hrm/employee-type/{employeeTypeId}")]
         public MixERP.Net.Entities.HRM.EmployeeType Get(int employeeTypeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/employee-type")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeType> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/employee-type/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeType> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/employee-type/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.EmployeeType> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of employee types.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/employee-type/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeType">Your instance of employee types class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{employeeType}")]
+        [Route("~/api/hrm/employee-type/add/{employeeType}")]
         public void Add(MixERP.Net.Entities.HRM.EmployeeType employeeType)
         {
             if (employeeType == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeTypeId">Enter the value for EmployeeTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{employeeTypeId}/{employeeType}")]
+        [Route("~/api/hrm/employee-type/edit/{employeeTypeId}/{employeeType}")]
         public void Edit(int employeeTypeId, MixERP.Net.Entities.HRM.EmployeeType employeeType)
         {
             if (employeeType == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeTypeId">Enter the value for EmployeeTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{employeeTypeId}")]
+        [Route("~/api/hrm/employee-type/delete/{employeeTypeId}")]
         public void Delete(int employeeTypeId)
         {
             try

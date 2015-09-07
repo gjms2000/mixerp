@@ -9,35 +9,35 @@
     var keys = [
         {
             property: "EmployeeId",
-            url: '/api/{v}/hrm/employee/display-fields',
+            url: '/api/hrm/employee/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "SalaryTypeId",
-            url: '/api/{v}/hrm/salary-type/display-fields',
+            url: '/api/hrm/salary-type/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "PayGradeId",
-            url: '/api/{v}/hrm/pay-grade/display-fields',
+            url: '/api/hrm/pay-grade/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "SalaryFrequencyId",
-            url: '/api/{v}/hrm/salary-frequency/display-fields',
+            url: '/api/hrm/salary-frequency/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "CurrencyCode",
-            url: '/api/{v}/core/currency/display-fields',
+            url: '/api/core/currency/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

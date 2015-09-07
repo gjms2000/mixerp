@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the employees.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/employee/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{employeeId}")]
+        [Route("~/api/hrm/employee/{employeeId}")]
         public MixERP.Net.Entities.HRM.Employee Get(int employeeId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/employee")]
         public IEnumerable<MixERP.Net.Entities.HRM.Employee> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/employee/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Employee> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/employee/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Employee> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of employees.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/employee/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employee">Your instance of employees class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{employee}")]
+        [Route("~/api/hrm/employee/add/{employee}")]
         public void Add(MixERP.Net.Entities.HRM.Employee employee)
         {
             if (employee == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeId">Enter the value for EmployeeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{employeeId}/{employee}")]
+        [Route("~/api/hrm/employee/edit/{employeeId}/{employee}")]
         public void Edit(int employeeId, MixERP.Net.Entities.HRM.Employee employee)
         {
             if (employee == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="employeeId">Enter the value for EmployeeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{employeeId}")]
+        [Route("~/api/hrm/employee/delete/{employeeId}")]
         public void Delete(int employeeId)
         {
             try

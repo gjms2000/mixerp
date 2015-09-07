@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the count of the localized resources.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/localization/localized-resource/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{localizedResourceId}")]
+        [Route("~/api/localization/localized-resource/{localizedResourceId}")]
         public MixERP.Net.Entities.Localization.LocalizedResource Get(long localizedResourceId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/localization/localized-resource")]
         public IEnumerable<MixERP.Net.Entities.Localization.LocalizedResource> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/localization/localized-resource/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Localization.LocalizedResource> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/localization/localized-resource/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Localization.LocalizedResource> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Localization
         /// <returns>Returns an enumerable key/value collection of localized resources.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/localization/localized-resource/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="localizedResource">Your instance of localized resources class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{localizedResource}")]
+        [Route("~/api/localization/localized-resource/add/{localizedResource}")]
         public void Add(MixERP.Net.Entities.Localization.LocalizedResource localizedResource)
         {
             if (localizedResource == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="localizedResourceId">Enter the value for LocalizedResourceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{localizedResourceId}/{localizedResource}")]
+        [Route("~/api/localization/localized-resource/edit/{localizedResourceId}/{localizedResource}")]
         public void Edit(long localizedResourceId, MixERP.Net.Entities.Localization.LocalizedResource localizedResource)
         {
             if (localizedResource == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Localization
         /// <param name="localizedResourceId">Enter the value for LocalizedResourceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{localizedResourceId}")]
+        [Route("~/api/localization/localized-resource/delete/{localizedResourceId}")]
         public void Delete(long localizedResourceId)
         {
             try

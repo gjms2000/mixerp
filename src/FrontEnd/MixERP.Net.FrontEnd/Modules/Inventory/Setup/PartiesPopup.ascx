@@ -61,7 +61,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     <div class="ui link four doubling stackable cards">
         <div class="card" data-ng-repeat="party in parties">
             <div class="image">
-                <img src="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{party.Photo}}&H=300&W=250" 
+                <img src="/api/core/attachment/document/250/300/{{party.Photo}}" 
                     data-value="{{party.PartyId}}" onclick="selectParty(this)">
             </div>
             <div class="content">

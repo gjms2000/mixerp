@@ -5,8 +5,9 @@
                 {{partyView.PartyName}}
             </div>
 
-            <a href="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{partyView.Photo }}" target="_blank">
-                <img src="/Modules/BackOffice/Handlers/PartyImageHandler.ashx?Path={{partyView.Photo }}&H=272&W=272" class="ui image"
+            
+            <a href="/api/core/attachment/document/{{partyView.Photo }}" target="_blank">
+                <img ng-src="/api/core/attachment/document/272/272/{{partyView.Photo }}" class="ui image"
                      height="272"
                      alt="{{partyView.PartyName}}" />
             </a>

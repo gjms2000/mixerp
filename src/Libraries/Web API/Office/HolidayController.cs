@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the count of the holidays.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/office/holiday/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.Office
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{holidayId}")]
+        [Route("~/api/office/holiday/{holidayId}")]
         public MixERP.Net.Entities.Office.Holiday Get(int holidayId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/office/holiday")]
         public IEnumerable<MixERP.Net.Entities.Office.Holiday> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/office/holiday/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Holiday> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/office/holiday/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.Office.Holiday> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.Office
         /// <returns>Returns an enumerable key/value collection of holidays.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/office/holiday/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="holiday">Your instance of holidays class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{holiday}")]
+        [Route("~/api/office/holiday/add/{holiday}")]
         public void Add(MixERP.Net.Entities.Office.Holiday holiday)
         {
             if (holiday == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="holidayId">Enter the value for HolidayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{holidayId}/{holiday}")]
+        [Route("~/api/office/holiday/edit/{holidayId}/{holiday}")]
         public void Edit(int holidayId, MixERP.Net.Entities.Office.Holiday holiday)
         {
             if (holiday == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.Office
         /// <param name="holidayId">Enter the value for HolidayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{holidayId}")]
+        [Route("~/api/office/holiday/delete/{holidayId}")]
         public void Delete(int holidayId)
         {
             try

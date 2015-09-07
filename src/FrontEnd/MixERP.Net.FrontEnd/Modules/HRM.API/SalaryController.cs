@@ -46,6 +46,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the count of the salaries.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
+        [Route("~/api/hrm/salary/count")]
         public long Count()
         {
             try
@@ -69,6 +70,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{salaryId}")]
+        [Route("~/api/hrm/salary/{salaryId}")]
         public MixERP.Net.Entities.HRM.Salary Get(long salaryId)
         {
             try
@@ -91,6 +93,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
+        [Route("~/api/hrm/salary")]
         public IEnumerable<MixERP.Net.Entities.HRM.Salary> GetPagedResult()
         {
             try
@@ -114,6 +117,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
+        [Route("~/api/hrm/salary/page/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Salary> GetPagedResult(long pageNumber)
         {
             try
@@ -138,6 +142,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
+        [Route("~/api/hrm/salary/get-where/{pageNumber}")]
         public IEnumerable<MixERP.Net.Entities.HRM.Salary> GetWhere(long pageNumber, [FromBody]dynamic filters)
         {
             try
@@ -161,6 +166,7 @@ namespace MixERP.Net.Api.HRM
         /// <returns>Returns an enumerable key/value collection of salaries.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
+        [Route("~/api/hrm/salary/display-fields")]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -183,6 +189,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salary">Your instance of salaries class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{salary}")]
+        [Route("~/api/hrm/salary/add/{salary}")]
         public void Add(MixERP.Net.Entities.HRM.Salary salary)
         {
             if (salary == null)
@@ -211,6 +218,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salaryId">Enter the value for SalaryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{salaryId}/{salary}")]
+        [Route("~/api/hrm/salary/edit/{salaryId}/{salary}")]
         public void Edit(long salaryId, MixERP.Net.Entities.HRM.Salary salary)
         {
             if (salary == null)
@@ -238,6 +246,7 @@ namespace MixERP.Net.Api.HRM
         /// <param name="salaryId">Enter the value for SalaryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{salaryId}")]
+        [Route("~/api/hrm/salary/delete/{salaryId}")]
         public void Delete(long salaryId)
         {
             try
