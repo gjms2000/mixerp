@@ -40,7 +40,7 @@ SELECT
     hrm.employees.city,
     hrm.employees.state,
     hrm.employees.country_id,
-    core.countries.country_code || ' (' || core.countries.country_name || ')' AS country,
+    core.countries.country_name AS country,
     hrm.employees.phone_home,
     hrm.employees.phone_cell,
     hrm.employees.phone_office_extension,

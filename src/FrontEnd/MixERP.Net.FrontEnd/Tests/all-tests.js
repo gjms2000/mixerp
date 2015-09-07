@@ -202,7 +202,7 @@ QUnit.test("visibility.js -> triggerClick", function (assert) {
     assert.equal(actual, true, "The element was unhidden again.");
 });
 ///#source 1 1 /Tests/dom/select.js
-///<reference path="../bundles/scripts/master-page.min.js"/>
+///<reference path="../bundles/master-page.js"/>
 var select = $("<select id='ItemSelect'/>").hide();
 QUnit.test("select.js -> getSelectedText", function (assert) {
     var items = ['Macbook', 'Ipad', 'Mobile', 'Laptop'];
@@ -233,7 +233,7 @@ function shouldEqualByItemSelect(expected, assert, select) {
 
 
 ///#source 1 1 /Tests/grid/cell.js
-///<reference path="../bundles/scripts/master-page.min.js"/>
+///<reference path="../bundles/master-page.js"/>
 window.currencySymbol = "Rs. ";
 window.currencyDecimalPlaces = "2";
 
@@ -299,7 +299,7 @@ QUnit.test("cell.js -> getColumnText", function (assert) {
 
 
 ///#source 1 1 /Tests/grid/grid.js
-///<reference path="../bundles/scripts/master-page.min.js"/>
+///<reference path="../bundles/master-page.js"/>
 QUnit.test("grid.js, ->getSelectedCheckBoxItemIds", function (assert) {
     var table = $("<table> " +
             "    <thead> " +
@@ -340,7 +340,7 @@ QUnit.test("grid.js, ->getSelectedCheckBoxItemIds", function (assert) {
 
 
 ///#source 1 1 /Tests/localization.js
-///<reference path="../bundles/scripts/master-page.min.js"/>
+///<reference path="../bundles/master-page.js"/>
 QUnit.test("localization.js -> getFormattedNumber (Case 1)", function (assert) {
     //Cultures: en-US, zh-CN, fil-PH, ja-JP, ms-MY
     window.currencyDecimalPlaces = 2;
@@ -438,7 +438,7 @@ QUnit.test("localization.js -> parseFormattedNumber (Case 3)", function (assert)
 
 });
 ///#source 1 1 /Tests/transaction.js
-///<reference path="../bundles/scripts/master-page.min.js"/>
+///<reference path="../bundles/master-page.js"/>
 QUnit.test("transaction.js -> convertToDebit", function (assert) {
     var expected = -100;//Negative credit balance is debit
     var actualBalance = 100;

@@ -148,7 +148,7 @@ BEGIN
     ) THEN
         CREATE TABLE core.genders
         (
-            gender_code                             character(4) NOT NULL PRIMARY KEY,
+            gender_code                             national character varying(4) NOT NULL PRIMARY KEY,
             gender_name                             national character varying(50) NOT NULL UNIQUE,
             audit_user_id                           integer NULL REFERENCES office.users(user_id),
             audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -289,4 +289,3 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
-

@@ -13,7 +13,8 @@
         ["EmployeeId", "EmployeeName", "", ""],
         ["FirstName", "MiddleName", "LastName", "GenderCode", "", "", "", ""]
     ];
-    var returnUrl = window.location.href;
+    var returnUrl = "../Employees.mix";
+    var queryStringKey = "EmployeeId";
 </script>
 
 <script>

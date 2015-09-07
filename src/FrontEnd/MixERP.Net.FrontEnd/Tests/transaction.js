@@ -1,4 +1,4 @@
-﻿///<reference path="../bundles/scripts/master-page.min.js"/>
+﻿///<reference path="../bundles/master-page.js"/>
 QUnit.test("transaction.js -> convertToDebit", function (assert) {
     var expected = -100;//Negative credit balance is debit
     var actualBalance = 100;

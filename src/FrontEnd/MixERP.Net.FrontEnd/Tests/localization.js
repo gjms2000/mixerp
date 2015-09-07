@@ -1,4 +1,4 @@
-﻿///<reference path="../bundles/scripts/master-page.min.js"/>
+﻿///<reference path="../bundles/master-page.js"/>
 QUnit.test("localization.js -> getFormattedNumber (Case 1)", function (assert) {
     //Cultures: en-US, zh-CN, fil-PH, ja-JP, ms-MY
     window.currencyDecimalPlaces = 2;

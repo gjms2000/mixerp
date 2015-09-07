@@ -25,7 +25,11 @@
             var el = $("[data-property=" + this.property + "]");
 
             if (el.length) {
-                ajaxDataBind(this.url, el, this.data, null, null, null, this.valueField, this.textField, this.isArray);
+                var selectedValue = "";
+                if (window.editData) {
+                    selectedValue = window.editData[el.attr("id")];
+                };
+                ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
             };
         });
     };
@@ -40,7 +44,8 @@
     var form = $(".poco.form.factory");
     var view = $(".poco.view.factory");
     var grid = [undefined, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
-
+    var editData;
+    var dropdownsLoaded = false;
 </script>
 
 <script>
@@ -53,11 +58,22 @@
         $(".description").remove();        
     };
 
-    cancelButton.click(function() {
+    cancelButton.click(function () {
+        var confirmed = confirmAction();
+
+        if (!confirmed) {
+            return;
+        };
+
         resetForm();
+
         if (view.length) {
             form.hide();
             view.show();
+        };
+
+        if (window.returnUrl) {
+            document.location.href = window.returnUrl;
         };
     });
 
@@ -76,7 +92,6 @@
 
         $.each(poco.Columns, function(i, v){
             var columnName = v.ColumnName;
-            var propertyName = v.PropertyName;
             var dataType = v.DataType;
             var isSerial = v.IsSerial;
 
@@ -187,22 +202,30 @@
 </script>
 
     <script>
-        $(window).load(function () {
+        //$(window).load
+        $(document).ready(function () {
             var form = $(".poco.form.factory");
             var view = $(".poco.view.factory");
-
             if (view.length) {
                 form.hide();
             } else {
                 form.show();
             };
 
-            createForm(window.formPocoName);
+            loadEdit();            
         });
 
         $(document).ajaxStop(function () {
             $("#scrud").removeClass("loading");
+            loadDropdowns();
         });
+
+        function loadDropdowns() {
+            if (!dropdownsLoaded) {
+                $(".poco.form.factory .dropdown").dropdown();
+                dropdownsLoaded = true;
+            };
+        };
 
         function createForm(pocoName) {
             var ajaxGetFormView = getFormView(pocoName);
@@ -276,14 +299,10 @@
 
 
             initializeAjaxRequest();
-
-            $(".dropdown").dropdown();
-
             initializeUploader();
             initializeValidators();
             setRegionalFormat();
             loadDatepicker();
-
 
             var initialValue = $(".initial.value").html();
 
@@ -300,6 +319,34 @@
 
                     $(".live:not(input)").html(val);
                 };
+            });
+
+            $("input.live").trigger("keyup");
+        };
+
+        function loadEdit() {
+            var queryString = getQueryStringByName(queryStringKey);            
+
+            if (!queryString) {
+                createForm(window.formPocoName);
+                return;
+            };
+
+            function getViewForEdit(pocoName, primaryKeyValue) {
+                var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
+                var data = appendParameter("", "pocoName", pocoName);
+                data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
+
+                data = getData(data);
+
+                return getAjax(url, data);
+            };
+
+            var ajaxGetViewForEdit = getViewForEdit(formPocoName, queryString);
+
+            ajaxGetViewForEdit.success(function (msg) {
+                editData = JSON.parse(msg.d);
+                createForm(window.formPocoName);
             });
         };
 
@@ -349,6 +396,11 @@
 
             if(["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >=0){
                 return;
+            };
+            var value = "";
+
+            if (window.editData) {
+                value = window.editData[column.ColumnName];
             };
 
             var field = $("<div/>");
@@ -402,6 +454,12 @@
             if (!column.IsNullable) {
                 element.attr("required", "required");
                 label.html(label.text() + "&nbsp;<span style='color:red'>*</span>");
+            };
+
+            if (value) {
+                if (!element.is("select")) {
+                    element.val(value);
+                };
             };
 
             element.addClass("form-field");

@@ -1,4 +1,4 @@
-﻿///<reference path="../bundles/scripts/master-page.min.js"/>
+﻿///<reference path="../bundles/master-page.js"/>
 var select = $("<select id='ItemSelect'/>").hide();
 QUnit.test("select.js -> getSelectedText", function (assert) {
     var items = ['Macbook', 'Ipad', 'Mobile', 'Laptop'];

@@ -1,4 +1,4 @@
-﻿///<reference path="../bundles/scripts/master-page.min.js"/>
+﻿///<reference path="../bundles/master-page.js"/>
 QUnit.test("grid.js, ->getSelectedCheckBoxItemIds", function (assert) {
     var table = $("<table> " +
             "    <thead> " +

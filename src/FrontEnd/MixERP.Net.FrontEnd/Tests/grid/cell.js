@@ -1,4 +1,4 @@
-﻿///<reference path="../bundles/scripts/master-page.min.js"/>
+﻿///<reference path="../bundles/master-page.js"/>
 window.currencySymbol = "Rs. ";
 window.currencyDecimalPlaces = "2";
 

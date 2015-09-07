@@ -53,6 +53,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -61,6 +65,10 @@
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MixERP.Net.Entities, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -108,10 +116,19 @@
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\BundleConfig.cs" />
     <Compile Include="Application\FirstSteps.cs" />
     <Compile Include="Application\LogManager.cs" />
     <Compile Include="Application\MixERPAssemblyResolver.cs" />
@@ -357,24 +374,6 @@
       <DependentUpon>mixerp.css</DependentUpon>
     </Content>
     <Content Include="Backups\index.html" />
-    <Content Include="bundles\scripts\libraries.js">
-      <DependentUpon>libraries.js.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\libraries.min.js">
-      <DependentUpon>libraries.js</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\master-page.js">
-      <DependentUpon>master-page.js.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\master-page.min.js">
-      <DependentUpon>master-page.js</DependentUpon>
-    </Content>
-    <Content Include="bundles\stylesheets\master-page.rtl.css">
-      <DependentUpon>master-page.rtl.css.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\stylesheets\master-page.rtl.min.css">
-      <DependentUpon>master-page.rtl.css</DependentUpon>
-    </Content>
     <Content Include="db\1.x\1.1\index.html" />
     <Content Include="db\1.x\1.1\mixerp-blank.sql" />
     <Content Include="db\1.x\1.1\mixerp-sample.sql" />
@@ -823,9 +822,6 @@
     <Content Include="Scripts\colorbox\bower.json" />
     <Content Include="Scripts\colorbox\colorbox.ai" />
     <Content Include="Scripts\colorbox\README.md" />
-    <Content Include="bundles\scripts\parties-popup.min.js.gzip">
-      <DependentUpon>parties-popup.min.js</DependentUpon>
-    </Content>
     <Content Include="BackendMaster.Master" />
     <Content Include="Resource\web.config" />
     <Content Include="Resource\Static\Attachments\web.config" />
@@ -841,7 +837,6 @@
     </Content>
     <Content Include="Resource\Configs\StockTransactionFactoryParameters.config" />
     <Content Include="Backups\web.config" />
-    <Content Include="bundles\stylesheets\master-page.rtl.css.bundle" />
     <Content Include="Handlers\LogoHandler.ashx" />
     <Content Include="App_Themes\MixERP\mixerp.less" />
     <Content Include="App_Themes\MixERP\mixerp.css.map">
@@ -850,7 +845,6 @@
     <Content Include="plugins\wkhtmltopdf\LICENSE" />
     <Content Include="Resource\Temp\Public\web.config" />
     <Content Include="Scripts\d3\LICENSE" />
-    <None Include="bundleconfig.json" />
     <Content Include="Resource\Static\Attachments\sample\readme.md" />
     <None Include="compilerconfig.json" />
     <Content Include="db\1.x\1.1\readme.md" />
@@ -1023,6 +1017,7 @@
     <Content Include="Stylesheets\report.rtl.min.css">
       <DependentUpon>report.rtl.css</DependentUpon>
     </Content>
+    <Content Include="Stylesheets\rtl.css" />
     <Content Include="Tests\all-tests.js">
       <DependentUpon>all-tests.js.bundle</DependentUpon>
     </Content>
@@ -1038,12 +1033,6 @@
     <Content Include="Tests\grid\grid.js" />
     <Content Include="Tests\localization.js" />
     <Content Include="Tests\mixerp-core.test.html" />
-    <Content Include="Scripts\mixerp\mixerp-core.js">
-      <DependentUpon>mixerp-core.js.bundle</DependentUpon>
-    </Content>
-    <Content Include="Scripts\mixerp\mixerp-core.min.js">
-      <DependentUpon>mixerp-core.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\mixerp\core\transaction.js" />
     <Content Include="Scripts\mixerp\core\mixerp-ajax.js" />
     <Content Include="Scripts\mixerp\core\json.js" />
@@ -1065,12 +1054,6 @@
     <Content Include="Scripts\mixerp\utitlities\country-codes.js" />
     <Content Include="Scripts\Pages\SignIn.aspx.js" />
     <Content Include="Scripts\mixerp.js" />
-    <Content Include="bundles\scripts\parties-popup.js">
-      <DependentUpon>parties-popup.js.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\parties-popup.min.js">
-      <DependentUpon>parties-popup.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\mixerp\master-page\declaration.js" />
     <Content Include="Scripts\mixerp\master-page\js-tree.js" />
     <Content Include="Scripts\mixerp\master-page\layout.js" />
@@ -1116,18 +1099,6 @@
     <Content Include="Scripts\shortcut.js" />
     <Content Include="SignIn.aspx" />
     <Content Include="Reports\Print.html" />
-    <Content Include="bundles\stylesheets\master-page.css">
-      <DependentUpon>master-page.css.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\stylesheets\master-page.min.css">
-      <DependentUpon>master-page.css</DependentUpon>
-    </Content>
-    <Content Include="bundles\stylesheets\parties-popup.css">
-      <DependentUpon>parties-popup.css.bundle</DependentUpon>
-    </Content>
-    <Content Include="bundles\stylesheets\parties-popup.min.css">
-      <DependentUpon>parties-popup.css</DependentUpon>
-    </Content>
     <Content Include="Stylesheets\report.css">
       <DependentUpon>report.less</DependentUpon>
     </Content>
@@ -1151,26 +1122,6 @@
     <Content Include="..\..\mixerp.licenseheader">
       <Link>mixerp.licenseheader</Link>
     </Content>
-    <Content Include="bundles\scripts\master-page.js.bundle" />
-    <Content Include="bundles\scripts\master-page.min.js.map">
-      <DependentUpon>master-page.min.js</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\master-page.min.js.gzip">
-      <DependentUpon>master-page.min.js</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\libraries.js.bundle" />
-    <Content Include="bundles\scripts\libraries.min.js.map">
-      <DependentUpon>libraries.min.js</DependentUpon>
-    </Content>
-    <Content Include="bundles\scripts\libraries.min.js.gzip">
-      <DependentUpon>libraries.min.js</DependentUpon>
-    </Content>
-    <None Include="bundles\stylesheets\master-page.css.bundle" />
-    <None Include="bundles\scripts\parties-popup.js.bundle" />
-    <Content Include="bundles\scripts\parties-popup.min.js.map">
-      <DependentUpon>parties-popup.min.js</DependentUpon>
-    </Content>
-    <None Include="bundles\stylesheets\parties-popup.css.bundle" />
     <None Include="Properties\PublishProfiles\MixERPPublish.pubxml" />
     <Content Include="Scripts\vakata-jstree\LICENSE-MIT" />
     <Content Include="Scripts\vakata-jstree\dist\jstree.min.js.map">
@@ -1181,13 +1132,6 @@
     <Content Include="Stylesheets\report.less" />
     <Content Include="Stylesheets\report.css.map">
       <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Scripts\mixerp\mixerp-core.js.bundle" />
-    <Content Include="Scripts\mixerp\mixerp-core.min.js.map">
-      <DependentUpon>mixerp-core.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\mixerp\mixerp-core.min.js.gzip">
-      <DependentUpon>mixerp-core.min.js</DependentUpon>
     </Content>
     <Content Include="Tests\all-tests.js.bundle" />
     <Content Include="Tests\all-tests.min.js.map">

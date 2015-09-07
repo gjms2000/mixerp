@@ -80,20 +80,20 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                     </span>
                     <br />
 
-                    <div class="ui icon buttons right floated right aligned">
-                        <a data-ng-if="party.Email.length > 0" class="ui basic green button" href="mailto:{{party.Email}}">
+                    <div class="ui basic icon buttons right floated right aligned">
+                        <a data-ng-if="party.Email.length > 0" class="ui basic button" href="mailto:{{party.Email}}">
                             <i class="mail outline icon"></i>
                         </a>
-                        <a data-ng-if="party.Url.length > 0" class="ui basic grey button" href="{{party.Url}}" target="_blank">
+                        <a data-ng-if="party.Url.length > 0" class="ui basic button" href="{{party.Url}}" target="_blank">
                             <i class="linkify icon"></i>
                         </a>
-                        <a data-ng-if="party.Phone.length > 0" class="ui basic purple button" href="tel:{{party.Phone}}">
+                        <a data-ng-if="party.Phone.length > 0" class="ui basic button" href="tel:{{party.Phone}}">
                             <i class="phone icon"></i>
                         </a>
-                        <a data-ng-if="party.Fax.length > 0" class="ui basic grey button" href="tel:{{party.Fax}}">
+                        <a data-ng-if="party.Fax.length > 0" class="ui basic button" href="tel:{{party.Fax}}">
                             <i class="fax icon"></i>
                         </a>
-                        <a data-ng-if="party.Cell.length > 0" class="ui basic green button" href="tel:{{party.Cell}}">
+                        <a data-ng-if="party.Cell.length > 0" class="ui basic button" href="tel:{{party.Cell}}">
                             <i class="mobile icon"></i>
                         </a>
                     </div>
@@ -104,14 +104,14 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
                 </div>
             </div>
             <div class="extra center content">
-                <div class="ui three buttons">
-                    <a class="ui basic green button"  target="_parent" href="Parties/Entry.mix?PartyId={{party.PartyId}}">
+                <div class="ui three basic buttons">
+                    <a class="ui basic button"  target="_parent" href="Parties/Entry.mix?PartyId={{party.PartyId}}">
                         {{getResource('Resources.Titles.Edit')}}
                     </a>
-                    <a class="ui basic green button"  target="_parent"  href="PartyInfo.mix?PartyId={{party.PartyId}}">
+                    <a class="ui basic button"  target="_parent"  href="PartyInfo.mix?PartyId={{party.PartyId}}">
                         {{getResource('Resources.Titles.View')}}
                     </a>
-                    <a class="ui basic red button" data-ng-click="delete(party);">
+                    <a class="ui basic button" data-ng-click="delete(party);">
                         {{getResource('Resources.Titles.Delete')}}
                     </a>
                 </div>
@@ -139,17 +139,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 
         </div>
         <div class="twelve wide right aligned right floated column">
-            <div class="ui buttons">
-                <div class="ui basic purple button" data-ng-click="showFirst()">
+            <div class="ui basic buttons">
+                <div class="ui basic button" data-ng-click="showFirst()">
                     {{getResource('Resources.Titles.First')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showPrevious()">
+                <div class="ui basic button" data-ng-click="showPrevious()">
                     {{getResource('Resources.Titles.Previous')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showNext()">
+                <div class="ui basic button" data-ng-click="showNext()">
                     {{getResource('Resources.Titles.Next')}}
                 </div>
-                <div class="ui basic purple button" data-ng-click="showLast()">
+                <div class="ui basic button" data-ng-click="showLast()">
                     {{getResource('Resources.Titles.Last')}}
                 </div>
             </div>

@@ -34,7 +34,7 @@ namespace MixERP.Net.FrontEnd
 
                 if (CultureManager.IsRtl())
                 {
-                    path = path.Replace("min.css", "rtl.min.css");
+                    path = path.Replace("css", "rtl.css");
                 }
 
                 stylesheet.Href = path;

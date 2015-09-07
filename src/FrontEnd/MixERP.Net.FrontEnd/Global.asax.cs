@@ -20,6 +20,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Web;
 using System.Web.Http;
+using System.Web.Optimization;
 using System.Web.Routing;
 using MixERP.Net.Entities.Office;
 using MixERP.Net.Entities.Public.Meta;
@@ -47,6 +48,7 @@ namespace MixERP.Net.FrontEnd
             Repository.DownloadAndInstallReports();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }

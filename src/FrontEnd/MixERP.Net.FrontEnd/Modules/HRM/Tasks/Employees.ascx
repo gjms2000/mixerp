@@ -25,7 +25,7 @@
         </div>
         <div class="six wide right floated right aligned column">
             <div class="ui buttons">
-                <a class="ui positive button" target="_parent" href="Employees/Entry.mix">
+                <a class="ui positive button" target="_parent" href="Entry/Employees.mix">
                     {{getResource('Resources.Titles.AddNew')}}
                 </a>
             </div>
@@ -46,11 +46,6 @@
                 <div class="description">
                     <span>
                         {{employee.City}} {{employee.State}}
-                    </span>
-                    <br />
-                    <span>
-                        <i class="currency icon"></i>
-                        {{employee.CurrencyCode}}
                     </span>
                     <br />
 
@@ -79,7 +74,7 @@
             </div>
             <div class="extra center content">
                 <div class="ui three buttons">
-                    <a class="ui basic green button"  target="_parent" href="Employees/Entry.mix?EmployeeId={{employee.EmployeeId}}">
+                    <a class="ui basic green button"  target="_parent" href="Entry/Employees.mix?EmployeeId={{employee.EmployeeId}}">
                         {{getResource('Resources.Titles.Edit')}}
                     </a>
                     <a class="ui basic green button"  target="_parent"  href="EmployeeInfo.mix?EmployeeId={{employee.EmployeeId}}">
@@ -97,7 +92,7 @@
                 </span>
                 <span>
                     <i class="user icon"></i>
-                    <span>{{employee.EmployeeCode}}</span>
+                    <span>{{employee.UserName}}</span>
 
                 </span>
             </div>
@@ -169,12 +164,9 @@
     };
 
     function deleteEmployee(employeeId) {
-        url = "/api/{v}/hrm/employee/delete";
-        data = appendParameter("", "employeeId", employeeId);
+        url = "/api/{v}/hrm/employee/delete/" + employeeId;
 
-        data = getData(data);
-
-        return getAjaxRequest(url, data, "DELETE");
+        return getAjaxRequest(url, "DELETE");
     };
 
 

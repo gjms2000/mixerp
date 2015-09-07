@@ -136,7 +136,8 @@ CREATE TABLE hrm.employees
     middle_name                             national character varying(50) DEFAULT(''),
     last_name                               national character varying(50) DEFAULT(''),
     employee_name                           national character varying(160) NOT NULL,
-    gender_code                             character(2) NOT NULL REFERENCES core.genders(gender_code),
+    gender_code                             national character varying(4) NOT NULL 
+                                            REFERENCES core.genders(gender_code),
     joined_on                               date NULL,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
     user_id                                 integer REFERENCES office.users(user_id),

@@ -10,7 +10,7 @@
     <script type="text/javascript">
         //window.chartAnimation = false;
     </script>
-    <script src="/bundles/scripts/libraries.min.js"></script>
+    <script src="/bundles/libraries.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

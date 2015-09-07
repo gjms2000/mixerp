@@ -17,11 +17,11 @@ namespace MixERP.Net.FrontEnd.Installation
         {
             using (HtmlLink stylesheet = new HtmlLink())
             {
-                string path = "/bundles/stylesheets/master-page.min.css";
+                string path = "/bundles/master-page.css";
 
                 if (CultureManager.IsRtl())
                 {
-                    path = path.Replace("min.css", "rtl.min.css");
+                    path = path.Replace("css", "rtl.css");
                 }
 
                 stylesheet.Href = path;

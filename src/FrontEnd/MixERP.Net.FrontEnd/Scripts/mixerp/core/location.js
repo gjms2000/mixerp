@@ -1,4 +1,7 @@
 function getQueryStringByName(name) {
+    if (!name) {
+        return "";
+    };
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);

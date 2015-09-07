@@ -13,6 +13,7 @@ using MixERP.Net.FrontEnd.Base;
 using MixERP.Net.i18n.Resources;
 using Newtonsoft.Json;
 using PetaPoco;
+using Filter = MixERP.Net.EntityParser.Filter;
 
 namespace MixERP.Net.FrontEnd.Services.Modules
 {

@@ -28,7 +28,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     <title></title>
     <script src="/Scripts/jquery-1.9.1.js"></script>
     <script src="/Scripts/semantic-ui/semantic.min.js"></script>
-    <script src="/bundles/scripts/libraries.js"></script>
+    <script src="/bundles/libraries.js"></script>
 </head>
 <body>
     <form id="form1" runat="server">

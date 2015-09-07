@@ -151,6 +151,7 @@
     <Compile Include="ZipCodeTypeController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Mix Open Foundation.snk" />
     <None Include="packages.config" />
   </ItemGroup>

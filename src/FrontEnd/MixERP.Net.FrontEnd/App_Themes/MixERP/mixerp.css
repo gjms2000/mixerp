@@ -52,8 +52,7 @@ option {
 }
 html,
 body,
-form,
-input {
+form {
   height: 100%;
   font-size: 12px;
 }
@@ -430,41 +429,6 @@ tr {
 table.borderless td {
   border: none;
 }
-/*Semantic UI Override Start */
-td input[type=text],
-.fields input,
-.button,
-input[type=text][readonly] {
-  height: 30px !important;
-}
-.inline .checkbox {
-  margin-top: 9px !important;
-}
-.form input[type=password]:focus,
-.form input[type=text]:focus,
-.form select:focus,
-.form textarea:focus {
-  border: 1px solid #4195fc !important;
-  -webkit-border-radius: 4px !important;
-  -moz-border-radius: 4px !important;
-  border-radius: 4px !important;
-  -webkit-box-shadow: 0 0 8px #4195fc !important;
-  -moz-box-shadow: 0 0 8px #4195fc !important;
-  box-shadow: 0 0 8px #4195fc !important;
-}
-.field.error input[type=password]:focus,
-.field.error input[type=text]:focus,
-.field.error select:focus,
-.field.error textarea:focus {
-  border: 1px solid #d4610e !important;
-  -webkit-border-radius: 4px !important;
-  -moz-border-radius: 4px !important;
-  border-radius: 4px !important;
-  -webkit-box-shadow: 0 0 8px #d4610e !important;
-  -moz-box-shadow: 0 0 8px #d4610e !important;
-  box-shadow: 0 0 8px #d4610e !important;
-}
-/*Semantic UI Override End */
 #MainContent {
   padding: 0 12px;
   min-height: 1000px;
