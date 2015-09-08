@@ -137,7 +137,8 @@ CREATE TABLE hrm.employees
     middle_name                             national character varying(50) DEFAULT(''),
     last_name                               national character varying(50) DEFAULT(''),
     employee_name                           national character varying(160) NOT NULL,
-    gender_code                             character(2) NOT NULL REFERENCES core.genders(gender_code),
+    gender_code                             national character varying(4) NOT NULL 
+                                            REFERENCES core.genders(gender_code),
     joined_on                               date NULL,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
     user_id                                 integer REFERENCES office.users(user_id),
@@ -145,12 +146,12 @@ CREATE TABLE hrm.employees
     current_department_id                   integer NOT NULL REFERENCES office.departments(department_id),
     current_role_id                         integer REFERENCES office.roles(role_id),
     current_employment_status_id            integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
-    current_job_title_id                    integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
+    current_job_title_id                    integer NOT NULL REFERENCES hrm.job_titles(job_title_id),
     current_pay_grade_id                    integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
     current_shift_id                        integer NOT NULL REFERENCES hrm.shifts(shift_id),
     nationality_code                        national character varying(12) REFERENCES core.nationalities(nationality_code),
     date_of_birth                           date,
-    photo                                   image,
+    photo                                   public.image,
     zip_code                                national character varying(128) DEFAULT(''),
     address_line_1                          national character varying(128) DEFAULT(''),
     address_line_2                          national character varying(128) DEFAULT(''),
@@ -177,7 +178,7 @@ CREATE TABLE hrm.employee_identification_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     identification_type_code                national character varying(12) NOT NULL 
                                             REFERENCES core.identification_types(identification_type_code),
-    identification_number                   text,
+    identification_number                   national character varying(128) NOT NULL,
     expires_on                              date,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -195,7 +196,7 @@ CREATE TABLE hrm.employee_social_network_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     social_network_name                     national character varying(128) NOT NULL
                                             REFERENCES core.social_networks(social_network_name),
-    social_network_id                       text,
+    social_network_id                       national character varying(128) NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -255,7 +256,7 @@ CREATE TABLE hrm.salaries
 
 CREATE TABLE hrm.employee_experiences
 (
-    employee_experience_id                  BIGINT NOT NULL PRIMARY KEY,
+    employee_experience_id                  BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     organization_name                       national character varying(128) NOT NULL,
     title                                   national character varying(128) NOT NULL,
@@ -269,7 +270,7 @@ CREATE TABLE hrm.employee_experiences
 
 CREATE TABLE hrm.employee_qualifications
 (
-    employee_qualification_id               BIGINT NOT NULL PRIMARY KEY,
+    employee_qualification_id               BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     education_level_id                      integer NOT NULL REFERENCES hrm.education_levels(education_level_id),
     institution                             national character varying(128) NOT NULL,
@@ -278,6 +279,7 @@ CREATE TABLE hrm.employee_qualifications
     score                                   numeric,
     started_on                              date,
     completed_on                            date,
+    details                                 text,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -416,6 +418,84 @@ INSERT INTO policy.menu_access(office_id, menu_id, user_id)
 SELECT office_id, menu_id, 2
 FROM office.offices, core.menus;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_experience_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_experience_scrud_view;
+
+CREATE VIEW hrm.employee_experience_scrud_view
+AS
+SELECT
+    hrm.employee_experiences.employee_experience_id,
+    hrm.employee_experiences.employee_id,
+    hrm.employees.employee_name,
+    hrm.employee_experiences.organization_name,
+    hrm.employee_experiences.title,
+    hrm.employee_experiences.started_on,
+    hrm.employee_experiences.ended_on
+FROM hrm.employee_experiences
+INNER JOIN hrm.employees
+ON hrm.employee_experiences.employee_id = hrm.employees.employee_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_identification_detail_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_identification_detail_scrud_view;
+
+CREATE VIEW hrm.employee_identification_detail_scrud_view
+AS
+SELECT
+    hrm.employee_identification_details.employee_identification_detail_id,
+    hrm.employee_identification_details.employee_id,
+    hrm.employees.employee_name,
+    hrm.employee_identification_details.identification_type_code,
+    core.identification_types.identification_type_name,
+    hrm.employee_identification_details.identification_number,
+    hrm.employee_identification_details.expires_on
+FROM hrm.employee_identification_details
+INNER JOIN hrm.employees
+ON hrm.employee_identification_details.employee_id = hrm.employees.employee_id
+INNER JOIN core.identification_types
+ON hrm.employee_identification_details.identification_type_code = core.identification_types.identification_type_code;
+
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_qualification_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_qualification_scrud_view;
+
+CREATE VIEW hrm.employee_qualification_scrud_view
+AS
+SELECT
+    hrm.employee_qualifications.employee_qualification_id,
+    hrm.employee_qualifications.employee_id,
+    hrm.employees.employee_name,
+    hrm.education_levels.education_level_name,
+    hrm.employee_qualifications.institution,
+    hrm.employee_qualifications.majors,
+    hrm.employee_qualifications.total_years,
+    hrm.employee_qualifications.score,
+    hrm.employee_qualifications.started_on,
+    hrm.employee_qualifications.completed_on
+FROM hrm.employee_qualifications
+INNER JOIN hrm.employees
+ON hrm.employee_qualifications.employee_id = hrm.employees.employee_id
+INNER JOIN hrm.education_levels
+ON hrm.employee_qualifications.education_level_id = hrm.education_levels.education_level_id;
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_social_network_detail_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_social_network_detail_scrud_view;
+
+CREATE VIEW hrm.employee_social_network_detail_scrud_view
+AS
+SELECT
+    hrm.employee_social_network_details.employee_social_network_detail_id,
+    hrm.employee_social_network_details.employee_id,
+    hrm.employees.employee_name,
+    hrm.employee_social_network_details.social_network_name,
+    hrm.employee_social_network_details.social_network_id
+FROM hrm.employee_social_network_details
+INNER JOIN hrm.employees
+ON hrm.employee_social_network_details.employee_id = hrm.employees.employee_id;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.views/hrm.employee_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.employee_view;
 
@@ -459,7 +539,7 @@ SELECT
     hrm.employees.city,
     hrm.employees.state,
     hrm.employees.country_id,
-    core.countries.country_code || ' (' || core.countries.country_name || ')' AS country,
+    core.countries.country_name AS country,
     hrm.employees.phone_home,
     hrm.employees.phone_cell,
     hrm.employees.phone_office_extension,

@@ -22,13 +22,13 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("employee_experience_id", autoIncrement=false)]
+    [PrimaryKey("employee_experience_id", autoIncrement=true)]
     [TableName("hrm.employee_experiences")]
     [ExplicitColumns]
     public sealed class EmployeeExperience : PetaPocoDB.Record<EmployeeExperience>, IPoco
     {
         [Column("employee_experience_id")]
-        [ColumnDbType("int8", 0, false, "")] 
+        [ColumnDbType("int8", 0, false, "nextval('hrm.employee_experiences_employee_experience_id_seq'::regclass)")] 
         public long EmployeeExperienceId { get; set; }
     
         [Column("employee_id")]

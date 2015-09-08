@@ -44,6 +44,7 @@ namespace MixERP.Net.FrontEnd.Application
                 "~/Scripts/mixerp/core/aspnet-validation.js",
                 "~/Scripts/mixerp/core/conversion.js",
                 "~/Scripts/mixerp/core/date-expressions.js",
+                "~/Scripts/mixerp/core/enums.js",
                 "~/Scripts/mixerp/core/browser.js",
                 "~/Scripts/mixerp/core/flag.js",
                 "~/Scripts/mixerp/core/json.js",

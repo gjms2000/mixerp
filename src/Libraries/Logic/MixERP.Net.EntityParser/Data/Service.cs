@@ -97,6 +97,14 @@ namespace MixERP.Net.EntityParser.Data
 
             foreach (Filter filter in filters)
             {
+                if (string.IsNullOrWhiteSpace(filter.ColumnName))
+                {
+                    if (!string.IsNullOrWhiteSpace(filter.PropertyName))
+                    {
+                        filter.ColumnName = PocoHelper.GetColumnName(poco, filter.PropertyName);
+                    }
+                }
+
                 string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName);
 
                 if (string.IsNullOrWhiteSpace(column) || !PocoHelper.HasColumn(poco, filter.ColumnName))

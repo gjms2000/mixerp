@@ -145,12 +145,12 @@ CREATE TABLE hrm.employees
     current_department_id                   integer NOT NULL REFERENCES office.departments(department_id),
     current_role_id                         integer REFERENCES office.roles(role_id),
     current_employment_status_id            integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
-    current_job_title_id                    integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
+    current_job_title_id                    integer NOT NULL REFERENCES hrm.job_titles(job_title_id),
     current_pay_grade_id                    integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
     current_shift_id                        integer NOT NULL REFERENCES hrm.shifts(shift_id),
     nationality_code                        national character varying(12) REFERENCES core.nationalities(nationality_code),
     date_of_birth                           date,
-    photo                                   image,
+    photo                                   public.image,
     zip_code                                national character varying(128) DEFAULT(''),
     address_line_1                          national character varying(128) DEFAULT(''),
     address_line_2                          national character varying(128) DEFAULT(''),
@@ -177,7 +177,7 @@ CREATE TABLE hrm.employee_identification_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     identification_type_code                national character varying(12) NOT NULL 
                                             REFERENCES core.identification_types(identification_type_code),
-    identification_number                   text,
+    identification_number                   national character varying(128) NOT NULL,
     expires_on                              date,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -195,7 +195,7 @@ CREATE TABLE hrm.employee_social_network_details
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     social_network_name                     national character varying(128) NOT NULL
                                             REFERENCES core.social_networks(social_network_name),
-    social_network_id                       text,
+    social_network_id                       national character varying(128) NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -255,7 +255,7 @@ CREATE TABLE hrm.salaries
 
 CREATE TABLE hrm.employee_experiences
 (
-    employee_experience_id                  BIGINT NOT NULL PRIMARY KEY,
+    employee_experience_id                  BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     organization_name                       national character varying(128) NOT NULL,
     title                                   national character varying(128) NOT NULL,
@@ -269,7 +269,7 @@ CREATE TABLE hrm.employee_experiences
 
 CREATE TABLE hrm.employee_qualifications
 (
-    employee_qualification_id               BIGINT NOT NULL PRIMARY KEY,
+    employee_qualification_id               BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     education_level_id                      integer NOT NULL REFERENCES hrm.education_levels(education_level_id),
     institution                             national character varying(128) NOT NULL,
@@ -278,6 +278,7 @@ CREATE TABLE hrm.employee_qualifications
     score                                   numeric,
     started_on                              date,
     completed_on                            date,
+    details                                 text,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    

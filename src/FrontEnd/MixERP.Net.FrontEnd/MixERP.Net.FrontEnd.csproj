@@ -475,6 +475,7 @@
     <Content Include="Scripts\mixerp\core\dom\frame.js" />
     <Content Include="Scripts\mixerp\core\dom\uploader.js" />
     <Content Include="Scripts\mixerp\core\libraries\jquery-ui.js" />
+    <Content Include="Scripts\mixerp\core\enums.js" />
     <Content Include="Scripts\mixerp\master-page\notification.js" />
     <Content Include="Scripts\mixerp\master-page\menu.js" />
     <Content Include="Scripts\mixerp\utitlities\localizable.js" />

@@ -18,11 +18,11 @@
     <div class="bpad8">
         <div class="ui basic buttons">
             <a href="Employees.mix" class="ui basic button">{{getResource('Resources.Titles.Employees')}}</a>
-            <a href="#" class="ui basic button">{{getResource('Resources.Titles.IdentificationDetails')}}</a>
-            <a href="#" class="ui basic button">{{getResource('Resources.Titles.SocialNetworks')}}</a>
-            <a href="#" class="ui basic button">{{getResource('Resources.Titles.Experiences')}}</a>
-            <a href="#" class="ui basic button">{{getResource('Resources.Titles.Qualifications')}}</a>
-            <a href="#" class="ui basic button">{{getResource('Resources.Titles.LeaveApplication')}}</a>
+            <a href="Employee/IdentificationDetails.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.IdentificationDetails')}}</a>
+            <a href="Employee/SocialNetworks.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.SocialNetworks')}}</a>
+            <a href="Employee/Experiences.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.Experiences')}}</a>
+            <a href="Employee/Qualifications.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.Qualifications')}}</a>
+            <a href="LeaveApplication.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.LeaveApplication')}}</a>
         </div>
     </div>
 
@@ -122,7 +122,7 @@
                                 </td>
                                 <td>
                                     <i class="user icon"></i>
-                                    {{employee.User}}
+                                    {{employee.UserName}}
                                 </td>
                             </tr>
                         </tbody>

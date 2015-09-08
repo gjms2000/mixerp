@@ -47,6 +47,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MixERP.Net.ApplicationState, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.ApplicationState.dll</HintPath>
+    </Reference>
+    <Reference Include="MixERP.Net.Common, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.Common.dll</HintPath>
+    </Reference>
     <Reference Include="MixERP.Net.Framework">
       <HintPath>..\..\bin\MixERP.Net.Framework.dll</HintPath>
     </Reference>
@@ -56,6 +64,10 @@
     <Reference Include="MixERP.Net.i18n, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\MixERP.Net.i18n.dll</HintPath>
+    </Reference>
+    <Reference Include="PetaPoco, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\PetaPoco.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -104,6 +116,10 @@
     <Content Include="Tasks\Contracts.ascx" />
     <Content Include="Tasks\EmployeeInfo.ascx" />
     <Content Include="Tasks\Employees.ascx" />
+    <Content Include="Tasks\Employee\Experiences.ascx" />
+    <Content Include="Tasks\Employee\IdentificationDetails.ascx" />
+    <Content Include="Tasks\Employee\Qualifications.ascx" />
+    <Content Include="Tasks\Employee\SocialNetworks.ascx" />
     <Content Include="Tasks\Entry\Employees.ascx" />
     <Content Include="Tasks\Exit.ascx" />
     <Content Include="Tasks\LeaveApplication.ascx" />
@@ -112,6 +128,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FirstSteps\EducationLevel.cs" />
     <Compile Include="Payroll\Bonus.ascx.cs">
       <DependentUpon>Bonus.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -267,6 +284,34 @@
     <Compile Include="Tasks\Employees.ascx.designer.cs">
       <DependentUpon>Employees.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Tasks\Employee\Experiences.ascx.cs">
+      <DependentUpon>Experiences.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\Experiences.ascx.designer.cs">
+      <DependentUpon>Experiences.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Employee\IdentificationDetails.ascx.cs">
+      <DependentUpon>IdentificationDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\IdentificationDetails.ascx.designer.cs">
+      <DependentUpon>IdentificationDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Employee\Qualifications.ascx.cs">
+      <DependentUpon>Qualifications.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\Qualifications.ascx.designer.cs">
+      <DependentUpon>Qualifications.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Employee\SocialNetworks.ascx.cs">
+      <DependentUpon>SocialNetworks.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\SocialNetworks.ascx.designer.cs">
+      <DependentUpon>SocialNetworks.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\Entry\Employees.ascx.cs">
       <DependentUpon>Employees.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -313,6 +358,7 @@
       <Name>MixERP.Net.Entities.HRM</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

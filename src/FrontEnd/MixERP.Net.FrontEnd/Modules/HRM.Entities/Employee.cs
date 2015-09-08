@@ -103,6 +103,10 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("image", 0, true, "")] 
         public string Photo { get; set; }
     
+        [Column("zip_code")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string ZipCode { get; set; }
+    
         [Column("address_line_1")]
         [ColumnDbType("varchar", 128, true, "")] 
         public string AddressLine1 { get; set; }
@@ -166,9 +170,5 @@ namespace MixERP.Net.Entities.HRM
         [Column("audit_ts")]
         [ColumnDbType("timestamptz", 0, true, "")] 
         public DateTime? AuditTs { get; set; }
-    
-        [Column("zip_code")]
-        [ColumnDbType("varchar", 128, true, "")] 
-        public string ZipCode { get; set; }
     }
 }

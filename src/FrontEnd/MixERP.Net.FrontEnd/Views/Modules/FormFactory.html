@@ -26,9 +26,11 @@
 
             if (el.length) {
                 var selectedValue = "";
+
                 if (window.editData) {
                     selectedValue = window.editData[el.attr("id")];
                 };
+
                 ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
             };
         });
@@ -46,6 +48,7 @@
     var grid = [undefined, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
     var editData;
     var dropdownsLoaded = false;
+    var defaultValuesLoaded = false;
 </script>
 
 <script>
@@ -56,6 +59,16 @@
         $(".description").html(window.description);
     }else{
         $(".description").remove();        
+    };
+
+    function getReturnUrl(){
+        var returnTo = getQueryStringByName("ReturnUrl");
+
+        if(!returnTo){
+            returnTo = window.returnUrl;
+        };
+
+        return (returnTo || "");
     };
 
     cancelButton.click(function () {
@@ -72,10 +85,12 @@
             view.show();
         };
 
-        if (window.returnUrl) {
-            document.location.href = window.returnUrl;
+        if (getReturnUrl()) {
+            document.location.href = getReturnUrl();
         };
     });
+
+
 
     saveButton.click(function(){
         var isValid = validate();
@@ -106,6 +121,12 @@
                 }else{
                     val = val.toString().trim();
                 };
+
+                if(el.is("select")){
+                    if(!val){
+                        val = null;
+                    };
+                };
             };
 
             if(isSerial){
@@ -129,14 +150,13 @@
             if(confirmed){
                 form.hide();
 
+                if(getReturnUrl()){
+                    window.location.href = getReturnUrl();
+                };
+
                 if(view.length){
                     view.show();
                     loadPageCount(loadGrid);
-                    return;
-                };
-
-                if(window.returnUrl){
-                    window.location.href = window.returnUrl;
                 };
             };
         });
@@ -155,22 +175,24 @@
 
         $.each(fields, function(){
             var el = $(this);
-            var defaultValue = el.data("default-value");
+            var defaultValue = el.attr("data-default-value");
 
-            if(defaultValue !== "undefined"){
-                el.val(defaultValue);
-            }else{
-                el.val("");
+            if(!defaultValue){
+                defaultValue = "";
             };
 
             if(el.hasClass("dropdown")){
-                var select = el.find("select");
-                var search = el.find(".search");
-                var text = el.find(".text");
+                if(!el.hasClass("disabled")){
+                    var select = el.find("select");
+                    var search = el.find(".search");
+                    var text = el.find(".text");
 
-                select.val("");
-                search.html("");
-                text.html("");
+                    select.val("");
+                    search.html("");
+                    text.html("");                    
+                };
+            }else{                
+                el.val(defaultValue);                
             };
         });
     };
@@ -217,12 +239,63 @@
 
         $(document).ajaxStop(function () {
             $("#scrud").removeClass("loading");
+            loadDefaultValues();
             loadDropdowns();
+            triggerReadyEvent();
         });
+
+        function triggerReadyEvent() {
+            $(document).trigger("formready");
+        };
+
+        function loadDefaultValues(){
+            if(defaultValuesLoaded){
+                return;
+            };
+
+            var qs = getQueryStrings();
+
+            $.each(qs, function(i, v){
+                var name = i;
+                var value = v;
+
+                var el = $("[data-property=" + name + "]");
+
+                if(el.length){
+                    if(el.is("select")){
+                        el.addClass("disabled");
+                        el.attr("data-value", value);
+                        el.attr("data-default-value", value);                        
+                    }else{
+                        el.val(value);                        
+                    };
+                };
+            });
+
+            $("input.live").trigger("keyup");
+            defaultValuesLoaded = true;
+        };
 
         function loadDropdowns() {
             if (!dropdownsLoaded) {
-                $(".poco.form.factory .dropdown").dropdown();
+                var dropdowns = $(".poco.form.factory .dropdown");
+
+                dropdowns.each(function(i, v){
+                    var dropdown = $(v);
+
+                    var selectedValue = (dropdown.getSelectedValue() || "");
+
+                    if(!selectedValue){
+                        selectedValue = dropdown.attr("data-value");
+
+                        if(selectedValue){
+                            dropdown.val(selectedValue);
+                        };
+                    };
+
+                    dropdown.dropdown();
+                });
+
                 dropdownsLoaded = true;
             };
         };
@@ -325,7 +398,7 @@
         };
 
         function loadEdit() {
-            var queryString = getQueryStringByName(queryStringKey);            
+            var queryString = getQueryStringByName(window.queryStringKey || "");
 
             if (!queryString) {
                 createForm(window.formPocoName);
@@ -429,12 +502,16 @@
                 };
             };
 
-            if(readonlyColumns.indexOf(column.PropertyName) > -1){
-                element.attr("readonly", "");
+            if(typeof(readonlyColumns) === "undefined"){
+                readonlyColumns = [];
             };
 
+            if(readonlyColumns.indexOf(column.PropertyName) > -1){
+                element.attr("readonly", "");
+            };                
+
             if (column.Value) {
-                element.attr("data-default-value", column.Value);
+                element.attr("data-value", column.Value);
                 element.val(column.Value);
             };
 
@@ -498,6 +575,8 @@
             case "money_strict2":
             case "money_strict":
                 return $("<input type='text' class='currency' />");
+            case "text":
+                return $("<textarea />");
             case "date":
                 return $("<input type='text' class='date' />");
             case "bool":
@@ -541,6 +620,13 @@
             return tryParseLocalizedResource(columnName);
         };
 
-
+    $(document).keydown(function(event){
+        if (event.ctrlKey) {
+            if (event.key === "Enter") {
+                $("#SaveButton").trigger("click");
+                return false;
+            };
+        };        
+    })
     </script>
 </div>

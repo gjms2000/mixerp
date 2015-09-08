@@ -227,6 +227,8 @@ BEGIN
         (
             social_network_name                     national character varying(128) NOT NULL PRIMARY KEY,
             semantic_css_class                      national character varying(128),
+            base_url                                national character varying(128) DEFAULT(''),
+            profile_url                             national character varying(128) DEFAULT(''),
             audit_user_id                           integer NULL REFERENCES office.users(user_id),
             audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                                     DEFAULT(NOW())    

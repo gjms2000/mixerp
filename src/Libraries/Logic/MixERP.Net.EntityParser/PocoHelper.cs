@@ -59,5 +59,23 @@ namespace MixERP.Net.EntityParser
 
             return false;
         }
+
+        public static string GetColumnName<T>(T poco, string propertyName)
+        {
+            var type = poco.GetType();
+
+            var a = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .FirstOrDefault(p => p.Name.Equals(propertyName));
+
+            var attr = a?.GetCustomAttributes(typeof (ColumnAttribute), false)
+                .Cast<ColumnAttribute>().FirstOrDefault();
+
+            if (attr != null)
+            {
+                return attr.Name;
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -63,9 +63,13 @@
     <Compile Include="EducationLevel.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeExperience.cs" />
+    <Compile Include="EmployeeExperienceScrudView.cs" />
     <Compile Include="EmployeeIdentificationDetail.cs" />
+    <Compile Include="EmployeeIdentificationDetailScrudView.cs" />
     <Compile Include="EmployeeQualification.cs" />
+    <Compile Include="EmployeeQualificationScrudView.cs" />
     <Compile Include="EmployeeSocialNetworkDetail.cs" />
+    <Compile Include="EmployeeSocialNetworkDetailScrudView.cs" />
     <Compile Include="EmployeeType.cs" />
     <Compile Include="EmployeeView.cs" />
     <Compile Include="EmploymentStatus.cs" />

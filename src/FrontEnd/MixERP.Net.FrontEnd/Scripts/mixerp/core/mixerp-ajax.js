@@ -257,3 +257,23 @@ var getAjaxErrorMessage = function (xhr) {
 
     return "";
 };
+
+function getAjaxColumnFilter(columnName, filterCondition, filtervalue, andValue) {
+    var filter = new Object();
+    filter.ColumnName = columnName;
+    filter.FilterCondition = filterCondition;
+    filter.FilterValue = filtervalue;
+    filter.FilterAndValue = andValue;
+
+    return filter;
+};
+
+function getAjaxPropertyFilter(propertyName, filterCondition, filtervalue, andValue) {
+    var filter = new Object();
+    filter.PropertyName = propertyName;
+    filter.FilterCondition = filterCondition;
+    filter.FilterValue = filtervalue;
+    filter.FilterAndValue = andValue;
+
+    return filter;
+};

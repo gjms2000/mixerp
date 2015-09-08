@@ -8,9 +8,9 @@
 
         <div class="ui stackable grid">
             <div class="twelve wide column">
-
-                <a id="AddNewButton" class="ui basic green left attached button">Add New</a>
-                <div class="ui icon top left pointing dropdown basic teal right attached button">
+            <div class="ui basic buttons">
+                <a id="AddNewButton" class="ui basic button">Add New</a>
+                <div class="ui icon top left pointing dropdown basic button">
                     <span>Export This Document</span>
                     <div class="menu">
                         <div class="header">
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-
+                </div>
             </div>
             <div class="right aligned four wide column">
                 <select class="ui fluid filter" id="DefaultFilterSelect"></select>
@@ -365,6 +365,12 @@
         };
 
         function getTotalPages(pocoName, filterName, byOffice) {
+            var qs = getQueryStrings();
+
+            if(qs){
+                return getFilteredTotalPages(pocoName, qs, byOffice);
+            };
+
             var url = "/Services/Modules/PocoService.asmx/GetTotalPages";
             var data = appendParameter("", "pocoName", pocoName);
             data = appendParameter(data, "filterName", filterName);
@@ -373,6 +379,30 @@
             data = getData(data);
             return getAjax(url, data);
         };
+
+        function getAjaxFilters(queryStrings){
+            var filters = [];
+
+            $.each(queryStrings, function(name, value){
+                filters.push(getAjaxPropertyFilter(name, 0, value));
+            });
+
+            return filters;
+        };
+
+        function getFilteredTotalPages(pocoName, queryStrings, byOffice) {
+            var filters = getAjaxFilters(queryStrings);
+
+            var url = "/Services/Modules/PocoService.asmx/GetFilteredTotalPages";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "filters", filters);
+            data = appendParameter(data, "byOffice", byOffice);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+
     </script>
     <script>
         function loadFilterConditions() {
@@ -476,6 +506,19 @@
             }else{
                 $(".description").remove();
             };
+
+            if(typeof(back) === "object"){
+                var title = back.Title;
+                var url = back.Url;
+
+                var anchor = $("<a/>");
+                anchor.addClass("ui basic button")
+                anchor.attr("title", Resources.Titles.Back());
+                anchor.attr("href", url);
+                anchor.text(title);
+
+                $("#AddNewButton").before(anchor);
+            };
         });
 
         function loadPoco(callback){
@@ -514,10 +557,27 @@
         };
 
         function getPocoView(pocoName, pageNumber, filterName, byOffice) {
+            var qs = getQueryStrings();
+
+            if(qs){
+                return getFilteredPocoView(pocoName, pageNumber, qs, byOffice);
+            };
+
             var url = "/Services/Modules/PocoService.asmx/GetPocoView";
             var data = appendParameter("", "pocoName", pocoName);
             data = appendParameter(data, "pageNumber", pageNumber);
             data = appendParameter(data, "filterName", filterName);
+            data = appendParameter(data, "byOffice", byOffice);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+        function getFilteredPocoView(pocoName, pageNumber, queryStrings, byOffice) {
+            var url = "/Services/Modules/PocoService.asmx/GetFilteredPocoView";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "pageNumber", pageNumber);
+            data = appendParameter(data, "filters", getAjaxFilters(queryStrings));
             data = appendParameter(data, "byOffice", byOffice);
 
             data = getData(data);
@@ -1061,6 +1121,7 @@
 
                         targetEl.dropdown("set selected", value);
                         targetEl.trigger("blur");
+                        targetEl.trigger("change");
                     };
                 };
             };

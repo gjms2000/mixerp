@@ -79,9 +79,13 @@
     <Compile Include="EducationLevelController.cs" />
     <Compile Include="EmployeeController.cs" />
     <Compile Include="EmployeeExperienceController.cs" />
+    <Compile Include="EmployeeExperienceScrudViewController.cs" />
     <Compile Include="EmployeeIdentificationDetailController.cs" />
+    <Compile Include="EmployeeIdentificationDetailScrudViewController.cs" />
     <Compile Include="EmployeeQualificationController.cs" />
+    <Compile Include="EmployeeQualificationScrudViewController.cs" />
     <Compile Include="EmployeeSocialNetworkDetailController.cs" />
+    <Compile Include="EmployeeSocialNetworkDetailScrudViewController.cs" />
     <Compile Include="EmployeeTypeController.cs" />
     <Compile Include="EmployeeViewController.cs" />
     <Compile Include="EmploymentStatusCodeController.cs" />

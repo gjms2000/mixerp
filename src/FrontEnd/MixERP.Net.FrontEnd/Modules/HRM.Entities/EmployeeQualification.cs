@@ -22,13 +22,13 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("employee_qualification_id", autoIncrement=false)]
+    [PrimaryKey("employee_qualification_id", autoIncrement=true)]
     [TableName("hrm.employee_qualifications")]
     [ExplicitColumns]
     public sealed class EmployeeQualification : PetaPocoDB.Record<EmployeeQualification>, IPoco
     {
         [Column("employee_qualification_id")]
-        [ColumnDbType("int8", 0, false, "")] 
+        [ColumnDbType("int8", 0, false, "nextval('hrm.employee_qualifications_employee_qualification_id_seq'::regclass)")] 
         public long EmployeeQualificationId { get; set; }
     
         [Column("employee_id")]
@@ -62,6 +62,10 @@ namespace MixERP.Net.Entities.HRM
         [Column("completed_on")]
         [ColumnDbType("date", 0, true, "")] 
         public DateTime? CompletedOn { get; set; }
+    
+        [Column("details")]
+        [ColumnDbType("text", 0, true, "")] 
+        public string Details { get; set; }
     
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")] 

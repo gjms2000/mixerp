@@ -51,6 +51,7 @@ namespace MixERP.Net.FrontEnd.Services.Modules
             return JsonConvert.SerializeObject(result);
         }
 
+
         [WebMethod]
         public List<string> GetPocos()
         {

@@ -15,16 +15,17 @@ SELECT 'O', 'Other';
 
 INSERT INTO core.identification_types
 SELECT 'DVL', 'Driving License', true UNION ALL
-SELECT 'SSN', 'Social Security Number', false;
+SELECT 'SSN', 'Social Security Number', false UNION ALL
+SELECT 'PAS', 'Passport Number', true;
 
-INSERT INTO core.social_networks(social_network_name)
-SELECT 'Twitter' UNION ALL
-SELECT 'Facebook' UNION ALL
-SELECT 'Google+' UNION ALL
-SELECT 'LinkedIn' UNION ALL
-SELECT 'Instagram' UNION ALL
-SELECT 'WeChat' UNION ALL
-SELECT 'Viber' UNION ALL
-SELECT 'WhatsApp' UNION ALL
-SELECT 'Skype' UNION ALL
-SELECT 'Hike';
+INSERT INTO core.social_networks(social_network_name, semantic_css_class, base_url, profile_url)
+SELECT 'Twitter',   'twitter',      'https://twitter.com/',             'https://twitter.com/{0}' UNION ALL
+SELECT 'Facebook',  'facebook',     'https://www.facebook.com/',        'https://www.facebook.com/{id}' UNION ALL
+SELECT 'Google+',   'google plus',  '',                                 '' UNION ALL
+SELECT 'LinkedIn',  'linkedin',     '',                                 '' UNION ALL
+SELECT 'Instagram', 'instagram',    '',                                 '' UNION ALL
+SELECT 'WeChat',    'wechat',       '',                                 '' UNION ALL
+SELECT 'Viber',     '',             '',                                 '' UNION ALL
+SELECT 'WhatsApp',  'whatsapp',     '',                                 '' UNION ALL
+SELECT 'Skype',     'skype',        '',                                 '' UNION ALL
+SELECT 'Hike',      '',             '',                                 '';

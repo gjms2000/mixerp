@@ -40,7 +40,7 @@ namespace MixERP.Net.Entities.HRM
         public string SocialNetworkName { get; set; }
     
         [Column("social_network_id")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("varchar", 128, false, "")] 
         public string SocialNetworkId { get; set; }
     
         [Column("audit_user_id")]

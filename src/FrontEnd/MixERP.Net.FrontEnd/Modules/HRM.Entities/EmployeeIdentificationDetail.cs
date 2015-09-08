@@ -40,7 +40,7 @@ namespace MixERP.Net.Entities.HRM
         public string IdentificationTypeCode { get; set; }
     
         [Column("identification_number")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("varchar", 128, false, "")] 
         public string IdentificationNumber { get; set; }
     
         [Column("expires_on")]
