@@ -1,7 +1,7 @@
-DROP FUNCTION IF EXISTS office.can_login(user_id integer_strict, office_id integer_strict, OUT result boolean, OUT message text);
-DROP FUNCTION IF EXISTS office.can_login(user_id integer_strict, office_id integer_strict);
+DROP FUNCTION IF EXISTS office.can_login(user_id public.integer_strict, office_id public.integer_strict, OUT result boolean, OUT message text);
+DROP FUNCTION IF EXISTS office.can_login(user_id public.integer_strict, office_id public.integer_strict);
 
-CREATE FUNCTION office.can_login(user_id integer_strict, office_id integer_strict)
+CREATE FUNCTION office.can_login(user_id public.integer_strict, office_id public.integer_strict)
 RETURNS TABLE
 (
     result              boolean,

@@ -1,6 +1,6 @@
 DROP FUNCTION IF EXISTS office.sign_in
 (
-    office_id       integer_strict, 
+    office_id       public.integer_strict, 
     user_name       text, 
     password        text, 
     browser         text, 
@@ -14,7 +14,7 @@ DROP FUNCTION IF EXISTS office.sign_in
 
 DROP FUNCTION IF EXISTS office.sign_in
 (
-    office_id       integer_strict, 
+    office_id       public.integer_strict, 
     user_name       text, 
     password        text, 
     browser         text, 
@@ -26,7 +26,7 @@ DROP FUNCTION IF EXISTS office.sign_in
 
 CREATE FUNCTION office.sign_in
 (
-    office_id       integer_strict, 
+    office_id       public.integer_strict, 
     user_name       text, 
     password        text, 
     browser         text, 
