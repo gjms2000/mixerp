@@ -4347,7 +4347,7 @@ BEGIN
 
     INSERT INTO core.social_networks(social_network_name, semantic_css_class, base_url, profile_url)
     SELECT 'Twitter',   'twitter',      'https://twitter.com/',             'https://twitter.com/{0}' UNION ALL
-    SELECT 'Facebook',  'facebook',     'https://www.facebook.com/',        'https://www.facebook.com/{id}' UNION ALL
+    SELECT 'Facebook',  'facebook',     'https://www.facebook.com/',        'https://www.facebook.com/{0}' UNION ALL
     SELECT 'Google+',   'google plus',  '',                                 '' UNION ALL
     SELECT 'LinkedIn',  'linkedin',     '',                                 '' UNION ALL
     SELECT 'Instagram', 'instagram',    '',                                 '' UNION ALL

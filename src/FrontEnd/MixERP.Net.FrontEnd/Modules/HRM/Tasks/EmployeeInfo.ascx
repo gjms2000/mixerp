@@ -13,8 +13,8 @@
             </div>
         </div>
     </div>
-    
-    
+
+
     <div class="bpad8">
         <div class="ui basic buttons">
             <a href="Employees.mix" class="ui basic button">{{getResource('Resources.Titles.Employees')}}</a>
@@ -40,8 +40,6 @@
                     <div class="ui large header">
                         {{employee.EmployeeName}}
                     </div>
-
-
                     <a href="/api/core/attachment/document/{{employee.Photo }}" target="_blank">
                         <img ng-src="/api/core/attachment/document/272/272/{{employee.Photo }}" class="ui image"
                             height="272"
@@ -136,8 +134,7 @@
                         <tr>
                             <td style="width: 200px;">{{getResource('Resources.ScrudResource.joined_on')}}
                             </td>
-                            <td title="{{employee.JoinedOn}}">
-                                {{employee.JoinedOnAgo}}
+                            <td title="{{employee.JoinedOn.toFormattedDate()}}">{{employee.JoinedOnAgo}}
                             </td>
                         </tr>
                         <tr>
@@ -197,8 +194,7 @@
                         <tr>
                             <td style="width: 200px;">{{getResource('Resources.Titles.DateOfBirth')}}
                             </td>
-                            <td title="{{employee.DateOfBirth}}">
-                                {{employee.Age}}
+                            <td title="{{employee.DateOfBirth.toFormattedDate()}}">{{employee.Age}}
                             </td>
                         </tr>
                         <tr>
@@ -250,16 +246,127 @@
         </div>
     </div>
     <div class="ui tab attached segment" data-tab="identification-tab">
+        <div class="ui grey header">
+            {{getResource('Resources.Titles.IdentificationDetails')}}
+        </div>
+
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>{{getResource('Resources.ScrudResource.identification_type_code')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.identification_type_name')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.identification_number')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.expires_on')}}</th>
+                </tr>
+            </thead>
+            <tbody data-ng-repeat="identification in identifications">
+                <tr>
+                    <td>{{identification.IdentificationTypeCode}}</td>
+                    <td>{{identification.IdentificationTypeName}}</td>
+                    <td>{{identification.IdentificationNumber}}</td>
+                    <td>{{identification.ExpiresOn}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="Employee/IdentificationDetails.mix?View=FormView&EmployeeId={{employee.EmployeeId}}&ReturnUrl={{thispage}}&data-tab=identification-tab" class="ui green button">
+            {{getResource('Resources.Titles.AddNew')}}
+        </a>
     </div>
     <div class="ui tab attached segment" data-tab="social-networks-tab">
+        <div class="ui grey header">
+            {{getResource('Resources.Titles.SocialNetworks')}}
+        </div>
+
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>{{getResource('Resources.ScrudResource.social_network_name')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.social_network_id')}}</th>
+                </tr>
+            </thead>
+            <tbody data-ng-repeat="network in socialNetworks">
+                <tr>
+                    <td>
+                        <i class="{{network.SemanticCssClass}} icon"></i>
+                        <a href="{{network.BaseUrl}}" target="_blank">{{network.SocialNetworkName}}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{network.ProfileUrl}}" target="_blank">{{network.SocialNetworkId}}
+                        </a>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="Employee/SocialNetworks.mix?View=FormView&EmployeeId={{employee.EmployeeId}}&ReturnUrl={{thispage}}&data-tab=social-networks-tab" class="ui green button">
+            {{getResource('Resources.Titles.AddNew')}}
+        </a>
     </div>
     <div class="ui tab attached segment" data-tab="experiences-tab">
+        <div class="ui grey header">
+            {{getResource('Resources.Titles.Experiences')}}
+        </div>
+
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>{{getResource('Resources.ScrudResource.organization_name')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.title')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.started_on')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.ended_on')}}</th>
+                </tr>
+            </thead>
+            <tbody data-ng-repeat="experience in experiences">
+                <tr>
+                    <td>{{experience.OrganizationName}}</td>
+                    <td>{{experience.Title}}</td>
+                    <td title="{{experience.StartedOn.toFormattedDate()}}">{{experience.StartedOnAgo}}</td>
+                    <td title="{{experience.EndedOn.toFormattedDate()}}">{{experience.EndedOnAgo}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a href="Employee/Experiences.mix?View=FormView&EmployeeId={{employee.EmployeeId}}&ReturnUrl={{thispage}}&data-tab=experiences-tab" class="ui green button">
+            {{getResource('Resources.Titles.AddNew')}}
+        </a>
     </div>
     <div class="ui tab attached segment" data-tab="qualifications-tab">
+        <div class="ui grey header">
+            {{getResource('Resources.Titles.Qualifications')}}
+        </div>
+
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>{{getResource('Resources.ScrudResource.education_level_name')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.institution')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.majors')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.total_years')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.started_on')}}</th>
+                    <th>{{getResource('Resources.ScrudResource.completed_on')}}</th>
+                </tr>
+            </thead>
+            <tbody data-ng-repeat="qualification in qualifications">
+                <tr>
+                    <td>{{qualification.EducationLevelName}}</td>
+                    <td>{{qualification.Institution}}</td>
+                    <td>{{qualification.Majors}}</td>
+                    <td>{{qualification.TotalYears}}</td>
+                    <td title="{{qualification.StartedOn.toFormattedDate()}}">{{qualification.StartedOnAgo}}</td>
+                    <td title="{{qualification.CompletedOn.toFormattedDate()}}">{{qualification.CompletedOnAgo}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="Employee/Qualifications.mix?View=FormView&EmployeeId={{employee.EmployeeId}}&ReturnUrl={{thispage}}&data-tab=qualifications-tab" class="ui green button">
+            {{getResource('Resources.Titles.AddNew')}}
+        </a>
     </div>
 
 </asp:Panel>
 
+<%-- ReSharper disable once NativeTypePrototypeExtending --%>
 <script>
     function getEmployee() {
         var employeeId = parseInt(window.getQueryStringByName("EmployeeId") || 0);
@@ -274,18 +381,86 @@
 
         var data = JSON.stringify(filters);
 
-
-
-
         var url = "/api/hrm/employee-view/get-where/1/";
+        return window.postAjaxRequest(url, data);
+    };
 
+    function getIdentificationDetails() {
+        var employeeId = parseInt(window.getQueryStringByName("EmployeeId") || 0);
+
+        var filters = [];
+        var filter = new Object();
+        filter.ColumnName = "employee_id";
+        filter.FilterCondition = "0";
+        filter.FilterValue = employeeId;
+
+        filters.push(filter);
+
+        var data = JSON.stringify(filters);
+
+        var url = "/api/hrm/employee-identification-detail-scrud-view/get-where/1/";
+        return window.postAjaxRequest(url, data);
+    };
+
+    function getSocialNetworkDetails() {
+        var employeeId = parseInt(window.getQueryStringByName("EmployeeId") || 0);
+
+        var filters = [];
+        var filter = new Object();
+        filter.ColumnName = "employee_id";
+        filter.FilterCondition = "0";
+        filter.FilterValue = employeeId;
+
+        filters.push(filter);
+
+        var data = JSON.stringify(filters);
+
+        var url = "/api/hrm/employee-social-network-detail-scrud-view/get-where/1/";
+        return window.postAjaxRequest(url, data);
+    };
+
+    function getExperiences() {
+        var employeeId = parseInt(window.getQueryStringByName("EmployeeId") || 0);
+
+        var filters = [];
+        var filter = new Object();
+        filter.ColumnName = "employee_id";
+        filter.FilterCondition = "0";
+        filter.FilterValue = employeeId;
+
+        filters.push(filter);
+
+        var data = JSON.stringify(filters);
+
+        var url = "/api/hrm/employee-experience-scrud-view/get-where/1/";
+        return window.postAjaxRequest(url, data);
+    };
+
+    function getQualifications() {
+        var employeeId = parseInt(window.getQueryStringByName("EmployeeId") || 0);
+
+        var filters = [];
+        var filter = new Object();
+        filter.ColumnName = "employee_id";
+        filter.FilterCondition = "0";
+        filter.FilterValue = employeeId;
+
+        filters.push(filter);
+
+        var data = JSON.stringify(filters);
+
+        var url = "/api/hrm/employee-qualification-scrud-view/get-where/1/";
         return window.postAjaxRequest(url, data);
     };
 
 
-
     MixERPApp.controller("EmployeeInfoController", function ($scope, $sce, $window) {
         var getEmployeeAjax = getEmployee();
+        var getIdentificationDetailsAjax = getIdentificationDetails();
+        var getSocialNetworkDetailsAjax = getSocialNetworkDetails();
+        var getExperiencesAjax = getExperiences();
+        var getQualificationsAjax = getQualifications();
+        $scope.thispage = $window.location.pathname;
 
         getEmployeeAjax.success(function (msg) {
             $scope.$apply(function () {
@@ -303,8 +478,58 @@
             });
         });
 
+        getIdentificationDetailsAjax.success(function (msg) {
+            $scope.$apply(function () {
+                $scope.identifications = msg;
+            });
+        });
+
+        getSocialNetworkDetailsAjax.success(function (msg) {
+            $.each(msg, function (i) {
+                msg[i].ProfileUrl = $window.stringFormat(msg[i].ProfileUrl, msg[i].SocialNetworkId);
+            });
+
+            $scope.$apply(function () {
+                $scope.socialNetworks = msg;
+            });
+        });
+
+        getExperiencesAjax.success(function (msg) {
+            $.each(msg, function (i) {
+                msg[i].StartedOnAgo = $window.moment(new Date(msg[i].StartedOn)).fromNow();
+                msg[i].EndedOnAgo = $window.moment(new Date(msg[i].EndedOn)).fromNow();
+            });
+
+            $scope.$apply(function () {
+                $scope.experiences = msg;
+            });
+        });
+
+        getQualificationsAjax.success(function (msg) {
+            $.each(msg, function (i) {
+                msg[i].StartedOnAgo = $window.moment(new Date(msg[i].StartedOn)).fromNow();
+                msg[i].CompletedOnAgo = $window.moment(new Date(msg[i].CompletedOn)).fromNow();
+            });
+
+            $scope.$apply(function () {
+                $scope.qualifications = msg;
+            });
+        });
+
         $scope.getResource = function (func) {
             return $window.executeFunctionByName(func, $window);
+        };
+    });
+
+    $(document).ready(function() {
+        var tab = window.getQueryStringByName("data-tab");
+
+        if (tab) {
+            var el = $("[data-tab=" + tab + "]");
+            if (el.length) {
+                $("[data-tab]").removeClass("active");
+                el.addClass("active");
+            };
         };
     });
 </script>

@@ -46,5 +46,17 @@ namespace MixERP.Net.Entities.HRM
         [Column("social_network_id")]
         [ColumnDbType("varchar", 128, true, "")] 
         public string SocialNetworkId { get; set; }
+    
+        [Column("semantic_css_class")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string SemanticCssClass { get; set; }
+    
+        [Column("base_url")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string BaseUrl { get; set; }
+    
+        [Column("profile_url")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string ProfileUrl { get; set; }
     }
 }

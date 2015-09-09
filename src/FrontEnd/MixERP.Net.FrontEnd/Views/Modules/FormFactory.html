@@ -64,6 +64,15 @@
     function getReturnUrl(){
         var returnTo = getQueryStringByName("ReturnUrl");
 
+        var qs = getQueryStrings();
+
+        $.each(qs, function (i, v) {
+            if (i !== "ReturnUrl") {
+                returnTo = updateQueryString(i, v, returnTo);
+            };
+        });
+
+
         if(!returnTo){
             returnTo = window.returnUrl;
         };
@@ -228,10 +237,18 @@
         $(document).ready(function () {
             var form = $(".poco.form.factory");
             var view = $(".poco.view.factory");
-            if (view.length) {
-                form.hide();
+
+            var defaultView = window.getQueryStringByName("View");
+
+            if ((defaultView || "") === "FormView") {
+                if (view.length) {
+                    view.hide();
+                    form.show();
+                };
             } else {
-                form.show();
+                if (view.length) {
+                    form.hide();
+                };
             };
 
             loadEdit();            

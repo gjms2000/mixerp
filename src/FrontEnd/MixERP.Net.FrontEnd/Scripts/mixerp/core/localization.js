@@ -84,3 +84,7 @@ stringFormat = function () {
 
     return s;
 };
+
+String.prototype.toFormattedDate = function () {
+    return new Date(this).toString(window.shortDateFormat);
+};

@@ -27,7 +27,7 @@ function dateAdd(dt, expression, number) {
 };
 
 $(document).ready(function () {
-    $(".date").blur(function () {
+    $("input[type=date], .date").blur(function () {
         if (today === "") return;
         var control = $(this);
         var value = control.val().trim().toLowerCase();
