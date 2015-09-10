@@ -113,6 +113,35 @@ namespace MixERP.Net.Schemas.Transactions.Data
 		}
 
         /// <summary>
+        /// Custom fields are user defined form elements for transactions.inventory_transfer_requests.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection for the table transactions.inventory_transfer_requests</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return null;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get custom fields for entity \"InventoryTransferRequest\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='transactions.inventory_transfer_requests' ORDER BY field_order;";
+            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+        }
+
+        /// <summary>
         /// Displayfields provide a minimal name/value context for data binding the row collection of transactions.inventory_transfer_requests.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table transactions.inventory_transfer_requests</returns>

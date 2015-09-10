@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of sales tax types.
+        ///     Displayfield is a lightweight key/value collection of sales tax types.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of sales tax types.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.SalesTaxTypeContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for sales tax types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of sales tax types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/sales-tax-type/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.SalesTaxTypeContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

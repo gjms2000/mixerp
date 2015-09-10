@@ -56,7 +56,7 @@ namespace MixERP.Net.Entities.Transactions
         public decimal Tax { get; set; }
     
         [Column("non_gl_stock_tax_detail_id")]
-        [ColumnDbType("int8", 0, false, "nextval('transactions.non_gl_stock_tax_details_non_gl_stock_tax_detail_id_seq'::regclass)")] 
+        [ColumnDbType("int8", 0, false, "nextval('non_gl_stock_tax_details_non_gl_stock_tax_detail_id_seq'::regclass)")] 
         public long NonGlStockTaxDetailId { get; set; }
     }
 }

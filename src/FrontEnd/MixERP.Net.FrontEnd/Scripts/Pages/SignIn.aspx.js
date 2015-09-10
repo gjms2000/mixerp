@@ -15,8 +15,11 @@ $(document).ready(function () {
 
     var userLang = navigator.language || navigator.userLanguage;
 
+
     if (languageSelect.find('option[value=' + userLang + ']').length) {
         languageSelect.val(userLang);
+    } else {
+        languageSelect.val("en-US");
     };
 
     $(".ui.checkbox").checkbox();

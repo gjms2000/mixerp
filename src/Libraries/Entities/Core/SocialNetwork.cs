@@ -35,6 +35,14 @@ namespace MixERP.Net.Entities.Core
         [ColumnDbType("varchar", 128, true, "")] 
         public string SemanticCssClass { get; set; }
     
+        [Column("base_url")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string BaseUrl { get; set; }
+    
+        [Column("profile_url")]
+        [ColumnDbType("varchar", 128, true, "")] 
+        public string ProfileUrl { get; set; }
+    
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")] 
         public int? AuditUserId { get; set; }

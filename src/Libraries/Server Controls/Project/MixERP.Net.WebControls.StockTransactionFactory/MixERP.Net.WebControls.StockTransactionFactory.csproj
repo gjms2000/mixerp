@@ -110,7 +110,6 @@
     <Compile Include="Control\Form\Top Form\Controls\DateTextBox.cs" />
     <Compile Include="Control\Form\Top Form\Controls\Party.cs" />
     <Compile Include="Control\Form\Top Form\Controls\CashTransaction.cs" />
-    <Compile Include="Control\Form\Top Form\Labels.cs" />
     <Compile Include="Control\Form\TopForm.cs" />
     <Compile Include="Control\IDisposable.cs" />
     <Compile Include="Control\Form\HiddenFields.cs" />

@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of salary types.
+        ///     Displayfield is a lightweight key/value collection of salary types.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of salary types.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.HRM
             try
             {
                 return this.SalaryTypeContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for salary types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of salary types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/salary-type/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.SalaryTypeContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

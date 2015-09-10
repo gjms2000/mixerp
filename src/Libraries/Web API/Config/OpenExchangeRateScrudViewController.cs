@@ -55,7 +55,7 @@ namespace MixERP.Net.Api.Config
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -79,7 +79,7 @@ namespace MixERP.Net.Api.Config
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -103,7 +103,7 @@ namespace MixERP.Net.Api.Config
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -129,7 +129,7 @@ namespace MixERP.Net.Api.Config
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {

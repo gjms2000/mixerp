@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of merchant fee setups.
+        ///     Displayfield is a lightweight key/value collection of merchant fee setups.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of merchant fee setups.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.MerchantFeeSetupContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for merchant fee setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of merchant fee setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/merchant-fee-setup/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.MerchantFeeSetupContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of employment statuses.
+        ///     Displayfield is a lightweight key/value collection of employment statuses.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of employment statuses.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.HRM
             try
             {
                 return this.EmploymentStatusContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for employment statuses.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of employment statuses.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/employment-status/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.EmploymentStatusContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

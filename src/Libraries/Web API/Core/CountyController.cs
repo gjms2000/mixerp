@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of counties.
+        ///     Displayfield is a lightweight key/value collection of counties.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of counties.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.CountyContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for counties.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of counties.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/county/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.CountyContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

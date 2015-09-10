@@ -18,25 +18,28 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Common.Helpers;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private void AddPaymentTermSelectCell(HtmlTableRow row)
+        private void AddPaymentTermSelectField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
-                if (this.ShowPaymentTerms)
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel("&nbsp;"))
                 {
-                    using (HtmlSelect paymentTermSelect = new HtmlSelect())
-                    {
-                        paymentTermSelect.ID = "PaymentTermSelect";
-                        cell.Controls.Add(paymentTermSelect);
-                    }
+                    field.Controls.Add(label);
                 }
 
-                row.Cells.Add(cell);
+                using (HtmlSelect paymentTermSelect = new HtmlSelect())
+                {
+                    paymentTermSelect.ID = "PaymentTermSelect";
+                    field.Controls.Add(paymentTermSelect);
+                }
+
+                container.Controls.Add(field);
             }
         }
     }

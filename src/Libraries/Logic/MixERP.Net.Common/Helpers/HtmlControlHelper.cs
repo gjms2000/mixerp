@@ -155,7 +155,7 @@ namespace MixERP.Net.Common.Helpers
         {
             using (HtmlGenericControl label = new HtmlGenericControl("label"))
             {
-                label.InnerText = text;
+                label.InnerHtml = text;
                 return label;
             }
         }

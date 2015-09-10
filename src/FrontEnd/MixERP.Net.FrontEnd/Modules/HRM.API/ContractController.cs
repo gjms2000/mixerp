@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of contracts.
+        ///     Displayfield is a lightweight key/value collection of contracts.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of contracts.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.HRM
             try
             {
                 return this.ContractContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for contracts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of contracts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/contract/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.ContractContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

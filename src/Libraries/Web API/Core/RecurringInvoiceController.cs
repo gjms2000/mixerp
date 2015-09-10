@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of recurring invoices.
+        ///     Displayfield is a lightweight key/value collection of recurring invoices.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of recurring invoices.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.RecurringInvoiceContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for recurring invoices.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of recurring invoices.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/recurring-invoice/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.RecurringInvoiceContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

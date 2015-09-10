@@ -7,6 +7,7 @@
     var allowDelete = true;
     var allowEdit = true;
     var excludedColumns = ["audit_user_id", "audit_ts"];
+
     var back = {
         Title: "Employee",
         Url: "/Modules/HRM/Tasks/EmployeeInfo.mix?EmployeeId=" + getQueryStringByName("EmployeeId")
@@ -43,6 +44,7 @@
 
     function checkIfExpires() {
         var value = $("#identification_type_code").getSelectedValue();
+
         if (!value) {
             return;
         };
@@ -55,6 +57,7 @@
         ajaxIdentificationTypeExpires.success(function (msg) {
             var canExpire = msg[0].CanExpire;
 
+
             if (!canExpire) {
                 $("#expires_on").val("");
             };
@@ -65,8 +68,29 @@
 
     $(document).on("formready", function () {
         checkIfExpires();
-        $("#identification_type_code").change(function() {
+
+        $("#identification_type_code").change(function () {
             checkIfExpires();
         });;
     });
+
+
+    var getParties = function(filters) {
+        var url = "/api/core/party-scrud-view/get-where/1";
+        var data = JSON.stringify(filters);
+
+        return window.postAjaxRequest(url, data);
+    };
+
+    var filters = [];
+    filters.push(window.getAjaxColumnFilter("first_name", window.FilterConditions.IsLike, "s"));
+    filters.push(window.getAjaxColumnFilter("party_type", window.FilterConditions.IsLike, "Customer"));
+
+
+    var getPartiesAjax = getParties(filters);
+
+    getPartiesAjax.success(function(msg) {
+        console.table(msg);
+    });
+
 </script>

@@ -23,12 +23,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     <div class="ui divider"></div>
 
     <div class="ui form">
-        <div class="inline fields">
+        <div class="fields">
             <div class="three wide field">
                 <label for="FormSelect"><%=Titles.SelectForm %></label>
-                <select id="FormSelect"></select>
+                <select id="FormSelect" class="ui dropdown"></select>
             </div>
-            <a class="ui purple button" onclick="show()"><%=Titles.Show %></a>
+
+            <div class="field">
+                <label>&nbsp;</label>
+                <a class="ui purple button" href="javascript:show();"><%=Titles.Show %></a>
+            </div>
+
         </div>
 
     </div>
@@ -38,9 +43,9 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
         <div id="CustomFieldContainer">
         </div>
         <div class="vpad8">
-            <div class="ui pink button" onclick="window.addField();">
+            <a class="ui pink button" href="javascript:window.addField();">
                 <%=Titles.AddNew %>
-            </div>
+            </a>
             <a class="ui positive button" onclick="save()"><%=Titles.Save %></a>
         </div>
     </div>

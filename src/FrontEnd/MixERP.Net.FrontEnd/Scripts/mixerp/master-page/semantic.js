@@ -1,9 +1,4 @@
-﻿$(document).ready(function () {
-    $('.ui.checkbox').checkbox();
-    $('.ui.dropdown').dropdown();
-});
-
-//Extending Semantic UI Form Validation Rules
+﻿//Extending Semantic UI Form Validation Rules
 $.extend(true, $.fn.form.settings.rules, {
     not_matches: function (value, fieldIdentifier) {
         // use either id or name of field

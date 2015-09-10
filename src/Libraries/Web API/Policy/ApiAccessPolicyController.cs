@@ -55,7 +55,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -79,7 +79,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -102,7 +102,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -126,7 +126,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -152,7 +152,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of api access policies.
+        ///     Displayfield is a lightweight key/value collection of api access policies.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of api access policies.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -175,7 +175,30 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for api access policies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of api access policies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/api-access-policy/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.ApiAccessPolicyContext.GetCustomFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -203,7 +226,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -232,7 +255,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {
@@ -255,7 +278,7 @@ namespace MixERP.Net.Api.Policy
             }
             catch (UnauthorizedException)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
             catch
             {

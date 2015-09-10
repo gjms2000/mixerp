@@ -1,9 +1,9 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Employees.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Tasks.Entry.Employees"
     OverridePath="/Modules/HRM/Tasks/Employees.mix"
      %>
+
 <script>
     var title = "Employee";
-    var viewPocoName = "Employee";
     var formPocoName = "Employee";
     var excludedColumns = ["audit_user_id", "audit_ts"];
     var readonlyColumns = ["EmployeeName"];
@@ -13,6 +13,7 @@
         ["EmployeeId", "EmployeeName", "", ""],
         ["FirstName", "MiddleName", "LastName", "GenderCode", "", "", "", ""]
     ];
+
     var returnUrl = "../Employees.mix";
     var queryStringKey = "EmployeeId";
 </script>
@@ -109,16 +110,17 @@
             data: null,
             valueField: "Key",
             textField: "Value"
-        },
+        }
     ];
 </script>
 
 <div data-ng-include="'/Views/Modules/FormFactory.html'"></div>
 
 <script>
-    $(document).ajaxStop(function () {
+    $(document).on("formready", function() {
         initialize();
     });
+
 
     function initialize() {
         var firstName = $("#first_name");
@@ -148,7 +150,6 @@
         lastName.keyup(function () { displayEmployeeName(); });
 
     };
-
 
 
 </script>

@@ -17,18 +17,25 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.Entities;
-using MixERP.Net.WebControls.Common;
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.Entities;
+using MixERP.Net.i18n.Resources;
+using MixERP.Net.WebControls.Common;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private void AddDateTextBoxCell(HtmlTableRow row)
+        private void AddDateTextBoxField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.ValueDate))
+                {
+                    field.Controls.Add(label);
+                }
+
                 this.dateTextBox = new DateTextBox();
                 this.dateTextBox.ID = "DateTextBox";
                 this.dateTextBox.OfficeId = this.OfficeId;
@@ -37,9 +44,8 @@ namespace MixERP.Net.WebControls.StockTransactionFactory
                 this.dateTextBox.Catalog = this.Catalog;
                 this.dateTextBox.OfficeId = this.OfficeId;
 
-                cell.Controls.Add(this.dateTextBox);
-
-                row.Cells.Add(cell);
+                field.Controls.Add(this.dateTextBox);
+                container.Controls.Add(field);
             }
         }
     }

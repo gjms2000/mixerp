@@ -547,15 +547,17 @@ select optgroup {
   padding: 12px 0 0 12px !important;
   max-height: 54px;
 }
-#signin-form {
-  width: 400px;
-  height: 800px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
+@media only screen and (min-device-width: 960px) {
+  #signin-form {
+    width: 400px;
+    height: 800px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
 }
 .theme,
 #SignInBody {

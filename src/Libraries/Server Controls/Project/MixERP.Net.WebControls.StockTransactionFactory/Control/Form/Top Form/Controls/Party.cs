@@ -18,37 +18,49 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private void AddPartyCodeInputTextCell(HtmlTableRow row)
+        private void AddPartyCodeInputTextField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.SelectParty))
+                {
+                    field.Controls.Add(label);
+                }
+
                 this.partyCodeInputText = new HtmlInputText();
                 this.partyCodeInputText.ID = "PartyCodeInputText";
                 this.partyCodeInputText.Attributes.Add("title", "F2");
 
-                cell.Controls.Add(this.partyCodeInputText);
-
-                row.Cells.Add(cell);
+                field.Controls.Add(this.partyCodeInputText);
+                container.Controls.Add(field);
             }
         }
 
-        private static void AddPartySelectCell(HtmlTableRow row)
+        private static void AddPartySelectField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel("&nbsp;"))
+                {
+                    field.Controls.Add(label);
+                }
+
                 using (HtmlSelect partySelect = new HtmlSelect())
                 {
                     partySelect.ID = "PartySelect";
                     partySelect.Attributes.Add("title", "F2");
 
-                    cell.Controls.Add(partySelect);
+                    field.Controls.Add(partySelect);
                 }
-                row.Cells.Add(cell);
+
+                container.Controls.Add(field);
             }
         }
     }

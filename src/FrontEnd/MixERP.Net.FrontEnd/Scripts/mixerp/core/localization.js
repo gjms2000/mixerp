@@ -86,5 +86,9 @@ stringFormat = function () {
 };
 
 String.prototype.toFormattedDate = function () {
+    if (isNullOrWhiteSpace(this)) {
+        return "";
+    };
+
     return new Date(this).toString(window.shortDateFormat);
 };

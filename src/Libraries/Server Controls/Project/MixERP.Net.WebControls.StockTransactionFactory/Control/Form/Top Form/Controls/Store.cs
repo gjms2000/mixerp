@@ -18,22 +18,30 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private static void AddStoreSelectCell(HtmlTableRow row)
+        private static void AddStoreSelectField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.SelectStore))
+                {
+                    field.Controls.Add(label);
+                }
+
+
                 using (HtmlSelect storeSelect = new HtmlSelect())
                 {
                     storeSelect.ID = "StoreSelect";
-                    cell.Controls.Add(storeSelect);
+                    field.Controls.Add(storeSelect);
                 }
 
-                row.Cells.Add(cell);
+                container.Controls.Add(field);
             }
         }
     }

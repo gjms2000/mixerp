@@ -8,28 +8,28 @@
 
         <div class="ui stackable grid">
             <div class="twelve wide column">
-            <div class="ui basic buttons">
-                <a id="AddNewButton" class="ui basic button">Add New</a>
-                <div class="ui icon top left pointing dropdown basic button">
-                    <span>Export This Document</span>
-                    <div class="menu">
-                        <div class="header">
-                            Export This Document
-                        </div>
-                        <div class="item">
-                            <i class="file word outline blue icon"></i>
-                            To Word Document
-                        </div>
-                        <div class="item">
-                            <i class="file excel outline green icon"></i>
-                            To Excel Document
-                        </div>
-                        <div class="item">
-                            <i class="file pdf outline red icon"></i>
-                            To PDF Document
+                <div class="ui basic buttons">
+                    <a id="AddNewButton" class="ui basic button">Add New</a>
+                    <div class="ui icon top left pointing dropdown basic button">
+                        <span>Export This Document</span>
+                        <div class="menu">
+                            <div class="header">
+                                Export This Document
+                            </div>
+                            <div class="item">
+                                <i class="file word outline blue icon"></i>
+                                To Word Document
+                            </div>
+                            <div class="item">
+                                <i class="file excel outline green icon"></i>
+                                To Excel Document
+                            </div>
+                            <div class="item">
+                                <i class="file pdf outline red icon"></i>
+                                To PDF Document
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
             <div class="right aligned four wide column">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="ui buttons">
                     <div class="ui basic green button" id="SaveFilterButton">Save</div>
-                        <div class="ui basic blue button" id="ManageFiltersButton">Manage Filters</div>
+                    <div class="ui basic blue button" id="ManageFiltersButton">Manage Filters</div>
                     <div class="ui basic red button">Cancel</div>
                 </div>
             </div>
@@ -158,7 +158,7 @@
 
             <div class="ui buttons">
                 <a class="ui basic green button" id="DownloadTemplateButton">Export Data</a>
-                <div  class="ui basic red button">
+                <div class="ui basic red button">
                     <label for="file">Import Data</label>
                     <input type="file" id="file" style="display:none;">
                 </div>
@@ -168,8 +168,8 @@
 
             <div id="ProgressBar" class="vpad16" style="display:none;">
                 <div data-percent="0" class="ui indicating progress active">
-                  <div style="transition-duration: 300ms; width: 0%;" class="bar"></div>
-                  <div class="label"></div>
+                    <div style="transition-duration: 300ms; width: 0%;" class="bar"></div>
+                    <div class="label"></div>
                 </div>
             </div>
         </div>
@@ -221,7 +221,7 @@
         };
 
 
-        function localizeHeaders(el) {            
+        function localizeHeaders(el) {
             el.find("thead tr th").each(function () {
                 var cell = $(this);
 
@@ -242,12 +242,12 @@
         function createGridView(appendTo, json) {
             appendTo.html("");
 
-            if(isNullOrWhiteSpace(json || "")){
+            if (isNullOrWhiteSpace(json || "")) {
                 return;
             };
 
             var mydata = eval(json);
-            var excludedColumnIndices = []; 
+            var excludedColumnIndices = [];
 
             if (!json) {
                 return null;
@@ -265,7 +265,7 @@
             $.each(json[0], function (name) {
                 if (window.excludedColumns.indexOf(name) === -1) {
                     header += "<th>" + name + "</th>";
-                }else{
+                } else {
                     excludedColumnIndices.push(index);
                 };
 
@@ -284,11 +284,11 @@
                 index = 0;
                 $.each(value, function (key, val) {
                     if (excludedColumnIndices.indexOf(index) === -1) {
-                        if(val === false){
+                        if (val === false) {
                             val = Resources.Titles.No();
                         };
 
-                        if(val === true){
+                        if (val === true) {
                             val = Resources.Titles.Yes();
                         };
 
@@ -367,7 +367,7 @@
         function getTotalPages(pocoName, filterName, byOffice) {
             var qs = getQueryStrings();
 
-            if(qs){
+            if (qs) {
                 return getFilteredTotalPages(pocoName, qs, byOffice);
             };
 
@@ -380,10 +380,10 @@
             return getAjax(url, data);
         };
 
-        function getAjaxFilters(queryStrings){
+        function getAjaxFilters(queryStrings) {
             var filters = [];
 
-            $.each(queryStrings, function(name, value){
+            $.each(queryStrings, function (name, value) {
                 filters.push(getAjaxPropertyFilter(name, 0, value));
             });
 
@@ -463,10 +463,10 @@
                 $("#DefaultFilterSelect").html(option);
 
                 if (selected) {
-                    $("#DefaultFilterSelect").dropdown("set selected", selected).dropdown();
+                    $("#DefaultFilterSelect").dropdown("set selected", selected).dropdown({ placeholder: false });
                     loadPageCount(loadGrid);
-                }else{
-                    $("#DefaultFilterSelect").dropdown();
+                } else {
+                    $("#DefaultFilterSelect").dropdown({ placeholder: false });
                     loadPageCount(loadGrid);
                 };
 
@@ -503,11 +503,11 @@
             };
             if (window.description) {
                 $(".description").html(window.description);
-            }else{
+            } else {
                 $(".description").remove();
             };
 
-            if(typeof(back) === "object"){
+            if (typeof (back) === "object") {
                 var title = back.Title;
                 var url = back.Url;
 
@@ -521,18 +521,18 @@
             };
         });
 
-        function loadPoco(callback){
+        function loadPoco(callback) {
             var ajaxgetPoco = getPoco(window.formPocoName);
 
             ajaxgetPoco.success(function (msg) {
                 pocoDefinition = msg.d;
-                if(typeof(callback) === "function"){
+                if (typeof (callback) === "function") {
                     callback();
-                }                    
-            });            
+                }
+            });
         };
 
-        
+
         function loadGrid() {
             var pageNumber = getPageNumber();
             var filterName = getFilter();
@@ -559,7 +559,7 @@
         function getPocoView(pocoName, pageNumber, filterName, byOffice) {
             var qs = getQueryStrings();
 
-            if(qs){
+            if (qs) {
                 return getFilteredPocoView(pocoName, pageNumber, qs, byOffice);
             };
 
@@ -857,19 +857,19 @@
             };
 
             setPageNumber(previousPage);
-            
+
             loadPageCount(loadGrid);
-        });        
+        });
     </script>
     <script>
-        $("#DownloadTemplateButton").click(function(){
+        $("#DownloadTemplateButton").click(function () {
             var ajaxDownloadTemplate = downloadTemplate(formPocoName, false, true);
             var el = this;
 
-            if(!el.href){
+            if (!el.href) {
                 $(el).addClass("loading");
 
-                ajaxDownloadTemplate.success(function(msg){
+                ajaxDownloadTemplate.success(function (msg) {
                     var json = JSON.parse(msg.d);
                     var csv = jsonToCsv(json);
                     var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
@@ -882,21 +882,20 @@
                     el.click();
                 });
 
-                ajaxDownloadTemplate.fail(function(){
+                ajaxDownloadTemplate.fail(function () {
                     $(el).removeClass("loading");
                 });
             };
         });
 
-        function jsonToCsv(json)
-        {
+        function jsonToCsv(json) {
 
             var header = "";
             var rows = "";
 
             $.each(json[0], function (name) {
-                if(header){
-                    header+= ",";
+                if (header) {
+                    header += ",";
                 };
 
                 header += '"' + name.replace(/"/g, '""') + '"';
@@ -908,16 +907,14 @@
                 var row = "";
 
                 $.each(value, function (key, val) {
-                    if(row){
-                        row+= ",";
+                    if (row) {
+                        row += ",";
                     };
 
-                    if(val == null)
-                    {
+                    if (val == null) {
                         row += '""';
                     }
-                    else
-                    {
+                    else {
                         row += '"' + val.toString().replace(/"/g, '""') + '"';
                     };
                 });
@@ -931,7 +928,7 @@
         };
 
 
-        function toProperCase(str){
+        function toProperCase(str) {
             var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
             return result.charAt(0).toUpperCase() + result.slice(1);
         };
@@ -957,18 +954,18 @@
         };
     </script>
     <script>
-        $("#file").change(function(){
+        $("#file").change(function () {
             var el = $(this);
             $(".big.error").removeClass("vpad8").html("");
             var file = this.files[0];
 
-            if(!file){
+            if (!file) {
                 return;
             };
 
             var supportedFileTypes = ["text/csv", "application/csv"];
 
-            if(supportedFileTypes.indexOf(file.type) === -1){
+            if (supportedFileTypes.indexOf(file.type) === -1) {
                 $(".big.error").addClass("vpad8").html(stringFormat("Your upload is of invalid file type \"{0}\". Please try again.", file.type));
                 return;
             };
@@ -980,10 +977,10 @@
 
             var reader = new FileReader();
 
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 var result = reader.result;
                 showProgress(progress, 50, "Successfully processed your file.");
-                var entities = Papa.parse(result, {"header":true}).data;
+                var entities = Papa.parse(result, { "header": true }).data;
 
                 showProgress(progress, 50, "Requesting import. This may take several minutes to complete.");
 
@@ -991,13 +988,13 @@
 
                 var ajaxImportPocos = importPocos(window.formPocoName, entities);
 
-                ajaxImportPocos.success(function(msg){
-                    var message  = stringFormat("Successfully imported {0} items.", entities.length);
+                ajaxImportPocos.success(function (msg) {
+                    var message = stringFormat("Successfully imported {0} items.", entities.length);
                     showProgress(progress, 100, message);
                     el.closest(".segment").find(".button").removeClass("loading");
                 });
 
-                ajaxImportPocos.fail(function(xhr){
+                ajaxImportPocos.fail(function (xhr) {
                     $(".big.error").addClass("vpad8").html(JSON.parse(xhr.responseText).Message);
                     el.closest(".segment").find(".button").removeClass("loading");
                     showProgress(progress, 0, "Rolling back changes.");
@@ -1006,36 +1003,35 @@
             };
 
             reader.readAsText(file);
-            
+
         });
 
-        function showProgress(el, percentage, message){
+        function showProgress(el, percentage, message) {
             el.attr("data-percent", percentage.toString());
             el.find(".bar").css("width", percentage.toString() + "%");
             el.find(".label").text(percentage.toString() + "% - " + message);
         };
     </script>
     <script>
-        function loadActions()
-        {
+        function loadActions() {
             var deleteTemplate = "";
             var editTemplate = "";
 
             var hasAction = false;
 
-            if(window.allowDelete){
-                deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", Resources.Titles.Delete());                
+            if (window.allowDelete) {
+                deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", Resources.Titles.Delete());
             };
 
-            if(window.allowEdit){
+            if (window.allowEdit) {
                 editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", Resources.Titles.Edit());
             };
 
-            if(!isNullOrWhiteSpace(editTemplate) || !isNullOrWhiteSpace(deleteTemplate)){
+            if (!isNullOrWhiteSpace(editTemplate) || !isNullOrWhiteSpace(deleteTemplate)) {
                 hasAction = true;
             };
 
-            if(hasAction){
+            if (hasAction) {
                 var grid = $(".definition.table");
                 var header = stringFormat("<th style='width:{0}px;'></th>", 25 * (!isNullOrWhiteSpace(editTemplate) + !isNullOrWhiteSpace(deleteTemplate)));
                 var column = stringFormat("<td>{0}{1}</td>", editTemplate, deleteTemplate);
@@ -1046,77 +1042,81 @@
         };
     </script>
     <script>
-        function deleteRow(el){
+        function deleteRow(el) {
             var confirmed = confirmAction();
 
-            if(!confirmed){
+            if (!confirmed) {
                 return;
             };
 
             el = $(el);
 
-            if(typeof(window.keyColumnPosition) === "undefined"){
+            if (typeof (window.keyColumnPosition) === "undefined") {
                 window.keyColumnPosition = "2";
             };
 
-            var selector = "td:nth-child(" + keyColumnPosition  + ")";
+            var selector = "td:nth-child(" + keyColumnPosition + ")";
             var primaryKey = el.parent().parent().find(selector).text();
 
             var ajaxDeleteEntity = deleteEntity(formPocoName, primaryKey);
 
-            ajaxDeleteEntity.success(function(msg){
+            ajaxDeleteEntity.success(function (msg) {
                 var confirmed = confirm("Task completed successfully. Refresh view?");
 
-                if(confirmed){
+                if (confirmed) {
                     loadPageCount(loadGrid);
                 };
             });
         };
 
-        function editRow(el){
+        function editRow(el) {
             var confirmed = confirmAction();
 
-            if(!confirmed){
+            if (!confirmed) {
                 return;
             };
 
             el = $(el);
 
-            if(typeof(window.keyColumnPosition) === "undefined"){
+            if (typeof (window.keyColumnPosition) === "undefined") {
                 window.keyColumnPosition = "2";
             };
 
-            var selector = "td:nth-child(" + keyColumnPosition  + ")";
+            var selector = "td:nth-child(" + keyColumnPosition + ")";
             var primaryKey = el.parent().parent().find(selector).text();
 
             var ajaxGetViewForEdit = getViewForEdit(formPocoName, primaryKey);
 
-            ajaxGetViewForEdit.success(function(msg){
+            ajaxGetViewForEdit.success(function (msg) {
                 var data = JSON.parse(msg.d);
 
-                if(window.form === "undefined"){
+                if (window.form === "undefined") {
                     alert("No instance of form handler was found.");
                     return;
                 };
 
-                displayEdit(data)
+                displayEdit(data);
             });
         };
 
-        function displayEdit(d){
+        function displayEdit(d) {
             for (var key in d) {
                 var value = d[key];
 
                 var targetEl = $("#" + key);
 
-                if(targetEl.length){
+                if (targetEl.length) {
+                    if (targetEl.hasClass("date")) {
+                        value = value.toFormattedDate();
+                    };
+
                     targetEl.val(value);
 
-                    if(targetEl.is("select")){
+                    if (targetEl.is("select")) {
                         var type = targetEl.attr("data-type");
-                        
-                        if(type === "bool"){
-                            value = value ? "yes": "no";
+
+                        if (type === "bool") {
+                            value = value ? "yes" : "no";
                         };
 
                         targetEl.dropdown("set selected", value);
@@ -1131,7 +1131,7 @@
         };
     </script>
     <script>
-        function deleteEntity(pocoName, primaryKeyValue){
+        function deleteEntity(pocoName, primaryKeyValue) {
             var url = "/Services/Modules/PocoService.asmx/DeleteEntity";
             var data = appendParameter("", "pocoName", pocoName);
             data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
@@ -1141,7 +1141,7 @@
             return getAjax(url, data);
         };
 
-        function getViewForEdit(pocoName, primaryKeyValue){
+        function getViewForEdit(pocoName, primaryKeyValue) {
             var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
             var data = appendParameter("", "pocoName", pocoName);
             data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
@@ -1149,6 +1149,6 @@
             data = getData(data);
 
             return getAjax(url, data);
-        };        
+        };
     </script>
 </div>

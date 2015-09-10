@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AccessValidator.cs" />
     <Compile Include="Attributes.cs" />
+    <Compile Include="CustomField.cs" />
     <Compile Include="DbAccess.cs" />
     <Compile Include="DisplayField.cs" />
     <Compile Include="Extensions.cs" />

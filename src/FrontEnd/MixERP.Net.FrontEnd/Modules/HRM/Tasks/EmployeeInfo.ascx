@@ -2,6 +2,8 @@
     OverridePath="/Modules/HRM/Tasks/Employees.mix" %>
 
 
+<script src="/Scripts/mixerp/utitlities/countries.js"></script>
+<script src="/Scripts/underscore/underscore-min.js"></script>
 
 <asp:Panel runat="server" ID="InfoPanel" data-ng-controller="EmployeeInfoController" data-ng-cloak>
     <div class="ui purple header">
@@ -18,6 +20,7 @@
     <div class="bpad8">
         <div class="ui basic buttons">
             <a href="Employees.mix" class="ui basic button">{{getResource('Resources.Titles.Employees')}}</a>
+            <a href="/Modules/BackOffice/AttachmentManager.mix?OverridePath=/Modules/HRM/Tasks/Employees.mix&Book=employee&Id={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.UploadAttachments')}}</a>
             <a href="Employee/IdentificationDetails.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.IdentificationDetails')}}</a>
             <a href="Employee/SocialNetworks.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.SocialNetworks')}}</a>
             <a href="Employee/Experiences.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.Experiences')}}</a>
@@ -462,11 +465,19 @@
         var getQualificationsAjax = getQualifications();
         $scope.thispage = $window.location.pathname;
 
+        $scope.getCountryCode = function (countryName) {
+            if (countryName) {
+                return $window._.find($window.countries, { countryName: countryName }).countryCode.toLowerCase();
+            };
+
+            return "";
+        };
+
         getEmployeeAjax.success(function (msg) {
             $scope.$apply(function () {
                 $scope.employee = msg[0];
                 $scope.employee.JoinedOnAgo = $window.moment(new Date(msg[0].JoinedOn)).fromNow();
-                var age = $window.moment().diff($window.moment(msg[0].DateOfBirth), 'years');
+                var age = $window.moment().diff($window.moment(msg[0].DateOfBirth), "years");
 
                 if (!age) { age = ""; };
 

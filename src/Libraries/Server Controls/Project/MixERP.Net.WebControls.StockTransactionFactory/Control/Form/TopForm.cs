@@ -26,17 +26,27 @@ namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
+        private readonly string[] numbers = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve" };
+
         private void CreateTopFormPanel(Control container)
         {
             using (HtmlGenericControl segment = HtmlControlHelper.GetSegment())
             {
-                using (HtmlTable table = new HtmlTable())
+                using (HtmlGenericControl form = new HtmlGenericControl("div"))
                 {
-                    table.Attributes.Add("class", "ui form");
+                    form.Attributes.Add("class", "ui stackable form");
 
-                    this.AddTopFormLabels(table);
-                    this.AddTopFormControls(table);
-                    segment.Controls.Add(table);
+                    var totalFields = this.CountTopFormControls();
+
+                    using (HtmlGenericControl fields = HtmlControlHelper.GetFields(this.numbers[totalFields] + " fields"))
+                    {
+                        this.AddTopFormControls(fields);
+
+                        form.Controls.Add(fields);
+                    }
+
+                    segment.Controls.Add(form);
+
                 }
 
                 container.Controls.Add(segment);

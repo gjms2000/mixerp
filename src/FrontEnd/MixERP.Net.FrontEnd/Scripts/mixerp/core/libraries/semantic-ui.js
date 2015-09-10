@@ -15,4 +15,7 @@ $(document).ready(function () {
     });
 
     $('.activating.element').popup();
+
+    $('.ui.checkbox').checkbox();
+    $('.ui.dropdown').dropdown( {placeholder: false });
 });

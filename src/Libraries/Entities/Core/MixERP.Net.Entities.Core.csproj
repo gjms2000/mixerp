@@ -98,6 +98,7 @@
     <Compile Include="CurrencySelectorView.cs" />
     <Compile Include="CustomField.cs" />
     <Compile Include="CustomFieldDataType.cs" />
+    <Compile Include="CustomFieldDefinitionView.cs" />
     <Compile Include="CustomFieldForm.cs" />
     <Compile Include="CustomFieldSetup.cs" />
     <Compile Include="DbGetAccountViewByAccountMasterIdResult.cs" />

@@ -478,6 +478,8 @@ namespace MixERP.Net.FrontEnd
                 {
                     usernameInputText.ID = "UsernameInputText";
                     usernameInputText.Attributes.Add("placeholder", Titles.UserId);
+                    usernameInputText.Attributes.Add("autocapitalize", "off");
+                    usernameInputText.Attributes.Add("autocorrect", "off");
                     field.Controls.Add(usernameInputText);
 
                     container.Controls.Add(field);

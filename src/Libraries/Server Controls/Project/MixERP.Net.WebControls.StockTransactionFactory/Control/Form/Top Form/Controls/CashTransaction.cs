@@ -17,41 +17,42 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
+using System.Web.UI.HtmlControls;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.i18n.Resources;
-using MixERP.Net.WebControls.StockTransactionFactory.Helpers;
-using System.Web.UI.HtmlControls;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private void AddCashTransactionDivCell(HtmlTableRow row)
+        private void AddCashTransactionDivField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
-                if (this.ShowTransactionType)
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel("&nbsp;"))
                 {
-                    using (HtmlGenericControl toggleCheckBox = HtmlControlHelper.GetToggleCheckBox())
-                    {
-                        toggleCheckBox.ID = "CashTransactionDiv";
-                        using (HtmlInputCheckBox cashTransactionInputCheckBox = new HtmlInputCheckBox())
-                        {
-                            cashTransactionInputCheckBox.ID = "CashTransactionInputCheckBox";
-                            cashTransactionInputCheckBox.Attributes.Add("checked", "checked");
-                            toggleCheckBox.Controls.Add(cashTransactionInputCheckBox);
-                        }
-
-                        using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.CashTransaction))
-                        {
-                            toggleCheckBox.Controls.Add(label);
-                        }
-
-                        cell.Controls.Add(toggleCheckBox);
-                    }
+                    field.Controls.Add(label);
                 }
 
-                row.Cells.Add(cell);
+                using (HtmlGenericControl toggleCheckBox = HtmlControlHelper.GetToggleCheckBox())
+                {
+                    toggleCheckBox.ID = "CashTransactionDiv";
+                    using (HtmlInputCheckBox cashTransactionInputCheckBox = new HtmlInputCheckBox())
+                    {
+                        cashTransactionInputCheckBox.ID = "CashTransactionInputCheckBox";
+                        cashTransactionInputCheckBox.Attributes.Add("checked", "checked");
+                        toggleCheckBox.Controls.Add(cashTransactionInputCheckBox);
+                    }
+
+                    using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.CashTransaction))
+                    {
+                        toggleCheckBox.Controls.Add(label);
+                    }
+
+                    field.Controls.Add(toggleCheckBox);
+                }
+
+                container.Controls.Add(field);
             }
         }
     }

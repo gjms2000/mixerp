@@ -25,7 +25,7 @@ using System.Linq;
 namespace MixERP.Net.Schemas.Audit.Data
 {
 	/// <summary>
-	/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(_login_id bigint)" on the database.
+	/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(pg_arg0 bigint)" on the database.
 	/// </summary>
 	public class GetOfficeIdByLoginIdProcedure: DbAccess
 	{
@@ -47,24 +47,24 @@ namespace MixERP.Net.Schemas.Audit.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Maps to "_login_id" argument of the function "audit.get_office_id_by_login_id".
+		/// Maps to "pg_arg0" argument of the function "audit.get_office_id_by_login_id".
 		/// </summary>
-		public long LoginIdParameter { get; set; }
+		public long PgArg0 { get; set; }
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(_login_id bigint)" on the database.
+		/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(pg_arg0 bigint)" on the database.
 		/// </summary>
 		public GetOfficeIdByLoginIdProcedure()
 		{
 		}
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(_login_id bigint)" on the database.
+		/// Prepares, validates, and executes the function "audit.get_office_id_by_login_id(pg_arg0 bigint)" on the database.
 		/// </summary>
-		/// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "audit.get_office_id_by_login_id".</param>
-		public GetOfficeIdByLoginIdProcedure(long loginIdParameter)
+		/// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "audit.get_office_id_by_login_id".</param>
+		public GetOfficeIdByLoginIdProcedure(long pgArg0)
 		{
-			this.LoginIdParameter = loginIdParameter;
+			this.PgArg0 = pgArg0;
 		}
 		/// <summary>
 		/// Prepares and executes the function "audit.get_office_id_by_login_id".
@@ -84,7 +84,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 				}
 			}
 			const string query = "SELECT * FROM audit.get_office_id_by_login_id(@0::bigint);";
-			return Factory.Scalar<int>(this.Catalog, query, this.LoginIdParameter);
+			return Factory.Scalar<int>(this.Catalog, query, this.PgArg0);
 		} 
 	}
 }

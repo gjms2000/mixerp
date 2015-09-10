@@ -18,21 +18,30 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
 using System.Web.UI.HtmlControls;
+using MixERP.Net.Common.Helpers;
+using MixERP.Net.i18n.Resources;
 
 namespace MixERP.Net.WebControls.StockTransactionFactory
 {
     public partial class StockTransactionForm
     {
-        private void AddReferenceNumberInputTextCell(HtmlTableRow row)
+        private void AddReferenceNumberInputTextField(HtmlGenericControl container)
         {
-            using (HtmlTableCell cell = Helpers.TableHelper.GetFieldCell())
+            using (HtmlGenericControl field = HtmlControlHelper.GetField())
             {
+                using (HtmlGenericControl label = HtmlControlHelper.GetLabel(Titles.ReferenceNumberAbbreviated))
+                {
+                    field.Controls.Add(label);
+                }
+
+
                 this.referenceNumberInputText = new HtmlInputText();
                 this.referenceNumberInputText.ID = "ReferenceNumberInputText";
                 this.referenceNumberInputText.MaxLength = 24;
 
-                cell.Controls.Add(this.referenceNumberInputText);
-                row.Cells.Add(cell);
+                field.Controls.Add(this.referenceNumberInputText);
+
+                container.Controls.Add(field);
             }
         }
     }

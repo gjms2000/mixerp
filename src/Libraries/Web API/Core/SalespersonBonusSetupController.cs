@@ -161,7 +161,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Displayfields is a lightweight key/value collection of salesperson bonus setups.
+        ///     Displayfield is a lightweight key/value collection of salesperson bonus setups.
         /// </summary>
         /// <returns>Returns an enumerable key/value collection of salesperson bonus setups.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -172,6 +172,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.SalespersonBonusSetupContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for salesperson bonus setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of salesperson bonus setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/salesperson-bonus-setup/custom-fields")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        {
+            try
+            {
+                return this.SalespersonBonusSetupContext.GetCustomFields();
             }
             catch (UnauthorizedException)
             {

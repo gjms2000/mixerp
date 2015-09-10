@@ -44,7 +44,7 @@
                     </div>
                     <div class="twelve wide column">
                         <div id="RightMenu">
-                            <div class="ui inverted attached contrast theme menu">
+                            <div class="ui inverted attached contrast theme stackable menu">
                                 <a class="item" href="http://mixerp.org/" target="_blank">
                                     <i class="anchor icon"></i>
                                     MixERP
@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="sixteen wide column" id="MainMenu">
-                <div id="top-menu" class="ui attached menu">
+                <div id="top-menu" class="ui attached stackable menu">
                     <a class="item" onclick=" toggleSidebar(this); ">
                         <i class="options icon"></i>
                     </a>

@@ -13,224 +13,225 @@
 
     <div class="ui stackable attached segment loading form" id="scrud">
     </div>
-<div class="ui stackable attached segment">
-    <div class="big error"></div>
-    <input type="button" id="SaveButton" value="Save" class="ui green button"/>
-    <input type="button" id="CancelButton" value="Cancel" class="ui red button"/>
-</div>
+    <div class="ui stackable attached segment">
+        <div class="big error"></div>
+        <input type="button" id="SaveButton" value="Save" class="ui green button" />
+        <input type="button" id="CancelButton" value="Cancel" class="ui red button" />
+    </div>
 
-<script>
-    function initializeAjaxRequest() {
-        $.each(keys, function() {
-            var el = $("[data-property=" + this.property + "]");
+    <script>
+        function initializeAjaxRequest() {
+            $.each(keys, function () {
+                var el = $("[data-property=" + this.property + "]");
 
-            if (el.length) {
-                var selectedValue = "";
+                if (el.length) {
+                    var selectedValue = "";
 
-                if (window.editData) {
-                    selectedValue = window.editData[el.attr("id")];
-                };
-
-                ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
-            };
-        });
-    };
-
-</script>
-
-<script>
-    var poco;
-    var saveButton = $("#SaveButton");
-    var scrud = $("#scrud");
-    var cancelButton = $("#CancelButton");
-    var form = $(".poco.form.factory");
-    var view = $(".poco.view.factory");
-    var grid = [undefined, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
-    var editData;
-    var dropdownsLoaded = false;
-    var defaultValuesLoaded = false;
-</script>
-
-<script>
-    if (window.title) {
-        $(".title").html(window.title);
-    };
-    if (window.description) {
-        $(".description").html(window.description);
-    }else{
-        $(".description").remove();        
-    };
-
-    function getReturnUrl(){
-        var returnTo = getQueryStringByName("ReturnUrl");
-
-        var qs = getQueryStrings();
-
-        $.each(qs, function (i, v) {
-            if (i !== "ReturnUrl") {
-                returnTo = updateQueryString(i, v, returnTo);
-            };
-        });
-
-
-        if(!returnTo){
-            returnTo = window.returnUrl;
-        };
-
-        return (returnTo || "");
-    };
-
-    cancelButton.click(function () {
-        var confirmed = confirmAction();
-
-        if (!confirmed) {
-            return;
-        };
-
-        resetForm();
-
-        if (view.length) {
-            form.hide();
-            view.show();
-        };
-
-        if (getReturnUrl()) {
-            document.location.href = getReturnUrl();
-        };
-    });
-
-
-
-    saveButton.click(function(){
-        var isValid = validate();
-
-        if(!isValid){
-            return;
-        };
-
-        saveButton.addClass("loading");
-        var bigError = $(".big.error");
-        var entity = new Object();
-
-        bigError.removeClass("bpad16").html("");
-
-        $.each(poco.Columns, function(i, v){
-            var columnName = v.ColumnName;
-            var dataType = v.DataType;
-            var isSerial = v.IsSerial;
-
-            var el = $("#" + columnName);
-            var val = null;
-
-            if(el.length){
-                val = el.val();
-
-                if(dataType === "System.Boolean"){
-                    val = val === "yes"? true: false;
-                }else{
-                    val = val.toString().trim();
-                };
-
-                if(el.is("select")){
-                    if(!val){
-                        val = null;
+                    if (window.editData) {
+                        selectedValue = window.editData[el.attr("id")];
                     };
+
+                    ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
                 };
+            });
+        };
+
+    </script>
+
+    <script>
+        var poco;
+        var saveButton = $("#SaveButton");
+        var scrud = $("#scrud");
+        var cancelButton = $("#CancelButton");
+        var form = $(".poco.form.factory");
+        var view = $(".poco.view.factory");
+        var grid = [undefined, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
+        var editData;
+        var dropdownsLoaded = false;
+        var defaultValuesLoaded = false;
+    </script>
+
+    <script>
+        if (window.title) {
+            $(".title").html(window.title);
+        };
+        if (window.description) {
+            $(".description").html(window.description);
+        } else {
+            $(".description").remove();
+        };
+
+        function getReturnUrl() {
+            var returnTo = getQueryStringByName("ReturnUrl");
+
+            if (returnTo) {
+                var qs = getQueryStrings();
+
+                $.each(qs, function (i, v) {
+                    if (i !== "ReturnUrl") {
+                        returnTo = updateQueryString(i, v, returnTo);
+                    };
+                });
             };
 
-            if(isSerial){
-                if(isNullOrWhiteSpace(val)){
-                    val = null;
-                };
+            if (!returnTo) {
+                returnTo = window.returnUrl;
             };
 
-            entity[columnName] = val;
-        });
+            return (returnTo || "");
+        };
 
-        var ajaxSaveOrUpdate = saveOrUpdate(formPocoName, entity);
+        cancelButton.click(function () {
+            var confirmed = confirmAction();
 
-
-        ajaxSaveOrUpdate.success(function(msg){
-            saveButton.removeClass("loading");
-            var confirmed = confirm("Task completed successfully. Return to view?");
+            if (!confirmed) {
+                return;
+            };
 
             resetForm();
 
-            if(confirmed){
+            if (view.length) {
                 form.hide();
+                view.show();
+            };
 
-                if(getReturnUrl()){
-                    window.location.href = getReturnUrl();
-                };
-
-                if(view.length){
-                    view.show();
-                    loadPageCount(loadGrid);
-                };
+            if (getReturnUrl()) {
+                document.location.href = getReturnUrl();
             };
         });
 
-        ajaxSaveOrUpdate.fail(function(xhr){
-            var error = getAjaxErrorMessage(xhr);
 
-            saveButton.removeClass("loading");
-            bigError.addClass("bpad16").text(error);
-        });
 
-    });
+        saveButton.click(function () {
+            var isValid = validate();
 
-    function resetForm(){
-        var fields = $(".form-field");
-
-        $.each(fields, function(){
-            var el = $(this);
-            var defaultValue = el.attr("data-default-value");
-
-            if(!defaultValue){
-                defaultValue = "";
+            if (!isValid) {
+                return;
             };
 
-            if(el.hasClass("dropdown")){
-                if(!el.hasClass("disabled")){
-                    var select = el.find("select");
-                    var search = el.find(".search");
-                    var text = el.find(".text");
+            saveButton.addClass("loading");
+            var bigError = $(".big.error");
+            var entity = new Object();
 
-                    select.val("");
-                    search.html("");
-                    text.html("");                    
+            bigError.removeClass("bpad16").html("");
+
+            $.each(poco.Columns, function (i, v) {
+                var columnName = v.ColumnName;
+                var dataType = v.DataType;
+                var isSerial = v.IsSerial;
+
+                var el = $("#" + columnName);
+                var val = null;
+
+                if (el.length) {
+                    val = el.val();
+
+                    if (dataType === "System.Boolean") {
+                        val = val === "yes" ? true : false;
+                    } else {
+                        val = val.toString().trim();
+                    };
+
+                    if (el.is("select")) {
+                        if (!val) {
+                            val = null;
+                        };
+                    };
                 };
-            }else{                
-                el.val(defaultValue);                
-            };
+
+                if (isSerial) {
+                    if (isNullOrWhiteSpace(val)) {
+                        val = null;
+                    };
+                };
+
+                entity[columnName] = val;
+            });
+
+            var ajaxSaveOrUpdate = saveOrUpdate(formPocoName, entity);
+
+
+            ajaxSaveOrUpdate.success(function (msg) {
+                saveButton.removeClass("loading");
+                var confirmed = confirm("Task completed successfully. Return to view?");
+
+                resetForm();
+
+                if (confirmed) {
+                    form.hide();
+
+                    if (getReturnUrl()) {
+                        window.location.href = getReturnUrl();
+                    };
+
+                    if (view.length) {
+                        view.show();
+                        loadPageCount(loadGrid);
+                    };
+                };
+            });
+
+            ajaxSaveOrUpdate.fail(function (xhr) {
+                var error = getAjaxErrorMessage(xhr);
+
+                saveButton.removeClass("loading");
+                bigError.addClass("bpad16").text(error);
+            });
+
         });
-    };
 
-    function validate(){
-        var required = $(".poco.form.factory [required]:not(:disabled):not([readonly])");
-        required.trigger("blur");
+        function resetForm() {
+            var fields = $(".form-field");
 
-        return form.find(".error").length === 1;
-    };
+            $.each(fields, function () {
+                var el = $(this);
+                var defaultValue = el.attr("data-default-value");
 
-    function getFormView(pocoName) {
-        var url = "/Services/Modules/PocoService.asmx/GetFormView";
-        var data = appendParameter("", "pocoName", pocoName);
+                if (!defaultValue) {
+                    defaultValue = "";
+                };
 
-        data = getData(data);
-        return getAjax(url, data);
-    };
+                if (el.hasClass("dropdown")) {
+                    if (!el.hasClass("disabled")) {
+                        var select = el.find("select");
+                        var search = el.find(".search");
+                        var text = el.find(".text");
 
-    function saveOrUpdate(pocoName, pocoEntity){
-        var url = "/Services/Modules/PocoService.asmx/SaveOrUpdate";
-        var data = appendParameter("", "pocoName", pocoName);
-        data = appendParameter(data, "pocoEntity", pocoEntity);
+                        select.val("");
+                        search.html("");
+                        text.html("");
+                    };
+                } else {
+                    el.val(defaultValue);
+                };
+            });
+        };
 
-        data = getData(data);
-        return getAjax(url, data);
-    };
+        function validate() {
+            var required = $(".poco.form.factory [required]:not(:disabled):not([readonly])");
+            required.trigger("blur");
 
-</script>
+            return form.find(".error").length === 1;
+        };
+
+        function getFormView(pocoName) {
+            var url = "/Services/Modules/PocoService.asmx/GetFormView";
+            var data = appendParameter("", "pocoName", pocoName);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+        function saveOrUpdate(pocoName, pocoEntity) {
+            var url = "/Services/Modules/PocoService.asmx/SaveOrUpdate";
+            var data = appendParameter("", "pocoName", pocoName);
+            data = appendParameter(data, "pocoEntity", pocoEntity);
+
+            data = getData(data);
+            return getAjax(url, data);
+        };
+
+    </script>
 
     <script>
         //$(window).load
@@ -248,10 +249,12 @@
             } else {
                 if (view.length) {
                     form.hide();
+                } else {
+                    form.show();
                 };
             };
 
-            loadEdit();            
+            loadEdit();
         });
 
         $(document).ajaxStop(function () {
@@ -265,26 +268,26 @@
             $(document).trigger("formready");
         };
 
-        function loadDefaultValues(){
-            if(defaultValuesLoaded){
+        function loadDefaultValues() {
+            if (defaultValuesLoaded) {
                 return;
             };
 
             var qs = getQueryStrings();
 
-            $.each(qs, function(i, v){
+            $.each(qs, function (i, v) {
                 var name = i;
                 var value = v;
 
                 var el = $("[data-property=" + name + "]");
 
-                if(el.length){
-                    if(el.is("select")){
+                if (el.length) {
+                    if (el.is("select")) {
                         el.addClass("disabled");
                         el.attr("data-value", value);
-                        el.attr("data-default-value", value);                        
-                    }else{
-                        el.val(value);                        
+                        el.attr("data-default-value", value);
+                    } else {
+                        el.val(value);
                     };
                 };
             });
@@ -297,20 +300,20 @@
             if (!dropdownsLoaded) {
                 var dropdowns = $(".poco.form.factory .dropdown");
 
-                dropdowns.each(function(i, v){
+                dropdowns.each(function (i, v) {
                     var dropdown = $(v);
 
                     var selectedValue = (dropdown.getSelectedValue() || "");
 
-                    if(!selectedValue){
+                    if (!selectedValue) {
                         selectedValue = dropdown.attr("data-value");
 
-                        if(selectedValue){
+                        if (selectedValue) {
                             dropdown.val(selectedValue);
                         };
                     };
 
-                    dropdown.dropdown();
+                    dropdown.dropdown({ placeholder: false });
                 });
 
                 dropdownsLoaded = true;
@@ -331,8 +334,8 @@
 
         function chunk_array(arr, len) {
             return arr.map(function (e, i) {
-                    return i % len === 0 ? arr.slice(i, i + len) : null;
-                })
+                return i % len === 0 ? arr.slice(i, i + len) : null;
+            })
                 .filter(function (e) { return e; });
         };
 
@@ -440,29 +443,29 @@
             });
         };
 
-        function initializeValidators(){
+        function initializeValidators() {
 
-            $(".dropdown input.search").blur(function(){
+            $(".dropdown input.search").blur(function () {
                 $(this).parent().find("select").trigger("blur");
             });
 
-            $(".poco.form.factory [required]:not(:disabled):not([readonly])").blur(function(){
+            $(".poco.form.factory [required]:not(:disabled):not([readonly])").blur(function () {
                 var el = $(this);
 
                 var val = el.val();
                 var errorMessage = el.closest(".field").find(".error-message");
 
-                if(!errorMessage.length){
-                    errorMessage = $("<span class='error-message' />"); 
+                if (!errorMessage.length) {
+                    errorMessage = $("<span class='error-message' />");
                     el.closest(".field").append(errorMessage);
                 };
 
-                if(isNullOrWhiteSpace(val)){
+                if (isNullOrWhiteSpace(val)) {
                     isValid = false;
                     makeDirty(el);
 
                     el.closest(".field").find(".error-message").html(Resources.Labels.ThisFieldIsRequired());
-                }else{
+                } else {
                     removeDirty(el);
                     el.closest(".field").find(".error-message").html("");
                 };
@@ -484,13 +487,8 @@
                 return;
             };
 
-            if(["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >=0){
+            if (["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >= 0) {
                 return;
-            };
-            var value = "";
-
-            if (window.editData) {
-                value = window.editData[column.ColumnName];
             };
 
             var field = $("<div/>");
@@ -519,18 +517,14 @@
                 };
             };
 
-            if(typeof(readonlyColumns) === "undefined"){
+            if (typeof (readonlyColumns) === "undefined") {
                 readonlyColumns = [];
             };
 
-            if(readonlyColumns.indexOf(column.PropertyName) > -1){
+            if (readonlyColumns.indexOf(column.PropertyName) > -1) {
                 element.attr("readonly", "");
-            };                
-
-            if (column.Value) {
-                element.attr("data-value", column.Value);
-                element.val(column.Value);
             };
+
 
             if (column.IsSerial) {
                 element.attr("readonly", "readonly");
@@ -550,10 +544,19 @@
                 label.html(label.text() + "&nbsp;<span style='color:red'>*</span>");
             };
 
+            var value = column.Value;
+
+            if (window.editData) {
+                value = window.editData[column.ColumnName];
+            };
+
+            if (element.hasClass("date")) {
+                value = value.toFormattedDate();
+            };
+
             if (value) {
-                if (!element.is("select")) {
-                    element.val(value);
-                };
+                element.attr("data-value", column.Value);
+                element.val(value);
             };
 
             element.addClass("form-field");
@@ -567,7 +570,7 @@
         //var bool = "<select class='ui dropdown'><option value='yes'>Yes</option><option value='no'>No</option>";
 
         function getField(propertyName, dataType, nullable) {
-            if(typeof(window.keys) === "undefined"){
+            if (typeof (window.keys) === "undefined") {
                 window.keys = [];
             };
 
@@ -578,44 +581,44 @@
             };
 
             switch (dataType) {
-            case "image":
-                return $("<input type='text' class='image' />");
-            case "int4":
-            case "int8":
-            case "integer_strict":
-            case "integer_strict2":
-                return $("<input type='text' class='integer' />");
-            case "float8":
-            case "decimal":
-            case "numeric":
-                return $("<input type='text' class='decimal' />");
-            case "money_strict2":
-            case "money_strict":
-                return $("<input type='text' class='currency' />");
-            case "text":
-                return $("<textarea />");
-            case "date":
-                return $("<input type='text' class='date' />");
-            case "bool":
-            case "boolean":
-                var el = $("<select class='ui search dropdown' />");
-                var option = "<option";
+                case "image":
+                    return $("<input type='text' class='image' />");
+                case "int4":
+                case "int8":
+                case "integer_strict":
+                case "integer_strict2":
+                    return $("<input type='text' class='integer' />");
+                case "float8":
+                case "decimal":
+                case "numeric":
+                    return $("<input type='text' class='decimal' />");
+                case "money_strict2":
+                case "money_strict":
+                    return $("<input type='text' class='currency' />");
+                case "text":
+                    return $("<textarea />");
+                case "date":
+                    return $("<input type='date' class='date' />");
+                case "bool":
+                case "boolean":
+                    var el = $("<select class='ui search dropdown' />");
+                    var option = "<option";
 
-                if (nullable) {
-                    option += " value='Select'>";
-                } else {
-                    option += " value=''>";
-                };
+                    if (nullable) {
+                        option += " value='Select'>";
+                    } else {
+                        option += " value=''>";
+                    };
 
-                option += Resources.Titles.Select() + "</option>";
-                option += "<option value='yes'>" + Resources.Titles.Yes() + "</option>";
-                option += "<option value='no'>" + Resources.Titles.No() + "</option>";
+                    option += Resources.Titles.Select() + "</option>";
+                    option += "<option value='yes'>" + Resources.Titles.Yes() + "</option>";
+                    option += "<option value='no'>" + Resources.Titles.No() + "</option>";
 
-                el.append(option);
+                    el.append(option);
 
-                return el;
-            default:
-                return $("<input type='text' />");
+                    return el;
+                default:
+                    return $("<input type='text' />");
             };
         };
 
@@ -637,13 +640,13 @@
             return tryParseLocalizedResource(columnName);
         };
 
-    $(document).keydown(function(event){
-        if (event.ctrlKey) {
-            if (event.key === "Enter") {
-                $("#SaveButton").trigger("click");
-                return false;
+        $(document).keydown(function (event) {
+            if (event.ctrlKey) {
+                if (event.key === "Enter") {
+                    $("#SaveButton").trigger("click");
+                    return false;
+                };
             };
-        };        
-    })
+        })
     </script>
 </div>
