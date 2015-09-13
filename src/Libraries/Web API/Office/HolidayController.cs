@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/holiday/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Holiday> Get([FromUri] int[] holidayIds)
+        {
+            try
+            {
+                return this.HolidayContext.Get(holidayIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 holidays on each page, sorted by the property HolidayId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.HolidayContext.GetCustomFields();
+                return this.HolidayContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for holidays.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of holidays.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/holiday/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.HolidayContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Holiday class.
+        /// </summary>
+        /// <param name="holiday">Your instance of holidays class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/holiday/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Holiday holiday)
+        {
+            if (holiday == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.HolidayContext.AddOrEdit(holiday);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Holiday class.
         /// </summary>
         /// <param name="holiday">Your instance of holidays class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Holiday class.
         /// </summary>
-        /// <param name="holiday">Your instance of Account class to edit.</param>
+        /// <param name="holiday">Your instance of Holiday class to edit.</param>
         /// <param name="holidayId">Enter the value for HolidayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{holidayId}/{holiday}")]
-        [Route("~/api/office/holiday/edit/{holidayId}/{holiday}")]
-        public void Edit(int holidayId, MixERP.Net.Entities.Office.Holiday holiday)
+        [Route("edit/{holidayId}")]
+        [Route("~/api/office/holiday/edit/{holidayId}")]
+        public void Edit(int holidayId, [FromBody] MixERP.Net.Entities.Office.Holiday holiday)
         {
             if (holiday == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via HolidayId.
+        ///     Deletes an existing instance of Holiday class via HolidayId.
         /// </summary>
         /// <param name="holidayId">Enter the value for HolidayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

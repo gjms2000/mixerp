@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/shipper/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Shipper> Get([FromUri] int[] shipperIds)
+        {
+            try
+            {
+                return this.ShipperContext.Get(shipperIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 shippers on each page, sorted by the property ShipperId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ShipperContext.GetCustomFields();
+                return this.ShipperContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for shippers.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of shippers.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/shipper/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ShipperContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Shipper class.
+        /// </summary>
+        /// <param name="shipper">Your instance of shippers class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/shipper/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Shipper shipper)
+        {
+            if (shipper == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShipperContext.AddOrEdit(shipper);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Shipper class.
         /// </summary>
         /// <param name="shipper">Your instance of shippers class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Shipper class.
         /// </summary>
-        /// <param name="shipper">Your instance of Account class to edit.</param>
+        /// <param name="shipper">Your instance of Shipper class to edit.</param>
         /// <param name="shipperId">Enter the value for ShipperId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{shipperId}/{shipper}")]
-        [Route("~/api/core/shipper/edit/{shipperId}/{shipper}")]
-        public void Edit(int shipperId, MixERP.Net.Entities.Core.Shipper shipper)
+        [Route("edit/{shipperId}")]
+        [Route("~/api/core/shipper/edit/{shipperId}")]
+        public void Edit(int shipperId, [FromBody] MixERP.Net.Entities.Core.Shipper shipper)
         {
             if (shipper == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ShipperId.
+        ///     Deletes an existing instance of Shipper class via ShipperId.
         /// </summary>
         /// <param name="shipperId">Enter the value for ShipperId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

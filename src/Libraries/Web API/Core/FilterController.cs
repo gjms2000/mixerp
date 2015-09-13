@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/filter/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Filter> Get([FromUri] long[] filterIds)
+        {
+            try
+            {
+                return this.FilterContext.Get(filterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 filters on each page, sorted by the property FilterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.FilterContext.GetCustomFields();
+                return this.FilterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for filters.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/filter/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.FilterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Filter class.
+        /// </summary>
+        /// <param name="filter">Your instance of filters class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/filter/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Filter filter)
+        {
+            if (filter == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.FilterContext.AddOrEdit(filter);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Filter class.
         /// </summary>
         /// <param name="filter">Your instance of filters class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Filter class.
         /// </summary>
-        /// <param name="filter">Your instance of Account class to edit.</param>
+        /// <param name="filter">Your instance of Filter class to edit.</param>
         /// <param name="filterId">Enter the value for FilterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{filterId}/{filter}")]
-        [Route("~/api/core/filter/edit/{filterId}/{filter}")]
-        public void Edit(long filterId, MixERP.Net.Entities.Core.Filter filter)
+        [Route("edit/{filterId}")]
+        [Route("~/api/core/filter/edit/{filterId}")]
+        public void Edit(long filterId, [FromBody] MixERP.Net.Entities.Core.Filter filter)
         {
             if (filter == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via FilterId.
+        ///     Deletes an existing instance of Filter class via FilterId.
         /// </summary>
         /// <param name="filterId">Enter the value for FilterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

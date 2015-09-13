@@ -178,6 +178,11 @@ Inherits="MixERP.Net.FrontEnd.MixERPMaster" %>
                 };
             });
 
+            $.connection.hub.disconnected(function () {
+                setTimeout(function () {
+                    $.connection.hub.start();
+                }, 5000);
+            });
         });
     </script>
 </form>

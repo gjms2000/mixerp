@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Localization.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table localization.localized_resources</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Localization.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='localization.localized_resources' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='localization.localized_resources' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('localization.localized_resources'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Localization.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of LocalizedResource class on the database table "localization.localized_resources".
+		/// </summary>
+		/// <param name="localizedResource">The instance of "LocalizedResource" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Localization.LocalizedResource localizedResource)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(localizedResource.LocalizedResourceId > 0){
+				this.Update(localizedResource, localizedResource.LocalizedResourceId);
+				return;
+			}
+	
+			this.Add(localizedResource);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Localization.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Localization.LocalizedResource> Get(long[] localizedResourceIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"LocalizedResource\" was denied to the user with Login ID {LoginId}. localizedResourceIds: {localizedResourceIds}.", this.LoginId, localizedResourceIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM localization.localized_resources WHERE localized_resource_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, localizedResourceIds);
         }
 	}
 }

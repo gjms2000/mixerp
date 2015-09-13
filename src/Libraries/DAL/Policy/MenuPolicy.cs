@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table policy.menu_policy</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Policy.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='policy.menu_policy' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='policy.menu_policy' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('policy.menu_policy'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Policy.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of MenuPolicy class on the database table "policy.menu_policy".
+		/// </summary>
+		/// <param name="menuPolicy">The instance of "MenuPolicy" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Policy.MenuPolicy menuPolicy)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(menuPolicy.PolicyId > 0){
+				this.Update(menuPolicy, menuPolicy.PolicyId);
+				return;
+			}
+	
+			this.Add(menuPolicy);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Policy.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Policy.MenuPolicy>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Policy.MenuPolicy> Get(int[] policyIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"MenuPolicy\" was denied to the user with Login ID {LoginId}. policyIds: {policyIds}.", this.LoginId, policyIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM policy.menu_policy WHERE policy_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Policy.MenuPolicy>(this.Catalog, sql, policyIds);
         }
 	}
 }

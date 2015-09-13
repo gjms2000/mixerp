@@ -117,7 +117,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table hrm.education_levels</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.education_levels' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.education_levels' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('hrm.education_levels'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of EducationLevel class on the database table "hrm.education_levels".
+		/// </summary>
+		/// <param name="educationLevel">The instance of "EducationLevel" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.HRM.EducationLevel educationLevel)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(educationLevel.EducationLevelId > 0){
+				this.Update(educationLevel, educationLevel.EducationLevelId);
+				return;
+			}
+	
+			this.Add(educationLevel);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.HRM.EducationLevel>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.HRM.EducationLevel> Get(int[] educationLevelIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"EducationLevel\" was denied to the user with Login ID {LoginId}. educationLevelIds: {educationLevelIds}.", this.LoginId, educationLevelIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM hrm.education_levels WHERE education_level_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.HRM.EducationLevel>(this.Catalog, sql, educationLevelIds);
         }
 	}
 }

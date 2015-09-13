@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table config.db_parameters</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Config.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='config.db_parameters' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='config.db_parameters' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('config.db_parameters'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Config.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of DbParameter class on the database table "config.db_parameters".
+		/// </summary>
+		/// <param name="dbParameter">The instance of "DbParameter" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Config.DbParameter dbParameter)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(!string.IsNullOrWhiteSpace(dbParameter.Key)){
+				this.Update(dbParameter, dbParameter.Key);
+				return;
+			}
+	
+			this.Add(dbParameter);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Config.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Config.DbParameter>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Config.DbParameter> Get(string[] keys)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"DbParameter\" was denied to the user with Login ID {LoginId}. keys: {keys}.", this.LoginId, keys);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM config.db_parameters WHERE key IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Config.DbParameter>(this.Catalog, sql, keys);
         }
 	}
 }

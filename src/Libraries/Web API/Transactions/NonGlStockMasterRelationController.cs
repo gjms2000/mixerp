@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMasterRelation> Get([FromUri] long[] nonGlStockMasterRelationIds)
+        {
+            try
+            {
+                return this.NonGlStockMasterRelationContext.Get(nonGlStockMasterRelationIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 non gl stock master relations on each page, sorted by the property NonGlStockMasterRelationId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.NonGlStockMasterRelationContext.GetCustomFields();
+                return this.NonGlStockMasterRelationContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for non gl stock master relations.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of non gl stock master relations.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.NonGlStockMasterRelationContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of NonGlStockMasterRelation class.
+        /// </summary>
+        /// <param name="nonGlStockMasterRelation">Your instance of non gl stock master relations class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.NonGlStockMasterRelation nonGlStockMasterRelation)
+        {
+            if (nonGlStockMasterRelation == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.NonGlStockMasterRelationContext.AddOrEdit(nonGlStockMasterRelation);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of NonGlStockMasterRelation class.
         /// </summary>
         /// <param name="nonGlStockMasterRelation">Your instance of non gl stock master relations class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of NonGlStockMasterRelation class.
         /// </summary>
-        /// <param name="nonGlStockMasterRelation">Your instance of Account class to edit.</param>
+        /// <param name="nonGlStockMasterRelation">Your instance of NonGlStockMasterRelation class to edit.</param>
         /// <param name="nonGlStockMasterRelationId">Enter the value for NonGlStockMasterRelationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{nonGlStockMasterRelationId}/{nonGlStockMasterRelation}")]
-        [Route("~/api/transactions/non-gl-stock-master-relation/edit/{nonGlStockMasterRelationId}/{nonGlStockMasterRelation}")]
-        public void Edit(long nonGlStockMasterRelationId, MixERP.Net.Entities.Transactions.NonGlStockMasterRelation nonGlStockMasterRelation)
+        [Route("edit/{nonGlStockMasterRelationId}")]
+        [Route("~/api/transactions/non-gl-stock-master-relation/edit/{nonGlStockMasterRelationId}")]
+        public void Edit(long nonGlStockMasterRelationId, [FromBody] MixERP.Net.Entities.Transactions.NonGlStockMasterRelation nonGlStockMasterRelation)
         {
             if (nonGlStockMasterRelation == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via NonGlStockMasterRelationId.
+        ///     Deletes an existing instance of NonGlStockMasterRelation class via NonGlStockMasterRelationId.
         /// </summary>
         /// <param name="nonGlStockMasterRelationId">Enter the value for NonGlStockMasterRelationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/work-center/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.WorkCenter> Get([FromUri] int[] workCenterIds)
+        {
+            try
+            {
+                return this.WorkCenterContext.Get(workCenterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 work centers on each page, sorted by the property WorkCenterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.WorkCenterContext.GetCustomFields();
+                return this.WorkCenterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for work centers.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of work centers.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/work-center/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.WorkCenterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of WorkCenter class.
+        /// </summary>
+        /// <param name="workCenter">Your instance of work centers class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/work-center/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.WorkCenter workCenter)
+        {
+            if (workCenter == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.WorkCenterContext.AddOrEdit(workCenter);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of WorkCenter class.
         /// </summary>
         /// <param name="workCenter">Your instance of work centers class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of WorkCenter class.
         /// </summary>
-        /// <param name="workCenter">Your instance of Account class to edit.</param>
+        /// <param name="workCenter">Your instance of WorkCenter class to edit.</param>
         /// <param name="workCenterId">Enter the value for WorkCenterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{workCenterId}/{workCenter}")]
-        [Route("~/api/office/work-center/edit/{workCenterId}/{workCenter}")]
-        public void Edit(int workCenterId, MixERP.Net.Entities.Office.WorkCenter workCenter)
+        [Route("edit/{workCenterId}")]
+        [Route("~/api/office/work-center/edit/{workCenterId}")]
+        public void Edit(int workCenterId, [FromBody] MixERP.Net.Entities.Office.WorkCenter workCenter)
         {
             if (workCenter == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via WorkCenterId.
+        ///     Deletes an existing instance of WorkCenter class via WorkCenterId.
         /// </summary>
         /// <param name="workCenterId">Enter the value for WorkCenterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

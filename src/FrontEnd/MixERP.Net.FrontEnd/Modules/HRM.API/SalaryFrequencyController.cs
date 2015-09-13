@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/salary-frequency/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.SalaryFrequency> Get([FromUri] int[] salaryFrequencyIds)
+        {
+            try
+            {
+                return this.SalaryFrequencyContext.Get(salaryFrequencyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 salary frequencies on each page, sorted by the property SalaryFrequencyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.SalaryFrequencyContext.GetCustomFields();
+                return this.SalaryFrequencyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for salary frequencies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of salary frequencies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/salary-frequency/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SalaryFrequencyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of SalaryFrequency class.
+        /// </summary>
+        /// <param name="salaryFrequency">Your instance of salary frequencies class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/salary-frequency/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.SalaryFrequency salaryFrequency)
+        {
+            if (salaryFrequency == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SalaryFrequencyContext.AddOrEdit(salaryFrequency);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of SalaryFrequency class.
         /// </summary>
         /// <param name="salaryFrequency">Your instance of salary frequencies class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of SalaryFrequency class.
         /// </summary>
-        /// <param name="salaryFrequency">Your instance of Account class to edit.</param>
+        /// <param name="salaryFrequency">Your instance of SalaryFrequency class to edit.</param>
         /// <param name="salaryFrequencyId">Enter the value for SalaryFrequencyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{salaryFrequencyId}/{salaryFrequency}")]
-        [Route("~/api/hrm/salary-frequency/edit/{salaryFrequencyId}/{salaryFrequency}")]
-        public void Edit(int salaryFrequencyId, MixERP.Net.Entities.HRM.SalaryFrequency salaryFrequency)
+        [Route("edit/{salaryFrequencyId}")]
+        [Route("~/api/hrm/salary-frequency/edit/{salaryFrequencyId}")]
+        public void Edit(int salaryFrequencyId, [FromBody] MixERP.Net.Entities.HRM.SalaryFrequency salaryFrequency)
         {
             if (salaryFrequency == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via SalaryFrequencyId.
+        ///     Deletes an existing instance of SalaryFrequency class via SalaryFrequencyId.
         /// </summary>
         /// <param name="salaryFrequencyId">Enter the value for SalaryFrequencyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

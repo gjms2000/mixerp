@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table core.compound_items</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.compound_items' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.compound_items' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('core.compound_items'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Core.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of CompoundItem class on the database table "core.compound_items".
+		/// </summary>
+		/// <param name="compoundItem">The instance of "CompoundItem" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Core.CompoundItem compoundItem)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(compoundItem.CompoundItemId > 0){
+				this.Update(compoundItem, compoundItem.CompoundItemId);
+				return;
+			}
+	
+			this.Add(compoundItem);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Core.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Core.CompoundItem>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Core.CompoundItem> Get(int[] compoundItemIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"CompoundItem\" was denied to the user with Login ID {LoginId}. compoundItemIds: {compoundItemIds}.", this.LoginId, compoundItemIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM core.compound_items WHERE compound_item_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Core.CompoundItem>(this.Catalog, sql, compoundItemIds);
         }
 	}
 }

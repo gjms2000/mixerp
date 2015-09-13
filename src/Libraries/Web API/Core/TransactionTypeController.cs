@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/transaction-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.TransactionType> Get([FromUri] short[] transactionTypeIds)
+        {
+            try
+            {
+                return this.TransactionTypeContext.Get(transactionTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 transaction types on each page, sorted by the property TransactionTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.TransactionTypeContext.GetCustomFields();
+                return this.TransactionTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for transaction types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of transaction types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/transaction-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.TransactionTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of TransactionType class.
+        /// </summary>
+        /// <param name="transactionType">Your instance of transaction types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/transaction-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.TransactionType transactionType)
+        {
+            if (transactionType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.TransactionTypeContext.AddOrEdit(transactionType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of TransactionType class.
         /// </summary>
         /// <param name="transactionType">Your instance of transaction types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of TransactionType class.
         /// </summary>
-        /// <param name="transactionType">Your instance of Account class to edit.</param>
+        /// <param name="transactionType">Your instance of TransactionType class to edit.</param>
         /// <param name="transactionTypeId">Enter the value for TransactionTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{transactionTypeId}/{transactionType}")]
-        [Route("~/api/core/transaction-type/edit/{transactionTypeId}/{transactionType}")]
-        public void Edit(short transactionTypeId, MixERP.Net.Entities.Core.TransactionType transactionType)
+        [Route("edit/{transactionTypeId}")]
+        [Route("~/api/core/transaction-type/edit/{transactionTypeId}")]
+        public void Edit(short transactionTypeId, [FromBody] MixERP.Net.Entities.Core.TransactionType transactionType)
         {
             if (transactionType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via TransactionTypeId.
+        ///     Deletes an existing instance of TransactionType class via TransactionTypeId.
         /// </summary>
         /// <param name="transactionTypeId">Enter the value for TransactionTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

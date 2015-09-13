@@ -51,7 +51,7 @@ function prepareEmail(url) {
 };
 
 function createDocument(html, documentName) {
-    var url = "/Services/CreateDocument.asmx/Create";
+    var url = "/Services/CreateDocument.asmx/CreatePdf";
     var data = appendParameter("", "html", html);
     data = appendParameter(data, "documentName", documentName);
     data = getData(data);

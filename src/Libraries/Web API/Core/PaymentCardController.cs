@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/payment-card/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentCard> Get([FromUri] int[] paymentCardIds)
+        {
+            try
+            {
+                return this.PaymentCardContext.Get(paymentCardIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 payment cards on each page, sorted by the property PaymentCardId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.PaymentCardContext.GetCustomFields();
+                return this.PaymentCardContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for payment cards.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of payment cards.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/payment-card/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.PaymentCardContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of PaymentCard class.
+        /// </summary>
+        /// <param name="paymentCard">Your instance of payment cards class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/payment-card/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.PaymentCard paymentCard)
+        {
+            if (paymentCard == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.PaymentCardContext.AddOrEdit(paymentCard);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of PaymentCard class.
         /// </summary>
         /// <param name="paymentCard">Your instance of payment cards class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of PaymentCard class.
         /// </summary>
-        /// <param name="paymentCard">Your instance of Account class to edit.</param>
+        /// <param name="paymentCard">Your instance of PaymentCard class to edit.</param>
         /// <param name="paymentCardId">Enter the value for PaymentCardId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{paymentCardId}/{paymentCard}")]
-        [Route("~/api/core/payment-card/edit/{paymentCardId}/{paymentCard}")]
-        public void Edit(int paymentCardId, MixERP.Net.Entities.Core.PaymentCard paymentCard)
+        [Route("edit/{paymentCardId}")]
+        [Route("~/api/core/payment-card/edit/{paymentCardId}")]
+        public void Edit(int paymentCardId, [FromBody] MixERP.Net.Entities.Core.PaymentCard paymentCard)
         {
             if (paymentCard == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PaymentCardId.
+        ///     Deletes an existing instance of PaymentCard class via PaymentCardId.
         /// </summary>
         /// <param name="paymentCardId">Enter the value for PaymentCardId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

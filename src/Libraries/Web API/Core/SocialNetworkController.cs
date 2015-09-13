@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/social-network/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.SocialNetwork> Get([FromUri] string[] socialNetworkNames)
+        {
+            try
+            {
+                return this.SocialNetworkContext.Get(socialNetworkNames);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 social networks on each page, sorted by the property SocialNetworkName.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.SocialNetworkContext.GetCustomFields();
+                return this.SocialNetworkContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for social networks.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of social networks.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/social-network/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SocialNetworkContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of SocialNetwork class.
+        /// </summary>
+        /// <param name="socialNetwork">Your instance of social networks class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/social-network/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.SocialNetwork socialNetwork)
+        {
+            if (socialNetwork == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SocialNetworkContext.AddOrEdit(socialNetwork);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of SocialNetwork class.
         /// </summary>
         /// <param name="socialNetwork">Your instance of social networks class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of SocialNetwork class.
         /// </summary>
-        /// <param name="socialNetwork">Your instance of Account class to edit.</param>
+        /// <param name="socialNetwork">Your instance of SocialNetwork class to edit.</param>
         /// <param name="socialNetworkName">Enter the value for SocialNetworkName in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{socialNetworkName}/{socialNetwork}")]
-        [Route("~/api/core/social-network/edit/{socialNetworkName}/{socialNetwork}")]
-        public void Edit(string socialNetworkName, MixERP.Net.Entities.Core.SocialNetwork socialNetwork)
+        [Route("edit/{socialNetworkName}")]
+        [Route("~/api/core/social-network/edit/{socialNetworkName}")]
+        public void Edit(string socialNetworkName, [FromBody] MixERP.Net.Entities.Core.SocialNetwork socialNetwork)
         {
             if (socialNetwork == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via SocialNetworkName.
+        ///     Deletes an existing instance of SocialNetwork class via SocialNetworkName.
         /// </summary>
         /// <param name="socialNetworkName">Enter the value for SocialNetworkName in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

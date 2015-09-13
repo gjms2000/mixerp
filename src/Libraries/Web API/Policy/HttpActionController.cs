@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/http-action/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.HttpAction> Get([FromUri] string[] httpActionCodes)
+        {
+            try
+            {
+                return this.HttpActionContext.Get(httpActionCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 http actions on each page, sorted by the property HttpActionCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.HttpActionContext.GetCustomFields();
+                return this.HttpActionContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for http actions.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of http actions.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/http-action/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.HttpActionContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of HttpAction class.
+        /// </summary>
+        /// <param name="httpAction">Your instance of http actions class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/http-action/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.HttpAction httpAction)
+        {
+            if (httpAction == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.HttpActionContext.AddOrEdit(httpAction);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of HttpAction class.
         /// </summary>
         /// <param name="httpAction">Your instance of http actions class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of HttpAction class.
         /// </summary>
-        /// <param name="httpAction">Your instance of Account class to edit.</param>
+        /// <param name="httpAction">Your instance of HttpAction class to edit.</param>
         /// <param name="httpActionCode">Enter the value for HttpActionCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{httpActionCode}/{httpAction}")]
-        [Route("~/api/policy/http-action/edit/{httpActionCode}/{httpAction}")]
-        public void Edit(string httpActionCode, MixERP.Net.Entities.Policy.HttpAction httpAction)
+        [Route("edit/{httpActionCode}")]
+        [Route("~/api/policy/http-action/edit/{httpActionCode}")]
+        public void Edit(string httpActionCode, [FromBody] MixERP.Net.Entities.Policy.HttpAction httpAction)
         {
             if (httpAction == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via HttpActionCode.
+        ///     Deletes an existing instance of HttpAction class via HttpActionCode.
         /// </summary>
         /// <param name="httpActionCode">Enter the value for HttpActionCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

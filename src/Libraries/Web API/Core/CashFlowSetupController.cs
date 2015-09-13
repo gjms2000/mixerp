@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/cash-flow-setup/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.CashFlowSetup> Get([FromUri] int[] cashFlowSetupIds)
+        {
+            try
+            {
+                return this.CashFlowSetupContext.Get(cashFlowSetupIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cash flow setups on each page, sorted by the property CashFlowSetupId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CashFlowSetupContext.GetCustomFields();
+                return this.CashFlowSetupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cash flow setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cash flow setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/cash-flow-setup/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CashFlowSetupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CashFlowSetup class.
+        /// </summary>
+        /// <param name="cashFlowSetup">Your instance of cash flow setups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/cash-flow-setup/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.CashFlowSetup cashFlowSetup)
+        {
+            if (cashFlowSetup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CashFlowSetupContext.AddOrEdit(cashFlowSetup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CashFlowSetup class.
         /// </summary>
         /// <param name="cashFlowSetup">Your instance of cash flow setups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CashFlowSetup class.
         /// </summary>
-        /// <param name="cashFlowSetup">Your instance of Account class to edit.</param>
+        /// <param name="cashFlowSetup">Your instance of CashFlowSetup class to edit.</param>
         /// <param name="cashFlowSetupId">Enter the value for CashFlowSetupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{cashFlowSetupId}/{cashFlowSetup}")]
-        [Route("~/api/core/cash-flow-setup/edit/{cashFlowSetupId}/{cashFlowSetup}")]
-        public void Edit(int cashFlowSetupId, MixERP.Net.Entities.Core.CashFlowSetup cashFlowSetup)
+        [Route("edit/{cashFlowSetupId}")]
+        [Route("~/api/core/cash-flow-setup/edit/{cashFlowSetupId}")]
+        public void Edit(int cashFlowSetupId, [FromBody] MixERP.Net.Entities.Core.CashFlowSetup cashFlowSetup)
         {
             if (cashFlowSetup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CashFlowSetupId.
+        ///     Deletes an existing instance of CashFlowSetup class via CashFlowSetupId.
         /// </summary>
         /// <param name="cashFlowSetupId">Enter the value for CashFlowSetupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

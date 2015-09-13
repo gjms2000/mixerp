@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/unit/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Unit> Get([FromUri] int[] unitIds)
+        {
+            try
+            {
+                return this.UnitContext.Get(unitIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 units on each page, sorted by the property UnitId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.UnitContext.GetCustomFields();
+                return this.UnitContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for units.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of units.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/unit/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.UnitContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Unit class.
+        /// </summary>
+        /// <param name="unit">Your instance of units class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/unit/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Unit unit)
+        {
+            if (unit == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.UnitContext.AddOrEdit(unit);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Unit class.
         /// </summary>
         /// <param name="unit">Your instance of units class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Unit class.
         /// </summary>
-        /// <param name="unit">Your instance of Account class to edit.</param>
+        /// <param name="unit">Your instance of Unit class to edit.</param>
         /// <param name="unitId">Enter the value for UnitId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{unitId}/{unit}")]
-        [Route("~/api/core/unit/edit/{unitId}/{unit}")]
-        public void Edit(int unitId, MixERP.Net.Entities.Core.Unit unit)
+        [Route("edit/{unitId}")]
+        [Route("~/api/core/unit/edit/{unitId}")]
+        public void Edit(int unitId, [FromBody] MixERP.Net.Entities.Core.Unit unit)
         {
             if (unit == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via UnitId.
+        ///     Deletes an existing instance of Unit class via UnitId.
         /// </summary>
         /// <param name="unitId">Enter the value for UnitId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/tax-authority/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.TaxAuthority> Get([FromUri] int[] taxAuthorityIds)
+        {
+            try
+            {
+                return this.TaxAuthorityContext.Get(taxAuthorityIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 tax authorities on each page, sorted by the property TaxAuthorityId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.TaxAuthorityContext.GetCustomFields();
+                return this.TaxAuthorityContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for tax authorities.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of tax authorities.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/tax-authority/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.TaxAuthorityContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of TaxAuthority class.
+        /// </summary>
+        /// <param name="taxAuthority">Your instance of tax authorities class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/tax-authority/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.TaxAuthority taxAuthority)
+        {
+            if (taxAuthority == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.TaxAuthorityContext.AddOrEdit(taxAuthority);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of TaxAuthority class.
         /// </summary>
         /// <param name="taxAuthority">Your instance of tax authorities class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of TaxAuthority class.
         /// </summary>
-        /// <param name="taxAuthority">Your instance of Account class to edit.</param>
+        /// <param name="taxAuthority">Your instance of TaxAuthority class to edit.</param>
         /// <param name="taxAuthorityId">Enter the value for TaxAuthorityId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{taxAuthorityId}/{taxAuthority}")]
-        [Route("~/api/core/tax-authority/edit/{taxAuthorityId}/{taxAuthority}")]
-        public void Edit(int taxAuthorityId, MixERP.Net.Entities.Core.TaxAuthority taxAuthority)
+        [Route("edit/{taxAuthorityId}")]
+        [Route("~/api/core/tax-authority/edit/{taxAuthorityId}")]
+        public void Edit(int taxAuthorityId, [FromBody] MixERP.Net.Entities.Core.TaxAuthority taxAuthority)
         {
             if (taxAuthority == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via TaxAuthorityId.
+        ///     Deletes an existing instance of TaxAuthority class via TaxAuthorityId.
         /// </summary>
         /// <param name="taxAuthorityId">Enter the value for TaxAuthorityId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

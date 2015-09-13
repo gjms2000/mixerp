@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/stock-master/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.StockMaster> Get([FromUri] long[] stockMasterIds)
+        {
+            try
+            {
+                return this.StockMasterContext.Get(stockMasterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 stock masters on each page, sorted by the property StockMasterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.StockMasterContext.GetCustomFields();
+                return this.StockMasterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for stock masters.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of stock masters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/stock-master/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.StockMasterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of StockMaster class.
+        /// </summary>
+        /// <param name="stockMaster">Your instance of stock masters class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/stock-master/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.StockMaster stockMaster)
+        {
+            if (stockMaster == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.StockMasterContext.AddOrEdit(stockMaster);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of StockMaster class.
         /// </summary>
         /// <param name="stockMaster">Your instance of stock masters class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of StockMaster class.
         /// </summary>
-        /// <param name="stockMaster">Your instance of Account class to edit.</param>
+        /// <param name="stockMaster">Your instance of StockMaster class to edit.</param>
         /// <param name="stockMasterId">Enter the value for StockMasterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{stockMasterId}/{stockMaster}")]
-        [Route("~/api/transactions/stock-master/edit/{stockMasterId}/{stockMaster}")]
-        public void Edit(long stockMasterId, MixERP.Net.Entities.Transactions.StockMaster stockMaster)
+        [Route("edit/{stockMasterId}")]
+        [Route("~/api/transactions/stock-master/edit/{stockMasterId}")]
+        public void Edit(long stockMasterId, [FromBody] MixERP.Net.Entities.Transactions.StockMaster stockMaster)
         {
             if (stockMaster == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via StockMasterId.
+        ///     Deletes an existing instance of StockMaster class via StockMasterId.
         /// </summary>
         /// <param name="stockMasterId">Enter the value for StockMasterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/fiscal-year/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.FiscalYear> Get([FromUri] string[] fiscalYearCodes)
+        {
+            try
+            {
+                return this.FiscalYearContext.Get(fiscalYearCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 fiscal years on each page, sorted by the property FiscalYearCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.FiscalYearContext.GetCustomFields();
+                return this.FiscalYearContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for fiscal years.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of fiscal years.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/fiscal-year/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.FiscalYearContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of FiscalYear class.
+        /// </summary>
+        /// <param name="fiscalYear">Your instance of fiscal years class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/fiscal-year/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.FiscalYear fiscalYear)
+        {
+            if (fiscalYear == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.FiscalYearContext.AddOrEdit(fiscalYear);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of FiscalYear class.
         /// </summary>
         /// <param name="fiscalYear">Your instance of fiscal years class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of FiscalYear class.
         /// </summary>
-        /// <param name="fiscalYear">Your instance of Account class to edit.</param>
+        /// <param name="fiscalYear">Your instance of FiscalYear class to edit.</param>
         /// <param name="fiscalYearCode">Enter the value for FiscalYearCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{fiscalYearCode}/{fiscalYear}")]
-        [Route("~/api/core/fiscal-year/edit/{fiscalYearCode}/{fiscalYear}")]
-        public void Edit(string fiscalYearCode, MixERP.Net.Entities.Core.FiscalYear fiscalYear)
+        [Route("edit/{fiscalYearCode}")]
+        [Route("~/api/core/fiscal-year/edit/{fiscalYearCode}")]
+        public void Edit(string fiscalYearCode, [FromBody] MixERP.Net.Entities.Core.FiscalYear fiscalYear)
         {
             if (fiscalYear == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via FiscalYearCode.
+        ///     Deletes an existing instance of FiscalYear class via FiscalYearCode.
         /// </summary>
         /// <param name="fiscalYearCode">Enter the value for FiscalYearCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

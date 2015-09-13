@@ -16,6 +16,9 @@ namespace MixERP.Net.FrontEnd.Application
 
             bundles.Add(new StyleBundle("~/bundles/master-page.css").Include(GetMasterPageStyle()));
             bundles.Add(new StyleBundle("~/bundles/master-page.rtl.css").Include(GetMasterPageRTLStyle()));
+
+            bundles.Add(new StyleBundle("~/bundles/report.css").Include(GetReportStyle()));
+            bundles.Add(new StyleBundle("~/bundles/report.rtl.css").Include(GetReportRTLStyle()));
         }
         #region Scripts
         private static string[] GetMixERPCoreScript()
@@ -89,6 +92,7 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/semantic-ui/semantic.js",
               "~/Scripts/jquery.signalR.js",
               "~/Scripts/vakata-jstree/dist/jstree.min.js",
+              "~/Scripts/momentjs/moment-with-locales.js",
               "~/Scripts/angular/angular.min.js"
             };
 
@@ -165,6 +169,24 @@ namespace MixERP.Net.FrontEnd.Application
                 "~/Scripts/vakata-jstree/dist/themes/default/style.css",
                 "~/Scripts/semantic-ui/semantic.rtl.css",
                 "~/App_Themes/MixERP/mixerp.css"
+            };
+        }
+
+        private static string[] GetReportStyle()
+        {
+            return new[]
+            {
+                "~/Scripts/semantic-ui/components/icon.css",
+                "~/Stylesheets/report.css"
+            };
+        }
+
+        private static string[] GetReportRTLStyle()
+        {
+            return new[]
+            {
+                "~/Scripts/semantic-ui/components/icon.rtl.css",
+                "~/Stylesheets/report.rtl.css"
             };
         }
         #endregion

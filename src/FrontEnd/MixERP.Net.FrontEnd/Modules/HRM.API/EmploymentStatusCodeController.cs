@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/employment-status-code/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> Get([FromUri] int[] employmentStatusCodeIds)
+        {
+            try
+            {
+                return this.EmploymentStatusCodeContext.Get(employmentStatusCodeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 employment status codes on each page, sorted by the property EmploymentStatusCodeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.EmploymentStatusCodeContext.GetCustomFields();
+                return this.EmploymentStatusCodeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for employment status codes.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of employment status codes.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/employment-status-code/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.EmploymentStatusCodeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of EmploymentStatusCode class.
+        /// </summary>
+        /// <param name="employmentStatusCode">Your instance of employment status codes class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/employment-status-code/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
+        {
+            if (employmentStatusCode == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.EmploymentStatusCodeContext.AddOrEdit(employmentStatusCode);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of EmploymentStatusCode class.
         /// </summary>
         /// <param name="employmentStatusCode">Your instance of employment status codes class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of EmploymentStatusCode class.
         /// </summary>
-        /// <param name="employmentStatusCode">Your instance of Account class to edit.</param>
+        /// <param name="employmentStatusCode">Your instance of EmploymentStatusCode class to edit.</param>
         /// <param name="employmentStatusCodeId">Enter the value for EmploymentStatusCodeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{employmentStatusCodeId}/{employmentStatusCode}")]
-        [Route("~/api/hrm/employment-status-code/edit/{employmentStatusCodeId}/{employmentStatusCode}")]
-        public void Edit(int employmentStatusCodeId, MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
+        [Route("edit/{employmentStatusCodeId}")]
+        [Route("~/api/hrm/employment-status-code/edit/{employmentStatusCodeId}")]
+        public void Edit(int employmentStatusCodeId, [FromBody] MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
         {
             if (employmentStatusCode == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via EmploymentStatusCodeId.
+        ///     Deletes an existing instance of EmploymentStatusCode class via EmploymentStatusCodeId.
         /// </summary>
         /// <param name="employmentStatusCodeId">Enter the value for EmploymentStatusCodeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

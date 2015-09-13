@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/frequency-setup/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.FrequencySetup> Get([FromUri] int[] frequencySetupIds)
+        {
+            try
+            {
+                return this.FrequencySetupContext.Get(frequencySetupIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 frequency setups on each page, sorted by the property FrequencySetupId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.FrequencySetupContext.GetCustomFields();
+                return this.FrequencySetupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for frequency setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of frequency setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/frequency-setup/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.FrequencySetupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of FrequencySetup class.
+        /// </summary>
+        /// <param name="frequencySetup">Your instance of frequency setups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/frequency-setup/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.FrequencySetup frequencySetup)
+        {
+            if (frequencySetup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.FrequencySetupContext.AddOrEdit(frequencySetup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of FrequencySetup class.
         /// </summary>
         /// <param name="frequencySetup">Your instance of frequency setups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of FrequencySetup class.
         /// </summary>
-        /// <param name="frequencySetup">Your instance of Account class to edit.</param>
+        /// <param name="frequencySetup">Your instance of FrequencySetup class to edit.</param>
         /// <param name="frequencySetupId">Enter the value for FrequencySetupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{frequencySetupId}/{frequencySetup}")]
-        [Route("~/api/core/frequency-setup/edit/{frequencySetupId}/{frequencySetup}")]
-        public void Edit(int frequencySetupId, MixERP.Net.Entities.Core.FrequencySetup frequencySetup)
+        [Route("edit/{frequencySetupId}")]
+        [Route("~/api/core/frequency-setup/edit/{frequencySetupId}")]
+        public void Edit(int frequencySetupId, [FromBody] MixERP.Net.Entities.Core.FrequencySetup frequencySetup)
         {
             if (frequencySetup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via FrequencySetupId.
+        ///     Deletes an existing instance of FrequencySetup class via FrequencySetupId.
         /// </summary>
         /// <param name="frequencySetupId">Enter the value for FrequencySetupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

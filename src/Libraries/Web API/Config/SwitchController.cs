@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/config/switch/get")]
+        public IEnumerable<MixERP.Net.Entities.Config.Switch> Get([FromUri] string[] keys)
+        {
+            try
+            {
+                return this.SwitchContext.Get(keys);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 switches on each page, sorted by the property Key.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Config
         {
             try
             {
-                return this.SwitchContext.GetCustomFields();
+                return this.SwitchContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for switches.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of switches.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/config/switch/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SwitchContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Switch class.
+        /// </summary>
+        /// <param name="switchParameter">Your instance of switches class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/config/switch/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Config.Switch switchParameter)
+        {
+            if (switchParameter == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SwitchContext.AddOrEdit(switchParameter);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Switch class.
         /// </summary>
         /// <param name="switchParameter">Your instance of switches class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Switch class.
         /// </summary>
-        /// <param name="switchParameter">Your instance of Account class to edit.</param>
+        /// <param name="switchParameter">Your instance of Switch class to edit.</param>
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{key}/{switchParameter}")]
-        [Route("~/api/config/switch/edit/{key}/{switchParameter}")]
-        public void Edit(string key, MixERP.Net.Entities.Config.Switch switchParameter)
+        [Route("edit/{key}")]
+        [Route("~/api/config/switch/edit/{key}")]
+        public void Edit(string key, [FromBody] MixERP.Net.Entities.Config.Switch switchParameter)
         {
             if (switchParameter == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via Key.
+        ///     Deletes an existing instance of Switch class via Key.
         /// </summary>
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

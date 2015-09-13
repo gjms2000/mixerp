@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table core.shipping_addresses</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.shipping_addresses' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.shipping_addresses' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('core.shipping_addresses'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Core.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of ShippingAddress class on the database table "core.shipping_addresses".
+		/// </summary>
+		/// <param name="shippingAddress">The instance of "ShippingAddress" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Core.ShippingAddress shippingAddress)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(shippingAddress.ShippingAddressId > 0){
+				this.Update(shippingAddress, shippingAddress.ShippingAddressId);
+				return;
+			}
+	
+			this.Add(shippingAddress);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Core.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Core.ShippingAddress>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Core.ShippingAddress> Get(long[] shippingAddressIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"ShippingAddress\" was denied to the user with Login ID {LoginId}. shippingAddressIds: {shippingAddressIds}.", this.LoginId, shippingAddressIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM core.shipping_addresses WHERE shipping_address_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Core.ShippingAddress>(this.Catalog, sql, shippingAddressIds);
         }
 	}
 }

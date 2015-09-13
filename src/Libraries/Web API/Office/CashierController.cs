@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/cashier/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Cashier> Get([FromUri] long[] cashierIds)
+        {
+            try
+            {
+                return this.CashierContext.Get(cashierIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cashiers on each page, sorted by the property CashierId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.CashierContext.GetCustomFields();
+                return this.CashierContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cashiers.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cashiers.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/cashier/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CashierContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Cashier class.
+        /// </summary>
+        /// <param name="cashier">Your instance of cashiers class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/cashier/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Cashier cashier)
+        {
+            if (cashier == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CashierContext.AddOrEdit(cashier);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Cashier class.
         /// </summary>
         /// <param name="cashier">Your instance of cashiers class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Cashier class.
         /// </summary>
-        /// <param name="cashier">Your instance of Account class to edit.</param>
+        /// <param name="cashier">Your instance of Cashier class to edit.</param>
         /// <param name="cashierId">Enter the value for CashierId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{cashierId}/{cashier}")]
-        [Route("~/api/office/cashier/edit/{cashierId}/{cashier}")]
-        public void Edit(long cashierId, MixERP.Net.Entities.Office.Cashier cashier)
+        [Route("edit/{cashierId}")]
+        [Route("~/api/office/cashier/edit/{cashierId}")]
+        public void Edit(long cashierId, [FromBody] MixERP.Net.Entities.Office.Cashier cashier)
         {
             if (cashier == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CashierId.
+        ///     Deletes an existing instance of Cashier class via CashierId.
         /// </summary>
         /// <param name="cashierId">Enter the value for CashierId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

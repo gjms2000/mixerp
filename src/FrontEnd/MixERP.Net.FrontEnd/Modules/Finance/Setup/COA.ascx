@@ -18,4 +18,50 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="COA.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.COA" %>
-<asp:PlaceHolder ID="ScrudPlaceholder" runat="server" />
+<script src="/Scripts/underscore/underscore-min.js"></script>
+<script>
+    var title = window.Resources.Titles.ChartOfAccounts();
+
+    var viewPocoName = "AccountScrudView";
+
+    var formPocoName = "Account";
+    var formTableName = "core.accounts";
+
+    var allowDelete = true;
+    var allowEdit = true;
+    var live = "AccountName";
+    var queryStringKey = "AccountId";
+    var excludedColumns = ["audit_user_id", "audit_ts"];
+</script>
+
+<script>
+    var keys = [
+        {
+            property: "AccountMasterId",
+            url: '/api/core/account-master/display-fields',
+            data: null,
+            isArray:false,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrencyCode",
+            url: '/api/core/currency/display-fields',
+            data: null,
+            isArray: false,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "ParentAccountId",
+            url: '/api/core/account/display-fields',
+            data: null,
+            isArray: false,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+</script>
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

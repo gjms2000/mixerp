@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/configuration/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Configuration> Get([FromUri] int[] configurationIds)
+        {
+            try
+            {
+                return this.ConfigurationContext.Get(configurationIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 configurations on each page, sorted by the property ConfigurationId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.ConfigurationContext.GetCustomFields();
+                return this.ConfigurationContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for configurations.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of configurations.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/configuration/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ConfigurationContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Configuration class.
+        /// </summary>
+        /// <param name="configuration">Your instance of configurations class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/configuration/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Configuration configuration)
+        {
+            if (configuration == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ConfigurationContext.AddOrEdit(configuration);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Configuration class.
         /// </summary>
         /// <param name="configuration">Your instance of configurations class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Configuration class.
         /// </summary>
-        /// <param name="configuration">Your instance of Account class to edit.</param>
+        /// <param name="configuration">Your instance of Configuration class to edit.</param>
         /// <param name="configurationId">Enter the value for ConfigurationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{configurationId}/{configuration}")]
-        [Route("~/api/office/configuration/edit/{configurationId}/{configuration}")]
-        public void Edit(int configurationId, MixERP.Net.Entities.Office.Configuration configuration)
+        [Route("edit/{configurationId}")]
+        [Route("~/api/office/configuration/edit/{configurationId}")]
+        public void Edit(int configurationId, [FromBody] MixERP.Net.Entities.Office.Configuration configuration)
         {
             if (configuration == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ConfigurationId.
+        ///     Deletes an existing instance of Configuration class via ConfigurationId.
         /// </summary>
         /// <param name="configurationId">Enter the value for ConfigurationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

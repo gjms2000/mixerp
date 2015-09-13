@@ -11,8 +11,11 @@
         <div class="ui info description message"></div>
     </div>
 
-    <div class="ui stackable attached segment loading form" id="scrud">
+    <div class="ui attached loading segment" style="min-height: 100px;">
+        <div class="ui stackable form" id="scrud" style="display: none;">
+        </div>
     </div>
+
     <div class="ui stackable attached segment">
         <div class="big error"></div>
         <input type="button" id="SaveButton" value="Save" class="ui green button" />
@@ -40,6 +43,7 @@
 
     <script>
         var poco;
+        var cf;//custom fields
         var saveButton = $("#SaveButton");
         var scrud = $("#scrud");
         var cancelButton = $("#CancelButton");
@@ -68,8 +72,8 @@
                 var qs = getQueryStrings();
 
                 $.each(qs, function (i, v) {
-                    if (i !== "ReturnUrl") {
-                        returnTo = updateQueryString(i, v, returnTo);
+                    if (v.key !== "ReturnUrl") {
+                        returnTo = updateQueryString(v.key, v.value, returnTo);
                     };
                 });
             };
@@ -112,31 +116,35 @@
             saveButton.addClass("loading");
             var bigError = $(".big.error");
             var entity = new Object();
+            var customFields = [];
 
             bigError.removeClass("bpad16").html("");
 
-            $.each(poco.Columns, function (i, v) {
-                var columnName = v.ColumnName;
-                var dataType = v.DataType;
-                var isSerial = v.IsSerial;
-
+            function getFormValue(columnName, dataType, isSerial) {
                 var el = $("#" + columnName);
                 var val = null;
 
                 if (el.length) {
                     val = el.val();
 
-                    if (dataType === "System.Boolean") {
-                        val = val === "yes" ? true : false;
-                    } else {
-                        val = val.toString().trim();
+
+                    switch (dataType) {
+                        case "System.Boolean":
+                        case "bool":
+                            val = val === "yes" ? true : false;
+                            break;
+                        default:
+                            val = val.toString().trim();
+
+                            if (el.is("select")) {
+                                if (!val) {
+                                    val = null;
+                                };
+                            };
+
+                            break;
                     };
 
-                    if (el.is("select")) {
-                        if (!val) {
-                            val = null;
-                        };
-                    };
                 };
 
                 if (isSerial) {
@@ -145,10 +153,35 @@
                     };
                 };
 
-                entity[columnName] = val;
+                return val;
+            };
+
+            $.each(poco.Columns, function (i, v) {
+                var columnName = v.ColumnName;
+                var dataType = v.DataType;
+                var isSerial = v.IsSerial;
+                var value = getFormValue(columnName, dataType, isSerial);
+
+                entity[columnName] = value;
             });
 
-            var ajaxSaveOrUpdate = saveOrUpdate(formPocoName, entity);
+            if (window.cf) {
+                $.each(window.cf, function (i, v) {
+                    var dataType = getCustomFieldDataType(v);
+                    var value = getFormValue(v.FieldName, dataType, false);
+
+                    var customField = new Object();
+                    customField.FieldName = v.FieldName;
+                    customField.Value = value;
+
+                    customFields.push(customField);
+
+                });
+            };
+
+
+
+            var ajaxSaveOrUpdate = saveOrUpdate(formPocoName, entity, customFields);
 
 
             ajaxSaveOrUpdate.success(function (msg) {
@@ -181,7 +214,7 @@
         });
 
         function resetForm() {
-            var fields = $(".form-field");
+            var fields = $(".form-field, .custom-field");
 
             $.each(fields, function () {
                 var el = $(this);
@@ -214,6 +247,19 @@
             return form.find(".error").length === 1;
         };
 
+        function getCustomFields(pocoName) {
+            var apiName = pocoName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
+            var url = "/api/" + window.formSchemaName + "/" + apiName + "/custom-fields";
+            var queryString = getQueryStringByName(window.queryStringKey || "");
+
+            if (queryString) {
+                url += "/" + queryString;
+            };
+
+            return getAjaxRequest(url);
+        };
+
         function getFormView(pocoName) {
             var url = "/Services/Modules/PocoService.asmx/GetFormView";
             var data = appendParameter("", "pocoName", pocoName);
@@ -222,10 +268,11 @@
             return getAjax(url, data);
         };
 
-        function saveOrUpdate(pocoName, pocoEntity) {
+        function saveOrUpdate(pocoName, pocoEntity, customFields) {
             var url = "/Services/Modules/PocoService.asmx/SaveOrUpdate";
             var data = appendParameter("", "pocoName", pocoName);
             data = appendParameter(data, "pocoEntity", pocoEntity);
+            data = appendParameter(data, "customFields", customFields);
 
             data = getData(data);
             return getAjax(url, data);
@@ -258,9 +305,12 @@
         });
 
         $(document).ajaxStop(function () {
-            $("#scrud").removeClass("loading");
+            $("#scrud").show();
+            $("#scrud").parent().removeClass("loading");
             loadDefaultValues();
             loadDropdowns();
+            setRegionalFormat();
+            loadDatepicker();
             triggerReadyEvent();
         });
 
@@ -276,8 +326,8 @@
             var qs = getQueryStrings();
 
             $.each(qs, function (i, v) {
-                var name = i;
-                var value = v;
+                var name = v.key;
+                var value = v.value;
 
                 var el = $("[data-property=" + name + "]");
 
@@ -327,8 +377,15 @@
                 poco = msg.d;
 
                 createLayout(poco.Columns);
-            });
 
+                if (window.formSchemaName) {
+                    var ajaxGetCustomFields = getCustomFields(pocoName);
+                    ajaxGetCustomFields.success(function (msg) {
+                        cf = msg;
+                        createCustomFields(cf);
+                    });
+                };
+            });
         };
 
 
@@ -338,6 +395,72 @@
             })
                 .filter(function (e) { return e; });
         };
+
+        function getCustomFieldDataType(customField) {
+            var type = "varchar";
+
+            if (customField.IsNumber) {
+                type = "numeric";
+            };
+
+            if (customField.IsDate) {
+                type = "date";
+            };
+
+            if (customField.IsBoolean) {
+                type = "bool";
+            };
+
+            if (customField.IsLongText) {
+                type = "text";
+            };
+
+            return type;
+        };
+
+        function mapColumnFrom(customField) {
+            var column = new Object();
+            column.ColumnName = customField.FieldName;
+            column.PropertyName = customField.FieldName;
+            column.FieldLabel = customField.FieldLabel;
+            column.IsCustomField = true;
+            column.DbDataType = getCustomFieldDataType(customField);
+            column.IsNullable = true;
+            column.IsSerial = false;
+            column.IsPrimaryKey = false;
+            column.MaxLength = 0;
+            column.Value = customField.Value;
+            column.Description = customField.Description;
+
+            return column;
+        };
+
+        function createCustomFields(customFields) {
+            if (customFields.length) {
+                var header = $("<div class='ui teal large header'/>");
+                header.text(window.Resources.Titles.CustomFields());
+                scrud.append(header);
+                scrud.append("<div class='ui divider'></div>");
+            };
+
+            for (var i = 0; i < customFields.length; i += 2) {
+                var fields = $("<div class='fields' />");
+
+
+                var leftField = mapColumnFrom(customFields[i]);
+                createColumn(fields, leftField, "four wide field");
+
+                if (i + 1 < customFields.length) {
+                    var rightField = mapColumnFrom(customFields[i + 1]);
+                    createColumn(fields, rightField, "four wide field");
+                };
+
+
+                scrud.append(fields);
+            };
+        };
+
+
 
         function createLayout(collection) {
             var skip = [];
@@ -394,8 +517,6 @@
             initializeAjaxRequest();
             initializeUploader();
             initializeValidators();
-            setRegionalFormat();
-            loadDatepicker();
 
             var initialValue = $(".initial.value").html();
 
@@ -491,11 +612,18 @@
                 return;
             };
 
+
             var field = $("<div/>");
             field.addClass(cssClass);
 
             var label = $("<label/>");
-            label.text(getLabel(column.ColumnName));
+
+            if (column.FieldLabel) {
+                label.text(column.FieldLabel);
+            } else {
+                label.text(getLabel(column.ColumnName));
+            };
+
             label.attr("for", column.ColumnName);
 
 
@@ -541,33 +669,45 @@
 
             if (!column.IsNullable) {
                 element.attr("required", "required");
-                label.html(label.text() + "&nbsp;<span style='color:red'>*</span>");
+                field.addClass("required");
             };
 
             var value = column.Value;
 
             if (window.editData) {
-                value = window.editData[column.ColumnName];
+                if (window.editData.hasOwnProperty(column.ColumnName)) {
+                    value = window.editData[column.ColumnName];
+                };
             };
 
             if (element.hasClass("date")) {
                 value = value.toFormattedDate();
             };
 
+            if (column.DbDataType === "bool") {
+                value = value ? "yes" : "no";
+            };
+
             if (value) {
-                element.attr("data-value", column.Value);
+                element.attr("data-value", value);
                 element.val(value);
             };
 
-            element.addClass("form-field");
+            if (column.IsCustomField) {
+                element.addClass("custom-field");
+            } else {
+                element.addClass("form-field");
+            };
 
             field.append(label);
             field.append(element);
 
+            if (column.Description) {
+                field.append("<span class='ui basic pointing label'>" + column.Description + "</span>");
+            };
+
             el.append(field);
         };
-
-        //var bool = "<select class='ui dropdown'><option value='yes'>Yes</option><option value='no'>No</option>";
 
         function getField(propertyName, dataType, nullable) {
             if (typeof (window.keys) === "undefined") {
@@ -600,7 +740,6 @@
                 case "date":
                     return $("<input type='date' class='date' />");
                 case "bool":
-                case "boolean":
                     var el = $("<select class='ui search dropdown' />");
                     var option = "<option";
 
@@ -640,13 +779,13 @@
             return tryParseLocalizedResource(columnName);
         };
 
-        $(document).keydown(function (event) {
+        $(document).keydown(function(event) {
             if (event.ctrlKey) {
                 if (event.key === "Enter") {
                     $("#SaveButton").trigger("click");
                     return false;
                 };
             };
-        })
+        });
     </script>
 </div>

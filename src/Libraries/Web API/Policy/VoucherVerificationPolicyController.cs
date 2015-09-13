@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/voucher-verification-policy/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.VoucherVerificationPolicy> Get([FromUri] int[] policyIds)
+        {
+            try
+            {
+                return this.VoucherVerificationPolicyContext.Get(policyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 voucher verification policies on each page, sorted by the property PolicyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.VoucherVerificationPolicyContext.GetCustomFields();
+                return this.VoucherVerificationPolicyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for voucher verification policies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of voucher verification policies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/voucher-verification-policy/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.VoucherVerificationPolicyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of VoucherVerificationPolicy class.
+        /// </summary>
+        /// <param name="voucherVerificationPolicy">Your instance of voucher verification policies class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/voucher-verification-policy/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.VoucherVerificationPolicy voucherVerificationPolicy)
+        {
+            if (voucherVerificationPolicy == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.VoucherVerificationPolicyContext.AddOrEdit(voucherVerificationPolicy);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of VoucherVerificationPolicy class.
         /// </summary>
         /// <param name="voucherVerificationPolicy">Your instance of voucher verification policies class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of VoucherVerificationPolicy class.
         /// </summary>
-        /// <param name="voucherVerificationPolicy">Your instance of Account class to edit.</param>
+        /// <param name="voucherVerificationPolicy">Your instance of VoucherVerificationPolicy class to edit.</param>
         /// <param name="policyId">Enter the value for PolicyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{policyId}/{voucherVerificationPolicy}")]
-        [Route("~/api/policy/voucher-verification-policy/edit/{policyId}/{voucherVerificationPolicy}")]
-        public void Edit(int policyId, MixERP.Net.Entities.Policy.VoucherVerificationPolicy voucherVerificationPolicy)
+        [Route("edit/{policyId}")]
+        [Route("~/api/policy/voucher-verification-policy/edit/{policyId}")]
+        public void Edit(int policyId, [FromBody] MixERP.Net.Entities.Policy.VoucherVerificationPolicy voucherVerificationPolicy)
         {
             if (voucherVerificationPolicy == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PolicyId.
+        ///     Deletes an existing instance of VoucherVerificationPolicy class via PolicyId.
         /// </summary>
         /// <param name="policyId">Enter the value for PolicyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

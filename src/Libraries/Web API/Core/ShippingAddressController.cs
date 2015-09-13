@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/shipping-address/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ShippingAddress> Get([FromUri] long[] shippingAddressIds)
+        {
+            try
+            {
+                return this.ShippingAddressContext.Get(shippingAddressIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 shipping addresses on each page, sorted by the property ShippingAddressId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ShippingAddressContext.GetCustomFields();
+                return this.ShippingAddressContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for shipping addresses.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of shipping addresses.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/shipping-address/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ShippingAddressContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ShippingAddress class.
+        /// </summary>
+        /// <param name="shippingAddress">Your instance of shipping addresses class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/shipping-address/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ShippingAddress shippingAddress)
+        {
+            if (shippingAddress == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShippingAddressContext.AddOrEdit(shippingAddress);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ShippingAddress class.
         /// </summary>
         /// <param name="shippingAddress">Your instance of shipping addresses class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ShippingAddress class.
         /// </summary>
-        /// <param name="shippingAddress">Your instance of Account class to edit.</param>
+        /// <param name="shippingAddress">Your instance of ShippingAddress class to edit.</param>
         /// <param name="shippingAddressId">Enter the value for ShippingAddressId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{shippingAddressId}/{shippingAddress}")]
-        [Route("~/api/core/shipping-address/edit/{shippingAddressId}/{shippingAddress}")]
-        public void Edit(long shippingAddressId, MixERP.Net.Entities.Core.ShippingAddress shippingAddress)
+        [Route("edit/{shippingAddressId}")]
+        [Route("~/api/core/shipping-address/edit/{shippingAddressId}")]
+        public void Edit(long shippingAddressId, [FromBody] MixERP.Net.Entities.Core.ShippingAddress shippingAddress)
         {
             if (shippingAddress == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ShippingAddressId.
+        ///     Deletes an existing instance of ShippingAddress class via ShippingAddressId.
         /// </summary>
         /// <param name="shippingAddressId">Enter the value for ShippingAddressId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

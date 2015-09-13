@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/employee-type/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeType> Get([FromUri] int[] employeeTypeIds)
+        {
+            try
+            {
+                return this.EmployeeTypeContext.Get(employeeTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 employee types on each page, sorted by the property EmployeeTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.EmployeeTypeContext.GetCustomFields();
+                return this.EmployeeTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for employee types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of employee types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/employee-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.EmployeeTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of EmployeeType class.
+        /// </summary>
+        /// <param name="employeeType">Your instance of employee types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/employee-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.EmployeeType employeeType)
+        {
+            if (employeeType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.EmployeeTypeContext.AddOrEdit(employeeType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of EmployeeType class.
         /// </summary>
         /// <param name="employeeType">Your instance of employee types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of EmployeeType class.
         /// </summary>
-        /// <param name="employeeType">Your instance of Account class to edit.</param>
+        /// <param name="employeeType">Your instance of EmployeeType class to edit.</param>
         /// <param name="employeeTypeId">Enter the value for EmployeeTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{employeeTypeId}/{employeeType}")]
-        [Route("~/api/hrm/employee-type/edit/{employeeTypeId}/{employeeType}")]
-        public void Edit(int employeeTypeId, MixERP.Net.Entities.HRM.EmployeeType employeeType)
+        [Route("edit/{employeeTypeId}")]
+        [Route("~/api/hrm/employee-type/edit/{employeeTypeId}")]
+        public void Edit(int employeeTypeId, [FromBody] MixERP.Net.Entities.HRM.EmployeeType employeeType)
         {
             if (employeeType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via EmployeeTypeId.
+        ///     Deletes an existing instance of EmployeeType class via EmployeeTypeId.
         /// </summary>
         /// <param name="employeeTypeId">Enter the value for EmployeeTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

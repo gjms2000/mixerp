@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomField.cs" />
     <Compile Include="Data\Service.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterCondition.cs" />

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/account/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Account> Get([FromUri] long[] accountIds)
+        {
+            try
+            {
+                return this.AccountContext.Get(accountIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 accounts on each page, sorted by the property AccountId.
         /// </summary>
@@ -194,7 +213,58 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.AccountContext.GetCustomFields();
+                return this.AccountContext.GetCustomFields(null);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for accounts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of accounts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/account/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AccountContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Account class.
+        /// </summary>
+        /// <param name="account">Your instance of accounts class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/account/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Account account)
+        {
+            if (account == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AccountContext.AddOrEdit(account);
             }
             catch (UnauthorizedException)
             {
@@ -240,9 +310,9 @@ namespace MixERP.Net.Api.Core
         /// <param name="account">Your instance of Account class to edit.</param>
         /// <param name="accountId">Enter the value for AccountId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{accountId}/{account}")]
-        [Route("~/api/core/account/edit/{accountId}/{account}")]
-        public void Edit(long accountId, MixERP.Net.Entities.Core.Account account)
+        [Route("edit/{accountId}")]
+        [Route("~/api/core/account/edit/{accountId}")]
+        public void Edit(long accountId, [FromBody] MixERP.Net.Entities.Core.Account account)
         {
             if (account == null)
             {

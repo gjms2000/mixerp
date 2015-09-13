@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/store-policy-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> Get([FromUri] long[] storePolicyDetailIds)
+        {
+            try
+            {
+                return this.StorePolicyDetailContext.Get(storePolicyDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 store policy details on each page, sorted by the property StorePolicyDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.StorePolicyDetailContext.GetCustomFields();
+                return this.StorePolicyDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for store policy details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of store policy details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/store-policy-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.StorePolicyDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of StorePolicyDetail class.
+        /// </summary>
+        /// <param name="storePolicyDetail">Your instance of store policy details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/store-policy-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
+        {
+            if (storePolicyDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.StorePolicyDetailContext.AddOrEdit(storePolicyDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of StorePolicyDetail class.
         /// </summary>
         /// <param name="storePolicyDetail">Your instance of store policy details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of StorePolicyDetail class.
         /// </summary>
-        /// <param name="storePolicyDetail">Your instance of Account class to edit.</param>
+        /// <param name="storePolicyDetail">Your instance of StorePolicyDetail class to edit.</param>
         /// <param name="storePolicyDetailId">Enter the value for StorePolicyDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{storePolicyDetailId}/{storePolicyDetail}")]
-        [Route("~/api/policy/store-policy-detail/edit/{storePolicyDetailId}/{storePolicyDetail}")]
-        public void Edit(long storePolicyDetailId, MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
+        [Route("edit/{storePolicyDetailId}")]
+        [Route("~/api/policy/store-policy-detail/edit/{storePolicyDetailId}")]
+        public void Edit(long storePolicyDetailId, [FromBody] MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
         {
             if (storePolicyDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via StorePolicyDetailId.
+        ///     Deletes an existing instance of StorePolicyDetail class via StorePolicyDetailId.
         /// </summary>
         /// <param name="storePolicyDetailId">Enter the value for StorePolicyDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

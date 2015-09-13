@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/employee-identification-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeIdentificationDetail> Get([FromUri] long[] employeeIdentificationDetailIds)
+        {
+            try
+            {
+                return this.EmployeeIdentificationDetailContext.Get(employeeIdentificationDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 employee identification details on each page, sorted by the property EmployeeIdentificationDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.EmployeeIdentificationDetailContext.GetCustomFields();
+                return this.EmployeeIdentificationDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for employee identification details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of employee identification details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/employee-identification-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.EmployeeIdentificationDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of EmployeeIdentificationDetail class.
+        /// </summary>
+        /// <param name="employeeIdentificationDetail">Your instance of employee identification details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/employee-identification-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.EmployeeIdentificationDetail employeeIdentificationDetail)
+        {
+            if (employeeIdentificationDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.EmployeeIdentificationDetailContext.AddOrEdit(employeeIdentificationDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of EmployeeIdentificationDetail class.
         /// </summary>
         /// <param name="employeeIdentificationDetail">Your instance of employee identification details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of EmployeeIdentificationDetail class.
         /// </summary>
-        /// <param name="employeeIdentificationDetail">Your instance of Account class to edit.</param>
+        /// <param name="employeeIdentificationDetail">Your instance of EmployeeIdentificationDetail class to edit.</param>
         /// <param name="employeeIdentificationDetailId">Enter the value for EmployeeIdentificationDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{employeeIdentificationDetailId}/{employeeIdentificationDetail}")]
-        [Route("~/api/hrm/employee-identification-detail/edit/{employeeIdentificationDetailId}/{employeeIdentificationDetail}")]
-        public void Edit(long employeeIdentificationDetailId, MixERP.Net.Entities.HRM.EmployeeIdentificationDetail employeeIdentificationDetail)
+        [Route("edit/{employeeIdentificationDetailId}")]
+        [Route("~/api/hrm/employee-identification-detail/edit/{employeeIdentificationDetailId}")]
+        public void Edit(long employeeIdentificationDetailId, [FromBody] MixERP.Net.Entities.HRM.EmployeeIdentificationDetail employeeIdentificationDetail)
         {
             if (employeeIdentificationDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via EmployeeIdentificationDetailId.
+        ///     Deletes an existing instance of EmployeeIdentificationDetail class via EmployeeIdentificationDetailId.
         /// </summary>
         /// <param name="employeeIdentificationDetailId">Enter the value for EmployeeIdentificationDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

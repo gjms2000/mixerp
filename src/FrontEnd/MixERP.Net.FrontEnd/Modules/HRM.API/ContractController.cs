@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/contract/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.Contract> Get([FromUri] long[] contractIds)
+        {
+            try
+            {
+                return this.ContractContext.Get(contractIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 contracts on each page, sorted by the property ContractId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.ContractContext.GetCustomFields();
+                return this.ContractContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for contracts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of contracts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/contract/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ContractContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Contract class.
+        /// </summary>
+        /// <param name="contract">Your instance of contracts class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/contract/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.Contract contract)
+        {
+            if (contract == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ContractContext.AddOrEdit(contract);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Contract class.
         /// </summary>
         /// <param name="contract">Your instance of contracts class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Contract class.
         /// </summary>
-        /// <param name="contract">Your instance of Account class to edit.</param>
+        /// <param name="contract">Your instance of Contract class to edit.</param>
         /// <param name="contractId">Enter the value for ContractId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{contractId}/{contract}")]
-        [Route("~/api/hrm/contract/edit/{contractId}/{contract}")]
-        public void Edit(long contractId, MixERP.Net.Entities.HRM.Contract contract)
+        [Route("edit/{contractId}")]
+        [Route("~/api/hrm/contract/edit/{contractId}")]
+        public void Edit(long contractId, [FromBody] MixERP.Net.Entities.HRM.Contract contract)
         {
             if (contract == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ContractId.
+        ///     Deletes an existing instance of Contract class via ContractId.
         /// </summary>
         /// <param name="contractId">Enter the value for ContractId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

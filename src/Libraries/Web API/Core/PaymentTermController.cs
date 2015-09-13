@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/payment-term/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> Get([FromUri] int[] paymentTermIds)
+        {
+            try
+            {
+                return this.PaymentTermContext.Get(paymentTermIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 payment terms on each page, sorted by the property PaymentTermId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.PaymentTermContext.GetCustomFields();
+                return this.PaymentTermContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for payment terms.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of payment terms.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/payment-term/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.PaymentTermContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of PaymentTerm class.
+        /// </summary>
+        /// <param name="paymentTerm">Your instance of payment terms class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/payment-term/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
+        {
+            if (paymentTerm == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.PaymentTermContext.AddOrEdit(paymentTerm);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of PaymentTerm class.
         /// </summary>
         /// <param name="paymentTerm">Your instance of payment terms class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of PaymentTerm class.
         /// </summary>
-        /// <param name="paymentTerm">Your instance of Account class to edit.</param>
+        /// <param name="paymentTerm">Your instance of PaymentTerm class to edit.</param>
         /// <param name="paymentTermId">Enter the value for PaymentTermId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{paymentTermId}/{paymentTerm}")]
-        [Route("~/api/core/payment-term/edit/{paymentTermId}/{paymentTerm}")]
-        public void Edit(int paymentTermId, MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
+        [Route("edit/{paymentTermId}")]
+        [Route("~/api/core/payment-term/edit/{paymentTermId}")]
+        public void Edit(int paymentTermId, [FromBody] MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
         {
             if (paymentTerm == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PaymentTermId.
+        ///     Deletes an existing instance of PaymentTerm class via PaymentTermId.
         /// </summary>
         /// <param name="paymentTermId">Enter the value for PaymentTermId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

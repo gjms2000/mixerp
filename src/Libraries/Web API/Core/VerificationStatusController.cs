@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/verification-status/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> Get([FromUri] short[] verificationStatusIds)
+        {
+            try
+            {
+                return this.VerificationStatusContext.Get(verificationStatusIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 verification statuses on each page, sorted by the property VerificationStatusId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.VerificationStatusContext.GetCustomFields();
+                return this.VerificationStatusContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for verification statuses.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of verification statuses.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/verification-status/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.VerificationStatusContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of VerificationStatus class.
+        /// </summary>
+        /// <param name="verificationStatus">Your instance of verification statuses class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/verification-status/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.VerificationStatus verificationStatus)
+        {
+            if (verificationStatus == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.VerificationStatusContext.AddOrEdit(verificationStatus);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of VerificationStatus class.
         /// </summary>
         /// <param name="verificationStatus">Your instance of verification statuses class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of VerificationStatus class.
         /// </summary>
-        /// <param name="verificationStatus">Your instance of Account class to edit.</param>
+        /// <param name="verificationStatus">Your instance of VerificationStatus class to edit.</param>
         /// <param name="verificationStatusId">Enter the value for VerificationStatusId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{verificationStatusId}/{verificationStatus}")]
-        [Route("~/api/core/verification-status/edit/{verificationStatusId}/{verificationStatus}")]
-        public void Edit(short verificationStatusId, MixERP.Net.Entities.Core.VerificationStatus verificationStatus)
+        [Route("edit/{verificationStatusId}")]
+        [Route("~/api/core/verification-status/edit/{verificationStatusId}")]
+        public void Edit(short verificationStatusId, [FromBody] MixERP.Net.Entities.Core.VerificationStatus verificationStatus)
         {
             if (verificationStatus == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via VerificationStatusId.
+        ///     Deletes an existing instance of VerificationStatus class via VerificationStatusId.
         /// </summary>
         /// <param name="verificationStatusId">Enter the value for VerificationStatusId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

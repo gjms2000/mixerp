@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/day-operation/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.DayOperation> Get([FromUri] long[] dayIds)
+        {
+            try
+            {
+                return this.DayOperationContext.Get(dayIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 day operations on each page, sorted by the property DayId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.DayOperationContext.GetCustomFields();
+                return this.DayOperationContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for day operations.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of day operations.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/day-operation/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.DayOperationContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of DayOperation class.
+        /// </summary>
+        /// <param name="dayOperation">Your instance of day operations class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/day-operation/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.DayOperation dayOperation)
+        {
+            if (dayOperation == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.DayOperationContext.AddOrEdit(dayOperation);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of DayOperation class.
         /// </summary>
         /// <param name="dayOperation">Your instance of day operations class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of DayOperation class.
         /// </summary>
-        /// <param name="dayOperation">Your instance of Account class to edit.</param>
+        /// <param name="dayOperation">Your instance of DayOperation class to edit.</param>
         /// <param name="dayId">Enter the value for DayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{dayId}/{dayOperation}")]
-        [Route("~/api/transactions/day-operation/edit/{dayId}/{dayOperation}")]
-        public void Edit(long dayId, MixERP.Net.Entities.Transactions.DayOperation dayOperation)
+        [Route("edit/{dayId}")]
+        [Route("~/api/transactions/day-operation/edit/{dayId}")]
+        public void Edit(long dayId, [FromBody] MixERP.Net.Entities.Transactions.DayOperation dayOperation)
         {
             if (dayOperation == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via DayId.
+        ///     Deletes an existing instance of DayOperation class via DayId.
         /// </summary>
         /// <param name="dayId">Enter the value for DayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

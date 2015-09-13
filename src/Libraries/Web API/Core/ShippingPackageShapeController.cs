@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/shipping-package-shape/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ShippingPackageShape> Get([FromUri] int[] shippingPackageShapeIds)
+        {
+            try
+            {
+                return this.ShippingPackageShapeContext.Get(shippingPackageShapeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 shipping package shapes on each page, sorted by the property ShippingPackageShapeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ShippingPackageShapeContext.GetCustomFields();
+                return this.ShippingPackageShapeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for shipping package shapes.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of shipping package shapes.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/shipping-package-shape/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ShippingPackageShapeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ShippingPackageShape class.
+        /// </summary>
+        /// <param name="shippingPackageShape">Your instance of shipping package shapes class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/shipping-package-shape/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ShippingPackageShape shippingPackageShape)
+        {
+            if (shippingPackageShape == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShippingPackageShapeContext.AddOrEdit(shippingPackageShape);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ShippingPackageShape class.
         /// </summary>
         /// <param name="shippingPackageShape">Your instance of shipping package shapes class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ShippingPackageShape class.
         /// </summary>
-        /// <param name="shippingPackageShape">Your instance of Account class to edit.</param>
+        /// <param name="shippingPackageShape">Your instance of ShippingPackageShape class to edit.</param>
         /// <param name="shippingPackageShapeId">Enter the value for ShippingPackageShapeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{shippingPackageShapeId}/{shippingPackageShape}")]
-        [Route("~/api/core/shipping-package-shape/edit/{shippingPackageShapeId}/{shippingPackageShape}")]
-        public void Edit(int shippingPackageShapeId, MixERP.Net.Entities.Core.ShippingPackageShape shippingPackageShape)
+        [Route("edit/{shippingPackageShapeId}")]
+        [Route("~/api/core/shipping-package-shape/edit/{shippingPackageShapeId}")]
+        public void Edit(int shippingPackageShapeId, [FromBody] MixERP.Net.Entities.Core.ShippingPackageShape shippingPackageShape)
         {
             if (shippingPackageShape == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ShippingPackageShapeId.
+        ///     Deletes an existing instance of ShippingPackageShape class via ShippingPackageShapeId.
         /// </summary>
         /// <param name="shippingPackageShapeId">Enter the value for ShippingPackageShapeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/config/currency-layer/get")]
+        public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> Get([FromUri] string[] keys)
+        {
+            try
+            {
+                return this.CurrencyLayerContext.Get(keys);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 currency layers on each page, sorted by the property Key.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Config
         {
             try
             {
-                return this.CurrencyLayerContext.GetCustomFields();
+                return this.CurrencyLayerContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for currency layers.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of currency layers.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/config/currency-layer/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CurrencyLayerContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CurrencyLayer class.
+        /// </summary>
+        /// <param name="currencyLayer">Your instance of currency layers class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/config/currency-layer/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
+        {
+            if (currencyLayer == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CurrencyLayerContext.AddOrEdit(currencyLayer);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CurrencyLayer class.
         /// </summary>
         /// <param name="currencyLayer">Your instance of currency layers class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CurrencyLayer class.
         /// </summary>
-        /// <param name="currencyLayer">Your instance of Account class to edit.</param>
+        /// <param name="currencyLayer">Your instance of CurrencyLayer class to edit.</param>
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{key}/{currencyLayer}")]
-        [Route("~/api/config/currency-layer/edit/{key}/{currencyLayer}")]
-        public void Edit(string key, MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
+        [Route("edit/{key}")]
+        [Route("~/api/config/currency-layer/edit/{key}")]
+        public void Edit(string key, [FromBody] MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
         {
             if (currencyLayer == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via Key.
+        ///     Deletes an existing instance of CurrencyLayer class via Key.
         /// </summary>
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

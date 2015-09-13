@@ -112,7 +112,7 @@ var getAjax = function (url, data) {
     return ajax;
 };
 
-var getAjaxRequest = function (url, type) {
+var getAjaxRequest = function (url, type, data) {
     var isWebApiRequest = url.substring(5, 0) === "/api/";
 
     if (isWebApiRequest) {
@@ -126,6 +126,7 @@ var getAjaxRequest = function (url, type) {
     var ajax = $.ajax({
         type: type,
         url: url,
+        data:data,
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     });

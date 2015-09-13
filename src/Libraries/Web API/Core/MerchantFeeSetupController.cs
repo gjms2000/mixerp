@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/merchant-fee-setup/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.MerchantFeeSetup> Get([FromUri] int[] merchantFeeSetupIds)
+        {
+            try
+            {
+                return this.MerchantFeeSetupContext.Get(merchantFeeSetupIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 merchant fee setups on each page, sorted by the property MerchantFeeSetupId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.MerchantFeeSetupContext.GetCustomFields();
+                return this.MerchantFeeSetupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for merchant fee setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of merchant fee setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/merchant-fee-setup/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.MerchantFeeSetupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of MerchantFeeSetup class.
+        /// </summary>
+        /// <param name="merchantFeeSetup">Your instance of merchant fee setups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/merchant-fee-setup/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.MerchantFeeSetup merchantFeeSetup)
+        {
+            if (merchantFeeSetup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.MerchantFeeSetupContext.AddOrEdit(merchantFeeSetup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of MerchantFeeSetup class.
         /// </summary>
         /// <param name="merchantFeeSetup">Your instance of merchant fee setups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of MerchantFeeSetup class.
         /// </summary>
-        /// <param name="merchantFeeSetup">Your instance of Account class to edit.</param>
+        /// <param name="merchantFeeSetup">Your instance of MerchantFeeSetup class to edit.</param>
         /// <param name="merchantFeeSetupId">Enter the value for MerchantFeeSetupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{merchantFeeSetupId}/{merchantFeeSetup}")]
-        [Route("~/api/core/merchant-fee-setup/edit/{merchantFeeSetupId}/{merchantFeeSetup}")]
-        public void Edit(int merchantFeeSetupId, MixERP.Net.Entities.Core.MerchantFeeSetup merchantFeeSetup)
+        [Route("edit/{merchantFeeSetupId}")]
+        [Route("~/api/core/merchant-fee-setup/edit/{merchantFeeSetupId}")]
+        public void Edit(int merchantFeeSetupId, [FromBody] MixERP.Net.Entities.Core.MerchantFeeSetup merchantFeeSetup)
         {
             if (merchantFeeSetup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via MerchantFeeSetupId.
+        ///     Deletes an existing instance of MerchantFeeSetup class via MerchantFeeSetupId.
         /// </summary>
         /// <param name="merchantFeeSetupId">Enter the value for MerchantFeeSetupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

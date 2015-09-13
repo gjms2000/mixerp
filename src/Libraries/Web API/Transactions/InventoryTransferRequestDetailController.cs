@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/inventory-transfer-request-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferRequestDetail> Get([FromUri] long[] inventoryTransferRequestDetailIds)
+        {
+            try
+            {
+                return this.InventoryTransferRequestDetailContext.Get(inventoryTransferRequestDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 inventory transfer request details on each page, sorted by the property InventoryTransferRequestDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.InventoryTransferRequestDetailContext.GetCustomFields();
+                return this.InventoryTransferRequestDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for inventory transfer request details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of inventory transfer request details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/inventory-transfer-request-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.InventoryTransferRequestDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of InventoryTransferRequestDetail class.
+        /// </summary>
+        /// <param name="inventoryTransferRequestDetail">Your instance of inventory transfer request details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/inventory-transfer-request-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.InventoryTransferRequestDetail inventoryTransferRequestDetail)
+        {
+            if (inventoryTransferRequestDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.InventoryTransferRequestDetailContext.AddOrEdit(inventoryTransferRequestDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of InventoryTransferRequestDetail class.
         /// </summary>
         /// <param name="inventoryTransferRequestDetail">Your instance of inventory transfer request details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of InventoryTransferRequestDetail class.
         /// </summary>
-        /// <param name="inventoryTransferRequestDetail">Your instance of Account class to edit.</param>
+        /// <param name="inventoryTransferRequestDetail">Your instance of InventoryTransferRequestDetail class to edit.</param>
         /// <param name="inventoryTransferRequestDetailId">Enter the value for InventoryTransferRequestDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{inventoryTransferRequestDetailId}/{inventoryTransferRequestDetail}")]
-        [Route("~/api/transactions/inventory-transfer-request-detail/edit/{inventoryTransferRequestDetailId}/{inventoryTransferRequestDetail}")]
-        public void Edit(long inventoryTransferRequestDetailId, MixERP.Net.Entities.Transactions.InventoryTransferRequestDetail inventoryTransferRequestDetail)
+        [Route("edit/{inventoryTransferRequestDetailId}")]
+        [Route("~/api/transactions/inventory-transfer-request-detail/edit/{inventoryTransferRequestDetailId}")]
+        public void Edit(long inventoryTransferRequestDetailId, [FromBody] MixERP.Net.Entities.Transactions.InventoryTransferRequestDetail inventoryTransferRequestDetail)
         {
             if (inventoryTransferRequestDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via InventoryTransferRequestDetailId.
+        ///     Deletes an existing instance of InventoryTransferRequestDetail class via InventoryTransferRequestDetailId.
         /// </summary>
         /// <param name="inventoryTransferRequestDetailId">Enter the value for InventoryTransferRequestDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

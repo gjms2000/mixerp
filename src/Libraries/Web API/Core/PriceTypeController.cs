@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/price-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.PriceType> Get([FromUri] int[] priceTypeIds)
+        {
+            try
+            {
+                return this.PriceTypeContext.Get(priceTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 price types on each page, sorted by the property PriceTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.PriceTypeContext.GetCustomFields();
+                return this.PriceTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for price types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of price types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/price-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.PriceTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of PriceType class.
+        /// </summary>
+        /// <param name="priceType">Your instance of price types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/price-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.PriceType priceType)
+        {
+            if (priceType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.PriceTypeContext.AddOrEdit(priceType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of PriceType class.
         /// </summary>
         /// <param name="priceType">Your instance of price types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of PriceType class.
         /// </summary>
-        /// <param name="priceType">Your instance of Account class to edit.</param>
+        /// <param name="priceType">Your instance of PriceType class to edit.</param>
         /// <param name="priceTypeId">Enter the value for PriceTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{priceTypeId}/{priceType}")]
-        [Route("~/api/core/price-type/edit/{priceTypeId}/{priceType}")]
-        public void Edit(int priceTypeId, MixERP.Net.Entities.Core.PriceType priceType)
+        [Route("edit/{priceTypeId}")]
+        [Route("~/api/core/price-type/edit/{priceTypeId}")]
+        public void Edit(int priceTypeId, [FromBody] MixERP.Net.Entities.Core.PriceType priceType)
         {
             if (priceType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PriceTypeId.
+        ///     Deletes an existing instance of PriceType class via PriceTypeId.
         /// </summary>
         /// <param name="priceTypeId">Enter the value for PriceTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

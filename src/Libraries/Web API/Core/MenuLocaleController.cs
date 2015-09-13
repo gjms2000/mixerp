@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/menu-locale/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.MenuLocale> Get([FromUri] int[] menuLocaleIds)
+        {
+            try
+            {
+                return this.MenuLocaleContext.Get(menuLocaleIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 menu locales on each page, sorted by the property MenuLocaleId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.MenuLocaleContext.GetCustomFields();
+                return this.MenuLocaleContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for menu locales.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of menu locales.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/menu-locale/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.MenuLocaleContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of MenuLocale class.
+        /// </summary>
+        /// <param name="menuLocale">Your instance of menu locales class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/menu-locale/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.MenuLocale menuLocale)
+        {
+            if (menuLocale == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.MenuLocaleContext.AddOrEdit(menuLocale);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of MenuLocale class.
         /// </summary>
         /// <param name="menuLocale">Your instance of menu locales class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of MenuLocale class.
         /// </summary>
-        /// <param name="menuLocale">Your instance of Account class to edit.</param>
+        /// <param name="menuLocale">Your instance of MenuLocale class to edit.</param>
         /// <param name="menuLocaleId">Enter the value for MenuLocaleId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{menuLocaleId}/{menuLocale}")]
-        [Route("~/api/core/menu-locale/edit/{menuLocaleId}/{menuLocale}")]
-        public void Edit(int menuLocaleId, MixERP.Net.Entities.Core.MenuLocale menuLocale)
+        [Route("edit/{menuLocaleId}")]
+        [Route("~/api/core/menu-locale/edit/{menuLocaleId}")]
+        public void Edit(int menuLocaleId, [FromBody] MixERP.Net.Entities.Core.MenuLocale menuLocale)
         {
             if (menuLocale == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via MenuLocaleId.
+        ///     Deletes an existing instance of MenuLocale class via MenuLocaleId.
         /// </summary>
         /// <param name="menuLocaleId">Enter the value for MenuLocaleId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/compound-item-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.CompoundItemDetail> Get([FromUri] int[] compoundItemDetailIds)
+        {
+            try
+            {
+                return this.CompoundItemDetailContext.Get(compoundItemDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 compound item details on each page, sorted by the property CompoundItemDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CompoundItemDetailContext.GetCustomFields();
+                return this.CompoundItemDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for compound item details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of compound item details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/compound-item-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CompoundItemDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CompoundItemDetail class.
+        /// </summary>
+        /// <param name="compoundItemDetail">Your instance of compound item details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/compound-item-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.CompoundItemDetail compoundItemDetail)
+        {
+            if (compoundItemDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CompoundItemDetailContext.AddOrEdit(compoundItemDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CompoundItemDetail class.
         /// </summary>
         /// <param name="compoundItemDetail">Your instance of compound item details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CompoundItemDetail class.
         /// </summary>
-        /// <param name="compoundItemDetail">Your instance of Account class to edit.</param>
+        /// <param name="compoundItemDetail">Your instance of CompoundItemDetail class to edit.</param>
         /// <param name="compoundItemDetailId">Enter the value for CompoundItemDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{compoundItemDetailId}/{compoundItemDetail}")]
-        [Route("~/api/core/compound-item-detail/edit/{compoundItemDetailId}/{compoundItemDetail}")]
-        public void Edit(int compoundItemDetailId, MixERP.Net.Entities.Core.CompoundItemDetail compoundItemDetail)
+        [Route("edit/{compoundItemDetailId}")]
+        [Route("~/api/core/compound-item-detail/edit/{compoundItemDetailId}")]
+        public void Edit(int compoundItemDetailId, [FromBody] MixERP.Net.Entities.Core.CompoundItemDetail compoundItemDetail)
         {
             if (compoundItemDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CompoundItemDetailId.
+        ///     Deletes an existing instance of CompoundItemDetail class via CompoundItemDetailId.
         /// </summary>
         /// <param name="compoundItemDetailId">Enter the value for CompoundItemDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

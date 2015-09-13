@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/widget/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Widget> Get([FromUri] string[] widgetNames)
+        {
+            try
+            {
+                return this.WidgetContext.Get(widgetNames);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 widgets on each page, sorted by the property WidgetName.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.WidgetContext.GetCustomFields();
+                return this.WidgetContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for widgets.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of widgets.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/widget/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.WidgetContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Widget class.
+        /// </summary>
+        /// <param name="widget">Your instance of widgets class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/widget/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Widget widget)
+        {
+            if (widget == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.WidgetContext.AddOrEdit(widget);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Widget class.
         /// </summary>
         /// <param name="widget">Your instance of widgets class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Widget class.
         /// </summary>
-        /// <param name="widget">Your instance of Account class to edit.</param>
+        /// <param name="widget">Your instance of Widget class to edit.</param>
         /// <param name="widgetName">Enter the value for WidgetName in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{widgetName}/{widget}")]
-        [Route("~/api/core/widget/edit/{widgetName}/{widget}")]
-        public void Edit(string widgetName, MixERP.Net.Entities.Core.Widget widget)
+        [Route("edit/{widgetName}")]
+        [Route("~/api/core/widget/edit/{widgetName}")]
+        public void Edit(string widgetName, [FromBody] MixERP.Net.Entities.Core.Widget widget)
         {
             if (widget == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via WidgetName.
+        ///     Deletes an existing instance of Widget class via WidgetName.
         /// </summary>
         /// <param name="widgetName">Enter the value for WidgetName in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

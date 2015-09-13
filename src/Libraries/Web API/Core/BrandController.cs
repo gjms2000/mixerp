@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/brand/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Brand> Get([FromUri] int[] brandIds)
+        {
+            try
+            {
+                return this.BrandContext.Get(brandIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 brands on each page, sorted by the property BrandId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.BrandContext.GetCustomFields();
+                return this.BrandContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for brands.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of brands.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/brand/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.BrandContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Brand class.
+        /// </summary>
+        /// <param name="brand">Your instance of brands class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/brand/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Brand brand)
+        {
+            if (brand == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.BrandContext.AddOrEdit(brand);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Brand class.
         /// </summary>
         /// <param name="brand">Your instance of brands class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Brand class.
         /// </summary>
-        /// <param name="brand">Your instance of Account class to edit.</param>
+        /// <param name="brand">Your instance of Brand class to edit.</param>
         /// <param name="brandId">Enter the value for BrandId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{brandId}/{brand}")]
-        [Route("~/api/core/brand/edit/{brandId}/{brand}")]
-        public void Edit(int brandId, MixERP.Net.Entities.Core.Brand brand)
+        [Route("edit/{brandId}")]
+        [Route("~/api/core/brand/edit/{brandId}")]
+        public void Edit(int brandId, [FromBody] MixERP.Net.Entities.Core.Brand brand)
         {
             if (brand == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via BrandId.
+        ///     Deletes an existing instance of Brand class via BrandId.
         /// </summary>
         /// <param name="brandId">Enter the value for BrandId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/identification-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.IdentificationType> Get([FromUri] string[] identificationTypeCodes)
+        {
+            try
+            {
+                return this.IdentificationTypeContext.Get(identificationTypeCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 identification types on each page, sorted by the property IdentificationTypeCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.IdentificationTypeContext.GetCustomFields();
+                return this.IdentificationTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for identification types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of identification types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/identification-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.IdentificationTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of IdentificationType class.
+        /// </summary>
+        /// <param name="identificationType">Your instance of identification types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/identification-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.IdentificationType identificationType)
+        {
+            if (identificationType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.IdentificationTypeContext.AddOrEdit(identificationType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of IdentificationType class.
         /// </summary>
         /// <param name="identificationType">Your instance of identification types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of IdentificationType class.
         /// </summary>
-        /// <param name="identificationType">Your instance of Account class to edit.</param>
+        /// <param name="identificationType">Your instance of IdentificationType class to edit.</param>
         /// <param name="identificationTypeCode">Enter the value for IdentificationTypeCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{identificationTypeCode}/{identificationType}")]
-        [Route("~/api/core/identification-type/edit/{identificationTypeCode}/{identificationType}")]
-        public void Edit(string identificationTypeCode, MixERP.Net.Entities.Core.IdentificationType identificationType)
+        [Route("edit/{identificationTypeCode}")]
+        [Route("~/api/core/identification-type/edit/{identificationTypeCode}")]
+        public void Edit(string identificationTypeCode, [FromBody] MixERP.Net.Entities.Core.IdentificationType identificationType)
         {
             if (identificationType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via IdentificationTypeCode.
+        ///     Deletes an existing instance of IdentificationType class via IdentificationTypeCode.
         /// </summary>
         /// <param name="identificationTypeCode">Enter the value for IdentificationTypeCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

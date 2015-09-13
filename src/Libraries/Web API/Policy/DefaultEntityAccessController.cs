@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/default-entity-access/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccess> Get([FromUri] int[] defaultEntityAccessIds)
+        {
+            try
+            {
+                return this.DefaultEntityAccessContext.Get(defaultEntityAccessIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 default entity accesses on each page, sorted by the property DefaultEntityAccessId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.DefaultEntityAccessContext.GetCustomFields();
+                return this.DefaultEntityAccessContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for default entity accesses.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of default entity accesses.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/default-entity-access/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.DefaultEntityAccessContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of DefaultEntityAccess class.
+        /// </summary>
+        /// <param name="defaultEntityAccess">Your instance of default entity accesses class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/default-entity-access/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.DefaultEntityAccess defaultEntityAccess)
+        {
+            if (defaultEntityAccess == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.DefaultEntityAccessContext.AddOrEdit(defaultEntityAccess);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of DefaultEntityAccess class.
         /// </summary>
         /// <param name="defaultEntityAccess">Your instance of default entity accesses class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of DefaultEntityAccess class.
         /// </summary>
-        /// <param name="defaultEntityAccess">Your instance of Account class to edit.</param>
+        /// <param name="defaultEntityAccess">Your instance of DefaultEntityAccess class to edit.</param>
         /// <param name="defaultEntityAccessId">Enter the value for DefaultEntityAccessId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{defaultEntityAccessId}/{defaultEntityAccess}")]
-        [Route("~/api/policy/default-entity-access/edit/{defaultEntityAccessId}/{defaultEntityAccess}")]
-        public void Edit(int defaultEntityAccessId, MixERP.Net.Entities.Policy.DefaultEntityAccess defaultEntityAccess)
+        [Route("edit/{defaultEntityAccessId}")]
+        [Route("~/api/policy/default-entity-access/edit/{defaultEntityAccessId}")]
+        public void Edit(int defaultEntityAccessId, [FromBody] MixERP.Net.Entities.Policy.DefaultEntityAccess defaultEntityAccess)
         {
             if (defaultEntityAccess == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via DefaultEntityAccessId.
+        ///     Deletes an existing instance of DefaultEntityAccess class via DefaultEntityAccessId.
         /// </summary>
         /// <param name="defaultEntityAccessId">Enter the value for DefaultEntityAccessId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

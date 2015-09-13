@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/leave-benefit/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.LeaveBenefit> Get([FromUri] int[] leaveBenefitIds)
+        {
+            try
+            {
+                return this.LeaveBenefitContext.Get(leaveBenefitIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 leave benefits on each page, sorted by the property LeaveBenefitId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.LeaveBenefitContext.GetCustomFields();
+                return this.LeaveBenefitContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for leave benefits.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of leave benefits.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/leave-benefit/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LeaveBenefitContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LeaveBenefit class.
+        /// </summary>
+        /// <param name="leaveBenefit">Your instance of leave benefits class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/leave-benefit/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.LeaveBenefit leaveBenefit)
+        {
+            if (leaveBenefit == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LeaveBenefitContext.AddOrEdit(leaveBenefit);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LeaveBenefit class.
         /// </summary>
         /// <param name="leaveBenefit">Your instance of leave benefits class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LeaveBenefit class.
         /// </summary>
-        /// <param name="leaveBenefit">Your instance of Account class to edit.</param>
+        /// <param name="leaveBenefit">Your instance of LeaveBenefit class to edit.</param>
         /// <param name="leaveBenefitId">Enter the value for LeaveBenefitId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{leaveBenefitId}/{leaveBenefit}")]
-        [Route("~/api/hrm/leave-benefit/edit/{leaveBenefitId}/{leaveBenefit}")]
-        public void Edit(int leaveBenefitId, MixERP.Net.Entities.HRM.LeaveBenefit leaveBenefit)
+        [Route("edit/{leaveBenefitId}")]
+        [Route("~/api/hrm/leave-benefit/edit/{leaveBenefitId}")]
+        public void Edit(int leaveBenefitId, [FromBody] MixERP.Net.Entities.HRM.LeaveBenefit leaveBenefit)
         {
             if (leaveBenefit == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via LeaveBenefitId.
+        ///     Deletes an existing instance of LeaveBenefit class via LeaveBenefitId.
         /// </summary>
         /// <param name="leaveBenefitId">Enter the value for LeaveBenefitId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

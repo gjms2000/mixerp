@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/party/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Party> Get([FromUri] long[] partyIds)
+        {
+            try
+            {
+                return this.PartyContext.Get(partyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 parties on each page, sorted by the property PartyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.PartyContext.GetCustomFields();
+                return this.PartyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for parties.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of parties.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/party/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.PartyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Party class.
+        /// </summary>
+        /// <param name="party">Your instance of parties class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/party/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Party party)
+        {
+            if (party == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.PartyContext.AddOrEdit(party);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Party class.
         /// </summary>
         /// <param name="party">Your instance of parties class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Party class.
         /// </summary>
-        /// <param name="party">Your instance of Account class to edit.</param>
+        /// <param name="party">Your instance of Party class to edit.</param>
         /// <param name="partyId">Enter the value for PartyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{partyId}/{party}")]
-        [Route("~/api/core/party/edit/{partyId}/{party}")]
-        public void Edit(long partyId, MixERP.Net.Entities.Core.Party party)
+        [Route("edit/{partyId}")]
+        [Route("~/api/core/party/edit/{partyId}")]
+        public void Edit(long partyId, [FromBody] MixERP.Net.Entities.Core.Party party)
         {
             if (party == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PartyId.
+        ///     Deletes an existing instance of Party class via PartyId.
         /// </summary>
         /// <param name="partyId">Enter the value for PartyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

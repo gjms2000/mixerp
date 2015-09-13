@@ -482,6 +482,7 @@
     <Content Include="Scripts\mixerp\master-page\menu.js" />
     <Content Include="Scripts\mixerp\utitlities\localizable.js" />
     <Content Include="Scripts\mixerp\utitlities\countries.js" />
+    <Content Include="Scripts\momentjs\moment-with-locales.js" />
     <Content Include="Scripts\Pages\Modules\WidgetManager.aspx.js" />
     <Content Include="Scripts\Pages\Modules\FirstSteps.aspx.js" />
     <Content Include="Scripts\papaparse\papaparse.min.js" />

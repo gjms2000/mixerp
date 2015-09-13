@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/sales-tax-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.SalesTaxDetail> Get([FromUri] int[] salesTaxDetailIds)
+        {
+            try
+            {
+                return this.SalesTaxDetailContext.Get(salesTaxDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 sales tax details on each page, sorted by the property SalesTaxDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.SalesTaxDetailContext.GetCustomFields();
+                return this.SalesTaxDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for sales tax details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of sales tax details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/sales-tax-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SalesTaxDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of SalesTaxDetail class.
+        /// </summary>
+        /// <param name="salesTaxDetail">Your instance of sales tax details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/sales-tax-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.SalesTaxDetail salesTaxDetail)
+        {
+            if (salesTaxDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SalesTaxDetailContext.AddOrEdit(salesTaxDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of SalesTaxDetail class.
         /// </summary>
         /// <param name="salesTaxDetail">Your instance of sales tax details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of SalesTaxDetail class.
         /// </summary>
-        /// <param name="salesTaxDetail">Your instance of Account class to edit.</param>
+        /// <param name="salesTaxDetail">Your instance of SalesTaxDetail class to edit.</param>
         /// <param name="salesTaxDetailId">Enter the value for SalesTaxDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{salesTaxDetailId}/{salesTaxDetail}")]
-        [Route("~/api/core/sales-tax-detail/edit/{salesTaxDetailId}/{salesTaxDetail}")]
-        public void Edit(int salesTaxDetailId, MixERP.Net.Entities.Core.SalesTaxDetail salesTaxDetail)
+        [Route("edit/{salesTaxDetailId}")]
+        [Route("~/api/core/sales-tax-detail/edit/{salesTaxDetailId}")]
+        public void Edit(int salesTaxDetailId, [FromBody] MixERP.Net.Entities.Core.SalesTaxDetail salesTaxDetail)
         {
             if (salesTaxDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via SalesTaxDetailId.
+        ///     Deletes an existing instance of SalesTaxDetail class via SalesTaxDetailId.
         /// </summary>
         /// <param name="salesTaxDetailId">Enter the value for SalesTaxDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/office/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Office> Get([FromUri] int[] officeIds)
+        {
+            try
+            {
+                return this.OfficeContext.Get(officeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 offices on each page, sorted by the property OfficeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.OfficeContext.GetCustomFields();
+                return this.OfficeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for offices.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of offices.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/office/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.OfficeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Office class.
+        /// </summary>
+        /// <param name="office">Your instance of offices class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/office/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Office office)
+        {
+            if (office == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.OfficeContext.AddOrEdit(office);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Office class.
         /// </summary>
         /// <param name="office">Your instance of offices class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Office class.
         /// </summary>
-        /// <param name="office">Your instance of Account class to edit.</param>
+        /// <param name="office">Your instance of Office class to edit.</param>
         /// <param name="officeId">Enter the value for OfficeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{officeId}/{office}")]
-        [Route("~/api/office/office/edit/{officeId}/{office}")]
-        public void Edit(int officeId, MixERP.Net.Entities.Office.Office office)
+        [Route("edit/{officeId}")]
+        [Route("~/api/office/office/edit/{officeId}")]
+        public void Edit(int officeId, [FromBody] MixERP.Net.Entities.Office.Office office)
         {
             if (office == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via OfficeId.
+        ///     Deletes an existing instance of Office class via OfficeId.
         /// </summary>
         /// <param name="officeId">Enter the value for OfficeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

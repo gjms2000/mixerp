@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/tax-rate-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.TaxRateType> Get([FromUri] string[] taxRateTypeCodes)
+        {
+            try
+            {
+                return this.TaxRateTypeContext.Get(taxRateTypeCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 tax rate types on each page, sorted by the property TaxRateTypeCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.TaxRateTypeContext.GetCustomFields();
+                return this.TaxRateTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for tax rate types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of tax rate types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/tax-rate-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.TaxRateTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of TaxRateType class.
+        /// </summary>
+        /// <param name="taxRateType">Your instance of tax rate types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/tax-rate-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.TaxRateType taxRateType)
+        {
+            if (taxRateType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.TaxRateTypeContext.AddOrEdit(taxRateType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of TaxRateType class.
         /// </summary>
         /// <param name="taxRateType">Your instance of tax rate types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of TaxRateType class.
         /// </summary>
-        /// <param name="taxRateType">Your instance of Account class to edit.</param>
+        /// <param name="taxRateType">Your instance of TaxRateType class to edit.</param>
         /// <param name="taxRateTypeCode">Enter the value for TaxRateTypeCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{taxRateTypeCode}/{taxRateType}")]
-        [Route("~/api/core/tax-rate-type/edit/{taxRateTypeCode}/{taxRateType}")]
-        public void Edit(string taxRateTypeCode, MixERP.Net.Entities.Core.TaxRateType taxRateType)
+        [Route("edit/{taxRateTypeCode}")]
+        [Route("~/api/core/tax-rate-type/edit/{taxRateTypeCode}")]
+        public void Edit(string taxRateTypeCode, [FromBody] MixERP.Net.Entities.Core.TaxRateType taxRateType)
         {
             if (taxRateType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via TaxRateTypeCode.
+        ///     Deletes an existing instance of TaxRateType class via TaxRateTypeCode.
         /// </summary>
         /// <param name="taxRateTypeCode">Enter the value for TaxRateTypeCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/non-gl-stock-tax-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockTaxDetail> Get([FromUri] long[] nonGlStockTaxDetailIds)
+        {
+            try
+            {
+                return this.NonGlStockTaxDetailContext.Get(nonGlStockTaxDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 non gl stock tax details on each page, sorted by the property NonGlStockTaxDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.NonGlStockTaxDetailContext.GetCustomFields();
+                return this.NonGlStockTaxDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for non gl stock tax details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of non gl stock tax details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/non-gl-stock-tax-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.NonGlStockTaxDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of NonGlStockTaxDetail class.
+        /// </summary>
+        /// <param name="nonGlStockTaxDetail">Your instance of non gl stock tax details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/non-gl-stock-tax-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.NonGlStockTaxDetail nonGlStockTaxDetail)
+        {
+            if (nonGlStockTaxDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.NonGlStockTaxDetailContext.AddOrEdit(nonGlStockTaxDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of NonGlStockTaxDetail class.
         /// </summary>
         /// <param name="nonGlStockTaxDetail">Your instance of non gl stock tax details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of NonGlStockTaxDetail class.
         /// </summary>
-        /// <param name="nonGlStockTaxDetail">Your instance of Account class to edit.</param>
+        /// <param name="nonGlStockTaxDetail">Your instance of NonGlStockTaxDetail class to edit.</param>
         /// <param name="nonGlStockTaxDetailId">Enter the value for NonGlStockTaxDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{nonGlStockTaxDetailId}/{nonGlStockTaxDetail}")]
-        [Route("~/api/transactions/non-gl-stock-tax-detail/edit/{nonGlStockTaxDetailId}/{nonGlStockTaxDetail}")]
-        public void Edit(long nonGlStockTaxDetailId, MixERP.Net.Entities.Transactions.NonGlStockTaxDetail nonGlStockTaxDetail)
+        [Route("edit/{nonGlStockTaxDetailId}")]
+        [Route("~/api/transactions/non-gl-stock-tax-detail/edit/{nonGlStockTaxDetailId}")]
+        public void Edit(long nonGlStockTaxDetailId, [FromBody] MixERP.Net.Entities.Transactions.NonGlStockTaxDetail nonGlStockTaxDetail)
         {
             if (nonGlStockTaxDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via NonGlStockTaxDetailId.
+        ///     Deletes an existing instance of NonGlStockTaxDetail class via NonGlStockTaxDetailId.
         /// </summary>
         /// <param name="nonGlStockTaxDetailId">Enter the value for NonGlStockTaxDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

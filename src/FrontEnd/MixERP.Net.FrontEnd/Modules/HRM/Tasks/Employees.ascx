@@ -4,7 +4,7 @@
 <script src="/Scripts/underscore/underscore-min.js"></script>
 
 <div id="EmployeeController" class="ui attached segment" style="border: none; max-width: 900px;" data-ng-controller="EmployeeController" data-ng-cloak>
-    <div class="ui large purple header">{{getResource('Resources.Titles.Employees')}}</div>
+    <div class="ui large grey header">{{getResource('Resources.Titles.Employees')}}</div>
     <div class="ui stackable grid">
         <div class="ten wide column">
             <div class="ui form">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="four wide field">
-                        <input class="ui purple button" data-ng-click="search();" value="{{getResource('Resources.Titles.Search')}}" type="button"/>                            
+                        <input class="ui grey button" data-ng-click="search();" value="{{getResource('Resources.Titles.Search')}}" type="button"/>                            
                     </div>
                 </div>
             </div>

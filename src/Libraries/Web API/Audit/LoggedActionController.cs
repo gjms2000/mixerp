@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Audit
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/audit/logged-action/get")]
+        public IEnumerable<MixERP.Net.Entities.Audit.LoggedAction> Get([FromUri] long[] eventIds)
+        {
+            try
+            {
+                return this.LoggedActionContext.Get(eventIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 logged actions on each page, sorted by the property EventId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Audit
         {
             try
             {
-                return this.LoggedActionContext.GetCustomFields();
+                return this.LoggedActionContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for logged actions.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of logged actions.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/audit/logged-action/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LoggedActionContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LoggedAction class.
+        /// </summary>
+        /// <param name="loggedAction">Your instance of logged actions class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/audit/logged-action/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Audit.LoggedAction loggedAction)
+        {
+            if (loggedAction == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LoggedActionContext.AddOrEdit(loggedAction);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LoggedAction class.
         /// </summary>
         /// <param name="loggedAction">Your instance of logged actions class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LoggedAction class.
         /// </summary>
-        /// <param name="loggedAction">Your instance of Account class to edit.</param>
+        /// <param name="loggedAction">Your instance of LoggedAction class to edit.</param>
         /// <param name="eventId">Enter the value for EventId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{eventId}/{loggedAction}")]
-        [Route("~/api/audit/logged-action/edit/{eventId}/{loggedAction}")]
-        public void Edit(long eventId, MixERP.Net.Entities.Audit.LoggedAction loggedAction)
+        [Route("edit/{eventId}")]
+        [Route("~/api/audit/logged-action/edit/{eventId}")]
+        public void Edit(long eventId, [FromBody] MixERP.Net.Entities.Audit.LoggedAction loggedAction)
         {
             if (loggedAction == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via EventId.
+        ///     Deletes an existing instance of LoggedAction class via EventId.
         /// </summary>
         /// <param name="eventId">Enter the value for EventId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -35,6 +35,10 @@ namespace MixERP.Net.Entities.Core
         [ColumnDbType("varchar", 100, true, "")] 
         public string KeyName { get; set; }
     
+        [Column("custom_field_setup_id")]
+        [ColumnDbType("int4", 0, true, "")] 
+        public int? CustomFieldSetupId { get; set; }
+    
         [Column("form_name")]
         [ColumnDbType("varchar", 100, true, "")] 
         public string FormName { get; set; }
@@ -74,5 +78,13 @@ namespace MixERP.Net.Entities.Core
         [Column("is_long_text")]
         [ColumnDbType("bool", 0, true, "")] 
         public bool? IsLongText { get; set; }
+    
+        [Column("resource_id")]
+        [ColumnDbType("text", 0, true, "")] 
+        public string ResourceId { get; set; }
+    
+        [Column("value")]
+        [ColumnDbType("text", 0, true, "")] 
+        public string Value { get; set; }
     }
 }

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/leave-type/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.LeaveType> Get([FromUri] int[] leaveTypeIds)
+        {
+            try
+            {
+                return this.LeaveTypeContext.Get(leaveTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 leave types on each page, sorted by the property LeaveTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.LeaveTypeContext.GetCustomFields();
+                return this.LeaveTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for leave types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of leave types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/leave-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LeaveTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LeaveType class.
+        /// </summary>
+        /// <param name="leaveType">Your instance of leave types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/leave-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.LeaveType leaveType)
+        {
+            if (leaveType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LeaveTypeContext.AddOrEdit(leaveType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LeaveType class.
         /// </summary>
         /// <param name="leaveType">Your instance of leave types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LeaveType class.
         /// </summary>
-        /// <param name="leaveType">Your instance of Account class to edit.</param>
+        /// <param name="leaveType">Your instance of LeaveType class to edit.</param>
         /// <param name="leaveTypeId">Enter the value for LeaveTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{leaveTypeId}/{leaveType}")]
-        [Route("~/api/hrm/leave-type/edit/{leaveTypeId}/{leaveType}")]
-        public void Edit(int leaveTypeId, MixERP.Net.Entities.HRM.LeaveType leaveType)
+        [Route("edit/{leaveTypeId}")]
+        [Route("~/api/hrm/leave-type/edit/{leaveTypeId}")]
+        public void Edit(int leaveTypeId, [FromBody] MixERP.Net.Entities.HRM.LeaveType leaveType)
         {
             if (leaveType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via LeaveTypeId.
+        ///     Deletes an existing instance of LeaveType class via LeaveTypeId.
         /// </summary>
         /// <param name="leaveTypeId">Enter the value for LeaveTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

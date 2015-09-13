@@ -8,9 +8,9 @@ function setVisible(targetControl, visible, timeout) {
 };
 
 function addNotification(message, onclick) {
-    var count = parseInt2($("#NotificationMenu span").addClass("ui red label").html());
+    var count = parseInt2($("#NotificationMenu span").addClass("ui red floating label").html());
     count++;
-    $("#NotificationMenu span").addClass("ui red label").html(count);
+    $("#NotificationMenu span").addClass("ui red floating label").html(count);
 
     var item = $("<div />");
     item.attr("class", "item");

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/item-selling-price/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ItemSellingPrice> Get([FromUri] long[] itemSellingPriceIds)
+        {
+            try
+            {
+                return this.ItemSellingPriceContext.Get(itemSellingPriceIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 item selling prices on each page, sorted by the property ItemSellingPriceId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ItemSellingPriceContext.GetCustomFields();
+                return this.ItemSellingPriceContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for item selling prices.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of item selling prices.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/item-selling-price/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ItemSellingPriceContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ItemSellingPrice class.
+        /// </summary>
+        /// <param name="itemSellingPrice">Your instance of item selling prices class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/item-selling-price/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ItemSellingPrice itemSellingPrice)
+        {
+            if (itemSellingPrice == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ItemSellingPriceContext.AddOrEdit(itemSellingPrice);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ItemSellingPrice class.
         /// </summary>
         /// <param name="itemSellingPrice">Your instance of item selling prices class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ItemSellingPrice class.
         /// </summary>
-        /// <param name="itemSellingPrice">Your instance of Account class to edit.</param>
+        /// <param name="itemSellingPrice">Your instance of ItemSellingPrice class to edit.</param>
         /// <param name="itemSellingPriceId">Enter the value for ItemSellingPriceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{itemSellingPriceId}/{itemSellingPrice}")]
-        [Route("~/api/core/item-selling-price/edit/{itemSellingPriceId}/{itemSellingPrice}")]
-        public void Edit(long itemSellingPriceId, MixERP.Net.Entities.Core.ItemSellingPrice itemSellingPrice)
+        [Route("edit/{itemSellingPriceId}")]
+        [Route("~/api/core/item-selling-price/edit/{itemSellingPriceId}")]
+        public void Edit(long itemSellingPriceId, [FromBody] MixERP.Net.Entities.Core.ItemSellingPrice itemSellingPrice)
         {
             if (itemSellingPrice == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ItemSellingPriceId.
+        ///     Deletes an existing instance of ItemSellingPrice class via ItemSellingPriceId.
         /// </summary>
         /// <param name="itemSellingPriceId">Enter the value for ItemSellingPriceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

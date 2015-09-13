@@ -27,6 +27,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.Common.Helpers;
 using MixERP.Net.Common.jQueryHelper;
 using MixERP.Net.i18n;
+using Newtonsoft.Json;
 
 namespace MixERP.Net.FrontEnd.Base
 {
@@ -50,9 +51,19 @@ namespace MixERP.Net.FrontEnd.Base
 
             script += JSUtility.GetVar("today", string.Format(CultureManager.GetCurrent(), CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern, DateTime.Now));
             script += JSUtility.GetVar("now", DateTime.Now.ToString(CultureManager.GetCurrent()));
+            script += JSUtility.GetVar("date", DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
+            script += JSUtility.GetVar("reportTemplatePath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(AppUsers.GetCurrentUserDB(), "TemplatePath")));
+            script += JSUtility.GetVar("reportExportTemplatePath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(AppUsers.GetCurrentUserDB(), "ExportTemplatePath")));
+            script += JSUtility.GetVar("reportHeaderPath", PageUtility.ResolveUrl(DbConfig.GetScrudParameter(AppUsers.GetCurrentUserDB(), "HeaderPath")));
+
+            script += JSUtility.GetVar("userId", AppUsers.GetCurrent().View.UserId);
             script += JSUtility.GetVar("user", AppUsers.GetCurrent().View.UserName);
+            script += JSUtility.GetVar("officeCode", AppUsers.GetCurrent().View.OfficeCode);
             script += JSUtility.GetVar("office", AppUsers.GetCurrent().View.OfficeName);
+
+
+            script += JSUtility.GetVar("metaView", JsonConvert.SerializeObject(AppUsers.GetCurrent().View), false);
 
             script += JSUtility.GetVar("shortDateFormat", CultureManager.GetShortDateFormat());
             script += JSUtility.GetVar("longDateFormat", CultureManager.GetLongDateFormat());

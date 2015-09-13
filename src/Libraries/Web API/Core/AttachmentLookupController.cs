@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/attachment-lookup/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.AttachmentLookup> Get([FromUri] int[] attachmentLookupIds)
+        {
+            try
+            {
+                return this.AttachmentLookupContext.Get(attachmentLookupIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 attachment lookups on each page, sorted by the property AttachmentLookupId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.AttachmentLookupContext.GetCustomFields();
+                return this.AttachmentLookupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for attachment lookups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of attachment lookups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/attachment-lookup/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AttachmentLookupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of AttachmentLookup class.
+        /// </summary>
+        /// <param name="attachmentLookup">Your instance of attachment lookups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/attachment-lookup/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.AttachmentLookup attachmentLookup)
+        {
+            if (attachmentLookup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AttachmentLookupContext.AddOrEdit(attachmentLookup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of AttachmentLookup class.
         /// </summary>
         /// <param name="attachmentLookup">Your instance of attachment lookups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of AttachmentLookup class.
         /// </summary>
-        /// <param name="attachmentLookup">Your instance of Account class to edit.</param>
+        /// <param name="attachmentLookup">Your instance of AttachmentLookup class to edit.</param>
         /// <param name="attachmentLookupId">Enter the value for AttachmentLookupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{attachmentLookupId}/{attachmentLookup}")]
-        [Route("~/api/core/attachment-lookup/edit/{attachmentLookupId}/{attachmentLookup}")]
-        public void Edit(int attachmentLookupId, MixERP.Net.Entities.Core.AttachmentLookup attachmentLookup)
+        [Route("edit/{attachmentLookupId}")]
+        [Route("~/api/core/attachment-lookup/edit/{attachmentLookupId}")]
+        public void Edit(int attachmentLookupId, [FromBody] MixERP.Net.Entities.Core.AttachmentLookup attachmentLookup)
         {
             if (attachmentLookup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via AttachmentLookupId.
+        ///     Deletes an existing instance of AttachmentLookup class via AttachmentLookupId.
         /// </summary>
         /// <param name="attachmentLookupId">Enter the value for AttachmentLookupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -75,6 +75,7 @@
     <Compile Include="AgeingSlabScrudViewController.cs" />
     <Compile Include="AttachmentController.cs" />
     <Compile Include="AttachmentLookupController.cs" />
+    <Compile Include="AttachmentViewController.cs" />
     <Compile Include="BankAccountController.cs" />
     <Compile Include="BankAccountScrudViewController.cs" />
     <Compile Include="BankAccountSelectorViewController.cs" />
@@ -115,8 +116,10 @@
     <Compile Include="CurrencySelectorViewController.cs" />
     <Compile Include="CustomFieldController.cs" />
     <Compile Include="CustomFieldDataTypeController.cs" />
+    <Compile Include="CustomFieldDefinitionViewController.cs" />
     <Compile Include="CustomFieldFormController.cs" />
     <Compile Include="CustomFieldSetupController.cs" />
+    <Compile Include="CustomFieldViewController.cs" />
     <Compile Include="DefaultWidgetSetupViewController.cs" />
     <Compile Include="DiscountReceivedAccountSelectorViewController.cs" />
     <Compile Include="EmailQueueController.cs" />

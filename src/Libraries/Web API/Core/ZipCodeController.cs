@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/zip-code/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ZipCode> Get([FromUri] long[] zipCodeIds)
+        {
+            try
+            {
+                return this.ZipCodeContext.Get(zipCodeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 zip codes on each page, sorted by the property ZipCodeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ZipCodeContext.GetCustomFields();
+                return this.ZipCodeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for zip codes.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of zip codes.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/zip-code/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ZipCodeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ZipCode class.
+        /// </summary>
+        /// <param name="zipCode">Your instance of zip codes class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/zip-code/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ZipCode zipCode)
+        {
+            if (zipCode == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ZipCodeContext.AddOrEdit(zipCode);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ZipCode class.
         /// </summary>
         /// <param name="zipCode">Your instance of zip codes class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ZipCode class.
         /// </summary>
-        /// <param name="zipCode">Your instance of Account class to edit.</param>
+        /// <param name="zipCode">Your instance of ZipCode class to edit.</param>
         /// <param name="zipCodeId">Enter the value for ZipCodeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{zipCodeId}/{zipCode}")]
-        [Route("~/api/core/zip-code/edit/{zipCodeId}/{zipCode}")]
-        public void Edit(long zipCodeId, MixERP.Net.Entities.Core.ZipCode zipCode)
+        [Route("edit/{zipCodeId}")]
+        [Route("~/api/core/zip-code/edit/{zipCodeId}")]
+        public void Edit(long zipCodeId, [FromBody] MixERP.Net.Entities.Core.ZipCode zipCode)
         {
             if (zipCode == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ZipCodeId.
+        ///     Deletes an existing instance of ZipCode class via ZipCodeId.
         /// </summary>
         /// <param name="zipCodeId">Enter the value for ZipCodeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

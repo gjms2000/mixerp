@@ -74,6 +74,7 @@
     <Compile Include="AppendIfNotNullProcedure.cs" />
     <Compile Include="Attachment.cs" />
     <Compile Include="AttachmentLookup.cs" />
+    <Compile Include="AttachmentView.cs" />
     <Compile Include="BankAccount.cs" />
     <Compile Include="BankAccountScrudView.cs" />
     <Compile Include="BankAccountSelectorView.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="CustomFieldDefinitionView.cs" />
     <Compile Include="CustomFieldForm.cs" />
     <Compile Include="CustomFieldSetup.cs" />
+    <Compile Include="CustomFieldView.cs" />
     <Compile Include="DefaultWidgetSetupView.cs" />
     <Compile Include="DiscountReceivedAccountSelectorView.cs" />
     <Compile Include="EmailQueue.cs" />

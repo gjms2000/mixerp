@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/customer-receipt/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.CustomerReceipt> Get([FromUri] long[] receiptIds)
+        {
+            try
+            {
+                return this.CustomerReceiptContext.Get(receiptIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 customer receipts on each page, sorted by the property ReceiptId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.CustomerReceiptContext.GetCustomFields();
+                return this.CustomerReceiptContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for customer receipts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of customer receipts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/customer-receipt/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CustomerReceiptContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CustomerReceipt class.
+        /// </summary>
+        /// <param name="customerReceipt">Your instance of customer receipts class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/customer-receipt/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.CustomerReceipt customerReceipt)
+        {
+            if (customerReceipt == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CustomerReceiptContext.AddOrEdit(customerReceipt);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CustomerReceipt class.
         /// </summary>
         /// <param name="customerReceipt">Your instance of customer receipts class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CustomerReceipt class.
         /// </summary>
-        /// <param name="customerReceipt">Your instance of Account class to edit.</param>
+        /// <param name="customerReceipt">Your instance of CustomerReceipt class to edit.</param>
         /// <param name="receiptId">Enter the value for ReceiptId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{receiptId}/{customerReceipt}")]
-        [Route("~/api/transactions/customer-receipt/edit/{receiptId}/{customerReceipt}")]
-        public void Edit(long receiptId, MixERP.Net.Entities.Transactions.CustomerReceipt customerReceipt)
+        [Route("edit/{receiptId}")]
+        [Route("~/api/transactions/customer-receipt/edit/{receiptId}")]
+        public void Edit(long receiptId, [FromBody] MixERP.Net.Entities.Transactions.CustomerReceipt customerReceipt)
         {
             if (customerReceipt == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ReceiptId.
+        ///     Deletes an existing instance of CustomerReceipt class via ReceiptId.
         /// </summary>
         /// <param name="receiptId">Enter the value for ReceiptId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

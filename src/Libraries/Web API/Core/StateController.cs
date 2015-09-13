@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/state/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.State> Get([FromUri] int[] stateIds)
+        {
+            try
+            {
+                return this.StateContext.Get(stateIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 states on each page, sorted by the property StateId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.StateContext.GetCustomFields();
+                return this.StateContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for states.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of states.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/state/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.StateContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of State class.
+        /// </summary>
+        /// <param name="state">Your instance of states class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/state/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.State state)
+        {
+            if (state == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.StateContext.AddOrEdit(state);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of State class.
         /// </summary>
         /// <param name="state">Your instance of states class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of State class.
         /// </summary>
-        /// <param name="state">Your instance of Account class to edit.</param>
+        /// <param name="state">Your instance of State class to edit.</param>
         /// <param name="stateId">Enter the value for StateId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{stateId}/{state}")]
-        [Route("~/api/core/state/edit/{stateId}/{state}")]
-        public void Edit(int stateId, MixERP.Net.Entities.Core.State state)
+        [Route("edit/{stateId}")]
+        [Route("~/api/core/state/edit/{stateId}")]
+        public void Edit(int stateId, [FromBody] MixERP.Net.Entities.Core.State state)
         {
             if (state == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via StateId.
+        ///     Deletes an existing instance of State class via StateId.
         /// </summary>
         /// <param name="stateId">Enter the value for StateId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

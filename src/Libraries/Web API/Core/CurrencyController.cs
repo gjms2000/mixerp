@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/currency/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Currency> Get([FromUri] string[] currencyCodes)
+        {
+            try
+            {
+                return this.CurrencyContext.Get(currencyCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 currencies on each page, sorted by the property CurrencyCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CurrencyContext.GetCustomFields();
+                return this.CurrencyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for currencies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of currencies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/currency/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CurrencyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Currency class.
+        /// </summary>
+        /// <param name="currency">Your instance of currencies class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/currency/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Currency currency)
+        {
+            if (currency == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CurrencyContext.AddOrEdit(currency);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Currency class.
         /// </summary>
         /// <param name="currency">Your instance of currencies class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Currency class.
         /// </summary>
-        /// <param name="currency">Your instance of Account class to edit.</param>
+        /// <param name="currency">Your instance of Currency class to edit.</param>
         /// <param name="currencyCode">Enter the value for CurrencyCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{currencyCode}/{currency}")]
-        [Route("~/api/core/currency/edit/{currencyCode}/{currency}")]
-        public void Edit(string currencyCode, MixERP.Net.Entities.Core.Currency currency)
+        [Route("edit/{currencyCode}")]
+        [Route("~/api/core/currency/edit/{currencyCode}")]
+        public void Edit(string currencyCode, [FromBody] MixERP.Net.Entities.Core.Currency currency)
         {
             if (currency == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CurrencyCode.
+        ///     Deletes an existing instance of Currency class via CurrencyCode.
         /// </summary>
         /// <param name="currencyCode">Enter the value for CurrencyCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

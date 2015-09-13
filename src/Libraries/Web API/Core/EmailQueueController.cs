@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/email-queue/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.EmailQueue> Get([FromUri] long[] queueIds)
+        {
+            try
+            {
+                return this.EmailQueueContext.Get(queueIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 email queues on each page, sorted by the property QueueId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.EmailQueueContext.GetCustomFields();
+                return this.EmailQueueContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for email queues.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of email queues.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/email-queue/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.EmailQueueContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of EmailQueue class.
+        /// </summary>
+        /// <param name="emailQueue">Your instance of email queues class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/email-queue/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.EmailQueue emailQueue)
+        {
+            if (emailQueue == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.EmailQueueContext.AddOrEdit(emailQueue);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of EmailQueue class.
         /// </summary>
         /// <param name="emailQueue">Your instance of email queues class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of EmailQueue class.
         /// </summary>
-        /// <param name="emailQueue">Your instance of Account class to edit.</param>
+        /// <param name="emailQueue">Your instance of EmailQueue class to edit.</param>
         /// <param name="queueId">Enter the value for QueueId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{queueId}/{emailQueue}")]
-        [Route("~/api/core/email-queue/edit/{queueId}/{emailQueue}")]
-        public void Edit(long queueId, MixERP.Net.Entities.Core.EmailQueue emailQueue)
+        [Route("edit/{queueId}")]
+        [Route("~/api/core/email-queue/edit/{queueId}")]
+        public void Edit(long queueId, [FromBody] MixERP.Net.Entities.Core.EmailQueue emailQueue)
         {
             if (emailQueue == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via QueueId.
+        ///     Deletes an existing instance of EmailQueue class via QueueId.
         /// </summary>
         /// <param name="queueId">Enter the value for QueueId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Audit
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/audit/login/get")]
+        public IEnumerable<MixERP.Net.Entities.Audit.Login> Get([FromUri] long[] loginIds)
+        {
+            try
+            {
+                return this.LoginContext.Get(loginIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 logins on each page, sorted by the property LoginIdParameter.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Audit
         {
             try
             {
-                return this.LoginContext.GetCustomFields();
+                return this.LoginContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for logins.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of logins.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/audit/login/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LoginContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Login class.
+        /// </summary>
+        /// <param name="login">Your instance of logins class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/audit/login/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Audit.Login login)
+        {
+            if (login == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LoginContext.AddOrEdit(login);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Login class.
         /// </summary>
         /// <param name="login">Your instance of logins class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Login class.
         /// </summary>
-        /// <param name="login">Your instance of Account class to edit.</param>
+        /// <param name="login">Your instance of Login class to edit.</param>
         /// <param name="loginIdParameter">Enter the value for LoginIdParameter in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{loginIdParameter}/{login}")]
-        [Route("~/api/audit/login/edit/{loginIdParameter}/{login}")]
-        public void Edit(long loginIdParameter, MixERP.Net.Entities.Audit.Login login)
+        [Route("edit/{loginIdParameter}")]
+        [Route("~/api/audit/login/edit/{loginIdParameter}")]
+        public void Edit(long loginIdParameter, [FromBody] MixERP.Net.Entities.Audit.Login login)
         {
             if (login == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via LoginIdParameter.
+        ///     Deletes an existing instance of Login class via LoginIdParameter.
         /// </summary>
         /// <param name="loginIdParameter">Enter the value for LoginIdParameter in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

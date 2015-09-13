@@ -117,7 +117,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table hrm.job_titles</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.job_titles' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.job_titles' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('hrm.job_titles'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of JobTitle class on the database table "hrm.job_titles".
+		/// </summary>
+		/// <param name="jobTitle">The instance of "JobTitle" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.HRM.JobTitle jobTitle)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(jobTitle.JobTitleId > 0){
+				this.Update(jobTitle, jobTitle.JobTitleId);
+				return;
+			}
+	
+			this.Add(jobTitle);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.HRM.JobTitle>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.HRM.JobTitle> Get(int[] jobTitleIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"JobTitle\" was denied to the user with Login ID {LoginId}. jobTitleIds: {jobTitleIds}.", this.LoginId, jobTitleIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM hrm.job_titles WHERE job_title_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.HRM.JobTitle>(this.Catalog, sql, jobTitleIds);
         }
 	}
 }

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/flag/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Flag> Get([FromUri] long[] flagIds)
+        {
+            try
+            {
+                return this.FlagContext.Get(flagIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 flags on each page, sorted by the property FlagId.
         /// </summary>
@@ -194,7 +213,85 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.FlagContext.GetCustomFields();
+                return this.FlagContext.GetCustomFields(null);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     A custom field is a user defined field for flags.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of flags.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/flag/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.FlagContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+
+        /// <summary>
+        ///     Deletes an existing instance of Flag class via FlagId.
+        /// </summary>
+        /// <param name="flagId">Enter the value for FlagId in order to find and delete the existing record.</param>
+        [AcceptVerbs("DELETE")]
+        [Route("delete/{flagId}")]
+        [Route("~/api/core/flag/delete/{flagId}")]
+        public void Delete(long flagId)
+        {
+            try
+            {
+                this.FlagContext.Delete(flagId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Flag class.
+        /// </summary>
+        /// <param name="flag">Your instance of flags class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/flag/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Flag flag)
+        {
+            if (flag == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                flag.UserId = this.UserId;
+                flag.FlaggedOn = System.DateTime.UtcNow;
+
+                this.FlagContext.AddOrEdit(flag);
             }
             catch (UnauthorizedException)
             {
@@ -222,6 +319,9 @@ namespace MixERP.Net.Api.Core
 
             try
             {
+                flag.UserId = this.UserId;
+                flag.FlaggedOn = System.DateTime.UtcNow;
+
                 this.FlagContext.Add(flag);
             }
             catch (UnauthorizedException)
@@ -240,9 +340,9 @@ namespace MixERP.Net.Api.Core
         /// <param name="flag">Your instance of Account class to edit.</param>
         /// <param name="flagId">Enter the value for FlagId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{flagId}/{flag}")]
-        [Route("~/api/core/flag/edit/{flagId}/{flag}")]
-        public void Edit(long flagId, MixERP.Net.Entities.Core.Flag flag)
+        [Route("edit/{flagId}")]
+        [Route("~/api/core/flag/edit/{flagId}")]
+        public void Edit(long flagId, [FromBody] MixERP.Net.Entities.Core.Flag flag)
         {
             if (flag == null)
             {
@@ -251,6 +351,9 @@ namespace MixERP.Net.Api.Core
 
             try
             {
+                flag.UserId = this.UserId;
+                flag.FlaggedOn = System.DateTime.UtcNow;
+
                 this.FlagContext.Update(flag, flagId);
             }
             catch (UnauthorizedException)
@@ -262,30 +365,6 @@ namespace MixERP.Net.Api.Core
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
-
-        /// <summary>
-        ///     Deletes an existing instance of Account class via FlagId.
-        /// </summary>
-        /// <param name="flagId">Enter the value for FlagId in order to find and delete the existing record.</param>
-        [AcceptVerbs("DELETE")]
-        [Route("delete/{flagId}")]
-        [Route("~/api/core/flag/delete/{flagId}")]
-        public void Delete(long flagId)
-        {
-            try
-            {
-                this.FlagContext.Delete(flagId);
-            }
-            catch (UnauthorizedException)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
-            }
-            catch
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
-            }
-        }
-
 
     }
 }

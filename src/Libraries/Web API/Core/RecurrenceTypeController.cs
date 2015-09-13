@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/recurrence-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.RecurrenceType> Get([FromUri] int[] recurrenceTypeIds)
+        {
+            try
+            {
+                return this.RecurrenceTypeContext.Get(recurrenceTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 recurrence types on each page, sorted by the property RecurrenceTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.RecurrenceTypeContext.GetCustomFields();
+                return this.RecurrenceTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for recurrence types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of recurrence types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/recurrence-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.RecurrenceTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of RecurrenceType class.
+        /// </summary>
+        /// <param name="recurrenceType">Your instance of recurrence types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/recurrence-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.RecurrenceType recurrenceType)
+        {
+            if (recurrenceType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RecurrenceTypeContext.AddOrEdit(recurrenceType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of RecurrenceType class.
         /// </summary>
         /// <param name="recurrenceType">Your instance of recurrence types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of RecurrenceType class.
         /// </summary>
-        /// <param name="recurrenceType">Your instance of Account class to edit.</param>
+        /// <param name="recurrenceType">Your instance of RecurrenceType class to edit.</param>
         /// <param name="recurrenceTypeId">Enter the value for RecurrenceTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{recurrenceTypeId}/{recurrenceType}")]
-        [Route("~/api/core/recurrence-type/edit/{recurrenceTypeId}/{recurrenceType}")]
-        public void Edit(int recurrenceTypeId, MixERP.Net.Entities.Core.RecurrenceType recurrenceType)
+        [Route("edit/{recurrenceTypeId}")]
+        [Route("~/api/core/recurrence-type/edit/{recurrenceTypeId}")]
+        public void Edit(int recurrenceTypeId, [FromBody] MixERP.Net.Entities.Core.RecurrenceType recurrenceType)
         {
             if (recurrenceType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via RecurrenceTypeId.
+        ///     Deletes an existing instance of RecurrenceType class via RecurrenceTypeId.
         /// </summary>
         /// <param name="recurrenceTypeId">Enter the value for RecurrenceTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

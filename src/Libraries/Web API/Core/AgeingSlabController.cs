@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/ageing-slab/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.AgeingSlab> Get([FromUri] int[] ageingSlabIds)
+        {
+            try
+            {
+                return this.AgeingSlabContext.Get(ageingSlabIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 ageing slabs on each page, sorted by the property AgeingSlabId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.AgeingSlabContext.GetCustomFields();
+                return this.AgeingSlabContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for ageing slabs.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of ageing slabs.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/ageing-slab/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AgeingSlabContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of AgeingSlab class.
+        /// </summary>
+        /// <param name="ageingSlab">Your instance of ageing slabs class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/ageing-slab/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.AgeingSlab ageingSlab)
+        {
+            if (ageingSlab == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AgeingSlabContext.AddOrEdit(ageingSlab);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of AgeingSlab class.
         /// </summary>
         /// <param name="ageingSlab">Your instance of ageing slabs class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of AgeingSlab class.
         /// </summary>
-        /// <param name="ageingSlab">Your instance of Account class to edit.</param>
+        /// <param name="ageingSlab">Your instance of AgeingSlab class to edit.</param>
         /// <param name="ageingSlabId">Enter the value for AgeingSlabId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{ageingSlabId}/{ageingSlab}")]
-        [Route("~/api/core/ageing-slab/edit/{ageingSlabId}/{ageingSlab}")]
-        public void Edit(int ageingSlabId, MixERP.Net.Entities.Core.AgeingSlab ageingSlab)
+        [Route("edit/{ageingSlabId}")]
+        [Route("~/api/core/ageing-slab/edit/{ageingSlabId}")]
+        public void Edit(int ageingSlabId, [FromBody] MixERP.Net.Entities.Core.AgeingSlab ageingSlab)
         {
             if (ageingSlab == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via AgeingSlabId.
+        ///     Deletes an existing instance of AgeingSlab class via AgeingSlabId.
         /// </summary>
         /// <param name="ageingSlabId">Enter the value for AgeingSlabId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

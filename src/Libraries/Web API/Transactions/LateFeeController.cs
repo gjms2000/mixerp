@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/late-fee/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.LateFee> Get([FromUri] long[] transactionMasterIds)
+        {
+            try
+            {
+                return this.LateFeeContext.Get(transactionMasterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 late fees on each page, sorted by the property TransactionMasterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.LateFeeContext.GetCustomFields();
+                return this.LateFeeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for late fees.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of late fees.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/late-fee/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LateFeeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LateFee class.
+        /// </summary>
+        /// <param name="lateFee">Your instance of late fees class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/late-fee/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.LateFee lateFee)
+        {
+            if (lateFee == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LateFeeContext.AddOrEdit(lateFee);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LateFee class.
         /// </summary>
         /// <param name="lateFee">Your instance of late fees class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LateFee class.
         /// </summary>
-        /// <param name="lateFee">Your instance of Account class to edit.</param>
+        /// <param name="lateFee">Your instance of LateFee class to edit.</param>
         /// <param name="transactionMasterId">Enter the value for TransactionMasterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{transactionMasterId}/{lateFee}")]
-        [Route("~/api/transactions/late-fee/edit/{transactionMasterId}/{lateFee}")]
-        public void Edit(long transactionMasterId, MixERP.Net.Entities.Transactions.LateFee lateFee)
+        [Route("edit/{transactionMasterId}")]
+        [Route("~/api/transactions/late-fee/edit/{transactionMasterId}")]
+        public void Edit(long transactionMasterId, [FromBody] MixERP.Net.Entities.Transactions.LateFee lateFee)
         {
             if (lateFee == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via TransactionMasterId.
+        ///     Deletes an existing instance of LateFee class via TransactionMasterId.
         /// </summary>
         /// <param name="transactionMasterId">Enter the value for TransactionMasterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

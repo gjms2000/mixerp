@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/department/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Department> Get([FromUri] int[] departmentIds)
+        {
+            try
+            {
+                return this.DepartmentContext.Get(departmentIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 departments on each page, sorted by the property DepartmentId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.DepartmentContext.GetCustomFields();
+                return this.DepartmentContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for departments.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of departments.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/department/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.DepartmentContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Department class.
+        /// </summary>
+        /// <param name="department">Your instance of departments class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/department/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Department department)
+        {
+            if (department == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.DepartmentContext.AddOrEdit(department);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Department class.
         /// </summary>
         /// <param name="department">Your instance of departments class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Department class.
         /// </summary>
-        /// <param name="department">Your instance of Account class to edit.</param>
+        /// <param name="department">Your instance of Department class to edit.</param>
         /// <param name="departmentId">Enter the value for DepartmentId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{departmentId}/{department}")]
-        [Route("~/api/office/department/edit/{departmentId}/{department}")]
-        public void Edit(int departmentId, MixERP.Net.Entities.Office.Department department)
+        [Route("edit/{departmentId}")]
+        [Route("~/api/office/department/edit/{departmentId}")]
+        public void Edit(int departmentId, [FromBody] MixERP.Net.Entities.Office.Department department)
         {
             if (department == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via DepartmentId.
+        ///     Deletes an existing instance of Department class via DepartmentId.
         /// </summary>
         /// <param name="departmentId">Enter the value for DepartmentId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

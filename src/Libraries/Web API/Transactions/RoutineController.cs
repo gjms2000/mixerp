@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/routine/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.Routine> Get([FromUri] int[] routineIds)
+        {
+            try
+            {
+                return this.RoutineContext.Get(routineIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 routines on each page, sorted by the property RoutineId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.RoutineContext.GetCustomFields();
+                return this.RoutineContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for routines.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of routines.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/routine/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.RoutineContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Routine class.
+        /// </summary>
+        /// <param name="routine">Your instance of routines class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/routine/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.Routine routine)
+        {
+            if (routine == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RoutineContext.AddOrEdit(routine);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Routine class.
         /// </summary>
         /// <param name="routine">Your instance of routines class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Routine class.
         /// </summary>
-        /// <param name="routine">Your instance of Account class to edit.</param>
+        /// <param name="routine">Your instance of Routine class to edit.</param>
         /// <param name="routineId">Enter the value for RoutineId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{routineId}/{routine}")]
-        [Route("~/api/transactions/routine/edit/{routineId}/{routine}")]
-        public void Edit(int routineId, MixERP.Net.Entities.Transactions.Routine routine)
+        [Route("edit/{routineId}")]
+        [Route("~/api/transactions/routine/edit/{routineId}")]
+        public void Edit(int routineId, [FromBody] MixERP.Net.Entities.Transactions.Routine routine)
         {
             if (routine == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via RoutineId.
+        ///     Deletes an existing instance of Routine class via RoutineId.
         /// </summary>
         /// <param name="routineId">Enter the value for RoutineId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

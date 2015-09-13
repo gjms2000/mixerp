@@ -612,6 +612,14 @@
     <Folder Include="Reports\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\DAL\Localization\MixERP.Net.Schemas.Localization.Data.csproj">
+      <Project>{22cc8cd2-6865-4be0-a2fd-c65b88487cc4}</Project>
+      <Name>MixERP.Net.Schemas.Localization.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\DAL\Office\MixERP.Net.Schemas.Office.Data.csproj">
+      <Project>{4436d581-5e64-448b-96ee-33c51aaaddad}</Project>
+      <Name>MixERP.Net.Schemas.Office.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\Entities\Audit\MixERP.Net.Entities.Audit.csproj">
       <Project>{64384CB7-0284-4DDC-BEED-5C52F7C0BFFF}</Project>
       <Name>MixERP.Net.Entities.Audit</Name>

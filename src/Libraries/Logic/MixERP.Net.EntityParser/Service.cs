@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using MixERP.Net.Framework;
 using MixERP.Net.Framework.Extensions;
@@ -47,17 +48,47 @@ namespace MixERP.Net.EntityParser
             return Data.Service.GetViewForEdit<T>(catalog, tableName, primaryKeyName, primaryKeyValue);
         }
 
-        public static void SaveOrUpdate<T>(string catalog, T poco, dynamic entity, EntityView entityView, int userId)
+        public static void SaveOrUpdate<T>(string catalog, T poco, dynamic entity, EntityView entityView, List<EntityParser.CustomField> customFields, int userId)
         {
+            string tableName = PocoHelper.GetTableName(poco);
+
             List<dynamic> entities = new List<dynamic>();
             entities.Add(entity);
 
-            Import(catalog, poco, entities, entityView, userId);
+            object keyValue = Import(catalog, poco, entities, entityView, userId)[0];
+
+            if (customFields.Any())
+            {
+                SaveCustomFields(catalog, tableName, keyValue.ToString(), customFields);
+            }
         }
+
+
+
+        public static void SaveCustomFields(string catalog, string tableName, string primaryKeyValue, List<CustomField> data)
+        {
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name(@0::character varying(100))" +
+                         ");";
+
+            Factory.NonQuery(catalog, sql, tableName);
+
+            foreach (var pair in data)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name(@0::character varying(100), @1::character varying(100)), " +
+                      "@2, @3;";
+
+                Factory.NonQuery(catalog, sql, tableName, pair.FieldName, primaryKeyValue, pair.Value);
+            }
+        }
+
 
         public static bool HasAccess(string pocoNamespace, AccessTypeEnum accessTypeEnum, int userId)
         {
-            int accessType = (int) accessTypeEnum;
+            int accessType = (int)accessTypeEnum;
             const string sql = "SELECT * FROM policy.has_access(@0, @1, @2);";
             //Todo
             return true;
@@ -71,11 +102,12 @@ namespace MixERP.Net.EntityParser
             Data.Service.Delete(catalog, tableName, primaryKeyName, primaryKeyValue);
         }
 
-        public static void Import<T>(string catalog, T poco, List<dynamic> entities, EntityView entityView, int userId)
+        public static List<object> Import<T>(string catalog, T poco, List<dynamic> entities, EntityView entityView, int userId)
         {
             string primaryKeyName = PocoHelper.GetKeyName(poco);
             string tableName = PocoHelper.GetTableName(poco);
             List<dynamic> items = new List<dynamic>();
+            List<object> result = new List<object>();
 
             int line = 0;
             foreach (dynamic entity in entities)
@@ -103,12 +135,12 @@ namespace MixERP.Net.EntityParser
                     }
                 }
 
-                if (((ICollection<KeyValuePair<string, object>>) item).Count > 1)
+                if (((ICollection<KeyValuePair<string, object>>)item).Count > 1)
                 {
                     line++;
 
-                    ((IDictionary<string, object>) item)["audit_user_id"] = userId;
-                    ((IDictionary<string, object>) item)["audit_ts"] = DateTime.UtcNow;
+                    ((IDictionary<string, object>)item)["audit_user_id"] = userId;
+                    ((IDictionary<string, object>)item)["audit_ts"] = DateTime.UtcNow;
 
                     items.Add(item);
                 }
@@ -127,7 +159,7 @@ namespace MixERP.Net.EntityParser
                         {
                             line++;
 
-                            object primaryKeyValue = ((IDictionary<string, object>) item)[primaryKeyName];
+                            object primaryKeyValue = ((IDictionary<string, object>)item)[primaryKeyName];
 
                             if (primaryKeyValue != null)
                             {
@@ -135,8 +167,10 @@ namespace MixERP.Net.EntityParser
                             }
                             else
                             {
-                                db.Insert(tableName, primaryKeyName, item);
+                                primaryKeyValue = db.Insert(tableName, primaryKeyName, item);
                             }
+
+                            result.Add(primaryKeyValue);
                         }
 
                         transaction.Complete();
@@ -162,6 +196,8 @@ namespace MixERP.Net.EntityParser
                 string errorMessage = string.Format(CultureManager.GetCurrent(), "Error on line {0}.", line);
                 throw new MixERPException(errorMessage, ex);
             }
+
+            return result;
         }
 
         private static void AddProperty(ref ExpandoObject item, string dataType, bool isNullable, string key,
@@ -172,31 +208,31 @@ namespace MixERP.Net.EntityParser
                 switch (dataType)
                 {
                     case "System.Boolean":
-                        ((IDictionary<string, object>) item)[key] = bool.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = bool.Parse(value.ToString());
                         break;
                     case "System.Int16":
-                        ((IDictionary<string, object>) item)[key] = short.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = short.Parse(value.ToString());
                         break;
                     case "System.Int32":
-                        ((IDictionary<string, object>) item)[key] = int.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = int.Parse(value.ToString());
                         break;
                     case "System.Int64":
-                        ((IDictionary<string, object>) item)[key] = int.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = int.Parse(value.ToString());
                         break;
                     case "System.Decimal":
-                        ((IDictionary<string, object>) item)[key] = decimal.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = decimal.Parse(value.ToString());
                         break;
                     case "System.Single":
-                        ((IDictionary<string, object>) item)[key] = float.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = float.Parse(value.ToString());
                         break;
                     case "System.Double":
-                        ((IDictionary<string, object>) item)[key] = double.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = double.Parse(value.ToString());
                         break;
                     case "System.DateTime":
-                        ((IDictionary<string, object>) item)[key] = DateTime.Parse(value.ToString());
+                        ((IDictionary<string, object>)item)[key] = DateTime.Parse(value.ToString());
                         break;
                     default:
-                        ((IDictionary<string, object>) item)[key] = value;
+                        ((IDictionary<string, object>)item)[key] = value;
                         break;
                 }
 
@@ -205,38 +241,38 @@ namespace MixERP.Net.EntityParser
 
             if (value == null)
             {
-                ((IDictionary<string, object>) item)[key] = null;
+                ((IDictionary<string, object>)item)[key] = null;
                 return;
             }
 
             switch (dataType)
             {
                 case "System.Boolean":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(bool.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(bool.Parse);
                     break;
                 case "System.Int16":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(short.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(short.Parse);
                     break;
                 case "System.Int32":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(int.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(int.Parse);
                     break;
                 case "System.Int64":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(long.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(long.Parse);
                     break;
                 case "System.Decimal":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(decimal.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(decimal.Parse);
                     break;
                 case "System.Single":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(float.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(float.Parse);
                     break;
                 case "System.Double":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(double.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(double.Parse);
                     break;
                 case "System.DateTime":
-                    ((IDictionary<string, object>) item)[key] = value.ToString().Parse(DateTime.Parse);
+                    ((IDictionary<string, object>)item)[key] = value.ToString().Parse(DateTime.Parse);
                     break;
                 default:
-                    ((IDictionary<string, object>) item)[key] = value;
+                    ((IDictionary<string, object>)item)[key] = value;
                     break;
             }
         }

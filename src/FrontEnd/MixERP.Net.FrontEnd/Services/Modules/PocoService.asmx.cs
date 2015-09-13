@@ -292,7 +292,7 @@ namespace MixERP.Net.FrontEnd.Services.Modules
         }
 
         [WebMethod]
-        public void SaveOrUpdate(string pocoName, dynamic pocoEntity)
+        public void SaveOrUpdate(string pocoName, dynamic pocoEntity, List<EntityParser.CustomField> customFields)
         {
             object poco = PocoHelper.GetInstanceOf(pocoName);
             if (poco == null)
@@ -309,7 +309,7 @@ namespace MixERP.Net.FrontEnd.Services.Modules
 
             EntityView entityView = this.GetFormView(pocoName);
 
-            Service.SaveOrUpdate(this.Catalog, poco, pocoEntity, entityView, this.UserId);
+            Service.SaveOrUpdate(this.Catalog, poco, pocoEntity, entityView, customFields, this.UserId);
         }
 
         [WebMethod]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/county/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.County> Get([FromUri] int[] countyIds)
+        {
+            try
+            {
+                return this.CountyContext.Get(countyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 counties on each page, sorted by the property CountyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CountyContext.GetCustomFields();
+                return this.CountyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for counties.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of counties.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/county/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CountyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of County class.
+        /// </summary>
+        /// <param name="county">Your instance of counties class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/county/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.County county)
+        {
+            if (county == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CountyContext.AddOrEdit(county);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of County class.
         /// </summary>
         /// <param name="county">Your instance of counties class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of County class.
         /// </summary>
-        /// <param name="county">Your instance of Account class to edit.</param>
+        /// <param name="county">Your instance of County class to edit.</param>
         /// <param name="countyId">Enter the value for CountyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{countyId}/{county}")]
-        [Route("~/api/core/county/edit/{countyId}/{county}")]
-        public void Edit(int countyId, MixERP.Net.Entities.Core.County county)
+        [Route("edit/{countyId}")]
+        [Route("~/api/core/county/edit/{countyId}")]
+        public void Edit(int countyId, [FromBody] MixERP.Net.Entities.Core.County county)
         {
             if (county == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CountyId.
+        ///     Deletes an existing instance of County class via CountyId.
         /// </summary>
         /// <param name="countyId">Enter the value for CountyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

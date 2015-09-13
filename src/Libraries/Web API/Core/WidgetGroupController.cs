@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/widget-group/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.WidgetGroup> Get([FromUri] string[] widgetGroupNames)
+        {
+            try
+            {
+                return this.WidgetGroupContext.Get(widgetGroupNames);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 widget groups on each page, sorted by the property WidgetGroupName.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.WidgetGroupContext.GetCustomFields();
+                return this.WidgetGroupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for widget groups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of widget groups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/widget-group/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.WidgetGroupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of WidgetGroup class.
+        /// </summary>
+        /// <param name="widgetGroup">Your instance of widget groups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/widget-group/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.WidgetGroup widgetGroup)
+        {
+            if (widgetGroup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.WidgetGroupContext.AddOrEdit(widgetGroup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of WidgetGroup class.
         /// </summary>
         /// <param name="widgetGroup">Your instance of widget groups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of WidgetGroup class.
         /// </summary>
-        /// <param name="widgetGroup">Your instance of Account class to edit.</param>
+        /// <param name="widgetGroup">Your instance of WidgetGroup class to edit.</param>
         /// <param name="widgetGroupName">Enter the value for WidgetGroupName in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{widgetGroupName}/{widgetGroup}")]
-        [Route("~/api/core/widget-group/edit/{widgetGroupName}/{widgetGroup}")]
-        public void Edit(string widgetGroupName, MixERP.Net.Entities.Core.WidgetGroup widgetGroup)
+        [Route("edit/{widgetGroupName}")]
+        [Route("~/api/core/widget-group/edit/{widgetGroupName}")]
+        public void Edit(string widgetGroupName, [FromBody] MixERP.Net.Entities.Core.WidgetGroup widgetGroup)
         {
             if (widgetGroup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via WidgetGroupName.
+        ///     Deletes an existing instance of WidgetGroup class via WidgetGroupName.
         /// </summary>
         /// <param name="widgetGroupName">Enter the value for WidgetGroupName in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

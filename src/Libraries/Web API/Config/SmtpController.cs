@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/config/smtp/get")]
+        public IEnumerable<MixERP.Net.Entities.Config.Smtp> Get([FromUri] int[] smtpIds)
+        {
+            try
+            {
+                return this.SmtpContext.Get(smtpIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 smtps on each page, sorted by the property SmtpId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Config
         {
             try
             {
-                return this.SmtpContext.GetCustomFields();
+                return this.SmtpContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for smtps.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of smtps.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/config/smtp/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SmtpContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Smtp class.
+        /// </summary>
+        /// <param name="smtp">Your instance of smtps class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/config/smtp/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Config.Smtp smtp)
+        {
+            if (smtp == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SmtpContext.AddOrEdit(smtp);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Smtp class.
         /// </summary>
         /// <param name="smtp">Your instance of smtps class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Smtp class.
         /// </summary>
-        /// <param name="smtp">Your instance of Account class to edit.</param>
+        /// <param name="smtp">Your instance of Smtp class to edit.</param>
         /// <param name="smtpId">Enter the value for SmtpId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{smtpId}/{smtp}")]
-        [Route("~/api/config/smtp/edit/{smtpId}/{smtp}")]
-        public void Edit(int smtpId, MixERP.Net.Entities.Config.Smtp smtp)
+        [Route("edit/{smtpId}")]
+        [Route("~/api/config/smtp/edit/{smtpId}")]
+        public void Edit(int smtpId, [FromBody] MixERP.Net.Entities.Config.Smtp smtp)
         {
             if (smtp == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via SmtpId.
+        ///     Deletes an existing instance of Smtp class via SmtpId.
         /// </summary>
         /// <param name="smtpId">Enter the value for SmtpId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/lock-out/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.LockOut> Get([FromUri] long[] lockOutIds)
+        {
+            try
+            {
+                return this.LockOutContext.Get(lockOutIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 lock outs on each page, sorted by the property LockOutId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.LockOutContext.GetCustomFields();
+                return this.LockOutContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for lock outs.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of lock outs.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/lock-out/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LockOutContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LockOut class.
+        /// </summary>
+        /// <param name="lockOut">Your instance of lock outs class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/lock-out/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.LockOut lockOut)
+        {
+            if (lockOut == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LockOutContext.AddOrEdit(lockOut);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LockOut class.
         /// </summary>
         /// <param name="lockOut">Your instance of lock outs class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LockOut class.
         /// </summary>
-        /// <param name="lockOut">Your instance of Account class to edit.</param>
+        /// <param name="lockOut">Your instance of LockOut class to edit.</param>
         /// <param name="lockOutId">Enter the value for LockOutId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{lockOutId}/{lockOut}")]
-        [Route("~/api/policy/lock-out/edit/{lockOutId}/{lockOut}")]
-        public void Edit(long lockOutId, MixERP.Net.Entities.Policy.LockOut lockOut)
+        [Route("edit/{lockOutId}")]
+        [Route("~/api/policy/lock-out/edit/{lockOutId}")]
+        public void Edit(long lockOutId, [FromBody] MixERP.Net.Entities.Policy.LockOut lockOut)
         {
             if (lockOut == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via LockOutId.
+        ///     Deletes an existing instance of LockOut class via LockOutId.
         /// </summary>
         /// <param name="lockOutId">Enter the value for LockOutId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

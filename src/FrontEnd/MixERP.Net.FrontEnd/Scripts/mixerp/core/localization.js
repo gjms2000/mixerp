@@ -92,3 +92,17 @@ String.prototype.toFormattedDate = function () {
 
     return new Date(this).toString(window.shortDateFormat);
 };
+
+function converToUTC(date) {
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+};
+
+String.prototype.toMoment = function () {
+    if (isNullOrWhiteSpace(this)) {
+        return "";
+    };
+
+    var d = converToUTC(new Date(this));
+
+    return window.moment(d).fromNow();
+};

@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table transactions.non_gl_stock_master</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='transactions.non_gl_stock_master' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='transactions.non_gl_stock_master' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('transactions.non_gl_stock_master'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Transactions.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of NonGlStockMaster class on the database table "transactions.non_gl_stock_master".
+		/// </summary>
+		/// <param name="nonGlStockMaster">The instance of "NonGlStockMaster" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Transactions.NonGlStockMaster nonGlStockMaster)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(nonGlStockMaster.NonGlStockMasterId > 0){
+				this.Update(nonGlStockMaster, nonGlStockMaster.NonGlStockMasterId);
+				return;
+			}
+	
+			this.Add(nonGlStockMaster);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Transactions.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Transactions.NonGlStockMaster>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Transactions.NonGlStockMaster> Get(long[] nonGlStockMasterIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"NonGlStockMaster\" was denied to the user with Login ID {LoginId}. nonGlStockMasterIds: {nonGlStockMasterIds}.", this.LoginId, nonGlStockMasterIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM transactions.non_gl_stock_master WHERE non_gl_stock_master_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Transactions.NonGlStockMaster>(this.Catalog, sql, nonGlStockMasterIds);
         }
 	}
 }

@@ -58,6 +58,7 @@
     <Compile Include="Attachment.cs" />
     <Compile Include="AttachmentLookup.cs" />
     <Compile Include="AttachmentType.cs" />
+    <Compile Include="AttachmentView.cs" />
     <Compile Include="BankAccount.cs" />
     <Compile Include="BankAccountScrudView.cs" />
     <Compile Include="BankAccountSelectorView.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="CustomFieldDefinitionView.cs" />
     <Compile Include="CustomFieldForm.cs" />
     <Compile Include="CustomFieldSetup.cs" />
+    <Compile Include="CustomFieldView.cs" />
     <Compile Include="DbGetAccountViewByAccountMasterIdResult.cs" />
     <Compile Include="DbGetAssociatedUnitsFromItemCodeResult.cs" />
     <Compile Include="DbGetAssociatedUnitsFromItemIdResult.cs" />

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/menu-policy/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.MenuPolicy> Get([FromUri] int[] policyIds)
+        {
+            try
+            {
+                return this.MenuPolicyContext.Get(policyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 menu policies on each page, sorted by the property PolicyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.MenuPolicyContext.GetCustomFields();
+                return this.MenuPolicyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for menu policies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of menu policies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/menu-policy/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.MenuPolicyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of MenuPolicy class.
+        /// </summary>
+        /// <param name="menuPolicy">Your instance of menu policies class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/menu-policy/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.MenuPolicy menuPolicy)
+        {
+            if (menuPolicy == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.MenuPolicyContext.AddOrEdit(menuPolicy);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of MenuPolicy class.
         /// </summary>
         /// <param name="menuPolicy">Your instance of menu policies class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of MenuPolicy class.
         /// </summary>
-        /// <param name="menuPolicy">Your instance of Account class to edit.</param>
+        /// <param name="menuPolicy">Your instance of MenuPolicy class to edit.</param>
         /// <param name="policyId">Enter the value for PolicyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{policyId}/{menuPolicy}")]
-        [Route("~/api/policy/menu-policy/edit/{policyId}/{menuPolicy}")]
-        public void Edit(int policyId, MixERP.Net.Entities.Policy.MenuPolicy menuPolicy)
+        [Route("edit/{policyId}")]
+        [Route("~/api/policy/menu-policy/edit/{policyId}")]
+        public void Edit(int policyId, [FromBody] MixERP.Net.Entities.Policy.MenuPolicy menuPolicy)
         {
             if (menuPolicy == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PolicyId.
+        ///     Deletes an existing instance of MenuPolicy class via PolicyId.
         /// </summary>
         /// <param name="policyId">Enter the value for PolicyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

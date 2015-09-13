@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/gender/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Gender> Get([FromUri] string[] genderCodes)
+        {
+            try
+            {
+                return this.GenderContext.Get(genderCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 genders on each page, sorted by the property GenderCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.GenderContext.GetCustomFields();
+                return this.GenderContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for genders.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of genders.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/gender/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.GenderContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Gender class.
+        /// </summary>
+        /// <param name="gender">Your instance of genders class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/gender/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Gender gender)
+        {
+            if (gender == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.GenderContext.AddOrEdit(gender);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Gender class.
         /// </summary>
         /// <param name="gender">Your instance of genders class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Gender class.
         /// </summary>
-        /// <param name="gender">Your instance of Account class to edit.</param>
+        /// <param name="gender">Your instance of Gender class to edit.</param>
         /// <param name="genderCode">Enter the value for GenderCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{genderCode}/{gender}")]
-        [Route("~/api/core/gender/edit/{genderCode}/{gender}")]
-        public void Edit(string genderCode, MixERP.Net.Entities.Core.Gender gender)
+        [Route("edit/{genderCode}")]
+        [Route("~/api/core/gender/edit/{genderCode}")]
+        public void Edit(string genderCode, [FromBody] MixERP.Net.Entities.Core.Gender gender)
         {
             if (gender == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via GenderCode.
+        ///     Deletes an existing instance of Gender class via GenderCode.
         /// </summary>
         /// <param name="genderCode">Enter the value for GenderCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/country/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Country> Get([FromUri] int[] countryIds)
+        {
+            try
+            {
+                return this.CountryContext.Get(countryIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 countries on each page, sorted by the property CountryId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CountryContext.GetCustomFields();
+                return this.CountryContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for countries.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of countries.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/country/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CountryContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Country class.
+        /// </summary>
+        /// <param name="country">Your instance of countries class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/country/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Country country)
+        {
+            if (country == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CountryContext.AddOrEdit(country);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Country class.
         /// </summary>
         /// <param name="country">Your instance of countries class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Country class.
         /// </summary>
-        /// <param name="country">Your instance of Account class to edit.</param>
+        /// <param name="country">Your instance of Country class to edit.</param>
         /// <param name="countryId">Enter the value for CountryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{countryId}/{country}")]
-        [Route("~/api/core/country/edit/{countryId}/{country}")]
-        public void Edit(int countryId, MixERP.Net.Entities.Core.Country country)
+        [Route("edit/{countryId}")]
+        [Route("~/api/core/country/edit/{countryId}")]
+        public void Edit(int countryId, [FromBody] MixERP.Net.Entities.Core.Country country)
         {
             if (country == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CountryId.
+        ///     Deletes an existing instance of Country class via CountryId.
         /// </summary>
         /// <param name="countryId">Enter the value for CountryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

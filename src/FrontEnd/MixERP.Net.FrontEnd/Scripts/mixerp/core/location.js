@@ -36,13 +36,14 @@ function updateQueryString(key, value, url) {
         }
         else
             return url;
-    }
+    };
 };
 
 //Josh Stodola and Andy E
 //http://stackoverflow.com/questions/2907482/how-to-get-the-query-string-by-javascript
 function getQueryStrings() {
-    var assoc = {};
+    var qs = [];
+
     var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
     var queryString = location.search.substring(1);
     var keyValues = queryString.split('&');
@@ -51,10 +52,15 @@ function getQueryStrings() {
         if (keyValues.hasOwnProperty(i)) {
             var key = keyValues[i].split('=');
             if (key.length > 1) {
-                assoc[decode(key[0])] = decode(key[1]);
+
+                var string = new Object();
+                string.key = decode(key[0]);
+                string.value = decode(key[1]);
+
+                qs.push(string);
             };
         };
     };
 
-    return assoc;
+    return qs;
 };

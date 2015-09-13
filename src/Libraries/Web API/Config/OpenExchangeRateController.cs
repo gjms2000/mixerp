@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/config/open-exchange-rate/get")]
+        public IEnumerable<MixERP.Net.Entities.Config.OpenExchangeRate> Get([FromUri] string[] keys)
+        {
+            try
+            {
+                return this.OpenExchangeRateContext.Get(keys);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 open exchange rates on each page, sorted by the property Key.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Config
         {
             try
             {
-                return this.OpenExchangeRateContext.GetCustomFields();
+                return this.OpenExchangeRateContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for open exchange rates.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of open exchange rates.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/config/open-exchange-rate/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.OpenExchangeRateContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of OpenExchangeRate class.
+        /// </summary>
+        /// <param name="openExchangeRate">Your instance of open exchange rates class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/config/open-exchange-rate/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Config.OpenExchangeRate openExchangeRate)
+        {
+            if (openExchangeRate == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.OpenExchangeRateContext.AddOrEdit(openExchangeRate);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of OpenExchangeRate class.
         /// </summary>
         /// <param name="openExchangeRate">Your instance of open exchange rates class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of OpenExchangeRate class.
         /// </summary>
-        /// <param name="openExchangeRate">Your instance of Account class to edit.</param>
+        /// <param name="openExchangeRate">Your instance of OpenExchangeRate class to edit.</param>
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{key}/{openExchangeRate}")]
-        [Route("~/api/config/open-exchange-rate/edit/{key}/{openExchangeRate}")]
-        public void Edit(string key, MixERP.Net.Entities.Config.OpenExchangeRate openExchangeRate)
+        [Route("edit/{key}")]
+        [Route("~/api/config/open-exchange-rate/edit/{key}")]
+        public void Edit(string key, [FromBody] MixERP.Net.Entities.Config.OpenExchangeRate openExchangeRate)
         {
             if (openExchangeRate == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via Key.
+        ///     Deletes an existing instance of OpenExchangeRate class via Key.
         /// </summary>
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

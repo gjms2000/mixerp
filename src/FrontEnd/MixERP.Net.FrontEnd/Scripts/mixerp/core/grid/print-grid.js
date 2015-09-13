@@ -1,4 +1,4 @@
-var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId) {
+var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
     var token = Math.random().toString();
     //Load report template from the path.
     $.get(templatePath + "?" + token, function () { }).done(function (data) {
@@ -29,6 +29,9 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
             if (hiddenFieldToUpdate) {                
                 //Update the hidden field with data, but do not print.
                 $(hiddenFieldToUpdate).val(data);
+                if (typeof (callback) === "function") {
+                    callback();
+                };
 
                 if (triggerControlId) {
                     $("#" + triggerControlId).trigger("click");

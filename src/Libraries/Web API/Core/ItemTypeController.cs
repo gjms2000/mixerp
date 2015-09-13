@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/item-type/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ItemType> Get([FromUri] int[] itemTypeIds)
+        {
+            try
+            {
+                return this.ItemTypeContext.Get(itemTypeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 item types on each page, sorted by the property ItemTypeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ItemTypeContext.GetCustomFields();
+                return this.ItemTypeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for item types.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of item types.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/item-type/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ItemTypeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ItemType class.
+        /// </summary>
+        /// <param name="itemType">Your instance of item types class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/item-type/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ItemType itemType)
+        {
+            if (itemType == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ItemTypeContext.AddOrEdit(itemType);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ItemType class.
         /// </summary>
         /// <param name="itemType">Your instance of item types class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ItemType class.
         /// </summary>
-        /// <param name="itemType">Your instance of Account class to edit.</param>
+        /// <param name="itemType">Your instance of ItemType class to edit.</param>
         /// <param name="itemTypeId">Enter the value for ItemTypeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{itemTypeId}/{itemType}")]
-        [Route("~/api/core/item-type/edit/{itemTypeId}/{itemType}")]
-        public void Edit(int itemTypeId, MixERP.Net.Entities.Core.ItemType itemType)
+        [Route("edit/{itemTypeId}")]
+        [Route("~/api/core/item-type/edit/{itemTypeId}")]
+        public void Edit(int itemTypeId, [FromBody] MixERP.Net.Entities.Core.ItemType itemType)
         {
             if (itemType == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ItemTypeId.
+        ///     Deletes an existing instance of ItemType class via ItemTypeId.
         /// </summary>
         /// <param name="itemTypeId">Enter the value for ItemTypeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/exchange-rate-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.ExchangeRateDetail> Get([FromUri] long[] exchangeRateDetailIds)
+        {
+            try
+            {
+                return this.ExchangeRateDetailContext.Get(exchangeRateDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 exchange rate details on each page, sorted by the property ExchangeRateDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.ExchangeRateDetailContext.GetCustomFields();
+                return this.ExchangeRateDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for exchange rate details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of exchange rate details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/exchange-rate-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ExchangeRateDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ExchangeRateDetail class.
+        /// </summary>
+        /// <param name="exchangeRateDetail">Your instance of exchange rate details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/exchange-rate-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.ExchangeRateDetail exchangeRateDetail)
+        {
+            if (exchangeRateDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ExchangeRateDetailContext.AddOrEdit(exchangeRateDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ExchangeRateDetail class.
         /// </summary>
         /// <param name="exchangeRateDetail">Your instance of exchange rate details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ExchangeRateDetail class.
         /// </summary>
-        /// <param name="exchangeRateDetail">Your instance of Account class to edit.</param>
+        /// <param name="exchangeRateDetail">Your instance of ExchangeRateDetail class to edit.</param>
         /// <param name="exchangeRateDetailId">Enter the value for ExchangeRateDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{exchangeRateDetailId}/{exchangeRateDetail}")]
-        [Route("~/api/core/exchange-rate-detail/edit/{exchangeRateDetailId}/{exchangeRateDetail}")]
-        public void Edit(long exchangeRateDetailId, MixERP.Net.Entities.Core.ExchangeRateDetail exchangeRateDetail)
+        [Route("edit/{exchangeRateDetailId}")]
+        [Route("~/api/core/exchange-rate-detail/edit/{exchangeRateDetailId}")]
+        public void Edit(long exchangeRateDetailId, [FromBody] MixERP.Net.Entities.Core.ExchangeRateDetail exchangeRateDetail)
         {
             if (exchangeRateDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ExchangeRateDetailId.
+        ///     Deletes an existing instance of ExchangeRateDetail class via ExchangeRateDetailId.
         /// </summary>
         /// <param name="exchangeRateDetailId">Enter the value for ExchangeRateDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

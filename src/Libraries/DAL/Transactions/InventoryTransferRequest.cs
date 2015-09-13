@@ -117,7 +117,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table transactions.inventory_transfer_requests</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='transactions.inventory_transfer_requests' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='transactions.inventory_transfer_requests' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('transactions.inventory_transfer_requests'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Schemas.Transactions.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of InventoryTransferRequest class on the database table "transactions.inventory_transfer_requests".
+		/// </summary>
+		/// <param name="inventoryTransferRequest">The instance of "InventoryTransferRequest" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.Transactions.InventoryTransferRequest inventoryTransferRequest)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(inventoryTransferRequest.InventoryTransferRequestId > 0){
+				this.Update(inventoryTransferRequest, inventoryTransferRequest.InventoryTransferRequestId);
+				return;
+			}
+	
+			this.Add(inventoryTransferRequest);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Schemas.Transactions.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.Transactions.InventoryTransferRequest>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferRequest> Get(long[] inventoryTransferRequestIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"InventoryTransferRequest\" was denied to the user with Login ID {LoginId}. inventoryTransferRequestIds: {inventoryTransferRequestIds}.", this.LoginId, inventoryTransferRequestIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM transactions.inventory_transfer_requests WHERE inventory_transfer_request_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Transactions.InventoryTransferRequest>(this.Catalog, sql, inventoryTransferRequestIds);
         }
 	}
 }

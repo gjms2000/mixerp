@@ -1,35 +1,55 @@
+
 <div class="poco view factory">
+    <div id="FlagPopUnder" class="ui initially hidden form segment" style="width:400px;z-index:3; position: absolute;">
+        <h3 class="panel-title">Flag This Transaction</h3>
+        <div>You can mark this transaction with a flag, however you will not be able to see the flags created by other users.</div>
+        <p>Select a flag.</p>
+
+        <select id="FlagSelect" class="ui fluid search dropdown selection"></select>
+
+        <p class="ui buttons tpad8">
+            <input id="UpdateButton" value="Update" class="green small ui button" type="button" />
+            <input onclick="$('#FlagPopUnder').fadeOut(1000);" class="red small ui button" value="Close" type="button">
+        </p>
+    </div>
+
     <div class="ui stackable attached segment">
         <div class="title ui huge grey header"></div>
-        <div class="ui info description message"></div>
+        <div class="ui info description message" style="display: none;"></div>
     </div>
+
     <div class="ui stackable attached segment">
         <script src="/Scripts/underscore/underscore-min.js"></script>
+
 
         <div class="ui stackable grid">
             <div class="twelve wide column">
                 <div class="ui basic buttons">
                     <a id="AddNewButton" class="ui basic button">Add New</a>
-                    <div class="ui icon top left pointing dropdown basic button">
+                    <a id="FlagButton" class="ui basic button">Flag</a>
+                    <div class="ui icon top left pointing dropdown basic button" id="ExportDropDown">
                         <span>Export This Document</span>
                         <div class="menu">
                             <div class="header">
                                 Export This Document
                             </div>
-                            <div class="item">
+                            <a class="item" href="javascript:void(0);" onclick="createDoc();">
                                 <i class="file word outline blue icon"></i>
                                 To Word Document
-                            </div>
-                            <div class="item">
+                            </a>
+                            <a class="item" href="javascript:void(0);" onclick="createXls();">
                                 <i class="file excel outline green icon"></i>
                                 To Excel Document
-                            </div>
-                            <div class="item">
+                            </a>
+                            <a class="item" href="javascript:void(0);" onclick="createPDF();">
                                 <i class="file pdf outline red icon"></i>
                                 To PDF Document
-                            </div>
+                            </a>
                         </div>
                     </div>
+                    <a id="PrintButton" href="javascript:void(0);" onclick="print()" class="ui basic button">Print</a>
+
+
                 </div>
             </div>
             <div class="right aligned four wide column">
@@ -118,10 +138,10 @@
                         <input id="FilterNameInputText" />
                     </div>
                 </div>
-                <div class="ui buttons">
-                    <div class="ui basic green button" id="SaveFilterButton">Save</div>
-                    <div class="ui basic blue button" id="ManageFiltersButton">Manage Filters</div>
-                    <div class="ui basic red button">Cancel</div>
+                <div class="ui basic buttons">
+                    <div class="ui basic button" id="SaveFilterButton">Save</div>
+                    <div class="ui basic button" id="ManageFiltersButton">Manage Filters</div>
+                    <div class="ui basic button">Cancel</div>
                 </div>
             </div>
 
@@ -146,8 +166,8 @@
                 </div>
                 <div class="actions">
                     <div class="ui basic buttons">
-                        <a class="ui basic red close button">Remove User Defaults</a>
-                        <a class="ui basic teal button" id="MakeUserDefaultFilterButton">Default (For Users)</a>
+                        <a class="ui basic close button">Remove User Defaults</a>
+                        <a class="ui basic button" id="MakeUserDefaultFilterButton">Default (For Users)</a>
                     </div>
                 </div>
             </div>
@@ -156,9 +176,9 @@
         <div class="ui bottom attached hidden tab segment" data-tab="import">
             <div class="ui huge header">Data Import</div>
 
-            <div class="ui buttons">
-                <a class="ui basic green button" id="DownloadTemplateButton">Export Data</a>
-                <div class="ui basic red button">
+            <div class="ui basic buttons">
+                <a class="ui basic button" id="DownloadTemplateButton">Export Data</a>
+                <div class="ui basic button">
                     <label for="file">Import Data</label>
                     <input type="file" id="file" style="display:none;">
                 </div>
@@ -175,6 +195,17 @@
         </div>
 
     </div>
+
+
+
+
+
+
+
+
+
+
+
 
     <br />
     <script>
@@ -257,7 +288,7 @@
                 excludedColumnIndices = [];
             };
 
-            var el = $('<table class="ui striped nowrap definition table">');
+            var el = $('<table class="ui striped nowrap definition table" id="ScrudView">');
             var header = "<thead><tr>";
 
             var index = 0;
@@ -334,6 +365,7 @@
             return "";
         };
 
+
         function bindSelect(el, data, valueField, textField) {
             $.each(data, function () {
                 var option = "<option value='" + this[valueField] + "'>" + this[textField] + "</option>";
@@ -367,7 +399,7 @@
         function getTotalPages(pocoName, filterName, byOffice) {
             var qs = getQueryStrings();
 
-            if (qs) {
+            if (qs.length) {
                 return getFilteredTotalPages(pocoName, qs, byOffice);
             };
 
@@ -383,8 +415,8 @@
         function getAjaxFilters(queryStrings) {
             var filters = [];
 
-            $.each(queryStrings, function (name, value) {
-                filters.push(getAjaxPropertyFilter(name, 0, value));
+            $.each(queryStrings, function (index, value) {
+                filters.push(getAjaxPropertyFilter(value.key, 0, value.value));
             });
 
             return filters;
@@ -406,11 +438,15 @@
     </script>
     <script>
         function loadFilterConditions() {
-            bindSelect($("#FilterConditionSelect"), filterConditions, "value", "text");
+            var el = $("#FilterConditionSelect");
+            bindSelect(el, filterConditions, "value", "text");
+            el.dropdown();
         };
 
         function loadColumns() {
-            bindSelect($("#ColumnSelect"), columns, "name", "text");
+            var el = $("#ColumnSelect");
+            bindSelect(el, columns, "name", "text");
+            el.dropdown();
         };
 
         $("#FilterNameInputText").keyup(function () {
@@ -447,7 +483,7 @@
                 var data = msg.d;
                 var selected = "";
 
-                var option = "<option value='0'>Select a Filter</option>";
+                var option = "<option value=''>Select a Filter</option>";
 
                 $.each(data, function () {
                     var isDefault = this[1].Value;
@@ -497,12 +533,13 @@
         $(document).ready(function () {
             loadPoco(loadFilterNames);
             loadFilterConditions();
+            $("#ExportDropDown").dropdown();
 
             if (window.title) {
                 $(".title").html(window.title);
             };
             if (window.description) {
-                $(".description").html(window.description);
+                $(".description").html(window.description).show();
             } else {
                 $(".description").remove();
             };
@@ -559,7 +596,7 @@
         function getPocoView(pocoName, pageNumber, filterName, byOffice) {
             var qs = getQueryStrings();
 
-            if (qs) {
+            if (qs.length) {
                 return getFilteredPocoView(pocoName, pageNumber, qs, byOffice);
             };
 
@@ -1034,10 +1071,27 @@
             if (hasAction) {
                 var grid = $(".definition.table");
                 var header = stringFormat("<th style='width:{0}px;'></th>", 25 * (!isNullOrWhiteSpace(editTemplate) + !isNullOrWhiteSpace(deleteTemplate)));
-                var column = stringFormat("<td>{0}{1}</td>", editTemplate, deleteTemplate);
+                header += "<th>" + Resources.Titles.Select() + "</th>";
+                var selectTemplate = '<div class="ui toggle checkbox"> \
+                                      <input type="checkbox">\
+                                      <label></label>\
+                                    </div>';
+
+                var column = stringFormat("<td>{0}{1}</td><td>{2}</td>", editTemplate, deleteTemplate, selectTemplate);
 
                 grid.find("th:first-child").before(header);
                 grid.find("td:first-child").before(column);
+
+                $(".definition.table tr").click(function (sender) {
+                    var row = $(this);
+                    var cell = $(sender.target).closest('td');
+
+                    if (cell.index() > 1) {
+                        var el = row.find("input:checkbox");
+                        toogleSelection(el);
+                    };
+
+                });
             };
         };
     </script>
@@ -1052,7 +1106,7 @@
             el = $(el);
 
             if (typeof (window.keyColumnPosition) === "undefined") {
-                window.keyColumnPosition = "2";
+                window.keyColumnPosition = "3";
             };
 
             var selector = "td:nth-child(" + keyColumnPosition + ")";
@@ -1076,61 +1130,79 @@
                 return;
             };
 
+            if (window.form === "undefined") {
+                alert("No instance of form handler was found.");
+                return;
+            };
+
             el = $(el);
 
             if (typeof (window.keyColumnPosition) === "undefined") {
-                window.keyColumnPosition = "2";
+                window.keyColumnPosition = "3";
             };
 
             var selector = "td:nth-child(" + keyColumnPosition + ")";
-            var primaryKey = el.parent().parent().find(selector).text();
+            var primaryKeyValue = el.parent().parent().find(selector).text();
+            var tableName = window.formSchemaName + "." + window.formTableName;
 
-            var ajaxGetViewForEdit = getViewForEdit(formPocoName, primaryKey);
+            var ajaxGetViewForEdit = getViewForEdit(formPocoName, primaryKeyValue);
 
             ajaxGetViewForEdit.success(function (msg) {
                 var data = JSON.parse(msg.d);
+                displayEdit(data, false);
 
-                if (window.form === "undefined") {
-                    alert("No instance of form handler was found.");
-                    return;
-                };
-
-                displayEdit(data);
+                getCustomFieldsForEdit(tableName, primaryKeyValue).success(function (msg) {
+                    displayCustomFields(msg);
+                    form.show();
+                    view.hide();
+                });
             });
         };
 
-        function displayEdit(d) {
-            for (var key in d) {
-                var value = d[key];
 
-                var targetEl = $("#" + key);
 
-                if (targetEl.length) {
-                    if (targetEl.hasClass("date")) {
-                        value = value.toFormattedDate();
+        function displayEdit(items) {
+            for (var id in items) {
+                var value = items[id];
+                editFormElement(id, value);
+            };
+        };
+
+        function displayCustomFields(items) {
+            $.each(items, function (i, v) {
+                var id = v.FieldName;
+                var value = v.Value;
+
+                editFormElement(id, value);
+            });
+        };
+
+        function editFormElement(id, value) {
+            var targetEl = $("#" + id);
+
+            if (targetEl.length) {
+                if (targetEl.hasClass("date")) {
+                    value = value.toFormattedDate();
+                };
+
+                targetEl.val(value);
+
+                if (targetEl.is("select")) {
+                    var type = targetEl.attr("data-type");
+
+                    if (type === "bool") {
+                        value = value ? "yes" : "no";
                     };
 
-                    targetEl.val(value);
-
-                    if (targetEl.is("select")) {
-                        var type = targetEl.attr("data-type");
-
-                        if (type === "bool") {
-                            value = value ? "yes" : "no";
-                        };
-
-                        targetEl.dropdown("set selected", value);
-                        targetEl.trigger("blur");
-                        targetEl.trigger("change");
-                    };
+                    targetEl.dropdown("set selected", value);
+                    targetEl.trigger("blur");
+                    targetEl.trigger("change");
                 };
             };
-
-            form.show();
-            view.hide();
         };
     </script>
     <script>
+
         function deleteEntity(pocoName, primaryKeyValue) {
             var url = "/Services/Modules/PocoService.asmx/DeleteEntity";
             var data = appendParameter("", "pocoName", pocoName);
@@ -1150,5 +1222,276 @@
 
             return getAjax(url, data);
         };
+
+        function getCustomFieldsForEdit(tableName, primaryKeyValue) {
+            var url = "/api/core/custom-field-view/get-where/1";
+
+            var filters = [];
+
+            filters.push(window.getAjaxColumnFilter("table_name", FilterConditions.IsEqualTo, tableName));
+            filters.push(window.getAjaxColumnFilter("resource_id", FilterConditions.IsEqualTo, primaryKeyValue));
+
+            var data = JSON.stringify(filters);
+
+            return postAjaxRequest(url, data);
+        };
+    </script>
+
+    <script>
+        function createPDFDocument(html, documentName) {
+            var url = "/Services/CreateDocument.asmx/CreatePdf";
+            var data = appendParameter("", "html", html);
+            data = appendParameter(data, "documentName", documentName);
+            data = getData(data);
+
+            return getAjax(url, data);
+        };
+
+        function createXlsDocument(html, documentName) {
+            var url = "/Services/CreateDocument.asmx/CreateXls";
+            var data = appendParameter("", "html", html);
+            data = appendParameter(data, "documentName", documentName);
+            data = getData(data);
+
+            return getAjax(url, data);
+        };
+
+        function createDocDocument(html, documentName) {
+            var url = "/Services/CreateDocument.asmx/CreateDoc";
+            var data = appendParameter("", "html", html);
+            data = appendParameter(data, "documentName", documentName);
+            data = getData(data);
+
+            return getAjax(url, data);
+        };
+
+        function getFileName() {
+            var filterName = ($("#DefaultFilterSelect").val() || "");
+
+            if (filterName) {
+                filterName += "-";
+            };
+
+            return title + "-" + filterName + stringFormat(Resources.Titles.PageN(), getPageNumber());
+        };
+
+        function createPDF() {
+            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
+        };
+
+        function createXls() {
+            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
+        };
+
+        function createDoc() {
+            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
+        };
+
+        function print() {
+            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0);
+        };
+
+        function downloadXls() {
+            var html = $("#MarkupHidden").val();
+            var fileName = getFileName() + ".xls";
+            var createXlsDocumentAjax = createXlsDocument(html, fileName);
+
+            createXlsDocumentAjax.success(function (msg) {
+                startDownload(msg.d);
+            });
+        };
+
+        function downloadDoc() {
+            var html = $("#MarkupHidden").val();
+            var fileName = getFileName() + ".docs";
+            var createDocDocumentAjax = createDocDocument(html, fileName);
+
+            createDocDocumentAjax.success(function (msg) {
+                startDownload(msg.d);
+            });
+        };
+
+
+        function downloadPDF() {
+            var html = $("#MarkupHidden").val();
+            var fileName = getFileName() + ".pdf";
+            var createPDFDocumentAjax = createPDFDocument(html, fileName);
+
+            createPDFDocumentAjax.success(function (msg) {
+                startDownload(msg.d);
+            });
+        };
+
+        function startDownload(path) {
+            var anchor = $("#DownloadAnchor");
+            anchor.attr("href", path);
+            anchor[0].click();
+        };
+
+
+        var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
+            var token = Math.random().toString();
+            //Load report template from the path.
+            $.get(templatePath + "?" + token, function () { }).done(function (data) {
+                //Load report header template.
+                $.get(headerPath + "?" + token, function () { }).done(function (header) {
+                    var table = $("#" + gridViewId).clone();
+
+                    table.find("tr.tableFloatingHeader").remove();
+
+                    table.find("th:nth-child(-n" + offset + ")").remove();
+                    table.find("td:nth-child(-n" + offset + ")").remove();
+
+                    table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
+                    table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
+
+                    table.find("td").removeAttr("style");
+                    table.find("tr").removeAttr("style");
+
+                    table = "<table class='preview'>" + table.html() + "</table>";
+
+                    data = data.replace("{Header}", header);
+                    data = data.replace("{ReportHeading}", reportTitle);
+                    data = data.replace("{PrintDate}", printedDate);
+                    data = data.replace("{UserName}", user);
+                    data = data.replace("{OfficeCode}", office);
+                    data = data.replace("{Table}", table);
+
+                    if (hiddenFieldToUpdate) {
+                        //Update the hidden field with data, but do not print.
+                        $(hiddenFieldToUpdate).val(data);
+                        if (typeof (callback) === "function") {
+                            callback();
+                        };
+
+                        if (triggerControlId) {
+                            $("#" + triggerControlId).trigger("click");
+                        };
+
+                        return;
+                    };
+
+                    //Creating and opening a new window to display the report.
+                    var w = window.open('', windowName,
+                        + ',menubar=0'
+                        + ',toolbar=0'
+                        + ',status=0'
+                        + ',scrollbars=1'
+                        + ',resizable=0');
+                    w.moveTo(0, 0);
+                    w.resizeTo(screen.width, screen.height);
+
+
+                    //Writing the report to the window.
+                    w.document.writeln(data);
+                    w.document.close();
+
+                    //Report sent to the browser.
+                });
+            });
+        };
     </script>
 </div>
+
+<input type="hidden" id="MarkupHidden" />
+<a id="DownloadAnchor" download />
+
+
+
+<script>
+    var flagPopUnder = $("#FlagPopUnder");
+    var flagButton = $("#FlagButton");
+    var flagSelect = $("#FlagSelect");
+    var updateButton = $("#UpdateButton");
+
+    function popUnder(div, button) {
+        div.removeClass("initially hidden");
+        div.fadeIn(1000).position({
+            my: "left top",
+            at: "left bottom",
+            of: button
+        });
+    };
+
+    function getFlagTypes() {
+        var url = "/api/core/flag-type/display-fields";
+        return getAjaxRequest(url);
+    };
+
+    function getFlagTypes() {
+        var url = "/api/core/flag-type/display-fields";
+        return getAjaxRequest(url);
+    };
+
+    var getAjaxRequest = function (url, type, data) {
+        var isWebApiRequest = url.substring(5, 0) === "/api/";
+
+        if (isWebApiRequest) {
+            url = url.replace("{v}", "v" + window.apiVersion);
+        };
+
+        if (!type) {
+            type = "GET";
+        };
+
+        var ajax = $.ajax({
+            type: type,
+            url: url,
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
+
+        ajax.fail(function (xhr) {
+            logAjaxErrorMessage(xhr);
+        });
+
+        return ajax;
+    };
+
+    function addFlag(flag) {
+        var url = "/api/core/flag/add-or-edit";
+        var data = JSON.stringify(flag);
+
+        return getAjaxRequest(url, "PUT", data);
+    };
+
+    $(document).ready(function () {
+        var getFlagTypesAjax = getFlagTypes();
+
+        getFlagTypesAjax.success(function (msg) {
+            bindSelect(flagSelect, msg, "Key", "Value");
+            flagSelect.dropdown();
+        });
+
+        flagButton.click(function () {
+            popUnder(flagPopUnder, flagButton);
+        });
+    });
+
+    updateButton.click(function() {
+        var selecteRows = $("input:checkbox:checked").closest("tr");
+
+        selecteRows.each(function() {
+            var row = $(this);
+            var flag = new Object();
+
+            flag.FlagId = (row.attr("data-flag-id") || 0);
+            flag.ResourceId = row.find("td:nth-child(3)").text();
+            flag.FlagTypeId = flagSelect.val();
+            flag.Resource = window.viewPocoName;
+            flag.ResourceKey = "";
+
+            var addFlagAjax = addFlag(flag);
+
+            addFlagAjax.success(function(msg) {
+                alert(msg);
+            });
+
+            addFlagAjax.fail(function(xhr) {
+                logAjaxErrorMessage(xhr);
+            });
+        });
+    });
+
+</script>

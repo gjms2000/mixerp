@@ -25,7 +25,7 @@ using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
 	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_schema_name character varying, _table_name character varying)" on the database.
+	/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_table_name character varying)" on the database.
 	/// </summary>
 	public class GetCustomFieldFormNameProcedure: DbAccess
 	{
@@ -47,29 +47,23 @@ namespace MixERP.Net.Schemas.Core.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Maps to "_schema_name" argument of the function "core.get_custom_field_form_name".
-		/// </summary>
-		public string SchemaName { get; set; }
-		/// <summary>
 		/// Maps to "_table_name" argument of the function "core.get_custom_field_form_name".
 		/// </summary>
 		public string TableName { get; set; }
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_schema_name character varying, _table_name character varying)" on the database.
+		/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_table_name character varying)" on the database.
 		/// </summary>
 		public GetCustomFieldFormNameProcedure()
 		{
 		}
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_schema_name character varying, _table_name character varying)" on the database.
+		/// Prepares, validates, and executes the function "core.get_custom_field_form_name(_table_name character varying)" on the database.
 		/// </summary>
-		/// <param name="schemaName">Enter argument value for "_schema_name" parameter of the function "core.get_custom_field_form_name".</param>
 		/// <param name="tableName">Enter argument value for "_table_name" parameter of the function "core.get_custom_field_form_name".</param>
-		public GetCustomFieldFormNameProcedure(string schemaName,string tableName)
+		public GetCustomFieldFormNameProcedure(string tableName)
 		{
-			this.SchemaName = schemaName;
 			this.TableName = tableName;
 		}
 		/// <summary>
@@ -89,8 +83,8 @@ namespace MixERP.Net.Schemas.Core.Data
 					throw new UnauthorizedException("Access is denied.");
 				}
 			}
-			const string query = "SELECT * FROM core.get_custom_field_form_name(@0::character varying, @1::character varying);";
-			return Factory.Scalar<string>(this.Catalog, query, this.SchemaName, this.TableName);
+			const string query = "SELECT * FROM core.get_custom_field_form_name(@0::character varying);";
+			return Factory.Scalar<string>(this.Catalog, query, this.TableName);
 		} 
 	}
 }

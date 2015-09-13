@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/user/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.User> Get([FromUri] int[] userIds)
+        {
+            try
+            {
+                return this.UserContext.Get(userIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 users on each page, sorted by the property UserId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.UserContext.GetCustomFields();
+                return this.UserContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for users.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of users.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/user/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.UserContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of User class.
+        /// </summary>
+        /// <param name="user">Your instance of users class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/user/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.User user)
+        {
+            if (user == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.UserContext.AddOrEdit(user);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of User class.
         /// </summary>
         /// <param name="user">Your instance of users class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of User class.
         /// </summary>
-        /// <param name="user">Your instance of Account class to edit.</param>
+        /// <param name="user">Your instance of User class to edit.</param>
         /// <param name="userId">Enter the value for UserId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{userId}/{user}")]
-        [Route("~/api/office/user/edit/{userId}/{user}")]
-        public void Edit(int userId, MixERP.Net.Entities.Office.User user)
+        [Route("edit/{userId}")]
+        [Route("~/api/office/user/edit/{userId}")]
+        public void Edit(int userId, [FromBody] MixERP.Net.Entities.Office.User user)
         {
             if (user == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via UserId.
+        ///     Deletes an existing instance of User class via UserId.
         /// </summary>
         /// <param name="userId">Enter the value for UserId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

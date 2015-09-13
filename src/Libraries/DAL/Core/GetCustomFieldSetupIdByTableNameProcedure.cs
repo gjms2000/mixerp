@@ -25,7 +25,7 @@ using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
 	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_schema_name character varying, _table_name character varying, _field_name character varying)" on the database.
+	/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_table_name character varying, _field_name character varying)" on the database.
 	/// </summary>
 	public class GetCustomFieldSetupIdByTableNameProcedure: DbAccess
 	{
@@ -47,10 +47,6 @@ namespace MixERP.Net.Schemas.Core.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Maps to "_schema_name" argument of the function "core.get_custom_field_setup_id_by_table_name".
-		/// </summary>
-		public string SchemaName { get; set; }
-		/// <summary>
 		/// Maps to "_table_name" argument of the function "core.get_custom_field_setup_id_by_table_name".
 		/// </summary>
 		public string TableName { get; set; }
@@ -60,21 +56,19 @@ namespace MixERP.Net.Schemas.Core.Data
 		public string FieldName { get; set; }
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_schema_name character varying, _table_name character varying, _field_name character varying)" on the database.
+		/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_table_name character varying, _field_name character varying)" on the database.
 		/// </summary>
 		public GetCustomFieldSetupIdByTableNameProcedure()
 		{
 		}
 
 		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_schema_name character varying, _table_name character varying, _field_name character varying)" on the database.
+		/// Prepares, validates, and executes the function "core.get_custom_field_setup_id_by_table_name(_table_name character varying, _field_name character varying)" on the database.
 		/// </summary>
-		/// <param name="schemaName">Enter argument value for "_schema_name" parameter of the function "core.get_custom_field_setup_id_by_table_name".</param>
 		/// <param name="tableName">Enter argument value for "_table_name" parameter of the function "core.get_custom_field_setup_id_by_table_name".</param>
 		/// <param name="fieldName">Enter argument value for "_field_name" parameter of the function "core.get_custom_field_setup_id_by_table_name".</param>
-		public GetCustomFieldSetupIdByTableNameProcedure(string schemaName,string tableName,string fieldName)
+		public GetCustomFieldSetupIdByTableNameProcedure(string tableName,string fieldName)
 		{
-			this.SchemaName = schemaName;
 			this.TableName = tableName;
 			this.FieldName = fieldName;
 		}
@@ -95,8 +89,8 @@ namespace MixERP.Net.Schemas.Core.Data
 					throw new UnauthorizedException("Access is denied.");
 				}
 			}
-			const string query = "SELECT * FROM core.get_custom_field_setup_id_by_table_name(@0::character varying, @1::character varying, @2::character varying);";
-			return Factory.Scalar<int>(this.Catalog, query, this.SchemaName, this.TableName, this.FieldName);
+			const string query = "SELECT * FROM core.get_custom_field_setup_id_by_table_name(@0::character varying, @1::character varying);";
+			return Factory.Scalar<int>(this.Catalog, query, this.TableName, this.FieldName);
 		} 
 	}
 }

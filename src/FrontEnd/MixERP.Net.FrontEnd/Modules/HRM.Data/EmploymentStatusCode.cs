@@ -117,7 +117,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table hrm.employment_status_codes</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<PetaPoco.CustomField> GetCustomFields()
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -137,8 +137,15 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 
-            const string sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.employment_status_codes' ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            string sql;
+			if (string.IsNullOrWhiteSpace(resourceId))
+            {
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.employment_status_codes' ORDER BY field_order;";
+				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+            }
+
+            sql = "SELECT * from core.get_custom_field_definition('hrm.employment_status_codes'::text, @0::text) ORDER BY field_order;";
+			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -195,6 +202,26 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 			}
 
 			return displayFields;
+		}
+
+		/// <summary>
+		/// Inserts or updates the instance of EmploymentStatusCode class on the database table "hrm.employment_status_codes".
+		/// </summary>
+		/// <param name="employmentStatusCode">The instance of "EmploymentStatusCode" class to insert or update.</param>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public void AddOrEdit(MixERP.Net.Entities.HRM.EmploymentStatusCode employmentStatusCode)
+		{
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return;
+			}
+
+			if(employmentStatusCode.EmploymentStatusCodeId > 0){
+				this.Update(employmentStatusCode, employmentStatusCode.EmploymentStatusCodeId);
+				return;
+			}
+	
+			this.Add(employmentStatusCode);
 		}
 
 		/// <summary>
@@ -381,6 +408,31 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.HRM.EmploymentStatusCode>(this.Catalog, sql);
+        }
+
+        public IEnumerable<MixERP.Net.Entities.HRM.EmploymentStatusCode> Get(int[] employmentStatusCodeIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"EmploymentStatusCode\" was denied to the user with Login ID {LoginId}. employmentStatusCodeIds: {employmentStatusCodeIds}.", this.LoginId, employmentStatusCodeIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+			const string sql = "SELECT * FROM hrm.employment_status_codes WHERE employment_status_code_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.HRM.EmploymentStatusCode>(this.Catalog, sql, employmentStatusCodeIds);
         }
 	}
 }

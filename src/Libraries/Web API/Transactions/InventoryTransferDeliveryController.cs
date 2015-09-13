@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/inventory-transfer-delivery/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.InventoryTransferDelivery> Get([FromUri] long[] inventoryTransferDeliveryIds)
+        {
+            try
+            {
+                return this.InventoryTransferDeliveryContext.Get(inventoryTransferDeliveryIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 inventory transfer deliveries on each page, sorted by the property InventoryTransferDeliveryId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.InventoryTransferDeliveryContext.GetCustomFields();
+                return this.InventoryTransferDeliveryContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for inventory transfer deliveries.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of inventory transfer deliveries.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/inventory-transfer-delivery/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.InventoryTransferDeliveryContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of InventoryTransferDelivery class.
+        /// </summary>
+        /// <param name="inventoryTransferDelivery">Your instance of inventory transfer deliveries class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/inventory-transfer-delivery/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.InventoryTransferDelivery inventoryTransferDelivery)
+        {
+            if (inventoryTransferDelivery == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.InventoryTransferDeliveryContext.AddOrEdit(inventoryTransferDelivery);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of InventoryTransferDelivery class.
         /// </summary>
         /// <param name="inventoryTransferDelivery">Your instance of inventory transfer deliveries class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of InventoryTransferDelivery class.
         /// </summary>
-        /// <param name="inventoryTransferDelivery">Your instance of Account class to edit.</param>
+        /// <param name="inventoryTransferDelivery">Your instance of InventoryTransferDelivery class to edit.</param>
         /// <param name="inventoryTransferDeliveryId">Enter the value for InventoryTransferDeliveryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{inventoryTransferDeliveryId}/{inventoryTransferDelivery}")]
-        [Route("~/api/transactions/inventory-transfer-delivery/edit/{inventoryTransferDeliveryId}/{inventoryTransferDelivery}")]
-        public void Edit(long inventoryTransferDeliveryId, MixERP.Net.Entities.Transactions.InventoryTransferDelivery inventoryTransferDelivery)
+        [Route("edit/{inventoryTransferDeliveryId}")]
+        [Route("~/api/transactions/inventory-transfer-delivery/edit/{inventoryTransferDeliveryId}")]
+        public void Edit(long inventoryTransferDeliveryId, [FromBody] MixERP.Net.Entities.Transactions.InventoryTransferDelivery inventoryTransferDelivery)
         {
             if (inventoryTransferDelivery == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via InventoryTransferDeliveryId.
+        ///     Deletes an existing instance of InventoryTransferDelivery class via InventoryTransferDeliveryId.
         /// </summary>
         /// <param name="inventoryTransferDeliveryId">Enter the value for InventoryTransferDeliveryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

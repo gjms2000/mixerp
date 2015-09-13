@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/cash-repository/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.CashRepository> Get([FromUri] int[] cashRepositoryIds)
+        {
+            try
+            {
+                return this.CashRepositoryContext.Get(cashRepositoryIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cash repositories on each page, sorted by the property CashRepositoryId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.CashRepositoryContext.GetCustomFields();
+                return this.CashRepositoryContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cash repositories.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cash repositories.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/cash-repository/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CashRepositoryContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CashRepository class.
+        /// </summary>
+        /// <param name="cashRepository">Your instance of cash repositories class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/cash-repository/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.CashRepository cashRepository)
+        {
+            if (cashRepository == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CashRepositoryContext.AddOrEdit(cashRepository);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CashRepository class.
         /// </summary>
         /// <param name="cashRepository">Your instance of cash repositories class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CashRepository class.
         /// </summary>
-        /// <param name="cashRepository">Your instance of Account class to edit.</param>
+        /// <param name="cashRepository">Your instance of CashRepository class to edit.</param>
         /// <param name="cashRepositoryId">Enter the value for CashRepositoryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{cashRepositoryId}/{cashRepository}")]
-        [Route("~/api/office/cash-repository/edit/{cashRepositoryId}/{cashRepository}")]
-        public void Edit(int cashRepositoryId, MixERP.Net.Entities.Office.CashRepository cashRepository)
+        [Route("edit/{cashRepositoryId}")]
+        [Route("~/api/office/cash-repository/edit/{cashRepositoryId}")]
+        public void Edit(int cashRepositoryId, [FromBody] MixERP.Net.Entities.Office.CashRepository cashRepository)
         {
             if (cashRepository == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CashRepositoryId.
+        ///     Deletes an existing instance of CashRepository class via CashRepositoryId.
         /// </summary>
         /// <param name="cashRepositoryId">Enter the value for CashRepositoryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

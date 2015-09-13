@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/industry/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Industry> Get([FromUri] int[] industryIds)
+        {
+            try
+            {
+                return this.IndustryContext.Get(industryIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 industries on each page, sorted by the property IndustryId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.IndustryContext.GetCustomFields();
+                return this.IndustryContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for industries.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of industries.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/industry/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.IndustryContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Industry class.
+        /// </summary>
+        /// <param name="industry">Your instance of industries class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/industry/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Industry industry)
+        {
+            if (industry == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.IndustryContext.AddOrEdit(industry);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Industry class.
         /// </summary>
         /// <param name="industry">Your instance of industries class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Industry class.
         /// </summary>
-        /// <param name="industry">Your instance of Account class to edit.</param>
+        /// <param name="industry">Your instance of Industry class to edit.</param>
         /// <param name="industryId">Enter the value for IndustryId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{industryId}/{industry}")]
-        [Route("~/api/core/industry/edit/{industryId}/{industry}")]
-        public void Edit(int industryId, MixERP.Net.Entities.Core.Industry industry)
+        [Route("edit/{industryId}")]
+        [Route("~/api/core/industry/edit/{industryId}")]
+        public void Edit(int industryId, [FromBody] MixERP.Net.Entities.Core.Industry industry)
         {
             if (industry == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via IndustryId.
+        ///     Deletes an existing instance of Industry class via IndustryId.
         /// </summary>
         /// <param name="industryId">Enter the value for IndustryId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

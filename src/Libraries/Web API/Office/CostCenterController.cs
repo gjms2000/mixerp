@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/cost-center/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.CostCenter> Get([FromUri] int[] costCenterIds)
+        {
+            try
+            {
+                return this.CostCenterContext.Get(costCenterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cost centers on each page, sorted by the property CostCenterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.CostCenterContext.GetCustomFields();
+                return this.CostCenterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cost centers.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cost centers.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/cost-center/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CostCenterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CostCenter class.
+        /// </summary>
+        /// <param name="costCenter">Your instance of cost centers class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/cost-center/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.CostCenter costCenter)
+        {
+            if (costCenter == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CostCenterContext.AddOrEdit(costCenter);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CostCenter class.
         /// </summary>
         /// <param name="costCenter">Your instance of cost centers class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CostCenter class.
         /// </summary>
-        /// <param name="costCenter">Your instance of Account class to edit.</param>
+        /// <param name="costCenter">Your instance of CostCenter class to edit.</param>
         /// <param name="costCenterId">Enter the value for CostCenterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{costCenterId}/{costCenter}")]
-        [Route("~/api/office/cost-center/edit/{costCenterId}/{costCenter}")]
-        public void Edit(int costCenterId, MixERP.Net.Entities.Office.CostCenter costCenter)
+        [Route("edit/{costCenterId}")]
+        [Route("~/api/office/cost-center/edit/{costCenterId}")]
+        public void Edit(int costCenterId, [FromBody] MixERP.Net.Entities.Office.CostCenter costCenter)
         {
             if (costCenter == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CostCenterId.
+        ///     Deletes an existing instance of CostCenter class via CostCenterId.
         /// </summary>
         /// <param name="costCenterId">Enter the value for CostCenterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

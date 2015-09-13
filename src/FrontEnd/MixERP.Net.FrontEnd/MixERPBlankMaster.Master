@@ -73,7 +73,13 @@
                     if (typeof connectionListener === "function") {
                         connectionListener();
                     };
-                });;
+                });
+
+                $.connection.hub.disconnected(function () {
+                    setTimeout(function () {
+                        $.connection.hub.start();
+                    }, 5000);
+                });
             });
         </script>
 

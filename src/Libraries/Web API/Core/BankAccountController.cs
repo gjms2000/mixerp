@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/bank-account/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.BankAccount> Get([FromUri] long[] accountIds)
+        {
+            try
+            {
+                return this.BankAccountContext.Get(accountIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 bank accounts on each page, sorted by the property AccountId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.BankAccountContext.GetCustomFields();
+                return this.BankAccountContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for bank accounts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of bank accounts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/bank-account/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.BankAccountContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of BankAccount class.
+        /// </summary>
+        /// <param name="bankAccount">Your instance of bank accounts class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/bank-account/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.BankAccount bankAccount)
+        {
+            if (bankAccount == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.BankAccountContext.AddOrEdit(bankAccount);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of BankAccount class.
         /// </summary>
         /// <param name="bankAccount">Your instance of bank accounts class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of BankAccount class.
         /// </summary>
-        /// <param name="bankAccount">Your instance of Account class to edit.</param>
+        /// <param name="bankAccount">Your instance of BankAccount class to edit.</param>
         /// <param name="accountId">Enter the value for AccountId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{accountId}/{bankAccount}")]
-        [Route("~/api/core/bank-account/edit/{accountId}/{bankAccount}")]
-        public void Edit(long accountId, MixERP.Net.Entities.Core.BankAccount bankAccount)
+        [Route("edit/{accountId}")]
+        [Route("~/api/core/bank-account/edit/{accountId}")]
+        public void Edit(long accountId, [FromBody] MixERP.Net.Entities.Core.BankAccount bankAccount)
         {
             if (bankAccount == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via AccountId.
+        ///     Deletes an existing instance of BankAccount class via AccountId.
         /// </summary>
         /// <param name="accountId">Enter the value for AccountId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

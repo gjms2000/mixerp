@@ -17,13 +17,8 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.ApplicationState.Cache;
-using MixERP.Net.Common.Helpers;
-using MixERP.Net.FrontEnd.Base;
-using MixERP.Net.FrontEnd.Controls;
-using MixERP.Net.i18n.Resources;
 using System;
-using System.Collections.Generic;
+using MixERP.Net.FrontEnd.Base;
 
 namespace MixERP.Net.Core.Modules.Finance.Setup
 {
@@ -31,44 +26,6 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
     {
         public override void OnControlLoad(object sender, EventArgs e)
         {
-            using (Scrud scrud = new Scrud())
-            {
-                scrud.TableSchema = "core";
-                scrud.Table = "accounts";
-                scrud.KeyColumn = "account_id";
-                scrud.ViewSchema = "core";
-                scrud.View = "account_scrud_view";
-
-                scrud.Exclude = "sys_type";
-
-                scrud.DisplayFields = GetDisplayFields();
-                scrud.DisplayViews = GetDisplayViews();
-                scrud.Text = Titles.ChartOfAccounts;
-
-                this.ScrudPlaceholder.Controls.Add(scrud);
-            }
-        }
-
-        private static string GetDisplayFields()
-        {
-            List<string> displayFields = new List<string>();
-            ScrudHelper.AddDisplayField(displayFields, "core.account_masters.account_master_id",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "AccountMasterDisplayField"));
-            ScrudHelper.AddDisplayField(displayFields, "core.accounts.account_id",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "AccountDisplayField"));
-            ScrudHelper.AddDisplayField(displayFields, "core.currencies.currency_code",
-                DbConfig.GetDbParameter(AppUsers.GetCurrentUserDB(), "CurrencyDisplayField"));
-            return string.Join(",", displayFields);
-        }
-
-        private static string GetDisplayViews()
-        {
-            List<string> displayViews = new List<string>();
-            ScrudHelper.AddDisplayView(displayViews, "core.account_masters.account_master_id",
-                "core.account_master_selector_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.accounts.account_id", "core.account_scrud_view");
-            ScrudHelper.AddDisplayView(displayViews, "core.currencies.currency_code", "core.currency_scrud_view");
-            return string.Join(",", displayViews);
         }
     }
 }

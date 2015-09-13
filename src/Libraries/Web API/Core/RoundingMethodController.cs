@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/rounding-method/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.RoundingMethod> Get([FromUri] string[] roundingMethodCodes)
+        {
+            try
+            {
+                return this.RoundingMethodContext.Get(roundingMethodCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 rounding methods on each page, sorted by the property RoundingMethodCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.RoundingMethodContext.GetCustomFields();
+                return this.RoundingMethodContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for rounding methods.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of rounding methods.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/rounding-method/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.RoundingMethodContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of RoundingMethod class.
+        /// </summary>
+        /// <param name="roundingMethod">Your instance of rounding methods class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/rounding-method/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.RoundingMethod roundingMethod)
+        {
+            if (roundingMethod == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RoundingMethodContext.AddOrEdit(roundingMethod);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of RoundingMethod class.
         /// </summary>
         /// <param name="roundingMethod">Your instance of rounding methods class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of RoundingMethod class.
         /// </summary>
-        /// <param name="roundingMethod">Your instance of Account class to edit.</param>
+        /// <param name="roundingMethod">Your instance of RoundingMethod class to edit.</param>
         /// <param name="roundingMethodCode">Enter the value for RoundingMethodCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{roundingMethodCode}/{roundingMethod}")]
-        [Route("~/api/core/rounding-method/edit/{roundingMethodCode}/{roundingMethod}")]
-        public void Edit(string roundingMethodCode, MixERP.Net.Entities.Core.RoundingMethod roundingMethod)
+        [Route("edit/{roundingMethodCode}")]
+        [Route("~/api/core/rounding-method/edit/{roundingMethodCode}")]
+        public void Edit(string roundingMethodCode, [FromBody] MixERP.Net.Entities.Core.RoundingMethod roundingMethod)
         {
             if (roundingMethod == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via RoundingMethodCode.
+        ///     Deletes an existing instance of RoundingMethod class via RoundingMethodCode.
         /// </summary>
         /// <param name="roundingMethodCode">Enter the value for RoundingMethodCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="BackendMaster.master.cs" Inherits="MixERP.Net.FrontEnd.BackendMaster" %>
+
 <%@ Import Namespace="MixERP.Net.i18n" %>
 
 <!DOCTYPE html>
@@ -28,7 +29,6 @@
     <form id="form1" runat="server" enctype="multipart/form-data" method="post" submitdisabledcontrols="true" defaultbutton="SwallowSubmit">
         <script src="/Resources.js?Culture=<%= CultureManager.GetCurrent().TwoLetterISOLanguageName %>"></script>
         <script src="/bundles/master-page.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.min.js"></script>
 
         <asp:Button runat="server" ID="SwallowSubmit" OnClientClick=" return false; " Style="display: none;" />
         <asp:ScriptManager runat="server" ID="ScriptManager1" />
@@ -64,7 +64,7 @@
                                     <asp:Literal runat="server" ID="NotificationLiteral" />
                                     <span></span>
                                     <i class="dropdown icon"></i>
-                                    <div id="Notification" class="ui vertical menu">
+                                    <div id="Notification" class="ui vertical stackable menu">
                                     </div>
                                 </div>
                                 <a class="item" href="http://docs.mixerp.org/" target="_blank">
@@ -202,7 +202,13 @@
                     if (typeof connectionListener === "function") {
                         connectionListener();
                     };
-                });;
+                });
+
+                $.connection.hub.disconnected(function () {
+                    setTimeout(function () {
+                        $.connection.hub.start();
+                    }, 5000);
+                });
             });
         </script>
     </form>

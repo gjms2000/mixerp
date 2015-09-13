@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/config/scrud-factory/get")]
+        public IEnumerable<MixERP.Net.Entities.Config.ScrudFactory> Get([FromUri] string[] keys)
+        {
+            try
+            {
+                return this.ScrudFactoryContext.Get(keys);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 scrud factories on each page, sorted by the property Key.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Config
         {
             try
             {
-                return this.ScrudFactoryContext.GetCustomFields();
+                return this.ScrudFactoryContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for scrud factories.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of scrud factories.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/config/scrud-factory/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ScrudFactoryContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of ScrudFactory class.
+        /// </summary>
+        /// <param name="scrudFactory">Your instance of scrud factories class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/config/scrud-factory/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Config.ScrudFactory scrudFactory)
+        {
+            if (scrudFactory == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ScrudFactoryContext.AddOrEdit(scrudFactory);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of ScrudFactory class.
         /// </summary>
         /// <param name="scrudFactory">Your instance of scrud factories class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of ScrudFactory class.
         /// </summary>
-        /// <param name="scrudFactory">Your instance of Account class to edit.</param>
+        /// <param name="scrudFactory">Your instance of ScrudFactory class to edit.</param>
         /// <param name="key">Enter the value for Key in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{key}/{scrudFactory}")]
-        [Route("~/api/config/scrud-factory/edit/{key}/{scrudFactory}")]
-        public void Edit(string key, MixERP.Net.Entities.Config.ScrudFactory scrudFactory)
+        [Route("edit/{key}")]
+        [Route("~/api/config/scrud-factory/edit/{key}")]
+        public void Edit(string key, [FromBody] MixERP.Net.Entities.Config.ScrudFactory scrudFactory)
         {
             if (scrudFactory == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Config
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via Key.
+        ///     Deletes an existing instance of ScrudFactory class via Key.
         /// </summary>
         /// <param name="key">Enter the value for Key in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

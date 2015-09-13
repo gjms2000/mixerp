@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/employee-experience/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeExperience> Get([FromUri] long[] employeeExperienceIds)
+        {
+            try
+            {
+                return this.EmployeeExperienceContext.Get(employeeExperienceIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 employee experiences on each page, sorted by the property EmployeeExperienceId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.EmployeeExperienceContext.GetCustomFields();
+                return this.EmployeeExperienceContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for employee experiences.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of employee experiences.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/employee-experience/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.EmployeeExperienceContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of EmployeeExperience class.
+        /// </summary>
+        /// <param name="employeeExperience">Your instance of employee experiences class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/employee-experience/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.EmployeeExperience employeeExperience)
+        {
+            if (employeeExperience == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.EmployeeExperienceContext.AddOrEdit(employeeExperience);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of EmployeeExperience class.
         /// </summary>
         /// <param name="employeeExperience">Your instance of employee experiences class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of EmployeeExperience class.
         /// </summary>
-        /// <param name="employeeExperience">Your instance of Account class to edit.</param>
+        /// <param name="employeeExperience">Your instance of EmployeeExperience class to edit.</param>
         /// <param name="employeeExperienceId">Enter the value for EmployeeExperienceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{employeeExperienceId}/{employeeExperience}")]
-        [Route("~/api/hrm/employee-experience/edit/{employeeExperienceId}/{employeeExperience}")]
-        public void Edit(long employeeExperienceId, MixERP.Net.Entities.HRM.EmployeeExperience employeeExperience)
+        [Route("edit/{employeeExperienceId}")]
+        [Route("~/api/hrm/employee-experience/edit/{employeeExperienceId}")]
+        public void Edit(long employeeExperienceId, [FromBody] MixERP.Net.Entities.HRM.EmployeeExperience employeeExperience)
         {
             if (employeeExperience == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via EmployeeExperienceId.
+        ///     Deletes an existing instance of EmployeeExperience class via EmployeeExperienceId.
         /// </summary>
         /// <param name="employeeExperienceId">Enter the value for EmployeeExperienceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

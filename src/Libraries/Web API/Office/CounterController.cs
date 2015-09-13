@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Office
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/office/counter/get")]
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> Get([FromUri] int[] counterIds)
+        {
+            try
+            {
+                return this.CounterContext.Get(counterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 counters on each page, sorted by the property CounterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Office
         {
             try
             {
-                return this.CounterContext.GetCustomFields();
+                return this.CounterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for counters.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of counters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/office/counter/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CounterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Counter class.
+        /// </summary>
+        /// <param name="counter">Your instance of counters class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/office/counter/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Counter counter)
+        {
+            if (counter == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CounterContext.AddOrEdit(counter);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Counter class.
         /// </summary>
         /// <param name="counter">Your instance of counters class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Counter class.
         /// </summary>
-        /// <param name="counter">Your instance of Account class to edit.</param>
+        /// <param name="counter">Your instance of Counter class to edit.</param>
         /// <param name="counterId">Enter the value for CounterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{counterId}/{counter}")]
-        [Route("~/api/office/counter/edit/{counterId}/{counter}")]
-        public void Edit(int counterId, MixERP.Net.Entities.Office.Counter counter)
+        [Route("edit/{counterId}")]
+        [Route("~/api/office/counter/edit/{counterId}")]
+        public void Edit(int counterId, [FromBody] MixERP.Net.Entities.Office.Counter counter)
         {
             if (counter == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CounterId.
+        ///     Deletes an existing instance of Counter class via CounterId.
         /// </summary>
         /// <param name="counterId">Enter the value for CounterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

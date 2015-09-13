@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Audit
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/audit/failed-login/get")]
+        public IEnumerable<MixERP.Net.Entities.Audit.FailedLogin> Get([FromUri] long[] failedLoginIds)
+        {
+            try
+            {
+                return this.FailedLoginContext.Get(failedLoginIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 failed logins on each page, sorted by the property FailedLoginId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Audit
         {
             try
             {
-                return this.FailedLoginContext.GetCustomFields();
+                return this.FailedLoginContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for failed logins.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of failed logins.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/audit/failed-login/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.FailedLoginContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of FailedLogin class.
+        /// </summary>
+        /// <param name="failedLogin">Your instance of failed logins class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/audit/failed-login/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Audit.FailedLogin failedLogin)
+        {
+            if (failedLogin == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.FailedLoginContext.AddOrEdit(failedLogin);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of FailedLogin class.
         /// </summary>
         /// <param name="failedLogin">Your instance of failed logins class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of FailedLogin class.
         /// </summary>
-        /// <param name="failedLogin">Your instance of Account class to edit.</param>
+        /// <param name="failedLogin">Your instance of FailedLogin class to edit.</param>
         /// <param name="failedLoginId">Enter the value for FailedLoginId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{failedLoginId}/{failedLogin}")]
-        [Route("~/api/audit/failed-login/edit/{failedLoginId}/{failedLogin}")]
-        public void Edit(long failedLoginId, MixERP.Net.Entities.Audit.FailedLogin failedLogin)
+        [Route("edit/{failedLoginId}")]
+        [Route("~/api/audit/failed-login/edit/{failedLoginId}")]
+        public void Edit(long failedLoginId, [FromBody] MixERP.Net.Entities.Audit.FailedLogin failedLogin)
         {
             if (failedLogin == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via FailedLoginId.
+        ///     Deletes an existing instance of FailedLogin class via FailedLoginId.
         /// </summary>
         /// <param name="failedLoginId">Enter the value for FailedLoginId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

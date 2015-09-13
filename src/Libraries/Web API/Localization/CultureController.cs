@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Localization
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/localization/culture/get")]
+        public IEnumerable<MixERP.Net.Entities.Localization.Culture> Get([FromUri] string[] cultureCodes)
+        {
+            try
+            {
+                return this.CultureContext.Get(cultureCodes);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cultures on each page, sorted by the property CultureCode.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Localization
         {
             try
             {
-                return this.CultureContext.GetCustomFields();
+                return this.CultureContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Localization
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cultures.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cultures.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/localization/culture/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CultureContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Culture class.
+        /// </summary>
+        /// <param name="culture">Your instance of cultures class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/localization/culture/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Localization.Culture culture)
+        {
+            if (culture == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CultureContext.AddOrEdit(culture);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Culture class.
         /// </summary>
         /// <param name="culture">Your instance of cultures class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Localization
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Culture class.
         /// </summary>
-        /// <param name="culture">Your instance of Account class to edit.</param>
+        /// <param name="culture">Your instance of Culture class to edit.</param>
         /// <param name="cultureCode">Enter the value for CultureCode in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{cultureCode}/{culture}")]
-        [Route("~/api/localization/culture/edit/{cultureCode}/{culture}")]
-        public void Edit(string cultureCode, MixERP.Net.Entities.Localization.Culture culture)
+        [Route("edit/{cultureCode}")]
+        [Route("~/api/localization/culture/edit/{cultureCode}")]
+        public void Edit(string cultureCode, [FromBody] MixERP.Net.Entities.Localization.Culture culture)
         {
             if (culture == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Localization
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CultureCode.
+        ///     Deletes an existing instance of Culture class via CultureCode.
         /// </summary>
         /// <param name="cultureCode">Enter the value for CultureCode in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

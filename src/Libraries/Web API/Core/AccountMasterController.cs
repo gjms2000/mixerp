@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/account-master/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.AccountMaster> Get([FromUri] short[] accountMasterIds)
+        {
+            try
+            {
+                return this.AccountMasterContext.Get(accountMasterIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 account masters on each page, sorted by the property AccountMasterId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.AccountMasterContext.GetCustomFields();
+                return this.AccountMasterContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for account masters.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of account masters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/account-master/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AccountMasterContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of AccountMaster class.
+        /// </summary>
+        /// <param name="accountMaster">Your instance of account masters class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/account-master/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.AccountMaster accountMaster)
+        {
+            if (accountMaster == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AccountMasterContext.AddOrEdit(accountMaster);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of AccountMaster class.
         /// </summary>
         /// <param name="accountMaster">Your instance of account masters class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of AccountMaster class.
         /// </summary>
-        /// <param name="accountMaster">Your instance of Account class to edit.</param>
+        /// <param name="accountMaster">Your instance of AccountMaster class to edit.</param>
         /// <param name="accountMasterId">Enter the value for AccountMasterId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{accountMasterId}/{accountMaster}")]
-        [Route("~/api/core/account-master/edit/{accountMasterId}/{accountMaster}")]
-        public void Edit(short accountMasterId, MixERP.Net.Entities.Core.AccountMaster accountMaster)
+        [Route("edit/{accountMasterId}")]
+        [Route("~/api/core/account-master/edit/{accountMasterId}")]
+        public void Edit(short accountMasterId, [FromBody] MixERP.Net.Entities.Core.AccountMaster accountMaster)
         {
             if (accountMaster == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via AccountMasterId.
+        ///     Deletes an existing instance of AccountMaster class via AccountMasterId.
         /// </summary>
         /// <param name="accountMasterId">Enter the value for AccountMasterId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

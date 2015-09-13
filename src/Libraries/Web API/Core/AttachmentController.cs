@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/attachment/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Attachment> Get([FromUri] long[] attachmentIds)
+        {
+            try
+            {
+                return this.AttachmentContext.Get(attachmentIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 attachments on each page, sorted by the property AttachmentId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.AttachmentContext.GetCustomFields();
+                return this.AttachmentContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for attachments.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of attachments.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/attachment/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AttachmentContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Attachment class.
+        /// </summary>
+        /// <param name="attachment">Your instance of attachments class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/attachment/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Attachment attachment)
+        {
+            if (attachment == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AttachmentContext.AddOrEdit(attachment);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Attachment class.
         /// </summary>
         /// <param name="attachment">Your instance of attachments class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Attachment class.
         /// </summary>
-        /// <param name="attachment">Your instance of Account class to edit.</param>
+        /// <param name="attachment">Your instance of Attachment class to edit.</param>
         /// <param name="attachmentId">Enter the value for AttachmentId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{attachmentId}/{attachment}")]
-        [Route("~/api/core/attachment/edit/{attachmentId}/{attachment}")]
-        public void Edit(long attachmentId, MixERP.Net.Entities.Core.Attachment attachment)
+        [Route("edit/{attachmentId}")]
+        [Route("~/api/core/attachment/edit/{attachmentId}")]
+        public void Edit(long attachmentId, [FromBody] MixERP.Net.Entities.Core.Attachment attachment)
         {
             if (attachment == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via AttachmentId.
+        ///     Deletes an existing instance of Attachment class via AttachmentId.
         /// </summary>
         /// <param name="attachmentId">Enter the value for AttachmentId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
@@ -329,6 +399,40 @@ namespace MixERP.Net.Api.Core
 
                     return response;
                 }
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
+        }
+
+        [Route("document/raw/{*path}")]
+        [Route("~/api/core/attachment/document/raw/{*path}")]
+        [HttpGet]
+        public HttpResponseMessage GetRaw(string path)
+        {
+            bool isValid = !(string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(this.Catalog) || this.LoginId <= 0);
+
+            if (!isValid)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
+            }
+
+            path = "/Resource/Static/Attachments/" + path;
+
+            if (System.IO.File.Exists(System.Web.Hosting.HostingEnvironment.MapPath(path)))
+            {
+                path = System.Web.Hosting.HostingEnvironment.MapPath(path);
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                System.IO.FileInfo file = new System.IO.FileInfo(path);
+
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                response.Content = new StreamContent(new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read));
+                response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("inline");
+                response.Content.Headers.ContentDisposition.FileName = file.Name;
+                response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MixERP.Net.Common.Helpers.ImageHelper.GetContentType(file.Extension));
+
+                return response;
             }
 
             return new HttpResponseMessage(HttpStatusCode.NotFound);

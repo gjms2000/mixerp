@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/leave-application/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.LeaveApplication> Get([FromUri] long[] leaveApplicationIds)
+        {
+            try
+            {
+                return this.LeaveApplicationContext.Get(leaveApplicationIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 leave applications on each page, sorted by the property LeaveApplicationId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.LeaveApplicationContext.GetCustomFields();
+                return this.LeaveApplicationContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for leave applications.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of leave applications.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/leave-application/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.LeaveApplicationContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of LeaveApplication class.
+        /// </summary>
+        /// <param name="leaveApplication">Your instance of leave applications class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/leave-application/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.LeaveApplication leaveApplication)
+        {
+            if (leaveApplication == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.LeaveApplicationContext.AddOrEdit(leaveApplication);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of LeaveApplication class.
         /// </summary>
         /// <param name="leaveApplication">Your instance of leave applications class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of LeaveApplication class.
         /// </summary>
-        /// <param name="leaveApplication">Your instance of Account class to edit.</param>
+        /// <param name="leaveApplication">Your instance of LeaveApplication class to edit.</param>
         /// <param name="leaveApplicationId">Enter the value for LeaveApplicationId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{leaveApplicationId}/{leaveApplication}")]
-        [Route("~/api/hrm/leave-application/edit/{leaveApplicationId}/{leaveApplication}")]
-        public void Edit(long leaveApplicationId, MixERP.Net.Entities.HRM.LeaveApplication leaveApplication)
+        [Route("edit/{leaveApplicationId}")]
+        [Route("~/api/hrm/leave-application/edit/{leaveApplicationId}")]
+        public void Edit(long leaveApplicationId, [FromBody] MixERP.Net.Entities.HRM.LeaveApplication leaveApplication)
         {
             if (leaveApplication == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via LeaveApplicationId.
+        ///     Deletes an existing instance of LeaveApplication class via LeaveApplicationId.
         /// </summary>
         /// <param name="leaveApplicationId">Enter the value for LeaveApplicationId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

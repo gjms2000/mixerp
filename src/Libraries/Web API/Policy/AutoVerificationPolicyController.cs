@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Policy
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/policy/auto-verification-policy/get")]
+        public IEnumerable<MixERP.Net.Entities.Policy.AutoVerificationPolicy> Get([FromUri] int[] policyIds)
+        {
+            try
+            {
+                return this.AutoVerificationPolicyContext.Get(policyIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 auto verification policies on each page, sorted by the property PolicyId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Policy
         {
             try
             {
-                return this.AutoVerificationPolicyContext.GetCustomFields();
+                return this.AutoVerificationPolicyContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for auto verification policies.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of auto verification policies.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/policy/auto-verification-policy/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.AutoVerificationPolicyContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of AutoVerificationPolicy class.
+        /// </summary>
+        /// <param name="autoVerificationPolicy">Your instance of auto verification policies class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/policy/auto-verification-policy/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.AutoVerificationPolicy autoVerificationPolicy)
+        {
+            if (autoVerificationPolicy == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.AutoVerificationPolicyContext.AddOrEdit(autoVerificationPolicy);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of AutoVerificationPolicy class.
         /// </summary>
         /// <param name="autoVerificationPolicy">Your instance of auto verification policies class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of AutoVerificationPolicy class.
         /// </summary>
-        /// <param name="autoVerificationPolicy">Your instance of Account class to edit.</param>
+        /// <param name="autoVerificationPolicy">Your instance of AutoVerificationPolicy class to edit.</param>
         /// <param name="policyId">Enter the value for PolicyId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{policyId}/{autoVerificationPolicy}")]
-        [Route("~/api/policy/auto-verification-policy/edit/{policyId}/{autoVerificationPolicy}")]
-        public void Edit(int policyId, MixERP.Net.Entities.Policy.AutoVerificationPolicy autoVerificationPolicy)
+        [Route("edit/{policyId}")]
+        [Route("~/api/policy/auto-verification-policy/edit/{policyId}")]
+        public void Edit(int policyId, [FromBody] MixERP.Net.Entities.Policy.AutoVerificationPolicy autoVerificationPolicy)
         {
             if (autoVerificationPolicy == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PolicyId.
+        ///     Deletes an existing instance of AutoVerificationPolicy class via PolicyId.
         /// </summary>
         /// <param name="policyId">Enter the value for PolicyId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

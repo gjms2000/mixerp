@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/pay-grade/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.PayGrade> Get([FromUri] int[] payGradeIds)
+        {
+            try
+            {
+                return this.PayGradeContext.Get(payGradeIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 pay grades on each page, sorted by the property PayGradeId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.PayGradeContext.GetCustomFields();
+                return this.PayGradeContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for pay grades.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of pay grades.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/pay-grade/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.PayGradeContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of PayGrade class.
+        /// </summary>
+        /// <param name="payGrade">Your instance of pay grades class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/pay-grade/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.PayGrade payGrade)
+        {
+            if (payGrade == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.PayGradeContext.AddOrEdit(payGrade);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of PayGrade class.
         /// </summary>
         /// <param name="payGrade">Your instance of pay grades class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of PayGrade class.
         /// </summary>
-        /// <param name="payGrade">Your instance of Account class to edit.</param>
+        /// <param name="payGrade">Your instance of PayGrade class to edit.</param>
         /// <param name="payGradeId">Enter the value for PayGradeId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{payGradeId}/{payGrade}")]
-        [Route("~/api/hrm/pay-grade/edit/{payGradeId}/{payGrade}")]
-        public void Edit(int payGradeId, MixERP.Net.Entities.HRM.PayGrade payGrade)
+        [Route("edit/{payGradeId}")]
+        [Route("~/api/hrm/pay-grade/edit/{payGradeId}")]
+        public void Edit(int payGradeId, [FromBody] MixERP.Net.Entities.HRM.PayGrade payGrade)
         {
             if (payGrade == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via PayGradeId.
+        ///     Deletes an existing instance of PayGrade class via PayGradeId.
         /// </summary>
         /// <param name="payGradeId">Enter the value for PayGradeId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -47,22 +47,32 @@ namespace MixERP.Net.Common.Helpers
             return destination;
         }
 
-        public static string CreateExcel(string html)
+        public static string CreateExcel(string html, string documentName = "")
         {
-            string id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid() + ".xls";
+
+            if (!string.IsNullOrWhiteSpace(documentName))
+            {
+                id = documentName;
+            }
 
             //public directory is allowed direct access
-            string source = "~/Resource/Temp/Public/" + id + ".xls";
+            string source = "~/Resource/Temp/Public/" + id;
             WriteHtml(source, html);
             return HostingEnvironment.MapPath(source);
         }
 
-        public static string CreateWord(string html)
+        public static string CreateWord(string html, string documentName = "")
         {
-            string id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid() + ".doc";
+
+            if (!string.IsNullOrWhiteSpace(documentName))
+            {
+                id = documentName;
+            }
 
             //public directory is allowed direct access
-            string source = "~/Resource/Temp/Public/" + id + ".doc";
+            string source = "~/Resource/Temp/Public/" + id;
             WriteHtml(source, html);
             return HostingEnvironment.MapPath(source);
         }

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/menu/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Menu> Get([FromUri] int[] menuIds)
+        {
+            try
+            {
+                return this.MenuContext.Get(menuIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 menus on each page, sorted by the property MenuId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.MenuContext.GetCustomFields();
+                return this.MenuContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for menus.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of menus.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/menu/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.MenuContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Menu class.
+        /// </summary>
+        /// <param name="menu">Your instance of menus class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/menu/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Menu menu)
+        {
+            if (menu == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.MenuContext.AddOrEdit(menu);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Menu class.
         /// </summary>
         /// <param name="menu">Your instance of menus class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Menu class.
         /// </summary>
-        /// <param name="menu">Your instance of Account class to edit.</param>
+        /// <param name="menu">Your instance of Menu class to edit.</param>
         /// <param name="menuId">Enter the value for MenuId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{menuId}/{menu}")]
-        [Route("~/api/core/menu/edit/{menuId}/{menu}")]
-        public void Edit(int menuId, MixERP.Net.Entities.Core.Menu menu)
+        [Route("edit/{menuId}")]
+        [Route("~/api/core/menu/edit/{menuId}")]
+        public void Edit(int menuId, [FromBody] MixERP.Net.Entities.Core.Menu menu)
         {
             if (menu == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via MenuId.
+        ///     Deletes an existing instance of Menu class via MenuId.
         /// </summary>
         /// <param name="menuId">Enter the value for MenuId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

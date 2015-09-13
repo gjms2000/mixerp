@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/custom-field/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.CustomField> Get([FromUri] long[] customFieldIds)
+        {
+            try
+            {
+                return this.CustomFieldContext.Get(customFieldIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 custom fields on each page, sorted by the property CustomFieldId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CustomFieldContext.GetCustomFields();
+                return this.CustomFieldContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for custom fields.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of custom fields.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/custom-field/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CustomFieldContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CustomField class.
+        /// </summary>
+        /// <param name="customField">Your instance of custom fields class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/custom-field/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.CustomField customField)
+        {
+            if (customField == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CustomFieldContext.AddOrEdit(customField);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CustomField class.
         /// </summary>
         /// <param name="customField">Your instance of custom fields class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CustomField class.
         /// </summary>
-        /// <param name="customField">Your instance of Account class to edit.</param>
+        /// <param name="customField">Your instance of CustomField class to edit.</param>
         /// <param name="customFieldId">Enter the value for CustomFieldId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{customFieldId}/{customField}")]
-        [Route("~/api/core/custom-field/edit/{customFieldId}/{customField}")]
-        public void Edit(long customFieldId, MixERP.Net.Entities.Core.CustomField customField)
+        [Route("edit/{customFieldId}")]
+        [Route("~/api/core/custom-field/edit/{customFieldId}")]
+        public void Edit(long customFieldId, [FromBody] MixERP.Net.Entities.Core.CustomField customField)
         {
             if (customField == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CustomFieldId.
+        ///     Deletes an existing instance of CustomField class via CustomFieldId.
         /// </summary>
         /// <param name="customFieldId">Enter the value for CustomFieldId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

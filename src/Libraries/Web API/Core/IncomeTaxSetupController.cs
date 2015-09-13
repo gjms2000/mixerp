@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/income-tax-setup/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.IncomeTaxSetup> Get([FromUri] int[] incomeTaxSetupIds)
+        {
+            try
+            {
+                return this.IncomeTaxSetupContext.Get(incomeTaxSetupIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 income tax setups on each page, sorted by the property IncomeTaxSetupId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.IncomeTaxSetupContext.GetCustomFields();
+                return this.IncomeTaxSetupContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for income tax setups.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of income tax setups.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/income-tax-setup/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.IncomeTaxSetupContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of IncomeTaxSetup class.
+        /// </summary>
+        /// <param name="incomeTaxSetup">Your instance of income tax setups class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/income-tax-setup/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.IncomeTaxSetup incomeTaxSetup)
+        {
+            if (incomeTaxSetup == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.IncomeTaxSetupContext.AddOrEdit(incomeTaxSetup);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of IncomeTaxSetup class.
         /// </summary>
         /// <param name="incomeTaxSetup">Your instance of income tax setups class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of IncomeTaxSetup class.
         /// </summary>
-        /// <param name="incomeTaxSetup">Your instance of Account class to edit.</param>
+        /// <param name="incomeTaxSetup">Your instance of IncomeTaxSetup class to edit.</param>
         /// <param name="incomeTaxSetupId">Enter the value for IncomeTaxSetupId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{incomeTaxSetupId}/{incomeTaxSetup}")]
-        [Route("~/api/core/income-tax-setup/edit/{incomeTaxSetupId}/{incomeTaxSetup}")]
-        public void Edit(int incomeTaxSetupId, MixERP.Net.Entities.Core.IncomeTaxSetup incomeTaxSetup)
+        [Route("edit/{incomeTaxSetupId}")]
+        [Route("~/api/core/income-tax-setup/edit/{incomeTaxSetupId}")]
+        public void Edit(int incomeTaxSetupId, [FromBody] MixERP.Net.Entities.Core.IncomeTaxSetup incomeTaxSetup)
         {
             if (incomeTaxSetup == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via IncomeTaxSetupId.
+        ///     Deletes an existing instance of IncomeTaxSetup class via IncomeTaxSetupId.
         /// </summary>
         /// <param name="incomeTaxSetupId">Enter the value for IncomeTaxSetupId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

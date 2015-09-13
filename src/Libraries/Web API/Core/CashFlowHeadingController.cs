@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/cash-flow-heading/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.CashFlowHeading> Get([FromUri] int[] cashFlowHeadingIds)
+        {
+            try
+            {
+                return this.CashFlowHeadingContext.Get(cashFlowHeadingIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 cash flow headings on each page, sorted by the property CashFlowHeadingId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.CashFlowHeadingContext.GetCustomFields();
+                return this.CashFlowHeadingContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for cash flow headings.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of cash flow headings.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/cash-flow-heading/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.CashFlowHeadingContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of CashFlowHeading class.
+        /// </summary>
+        /// <param name="cashFlowHeading">Your instance of cash flow headings class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/cash-flow-heading/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.CashFlowHeading cashFlowHeading)
+        {
+            if (cashFlowHeading == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.CashFlowHeadingContext.AddOrEdit(cashFlowHeading);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of CashFlowHeading class.
         /// </summary>
         /// <param name="cashFlowHeading">Your instance of cash flow headings class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of CashFlowHeading class.
         /// </summary>
-        /// <param name="cashFlowHeading">Your instance of Account class to edit.</param>
+        /// <param name="cashFlowHeading">Your instance of CashFlowHeading class to edit.</param>
         /// <param name="cashFlowHeadingId">Enter the value for CashFlowHeadingId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{cashFlowHeadingId}/{cashFlowHeading}")]
-        [Route("~/api/core/cash-flow-heading/edit/{cashFlowHeadingId}/{cashFlowHeading}")]
-        public void Edit(int cashFlowHeadingId, MixERP.Net.Entities.Core.CashFlowHeading cashFlowHeading)
+        [Route("edit/{cashFlowHeadingId}")]
+        [Route("~/api/core/cash-flow-heading/edit/{cashFlowHeadingId}")]
+        public void Edit(int cashFlowHeadingId, [FromBody] MixERP.Net.Entities.Core.CashFlowHeading cashFlowHeading)
         {
             if (cashFlowHeading == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via CashFlowHeadingId.
+        ///     Deletes an existing instance of CashFlowHeading class via CashFlowHeadingId.
         /// </summary>
         /// <param name="cashFlowHeadingId">Enter the value for CashFlowHeadingId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

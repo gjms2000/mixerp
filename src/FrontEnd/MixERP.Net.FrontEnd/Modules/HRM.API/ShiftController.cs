@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/shift/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.Shift> Get([FromUri] int[] shiftIds)
+        {
+            try
+            {
+                return this.ShiftContext.Get(shiftIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 shifts on each page, sorted by the property ShiftId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.ShiftContext.GetCustomFields();
+                return this.ShiftContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for shifts.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of shifts.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/shift/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.ShiftContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Shift class.
+        /// </summary>
+        /// <param name="shift">Your instance of shifts class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/shift/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.Shift shift)
+        {
+            if (shift == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.ShiftContext.AddOrEdit(shift);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Shift class.
         /// </summary>
         /// <param name="shift">Your instance of shifts class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Shift class.
         /// </summary>
-        /// <param name="shift">Your instance of Account class to edit.</param>
+        /// <param name="shift">Your instance of Shift class to edit.</param>
         /// <param name="shiftId">Enter the value for ShiftId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{shiftId}/{shift}")]
-        [Route("~/api/hrm/shift/edit/{shiftId}/{shift}")]
-        public void Edit(int shiftId, MixERP.Net.Entities.HRM.Shift shift)
+        [Route("edit/{shiftId}")]
+        [Route("~/api/hrm/shift/edit/{shiftId}")]
+        public void Edit(int shiftId, [FromBody] MixERP.Net.Entities.HRM.Shift shift)
         {
             if (shift == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via ShiftId.
+        ///     Deletes an existing instance of Shift class via ShiftId.
         /// </summary>
         /// <param name="shiftId">Enter the value for ShiftId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

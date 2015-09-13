@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.HRM
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/hrm/office-hour/get")]
+        public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> Get([FromUri] int[] weekDayIds)
+        {
+            try
+            {
+                return this.OfficeHourContext.Get(weekDayIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 office hours on each page, sorted by the property WeekDayId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.HRM
         {
             try
             {
-                return this.OfficeHourContext.GetCustomFields();
+                return this.OfficeHourContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for office hours.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of office hours.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/hrm/office-hour/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.OfficeHourContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of OfficeHour class.
+        /// </summary>
+        /// <param name="officeHour">Your instance of office hours class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/hrm/office-hour/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.OfficeHour officeHour)
+        {
+            if (officeHour == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.OfficeHourContext.AddOrEdit(officeHour);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of OfficeHour class.
         /// </summary>
         /// <param name="officeHour">Your instance of office hours class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of OfficeHour class.
         /// </summary>
-        /// <param name="officeHour">Your instance of Account class to edit.</param>
+        /// <param name="officeHour">Your instance of OfficeHour class to edit.</param>
         /// <param name="weekDayId">Enter the value for WeekDayId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{weekDayId}/{officeHour}")]
-        [Route("~/api/hrm/office-hour/edit/{weekDayId}/{officeHour}")]
-        public void Edit(int weekDayId, MixERP.Net.Entities.HRM.OfficeHour officeHour)
+        [Route("edit/{weekDayId}")]
+        [Route("~/api/hrm/office-hour/edit/{weekDayId}")]
+        public void Edit(int weekDayId, [FromBody] MixERP.Net.Entities.HRM.OfficeHour officeHour)
         {
             if (officeHour == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via WeekDayId.
+        ///     Deletes an existing instance of OfficeHour class via WeekDayId.
         /// </summary>
         /// <param name="weekDayId">Enter the value for WeekDayId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

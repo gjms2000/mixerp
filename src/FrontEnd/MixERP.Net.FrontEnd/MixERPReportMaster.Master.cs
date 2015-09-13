@@ -30,7 +30,7 @@ namespace MixERP.Net.FrontEnd
         {
             using (HtmlLink stylesheet = new HtmlLink())
             {
-                string path = "/Stylesheets/report.min.css";
+                string path = "/bundles/report.css";
 
                 if (CultureManager.IsRtl())
                 {

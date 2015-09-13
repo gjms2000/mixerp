@@ -18,10 +18,12 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
 using System.IO;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.Script.Services;
 using System.Web.Services;
 using MixERP.Net.Common.Helpers;
+using MixERP.Net.FrontEnd.Base;
 
 namespace MixERP.Net.FrontEnd.Services
 {
@@ -29,19 +31,16 @@ namespace MixERP.Net.FrontEnd.Services
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [ToolboxItem(false)]
     [ScriptService]
-    public class CreateDocument : WebService
+    public class CreateDocument : MixERPWebService
     {
-        [WebMethod]
-        public void Create(string html, string documentName)
-        {
-            if (!this.Context.User.Identity.IsAuthenticated)
-            {
-                return;
-            }
+       private readonly string basePath = HostingEnvironment.MapPath("/");
 
-            if (string.IsNullOrWhiteSpace(html) || string.IsNullOrWhiteSpace(documentName))
+        [WebMethod]
+        public string CreatePdf(string html, string documentName)
+        {
+            if (!this.IsValid(html, documentName))
             {
-                return;
+                return string.Empty;
             }
 
             string destination = HostingEnvironment.MapPath("/Resource/Documents/" + documentName);
@@ -51,9 +50,49 @@ namespace MixERP.Net.FrontEnd.Services
                 File.Delete(destination);
             }
 
-            ExportHelper.CreatePDF(html, destination);
+             ExportHelper.CreatePDF(html, destination);
 
-            System.Threading.Thread.Sleep(1000);
+            return "/" + destination.Replace(this.basePath, string.Empty).Replace(@"\", "/");
         }
+
+        private bool IsValid(string html, string documentName)
+        {
+            if (!this.Context.User.Identity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(html) || string.IsNullOrWhiteSpace(documentName))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        [WebMethod]
+        public string CreateDoc(string html, string documentName)
+        {
+            if (!this.IsValid(html, documentName))
+            {
+                return string.Empty;
+            }
+
+            string destination = ExportHelper.CreateWord(html, documentName);
+            return "/" + destination.Replace(this.basePath, string.Empty).Replace(@"\", "/");
+        }
+
+        [WebMethod]
+        public string CreateXls(string html, string documentName)
+        {
+            if (!this.IsValid(html, documentName))
+            {
+                return string.Empty;
+            }
+
+            string destination = ExportHelper.CreateExcel(html, documentName);
+            return "/" + destination.Replace(this.basePath, string.Empty).Replace(@"\", "/");
+        }
+
     }
 }

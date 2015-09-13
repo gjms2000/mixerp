@@ -45,8 +45,8 @@
     <div class="ui three stackable cards">
         <div class="card" data-ng-repeat="task in checklist | filter:filters">
             <div class="content">
-                <i class="right floated {{task.Status ? 'purple' : 'pink'}}  {{ task.Icon }}"></i>
-                <div class="ui {{task.Status ? 'purple' : 'pink'}} header">
+                <i class="right floated {{task.Status ? 'grey' : 'pink'}}  {{ task.Icon }}"></i>
+                <div class="ui {{task.Status ? 'grey' : 'pink'}} header">
                     {{task.Name}}
                 </div>
                 <a class="meta" data-ng-click="filters.Category=task.Category;">{{task.Category}}</a>
@@ -55,9 +55,9 @@
                 </div>
             </div>
             <div class="extra content">
-                <div class="ui buttons">
-                    <a class="ui basic purple button" href="{{task.NavigateUrl}}?ReturnUrl={{documentLocation}}">{{i18n.Start}}</a>
-                    <a class="ui basic pink button" data-ng-click="remove(task)">{{i18n.HideForNow}}</a>
+                <div class="ui basic buttons">
+                    <a class="ui basic button" href="{{task.NavigateUrl}}?ReturnUrl={{documentLocation}}">{{i18n.Start}}</a>
+                    <a class="ui basic button" data-ng-click="remove(task)">{{i18n.HideForNow}}</a>
                 </div>
             </div>
             <div class="extra content">

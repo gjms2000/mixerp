@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/bonus-slab-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.BonusSlabDetail> Get([FromUri] int[] bonusSlabDetailIds)
+        {
+            try
+            {
+                return this.BonusSlabDetailContext.Get(bonusSlabDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 bonus slab details on each page, sorted by the property BonusSlabDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.BonusSlabDetailContext.GetCustomFields();
+                return this.BonusSlabDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for bonus slab details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of bonus slab details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/bonus-slab-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.BonusSlabDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of BonusSlabDetail class.
+        /// </summary>
+        /// <param name="bonusSlabDetail">Your instance of bonus slab details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/bonus-slab-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.BonusSlabDetail bonusSlabDetail)
+        {
+            if (bonusSlabDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.BonusSlabDetailContext.AddOrEdit(bonusSlabDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of BonusSlabDetail class.
         /// </summary>
         /// <param name="bonusSlabDetail">Your instance of bonus slab details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of BonusSlabDetail class.
         /// </summary>
-        /// <param name="bonusSlabDetail">Your instance of Account class to edit.</param>
+        /// <param name="bonusSlabDetail">Your instance of BonusSlabDetail class to edit.</param>
         /// <param name="bonusSlabDetailId">Enter the value for BonusSlabDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{bonusSlabDetailId}/{bonusSlabDetail}")]
-        [Route("~/api/core/bonus-slab-detail/edit/{bonusSlabDetailId}/{bonusSlabDetail}")]
-        public void Edit(int bonusSlabDetailId, MixERP.Net.Entities.Core.BonusSlabDetail bonusSlabDetail)
+        [Route("edit/{bonusSlabDetailId}")]
+        [Route("~/api/core/bonus-slab-detail/edit/{bonusSlabDetailId}")]
+        public void Edit(int bonusSlabDetailId, [FromBody] MixERP.Net.Entities.Core.BonusSlabDetail bonusSlabDetail)
         {
             if (bonusSlabDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via BonusSlabDetailId.
+        ///     Deletes an existing instance of BonusSlabDetail class via BonusSlabDetailId.
         /// </summary>
         /// <param name="bonusSlabDetailId">Enter the value for BonusSlabDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

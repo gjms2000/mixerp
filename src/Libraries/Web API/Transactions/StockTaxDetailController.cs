@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Transactions
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/transactions/stock-tax-detail/get")]
+        public IEnumerable<MixERP.Net.Entities.Transactions.StockTaxDetail> Get([FromUri] long[] stockTaxDetailIds)
+        {
+            try
+            {
+                return this.StockTaxDetailContext.Get(stockTaxDetailIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 stock tax details on each page, sorted by the property StockTaxDetailId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Transactions
         {
             try
             {
-                return this.StockTaxDetailContext.GetCustomFields();
+                return this.StockTaxDetailContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for stock tax details.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of stock tax details.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/transactions/stock-tax-detail/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.StockTaxDetailContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of StockTaxDetail class.
+        /// </summary>
+        /// <param name="stockTaxDetail">Your instance of stock tax details class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/transactions/stock-tax-detail/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Transactions.StockTaxDetail stockTaxDetail)
+        {
+            if (stockTaxDetail == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.StockTaxDetailContext.AddOrEdit(stockTaxDetail);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of StockTaxDetail class.
         /// </summary>
         /// <param name="stockTaxDetail">Your instance of stock tax details class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of StockTaxDetail class.
         /// </summary>
-        /// <param name="stockTaxDetail">Your instance of Account class to edit.</param>
+        /// <param name="stockTaxDetail">Your instance of StockTaxDetail class to edit.</param>
         /// <param name="stockTaxDetailId">Enter the value for StockTaxDetailId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{stockTaxDetailId}/{stockTaxDetail}")]
-        [Route("~/api/transactions/stock-tax-detail/edit/{stockTaxDetailId}/{stockTaxDetail}")]
-        public void Edit(long stockTaxDetailId, MixERP.Net.Entities.Transactions.StockTaxDetail stockTaxDetail)
+        [Route("edit/{stockTaxDetailId}")]
+        [Route("~/api/transactions/stock-tax-detail/edit/{stockTaxDetailId}")]
+        public void Edit(long stockTaxDetailId, [FromBody] MixERP.Net.Entities.Transactions.StockTaxDetail stockTaxDetail)
         {
             if (stockTaxDetail == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via StockTaxDetailId.
+        ///     Deletes an existing instance of StockTaxDetail class via StockTaxDetailId.
         /// </summary>
         /// <param name="stockTaxDetailId">Enter the value for StockTaxDetailId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

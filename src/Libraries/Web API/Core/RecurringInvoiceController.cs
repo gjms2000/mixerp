@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/recurring-invoice/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.RecurringInvoice> Get([FromUri] int[] recurringInvoiceIds)
+        {
+            try
+            {
+                return this.RecurringInvoiceContext.Get(recurringInvoiceIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 recurring invoices on each page, sorted by the property RecurringInvoiceId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.RecurringInvoiceContext.GetCustomFields();
+                return this.RecurringInvoiceContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for recurring invoices.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of recurring invoices.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/recurring-invoice/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.RecurringInvoiceContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of RecurringInvoice class.
+        /// </summary>
+        /// <param name="recurringInvoice">Your instance of recurring invoices class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/recurring-invoice/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.RecurringInvoice recurringInvoice)
+        {
+            if (recurringInvoice == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.RecurringInvoiceContext.AddOrEdit(recurringInvoice);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of RecurringInvoice class.
         /// </summary>
         /// <param name="recurringInvoice">Your instance of recurring invoices class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of RecurringInvoice class.
         /// </summary>
-        /// <param name="recurringInvoice">Your instance of Account class to edit.</param>
+        /// <param name="recurringInvoice">Your instance of RecurringInvoice class to edit.</param>
         /// <param name="recurringInvoiceId">Enter the value for RecurringInvoiceId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{recurringInvoiceId}/{recurringInvoice}")]
-        [Route("~/api/core/recurring-invoice/edit/{recurringInvoiceId}/{recurringInvoice}")]
-        public void Edit(int recurringInvoiceId, MixERP.Net.Entities.Core.RecurringInvoice recurringInvoice)
+        [Route("edit/{recurringInvoiceId}")]
+        [Route("~/api/core/recurring-invoice/edit/{recurringInvoiceId}")]
+        public void Edit(int recurringInvoiceId, [FromBody] MixERP.Net.Entities.Core.RecurringInvoice recurringInvoice)
         {
             if (recurringInvoice == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via RecurringInvoiceId.
+        ///     Deletes an existing instance of RecurringInvoice class via RecurringInvoiceId.
         /// </summary>
         /// <param name="recurringInvoiceId">Enter the value for RecurringInvoiceId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]

@@ -87,6 +87,25 @@ namespace MixERP.Net.Api.Core
             }
         }
 
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get")]
+        [Route("~/api/core/salesperson/get")]
+        public IEnumerable<MixERP.Net.Entities.Core.Salesperson> Get([FromUri] int[] salespersonIds)
+        {
+            try
+            {
+                return this.SalespersonContext.Get(salespersonIds);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
         /// <summary>
         ///     Creates a paginated collection containing 25 salespeople on each page, sorted by the property SalespersonId.
         /// </summary>
@@ -194,7 +213,7 @@ namespace MixERP.Net.Api.Core
         {
             try
             {
-                return this.SalespersonContext.GetCustomFields();
+                return this.SalespersonContext.GetCustomFields(null);
             }
             catch (UnauthorizedException)
             {
@@ -207,7 +226,58 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Adds your instance of Account class.
+        ///     A custom field is a user defined field for salespeople.
+        /// </summary>
+        /// <returns>Returns an enumerable custom field collection of salespeople.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("custom-fields")]
+        [Route("~/api/core/salesperson/custom-fields/{resourceId}")]
+        public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
+        {
+            try
+            {
+                return this.SalespersonContext.GetCustomFields(resourceId);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds or edits your instance of Salesperson class.
+        /// </summary>
+        /// <param name="salesperson">Your instance of salespeople class to add or edit.</param>
+        [AcceptVerbs("PUT")]
+        [Route("add-or-edit")]
+        [Route("~/api/core/salesperson/add-or-edit")]
+        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Salesperson salesperson)
+        {
+            if (salesperson == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
+            }
+
+            try
+            {
+                this.SalespersonContext.AddOrEdit(salesperson);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Adds your instance of Salesperson class.
         /// </summary>
         /// <param name="salesperson">Your instance of salespeople class to add.</param>
         [AcceptVerbs("POST")]
@@ -235,14 +305,14 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Edits existing record with your instance of Account class.
+        ///     Edits existing record with your instance of Salesperson class.
         /// </summary>
-        /// <param name="salesperson">Your instance of Account class to edit.</param>
+        /// <param name="salesperson">Your instance of Salesperson class to edit.</param>
         /// <param name="salespersonId">Enter the value for SalespersonId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{salespersonId}/{salesperson}")]
-        [Route("~/api/core/salesperson/edit/{salespersonId}/{salesperson}")]
-        public void Edit(int salespersonId, MixERP.Net.Entities.Core.Salesperson salesperson)
+        [Route("edit/{salespersonId}")]
+        [Route("~/api/core/salesperson/edit/{salespersonId}")]
+        public void Edit(int salespersonId, [FromBody] MixERP.Net.Entities.Core.Salesperson salesperson)
         {
             if (salesperson == null)
             {
@@ -264,7 +334,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Account class via SalespersonId.
+        ///     Deletes an existing instance of Salesperson class via SalespersonId.
         /// </summary>
         /// <param name="salespersonId">Enter the value for SalespersonId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
