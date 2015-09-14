@@ -15,6 +15,9 @@ Tell us what you like to see in the CRM Module! Not sure? Then what about review
 * [chamlang.mixerp.org](http://chamlang.mixerp.org)
 * [nemjung.mixerp.org](http://nemjung.mixerp.org) 
 
+##Community Demos
+
+* [http://egypt.mixerp.org:8000/](http://egypt.mixerp.org:8000/)
 
 ##Updates and Compatibility
 

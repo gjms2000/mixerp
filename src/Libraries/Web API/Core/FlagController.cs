@@ -248,7 +248,6 @@ namespace MixERP.Net.Api.Core
             }
         }
 
-
         /// <summary>
         ///     Deletes an existing instance of Flag class via FlagId.
         /// </summary>

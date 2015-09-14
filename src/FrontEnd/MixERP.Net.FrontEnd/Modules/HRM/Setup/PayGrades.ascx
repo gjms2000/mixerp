@@ -1,13 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PayGrades.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.PayGrades" %>
 <script>
-    var title = "Pay Grades";
-    var viewPocoName = "PayGrade";
-    var formPocoName = "PayGrade";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
 
-    var live = "PayGradeName";
+    scrudFactory.title = "Pay Grades";
+    
+    scrudFactory.viewPocoName = "PayGrade";
+    scrudFactory.formPocoName = "PayGrade";
+    scrudFactory.formTableName = "hrm.pay_grades";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "PayGradeName";
 </script>
 
 

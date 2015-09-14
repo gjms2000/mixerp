@@ -1,13 +1,17 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Shifts.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.Shifts" %>
 <script>
-    var title = "Shifts";
-    var viewPocoName = "Shift";
-    var formPocoName = "Shift";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
 
-    var live = "ShiftName";
+    scrudFactory.title = "Shifts";
+    scrudFactory.viewPocoName = "Shift";
+    scrudFactory.formPocoName = "Shift";
+    scrudFactory.formTableName = "hrm.shifts";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "ShiftName";
 </script>
 
 

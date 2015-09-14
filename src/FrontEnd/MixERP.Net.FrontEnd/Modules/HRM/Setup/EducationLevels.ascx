@@ -1,14 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EducationLevels.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.EducationLevels" %>
 
 <script>
-    var title = "Education Levels";
-    var viewPocoName = "EducationLevel";
-    var formPocoName = "EducationLevel";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+	var scrudFactory = new Object();
 
-    var live = "EducationLevelName";
+    scrudFactory.title = "Education Levels";
+    scrudFactory.viewPocoName = "EducationLevel";
+    scrudFactory.formPocoName = "EducationLevel";
+    scrudFactory.formTableName = "hrm.education_levels";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "EducationLevelName";
 </script>
 
 

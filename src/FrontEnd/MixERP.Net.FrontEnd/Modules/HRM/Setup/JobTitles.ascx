@@ -1,13 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="JobTitles.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.JobTitles" %>
 <script>
-    var title = "Job Titles";
-    var viewPocoName = "JobTitle";
-    var formPocoName = "JobTitle";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+	var scrudFactory = new Object();
+    
+    scrudFactory.title = "Job Titles";
 
-    var live = "JobTitleName";
+    scrudFactory.viewPocoName = "JobTitle";
+    scrudFactory.formPocoName = "JobTitle";
+    scrudFactory.formTableName = "hrm.job_titles";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "JobTitleName";
 </script>
 
 

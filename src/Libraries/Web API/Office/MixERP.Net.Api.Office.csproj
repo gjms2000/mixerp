@@ -73,7 +73,6 @@
     <Compile Include="CounterScrudViewController.cs" />
     <Compile Include="DepartmentController.cs" />
     <Compile Include="DepartmentScrudViewController.cs" />
-    <Compile Include="HolidayController.cs" />
     <Compile Include="OfficeController.cs" />
     <Compile Include="OfficeScrudViewController.cs" />
     <Compile Include="OfficeSelectorViewController.cs" />

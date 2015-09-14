@@ -107,7 +107,6 @@
     <Compile Include="GetUserIdByUserNameProcedure.cs" />
     <Compile Include="GetUserNameByUserIdProcedure.cs" />
     <Compile Include="HasChildOfficesProcedure.cs" />
-    <Compile Include="Holiday.cs" />
     <Compile Include="IsAdminProcedure.cs" />
     <Compile Include="IsParentOfficeProcedure.cs" />
     <Compile Include="IsPeriodicInventoryProcedure.cs" />

@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Core.Data
 
             return Factory.Get<MixERP.Net.Entities.Core.ZipCodeType>(this.Catalog, sql, zipCodeTypeIds);
         }
+
 	}
 }

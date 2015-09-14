@@ -1,12 +1,16 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Salaries.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.Salaries" %>
 <script>
-    var title = "Salaries";
-    var viewPocoName = "Salary";
-    var formPocoName = "Salary";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
-    var keys = [
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Salaries";
+    scrudFactory.viewPocoName = "Salary";
+    scrudFactory.formPocoName = "Salary";
+    scrudFactory.formTableName = "hrm.salaries";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.keys = [
         {
             property: "EmployeeId",
             url: '/api/hrm/employee/display-fields',

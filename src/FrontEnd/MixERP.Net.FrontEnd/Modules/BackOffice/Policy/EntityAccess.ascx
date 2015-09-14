@@ -1,17 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EntityAccess.ascx.cs" Inherits="MixERP.Net.Core.Modules.BackOffice.Policy.EntityAccess" %>
 <script>
-    var title = "Entity Access Policy";
-    var description = "Create entity access policy for individual users. By default, users have right to access an entity if a menu acesss policy is granted. If a <a href='{0}'>default entity access policy</a> was created to restrict access to a group of users, you can still override that policy and provide access permission to a particular user.";
-    description = stringFormat(description, "EntityAccess.mix");
-    var viewPocoName = "EntityAccessScrudView";
-    var formPocoName = "EntityAccess";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
-</script>
+    var scrudFactory = new Object();
 
-<script>
-    var keys = [
+    scrudFactory.title = "Entity Access Policy";
+    scrudFactory.description = "Create entity access policy for individual users. By default, users have right to access an entity if a menu acesss policy is granted. If a <a href='{0}'>default entity access policy</a> was created to restrict access to a group of users, you can still override that policy and provide access permission to a particular user.";
+    scrudFactory.description = stringFormat(scrudFactory.description, "EntityAccess.mix");
+    scrudFactory.viewPocoName = "EntityAccessScrudView";
+    scrudFactory.formPocoName = "EntityAccess";
+    scrudFactory.formTableName = "policy.entity_access";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.keys = [
         {
             property: "EntityName",
             url: '/Services/Modules/PocoService.asmx/GetPocos',

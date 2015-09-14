@@ -1,18 +1,23 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="IdentificationDetails.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Tasks.Employee.IdentificationDetails"
     OverridePath="/Modules/HRM/Tasks/Employees.mix" %>
 <script>
-    var title = window.Resources.Titles.EmployeeIdentificationDetails();
-    var viewPocoName = "EmployeeIdentificationDetailScrudView";
-    var formPocoName = "EmployeeIdentificationDetail";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
 
-    var back = {
+    scrudFactory.title = window.Resources.Titles.EmployeeIdentificationDetails();
+    scrudFactory.viewPocoName = "EmployeeIdentificationDetailScrudView";
+    scrudFactory.formPocoName = "EmployeeIdentificationDetail";
+    scrudFactory.formTableName = "hrm.employee_identification_details";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.back = {
         Title: "Employee",
         Url: "/Modules/HRM/Tasks/EmployeeInfo.mix?EmployeeId=" + getQueryStringByName("EmployeeId")
     };
-    var keys = [
+    
+    scrudFactory.keys = [
         {
             property: "EmployeeId",
             url: '/api/hrm/employee/display-fields',

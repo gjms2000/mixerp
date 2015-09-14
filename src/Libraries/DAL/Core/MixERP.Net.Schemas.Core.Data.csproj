@@ -146,6 +146,7 @@
     <Compile Include="Flag.cs" />
     <Compile Include="FlagType.cs" />
     <Compile Include="FlagTypeScrudView.cs" />
+    <Compile Include="FlagView.cs" />
     <Compile Include="Frequency.cs" />
     <Compile Include="FrequencySelectorView.cs" />
     <Compile Include="FrequencySetup.cs" />

@@ -1,15 +1,20 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="HolidaySetup.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.HolidaySetup" %>
 <script>
-    var title = "Holiday Setup";
-    var viewPocoName = "Holiday";
-    var formPocoName = "Holiday";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
 
-    var live = "Comment";
+    scrudFactory.title = "Holiday Setup";
 
-    var keys = [
+    scrudFactory.viewPocoName = "Holiday";
+    scrudFactory.formPocoName = "Holiday";
+    scrudFactory.formTableName = "hrm.holidays";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "Comment";
+
+    scrudFactory.keys = [
         {
             property: "OfficeId",
             url: '/api/office/office/display-fields',

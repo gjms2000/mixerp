@@ -1,13 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="LeaveBenefits.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.LeaveBenefits" %>
 <script>
-    var title = "Leave Benefits";
-    var viewPocoName = "LeaveBenefit";
-    var formPocoName = "LeaveBenefit";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
+    
+    scrudFactory.title = "Leave Benefits";
+    
+    scrudFactory.viewPocoName = "LeaveBenefit";
+    scrudFactory.formPocoName = "LeaveBenefit";
+    scrudFactory.formTableName = "hrm.leave_benefits";
 
-    var live = "LeaveBenefitName";
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "LeaveBenefitName";
 </script>
 
 

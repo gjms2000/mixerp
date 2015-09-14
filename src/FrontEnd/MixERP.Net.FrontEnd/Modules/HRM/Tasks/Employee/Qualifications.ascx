@@ -1,18 +1,23 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Qualifications.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Tasks.Employee.Qualifications"
     OverridePath="/Modules/HRM/Tasks/Employees.mix" %>
 <script>
-    var title = window.Resources.Titles.Qualifications();
-    var viewPocoName = "EmployeeQualificationScrudView";
-    var formPocoName = "EmployeeQualification";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
-    var back = {
+    var scrudFactory = new Object();
+
+    scrudFactory.title = window.Resources.Titles.Qualifications();
+    scrudFactory.viewPocoName = "EmployeeQualificationScrudView";
+    scrudFactory.formPocoName = "EmployeeQualification";
+    scrudFactory.formTableName = "hrm.employee_qualifications";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    
+    scrudFactory.back = {
         Title: "Employee",
         Url: "/Modules/HRM/Tasks/EmployeeInfo.mix?EmployeeId=" + getQueryStringByName("EmployeeId")
     };
 
-    var layout = [
+    scrudFactory.layout = [
         ["EmployeeQualificationId", "EmployeeId", "", ""],
         ["EducationLevelId", "Institution", "", ""],
         ["Majors", "TotalYears", "", ""],
@@ -21,8 +26,8 @@
         ["Details", ""]
     ];
 
-    var live = "Majors";
-    var keys = [
+    scrudFactory.live = "Majors";
+    scrudFactory.keys = [
         {
             property: "EmployeeId",
             url: '/api/hrm/employee/display-fields',

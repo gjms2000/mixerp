@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Core.Data
 
             return Factory.Get<MixERP.Net.Entities.Core.ShippingAddress>(this.Catalog, sql, shippingAddressIds);
         }
+
 	}
 }

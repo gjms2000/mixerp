@@ -1,16 +1,20 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EmploymentStatuses.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.EmploymentStatuses" %>
 
 <script>
-    var title = "Employment Statuses";
-    var viewPocoName = "EmploymentStatus";
-    var formPocoName = "EmploymentStatus";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
+    
+    scrudFactory.title = "Employment Statuses";
+    scrudFactory.viewPocoName = "EmploymentStatus";
+    scrudFactory.formPocoName = "EmploymentStatus";
+    scrudFactory.formTableName = "hrm.employment_statuses";
 
-    var live = "EmploymentStatusName";
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
-    var keys = [
+    scrudFactory.live = "EmploymentStatusName";
+
+    scrudFactory.keys = [
         {
             property: "DefaultEmploymentStatusCodeId",
             url: '/api/hrm/employment-status-code/display-fields',

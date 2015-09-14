@@ -216,7 +216,7 @@
         $("#AddNewButton").click(function () {
             if (form.length) {
                 view.hide();
-                form.show();
+                form.fadeIn(1000);
             };
         });
     </script>
@@ -294,7 +294,7 @@
             var index = 0;
 
             $.each(json[0], function (name) {
-                if (window.excludedColumns.indexOf(name) === -1) {
+                if (scrudFactory.excludedColumns.indexOf(name) === -1) {
                     header += "<th>" + name + "</th>";
                 } else {
                     excludedColumnIndices.push(index);
@@ -378,7 +378,7 @@
             $("[data-tab=view]").addClass("loading");
             var filterName = getFilter();
 
-            var ajaxGetTotalPages = getTotalPages(window.viewPocoName, filterName, false);
+            var ajaxGetTotalPages = getTotalPages(scrudFactory.viewPocoName, filterName, false);
 
             ajaxGetTotalPages.success(function (msg) {
                 var pages = parseInt(msg.d || 1);
@@ -457,7 +457,7 @@
             var filterName = $("#FilterSelect").getSelectedText();
             $("#FilterName").html(filterName);
             $("#FilterNameInputText").val(filterName);
-            var ajaxGetFilters = getFilters(window.viewPocoName, filterName);
+            var ajaxGetFilters = getFilters(scrudFactory.viewPocoName, filterName);
 
             ajaxGetFilters.success(function (msg) {
                 createFilters(msg.d);
@@ -478,7 +478,7 @@
     </script>
     <script>
         function loadFilterNames() {
-            var ajaxGetFilterNames = getFilterNames(window.viewPocoName);
+            var ajaxGetFilterNames = getFilterNames(scrudFactory.viewPocoName);
             ajaxGetFilterNames.success(function (msg) {
                 var data = msg.d;
                 var selected = "";
@@ -529,27 +529,39 @@
     <script>
     </script>
     <script>
-
         $(document).ready(function () {
+            var form = $(".poco.form.factory");
+            var view = $(".poco.view.factory");
+
+            var defaultView = window.getQueryStringByName("View");
+
+            if ((defaultView || "") === "FormView") {
+                view.hide();
+                form.fadeIn(1000);
+            } else {
+                form.hide();
+            };
+
+
             loadPoco(loadFilterNames);
             loadFilterConditions();
             $("#ExportDropDown").dropdown();
 
-            if (window.title) {
-                $(".title").html(window.title);
+            if (scrudFactory.title) {
+                $(".title").html(scrudFactory.title);
             };
-            if (window.description) {
-                $(".description").html(window.description).show();
+            if (scrudFactory.description) {
+                $(".description").html(scrudFactory.description).show();
             } else {
                 $(".description").remove();
             };
 
-            if (typeof (back) === "object") {
-                var title = back.Title;
-                var url = back.Url;
+            if (typeof (scrudFactory.back) === "object") {
+                var title = scrudFactory.back.Title;
+                var url = scrudFactory.back.Url;
 
                 var anchor = $("<a/>");
-                anchor.addClass("ui basic button")
+                anchor.addClass("ui basic button");
                 anchor.attr("title", Resources.Titles.Back());
                 anchor.attr("href", url);
                 anchor.text(title);
@@ -559,7 +571,7 @@
         });
 
         function loadPoco(callback) {
-            var ajaxgetPoco = getPoco(window.formPocoName);
+            var ajaxgetPoco = getPoco(scrudFactory.formPocoName);
 
             ajaxgetPoco.success(function (msg) {
                 pocoDefinition = msg.d;
@@ -576,7 +588,7 @@
 
             $("#CurrentPageAnchor").text(pageNumber);
 
-            var ajaxGetPocoView = getPocoView(window.viewPocoName, pageNumber, filterName, false);
+            var ajaxGetPocoView = getPocoView(scrudFactory.viewPocoName, pageNumber, filterName, false);
 
             ajaxGetPocoView.success(function (msg) {
                 var el = $("#json");
@@ -585,6 +597,7 @@
                 localizeHeaders(el);
                 loadColumns();
                 loadActions();
+                $(document).trigger("viewready");
                 $("[data-tab=view]").removeClass("loading");
             });
 
@@ -776,7 +789,7 @@
                 filters.push(filter);
             });
 
-            var ajaxSaveFilter = saveFilter(window.viewPocoName, filters);
+            var ajaxSaveFilter = saveFilter(scrudFactory.viewPocoName, filters);
 
             ajaxSaveFilter.success(function () {
                 displayMessage(Resources.Titles.TaskCompletedSuccessfully(), "success");
@@ -832,7 +845,7 @@
     <script>
         $("#MakeUserDefaultFilterButton").click(function () {
             var filterName = $("#FilterSelect").getSelectedText();
-            var ajaxMakeDefaultFilter = makeDefaultFilter(window.viewPocoName, filterName);
+            var ajaxMakeDefaultFilter = makeDefaultFilter(scrudFactory.viewPocoName, filterName);
 
             ajaxMakeDefaultFilter.success(function () {
                 displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
@@ -900,7 +913,7 @@
     </script>
     <script>
         $("#DownloadTemplateButton").click(function () {
-            var ajaxDownloadTemplate = downloadTemplate(formPocoName, false, true);
+            var ajaxDownloadTemplate = downloadTemplate(scrudFactory.formPocoName, false, true);
             var el = this;
 
             if (!el.href) {
@@ -912,7 +925,7 @@
                     var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
                     el.href = uri;
                     el.target = "_blank";
-                    el.download = title + ".csv";
+                    el.download = scrudFactory.title + ".csv";
 
                     $(el).removeClass("loading");
 
@@ -1023,7 +1036,7 @@
 
                 el.closest(".segment").find(".button").addClass("loading");
 
-                var ajaxImportPocos = importPocos(window.formPocoName, entities);
+                var ajaxImportPocos = importPocos(scrudFactory.formPocoName, entities);
 
                 ajaxImportPocos.success(function (msg) {
                     var message = stringFormat("Successfully imported {0} items.", entities.length);
@@ -1056,11 +1069,11 @@
 
             var hasAction = false;
 
-            if (window.allowDelete) {
+            if (scrudFactory.allowDelete) {
                 deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", Resources.Titles.Delete());
             };
 
-            if (window.allowEdit) {
+            if (scrudFactory.allowEdit) {
                 editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", Resources.Titles.Edit());
             };
 
@@ -1071,7 +1084,7 @@
             if (hasAction) {
                 var grid = $(".definition.table");
                 var header = stringFormat("<th style='width:{0}px;'></th>", 25 * (!isNullOrWhiteSpace(editTemplate) + !isNullOrWhiteSpace(deleteTemplate)));
-                header += "<th>" + Resources.Titles.Select() + "</th>";
+                header += "<th class='action' style='cursor:pointer;'>" + Resources.Titles.Select() + "</th>";
                 var selectTemplate = '<div class="ui toggle checkbox"> \
                                       <input type="checkbox">\
                                       <label></label>\
@@ -1090,7 +1103,19 @@
                         var el = row.find("input:checkbox");
                         toogleSelection(el);
                     };
+                });
 
+                var isSelectionToggler = true;
+
+                $("th.action").click(function () {
+                    if (isSelectionToggler) {
+                        $(".definition.table input:checkbox").prop("checked", "checked");
+                    }
+                    else {
+                        $(".definition.table input:checkbox").removeProp("checked");
+                    };
+
+                    isSelectionToggler = !isSelectionToggler;
                 });
             };
         };
@@ -1112,7 +1137,7 @@
             var selector = "td:nth-child(" + keyColumnPosition + ")";
             var primaryKey = el.parent().parent().find(selector).text();
 
-            var ajaxDeleteEntity = deleteEntity(formPocoName, primaryKey);
+            var ajaxDeleteEntity = deleteEntity(scrudFactory.formPocoName, primaryKey);
 
             ajaxDeleteEntity.success(function (msg) {
                 var confirmed = confirm("Task completed successfully. Refresh view?");
@@ -1143,9 +1168,9 @@
 
             var selector = "td:nth-child(" + keyColumnPosition + ")";
             var primaryKeyValue = el.parent().parent().find(selector).text();
-            var tableName = window.formSchemaName + "." + window.formTableName;
+            var tableName = scrudFactory.formTableName;
 
-            var ajaxGetViewForEdit = getViewForEdit(formPocoName, primaryKeyValue);
+            var ajaxGetViewForEdit = getViewForEdit(scrudFactory.formPocoName, primaryKeyValue);
 
             ajaxGetViewForEdit.success(function (msg) {
                 var data = JSON.parse(msg.d);
@@ -1153,8 +1178,8 @@
 
                 getCustomFieldsForEdit(tableName, primaryKeyValue).success(function (msg) {
                     displayCustomFields(msg);
-                    form.show();
                     view.hide();
+                    form.fadeIn(1000);
                 });
             });
         };
@@ -1272,23 +1297,23 @@
                 filterName += "-";
             };
 
-            return title + "-" + filterName + stringFormat(Resources.Titles.PageN(), getPageNumber());
+            return scrudFactory.title + "-" + filterName + stringFormat(Resources.Titles.PageN(), getPageNumber());
         };
 
         function createPDF() {
-            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
+            printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
         };
 
         function createXls() {
-            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
+            printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
         };
 
         function createDoc() {
-            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
+            printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
         };
 
         function print() {
-            printGridView(reportExportTemplatePath, reportHeaderPath, title, "ScrudView", date, user, office, '', 2, 0);
+            printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0);
         };
 
         function downloadXls() {
@@ -1303,7 +1328,7 @@
 
         function downloadDoc() {
             var html = $("#MarkupHidden").val();
-            var fileName = getFileName() + ".docs";
+            var fileName = getFileName() + ".doc";
             var createDocDocumentAjax = createDocDocument(html, fileName);
 
             createDocDocumentAjax.success(function (msg) {
@@ -1330,11 +1355,10 @@
 
 
         var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
-            var token = Math.random().toString();
             //Load report template from the path.
-            $.get(templatePath + "?" + token, function () { }).done(function (data) {
+            $.get(templatePath, function () { }).done(function (data) {
                 //Load report header template.
-                $.get(headerPath + "?" + token, function () { }).done(function (header) {
+                $.get(headerPath, function () { }).done(function (header) {
                     var table = $("#" + gridViewId).clone();
 
                     table.find("tr.tableFloatingHeader").remove();
@@ -1399,99 +1423,173 @@
 
 
 <script>
-    var flagPopUnder = $("#FlagPopUnder");
-    var flagButton = $("#FlagButton");
-    var flagSelect = $("#FlagSelect");
-    var updateButton = $("#UpdateButton");
+    $(document).on("viewready", function () {
+        initializeFlag();
+    });
 
-    function popUnder(div, button) {
-        div.removeClass("initially hidden");
-        div.fadeIn(1000).position({
-            my: "left top",
-            at: "left bottom",
-            of: button
-        });
-    };
 
-    function getFlagTypes() {
-        var url = "/api/core/flag-type/display-fields";
-        return getAjaxRequest(url);
-    };
+    function initializeFlag() {
+        var flagPopUnder = $("#FlagPopUnder");
+        var flagButton = $("#FlagButton");
+        var flagSelect = $("#FlagSelect");
+        var updateButton = $("#UpdateButton");
 
-    function getFlagTypes() {
-        var url = "/api/core/flag-type/display-fields";
-        return getAjaxRequest(url);
-    };
 
-    var getAjaxRequest = function (url, type, data) {
-        var isWebApiRequest = url.substring(5, 0) === "/api/";
-
-        if (isWebApiRequest) {
-            url = url.replace("{v}", "v" + window.apiVersion);
+        function popUnder(div, button) {
+            div.removeClass("initially hidden");
+            div.fadeIn(1000).position({
+                my: "left top",
+                at: "left bottom",
+                of: button
+            });
         };
 
-        if (!type) {
-            type = "GET";
+        var getAjaxRequest = function (url, type, data) {
+            var isWebApiRequest = url.substring(5, 0) === "/api/";
+
+            if (isWebApiRequest) {
+                url = url.replace("{v}", "v" + window.apiVersion);
+            };
+
+            if (!type) {
+                type = "GET";
+            };
+
+            var ajax = $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+
+            ajax.fail(function (xhr) {
+                displayMessage(JSON.stringify(xhr));
+            });
+
+            return ajax;
         };
 
-        var ajax = $.ajax({
-            type: type,
-            url: url,
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        });
+        function getFlagTypes() {
+            var url = "/api/core/flag-type/display-fields";
+            return getAjaxRequest(url);
+        };
 
-        ajax.fail(function (xhr) {
-            logAjaxErrorMessage(xhr);
-        });
+        function addFlag(flag) {
+            var url = "/api/core/flag/add-or-edit";
+            var data = JSON.stringify(flag);
+            return getAjaxRequest(url, "PUT", data);
+        };
 
-        return ajax;
-    };
+        function deleteFlag(flagId) {
+            var url = "/api/core/flag/delete/" + flagId;
+            return getAjaxRequest(url, "DELETE");
+        };
 
-    function addFlag(flag) {
-        var url = "/api/core/flag/add-or-edit";
-        var data = JSON.stringify(flag);
+        if (!flagSelect.find("option").length) {
+            var getFlagTypesAjax = getFlagTypes();
 
-        return getAjaxRequest(url, "PUT", data);
-    };
-
-    $(document).ready(function () {
-        var getFlagTypesAjax = getFlagTypes();
-
-        getFlagTypesAjax.success(function (msg) {
-            bindSelect(flagSelect, msg, "Key", "Value");
-            flagSelect.dropdown();
-        });
+            getFlagTypesAjax.success(function (msg) {
+                bindSelect(flagSelect, msg, "Key", "Value");
+                var options = "<option value='0'>" + Resources.Titles.None() + "</option>";
+                options += flagSelect.html();
+                flagSelect.html(options);
+                flagSelect.dropdown();
+            });
+        };
 
         flagButton.click(function () {
             popUnder(flagPopUnder, flagButton);
         });
-    });
 
-    updateButton.click(function() {
-        var selecteRows = $("input:checkbox:checked").closest("tr");
+        updateButton.unbind("click").click(function () {
+            var selecteRows = $("input:checkbox:checked").closest("tr");
+            if (selecteRows.length === 0) {
+                return;
+            };
 
-        selecteRows.each(function() {
-            var row = $(this);
-            var flag = new Object();
+            selecteRows.each(function (i) {
+                var row = $(this);
+                var flag = new Object();
 
-            flag.FlagId = (row.attr("data-flag-id") || 0);
-            flag.ResourceId = row.find("td:nth-child(3)").text();
-            flag.FlagTypeId = flagSelect.val();
-            flag.Resource = window.viewPocoName;
-            flag.ResourceKey = "";
+                flag.FlagId = (row.attr("data-flag-id") || 0);
+                flag.ResourceId = row.find("td:nth-child(3)").text();
+                flag.FlagTypeId = parseInt(flagSelect.val());
+                flag.Resource = scrudFactory.viewPocoName;
+                flag.ResourceKey = "";
 
-            var addFlagAjax = addFlag(flag);
+                var flagAjax;
 
-            addFlagAjax.success(function(msg) {
-                alert(msg);
-            });
+                if (flag.FlagTypeId) {
+                    flagAjax = addFlag(flag);
+                } else {
+                    flagAjax = deleteFlag(flag.FlagId);
+                };
 
-            addFlagAjax.fail(function(xhr) {
-                logAjaxErrorMessage(xhr);
+
+                flagAjax.success(function () {
+                    if (i + 1 === selecteRows.length) {
+                        if (flag.FlagTypeId) {
+                            window.displayMessage("Flag saved.", "success");
+                        } else {
+                            window.displayMessage("Flag removed.");
+                        };
+
+                        loadPageCount(loadGrid);
+                    };
+                });
+
+                flagAjax.fail(function (xhr) {
+                    logAjaxErrorMessage(xhr);
+                });
             });
         });
-    });
+
+
+        function getIds() {
+            var ids = [];
+            $("#ScrudView").find("td:nth-child(3)").each(function () {
+                ids.push($(this).text());
+            });
+
+            return ids;
+        };
+
+        function getFlagView(resource, userId, flagIds) {
+            var url = "/api/core/flag-view/get/";
+            url += resource + "/";
+            url += userId;
+            url += "?resourceIds=";
+            url += flagIds.join("&resourceIds=");
+
+            return getAjaxRequest(url);            
+        };
+
+        function displayFlaggedRows() {
+            var ids = getIds();
+
+            var getFlagViewAjax = getFlagView(scrudFactory.viewPocoName, userId, ids);
+
+            getFlagViewAjax.success(function (msg) {
+                $("#ScrudView").find("tbody tr").each(function () {
+                    var row = $(this);
+                    var resourceId = row.find("td:nth-child(3)").text();
+
+                    var data = _.findWhere(msg, { ResourceId: resourceId });
+
+                    if (data) {
+                        row.css("background-color", data.BackgroundColor);
+                        row.css("color", data.ForegroundColor);
+                        row.attr("data-flag", data.FlagTypeName);
+                        row.attr("data-flag-id", data.FlagId);
+                    };
+
+                });
+            });
+        };
+
+        displayFlaggedRows();
+    };
+
 
 </script>

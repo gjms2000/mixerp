@@ -1,13 +1,17 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="LeaveTypes.ascx.cs" Inherits="MixERP.Net.Core.Modules.HRM.Setup.LeaveTypes" %>
 <script>
-    var title = "Leave Types";
-    var viewPocoName = "LeaveType";
-    var formPocoName = "LeaveType";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
+    var scrudFactory = new Object();
 
-    var live = "LeaveTypeName";
+    scrudFactory.title = "Leave Types";
+    scrudFactory.viewPocoName = "LeaveType";
+    scrudFactory.formPocoName = "LeaveType";
+    scrudFactory.formTableName = "hrm.leave_types";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.live = "LeaveTypeName";
 </script>
 
 

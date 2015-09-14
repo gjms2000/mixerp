@@ -434,5 +434,6 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 
             return Factory.Get<MixERP.Net.Entities.HRM.Salary>(this.Catalog, sql, salaryIds);
         }
+
 	}
 }

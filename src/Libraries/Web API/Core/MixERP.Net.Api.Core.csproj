@@ -135,6 +135,7 @@
     <Compile Include="FlagController.cs" />
     <Compile Include="FlagTypeController.cs" />
     <Compile Include="FlagTypeScrudViewController.cs" />
+    <Compile Include="FlagViewController.cs" />
     <Compile Include="FrequencyController.cs" />
     <Compile Include="FrequencySelectorViewController.cs" />
     <Compile Include="FrequencySetupController.cs" />

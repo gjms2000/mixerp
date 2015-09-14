@@ -183,5 +183,6 @@ namespace MixERP.Net.Schemas.Core.Data
 
             return Factory.Get<MixERP.Net.Entities.Core.MerchantFeeSetupScrudView>(this.Catalog, sql);
         }
+
 	}
 }

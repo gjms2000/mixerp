@@ -1,18 +1,21 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DefaultEntityAccess.ascx.cs" Inherits="MixERP.Net.Core.Modules.BackOffice.Policy.DefaultEntityAccess" %>
 <script src="/Scripts/underscore/underscore-min.js"></script>
 <script>
-    var title = "Default Entity Access Policy";
-    var description = "Create default entity access policy based on user roles. By default, users have right to access an entity if a menu acesss policy is granted. A negative policy defined here is applicable for all users of the selected role. The explicit <a href='{0}'>entity access policy</a> takes precedence over this policy.";
-    description = stringFormat(description, "EntityAccess.mix");
-    var viewPocoName = "DefaultEntityAccessScrudView";
-    var formPocoName = "DefaultEntityAccess";
-    var allowDelete = true;
-    var allowEdit = true;
-    var excludedColumns = ["audit_user_id", "audit_ts"];
-</script>
+    var scrudFactory = new Object();
 
-<script>
-    var keys = [
+    scrudFactory.title = "Default Entity Access Policy";
+    scrudFactory.description = "Create default entity access policy based on user roles. By default, users have right to access an entity if a menu acesss policy is granted. A negative policy defined here is applicable for all users of the selected role. The explicit <a href='{0}'>entity access policy</a> takes precedence over this policy.";
+    scrudFactory.description = stringFormat(scrudFactory.description, "EntityAccess.mix");
+
+    scrudFactory.viewPocoName = "DefaultEntityAccessScrudView";
+    scrudFactory.formPocoName = "DefaultEntityAccess";
+    scrudFactory.formTableName = "policy.default_entity_access";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.keys = [
         {
             property: "EntityName",
             url: '/Services/Modules/PocoService.asmx/GetPocos',

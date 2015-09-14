@@ -183,5 +183,6 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 
             return Factory.Get<MixERP.Net.Entities.HRM.EmployeeExperienceScrudView>(this.Catalog, sql);
         }
+
 	}
 }
