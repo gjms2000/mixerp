@@ -325,7 +325,7 @@ SELECT 'BA', 'الباحة', _country_id ;
 ('43', 'االفريش', core.get_state_id_by_state_name('المدينة')),
 ('44', 'ابارق', core.get_state_id_by_state_name('عسير')),
 ('45', 'االحوطة', core.get_state_id_by_state_name('الرياض')),
-('46', 'االأفلاج', core.get_state_id_by_state_name('الرياض')),
+('46', 'االأفلاج', core.get_state_id_by_state_name('الرياض'));
 
 
 

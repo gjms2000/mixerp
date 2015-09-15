@@ -836,7 +836,7 @@ BEGIN
     SELECT 'UST', 'مصلحة الضرائب المصرية';
 
     INSERT INTO core.tax_authorities(tax_master_id, tax_authority_code, tax_authority_name, country_id, state_id, zip_code, address_line_1, address_line_2, street, city, phone, fax, email, url)
-    SELECT core.get_tax_master_id_by_tax_master_code('EGT'), 'EIT', 'مأمورية الضرائب العامة - الاستثمار', core.get_country_id_by_country_code('ُEG'), core.get_state_id_by_state_code('CAI'), '11201', '5 ش 26 يوليو', 'الدور الثالث', '', 'وسط البلد', '25882723 - 25905524 - 25880079', '', '', '';
+    SELECT core.get_tax_master_id_by_tax_master_code('UST'), 'EIT', 'مأمورية الضرائب العامة - الاستثمار', core.get_country_id_by_country_code('EG'), core.get_state_id_by_state_code('CAI'), '11201', '5 ش 26 يوليو', 'الدور الثالث', '', 'وسط البلد', '25882723 - 25905524 - 25880079', '', '', '';
 
     INSERT INTO core.sales_tax_types(sales_tax_type_code, sales_tax_type_name, is_vat)
     SELECT 'SAT',   'ضريبة المبيعات',            false   UNION ALL
@@ -850,7 +850,7 @@ BEGIN
 
     PERFORM core.create_card_type(1, 'CRC', 'بطاقة ائتمان');
     PERFORM core.create_card_type(2, 'DRC', 'بطاقة مدين');
-    PERFORM core.create_card_type(3, 'CHC', 'بطاقة شحن'
+    PERFORM core.create_card_type(3, 'CHC', 'بطاقة شحن');
     PERFORM core.create_card_type(4, 'ATM', 'ATM بطاقة');
     PERFORM core.create_card_type(5, 'SVC', 'بطاقة تخزين القيمة');
     PERFORM core.create_card_type(6, 'FLC', 'Fleet بطاقة');
@@ -1352,62 +1352,6 @@ BEGIN
     ALTER column currency_code SET NOT NULL;
 
 
-
-
-    INSERT INTO core.state_sales_taxes(state_sales_tax_code, state_sales_tax_name, state_id, rate) VALUES
-
-('AL-STT', 'ضريبة مبيعات ولاية ألاباما', core.get_state_id_by_state_name('ألاباما'), 4), 
-('AZ-STT', 'ضريبة مبيعات ولاية أريزونا', core.get_state_id_by_state_name('أريزونا'), 5.6), 
-('AR-STT', 'ضريبة مبيعات ولاية أركنساس', core.get_state_id_by_state_name('أركنساس'), 6.5), 
-('CA-STT', 'ضريبة مبيعات ولاية كاليفورنيا', core.get_state_id_by_state_name('كاليفورنيا'), 7.5), 
-('CO-STT', 'ضريبة مبيعات ولاية كولورادو', core.get_state_id_by_state_name('كولورادو'), 2.9), 
-('CT-STT', 'ضريبة مبيعات ولاية كونيتيكت', core.get_state_id_by_state_name('كونيتيكت'), 6.35), 
-('DE-STT', 'ضريبة مبيعات ولاية ديلاوير', core.get_state_id_by_state_name('ديلاوير'), 0), 
-('DC-TAX', 'ضريبة مبيعات ولاية مقاطعة كولومبيا', core.get_state_id_by_state_name('مقاطعة كولومبيا'), 5.75), 
-('FL-STT', 'ضريبة مبيعات ولاية فلوريدا', core.get_state_id_by_state_name('فلوريدا'), 6), 
-('GA-STT', 'ضريبة مبيعات ولاية جورجيا', core.get_state_id_by_state_name('جورجيا'), 4), 
-('HI-STT', 'ضريبة مبيعات ولاية هاواي', core.get_state_id_by_state_name('هاواي'), 4), 
-('ID-STT', 'ضريبة مبيعات ولاية ايداهو', core.get_state_id_by_state_name('ايداهو'), 6), 
-('IL-STT', 'ضريبة مبيعات ولاية إلينوي', core.get_state_id_by_state_name('إلينوي'), 6.25), 
-('IN-STT', 'ضريبة مبيعات ولاية إنديانا', core.get_state_id_by_state_name('إنديانا'), 7), 
-('IA-STT', 'ضريبة مبيعات ولاية أيوا', core.get_state_id_by_state_name('أيوا'), 6), 
-('KS-STT', 'ضريبة مبيعات ولاية كانساس', core.get_state_id_by_state_name('كانساس'), 6.15), 
-('KY-STT', 'ضريبة مبيعات ولاية كنتاكي', core.get_state_id_by_state_name('كنتاكي'), 6), 
-('LA-STT', 'ضريبة مبيعات ولاية لويزيانا', core.get_state_id_by_state_name('لويزيانا'), 4), 
-('ME-STT', 'ضريبة مبيعات ولاية مين', core.get_state_id_by_state_name('مين'), 5.5), 
-('MD-STT', 'ضريبة مبيعات ولاية ميريلاند', core.get_state_id_by_state_name('ميريلاند'), 6), 
-('MA-STT', 'ضريبة مبيعات ولاية ماساتشوستس', core.get_state_id_by_state_name('ماساتشوستس'), 6.25), 
-('MI-STT', 'ضريبة مبيعات ولاية ميشيغان', core.get_state_id_by_state_name('ميشيغان'), 6), 
-('MN-STT', 'ضريبة مبيعات ولاية مينيسوتا', core.get_state_id_by_state_name('مينيسوتا'), 6.875), 
-('MS-STT', 'ضريبة مبيعات ولاية ميسيسيبي', core.get_state_id_by_state_name('ميسيسيبي'), 7), 
-('MO-STT', 'ضريبة مبيعات ولاية ميسوري', core.get_state_id_by_state_name('ميسوري'), 4.225), 
-('NE-STT', 'ضريبة مبيعات ولاية نبراسكا', core.get_state_id_by_state_name('نبراسكا'), 5.5), 
-('NV-STT', 'ضريبة مبيعات ولاية نيفادا', core.get_state_id_by_state_name('نيفادا'), 6.85), 
-('NJ-STT', 'ضريبة مبيعات ولاية نيو جيرسي', core.get_state_id_by_state_name('نيو جيرسي'), 7), 
-('NM-STT', 'ضريبة مبيعات ولاية نيو مكسيكو', core.get_state_id_by_state_name('نيو مكسيكو'), 5.125), 
-('NY-STT', 'ضريبة مبيعات ولاية نيويورك', core.get_state_id_by_state_name('نيويورك'), 4), 
-('NC-STT', 'ضريبة مبيعات ولاية نورث كارولينا', core.get_state_id_by_state_name('نورث كارولينا'), 4.75), 
-('ND-STT', 'ضريبة مبيعات ولاية نورث داكوتا', core.get_state_id_by_state_name('نورث داكوتا'), 5), 
-('OH-STT', 'ضريبة مبيعات ولاية أوهايو', core.get_state_id_by_state_name('أوهايو'), 5.75), 
-('OK-STT', 'ضريبة مبيعات ولاية أوكلاهوما', core.get_state_id_by_state_name('أوكلاهوما'), 4.5), 
-('PA-STT', 'ضريبة مبيعات ولاية بنسلفانيا', core.get_state_id_by_state_name('بنسلفانيا'), 6), 
-('RI-STT', 'ضريبة مبيعات ولاية رود ايلاند', core.get_state_id_by_state_name('رود ايلاند'), 7), 
-('SC-STT', 'ضريبة مبيعات ولاية ساوث كارولينا', core.get_state_id_by_state_name('ساوث كارولينا'), 6), 
-('SD-STT', 'ضريبة مبيعات ولاية ساوث داكوتا', core.get_state_id_by_state_name('ساوث داكوتا'), 4), 
-('TN-STT', 'ضريبة مبيعات ولاية تينيسي', core.get_state_id_by_state_name('تينيسي'), 7), 
-('TX-STT', 'ضريبة مبيعات ولاية تكساس', core.get_state_id_by_state_name('تكساس'), 6.25), 
-('UT-STT', 'ضريبة مبيعات ولاية يوتا', core.get_state_id_by_state_name('يوتا'), 4.7), 
-('VT-STT', 'ضريبة مبيعات ولاية فيرمونت', core.get_state_id_by_state_name('فيرمونت'), 6), 
-('VA-STT', 'ضريبة مبيعات ولاية فرجينيا', core.get_state_id_by_state_name('فرجينيا'), 4.3), 
-('WA-STT', 'ضريبة مبيعات ولاية واشنطن', core.get_state_id_by_state_name('واشنطن'), 6.5), 
-('WV-STT', 'ضريبة مبيعات ولاية ويست فرجينيا', core.get_state_id_by_state_name('ويست فرجينيا'), 6), 
-('WI-STT', 'ضريبة مبيعات ولاية ويسكونسن', core.get_state_id_by_state_name('ويسكونسن'), 5), 
-('WY-STT', 'ضريبة مبيعات ولاية وايومنغ', core.get_state_id_by_state_name('وايومنغ'), 4);
-
-
-    INSERT INTO core.county_sales_taxes(county_id, county_sales_tax_code, county_sales_tax_name, rate)
-    SELECT core.get_county_id_by_county_code('36047'), '36047-STX', 'ضريبة مبيعات مقاطعة كينغز', 4.875 UNION ALL
-    SELECT core.get_county_id_by_county_code('6095'), '6095-STX', 'ضريبة مبيعات مقاطعة سولانو', 0.125;
 
 
     INSERT INTO core.party_types(party_type_code, party_type_name, account_id) 
