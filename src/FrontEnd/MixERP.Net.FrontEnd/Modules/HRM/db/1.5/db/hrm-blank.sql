@@ -326,7 +326,7 @@ CREATE TABLE hrm.resignations
     verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
     verified_by_user_id                     integer NOT NULL REFERENCES office.users(user_id),
     verified_on                             date NOT NULL,
-    effecive_resignation_date               date NOT NULL,
+    effective_resignation_date              date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -337,7 +337,7 @@ CREATE TABLE hrm.terminations
     termination_id                          SERIAL NOT NULL PRIMARY KEY,
     entered_by                              integer NOT NULL REFERENCES office.users(user_id),
     notice_date                             date NOT NULL,
-    effecive_termination_date               date NOT NULL,
+    effective_termination_date              date NOT NULL,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     forward_to                              integer REFERENCES hrm.employees(employee_id),
     reason                                  national character varying(128) NOT NULL,
@@ -417,6 +417,47 @@ DELETE FROM policy.menu_access;
 INSERT INTO policy.menu_access(office_id, menu_id, user_id)
 SELECT office_id, menu_id, 2
 FROM office.offices, core.menus;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/04.default-values/01.default-values.sql --<--<--
+DO
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM core.attachment_lookup WHERE book = 'employee') THEN
+        INSERT INTO core.attachment_lookup(book, resource, resource_key)
+        SELECT 'employee',           'core.employees',  'employee_id';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.contract_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.contract_scrud_view;
+
+CREATE VIEW hrm.contract_scrud_view
+AS
+SELECT
+    hrm.contracts.contract_id,
+    hrm.employees.employee_id,
+    office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
+    office.departments.department_code || ' (' || office.departments.department_name || ')' AS department,
+    office.roles.role_code || ' (' || office.roles.role_name || ')' AS role,
+    hrm.leave_benefits.leave_benefit_code || ' (' || hrm.leave_benefits.leave_benefit_name || ')' AS leave_benefit,
+    hrm.employment_status_codes.status_code || ' (' || hrm.employment_status_codes.status_code_name || ')' AS employment_status_code,
+    hrm.contracts.began_on,
+    hrm.contracts.ended_on
+FROM hrm.contracts
+INNER JOIN hrm.employees
+ON hrm.employees.employee_id = hrm.contracts.employee_id
+INNER JOIN office.offices
+ON office.offices.office_id = hrm.contracts.office_id
+INNER JOIN office.departments
+ON office.departments.department_id = hrm.contracts.department_id
+INNER JOIN office.roles
+ON office.roles.role_id = hrm.contracts.role_id
+INNER JOIN hrm.employment_status_codes
+ON hrm.employment_status_codes.employment_status_code_id = hrm.contracts.employment_status_code_id
+LEFT JOIN hrm.leave_benefits
+ON hrm.leave_benefits.leave_benefit_id = hrm.contracts.leave_benefit_id;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_experience_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.employee_experience_scrud_view;

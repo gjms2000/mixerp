@@ -46,7 +46,8 @@
     <Reference Include="MixERP.Net.FrontEnd">
       <HintPath>..\..\bin\MixERP.Net.FrontEnd.dll</HintPath>
     </Reference>
-    <Reference Include="PetaPoco">
+    <Reference Include="PetaPoco, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\PetaPoco.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -60,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract.cs" />
+    <Compile Include="ContractScrudView.cs" />
     <Compile Include="EducationLevel.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeExperience.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="EmploymentStatus.cs" />
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />
+    <Compile Include="ExitScrudView.cs" />
     <Compile Include="ExitType.cs" />
     <Compile Include="Holiday.cs" />
     <Compile Include="JobTitle.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="SalaryType.cs" />
     <Compile Include="Shift.cs" />
     <Compile Include="Termination.cs" />
+    <Compile Include="TerminationScrudView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />

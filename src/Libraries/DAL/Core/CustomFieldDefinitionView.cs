@@ -29,22 +29,22 @@ using Serilog;
 namespace MixERP.Net.Schemas.Core.Data
 {
     /// <summary>
-    /// Provides simplified data access features to perform SCRUD operation on the database table "core.custom_field_definition_view".
+    /// Provides simplified data access features to perform SCRUD operation on the database view "core.custom_field_definition_view".
     /// </summary>
     public class CustomFieldDefinitionView : DbAccess
     {
         /// <summary>
-        /// The schema of this table. Returns literal "core".
+        /// The schema of this view. Returns literal "core".
         /// </summary>
 	    public override string ObjectNamespace => "core";
 
         /// <summary>
-        /// The schema unqualified name of this table. Returns literal "custom_field_definition_view".
+        /// The schema unqualified name of this view. Returns literal "custom_field_definition_view".
         /// </summary>
 	    public override string ObjectName => "custom_field_definition_view";
 
         /// <summary>
-        /// Login id of application user accessing this table.
+        /// Login id of application user accessing this view.
         /// </summary>
 		public long LoginId { get; set; }
 
@@ -54,9 +54,9 @@ namespace MixERP.Net.Schemas.Core.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Performs SQL count on the table "core.custom_field_definition_view".
+		/// Performs SQL count on the view "core.custom_field_definition_view".
 		/// </summary>
-		/// <returns>Returns the number of rows of the table "core.custom_field_definition_view".</returns>
+		/// <returns>Returns the number of rows of the view "core.custom_field_definition_view".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
@@ -85,7 +85,7 @@ namespace MixERP.Net.Schemas.Core.Data
 
 
 		/// <summary>
-		/// Performs a select statement on table "core.custom_field_definition_view" producing a paged result of 25.
+		/// Performs a select statement on the view "core.custom_field_definition_view" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "CustomFieldDefinitionView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -114,7 +114,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "core.custom_field_definition_view" producing a paged result of 25.
+		/// Performs a select statement on the view "core.custom_field_definition_view" producing a paged result of 25.
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "CustomFieldDefinitionView" class.</returns>
@@ -146,7 +146,7 @@ namespace MixERP.Net.Schemas.Core.Data
 		}
 
         /// <summary>
-		/// Performs a filtered select statement on table "core.custom_field_definition_view" producing a paged result of 25.
+		/// Performs a filtered select statement on view "core.custom_field_definition_view" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>

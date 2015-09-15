@@ -450,8 +450,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'due_frequency_i
 SELECT localization.add_localized_resource('ScrudResource', '', 'due_on_date', 'Due on Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'education_level_id', 'Education Level Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'education_level_name', 'Education Level Name');
-SELECT localization.add_localized_resource('ScrudResource', '', 'effecive_resignation_date', 'Effecive Resignation Date');
-SELECT localization.add_localized_resource('ScrudResource', '', 'effecive_termination_date', 'Effecive Termination Date');
+SELECT localization.add_localized_resource('ScrudResource', '', 'effective_resignation_date', 'Effective Resignation Date');
+SELECT localization.add_localized_resource('ScrudResource', '', 'effective_termination_date', 'Effective Termination Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'effective_from', 'Effective From');
 SELECT localization.add_localized_resource('ScrudResource', '', 'elevated', 'Elevated');
 SELECT localization.add_localized_resource('ScrudResource', '', 'email', 'Email');

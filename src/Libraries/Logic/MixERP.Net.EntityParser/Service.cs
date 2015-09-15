@@ -139,6 +139,11 @@ namespace MixERP.Net.EntityParser
                 {
                     line++;
 
+                    if (((IDictionary<string, object>) item).ContainsKey("entered_by"))
+                    {
+                        ((IDictionary<string, object>)item)["entered_by"] = userId;
+                    }
+
                     ((IDictionary<string, object>)item)["audit_user_id"] = userId;
                     ((IDictionary<string, object>)item)["audit_ts"] = DateTime.UtcNow;
 

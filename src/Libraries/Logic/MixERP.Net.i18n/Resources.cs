@@ -5036,28 +5036,6 @@ namespace MixERP.Net.i18n.Resources
 		}
 		
 		/// <summary>
-		///   Localized string for Effecive Resignation Date
-		/// </summary>
-		public static string effecive_resignation_date 
-		{
-			get
-			{
-				return Get("effecive_resignation_date");
-			}
-		}
-		
-		/// <summary>
-		///   Localized string for Effecive Termination Date
-		/// </summary>
-		public static string effecive_termination_date 
-		{
-			get
-			{
-				return Get("effecive_termination_date");
-			}
-		}
-		
-		/// <summary>
 		///   Localized string for Effective From
 		/// </summary>
 		public static string effective_from 
@@ -5065,6 +5043,28 @@ namespace MixERP.Net.i18n.Resources
 			get
 			{
 				return Get("effective_from");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Effective Resignation Date
+		/// </summary>
+		public static string effective_resignation_date 
+		{
+			get
+			{
+				return Get("effective_resignation_date");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Effective Termination Date
+		/// </summary>
+		public static string effective_termination_date 
+		{
+			get
+			{
+				return Get("effective_termination_date");
 			}
 		}
 		

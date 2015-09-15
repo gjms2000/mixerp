@@ -17,4 +17,36 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CashFlowSetup.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.CashFlowSetup" %>
-<asp:PlaceHolder runat="server" ID="ScrudPlaceholder"></asp:PlaceHolder>
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = Resources.Titles.CashFlowSetup();
+    scrudFactory.viewPocoName = "CashFlowSetupScrudView";
+    scrudFactory.formPocoName = "CashFlowSetup";
+    scrudFactory.formTableName = "core.cash_flow_setups";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.keys = [
+        {
+            property: "CashFlowHeadingId",
+            url: '/api/core/cash-flow-heading/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "AccountMasterId",
+            url: '/api/core/account-master/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

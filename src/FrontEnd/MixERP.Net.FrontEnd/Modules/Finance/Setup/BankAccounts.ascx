@@ -18,4 +18,54 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BankAccounts.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.BankAccounts" %>
-<asp:PlaceHolder ID="ScrudPlaceholder" runat="server" />
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = Resources.Titles.BankAccounts();
+    scrudFactory.viewPocoName = "BankAccountScrudView";
+    scrudFactory.formPocoName = "BankAccount";
+    scrudFactory.formTableName = "core.bank_accounts";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.layout = [
+        ["AccountId", ""],
+        ["BankName", "BankBranch", "", ""],
+        ["OfficeId", "MaintainedByUserId", "", ""],
+        ["BankAccountNumber", "BankContactNumber", "", ""],
+        ["BankAddress", ""]
+    ];
+
+    scrudFactory.keys = [
+        {
+            property: "MaintainedByUserId",
+            url: '/api/office/user-selector-view/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "AccountId",
+            url: '/api/core/bank-account-selector-view/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "OfficeId",
+            url: '/api/office/office-scrud-view/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+
+    scrudFactory.live = "BankAccountNumber";
+</script>
+
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

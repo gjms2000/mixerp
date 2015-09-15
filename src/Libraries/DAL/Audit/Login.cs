@@ -216,8 +216,7 @@ namespace MixERP.Net.Schemas.Audit.Data
 				return;
 			}
 
-			if(login.LoginId > 0)
-            {
+			if(login.LoginId > 0){
 				this.Update(login, login.LoginId);
 				return;
 			}
@@ -435,5 +434,6 @@ namespace MixERP.Net.Schemas.Audit.Data
 
             return Factory.Get<MixERP.Net.Entities.Audit.Login>(this.Catalog, sql, loginIds);
         }
+
 	}
 }

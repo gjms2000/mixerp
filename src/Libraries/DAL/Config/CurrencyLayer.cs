@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Config.Data
 
             return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql, keys);
         }
+
 	}
 }

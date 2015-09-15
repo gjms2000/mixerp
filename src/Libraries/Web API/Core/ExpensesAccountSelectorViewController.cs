@@ -112,6 +112,29 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
+        ///     Displayfield is a lightweight key/value collection of expenses account selector views.
+        /// </summary>
+        /// <returns>Returns an enumerable key/value collection of expenses account selector views.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("display-fields")]
+        [Route("~/api/core/expenses-account-selector-view/display-fields")]
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            try
+            {
+                return this.ExpensesAccountSelectorViewContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 expenses account selector views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>

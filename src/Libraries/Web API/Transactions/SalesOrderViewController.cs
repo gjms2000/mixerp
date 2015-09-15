@@ -112,6 +112,29 @@ namespace MixERP.Net.Api.Transactions
         }
 
         /// <summary>
+        ///     Displayfield is a lightweight key/value collection of sales order views.
+        /// </summary>
+        /// <returns>Returns an enumerable key/value collection of sales order views.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("display-fields")]
+        [Route("~/api/transactions/sales-order-view/display-fields")]
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            try
+            {
+                return this.SalesOrderViewContext.GetDisplayFields();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 sales order views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -136,5 +159,6 @@ namespace MixERP.Net.Api.Transactions
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
+
     }
 }

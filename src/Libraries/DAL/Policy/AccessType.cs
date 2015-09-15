@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Policy.Data
 
             return Factory.Get<MixERP.Net.Entities.Policy.AccessType>(this.Catalog, sql, accessTypeIds);
         }
+
 	}
 }

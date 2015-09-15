@@ -14,6 +14,13 @@
 
     scrudFactory.live = "EmploymentStatusName";
 
+    scrudFactory.layout = [
+        ["EmploymentStatusId", ""],
+        ["EmploymentStatusCode", "EmploymentStatusName", "", ""],
+        ["IsContract", "DefaultEmploymentStatusCodeId", "", ""],
+        ["Description", ""]
+    ];
+
     scrudFactory.keys = [
         {
             property: "DefaultEmploymentStatusCodeId",

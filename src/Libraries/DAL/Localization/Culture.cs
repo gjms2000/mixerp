@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Localization.Data
 
             return Factory.Get<MixERP.Net.Entities.Localization.Culture>(this.Catalog, sql, cultureCodes);
         }
+
 	}
 }

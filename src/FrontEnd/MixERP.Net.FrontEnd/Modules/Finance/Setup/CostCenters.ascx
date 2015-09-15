@@ -18,4 +18,26 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CostCenters.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.CostCenters" %>
-<asp:PlaceHolder ID="ScrudPlaceholder" runat="server" />
+
+<script src="/Scripts/underscore/underscore-min.js"></script>
+<script>
+    var scrudFactory = new Object();
+    scrudFactory.title = window.Resources.Titles.CostCenters();
+
+    scrudFactory.viewPocoName = "CostCenterScrudView";
+    scrudFactory.formPocoName = "CostCenter";
+
+    scrudFactory.formTableName = "office.cost_centers";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "CostCenterName";
+    scrudFactory.queryStringKey = "AccountId";
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+
+</script>
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

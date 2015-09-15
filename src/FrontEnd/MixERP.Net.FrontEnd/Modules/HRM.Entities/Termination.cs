@@ -39,9 +39,9 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("date", 0, false, "")] 
         public DateTime NoticeDate { get; set; }
     
-        [Column("effecive_termination_date")]
+        [Column("effective_termination_date")]
         [ColumnDbType("date", 0, false, "")] 
-        public DateTime EffeciveTerminationDate { get; set; }
+        public DateTime EffectiveTerminationDate { get; set; }
     
         [Column("employee_id")]
         [ColumnDbType("int4", 0, false, "")] 

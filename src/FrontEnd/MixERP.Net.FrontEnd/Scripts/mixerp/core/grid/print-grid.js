@@ -1,9 +1,8 @@
 var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
-    var token = Math.random().toString();
     //Load report template from the path.
-    $.get(templatePath + "?" + token, function () { }).done(function (data) {
+    $.get(templatePath, function () { }).done(function (data) {
         //Load report header template.
-        $.get(headerPath + "?" + token, function () { }).done(function (header) {
+        $.get(headerPath, function () { }).done(function (header) {
             var table = $("#" + gridViewId).clone();
 
             table.find("tr.tableFloatingHeader").remove();
@@ -26,7 +25,7 @@ var printGridView = function (templatePath, headerPath, reportTitle, gridViewId,
             data = data.replace("{OfficeCode}", office);
             data = data.replace("{Table}", table);
 
-            if (hiddenFieldToUpdate) {                
+            if (hiddenFieldToUpdate) {
                 //Update the hidden field with data, but do not print.
                 $(hiddenFieldToUpdate).val(data);
                 if (typeof (callback) === "function") {

@@ -360,7 +360,7 @@
 
     function loadDropdowns() {
         if (!dropdownsLoaded) {
-            var dropdowns = $(".poco.form.factory .dropdown");
+            var dropdowns = $(".poco.form.factory select");
 
             dropdowns.each(function (i, v) {
                 var dropdown = $(v);
@@ -477,8 +477,8 @@
     function createLayout(collection) {
         var skip = [];
 
-        if (typeof (layout) !== "undefined") {
-            $.each(layout, function (i, currentLayout) {
+        if (typeof (scrudFactory.layout) !== "undefined") {
+            $.each(scrudFactory.layout, function (i, currentLayout) {
                 var actualColumns = _.uniq(currentLayout);
                 var fieldWith = 16 / currentLayout.length;
 
@@ -657,14 +657,13 @@
             };
         };
 
-        if (typeof (readonlyColumns) === "undefined") {
-            readonlyColumns = [];
+        if (typeof (scrudFactory.readonlyColumns) === "undefined") {
+            scrudFactory.readonlyColumns = [];
         };
 
-        if (readonlyColumns.indexOf(column.PropertyName) > -1) {
+        if (scrudFactory.readonlyColumns.indexOf(column.PropertyName) > -1) {
             element.attr("readonly", "");
         };
-
 
         if (column.IsSerial) {
             element.attr("readonly", "readonly");
@@ -727,7 +726,6 @@
         };
 
         var hasKey = _.findWhere(scrudFactory.keys, { property: propertyName });
-
         if (hasKey) {
             return $("<select class='ui search dropdown' />");
         };
@@ -742,6 +740,7 @@
             return $("<input type='text' class='integer' />");
         case "float8":
         case "decimal":
+        case "decimal_strict":
         case "numeric":
             return $("<input type='text' class='decimal' />");
         case "money_strict2":

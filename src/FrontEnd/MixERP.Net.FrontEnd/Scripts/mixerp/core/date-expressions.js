@@ -4,7 +4,7 @@ function convertDate(d) {
         return date;
     } catch (e) {
         return null;
-    } 
+    }
 };
 
 function dateAdd(dt, expression, number) {
@@ -26,7 +26,19 @@ function dateAdd(dt, expression, number) {
     return ret.toString(shortDateFormat);
 };
 
-$(document).ready(function () {
+function loadDatepicker() {
+    $(".date:not([readonly]), input[type=date]:not([readonly])").datepicker(
+    {
+        dateFormat: datepickerFormat,
+        showWeek: datepickerShowWeekNumber,
+        firstDay: datepickerWeekStartDay,
+        constrainInput: false,
+        numberOfMonths: eval(datepickerNumberOfMonths)
+    },
+    $.datepicker.regional[language]);
+
+
+
     $("input[type=date], .date").blur(function () {
         if (today === "") return;
         var control = $(this);
@@ -117,4 +129,8 @@ $(document).ready(function () {
             return;
         }
     });
+};
+
+$(document).ready(function () {
+    loadDatepicker();
 });

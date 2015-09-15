@@ -111,6 +111,7 @@ namespace MixERP.Net.Api.Localization
             }
         }
 
+
         /// <summary>
         ///     Creates a filtered and paginated collection containing 25 resource views on each page, sorted by the property .
         /// </summary>
@@ -136,5 +137,6 @@ namespace MixERP.Net.Api.Localization
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
+
     }
 }

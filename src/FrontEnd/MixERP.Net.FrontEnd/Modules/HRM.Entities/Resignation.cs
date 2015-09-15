@@ -71,9 +71,9 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("date", 0, false, "")] 
         public DateTime VerifiedOn { get; set; }
     
-        [Column("effecive_resignation_date")]
+        [Column("effective_resignation_date")]
         [ColumnDbType("date", 0, false, "")] 
-        public DateTime EffeciveResignationDate { get; set; }
+        public DateTime EffectiveResignationDate { get; set; }
     
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")] 

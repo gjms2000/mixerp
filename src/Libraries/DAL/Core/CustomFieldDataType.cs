@@ -175,7 +175,7 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
 	
-			const string sql = "SELECT data_type AS key, data_type as value FROM core.custom_field_data_types;";
+			const string sql = "SELECT data_type AS key, is_number as value FROM core.custom_field_data_types;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
 				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))

@@ -31,10 +31,10 @@
         },
         {
             property: "UserId",
-            url: '/Modules/BackOffice/Services/Policy/EntityAccess.asmx/GetUsers',
+            url: '/api/office/user-selector-view/display-fields',
             data: null,
-            valueField: "UserId",
-            textField: "UserName"
+            valueField: "Key",
+            textField: "Value"
         }
     ];
 </script>

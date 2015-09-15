@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Transactions.Data
 
             return Factory.Get<MixERP.Net.Entities.Transactions.InventoryTransferDeliveryDetail>(this.Catalog, sql, inventoryTransferDeliveryDetailIds);
         }
+
 	}
 }

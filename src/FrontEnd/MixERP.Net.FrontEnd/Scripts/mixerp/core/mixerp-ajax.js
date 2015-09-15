@@ -126,13 +126,13 @@ var getAjaxRequest = function (url, type, data) {
     var ajax = $.ajax({
         type: type,
         url: url,
-        data:data,
+        data: data,
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     });
 
     ajax.fail(function (xhr) {
-        logAjaxErrorMessage(xhr);
+        displayMessage(JSON.stringify(xhr));
     });
 
     return ajax;

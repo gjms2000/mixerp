@@ -18,7 +18,27 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="AgeingSlabs.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.AgeingSlabs" %>
-<asp:PlaceHolder ID="ScrudPlaceholder" runat="server" />
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = Resources.Titles.AgeingSlabs();
+    scrudFactory.viewPocoName = "AgeingSlabScrudView";
+    scrudFactory.formPocoName = "AgeingSlab";
+    scrudFactory.formTableName = "core.ageing_slabs";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+
+    scrudFactory.live = "AgeingSlabName";
+</script>
+
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>
+
+
 <script type="text/javascript">
     function scrudCustomValidator() {
         var fromDaysTextbox = $("#from_days_textbox");

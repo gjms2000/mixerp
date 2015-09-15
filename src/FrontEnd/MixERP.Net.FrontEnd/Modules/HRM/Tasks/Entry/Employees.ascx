@@ -3,23 +3,24 @@
      %>
 
 <script>
-    var title = "Employee";
-    var formPocoName = "Employee";
-    var excludedColumns = ["audit_user_id", "audit_ts"];
-    var readonlyColumns = ["EmployeeName"];
-    var live = "EmployeeName";
-    var layout = [
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Employee";
+    scrudFactory.formPocoName = "Employee";
+    scrudFactory.formTableName = "hrm.employees";
+
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.readonlyColumns = ["EmployeeName"];
+    scrudFactory.live = "EmployeeName";
+    scrudFactory.layout = [
         ["Photo", ""],
         ["EmployeeId", "EmployeeName", "", ""],
         ["FirstName", "MiddleName", "LastName", "GenderCode", "", "", "", ""]
     ];
 
-    var returnUrl = "../Employees.mix";
-    var queryStringKey = "EmployeeId";
-</script>
-
-<script>
-    var keys = [
+    scrudFactory.returnUrl = "../Employees.mix";
+    scrudFactory.queryStringKey = "EmployeeId";
+    scrudFactory.keys = [
         {
             property: "GenderCode",
             url: '/api/core/gender/display-fields',

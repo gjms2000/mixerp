@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Localization.Data
 
             return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResource>(this.Catalog, sql, localizedResourceIds);
         }
+
 	}
 }

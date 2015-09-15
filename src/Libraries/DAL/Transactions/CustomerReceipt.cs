@@ -175,7 +175,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
 	
-			const string sql = "SELECT receipt_id AS key, currency_code as value FROM transactions.customer_receipts;";
+			const string sql = "SELECT receipt_id AS key, receipt_id as value FROM transactions.customer_receipts;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
 				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Transactions.Data
 
             return Factory.Get<MixERP.Net.Entities.Transactions.CustomerReceipt>(this.Catalog, sql, receiptIds);
         }
+
 	}
 }

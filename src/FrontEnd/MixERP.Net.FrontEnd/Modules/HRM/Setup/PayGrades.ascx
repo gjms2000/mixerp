@@ -12,6 +12,13 @@
     scrudFactory.allowEdit = true;
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
+    scrudFactory.layout = [
+    	["PayGradeId", ""],
+    	["PayGradeCode", "PayGradeName", "", ""],
+    	["MinimumSalary", "MaximumSalary", "", ""],
+    	["Description", ""]
+    ];
+
     scrudFactory.live = "PayGradeName";
 </script>
 

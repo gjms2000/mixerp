@@ -29,22 +29,22 @@ using Serilog;
 namespace MixERP.Net.Schemas.Policy.Data
 {
     /// <summary>
-    /// Provides simplified data access features to perform SCRUD operation on the database table "policy.auto_verification_policy_scrud_view".
+    /// Provides simplified data access features to perform SCRUD operation on the database view "policy.auto_verification_policy_scrud_view".
     /// </summary>
     public class AutoVerificationPolicyScrudView : DbAccess
     {
         /// <summary>
-        /// The schema of this table. Returns literal "policy".
+        /// The schema of this view. Returns literal "policy".
         /// </summary>
 	    public override string ObjectNamespace => "policy";
 
         /// <summary>
-        /// The schema unqualified name of this table. Returns literal "auto_verification_policy_scrud_view".
+        /// The schema unqualified name of this view. Returns literal "auto_verification_policy_scrud_view".
         /// </summary>
 	    public override string ObjectName => "auto_verification_policy_scrud_view";
 
         /// <summary>
-        /// Login id of application user accessing this table.
+        /// Login id of application user accessing this view.
         /// </summary>
 		public long LoginId { get; set; }
 
@@ -54,9 +54,9 @@ namespace MixERP.Net.Schemas.Policy.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Performs SQL count on the table "policy.auto_verification_policy_scrud_view".
+		/// Performs SQL count on the view "policy.auto_verification_policy_scrud_view".
 		/// </summary>
-		/// <returns>Returns the number of rows of the table "policy.auto_verification_policy_scrud_view".</returns>
+		/// <returns>Returns the number of rows of the view "policy.auto_verification_policy_scrud_view".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
@@ -82,10 +82,66 @@ namespace MixERP.Net.Schemas.Policy.Data
 			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
+        /// <summary>
+        /// Displayfields provide a minimal name/value context for data binding the row collection of policy.auto_verification_policy_scrud_view.
+        /// </summary>
+        /// <returns>Returns an enumerable name and value collection for the view policy.auto_verification_policy_scrud_view</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+		public IEnumerable<DisplayField> GetDisplayFields()
+		{
+			List<DisplayField> displayFields = new List<DisplayField>();
+
+			if(string.IsNullOrWhiteSpace(this.Catalog))
+			{
+				return displayFields;
+			}
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to get display field for entity \"AutoVerificationPolicyScrudView\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+	
+			const string sql = "SELECT policy_id AS key, user_name as value FROM policy.auto_verification_policy_scrud_view;";
+			using (NpgsqlCommand command = new NpgsqlCommand(sql))
+			{
+				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+				{
+					if (table?.Rows == null || table.Rows.Count == 0)
+					{
+						return displayFields;
+					}
+
+					foreach (DataRow row in table.Rows)
+					{
+						if (row != null)
+						{
+							DisplayField displayField = new DisplayField
+							{
+								Key = row["key"].ToString(),
+								Value = row["value"].ToString()
+							};
+
+							displayFields.Add(displayField);
+						}
+					}
+				}
+			}
+
+			return displayFields;
+		}
+
 
 
 		/// <summary>
-		/// Performs a select statement on table "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
+		/// Performs a select statement on the view "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "AutoVerificationPolicyScrudView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -114,7 +170,7 @@ namespace MixERP.Net.Schemas.Policy.Data
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
+		/// Performs a select statement on the view "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "AutoVerificationPolicyScrudView" class.</returns>
@@ -146,7 +202,7 @@ namespace MixERP.Net.Schemas.Policy.Data
 		}
 
         /// <summary>
-		/// Performs a filtered select statement on table "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
+		/// Performs a filtered select statement on view "policy.auto_verification_policy_scrud_view" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -183,5 +239,6 @@ namespace MixERP.Net.Schemas.Policy.Data
 
             return Factory.Get<MixERP.Net.Entities.Policy.AutoVerificationPolicyScrudView>(this.Catalog, sql);
         }
+
 	}
 }

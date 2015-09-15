@@ -11,6 +11,13 @@
     scrudFactory.allowEdit = true;
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
+    scrudFactory.layout = [
+    	["LeaveTypeId", ""],
+    	["LeaveTypeCode", "LeaveTypeName", "", ""],
+    	["Description", ""]
+    ];
+
+
     scrudFactory.live = "LeaveTypeName";
 </script>
 

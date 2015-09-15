@@ -17,10 +17,8 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
 
-using MixERP.Net.FrontEnd.Base;
-using MixERP.Net.FrontEnd.Controls;
-using MixERP.Net.i18n.Resources;
 using System;
+using MixERP.Net.FrontEnd.Base;
 
 namespace MixERP.Net.Core.Modules.Finance.Setup
 {
@@ -28,19 +26,6 @@ namespace MixERP.Net.Core.Modules.Finance.Setup
     {
         public override void OnControlLoad(object sender, EventArgs e)
         {
-            using (Scrud scrud = new Scrud())
-            {
-                scrud.KeyColumn = "ageing_slab_id";
-
-                scrud.TableSchema = "core";
-                scrud.Table = "ageing_slabs";
-                scrud.ViewSchema = "core";
-                scrud.View = "ageing_slab_scrud_view";
-
-                scrud.Text = Titles.AgeingSlabs;
-
-                this.ScrudPlaceholder.Controls.Add(scrud);
-            }            
         }
     }
 }

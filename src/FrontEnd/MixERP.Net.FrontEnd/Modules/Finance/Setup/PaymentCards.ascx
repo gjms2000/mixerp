@@ -17,4 +17,43 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PaymentCards.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.PaymentCards" %>
-<asp:PlaceHolder runat="server" ID="ScrudPlaceholder"></asp:PlaceHolder>
+<script src="/Scripts/underscore/underscore-min.js"></script>
+<script>
+    var scrudFactory = new Object();
+    scrudFactory.title = window.Resources.Titles.PaymentCards();
+
+    scrudFactory.viewPocoName = "PaymentCardScrudView";
+    scrudFactory.formPocoName = "PaymentCard";
+
+    scrudFactory.formTableName = "core.payment_cards";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "PaymentCardName";
+    scrudFactory.queryStringKey = "AccountId";
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.layout = [
+        ["PaymentCardId", ""],
+        ["PaymentCardCode", "PaymentCardName", "", ""],
+        ["CardTypeId", ""]
+    ];
+
+    scrudFactory.keys = [
+        {
+            property: "CardTypeId",
+            url: '/api/core/card-type/display-fields',
+            data: null,
+            isArray:false,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+
+
+</script>
+
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

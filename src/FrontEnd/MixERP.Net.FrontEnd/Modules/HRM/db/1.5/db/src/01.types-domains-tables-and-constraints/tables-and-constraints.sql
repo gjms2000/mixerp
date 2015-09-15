@@ -325,7 +325,7 @@ CREATE TABLE hrm.resignations
     verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
     verified_by_user_id                     integer NOT NULL REFERENCES office.users(user_id),
     verified_on                             date NOT NULL,
-    effecive_resignation_date               date NOT NULL,
+    effective_resignation_date              date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -336,7 +336,7 @@ CREATE TABLE hrm.terminations
     termination_id                          SERIAL NOT NULL PRIMARY KEY,
     entered_by                              integer NOT NULL REFERENCES office.users(user_id),
     notice_date                             date NOT NULL,
-    effecive_termination_date               date NOT NULL,
+    effective_termination_date              date NOT NULL,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     forward_to                              integer REFERENCES hrm.employees(employee_id),
     reason                                  national character varying(128) NOT NULL,

@@ -12,7 +12,14 @@
     scrudFactory.allowEdit = true;
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
-    scrudFactory.live = "Comment";
+    scrudFactory.live = "HolidayName";
+
+    scrudFactory.layout = [
+        ["HolidayId", ""],
+        ["OfficeId", "HolidayName", "", ""],
+        ["OccursOn", "EndsOn", "", ""],
+        ["Comment", ""]
+    ];
 
     scrudFactory.keys = [
         {

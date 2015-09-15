@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Audit.Data
 
             return Factory.Get<MixERP.Net.Entities.Audit.FailedLogin>(this.Catalog, sql, failedLoginIds);
         }
+
 	}
 }

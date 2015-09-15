@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Config.Data
 
             return Factory.Get<MixERP.Net.Entities.Config.Smtp>(this.Catalog, sql, smtpIds);
         }
+
 	}
 }

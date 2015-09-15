@@ -111,6 +111,7 @@ namespace MixERP.Net.Api.Config
             }
         }
 
+
         /// <summary>
         ///     Creates a filtered and paginated collection containing 25 currency layer scrud views on each page, sorted by the property .
         /// </summary>
@@ -136,5 +137,6 @@ namespace MixERP.Net.Api.Config
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
         }
+
     }
 }

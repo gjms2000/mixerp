@@ -445,6 +445,7 @@
 
         function loadColumns() {
             var el = $("#ColumnSelect");
+            el.html("");
             bindSelect(el, columns, "name", "text");
             el.dropdown();
         };
@@ -1353,67 +1354,6 @@
             anchor[0].click();
         };
 
-
-        var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
-            //Load report template from the path.
-            $.get(templatePath, function () { }).done(function (data) {
-                //Load report header template.
-                $.get(headerPath, function () { }).done(function (header) {
-                    var table = $("#" + gridViewId).clone();
-
-                    table.find("tr.tableFloatingHeader").remove();
-
-                    table.find("th:nth-child(-n" + offset + ")").remove();
-                    table.find("td:nth-child(-n" + offset + ")").remove();
-
-                    table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
-                    table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
-
-                    table.find("td").removeAttr("style");
-                    table.find("tr").removeAttr("style");
-
-                    table = "<table class='preview'>" + table.html() + "</table>";
-
-                    data = data.replace("{Header}", header);
-                    data = data.replace("{ReportHeading}", reportTitle);
-                    data = data.replace("{PrintDate}", printedDate);
-                    data = data.replace("{UserName}", user);
-                    data = data.replace("{OfficeCode}", office);
-                    data = data.replace("{Table}", table);
-
-                    if (hiddenFieldToUpdate) {
-                        //Update the hidden field with data, but do not print.
-                        $(hiddenFieldToUpdate).val(data);
-                        if (typeof (callback) === "function") {
-                            callback();
-                        };
-
-                        if (triggerControlId) {
-                            $("#" + triggerControlId).trigger("click");
-                        };
-
-                        return;
-                    };
-
-                    //Creating and opening a new window to display the report.
-                    var w = window.open('', windowName,
-                        + ',menubar=0'
-                        + ',toolbar=0'
-                        + ',status=0'
-                        + ',scrollbars=1'
-                        + ',resizable=0');
-                    w.moveTo(0, 0);
-                    w.resizeTo(screen.width, screen.height);
-
-
-                    //Writing the report to the window.
-                    w.document.writeln(data);
-                    w.document.close();
-
-                    //Report sent to the browser.
-                });
-            });
-        };
     </script>
 </div>
 
@@ -1442,32 +1382,6 @@
                 at: "left bottom",
                 of: button
             });
-        };
-
-        var getAjaxRequest = function (url, type, data) {
-            var isWebApiRequest = url.substring(5, 0) === "/api/";
-
-            if (isWebApiRequest) {
-                url = url.replace("{v}", "v" + window.apiVersion);
-            };
-
-            if (!type) {
-                type = "GET";
-            };
-
-            var ajax = $.ajax({
-                type: type,
-                url: url,
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
-            });
-
-            ajax.fail(function (xhr) {
-                displayMessage(JSON.stringify(xhr));
-            });
-
-            return ajax;
         };
 
         function getFlagTypes() {

@@ -29,22 +29,22 @@ using Serilog;
 namespace MixERP.Net.Schemas.Localization.Data
 {
     /// <summary>
-    /// Provides simplified data access features to perform SCRUD operation on the database table "localization.localized_resource_view".
+    /// Provides simplified data access features to perform SCRUD operation on the database view "localization.localized_resource_view".
     /// </summary>
     public class LocalizedResourceView : DbAccess
     {
         /// <summary>
-        /// The schema of this table. Returns literal "localization".
+        /// The schema of this view. Returns literal "localization".
         /// </summary>
 	    public override string ObjectNamespace => "localization";
 
         /// <summary>
-        /// The schema unqualified name of this table. Returns literal "localized_resource_view".
+        /// The schema unqualified name of this view. Returns literal "localized_resource_view".
         /// </summary>
 	    public override string ObjectName => "localized_resource_view";
 
         /// <summary>
-        /// Login id of application user accessing this table.
+        /// Login id of application user accessing this view.
         /// </summary>
 		public long LoginId { get; set; }
 
@@ -54,9 +54,9 @@ namespace MixERP.Net.Schemas.Localization.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Performs SQL count on the table "localization.localized_resource_view".
+		/// Performs SQL count on the view "localization.localized_resource_view".
 		/// </summary>
-		/// <returns>Returns the number of rows of the table "localization.localized_resource_view".</returns>
+		/// <returns>Returns the number of rows of the view "localization.localized_resource_view".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
@@ -85,7 +85,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 
 
 		/// <summary>
-		/// Performs a select statement on table "localization.localized_resource_view" producing a paged result of 25.
+		/// Performs a select statement on the view "localization.localized_resource_view" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "LocalizedResourceView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -114,7 +114,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "localization.localized_resource_view" producing a paged result of 25.
+		/// Performs a select statement on the view "localization.localized_resource_view" producing a paged result of 25.
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "LocalizedResourceView" class.</returns>
@@ -146,7 +146,7 @@ namespace MixERP.Net.Schemas.Localization.Data
 		}
 
         /// <summary>
-		/// Performs a filtered select statement on table "localization.localized_resource_view" producing a paged result of 25.
+		/// Performs a filtered select statement on view "localization.localized_resource_view" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -183,5 +183,6 @@ namespace MixERP.Net.Schemas.Localization.Data
 
             return Factory.Get<MixERP.Net.Entities.Localization.LocalizedResourceView>(this.Catalog, sql);
         }
+
 	}
 }

@@ -11,6 +11,13 @@
     scrudFactory.allowEdit = true;
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
+    scrudFactory.layout = [
+    	["ShiftId", ""],
+    	["ShiftCode", "ShiftName", "", ""],
+    	["BeginsFrom", "EndsOn", "", ""],
+    	["Description", ""]
+    ];
+
     scrudFactory.live = "ShiftName";
 </script>
 

@@ -17,4 +17,50 @@ You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MerchantFeeSetup.ascx.cs" Inherits="MixERP.Net.Core.Modules.Finance.Setup.MerchantFeeSetup" %>
-<asp:PlaceHolder runat="server" ID="ScrudPlaceholder"></asp:PlaceHolder>
+<script src="/Scripts/underscore/underscore-min.js"></script>
+<script>
+    var scrudFactory = new Object();
+    scrudFactory.title = window.Resources.Titles.MerchantFeeSetup();
+
+    scrudFactory.viewPocoName = "MerchantFeeSetupScrudView";
+    scrudFactory.formPocoName = "MerchantFeeSetup";
+
+    scrudFactory.formTableName = "core.merchant_fee_setup";
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.keys = [
+        {
+            property: "MerchantAccountId",
+            url: '/api/core/merchant-account-selector-view/display-fields',
+            data: null,
+            isArray:false,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "PaymentCardId",
+            url: '/api/core/payment-card-scrud-view/display-fields',
+            data: null,
+            isArray: false,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "AccountId",
+            url: '/api/core/merchant-fee-setup-account-selector-view/display-fields',
+            data: null,
+            isArray: false,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+
+
+</script>
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

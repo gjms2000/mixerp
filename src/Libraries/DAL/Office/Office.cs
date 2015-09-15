@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Office.Data
 
             return Factory.Get<MixERP.Net.Entities.Office.Office>(this.Catalog, sql, officeIds);
         }
+
 	}
 }

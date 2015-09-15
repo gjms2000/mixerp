@@ -10,6 +10,7 @@
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
     scrudFactory.keys = [
         {
             property: "EmployeeId",

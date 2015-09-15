@@ -434,5 +434,6 @@ namespace MixERP.Net.Schemas.Transactions.Data
 
             return Factory.Get<MixERP.Net.Entities.Transactions.NonGlStockTaxDetail>(this.Catalog, sql, nonGlStockTaxDetailIds);
         }
+
 	}
 }
