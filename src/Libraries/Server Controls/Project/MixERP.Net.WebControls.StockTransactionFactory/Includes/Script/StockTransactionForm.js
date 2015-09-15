@@ -1081,6 +1081,22 @@ var countItemInStockByUnitName = function (itemCode, unitName, storeId) {
 
 
 var getCompoundItemDetails = function () {
+
+    var priceTypeId = parseInt(priceTypeSelect.val() || 0);
+    var storeId = parseInt(storeSelect.val() || 0);
+
+    if (storeId <= 0) {
+        $.notify(Resources.Warnings.InvalidStore(), "error");
+        storeSelect.focus();
+        return;
+    };
+
+    if (priceTypeId <= 0) {
+        $.notify(Resources.Warnings.InvalidPriceType(), "error");
+        priceTypeSelect.focus();
+        return;
+    };
+
     url = "/Modules/Inventory/Services/ItemData.asmx/GetCompoundItemDetails";
     data = appendParameter("", "compoundItemCode", itemCodeInputText.val());
     data = appendParameter(data, "salesTaxCode", taxSelect.getSelectedText());
