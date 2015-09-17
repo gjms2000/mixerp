@@ -25,7 +25,8 @@
             <a href="Employee/SocialNetworks.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.SocialNetworks')}}</a>
             <a href="Employee/Experiences.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.Experiences')}}</a>
             <a href="Employee/Qualifications.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.Qualifications')}}</a>
-            <a href="LeaveApplication.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.LeaveApplication')}}</a>
+            <a href="Employee/Wages.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">Wages</a>
+            <a href="Employee/LeaveApplication.mix?EmployeeId={{employee.EmployeeId}}" class="ui basic button">{{getResource('Resources.Titles.LeaveApplication')}}</a>
         </div>
     </div>
 

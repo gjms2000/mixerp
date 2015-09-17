@@ -100,9 +100,10 @@ CREATE TABLE hrm.leave_types
 
 CREATE TABLE hrm.office_hours
 (
-    week_day_id                             integer NOT NULL PRIMARY KEY,
+    office_hour_id                          SERIAL NOT NULL PRIMARY KEY,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
     shift_id                                integer NOT NULL REFERENCES hrm.shifts,
+    week_day_id                             integer NOT NULL REFERENCES core.week_days(week_day_id),
     begins_from                             time NOT NULL,
     ends_on                                 time NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
@@ -219,11 +220,11 @@ CREATE TABLE hrm.contracts
                                             DEFAULT(NOW())    
 );
 
-
---Todo
 CREATE TABLE hrm.salary_frequencies
 (
-    salary_frequency_id                     integer NOT NULL PRIMARY KEY
+    salary_frequency_id                     integer NOT NULL PRIMARY KEY,
+    salary_frequency_name                   national character varying(128) NOT NULL UNIQUE,
+    frequency_id                            integer REFERENCES core.frequencies(frequency_id)
 );
 
 CREATE TABLE hrm.salary_types
@@ -237,9 +238,44 @@ CREATE TABLE hrm.salary_types
                                             DEFAULT(NOW())    
 );
 
+CREATE TABLE hrm.wages_setup
+(
+    wages_setup_id                          SERIAL NOT NULL PRIMARY KEY,
+    wages_setup_code                        national character varying(12) NOT NULL UNIQUE,
+    wages_setup_name                        national character varying(128) NOT NULL,
+    currency_code                           national character varying(12) NOT NULL REFERENCES core.currencies(currency_code),
+    max_week_hours                          integer NOT NULL DEFAULT(0),
+    hourly_rate                             public.money_strict NOT NULL,
+    overtime_applicable                     boolean NOT NULL DEFAULT(true),
+    overtime_hourly_rate                    public.money_strict2 NOT NULL,
+    description                             text,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),
+    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
+);
+
+
+CREATE TABLE hrm.employee_wages
+(
+    employee_wage_id                        BIGSERIAL NOT NULL PRIMARY KEY,
+    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
+    wages_setup_id                          integer NOT NULL REFERENCES hrm.wages_setup(wages_setup_id),
+    currency_code                           national character varying(12) NOT NULL REFERENCES core.currencies(currency_code),
+    max_week_hours                          integer NOT NULL,
+    hourly_rate                             public.money_strict NOT NULL,
+    overtime_applicable                     boolean NOT NULL,
+    overtime_hourly_rate                    public.money_strict2 DEFAULT(0),
+    valid_till                              date NOT NULL,
+    is_active                               boolean,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
+);
+
 CREATE TABLE hrm.salaries
 (
-    salary_id                               BIGINT NOT NULL PRIMARY KEY,    
+    salary_id                               BIGSERIAL NOT NULL PRIMARY KEY,    
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     salary_type_id                          integer NOT NULL REFERENCES hrm.salary_types(salary_type_id),
     pay_grade_id                            integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
@@ -298,13 +334,13 @@ CREATE TABLE hrm.holidays
                                             DEFAULT(NOW())    
 );
 
-CREATE TABLE hrm.leave_application
+CREATE TABLE hrm.leave_applications
 (
-    leave_application_id                    BIGINT NOT NULL PRIMARY KEY,
+    leave_application_id                    BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     leave_type_id                           integer NOT NULL REFERENCES hrm.leave_types(leave_type_id),
     entered_by                              integer NOT NULL REFERENCES office.users(user_id),
-    applied_on                              date,
+    applied_on                              date DEFAULT(NOW()),
     reason                                  text,
     start_date                              date,
     end_date                                date,
@@ -383,7 +419,7 @@ SELECT * FROM core.recreate_menu('Attendance', '~/Modules/HRM/Tasks/Attendance.m
 SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix', 'EMPL', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Contracts', '~/Modules/HRM/Tasks/Contracts.mix', 'CTRCT', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Leave Application', '~/Modules/HRM/Tasks/LeaveApplication.mix', 'LEVAPP', 2, core.get_menu_id('HRMTA'));
-SELECT * FROM core.recreate_menu('Resignation', '~/Modules/HRM/Tasks/Regignation.mix', 'RESIGN', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Resignation', '~/Modules/HRM/Tasks/Resignation.mix', 'RESIGN', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Termination', '~/Modules/HRM/Tasks/Termination.mix', 'TERMIN', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Exit', '~/Modules/HRM/Tasks/Exit.mix', 'EXIT', 2, core.get_menu_id('HRMTA'));
 
@@ -399,6 +435,7 @@ SELECT * FROM core.recreate_menu('Commissions', '~/Modules/HRM/Payroll/Commissio
 SELECT * FROM core.recreate_menu('Setup & Maintenance', NULL, 'HRMSSM', 1, core.get_menu_id('HRM'));
 SELECT * FROM core.recreate_menu('Holiday Setup', '~/Modules/HRM/Setup/HolidaySetup.mix', 'HOLDAY', 2, core.get_menu_id('HRMSSM'));
 SELECT * FROM core.recreate_menu('Salaries', '~/Modules/HRM/Setup/Salaries.mix', 'SETSAL', 2, core.get_menu_id('HRMSSM'));
+SELECT * FROM core.recreate_menu('Wages', '~/Modules/HRM/Setup/Wages.mix', 'SETWAGES', 2, core.get_menu_id('HRMSSM'));
 SELECT * FROM core.recreate_menu('Employment Statuses', '~/Modules/HRM/Setup/EmploymentStatuses.mix', 'EMPSTA', 2, core.get_menu_id('HRMSSM'));
 SELECT * FROM core.recreate_menu('Employee Types', '~/Modules/HRM/Setup/EmployeeTypes.mix', 'EMPTYP', 2, core.get_menu_id('HRMSSM'));
 SELECT * FROM core.recreate_menu('Education Levels', '~/Modules/HRM/Setup/EducationLevels.mix', 'EDULVL', 2, core.get_menu_id('HRMSSM'));
@@ -543,6 +580,121 @@ INNER JOIN core.social_networks
 ON core.social_networks.social_network_name = hrm.employee_social_network_details.social_network_name;
 
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_wage_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_wage_scrud_view;
+
+CREATE VIEW hrm.employee_wage_scrud_view
+AS
+SELECT
+    hrm.employee_wages.employee_wage_id,
+    hrm.employees.employee_name,
+    hrm.wages_setup.wages_setup_code || ' (' || hrm.wages_setup.wages_setup_name || ')' AS wages_setup,
+    hrm.employee_wages.currency_code,
+    hrm.employee_wages.max_week_hours,
+    hrm.employee_wages.hourly_rate,
+    hrm.employee_wages.overtime_applicable,
+    hrm.employee_wages.overtime_hourly_rate,
+    hrm.employee_wages.valid_till,
+    hrm.employee_wages.is_active
+FROM hrm.employee_wages
+INNER JOIN hrm.employees
+ON hrm.employee_wages.employee_id = hrm.employees.employee_id
+INNER JOIN hrm.wages_setup
+ON hrm.wages_setup.wages_setup_id = hrm.employee_wages.wages_setup_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.exit_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.exit_scrud_view;
+
+CREATE VIEW hrm.exit_scrud_view
+AS
+SELECT
+    hrm.exits.exit_id,
+    hrm.exits.employee_id,
+    hrm.employees.employee_name,
+    hrm.exits.reason,
+    hrm.employment_status_codes.status_code || ' (' || hrm.employment_status_codes.status_code_name || ')' AS employment_status_code,
+    hrm.exit_types.exit_type_code || ' (' || hrm.exit_types.exit_type_name || ')' AS exit_type,
+    hrm.exits.details,
+    hrm.exits.exit_interview_details
+FROM hrm.exits
+INNER JOIN hrm.employees
+ON hrm.employees.employee_id = hrm.exits.employee_id
+INNER JOIN hrm.employment_status_codes
+ON hrm.employment_status_codes.employment_status_code_id = hrm.exits.change_status_code_to
+INNER JOIN hrm.exit_types
+ON hrm.exit_types.exit_type_id = hrm.exits.exit_type_id;
+
+
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.leave_application_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.leave_application_scrud_view;
+
+CREATE VIEW hrm.leave_application_scrud_view
+AS
+SELECT
+    hrm.leave_applications.leave_application_id,
+    hrm.employees.employee_name,
+    hrm.leave_types.leave_type_code || ' (' || hrm.leave_types.leave_type_name || ')' AS leave_type,
+    office.users.user_name AS entered_by,
+    hrm.leave_applications.applied_on,
+    hrm.leave_applications.reason,
+    hrm.leave_applications.start_date,
+    hrm.leave_applications.end_date
+FROM hrm.leave_applications
+INNER JOIN hrm.employees
+ON hrm.employees.employee_id = hrm.leave_applications.employee_id
+INNER JOIN hrm.leave_types
+ON hrm.leave_types.leave_type_id = hrm.leave_applications.leave_type_id
+INNER JOIN office.users
+ON office.users.user_id = hrm.leave_applications.entered_by;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.office_hour_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.office_hour_scrud_view;
+
+CREATE VIEW hrm.office_hour_scrud_view
+AS
+SELECT
+    hrm.office_hours.office_hour_id,
+    office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
+    hrm.shifts.shift_code || ' (' || hrm.shifts.shift_name || ')' AS shift,
+    core.week_days.week_day_code || ' (' || core.week_days.week_day_name || ')' AS week_day,
+    hrm.office_hours.begins_from,
+    hrm.office_hours.ends_on
+FROM hrm.office_hours
+INNER JOIN office.offices
+ON office.offices.office_id = hrm.office_hours.office_id
+INNER JOIN hrm.shifts
+ON hrm.shifts.shift_id = hrm.office_hours.shift_id
+INNER JOIN core.week_days
+ON core.week_days.week_day_id = hrm.office_hours.week_day_id;
+
+
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.termination_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.termination_scrud_view;
+
+CREATE VIEW hrm.termination_scrud_view
+AS
+SELECT
+    hrm.terminations.termination_id,
+    office.users.user_name AS entered_by,
+    hrm.employees.employee_name,
+    hrm.terminations.notice_date,
+    hrm.terminations.effective_termination_date,
+    forwarded_to.employee_name AS forward_to,
+    hrm.terminations.reason,
+    hrm.terminations.details
+FROM hrm.terminations
+INNER JOIN hrm.employees
+ON hrm.employees.employee_id = hrm.terminations.employee_id
+INNER JOIN hrm.employees AS forwarded_to
+ON forwarded_to.employee_id = hrm.terminations.forward_to
+INNER JOIN office.users
+ON office.users.user_id = hrm.terminations.entered_by;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.views/hrm.employee_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.employee_view;

@@ -81,6 +81,7 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/jquery-1.9.1.js",
               "~/Scripts/jquery.address.js",
               "~/Scripts/jquery-ui.js",
+              "~/Scripts/jquery-ui-timepicker/jquery.ui.timepicker.js",
               "~/Scripts/shortcut.js",
               "~/Scripts/colorbox/jquery.colorbox.js",
               "~/Scripts/jqueryNumber/jquery.number.js",
@@ -92,6 +93,7 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/jquery.signalR.js",
               "~/Scripts/vakata-jstree/dist/jstree.min.js",
               "~/Scripts/momentjs/moment-with-locales.js",
+              "~/Scripts/underscore/underscore-min.js",
               "~/Scripts/angular/angular.min.js"
             };
 
@@ -108,6 +110,7 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/angular/angular.min.js",
               "~/Scripts/jquery.address.js",
               "~/Scripts/jquery-ui.js",
+              "~/Scripts/jquery-ui-timepicker/jquery.ui.timepicker.js",
               "~/Scripts/shortcut.js",
               "~/Scripts/colorbox/jquery.colorbox.js",
               "~/Scripts/papaparse/papaparse.min.js",
@@ -119,6 +122,8 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/semantic-ui/semantic.js",
               "~/Scripts/jquery.signalR.js",
               "~/Scripts/vakata-jstree/dist/jstree.min.js",
+              "~/Scripts/momentjs/moment-with-locales.js",
+              "~/Scripts/underscore/underscore-min.js",
               "~/Scripts/sprintf/sprintf.min.js"
             };
 
@@ -151,6 +156,7 @@ namespace MixERP.Net.FrontEnd.Application
             {
               "~/Scripts/colorbox/colorbox.css",
               "~/Scripts/jquery-ui/css/custom-theme/jquery-ui.css",
+              "~/Scripts/jquery-ui-timepicker/jquery.ui.timepicker.css",
               "~/Scripts/vakata-jstree/dist/themes/default/style.css",
               "~/Scripts/semantic-ui/semantic.css",
               "~/App_Themes/MixERP/mixerp.css"
@@ -165,6 +171,7 @@ namespace MixERP.Net.FrontEnd.Application
                 "~/Stylesheets/rtl.css",
                 "~/Scripts/colorbox/colorbox.css",
                 "~/Scripts/jquery-ui/css/custom-theme/jquery-ui.css",
+              "~/Scripts/jquery-ui-timepicker/jquery.ui.timepicker.css",
                 "~/Scripts/vakata-jstree/dist/themes/default/style.css",
                 "~/Scripts/semantic-ui/semantic.rtl.css",
                 "~/App_Themes/MixERP/mixerp.css"

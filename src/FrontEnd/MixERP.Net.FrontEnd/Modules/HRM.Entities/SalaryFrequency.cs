@@ -30,5 +30,13 @@ namespace MixERP.Net.Entities.HRM
         [Column("salary_frequency_id")]
         [ColumnDbType("int4", 0, false, "")] 
         public int SalaryFrequencyId { get; set; }
+    
+        [Column("salary_frequency_name")]
+        [ColumnDbType("varchar", 128, false, "")] 
+        public string SalaryFrequencyName { get; set; }
+    
+        [Column("frequency_id")]
+        [ColumnDbType("int4", 0, true, "")] 
+        public int? FrequencyId { get; set; }
     }
 }

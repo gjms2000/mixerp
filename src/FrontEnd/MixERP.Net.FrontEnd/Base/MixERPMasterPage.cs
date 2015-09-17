@@ -75,6 +75,7 @@ namespace MixERP.Net.FrontEnd.Base
 
 
             script += JSUtility.GetVar("today", DateTime.Now.ToShortDateString());
+
             script += JSUtility.GetVar("shortDateFormat", CultureManager.GetShortDateFormat());
             script += JSUtility.GetVar("thousandSeparator", CultureManager.GetThousandSeparator());
             script += JSUtility.GetVar("decimalSeparator", CultureManager.GetDecimalSeparator());
@@ -94,7 +95,7 @@ namespace MixERP.Net.FrontEnd.Base
             script += JSUtility.GetVar("datepickerNumberOfMonths", jQueryUI.GetNumberOfMonths());
 
 
-            PageUtility.RegisterJavascript("MixERPMasterPage", script, this.Page, true);
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "MixERPMasterPage", script, true);
         }
 
         private int Update()

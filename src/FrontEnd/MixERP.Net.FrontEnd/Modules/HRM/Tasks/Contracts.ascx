@@ -5,7 +5,7 @@
     scrudFactory.title = "Contracts";
     scrudFactory.viewPocoName = "ContractScrudView";
     scrudFactory.formPocoName = "Contract";
-    scrudFactory.formTableName = "hrm.constracts";
+    scrudFactory.formTableName = "hrm.contracts";
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -13,13 +13,6 @@
 
     scrudFactory.live = "EmployeeId";
 
-    scrudFactory.layout = [
-        ["ContractId", ""],
-        ["EmployeeId", "OfficeId", "", ""],
-        ["DepartmentId", "RoleId", "", ""],
-        ["EmploymentStatusCodeId", "LeaveBenefitId", "", ""],
-        ["BeganOn", "EndedOn", "", ""]
-    ];
 
     scrudFactory.readonlyColumns = ["EndedOn"];
 

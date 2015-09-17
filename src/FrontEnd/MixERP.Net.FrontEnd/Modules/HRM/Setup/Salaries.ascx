@@ -2,7 +2,7 @@
 <script>
     var scrudFactory = new Object();
 
-    scrudFactory.title = "Salaries";
+    scrudFactory.title = "Salary Setup";
     scrudFactory.viewPocoName = "Salary";
     scrudFactory.formPocoName = "Salary";
     scrudFactory.formTableName = "hrm.salaries";

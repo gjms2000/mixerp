@@ -12,15 +12,13 @@
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
-    	["ShiftId", ""],
-    	["ShiftCode", "ShiftName", "", ""],
-    	["BeginsFrom", "EndsOn", "", ""],
-    	["Description", ""]
+        ["ShiftId", ""],
+        ["ShiftCode", "ShiftName", "", ""],
+        ["BeginsFrom", "EndsOn", "", ""],
+        ["Description", ""]
     ];
 
     scrudFactory.live = "ShiftName";
 </script>
-
-
 <div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
 <div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

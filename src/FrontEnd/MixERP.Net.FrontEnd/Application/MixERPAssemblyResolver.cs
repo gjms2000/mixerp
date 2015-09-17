@@ -8,6 +8,28 @@ using Serilog;
 
 namespace MixERP.Net.FrontEnd.Application
 {
+    public class ClassicAssemblyResolver : DefaultAssembliesResolver
+    {
+        public override ICollection<Assembly> GetAssemblies()
+        {
+            ICollection<Assembly> baseAssemblies = base.GetAssemblies();
+            List<Assembly> assemblies = new List<Assembly>(baseAssemblies);
+
+            Type type = typeof(ApiController);
+
+            IEnumerable<Assembly> items = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => p.IsSubclassOf(type)).Select(t => t.Assembly);
+
+            foreach (Assembly item in items)
+            {
+                baseAssemblies.Add(item);
+            }
+
+            return assemblies;
+        }
+    }
+
     public class MixERPAssemblyResolver : DefaultAssembliesResolver
     {
         public override ICollection<Assembly> GetAssemblies()

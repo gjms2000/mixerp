@@ -29,3 +29,12 @@ SELECT 'Viber',     '',             '',                                 '' UNION
 SELECT 'WhatsApp',  'whatsapp',     '',                                 '' UNION ALL
 SELECT 'Skype',     'skype',        '',                                 '' UNION ALL
 SELECT 'Hike',      '',             '',                                 '';
+
+INSERT INTO core.week_days
+SELECT 1, 'SUN', 'Sunday' UNION ALL
+SELECT 2, 'MON', 'Monday' UNION ALL
+SELECT 3, 'TUE', 'Tuesday' UNION ALL
+SELECT 4, 'WED', 'Wednesday' UNION ALL
+SELECT 5, 'THU', 'Thursday' UNION ALL
+SELECT 6, 'FRI', 'Firday' UNION ALL
+SELECT 7, 'SAT', 'Saturday';

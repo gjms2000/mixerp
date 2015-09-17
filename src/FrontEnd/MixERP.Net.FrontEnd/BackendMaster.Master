@@ -1,6 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="BackendMaster.master.cs" Inherits="MixERP.Net.FrontEnd.BackendMaster" %>
 
 <%@ Import Namespace="MixERP.Net.i18n" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 
 <!DOCTYPE html>
 <html data-ng-app="MixERPApp">

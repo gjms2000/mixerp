@@ -66,16 +66,16 @@ namespace MixERP.Net.Api.HRM
         /// <summary>
         ///     Returns an instance of office hour.
         /// </summary>
-        /// <param name="weekDayId">Enter WeekDayId to search for.</param>
+        /// <param name="officeHourId">Enter OfficeHourId to search for.</param>
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("{weekDayId}")]
-        [Route("~/api/hrm/office-hour/{weekDayId}")]
-        public MixERP.Net.Entities.HRM.OfficeHour Get(int weekDayId)
+        [Route("{officeHourId}")]
+        [Route("~/api/hrm/office-hour/{officeHourId}")]
+        public MixERP.Net.Entities.HRM.OfficeHour Get(int officeHourId)
         {
             try
             {
-                return this.OfficeHourContext.Get(weekDayId);
+                return this.OfficeHourContext.Get(officeHourId);
             }
             catch (UnauthorizedException)
             {
@@ -90,11 +90,11 @@ namespace MixERP.Net.Api.HRM
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/hrm/office-hour/get")]
-        public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> Get([FromUri] int[] weekDayIds)
+        public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> Get([FromUri] int[] officeHourIds)
         {
             try
             {
-                return this.OfficeHourContext.Get(weekDayIds);
+                return this.OfficeHourContext.Get(officeHourIds);
             }
             catch (UnauthorizedException)
             {
@@ -107,7 +107,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 office hours on each page, sorted by the property WeekDayId.
+        ///     Creates a paginated collection containing 25 office hours on each page, sorted by the property OfficeHourId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -130,7 +130,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 office hours on each page, sorted by the property WeekDayId.
+        ///     Creates a paginated collection containing 25 office hours on each page, sorted by the property OfficeHourId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -154,7 +154,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 office hours on each page, sorted by the property WeekDayId.
+        ///     Creates a filtered and paginated collection containing 25 office hours on each page, sorted by the property OfficeHourId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -308,11 +308,11 @@ namespace MixERP.Net.Api.HRM
         ///     Edits existing record with your instance of OfficeHour class.
         /// </summary>
         /// <param name="officeHour">Your instance of OfficeHour class to edit.</param>
-        /// <param name="weekDayId">Enter the value for WeekDayId in order to find and edit the existing record.</param>
+        /// <param name="officeHourId">Enter the value for OfficeHourId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{weekDayId}")]
-        [Route("~/api/hrm/office-hour/edit/{weekDayId}")]
-        public void Edit(int weekDayId, [FromBody] MixERP.Net.Entities.HRM.OfficeHour officeHour)
+        [Route("edit/{officeHourId}")]
+        [Route("~/api/hrm/office-hour/edit/{officeHourId}")]
+        public void Edit(int officeHourId, [FromBody] MixERP.Net.Entities.HRM.OfficeHour officeHour)
         {
             if (officeHour == null)
             {
@@ -321,7 +321,7 @@ namespace MixERP.Net.Api.HRM
 
             try
             {
-                this.OfficeHourContext.Update(officeHour, weekDayId);
+                this.OfficeHourContext.Update(officeHour, officeHourId);
             }
             catch (UnauthorizedException)
             {
@@ -334,17 +334,17 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Deletes an existing instance of OfficeHour class via WeekDayId.
+        ///     Deletes an existing instance of OfficeHour class via OfficeHourId.
         /// </summary>
-        /// <param name="weekDayId">Enter the value for WeekDayId in order to find and delete the existing record.</param>
+        /// <param name="officeHourId">Enter the value for OfficeHourId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
-        [Route("delete/{weekDayId}")]
-        [Route("~/api/hrm/office-hour/delete/{weekDayId}")]
-        public void Delete(int weekDayId)
+        [Route("delete/{officeHourId}")]
+        [Route("~/api/hrm/office-hour/delete/{officeHourId}")]
+        public void Delete(int officeHourId)
         {
             try
             {
-                this.OfficeHourContext.Delete(weekDayId);
+                this.OfficeHourContext.Delete(officeHourId);
             }
             catch (UnauthorizedException)
             {

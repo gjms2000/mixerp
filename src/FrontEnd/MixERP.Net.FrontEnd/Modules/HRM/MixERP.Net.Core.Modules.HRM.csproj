@@ -112,14 +112,17 @@
     <Content Include="Setup\Salaries.ascx" />
     <Content Include="Setup\SalaryTypes.ascx" />
     <Content Include="Setup\Shifts.ascx" />
+    <Content Include="Setup\Wages.ascx" />
     <Content Include="Tasks\Attendance.ascx" />
     <Content Include="Tasks\Contracts.ascx" />
     <Content Include="Tasks\EmployeeInfo.ascx" />
     <Content Include="Tasks\Employees.ascx" />
     <Content Include="Tasks\Employee\Experiences.ascx" />
     <Content Include="Tasks\Employee\IdentificationDetails.ascx" />
+    <Content Include="Tasks\Employee\LeaveApplication.ascx" />
     <Content Include="Tasks\Employee\Qualifications.ascx" />
     <Content Include="Tasks\Employee\SocialNetworks.ascx" />
+    <Content Include="Tasks\Employee\Wages.ascx" />
     <Content Include="Tasks\Entry\Employees.ascx" />
     <Content Include="Tasks\Exit.ascx" />
     <Content Include="Tasks\LeaveApplication.ascx" />
@@ -256,6 +259,13 @@
     <Compile Include="Setup\Shifts.ascx.designer.cs">
       <DependentUpon>Shifts.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Setup\Wages.ascx.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\Wages.ascx.designer.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\Attendance.ascx.cs">
       <DependentUpon>Attendance.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -298,6 +308,13 @@
     <Compile Include="Tasks\Employee\IdentificationDetails.ascx.designer.cs">
       <DependentUpon>IdentificationDetails.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Tasks\Employee\LeaveApplication.ascx.cs">
+      <DependentUpon>LeaveApplication.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\LeaveApplication.ascx.designer.cs">
+      <DependentUpon>LeaveApplication.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\Employee\Qualifications.ascx.cs">
       <DependentUpon>Qualifications.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -311,6 +328,13 @@
     </Compile>
     <Compile Include="Tasks\Employee\SocialNetworks.ascx.designer.cs">
       <DependentUpon>SocialNetworks.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Employee\Wages.ascx.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tasks\Employee\Wages.ascx.designer.cs">
+      <DependentUpon>Wages.ascx</DependentUpon>
     </Compile>
     <Compile Include="Tasks\Entry\Employees.ascx.cs">
       <DependentUpon>Employees.ascx</DependentUpon>

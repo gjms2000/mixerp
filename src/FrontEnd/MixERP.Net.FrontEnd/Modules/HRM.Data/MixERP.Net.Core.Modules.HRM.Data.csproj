@@ -94,6 +94,8 @@
     <Compile Include="EmployeeSocialNetworkDetailScrudView.cs" />
     <Compile Include="EmployeeType.cs" />
     <Compile Include="EmployeeView.cs" />
+    <Compile Include="EmployeeWage.cs" />
+    <Compile Include="EmployeeWageScrudView.cs" />
     <Compile Include="EmploymentStatus.cs" />
     <Compile Include="EmploymentStatusCode.cs" />
     <Compile Include="Exit.cs" />
@@ -102,9 +104,11 @@
     <Compile Include="Holiday.cs" />
     <Compile Include="JobTitle.cs" />
     <Compile Include="LeaveApplication.cs" />
+    <Compile Include="LeaveApplicationScrudView.cs" />
     <Compile Include="LeaveBenefit.cs" />
     <Compile Include="LeaveType.cs" />
     <Compile Include="OfficeHour.cs" />
+    <Compile Include="OfficeHourScrudView.cs" />
     <Compile Include="PayGrade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resignation.cs" />
@@ -114,6 +118,7 @@
     <Compile Include="Shift.cs" />
     <Compile Include="Termination.cs" />
     <Compile Include="TerminationScrudView.cs" />
+    <Compile Include="WagesSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Entities\MixERP.Net.Entities.HRM.csproj">

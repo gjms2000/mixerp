@@ -22,14 +22,14 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("week_day_id", autoIncrement=false)]
+    [PrimaryKey("office_hour_id", autoIncrement=true)]
     [TableName("hrm.office_hours")]
     [ExplicitColumns]
     public sealed class OfficeHour : PetaPocoDB.Record<OfficeHour>, IPoco
     {
-        [Column("week_day_id")]
-        [ColumnDbType("int4", 0, false, "")] 
-        public int WeekDayId { get; set; }
+        [Column("office_hour_id")]
+        [ColumnDbType("int4", 0, false, "nextval('hrm.office_hours_office_hour_id_seq'::regclass)")] 
+        public int OfficeHourId { get; set; }
     
         [Column("office_id")]
         [ColumnDbType("int4", 0, false, "")] 
@@ -38,6 +38,10 @@ namespace MixERP.Net.Entities.HRM
         [Column("shift_id")]
         [ColumnDbType("int4", 0, false, "")] 
         public int ShiftId { get; set; }
+    
+        [Column("week_day_id")]
+        [ColumnDbType("int4", 0, false, "")] 
+        public int WeekDayId { get; set; }
     
         [Column("begins_from")]
         [ColumnDbType("time", 0, false, "")] 

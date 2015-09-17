@@ -406,6 +406,7 @@
     <Compile Include="UnitSelectorView.cs" />
     <Compile Include="UnitView.cs" />
     <Compile Include="VerificationStatus.cs" />
+    <Compile Include="WeekDay.cs" />
     <Compile Include="Widget.cs" />
     <Compile Include="WidgetGroup.cs" />
     <Compile Include="WidgetSetup.cs" />

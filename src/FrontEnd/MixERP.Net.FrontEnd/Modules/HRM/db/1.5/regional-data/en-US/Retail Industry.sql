@@ -75,3 +75,12 @@ SELECT 'RET', 'Retirement' UNION ALL
 SELECT 'RES', 'Resignation' UNION ALL
 SELECT 'TER', 'Termination' UNION ALL
 SELECT 'DEC', 'Deceased';
+
+INSERT INTO hrm.salary_frequencies(salary_frequency_id, frequency_id, salary_frequency_name)
+SELECT 0, NULL::integer,    'Weekly' UNION ALL
+SELECT 1, NULL,             'Biweekly' UNION ALL
+SELECT 2, 2,                'Monhtly' UNION ALL
+SELECT 3, 3,                'Quarterly' UNION ALL
+SELECT 4, 4,                'Semi Annually' UNION ALL
+SELECT 5, 5,                'Anually';
+

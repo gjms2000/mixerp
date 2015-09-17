@@ -291,3 +291,26 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'week_days'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.week_days
+        (
+            week_day_id                 integer NOT NULL CHECK(week_day_id>=1 AND week_day_id<=7) PRIMARY KEY,
+            week_day_code               national character varying(12) NOT NULL UNIQUE,
+            week_day_name               national character varying(50) NOT NULL UNIQUE
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+

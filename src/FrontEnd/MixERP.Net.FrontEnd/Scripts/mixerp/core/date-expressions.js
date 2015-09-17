@@ -4,7 +4,27 @@ function convertDate(d) {
         return date;
     } catch (e) {
         return null;
-    }
+    };
+};
+
+function removeTimezone(dateTime) {
+    return dateTime.toString().replace("Z", "");
+};
+
+function getTime(dateTime) {
+    function padMinutes(minutes) {
+        if (parseInt(minutes || 0) < 10) {
+            return "0" + minutes;
+        };
+
+        return minutes;
+    };
+
+    var value = removeTimezone(dateTime);
+    var d = new Date(value);
+    value = d.getHours() + ":" + padMinutes(d.getMinutes());
+
+    return value;
 };
 
 function dateAdd(dt, expression, number) {
@@ -27,6 +47,12 @@ function dateAdd(dt, expression, number) {
 };
 
 function loadDatepicker() {
+    if (typeof (datepickerFormat) === "undefined") { datepickerFormat = ""; }
+    if (typeof (datepickerShowWeekNumber) === "undefined") { datepickerShowWeekNumber = false; }
+    if (typeof (datepickerWeekStartDay) === "undefined") { datepickerWeekStartDay = "1"; }
+    if (typeof (datepickerNumberOfMonths) === "undefined") { datepickerNumberOfMonths = ""; }
+    if (typeof (language) === "undefined") { language = ""; }
+
     $(".date:not([readonly]), input[type=date]:not([readonly])").datepicker(
     {
         dateFormat: datepickerFormat,
@@ -129,6 +155,8 @@ function loadDatepicker() {
             return;
         }
     });
+
+    $('[data-type="time"], .time').timepicker({ showPeriodLabels: false });
 };
 
 $(document).ready(function () {

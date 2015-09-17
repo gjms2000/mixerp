@@ -4,7 +4,7 @@
 
     scrudFactory.title = "Office Hours";
     
-    scrudFactory.viewPocoName = "OfficeHour";
+    scrudFactory.viewPocoName = "OfficeHourScrudView";
     scrudFactory.formPocoName = "OfficeHour";
     scrudFactory.formTableName = "hrm.office_hours";
 
@@ -25,6 +25,13 @@
         {
             property: "ShiftId",
             url: '/api/hrm/shift/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "WeekDayId",
+            url: '/api/core/week-day/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

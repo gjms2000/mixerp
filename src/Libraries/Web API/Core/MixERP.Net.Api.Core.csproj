@@ -252,6 +252,7 @@
     <Compile Include="UnitSelectorViewController.cs" />
     <Compile Include="UnitViewController.cs" />
     <Compile Include="VerificationStatusController.cs" />
+    <Compile Include="WeekDayController.cs" />
     <Compile Include="WidgetController.cs" />
     <Compile Include="WidgetGroupController.cs" />
     <Compile Include="WidgetSetupController.cs" />

@@ -175,7 +175,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT salary_frequency_id AS key, salary_frequency_id as value FROM hrm.salary_frequencies;";
+			const string sql = "SELECT salary_frequency_id AS key, salary_frequency_name as value FROM hrm.salary_frequencies;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
 				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))

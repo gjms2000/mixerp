@@ -1,5 +1,4 @@
 ﻿<div class="poco form factory" style="display: none;">
-    <script src="/Scripts/underscore/underscore-min.js"></script>
     <div class="ui stackable attached segment">
         <div class="ui grey huge header">
             <span class="title initial value"></span>
@@ -19,7 +18,6 @@
         <input type="button" id="SaveButton" value="Save" class="ui green button" />
         <input type="button" id="CancelButton" value="Cancel" class="ui red button" />
     </div>
-
     <script>
         function initializeAjaxRequest() {
             $.each(scrudFactory.keys, function () {
@@ -32,7 +30,9 @@
                         selectedValue = window.editData[el.attr("id")];
                     };
 
-                    ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
+                    if (this.url) {
+                        ajaxDataBind(this.url, el, this.data, selectedValue, null, null, this.valueField, this.textField, this.isArray);
+                    };
                 };
             });
         };
@@ -129,20 +129,20 @@
 
 
                     switch (dataType) {
-                    case "System.Boolean":
-                    case "bool":
-                        val = val === "yes" ? true : false;
-                        break;
-                    default:
-                        val = val.toString().trim();
+                        case "System.Boolean":
+                        case "bool":
+                            val = val === "yes" ? true : false;
+                            break;
+                        default:
+                            val = val.toString().trim();
 
-                        if (el.is("select")) {
-                            if (!val) {
-                                val = null;
+                            if (el.is("select")) {
+                                if (!val) {
+                                    val = null;
+                                };
                             };
-                        };
 
-                        break;
+                            break;
                     };
 
                 };
@@ -284,519 +284,530 @@
 
     </script>
 
-<script>
-    
-    function showForm() {
-        var form = $(".poco.form.factory");
-        var view = $(".poco.view.factory");
+    <script>
 
-        var defaultView = window.getQueryStringByName("View");
+        function showForm() {
+            var form = $(".poco.form.factory");
+            var view = $(".poco.view.factory");
 
-        if ((defaultView || "") === "FormView") {
-            if (view.length) {
-                view.hide();
-            };
+            var defaultView = window.getQueryStringByName("View");
 
-            form.fadeIn(1000);
-        } else {
-            if (view.length) {
-                form.hide();
-            } else {
+            if ((defaultView || "") === "FormView") {
+                if (view.length) {
+                    view.hide();
+                };
+
                 form.fadeIn(1000);
-            };
-        };
-    };
-
-    //$(window).load
-    $(document).ready(function () {        
-        loadEdit();
-        setTimeout(
-          function () {
-              showForm();
-          }, 500);
-    });
-
-    $(document).ajaxStop(function () {
-        $("#scrud").show();
-        $("#scrud").parent().removeClass("loading");
-        loadDefaultValues();
-        loadDropdowns();
-        setRegionalFormat();
-        loadDatepicker();
-        triggerReadyEvent();
-    });
-
-    function triggerReadyEvent() {
-        $(document).trigger("formready");
-    };
-
-    function loadDefaultValues() {
-        if (defaultValuesLoaded) {
-            return;
-        };
-
-        var qs = getQueryStrings();
-
-        $.each(qs, function (i, v) {
-            var name = v.key;
-            var value = v.value;
-
-            var el = $("[data-property=" + name + "]");
-
-            if (el.length) {
-                if (el.is("select")) {
-                    el.addClass("disabled");
-                    el.attr("data-value", value);
-                    el.attr("data-default-value", value);
+            } else {
+                if (view.length) {
+                    form.hide();
                 } else {
-                    el.val(value);
+                    form.fadeIn(1000);
                 };
             };
+        };
+
+        //$(window).load
+        $(document).ready(function () {
+            loadEdit();
+            setTimeout(
+                function () {
+                    showForm();
+                }, 500);
         });
 
-        $("input.live").trigger("keyup");
-        defaultValuesLoaded = true;
-    };
+        $(document).ajaxStop(function () {
+            $("#scrud").show();
+            $("#scrud").parent().removeClass("loading");
+            loadDefaultValues();
+            loadDropdowns();
+            setRegionalFormat();
+            loadDatepicker();
+            triggerReadyEvent();
+        });
 
-    function loadDropdowns() {
-        if (!dropdownsLoaded) {
-            var dropdowns = $(".poco.form.factory select");
+        function triggerReadyEvent() {
+            $(document).trigger("formready");
+        };
 
-            dropdowns.each(function (i, v) {
-                var dropdown = $(v);
+        function loadDefaultValues() {
+            if (defaultValuesLoaded) {
+                return;
+            };
 
-                var selectedValue = (dropdown.getSelectedValue() || "");
+            var qs = getQueryStrings();
 
-                if (!selectedValue) {
-                    selectedValue = dropdown.attr("data-value");
+            $.each(qs, function (i, v) {
+                var name = v.key;
+                var value = v.value;
 
-                    if (selectedValue) {
-                        dropdown.val(selectedValue);
+                var el = $("[data-property=" + name + "]");
+
+                if (el.length) {
+                    if (el.is("select")) {
+                        el.addClass("disabled");
+                        el.attr("data-value", value);
+                        el.attr("data-default-value", value);
+                    } else {
+                        el.val(value);
                     };
                 };
-
-                dropdown.dropdown({ placeholder: false });
             });
 
-            dropdownsLoaded = true;
-        };
-    };
-
-    function createForm(pocoName) {
-        var ajaxGetFormView = getFormView(pocoName);
-
-        ajaxGetFormView.success(function (msg) {
-            poco = msg.d;
-
-            createLayout(poco.Columns);
-
-            if (getSchema()) {
-                var ajaxGetCustomFields = getCustomFields(pocoName);
-                ajaxGetCustomFields.success(function (msg) {
-                    cf = msg;
-                    createCustomFields(cf);
-                });
-            };
-        });
-    };
-
-
-    function chunk_array(arr, len) {
-        return arr.map(function (e, i) {
-                return i % len === 0 ? arr.slice(i, i + len) : null;
-            })
-            .filter(function (e) { return e; });
-    };
-
-    function getCustomFieldDataType(customField) {
-        var type = "varchar";
-
-        if (customField.IsNumber) {
-            type = "numeric";
+            $("input.live").trigger("keyup");
+            defaultValuesLoaded = true;
         };
 
-        if (customField.IsDate) {
-            type = "date";
-        };
+        function loadDropdowns() {
+            if (!dropdownsLoaded) {
+                var dropdowns = $(".poco.form.factory select");
 
-        if (customField.IsBoolean) {
-            type = "bool";
-        };
+                dropdowns.each(function (i, v) {
+                    var dropdown = $(v);
 
-        if (customField.IsLongText) {
-            type = "text";
-        };
+                    var selectedValue = (dropdown.getSelectedValue() || "");
 
-        return type;
-    };
+                    if (!selectedValue) {
+                        selectedValue = dropdown.attr("data-value");
 
-    function mapColumnFrom(customField) {
-        var column = new Object();
-        column.ColumnName = customField.FieldName;
-        column.PropertyName = customField.FieldName;
-        column.FieldLabel = customField.FieldLabel;
-        column.IsCustomField = true;
-        column.DbDataType = getCustomFieldDataType(customField);
-        column.IsNullable = true;
-        column.IsSerial = false;
-        column.IsPrimaryKey = false;
-        column.MaxLength = 0;
-        column.Value = customField.Value;
-        column.Description = customField.Description;
-
-        return column;
-    };
-
-    function createCustomFields(customFields) {
-        if (customFields.length) {
-            var header = $("<div class='ui purple large header'/>");
-            header.text(window.Resources.Titles.CustomFields());
-            scrud.append(header);
-            scrud.append("<div class='ui divider'></div>");
-        };
-
-        for (var i = 0; i < customFields.length; i += 2) {
-            var fields = $("<div class='fields' />");
-
-
-            var leftField = mapColumnFrom(customFields[i]);
-            createColumn(fields, leftField, "four wide field");
-
-            if (i + 1 < customFields.length) {
-                var rightField = mapColumnFrom(customFields[i + 1]);
-                createColumn(fields, rightField, "four wide field");
-            };
-
-
-            scrud.append(fields);
-        };
-    };
-
-
-
-    function createLayout(collection) {
-        var skip = [];
-
-        if (typeof (scrudFactory.layout) !== "undefined") {
-            $.each(scrudFactory.layout, function (i, currentLayout) {
-                var actualColumns = _.uniq(currentLayout);
-                var fieldWith = 16 / currentLayout.length;
-
-                var fields = $("<div class='fields' />");
-
-                $.each(actualColumns, function (index, propertyName) {
-                    var value = _.findIndex(collection, { "PropertyName": propertyName });
-
-                    if (value >= 0) {
-                        skip.push(value);
-
-                        var weight = currentLayout.reduce(function (x, y) {
-                            return x + (y === propertyName);
-                        }, 0);
-
-                        var cssClass = grid[fieldWith * weight] + " wide field";
-
-                        createColumn(fields, collection[value], cssClass);
+                        if (selectedValue) {
+                            dropdown.val(selectedValue);
+                        };
                     };
 
+                    dropdown.dropdown({ placeholder: false });
                 });
+
+                dropdownsLoaded = true;
+            };
+        };
+
+        function createForm(pocoName) {
+            var ajaxGetFormView = getFormView(pocoName);
+
+            ajaxGetFormView.success(function (msg) {
+                poco = msg.d;
+
+                createLayout(poco.Columns);
+
+                if (getSchema()) {
+                    var ajaxGetCustomFields = getCustomFields(pocoName);
+                    ajaxGetCustomFields.success(function (msg) {
+                        cf = msg;
+                        createCustomFields(cf);
+                    });
+                };
+            });
+        };
+
+
+        function chunk_array(arr, len) {
+            return arr.map(function (e, i) {
+                return i % len === 0 ? arr.slice(i, i + len) : null;
+            })
+                .filter(function (e) { return e; });
+        };
+
+        function getCustomFieldDataType(customField) {
+            var type = "varchar";
+
+            if (customField.IsNumber) {
+                type = "numeric";
+            };
+
+            if (customField.IsDate) {
+                type = "date";
+            };
+
+            if (customField.IsBoolean) {
+                type = "bool";
+            };
+
+            if (customField.IsLongText) {
+                type = "text";
+            };
+
+            return type;
+        };
+
+        function mapColumnFrom(customField) {
+            var column = new Object();
+            column.ColumnName = customField.FieldName;
+            column.PropertyName = customField.FieldName;
+            column.FieldLabel = customField.FieldLabel;
+            column.IsCustomField = true;
+            column.DbDataType = getCustomFieldDataType(customField);
+            column.IsNullable = true;
+            column.IsSerial = false;
+            column.IsPrimaryKey = false;
+            column.MaxLength = 0;
+            column.Value = customField.Value;
+            column.Description = customField.Description;
+
+            return column;
+        };
+
+        function createCustomFields(customFields) {
+            if (customFields.length) {
+                var header = $("<div class='ui purple large header'/>");
+                header.text(window.Resources.Titles.CustomFields());
+                scrud.append(header);
+                scrud.append("<div class='ui divider'></div>");
+            };
+
+            for (var i = 0; i < customFields.length; i += 2) {
+                var fields = $("<div class='fields' />");
+
+
+                var leftField = mapColumnFrom(customFields[i]);
+                createColumn(fields, leftField, "four wide field");
+
+                if (i + 1 < customFields.length) {
+                    var rightField = mapColumnFrom(customFields[i + 1]);
+                    createColumn(fields, rightField, "four wide field");
+                };
+
+
+                scrud.append(fields);
+            };
+        };
+
+
+
+        function createLayout(collection) {
+            var skip = [];
+
+            if (typeof (scrudFactory.layout) !== "undefined") {
+                $.each(scrudFactory.layout, function (i, currentLayout) {
+                    var actualColumns = _.uniq(currentLayout);
+                    var fieldWith = 16 / currentLayout.length;
+
+                    var fields = $("<div class='fields' />");
+
+                    $.each(actualColumns, function (index, propertyName) {
+                        var value = _.findIndex(collection, { "PropertyName": propertyName });
+
+                        if (value >= 0) {
+                            skip.push(value);
+
+                            var weight = currentLayout.reduce(function (x, y) {
+                                return x + (y === propertyName);
+                            }, 0);
+
+                            var cssClass = grid[fieldWith * weight] + " wide field";
+
+                            createColumn(fields, collection[value], cssClass);
+                        };
+
+                    });
+
+                    scrud.append(fields);
+                });
+            };
+
+
+            var range = _.range(collection.length);
+            var missing = $(range).not(skip).get();
+
+            missing = chunk_array(missing, 2);
+
+
+            $.each(missing, function () {
+                fields = $("<div class='fields' />");
+
+                createColumn(fields, collection[this[0]], "four wide field");
+
+                if (this[1] !== undefined) {
+                    createColumn(fields, collection[this[1]], "four wide field");
+                };
 
                 scrud.append(fields);
             });
+
+
+
+            initializeAjaxRequest();
+            initializeUploader();
+            initializeValidators();
+
+            var initialValue = $(".initial.value").html();
+
+            $("input.live").keyup(function () {
+                var val = $(this).val();
+
+                if (!val.length) {
+                    $(".initial.value").html(initialValue);
+                    $(".huge.header .sub.header").html("");
+                    $(".live:not(input)").html("");
+                } else {
+                    $(".initial.value").html("");
+                    $(".huge.header .sub.header").html(initialValue);
+
+                    $(".live:not(input)").html(val);
+                };
+            });
+
+            $("input.live").trigger("keyup");
         };
 
+        function loadEdit() {
+            var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
 
-        var range = _.range(collection.length);
-        var missing = $(range).not(skip).get();
-
-        missing = chunk_array(missing, 2);
-
-
-        $.each(missing, function () {
-            fields = $("<div class='fields' />");
-
-            createColumn(fields, collection[this[0]], "four wide field");
-
-            if (this[1] !== undefined) {
-                createColumn(fields, collection[this[1]], "four wide field");
+            if (!queryString) {
+                createForm(scrudFactory.formPocoName);
+                return;
             };
 
-            scrud.append(fields);
-        });
+            function getViewForEdit(pocoName, primaryKeyValue) {
+                var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
+                var data = appendParameter("", "pocoName", pocoName);
+                data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
 
+                data = getData(data);
 
+                return getAjax(url, data);
+            };
 
-        initializeAjaxRequest();
-        initializeUploader();
-        initializeValidators();
+            var ajaxGetViewForEdit = getViewForEdit(scrudFactory.formPocoName, queryString);
 
-        var initialValue = $(".initial.value").html();
+            ajaxGetViewForEdit.success(function (msg) {
+                editData = JSON.parse(msg.d);
+                createForm(scrudFactory.formPocoName);
+            });
+        };
 
-        $("input.live").keyup(function () {
-            var val = $(this).val();
+        function initializeValidators() {
 
-            if (!val.length) {
-                $(".initial.value").html(initialValue);
-                $(".huge.header .sub.header").html("");
-                $(".live:not(input)").html("");
+            $(".dropdown input.search").blur(function () {
+                $(this).parent().find("select").trigger("blur");
+            });
+
+            $(".poco.form.factory [required]:not(:disabled):not([readonly])").blur(function () {
+                var el = $(this);
+
+                var val = el.val();
+                var errorMessage = el.closest(".field").find(".error-message");
+
+                if (!errorMessage.length) {
+                    errorMessage = $("<span class='error-message' />");
+                    el.closest(".field").append(errorMessage);
+                };
+
+                if (isNullOrWhiteSpace(val)) {
+                    isValid = false;
+                    makeDirty(el);
+
+                    el.closest(".field").find(".error-message").html(Resources.Labels.ThisFieldIsRequired());
+                } else {
+                    removeDirty(el);
+                    el.closest(".field").find(".error-message").html("");
+                };
+            });
+        };
+
+        function mergeArray(array) {
+            var merged = [];
+
+            for (var i = 0; i < array.length; i++) {
+                merged = merged.concat(array[i]);
+            }
+
+            return merged;
+        };
+
+        function createColumn(el, column, cssClass) {
+            if (typeof (column) === "undefined") {
+                return;
+            };
+
+            if (["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >= 0) {
+                return;
+            };
+
+            var field = $("<div/>");
+            field.addClass(cssClass);
+
+            var label = $("<label/>");
+
+            if (column.FieldLabel) {
+                label.text(column.FieldLabel);
             } else {
-                $(".initial.value").html("");
-                $(".huge.header .sub.header").html(initialValue);
-
-                $(".live:not(input)").html(val);
-            };
-        });
-
-        $("input.live").trigger("keyup");
-    };
-
-    function loadEdit() {
-        var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
-
-        if (!queryString) {
-            createForm(scrudFactory.formPocoName);
-            return;
-        };
-
-        function getViewForEdit(pocoName, primaryKeyValue) {
-            var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
-
-            data = getData(data);
-
-            return getAjax(url, data);
-        };
-
-        var ajaxGetViewForEdit = getViewForEdit(scrudFactory.formPocoName, queryString);
-
-        ajaxGetViewForEdit.success(function (msg) {
-            editData = JSON.parse(msg.d);
-            createForm(scrudFactory.formPocoName);
-        });
-    };
-
-    function initializeValidators() {
-
-        $(".dropdown input.search").blur(function () {
-            $(this).parent().find("select").trigger("blur");
-        });
-
-        $(".poco.form.factory [required]:not(:disabled):not([readonly])").blur(function () {
-            var el = $(this);
-
-            var val = el.val();
-            var errorMessage = el.closest(".field").find(".error-message");
-
-            if (!errorMessage.length) {
-                errorMessage = $("<span class='error-message' />");
-                el.closest(".field").append(errorMessage);
+                label.text(getLabel(column.ColumnName));
             };
 
-            if (isNullOrWhiteSpace(val)) {
-                isValid = false;
-                makeDirty(el);
+            label.attr("for", column.ColumnName);
 
-                el.closest(".field").find(".error-message").html(Resources.Labels.ThisFieldIsRequired());
+
+            var element = getField(column.PropertyName, column.DbDataType, column.IsNullable);
+
+
+            element.attr("id", column.ColumnName);
+
+            if (column.DbDataType.indexOf("strict") > -1) {
+                element.attr("data-validation", column.DbDataType);
+            };
+
+            element.attr("data-property", column.PropertyName);
+            element.attr("data-type", column.DbDataType);
+
+            if (typeof (scrudFactory.live) !== "undefined") {
+                if (column.PropertyName === scrudFactory.live) {
+                    element.addClass("live");
+                };
+            };
+
+            if (typeof (scrudFactory.readonlyColumns) === "undefined") {
+                scrudFactory.readonlyColumns = [];
+            };
+
+            if (typeof (scrudFactory.hiddenColumns) === "undefined") {
+                scrudFactory.hiddenColumns = [];
+            };
+
+            if (scrudFactory.readonlyColumns.indexOf(column.PropertyName) > -1) {
+                element.attr("readonly", "");
+            };
+
+            if (scrudFactory.hiddenColumns.indexOf(column.PropertyName) > -1) {
+                field.addClass("hidden");
+            };
+
+            if (column.IsSerial) {
+                element.attr("readonly", "readonly");
+            };
+
+            if (column.IsPrimaryKey) {
+                element.attr("data-primaryKey", "");
+                element.removeClass();
+            };
+
+            if (column.MaxLength > 0) {
+                element.attr("maxlength", column.MaxLength);
+            };
+
+            if (!column.IsNullable) {
+                element.attr("required", "required");
+                field.addClass("required");
+            };
+
+            var value = column.Value;
+
+            if (window.editData) {
+                if (window.editData.hasOwnProperty(column.ColumnName)) {
+                    value = window.editData[column.ColumnName];
+                };
+            };
+
+            if (element.hasClass("date")) {
+                value = value.toFormattedDate();
+            };
+
+            if (element.attr("data-type") === "time") {
+                value = getTime(value);
+            };
+
+            if (column.DbDataType === "bool") {
+                value = value ? "yes" : "no";
+            };
+
+            if (value) {
+                element.attr("data-value", value);
+                element.val(value);
+            };
+
+            if (column.IsCustomField) {
+                element.addClass("custom-field");
             } else {
-                removeDirty(el);
-                el.closest(".field").find(".error-message").html("");
+                element.addClass("form-field");
+            };
+
+            field.append(label);
+            field.append(element);
+
+            if (column.Description) {
+                field.append("<span class='ui basic pointing label'>" + column.Description + "</span>");
+            };
+
+            el.append(field);
+        };
+
+        function getField(propertyName, dataType, nullable) {
+            if (typeof (scrudFactory.keys) === "undefined") {
+                scrudFactory.keys = [];
+            };
+
+            var hasKey = _.findWhere(scrudFactory.keys, { property: propertyName });
+            if (hasKey) {
+                return $("<select class='ui search fluid dropdown' />");
+            };
+
+            switch (dataType) {
+                case "image":
+                    return $("<input type='text' class='image' />");
+                case "int4":
+                case "int8":
+                case "integer_strict":
+                case "integer_strict2":
+                    return $("<input type='text' class='integer' />");
+                case "float8":
+                case "decimal":
+                case "decimal_strict":
+                case "numeric":
+                    return $("<input type='text' class='decimal' />");
+                case "money_strict2":
+                case "money_strict":
+                    return $("<input type='text' class='currency' />");
+                case "text":
+                    return $("<textarea />");
+                case "date":
+                    return $("<input type='date' class='date' />");
+                case "bool":
+                    var el = $("<select class='ui search dropdown' />");
+                    var option = "<option";
+
+                    if (nullable) {
+                        option += " value='Select'>";
+                    } else {
+                        option += " value=''>";
+                    };
+
+                    option += Resources.Titles.Select() + "</option>";
+                    option += "<option value='yes'>" + Resources.Titles.Yes() + "</option>";
+                    option += "<option value='no'>" + Resources.Titles.No() + "</option>";
+
+                    el.append(option);
+
+                    return el;
+                default:
+                    return $("<input type='text' />");
+            };
+        };
+
+        function tryParseLocalizedResource(text) {
+            var localized = executeFunctionByName("Resources.Titles." + text, window);
+
+            if (!localized) {
+                localized = executeFunctionByName("Resources.ScrudResource." + text, window);
+            };
+
+            if (localized) {
+                return localized;
+            };
+
+            return text;
+        };
+
+        function getLabel(columnName) {
+            return tryParseLocalizedResource(columnName);
+        };
+
+        $(document).keydown(function (event) {
+            if (event.ctrlKey) {
+                if (event.key === "Enter") {
+                    $("#SaveButton").trigger("click");
+                    return false;
+                };
             };
         });
-    };
-
-    function mergeArray(array) {
-        var merged = [];
-
-        for (var i = 0; i < array.length; i++) {
-            merged = merged.concat(array[i]);
-        }
-
-        return merged;
-    };
-
-    function createColumn(el, column, cssClass) {
-        if (typeof (column) === "undefined") {
-            return;
-        };
-
-        if (["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >= 0) {
-            return;
-        };
-
-
-        var field = $("<div/>");
-        field.addClass(cssClass);
-
-        var label = $("<label/>");
-
-        if (column.FieldLabel) {
-            label.text(column.FieldLabel);
-        } else {
-            label.text(getLabel(column.ColumnName));
-        };
-
-        label.attr("for", column.ColumnName);
-
-
-        var element = getField(column.PropertyName, column.DbDataType, column.IsNullable);
-
-
-        element.attr("id", column.ColumnName);
-
-        if (column.DbDataType.indexOf("strict") > -1) {
-            element.attr("data-validation", column.DbDataType);
-        };
-
-        element.attr("data-property", column.PropertyName);
-        element.attr("data-type", column.DbDataType);
-
-        if (typeof (scrudFactory.live) !== "undefined") {
-            if (column.PropertyName === scrudFactory.live) {
-                element.addClass("live");
-            };
-        };
-
-        if (typeof (scrudFactory.readonlyColumns) === "undefined") {
-            scrudFactory.readonlyColumns = [];
-        };
-
-        if (scrudFactory.readonlyColumns.indexOf(column.PropertyName) > -1) {
-            element.attr("readonly", "");
-        };
-
-        if (column.IsSerial) {
-            element.attr("readonly", "readonly");
-        };
-
-        if (column.IsPrimaryKey) {
-            element.attr("data-primaryKey", "");
-            element.removeClass();
-        };
-
-        if (column.MaxLength > 0) {
-            element.attr("maxlength", column.MaxLength);
-        };
-
-        if (!column.IsNullable) {
-            element.attr("required", "required");
-            field.addClass("required");
-        };
-
-        var value = column.Value;
-
-        if (window.editData) {
-            if (window.editData.hasOwnProperty(column.ColumnName)) {
-                value = window.editData[column.ColumnName];
-            };
-        };
-
-        if (element.hasClass("date")) {
-            value = value.toFormattedDate();
-        };
-
-        if (column.DbDataType === "bool") {
-            value = value ? "yes" : "no";
-        };
-
-        if (value) {
-            element.attr("data-value", value);
-            element.val(value);
-        };
-
-        if (column.IsCustomField) {
-            element.addClass("custom-field");
-        } else {
-            element.addClass("form-field");
-        };
-
-        field.append(label);
-        field.append(element);
-
-        if (column.Description) {
-            field.append("<span class='ui basic pointing label'>" + column.Description + "</span>");
-        };
-
-        el.append(field);
-    };
-
-    function getField(propertyName, dataType, nullable) {
-        if (typeof (scrudFactory.keys) === "undefined") {
-            scrudFactory.keys = [];
-        };
-
-        var hasKey = _.findWhere(scrudFactory.keys, { property: propertyName });
-        if (hasKey) {
-            return $("<select class='ui search dropdown' />");
-        };
-
-        switch (dataType) {
-        case "image":
-            return $("<input type='text' class='image' />");
-        case "int4":
-        case "int8":
-        case "integer_strict":
-        case "integer_strict2":
-            return $("<input type='text' class='integer' />");
-        case "float8":
-        case "decimal":
-        case "decimal_strict":
-        case "numeric":
-            return $("<input type='text' class='decimal' />");
-        case "money_strict2":
-        case "money_strict":
-            return $("<input type='text' class='currency' />");
-        case "text":
-            return $("<textarea />");
-        case "date":
-            return $("<input type='date' class='date' />");
-        case "bool":
-            var el = $("<select class='ui search dropdown' />");
-            var option = "<option";
-
-            if (nullable) {
-                option += " value='Select'>";
-            } else {
-                option += " value=''>";
-            };
-
-            option += Resources.Titles.Select() + "</option>";
-            option += "<option value='yes'>" + Resources.Titles.Yes() + "</option>";
-            option += "<option value='no'>" + Resources.Titles.No() + "</option>";
-
-            el.append(option);
-
-            return el;
-        default:
-            return $("<input type='text' />");
-        };
-    };
-
-    function tryParseLocalizedResource(text) {
-        var localized = executeFunctionByName("Resources.Titles." + text, window);
-
-        if (!localized) {
-            localized = executeFunctionByName("Resources.ScrudResource." + text, window);
-        };
-
-        if (localized) {
-            return localized;
-        };
-
-        return text;
-    };
-
-    function getLabel(columnName) {
-        return tryParseLocalizedResource(columnName);
-    };
-
-    $(document).keydown(function(event) {
-        if (event.ctrlKey) {
-            if (event.key === "Enter") {
-                $("#SaveButton").trigger("click");
-                return false;
-            };
-        };
-    });
-</script>
+    </script>
 </div>

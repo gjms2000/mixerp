@@ -29,7 +29,7 @@ using Serilog;
 namespace MixERP.Net.Core.Modules.HRM.Data
 {
     /// <summary>
-    /// Provides simplified data access features to perform SCRUD operation on the database table "hrm.leave_application".
+    /// Provides simplified data access features to perform SCRUD operation on the database table "hrm.leave_applications".
     /// </summary>
     public class LeaveApplication : DbAccess
     {
@@ -39,9 +39,9 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 	    public override string ObjectNamespace => "hrm";
 
         /// <summary>
-        /// The schema unqualified name of this table. Returns literal "leave_application".
+        /// The schema unqualified name of this table. Returns literal "leave_applications".
         /// </summary>
-	    public override string ObjectName => "leave_application";
+	    public override string ObjectName => "leave_applications";
 
         /// <summary>
         /// Login id of application user accessing this table.
@@ -54,9 +54,9 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         public string Catalog { get; set; }
 
 		/// <summary>
-		/// Performs SQL count on the table "hrm.leave_application".
+		/// Performs SQL count on the table "hrm.leave_applications".
 		/// </summary>
-		/// <returns>Returns the number of rows of the table "hrm.leave_application".</returns>
+		/// <returns>Returns the number of rows of the table "hrm.leave_applications".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public long Count()
 		{
@@ -78,12 +78,12 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT COUNT(*) FROM hrm.leave_application;";
+			const string sql = "SELECT COUNT(*) FROM hrm.leave_applications;";
 			return Factory.Scalar<long>(this.Catalog, sql);
 		}
 
 		/// <summary>
-		/// Executes a select query on the table "hrm.leave_application" with a where filter on the column "leave_application_id" to return a single instance of the "LeaveApplication" class. 
+		/// Executes a select query on the table "hrm.leave_applications" with a where filter on the column "leave_application_id" to return a single instance of the "LeaveApplication" class. 
 		/// </summary>
 		/// <param name="leaveApplicationId">The column "leave_application_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "LeaveApplication" class mapped to the database row.</returns>
@@ -108,14 +108,14 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT * FROM hrm.leave_application WHERE leave_application_id=@0;";
+			const string sql = "SELECT * FROM hrm.leave_applications WHERE leave_application_id=@0;";
 			return Factory.Get<MixERP.Net.Entities.HRM.LeaveApplication>(this.Catalog, sql, leaveApplicationId).FirstOrDefault();
 		}
 
         /// <summary>
-        /// Custom fields are user defined form elements for hrm.leave_application.
+        /// Custom fields are user defined form elements for hrm.leave_applications.
         /// </summary>
-        /// <returns>Returns an enumerable custom field collection for the table hrm.leave_application</returns>
+        /// <returns>Returns an enumerable custom field collection for the table hrm.leave_applications</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -140,18 +140,18 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             string sql;
 			if (string.IsNullOrWhiteSpace(resourceId))
             {
-				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.leave_application' ORDER BY field_order;";
+				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.leave_applications' ORDER BY field_order;";
 				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
             }
 
-            sql = "SELECT * from core.get_custom_field_definition('hrm.leave_application'::text, @0::text) ORDER BY field_order;";
+            sql = "SELECT * from core.get_custom_field_definition('hrm.leave_applications'::text, @0::text) ORDER BY field_order;";
 			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
-        /// Displayfields provide a minimal name/value context for data binding the row collection of hrm.leave_application.
+        /// Displayfields provide a minimal name/value context for data binding the row collection of hrm.leave_applications.
         /// </summary>
-        /// <returns>Returns an enumerable name and value collection for the table hrm.leave_application</returns>
+        /// <returns>Returns an enumerable name and value collection for the table hrm.leave_applications</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
 		public IEnumerable<DisplayField> GetDisplayFields()
 		{
@@ -175,7 +175,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT leave_application_id AS key, leave_application_id as value FROM hrm.leave_application;";
+			const string sql = "SELECT leave_application_id AS key, leave_application_id as value FROM hrm.leave_applications;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
 				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
@@ -205,7 +205,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		}
 
 		/// <summary>
-		/// Inserts or updates the instance of LeaveApplication class on the database table "hrm.leave_application".
+		/// Inserts or updates the instance of LeaveApplication class on the database table "hrm.leave_applications".
 		/// </summary>
 		/// <param name="leaveApplication">The instance of "LeaveApplication" class to insert or update.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -225,7 +225,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		}
 
 		/// <summary>
-		/// Inserts the instance of LeaveApplication class on the database table "hrm.leave_application".
+		/// Inserts the instance of LeaveApplication class on the database table "hrm.leave_applications".
 		/// </summary>
 		/// <param name="leaveApplication">The instance of "LeaveApplication" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -253,7 +253,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		}
 
 		/// <summary>
-		/// Updates the row of the table "hrm.leave_application" with an instance of "LeaveApplication" class against the primary key value.
+		/// Updates the row of the table "hrm.leave_applications" with an instance of "LeaveApplication" class against the primary key value.
 		/// </summary>
 		/// <param name="leaveApplication">The instance of "LeaveApplication" class to update.</param>
 		/// <param name="leaveApplicationId">The value of the column "leave_application_id" which will be updated.</param>
@@ -282,7 +282,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		}
 
 		/// <summary>
-		/// Deletes the row of the table "hrm.leave_application" against the primary key value.
+		/// Deletes the row of the table "hrm.leave_applications" against the primary key value.
 		/// </summary>
 		/// <param name="leaveApplicationId">The value of the column "leave_application_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -306,12 +306,12 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "DELETE FROM hrm.leave_application WHERE leave_application_id=@0;";
+			const string sql = "DELETE FROM hrm.leave_applications WHERE leave_application_id=@0;";
 			Factory.NonQuery(this.Catalog, sql, leaveApplicationId);
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "hrm.leave_application" producing a paged result of 25.
+		/// Performs a select statement on table "hrm.leave_applications" producing a paged result of 25.
 		/// </summary>
 		/// <returns>Returns the first page of collection of "LeaveApplication" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -335,12 +335,12 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT * FROM hrm.leave_application ORDER BY leave_application_id LIMIT 25 OFFSET 0;";
+			const string sql = "SELECT * FROM hrm.leave_applications ORDER BY leave_application_id LIMIT 25 OFFSET 0;";
 			return Factory.Get<MixERP.Net.Entities.HRM.LeaveApplication>(this.Catalog, sql);
 		}
 
 		/// <summary>
-		/// Performs a select statement on table "hrm.leave_application" producing a paged result of 25.
+		/// Performs a select statement on table "hrm.leave_applications" producing a paged result of 25.
 		/// </summary>
 		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
 		/// <returns>Returns collection of "LeaveApplication" class.</returns>
@@ -366,13 +366,13 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             }
 	
 			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM hrm.leave_application ORDER BY leave_application_id LIMIT 25 OFFSET @0;";
+			const string sql = "SELECT * FROM hrm.leave_applications ORDER BY leave_application_id LIMIT 25 OFFSET @0;";
 				
 			return Factory.Get<MixERP.Net.Entities.HRM.LeaveApplication>(this.Catalog, sql, offset);
 		}
 
         /// <summary>
-		/// Performs a filtered select statement on table "hrm.leave_application" producing a paged result of 25.
+		/// Performs a filtered select statement on table "hrm.leave_applications" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -399,7 +399,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             }
 
             long offset = (pageNumber - 1) * 25;
-            Sql sql = Sql.Builder.Append("SELECT * FROM hrm.leave_application WHERE 1 = 1");
+            Sql sql = Sql.Builder.Append("SELECT * FROM hrm.leave_applications WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.LeaveApplication(), filters);
 
@@ -430,7 +430,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 
-			const string sql = "SELECT * FROM hrm.leave_application WHERE leave_application_id IN (@0);";
+			const string sql = "SELECT * FROM hrm.leave_applications WHERE leave_application_id IN (@0);";
 
             return Factory.Get<MixERP.Net.Entities.HRM.LeaveApplication>(this.Catalog, sql, leaveApplicationIds);
         }

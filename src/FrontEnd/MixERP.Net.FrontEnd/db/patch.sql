@@ -293,6 +293,30 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'week_days'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.week_days
+        (
+            week_day_id                 integer NOT NULL CHECK(week_day_id>=1 AND week_day_id<=7) PRIMARY KEY,
+            week_day_code               national character varying(12) NOT NULL UNIQUE,
+            week_day_name               national character varying(50) NOT NULL UNIQUE
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
 (
@@ -316,6 +340,126 @@ BEGIN
     IF(_menu_id IS NOT NULL) THEN
         PERFORM core.create_menu_locale(_menu_id, _culture, _menu_text);
     END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.get_custom_field_definition.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+);
+
+CREATE FUNCTION core.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+)
+RETURNS TABLE
+(
+    table_name              national character varying(100),
+    key_name                national character varying(100),
+    custom_field_setup_id   integer,
+    form_name               national character varying(100),
+    field_order             integer,
+    field_name              national character varying(100),
+    field_label             national character varying(100),
+    description             text,
+    data_type               national character varying(50),
+    is_number               boolean,
+    is_date                 boolean,
+    is_boolean              boolean,
+    is_long_text            boolean,
+    resource_id             text,
+    value                   text
+)
+AS
+$$
+BEGIN
+    DROP TABLE IF EXISTS definition_temp;
+    CREATE TEMPORARY TABLE definition_temp
+    (
+        table_name              national character varying(100),
+        key_name                national character varying(100),
+        custom_field_setup_id   integer,
+        form_name               national character varying(100),
+        field_order             integer,
+        field_name              national character varying(100),
+        field_label             national character varying(100),
+        description             text,
+        data_type               national character varying(50),
+        is_number               boolean,
+        is_date                 boolean,
+        is_boolean              boolean,
+        is_long_text            boolean,
+        resource_id             text,
+        value                   text
+    ) ON COMMIT DROP;
+    
+    INSERT INTO definition_temp
+    SELECT * FROM core.custom_field_definition_view
+    WHERE core.custom_field_definition_view.table_name = _table_name
+    ORDER BY field_order;
+
+    UPDATE definition_temp
+    SET resource_id = _resource_id;
+
+    UPDATE definition_temp
+    SET value = core.custom_fields.value
+    FROM core.custom_fields
+    WHERE definition_temp.custom_field_setup_id = core.custom_fields.custom_field_setup_id
+    AND core.custom_fields.resource_id = _resource_id;
+    
+    RETURN QUERY
+    SELECT * FROM definition_temp;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.get_custom_field_form_name.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_form_name
+(
+    _table_name character varying
+);
+
+CREATE FUNCTION core.get_custom_field_form_name
+(
+    _table_name character varying
+)
+RETURNS character varying
+STABLE
+AS
+$$
+BEGIN
+    RETURN form_name 
+    FROM core.custom_field_forms
+    WHERE table_name = _table_name;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.get_custom_field_setup_id_by_table_name.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_setup_id_by_table_name
+(
+    _table_name character varying,
+    _field_name character varying
+);
+
+CREATE FUNCTION core.get_custom_field_setup_id_by_table_name
+(
+    _table_name character varying,
+    _field_name character varying
+)
+RETURNS integer 
+STABLE
+AS
+$$
+BEGIN
+    RETURN custom_field_setup_id
+    FROM core.custom_field_setup
+    WHERE form_name = core.get_custom_field_form_name(_table_name)
+    AND field_name = _field_name;
 END
 $$
 LANGUAGE plpgsql;
@@ -886,6 +1030,287 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/triggers/transactions.verification_trigger.sql --<--<--
+DROP FUNCTION IF EXISTS transactions.verification_trigger() CASCADE;
+CREATE FUNCTION transactions.verification_trigger()
+RETURNS TRIGGER
+AS
+$$
+    DECLARE _transaction_master_id bigint;
+    DECLARE _transaction_posted_by integer;
+    DECLARE _old_verifier integer;
+    DECLARE _old_status integer;
+    DECLARE _old_reason national character varying(128);
+    DECLARE _verifier integer;
+    DECLARE _status integer;
+    DECLARE _reason national character varying(128);
+    DECLARE _has_policy boolean;
+    DECLARE _is_sys boolean;
+    DECLARE _rejected smallint=-3;
+    DECLARE _closed smallint=-2;
+    DECLARE _withdrawn smallint=-1;
+    DECLARE _unapproved smallint = 0;
+    DECLARE _auto_approved smallint = 1;
+    DECLARE _approved smallint=2;
+    DECLARE _book text;
+    DECLARE _can_verify_sales_transactions boolean;
+    DECLARE _sales_verification_limit money_strict2;
+    DECLARE _can_verify_purchase_transactions boolean;
+    DECLARE _purchase_verification_limit money_strict2;
+    DECLARE _can_verify_gl_transactions boolean;
+    DECLARE _gl_verification_limit money_strict2;
+    DECLARE _can_verify_self boolean;
+    DECLARE _self_verification_limit money_strict2;
+    DECLARE _posted_amount money_strict2;
+	DECLARE _cascading_tran_id bigint;
+	
+BEGIN
+    IF TG_OP='DELETE' THEN
+        RAISE EXCEPTION 'Deleting a transaction is not allowed. Mark the transaction as rejected instead.'
+        USING ERRCODE='P5800';
+    END IF;
+
+    IF TG_OP='UPDATE' THEN
+        RAISE NOTICE 'Columns except the following will be ignored for this update: %', 'verified_by_user_id, verification_status_id, verification_reason.';
+
+        IF(OLD.transaction_master_id IS DISTINCT FROM NEW.transaction_master_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_master_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.transaction_counter IS DISTINCT FROM NEW.transaction_counter) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_counter".'
+            USING ERRCODE='P8502';            
+        END IF;
+
+        IF(OLD.transaction_code IS DISTINCT FROM NEW.transaction_code) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_code".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.book IS DISTINCT FROM NEW.book) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"book".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.value_date IS DISTINCT FROM NEW.value_date) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"value_date".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.transaction_ts IS DISTINCT FROM NEW.transaction_ts) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"transaction_ts".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.login_id IS DISTINCT FROM NEW.login_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"login_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.user_id IS DISTINCT FROM NEW.user_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"user_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.sys_user_id IS DISTINCT FROM NEW.sys_user_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"sys_user_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.office_id IS DISTINCT FROM NEW.office_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"office_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        IF(OLD.cost_center_id IS DISTINCT FROM NEW.cost_center_id) THEN
+            RAISE EXCEPTION 'Cannot update the column %', '"cost_center_id".'
+            USING ERRCODE='P8502';
+        END IF;
+
+        _transaction_master_id := OLD.transaction_master_id;
+        _book := OLD.book;
+        _old_verifier := OLD.verified_by_user_id;
+        _old_status := OLD.verification_status_id;
+        _old_reason := OLD.verification_reason;
+        _transaction_posted_by := OLD.user_id;      
+        _verifier := NEW.verified_by_user_id;
+        _status := NEW.verification_status_id;
+        _reason := NEW.verification_reason;
+        _is_sys := office.is_sys(_verifier);
+
+        
+        SELECT
+            SUM(amount_in_local_currency)
+        INTO
+            _posted_amount
+        FROM
+            transactions.transaction_details
+        WHERE transactions.transaction_details.transaction_master_id = _transaction_master_id
+        AND transactions.transaction_details.tran_type='Cr';
+
+
+        SELECT
+            true,
+            can_verify_sales_transactions,
+            sales_verification_limit,
+            can_verify_purchase_transactions,
+            purchase_verification_limit,
+            can_verify_gl_transactions,
+            gl_verification_limit,
+            can_self_verify,
+            self_verification_limit
+        INTO
+            _has_policy,
+            _can_verify_sales_transactions,
+            _sales_verification_limit,
+            _can_verify_purchase_transactions,
+            _purchase_verification_limit,
+            _can_verify_gl_transactions,
+            _gl_verification_limit,
+            _can_verify_self,
+            _self_verification_limit
+        FROM
+        policy.voucher_verification_policy
+        WHERE user_id=_verifier
+        AND is_active=true
+        AND now() >= effective_from
+        AND now() <= ends_on;
+
+        IF(_verifier IS NULL) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;     
+        
+        IF(_status != _withdrawn AND _has_policy = false) THEN
+            RAISE EXCEPTION 'Access is denied. You don''t have the right to verify the transaction.'
+            USING ERRCODE='P9016';
+        END IF;
+
+        IF(_status = _withdrawn AND _has_policy = false) THEN
+            IF(_transaction_posted_by != _verifier) THEN
+                RAISE EXCEPTION 'Access is denied. You don''t have the right to withdraw the transaction.'
+                USING ERRCODE='P9017';
+            END IF;
+        END IF;
+
+        IF(_status = _auto_approved AND _is_sys = false) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;
+
+
+        IF(_has_policy = false) THEN
+            RAISE EXCEPTION 'Access is denied.'
+            USING ERRCODE='P9001';
+        END IF;
+
+
+        --Is trying verify self transaction.
+        IF(NEW.verified_by_user_id = NEW.user_id) THEN
+            IF(_can_verify_self = false) THEN
+                RAISE EXCEPTION 'Please ask someone else to verify the transaction you posted.'
+                USING ERRCODE='P5901';                
+            END IF;
+            IF(_can_verify_self = true) THEN
+                IF(_posted_amount > _self_verification_limit AND _self_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Self verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5910';
+                END IF;
+            END IF;
+        END IF;
+
+        IF(lower(_book) LIKE '%sales%') THEN
+            IF(_can_verify_sales_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_sales_transactions = true) THEN
+                IF(_posted_amount > _sales_verification_limit AND _sales_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Sales verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5911';
+                END IF;
+            END IF;         
+        END IF;
+
+
+        IF(lower(_book) LIKE '%purchase%') THEN
+            IF(_can_verify_purchase_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_purchase_transactions = true) THEN
+                IF(_posted_amount > _purchase_verification_limit AND _purchase_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'Purchase verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5912';
+                END IF;
+            END IF;         
+        END IF;
+
+
+        IF(lower(_book) LIKE 'journal%') THEN
+            IF(_can_verify_gl_transactions = false) THEN
+                RAISE EXCEPTION 'Access is denied.'
+                USING ERRCODE='P9001';
+            END IF;
+            IF(_can_verify_gl_transactions = true) THEN
+                IF(_posted_amount > _gl_verification_limit AND _gl_verification_limit > 0::money_strict2) THEN
+                    RAISE EXCEPTION 'GL verification limit exceeded. The transaction was not verified.'
+                    USING ERRCODE='P5913';
+                END IF;
+            END IF;         
+        END IF;
+
+        --This transaction is rejected. So, cancel all emails related to this transaction.
+        IF(_status < 0) THEN
+            UPDATE core.email_queue
+            SET canceled = true
+            WHERE transaction_master_id = _transaction_master_id;
+        END IF;
+        
+        NEW.last_verified_on := now();
+		
+		SELECT cascading_tran_id
+            INTO _cascading_tran_id
+            FROM transactions.transaction_master
+            WHERE transactions.transaction_master.transaction_master_id=_transaction_master_id;
+
+    
+		
+		UPDATE transactions.transaction_master
+        SET 
+            last_verified_on = now(),
+            verified_by_user_id=_verifier,
+            verification_status_id=_status,
+            verification_reason=_reason
+        WHERE verification_status_id !=_status
+        AND
+        (
+            transactions.transaction_master.cascading_tran_id =_transaction_master_id
+            OR
+            transactions.transaction_master.transaction_master_id = _cascading_tran_id
+        );
+
+    END IF; 
+    RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER verification_update_trigger
+AFTER UPDATE
+ON transactions.transaction_master
+FOR EACH ROW 
+EXECUTE PROCEDURE transactions.verification_trigger();
+
+CREATE TRIGGER verification_delete_trigger
+BEFORE DELETE
+ON transactions.transaction_master
+FOR EACH ROW 
+EXECUTE PROCEDURE transactions.verification_trigger();
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/03.menus/0.menus.sql --<--<--
 --This table should not be localized.
 SELECT * FROM core.create_menu('Other Setup', NULL, 'OTHR', 1, core.get_menu_id('SET'));
@@ -1350,8 +1775,8 @@ SELECT localization.add_localized_resource('ScrudResource', '', 'due_frequency_i
 SELECT localization.add_localized_resource('ScrudResource', '', 'due_on_date', 'Due on Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'education_level_id', 'Education Level Id');
 SELECT localization.add_localized_resource('ScrudResource', '', 'education_level_name', 'Education Level Name');
-SELECT localization.add_localized_resource('ScrudResource', '', 'effecive_resignation_date', 'Effecive Resignation Date');
-SELECT localization.add_localized_resource('ScrudResource', '', 'effecive_termination_date', 'Effecive Termination Date');
+SELECT localization.add_localized_resource('ScrudResource', '', 'effective_resignation_date', 'Effective Resignation Date');
+SELECT localization.add_localized_resource('ScrudResource', '', 'effective_termination_date', 'Effective Termination Date');
 SELECT localization.add_localized_resource('ScrudResource', '', 'effective_from', 'Effective From');
 SELECT localization.add_localized_resource('ScrudResource', '', 'elevated', 'Elevated');
 SELECT localization.add_localized_resource('ScrudResource', '', 'email', 'Email');
@@ -21021,6 +21446,185 @@ INNER JOIN office.users
 ON office.users.user_id = policy.entity_access.user_id
 LEFT JOIN policy.access_types
 ON policy.access_types.access_type_id = policy.entity_access.access_type_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.attachment_view.sql --<--<--
+DROP VIEW IF EXISTS core.attachment_view;
+
+CREATE VIEW core.attachment_view
+AS
+SELECT 
+    core.attachments.attachment_id, 
+    core.attachment_lookup.book,
+    core.attachments.user_id, 
+    core.attachments.resource, 
+    core.attachments.resource_key, 
+    core.attachments.resource_id, 
+    core.attachments.original_file_name, 
+    core.attachments.file_extension, 
+    core.attachments.file_path, 
+    core.attachments.comment, 
+    core.attachments.added_on
+FROM core.attachments 
+INNER JOIN core.attachment_lookup
+ON core.attachments.resource = core.attachment_lookup.resource;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.custom_field_definition_view.sql --<--<--
+DROP VIEW IF EXISTS core.custom_field_definition_view;
+
+CREATE VIEW core.custom_field_definition_view
+AS
+SELECT
+    core.custom_field_forms.table_name,
+    core.custom_field_forms.key_name,
+    core.custom_field_setup.custom_field_setup_id,
+    core.custom_field_setup.form_name,
+    core.custom_field_setup.field_order,
+    core.custom_field_setup.field_name,
+    core.custom_field_setup.field_label,
+    core.custom_field_setup.description,
+    core.custom_field_data_types.data_type,
+    core.custom_field_data_types.is_number,
+    core.custom_field_data_types.is_date,
+    core.custom_field_data_types.is_boolean,
+    core.custom_field_data_types.is_long_text,
+    ''::text AS resource_id,
+    ''::text AS value
+FROM core.custom_field_setup
+INNER JOIN core.custom_field_data_types
+ON core.custom_field_data_types.data_type = core.custom_field_setup.data_type
+INNER JOIN core.custom_field_forms
+ON core.custom_field_forms.form_name = core.custom_field_setup.form_name
+ORDER BY field_order;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.custom_field_view.sql --<--<--
+DROP VIEW IF EXISTS core.custom_field_view;
+
+CREATE VIEW core.custom_field_view
+AS
+SELECT
+    core.custom_field_forms.table_name,
+    core.custom_field_forms.key_name,
+    core.custom_field_setup.custom_field_setup_id,
+    core.custom_field_setup.form_name,
+    core.custom_field_setup.field_order,
+    core.custom_field_setup.field_name,
+    core.custom_field_setup.field_label,
+    core.custom_field_setup.description,
+    core.custom_field_data_types.data_type,
+    core.custom_field_data_types.is_number,
+    core.custom_field_data_types.is_date,
+    core.custom_field_data_types.is_boolean,
+    core.custom_field_data_types.is_long_text,
+    core.custom_fields.resource_id,
+    core.custom_fields.value
+FROM core.custom_field_setup
+INNER JOIN core.custom_field_data_types
+ON core.custom_field_data_types.data_type = core.custom_field_setup.data_type
+INNER JOIN core.custom_field_forms
+ON core.custom_field_forms.form_name = core.custom_field_setup.form_name
+INNER JOIN core.custom_fields
+ON core.custom_fields.custom_field_setup_id = core.custom_field_setup.custom_field_setup_id
+ORDER BY field_order;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.flag_view.sql --<--<--
+DROP VIEW IF EXISTS core.flag_view;
+
+CREATE VIEW core.flag_view
+AS
+SELECT
+    core.flags.flag_id,
+    core.flags.user_id,
+    core.flags.flag_type_id,
+    core.flags.resource_id,
+    core.flags.resource,
+    core.flags.resource_key,
+    core.flags.flagged_on,
+    core.flag_types.flag_type_name,
+    core.flag_types.background_color,
+    core.flag_types.foreground_color
+FROM core.flags
+INNER JOIN core.flag_types
+ON core.flags.flag_type_id = core.flag_types.flag_type_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/custom_field_definition_value_view.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+);
+
+CREATE FUNCTION core.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+)
+RETURNS TABLE
+(
+    table_name              national character varying(100),
+    key_name                national character varying(100),
+    custom_field_setup_id   integer,
+    form_name               national character varying(100),
+    field_order             integer,
+    field_name              national character varying(100),
+    field_label             national character varying(100),
+    description             text,
+    data_type               national character varying(50),
+    is_number               boolean,
+    is_date                 boolean,
+    is_boolean              boolean,
+    is_long_text            boolean,
+    resource_id             text,
+    value                   text
+)
+AS
+$$
+BEGIN
+    DROP TABLE IF EXISTS definition_temp;
+    CREATE TEMPORARY TABLE definition_temp
+    (
+        table_name              national character varying(100),
+        key_name                national character varying(100),
+        custom_field_setup_id   integer,
+        form_name               national character varying(100),
+        field_order             integer,
+        field_name              national character varying(100),
+        field_label             national character varying(100),
+        description             text,
+        data_type               national character varying(50),
+        is_number               boolean,
+        is_date                 boolean,
+        is_boolean              boolean,
+        is_long_text            boolean,
+        resource_id             text,
+        value                   text
+    ) ON COMMIT DROP;
+    
+    INSERT INTO definition_temp
+    SELECT * FROM core.custom_field_definition_view
+    WHERE core.custom_field_definition_view.table_name = _table_name
+    ORDER BY field_order;
+
+    UPDATE definition_temp
+    SET resource_id = _resource_id;
+
+    UPDATE definition_temp
+    SET value = core.custom_fields.value
+    FROM core.custom_fields
+    WHERE definition_temp.custom_field_setup_id = core.custom_fields.custom_field_setup_id
+    AND core.custom_fields.resource_id = _resource_id;
+    
+    RETURN QUERY
+    SELECT * FROM definition_temp;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/99.sample-data/00.custom-fields.sql --<--<--
+UPDATE core.custom_field_data_types
+SET is_number = false
+WHERE data_type = 'Text';
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/99.sample-data/99.ownership.sql --<--<--
 DO

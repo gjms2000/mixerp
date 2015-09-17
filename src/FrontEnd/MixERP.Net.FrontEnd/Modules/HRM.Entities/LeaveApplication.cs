@@ -22,13 +22,13 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("leave_application_id", autoIncrement=false)]
-    [TableName("hrm.leave_application")]
+    [PrimaryKey("leave_application_id", autoIncrement=true)]
+    [TableName("hrm.leave_applications")]
     [ExplicitColumns]
     public sealed class LeaveApplication : PetaPocoDB.Record<LeaveApplication>, IPoco
     {
         [Column("leave_application_id")]
-        [ColumnDbType("int8", 0, false, "")] 
+        [ColumnDbType("int8", 0, false, "nextval('hrm.leave_applications_leave_application_id_seq'::regclass)")] 
         public long LeaveApplicationId { get; set; }
     
         [Column("employee_id")]

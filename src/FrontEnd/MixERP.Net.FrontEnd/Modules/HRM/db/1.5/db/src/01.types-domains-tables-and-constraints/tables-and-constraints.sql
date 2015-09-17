@@ -99,9 +99,10 @@ CREATE TABLE hrm.leave_types
 
 CREATE TABLE hrm.office_hours
 (
-    week_day_id                             integer NOT NULL PRIMARY KEY,
+    office_hour_id                          SERIAL NOT NULL PRIMARY KEY,
     office_id                               integer NOT NULL REFERENCES office.offices(office_id),
     shift_id                                integer NOT NULL REFERENCES hrm.shifts,
+    week_day_id                             integer NOT NULL REFERENCES core.week_days(week_day_id),
     begins_from                             time NOT NULL,
     ends_on                                 time NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
@@ -218,11 +219,11 @@ CREATE TABLE hrm.contracts
                                             DEFAULT(NOW())    
 );
 
-
---Todo
 CREATE TABLE hrm.salary_frequencies
 (
-    salary_frequency_id                     integer NOT NULL PRIMARY KEY
+    salary_frequency_id                     integer NOT NULL PRIMARY KEY,
+    salary_frequency_name                   national character varying(128) NOT NULL UNIQUE,
+    frequency_id                            integer REFERENCES core.frequencies(frequency_id)
 );
 
 CREATE TABLE hrm.salary_types
@@ -236,9 +237,44 @@ CREATE TABLE hrm.salary_types
                                             DEFAULT(NOW())    
 );
 
+CREATE TABLE hrm.wages_setup
+(
+    wages_setup_id                          SERIAL NOT NULL PRIMARY KEY,
+    wages_setup_code                        national character varying(12) NOT NULL UNIQUE,
+    wages_setup_name                        national character varying(128) NOT NULL,
+    currency_code                           national character varying(12) NOT NULL REFERENCES core.currencies(currency_code),
+    max_week_hours                          integer NOT NULL DEFAULT(0),
+    hourly_rate                             public.money_strict NOT NULL,
+    overtime_applicable                     boolean NOT NULL DEFAULT(true),
+    overtime_hourly_rate                    public.money_strict2 NOT NULL,
+    description                             text,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),
+    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
+);
+
+
+CREATE TABLE hrm.employee_wages
+(
+    employee_wage_id                        BIGSERIAL NOT NULL PRIMARY KEY,
+    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
+    wages_setup_id                          integer NOT NULL REFERENCES hrm.wages_setup(wages_setup_id),
+    currency_code                           national character varying(12) NOT NULL REFERENCES core.currencies(currency_code),
+    max_week_hours                          integer NOT NULL,
+    hourly_rate                             public.money_strict NOT NULL,
+    overtime_applicable                     boolean NOT NULL,
+    overtime_hourly_rate                    public.money_strict2 DEFAULT(0),
+    valid_till                              date NOT NULL,
+    is_active                               boolean,
+    audit_user_id                           integer NULL REFERENCES office.users(user_id),    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())    
+);
+
 CREATE TABLE hrm.salaries
 (
-    salary_id                               BIGINT NOT NULL PRIMARY KEY,    
+    salary_id                               BIGSERIAL NOT NULL PRIMARY KEY,    
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     salary_type_id                          integer NOT NULL REFERENCES hrm.salary_types(salary_type_id),
     pay_grade_id                            integer NOT NULL REFERENCES hrm.pay_grades(pay_grade_id),
@@ -297,13 +333,13 @@ CREATE TABLE hrm.holidays
                                             DEFAULT(NOW())    
 );
 
-CREATE TABLE hrm.leave_application
+CREATE TABLE hrm.leave_applications
 (
-    leave_application_id                    BIGINT NOT NULL PRIMARY KEY,
+    leave_application_id                    BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
     leave_type_id                           integer NOT NULL REFERENCES hrm.leave_types(leave_type_id),
     entered_by                              integer NOT NULL REFERENCES office.users(user_id),
-    applied_on                              date,
+    applied_on                              date DEFAULT(NOW()),
     reason                                  text,
     start_date                              date,
     end_date                                date,

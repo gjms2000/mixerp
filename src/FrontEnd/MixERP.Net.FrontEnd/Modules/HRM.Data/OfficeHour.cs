@@ -83,12 +83,12 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		}
 
 		/// <summary>
-		/// Executes a select query on the table "hrm.office_hours" with a where filter on the column "week_day_id" to return a single instance of the "OfficeHour" class. 
+		/// Executes a select query on the table "hrm.office_hours" with a where filter on the column "office_hour_id" to return a single instance of the "OfficeHour" class. 
 		/// </summary>
-		/// <param name="weekDayId">The column "week_day_id" parameter used on where filter.</param>
+		/// <param name="officeHourId">The column "office_hour_id" parameter used on where filter.</param>
 		/// <returns>Returns a non-live, non-mapped instance of "OfficeHour" class mapped to the database row.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public MixERP.Net.Entities.HRM.OfficeHour Get(int weekDayId)
+		public MixERP.Net.Entities.HRM.OfficeHour Get(int officeHourId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -103,13 +103,13 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"OfficeHour\" filtered by \"WeekDayId\" with value {WeekDayId} was denied to the user with Login ID {LoginId}", weekDayId, this.LoginId);
+                    Log.Information("Access to the get entity \"OfficeHour\" filtered by \"OfficeHourId\" with value {OfficeHourId} was denied to the user with Login ID {LoginId}", officeHourId, this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 	
-			const string sql = "SELECT * FROM hrm.office_hours WHERE week_day_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql, weekDayId).FirstOrDefault();
+			const string sql = "SELECT * FROM hrm.office_hours WHERE office_hour_id=@0;";
+			return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql, officeHourId).FirstOrDefault();
 		}
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT week_day_id AS key, week_day_id as value FROM hrm.office_hours;";
+			const string sql = "SELECT office_hour_id AS key, office_hour_id as value FROM hrm.office_hours;";
 			using (NpgsqlCommand command = new NpgsqlCommand(sql))
 			{
 				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
@@ -216,8 +216,8 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 				return;
 			}
 
-			if(officeHour.WeekDayId > 0){
-				this.Update(officeHour, officeHour.WeekDayId);
+			if(officeHour.OfficeHourId > 0){
+				this.Update(officeHour, officeHour.OfficeHourId);
 				return;
 			}
 	
@@ -256,9 +256,9 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 		/// Updates the row of the table "hrm.office_hours" with an instance of "OfficeHour" class against the primary key value.
 		/// </summary>
 		/// <param name="officeHour">The instance of "OfficeHour" class to update.</param>
-		/// <param name="weekDayId">The value of the column "week_day_id" which will be updated.</param>
+		/// <param name="officeHourId">The value of the column "office_hour_id" which will be updated.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Update(MixERP.Net.Entities.HRM.OfficeHour officeHour, int weekDayId)
+		public void Update(MixERP.Net.Entities.HRM.OfficeHour officeHour, int officeHourId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -273,20 +273,20 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"OfficeHour\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {OfficeHour}", weekDayId, this.LoginId, officeHour);
+                    Log.Information("Access to edit entity \"OfficeHour\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {OfficeHour}", officeHourId, this.LoginId, officeHour);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 	
-			Factory.Update(this.Catalog, officeHour, weekDayId);
+			Factory.Update(this.Catalog, officeHour, officeHourId);
 		}
 
 		/// <summary>
 		/// Deletes the row of the table "hrm.office_hours" against the primary key value.
 		/// </summary>
-		/// <param name="weekDayId">The value of the column "week_day_id" which will be deleted.</param>
+		/// <param name="officeHourId">The value of the column "office_hour_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Delete(int weekDayId)
+		public void Delete(int officeHourId)
 		{
 			if(string.IsNullOrWhiteSpace(this.Catalog))
 			{
@@ -301,13 +301,13 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"OfficeHour\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", weekDayId, this.LoginId);
+                    Log.Information("Access to delete entity \"OfficeHour\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", officeHourId, this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 	
-			const string sql = "DELETE FROM hrm.office_hours WHERE week_day_id=@0;";
-			Factory.NonQuery(this.Catalog, sql, weekDayId);
+			const string sql = "DELETE FROM hrm.office_hours WHERE office_hour_id=@0;";
+			Factory.NonQuery(this.Catalog, sql, officeHourId);
 		}
 
 		/// <summary>
@@ -335,7 +335,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
             }
 	
-			const string sql = "SELECT * FROM hrm.office_hours ORDER BY week_day_id LIMIT 25 OFFSET 0;";
+			const string sql = "SELECT * FROM hrm.office_hours ORDER BY office_hour_id LIMIT 25 OFFSET 0;";
 			return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql);
 		}
 
@@ -366,7 +366,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             }
 	
 			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM hrm.office_hours ORDER BY week_day_id LIMIT 25 OFFSET @0;";
+			const string sql = "SELECT * FROM hrm.office_hours ORDER BY office_hour_id LIMIT 25 OFFSET @0;";
 				
 			return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql, offset);
 		}
@@ -403,14 +403,14 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.OfficeHour(), filters);
 
-            sql.OrderBy("week_day_id");
+            sql.OrderBy("office_hour_id");
             sql.Append("LIMIT @0", 25);
             sql.Append("OFFSET @0", offset);
 
             return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql);
         }
 
-        public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> Get(int[] weekDayIds)
+        public IEnumerable<MixERP.Net.Entities.HRM.OfficeHour> Get(int[] officeHourIds)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
@@ -425,14 +425,14 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"OfficeHour\" was denied to the user with Login ID {LoginId}. weekDayIds: {weekDayIds}.", this.LoginId, weekDayIds);
+                    Log.Information("Access to entity \"OfficeHour\" was denied to the user with Login ID {LoginId}. officeHourIds: {officeHourIds}.", this.LoginId, officeHourIds);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-			const string sql = "SELECT * FROM hrm.office_hours WHERE week_day_id IN (@0);";
+			const string sql = "SELECT * FROM hrm.office_hours WHERE office_hour_id IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql, weekDayIds);
+            return Factory.Get<MixERP.Net.Entities.HRM.OfficeHour>(this.Catalog, sql, officeHourIds);
         }
 
 	}
