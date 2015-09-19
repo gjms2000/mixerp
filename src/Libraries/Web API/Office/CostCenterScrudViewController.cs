@@ -31,7 +31,8 @@ namespace MixERP.Net.Api.Office
             this.CostCenterScrudViewContext = new MixERP.Net.Schemas.Office.Data.CostCenterScrudView
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -135,6 +136,32 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
+        ///     Counts the number of cost center scrud views using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered cost center scrud views.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/office/cost-center-scrud-view/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+
+                return this.CostCenterScrudViewContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 cost center scrud views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -149,6 +176,56 @@ namespace MixERP.Net.Api.Office
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.CostCenterScrudViewContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of cost center scrud views using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered cost center scrud views.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/office/cost-center-scrud-view/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.CostCenterScrudViewContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 cost center scrud views on each page, sorted by the property .
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/office/cost-center-scrud-view/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.Office.CostCenterScrudView> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.CostCenterScrudViewContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {

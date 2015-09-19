@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MixERP.Net.Api.Framework;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Newtonsoft.Json;
 using PetaPoco;
 
@@ -31,7 +33,8 @@ namespace MixERP.Net.Api.Policy
             this.DefaultEntityAccessContext = new MixERP.Net.Schemas.Policy.Data.DefaultEntityAccess
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -39,6 +42,31 @@ namespace MixERP.Net.Api.Policy
         public int UserId { get; private set; }
         public int OfficeId { get; private set; }
         public string Catalog { get; }
+
+        /// <summary>
+        ///     Creates meta information of "default entity access" entity.
+        /// </summary>
+        /// <returns>Returns the "default entity access" meta information to perform CRUD operation.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("meta")]
+        [Route("~/api/policy/default-entity-access/meta")]
+        public EntityView GetEntityView()
+        {
+            return new EntityView
+            {
+                PrimaryKey = "default_entity_access_id",
+                Columns = new List<EntityColumn>()
+                                {
+                                        new EntityColumn { ColumnName = "default_entity_access_id",  PropertyName = "DefaultEntityAccessId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "entity_name",  PropertyName = "EntityName",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 128 },
+                                        new EntityColumn { ColumnName = "role_id",  PropertyName = "RoleId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "access_type_id",  PropertyName = "AccessTypeId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "allow_access",  PropertyName = "AllowAccess",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
+                                }
+            };
+        }
 
         /// <summary>
         ///     Counts the number of default entity accesses.
@@ -52,6 +80,29 @@ namespace MixERP.Net.Api.Policy
             try
             {
                 return this.DefaultEntityAccessContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns collection of default entity access for export.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("export")]
+        [Route("~/api/policy/default-entity-access/export")]
+        public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccess> Get()
+        {
+            try
+            {
+                return this.DefaultEntityAccessContext.Get();
             }
             catch (UnauthorizedException)
             {
@@ -154,6 +205,31 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
+        ///     Counts the number of default entity accesses using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered default entity accesses.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/policy/default-entity-access/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.DefaultEntityAccessContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 default entity accesses on each page, sorted by the property DefaultEntityAccessId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -168,6 +244,55 @@ namespace MixERP.Net.Api.Policy
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.DefaultEntityAccessContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of default entity accesses using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered default entity accesses.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/policy/default-entity-access/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.DefaultEntityAccessContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 default entity accesses on each page, sorted by the property DefaultEntityAccessId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/policy/default-entity-access/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.Policy.DefaultEntityAccess> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.DefaultEntityAccessContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {
@@ -230,7 +355,7 @@ namespace MixERP.Net.Api.Policy
         /// </summary>
         /// <returns>Returns an enumerable custom field collection of default entity accesses.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("custom-fields")]
+        [Route("custom-fields/{resourceId}")]
         [Route("~/api/policy/default-entity-access/custom-fields/{resourceId}")]
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -255,8 +380,11 @@ namespace MixERP.Net.Api.Policy
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/policy/default-entity-access/add-or-edit")]
-        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.DefaultEntityAccess defaultEntityAccess)
+        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
+            MixERP.Net.Entities.Policy.DefaultEntityAccess defaultEntityAccess = form[0].ToObject<MixERP.Net.Entities.Policy.DefaultEntityAccess>(JsonHelper.GetJsonSerializer());
+            List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
+
             if (defaultEntityAccess == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -264,7 +392,7 @@ namespace MixERP.Net.Api.Policy
 
             try
             {
-                this.DefaultEntityAccessContext.AddOrEdit(defaultEntityAccess);
+                this.DefaultEntityAccessContext.AddOrEdit(defaultEntityAccess, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -326,6 +454,47 @@ namespace MixERP.Net.Api.Policy
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        private List<MixERP.Net.Entities.Policy.DefaultEntityAccess> ParseCollection(dynamic collection)
+        {
+            return JsonConvert.DeserializeObject<List<MixERP.Net.Entities.Policy.DefaultEntityAccess>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Adds or edits multiple instances of DefaultEntityAccess class.
+        /// </summary>
+        /// <param name="collection">Your collection of DefaultEntityAccess class to bulk import.</param>
+        /// <returns>Returns list of imported defaultEntityAccessIds.</returns>
+        /// <exception cref="MixERPException">Thrown when your any DefaultEntityAccess class in the collection is invalid or malformed.</exception>
+        [AcceptVerbs("PUT")]
+        [Route("bulk-import")]
+        [Route("~/api/policy/default-entity-access/bulk-import")]
+        public List<object> BulkImport([FromBody]dynamic collection)
+        {
+            List<MixERP.Net.Entities.Policy.DefaultEntityAccess> defaultEntityAccessCollection = this.ParseCollection(collection);
+
+            if (defaultEntityAccessCollection == null || defaultEntityAccessCollection.Count.Equals(0))
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.DefaultEntityAccessContext.BulkImport(defaultEntityAccessCollection);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException)
+            {
+                throw;
             }
             catch
             {

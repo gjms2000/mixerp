@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
-	/// </summary>
-	public class GetStoreIdByStoreNameProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
+    /// </summary>
+    public class GetStoreIdByStoreNameProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_store_id_by_store_name";
+        public override string ObjectName => "get_store_id_by_store_name";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_store_name" argument of the function "office.get_store_id_by_store_name".
-		/// </summary>
-		public string StoreName { get; set; }
+        /// <summary>
+        /// Maps to "_store_name" argument of the function "office.get_store_id_by_store_name".
+        /// </summary>
+        public string StoreName { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
-		/// </summary>
-		public GetStoreIdByStoreNameProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
+        /// </summary>
+        public GetStoreIdByStoreNameProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
-		/// </summary>
-		/// <param name="storeName">Enter argument value for "_store_name" parameter of the function "office.get_store_id_by_store_name".</param>
-		public GetStoreIdByStoreNameProcedure(string storeName)
-		{
-			this.StoreName = storeName;
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.get_store_id_by_store_name".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetStoreIdByStoreNameProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.get_store_id_by_store_name(@0::text);";
-			return Factory.Scalar<int>(this.Catalog, query, this.StoreName);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_store_id_by_store_name(_store_name text)" on the database.
+        /// </summary>
+        /// <param name="storeName">Enter argument value for "_store_name" parameter of the function "office.get_store_id_by_store_name".</param>
+        public GetStoreIdByStoreNameProcedure(string storeName)
+        {
+            this.StoreName = storeName;
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.get_store_id_by_store_name".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetStoreIdByStoreNameProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.get_store_id_by_store_name(@0::text);";
+            return Factory.Scalar<int>(this.Catalog, query, this.StoreName);
+        }
+    }
 }

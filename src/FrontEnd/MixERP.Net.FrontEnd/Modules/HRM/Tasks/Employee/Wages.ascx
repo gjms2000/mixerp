@@ -4,13 +4,17 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = "Setup Wages";
-    scrudFactory.viewPocoName = "EmployeeWageScrudView";
-    scrudFactory.formPocoName = "EmployeeWage";
+
+    scrudFactory.viewAPI = "/api/hrm/employee-wages-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_wages_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-wage";
     scrudFactory.formTableName = "hrm.employee_wages";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
     
     scrudFactory.back = {
         Title: "Employee",

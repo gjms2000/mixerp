@@ -22,17 +22,17 @@ using System;
 
 namespace MixERP.Net.Entities.Config
 {
-    [PrimaryKey("", autoIncrement=false)]
+    [PrimaryKey("", autoIncrement = false)]
     [TableName("config.switch_scrud_view")]
     [ExplicitColumns]
     public sealed class SwitchScrudView : PetaPocoDB.Record<SwitchScrudView>, IPoco
     {
         [Column("key")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string Key { get; set; }
-    
+
         [Column("value")]
-        [ColumnDbType("bool", 0, true, "")] 
+        [ColumnDbType("bool", 0, true, "")]
         public bool? Value { get; set; }
     }
 }

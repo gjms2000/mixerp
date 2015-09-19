@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MixERP.Net.Api.Framework;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Newtonsoft.Json;
 using PetaPoco;
 
@@ -31,7 +33,8 @@ namespace MixERP.Net.Api.Policy
             this.LockOutContext = new MixERP.Net.Schemas.Policy.Data.LockOut
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -39,6 +42,28 @@ namespace MixERP.Net.Api.Policy
         public int UserId { get; private set; }
         public int OfficeId { get; private set; }
         public string Catalog { get; }
+
+        /// <summary>
+        ///     Creates meta information of "lock out" entity.
+        /// </summary>
+        /// <returns>Returns the "lock out" meta information to perform CRUD operation.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("meta")]
+        [Route("~/api/policy/lock-out/meta")]
+        public EntityView GetEntityView()
+        {
+            return new EntityView
+            {
+                PrimaryKey = "lock_out_id",
+                Columns = new List<EntityColumn>()
+                                {
+                                        new EntityColumn { ColumnName = "lock_out_id",  PropertyName = "LockOutId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "user_id",  PropertyName = "UserId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "lock_out_time",  PropertyName = "LockOutTime",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "lock_out_till",  PropertyName = "LockOutTill",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
+                                }
+            };
+        }
 
         /// <summary>
         ///     Counts the number of lock outs.
@@ -52,6 +77,29 @@ namespace MixERP.Net.Api.Policy
             try
             {
                 return this.LockOutContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns collection of lock out for export.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("export")]
+        [Route("~/api/policy/lock-out/export")]
+        public IEnumerable<MixERP.Net.Entities.Policy.LockOut> Get()
+        {
+            try
+            {
+                return this.LockOutContext.Get();
             }
             catch (UnauthorizedException)
             {
@@ -154,6 +202,31 @@ namespace MixERP.Net.Api.Policy
         }
 
         /// <summary>
+        ///     Counts the number of lock outs using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered lock outs.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/policy/lock-out/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.LockOutContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 lock outs on each page, sorted by the property LockOutId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -168,6 +241,55 @@ namespace MixERP.Net.Api.Policy
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.LockOutContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of lock outs using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered lock outs.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/policy/lock-out/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.LockOutContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 lock outs on each page, sorted by the property LockOutId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/policy/lock-out/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.Policy.LockOut> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.LockOutContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {
@@ -230,7 +352,7 @@ namespace MixERP.Net.Api.Policy
         /// </summary>
         /// <returns>Returns an enumerable custom field collection of lock outs.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("custom-fields")]
+        [Route("custom-fields/{resourceId}")]
         [Route("~/api/policy/lock-out/custom-fields/{resourceId}")]
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -255,8 +377,11 @@ namespace MixERP.Net.Api.Policy
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/policy/lock-out/add-or-edit")]
-        public void AddOrEdit([FromBody]MixERP.Net.Entities.Policy.LockOut lockOut)
+        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
+            MixERP.Net.Entities.Policy.LockOut lockOut = form[0].ToObject<MixERP.Net.Entities.Policy.LockOut>(JsonHelper.GetJsonSerializer());
+            List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
+
             if (lockOut == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -264,7 +389,7 @@ namespace MixERP.Net.Api.Policy
 
             try
             {
-                this.LockOutContext.AddOrEdit(lockOut);
+                this.LockOutContext.AddOrEdit(lockOut, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -326,6 +451,47 @@ namespace MixERP.Net.Api.Policy
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        private List<MixERP.Net.Entities.Policy.LockOut> ParseCollection(dynamic collection)
+        {
+            return JsonConvert.DeserializeObject<List<MixERP.Net.Entities.Policy.LockOut>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Adds or edits multiple instances of LockOut class.
+        /// </summary>
+        /// <param name="collection">Your collection of LockOut class to bulk import.</param>
+        /// <returns>Returns list of imported lockOutIds.</returns>
+        /// <exception cref="MixERPException">Thrown when your any LockOut class in the collection is invalid or malformed.</exception>
+        [AcceptVerbs("PUT")]
+        [Route("bulk-import")]
+        [Route("~/api/policy/lock-out/bulk-import")]
+        public List<object> BulkImport([FromBody]dynamic collection)
+        {
+            List<MixERP.Net.Entities.Policy.LockOut> lockOutCollection = this.ParseCollection(collection);
+
+            if (lockOutCollection == null || lockOutCollection.Count.Equals(0))
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.LockOutContext.BulkImport(lockOutCollection);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException)
+            {
+                throw;
             }
             catch
             {

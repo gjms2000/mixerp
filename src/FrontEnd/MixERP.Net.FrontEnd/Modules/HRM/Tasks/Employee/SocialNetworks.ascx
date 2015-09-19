@@ -2,15 +2,18 @@
     OverridePath="/Modules/HRM/Tasks/Employees.mix" %>
 <script>
     var scrudFactory = new Object();
-
     scrudFactory.title = window.Resources.Titles.SocialNetworks();
-    scrudFactory.viewPocoName = "EmployeeSocialNetworkDetailScrudView";
-    scrudFactory.formPocoName = "EmployeeSocialNetworkDetail";
+
+    scrudFactory.viewAPI = "/api/hrm/employee-social-network-detail-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_social_network_detail_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-social-network-detail";
     scrudFactory.formTableName = "hrm.employee_social_network_details";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
     
     scrudFactory.back = {
         Title: "Employee",

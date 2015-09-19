@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Pay Grades";
     
-    scrudFactory.viewPocoName = "PayGrade";
-    scrudFactory.formPocoName = "PayGrade";
+    scrudFactory.viewAPI = "/api/hrm/pay-grade";
+    scrudFactory.viewTableName = "hrm.pay_grades";
+
+    scrudFactory.formAPI = "/api/hrm/pay-grade";
     scrudFactory.formTableName = "hrm.pay_grades";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
     	["PayGradeId", ""],

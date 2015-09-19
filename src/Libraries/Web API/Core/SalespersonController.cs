@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MixERP.Net.Api.Framework;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Newtonsoft.Json;
 using PetaPoco;
 
@@ -31,7 +33,8 @@ namespace MixERP.Net.Api.Core
             this.SalespersonContext = new MixERP.Net.Schemas.Core.Data.Salesperson
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -39,6 +42,34 @@ namespace MixERP.Net.Api.Core
         public int UserId { get; private set; }
         public int OfficeId { get; private set; }
         public string Catalog { get; }
+
+        /// <summary>
+        ///     Creates meta information of "salesperson" entity.
+        /// </summary>
+        /// <returns>Returns the "salesperson" meta information to perform CRUD operation.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("meta")]
+        [Route("~/api/core/salesperson/meta")]
+        public EntityView GetEntityView()
+        {
+            return new EntityView
+            {
+                PrimaryKey = "salesperson_id",
+                Columns = new List<EntityColumn>()
+                                {
+                                        new EntityColumn { ColumnName = "salesperson_id",  PropertyName = "SalespersonId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "sales_team_id",  PropertyName = "SalesTeamId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "salesperson_code",  PropertyName = "SalespersonCode",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 12 },
+                                        new EntityColumn { ColumnName = "salesperson_name",  PropertyName = "SalespersonName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
+                                        new EntityColumn { ColumnName = "address",  PropertyName = "Address",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
+                                        new EntityColumn { ColumnName = "contact_number",  PropertyName = "ContactNumber",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
+                                        new EntityColumn { ColumnName = "commission_rate",  PropertyName = "CommissionRate",  DataType = "decimal",  DbDataType = "decimal_strict2",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "account_id",  PropertyName = "AccountId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
+                                }
+            };
+        }
 
         /// <summary>
         ///     Counts the number of salespeople.
@@ -52,6 +83,29 @@ namespace MixERP.Net.Api.Core
             try
             {
                 return this.SalespersonContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns collection of salesperson for export.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("export")]
+        [Route("~/api/core/salesperson/export")]
+        public IEnumerable<MixERP.Net.Entities.Core.Salesperson> Get()
+        {
+            try
+            {
+                return this.SalespersonContext.Get();
             }
             catch (UnauthorizedException)
             {
@@ -154,6 +208,31 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
+        ///     Counts the number of salespeople using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered salespeople.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/core/salesperson/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.SalespersonContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 salespeople on each page, sorted by the property SalespersonId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -168,6 +247,55 @@ namespace MixERP.Net.Api.Core
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.SalespersonContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of salespeople using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered salespeople.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/core/salesperson/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.SalespersonContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 salespeople on each page, sorted by the property SalespersonId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/core/salesperson/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.Core.Salesperson> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.SalespersonContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {
@@ -230,7 +358,7 @@ namespace MixERP.Net.Api.Core
         /// </summary>
         /// <returns>Returns an enumerable custom field collection of salespeople.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("custom-fields")]
+        [Route("custom-fields/{resourceId}")]
         [Route("~/api/core/salesperson/custom-fields/{resourceId}")]
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -255,8 +383,11 @@ namespace MixERP.Net.Api.Core
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/core/salesperson/add-or-edit")]
-        public void AddOrEdit([FromBody]MixERP.Net.Entities.Core.Salesperson salesperson)
+        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
+            MixERP.Net.Entities.Core.Salesperson salesperson = form[0].ToObject<MixERP.Net.Entities.Core.Salesperson>(JsonHelper.GetJsonSerializer());
+            List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
+
             if (salesperson == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -264,7 +395,7 @@ namespace MixERP.Net.Api.Core
 
             try
             {
-                this.SalespersonContext.AddOrEdit(salesperson);
+                this.SalespersonContext.AddOrEdit(salesperson, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -326,6 +457,47 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        private List<MixERP.Net.Entities.Core.Salesperson> ParseCollection(dynamic collection)
+        {
+            return JsonConvert.DeserializeObject<List<MixERP.Net.Entities.Core.Salesperson>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Adds or edits multiple instances of Salesperson class.
+        /// </summary>
+        /// <param name="collection">Your collection of Salesperson class to bulk import.</param>
+        /// <returns>Returns list of imported salespersonIds.</returns>
+        /// <exception cref="MixERPException">Thrown when your any Salesperson class in the collection is invalid or malformed.</exception>
+        [AcceptVerbs("PUT")]
+        [Route("bulk-import")]
+        [Route("~/api/core/salesperson/bulk-import")]
+        public List<object> BulkImport([FromBody]dynamic collection)
+        {
+            List<MixERP.Net.Entities.Core.Salesperson> salespersonCollection = this.ParseCollection(collection);
+
+            if (salespersonCollection == null || salespersonCollection.Count.Equals(0))
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.SalespersonContext.BulkImport(salespersonCollection);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException)
+            {
+                throw;
             }
             catch
             {

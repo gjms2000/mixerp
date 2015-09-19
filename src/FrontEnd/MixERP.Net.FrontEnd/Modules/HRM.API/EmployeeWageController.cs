@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MixERP.Net.Api.Framework;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Newtonsoft.Json;
 using PetaPoco;
 
@@ -31,7 +33,8 @@ namespace MixERP.Net.Api.HRM
             this.EmployeeWageContext = new MixERP.Net.Core.Modules.HRM.Data.EmployeeWage
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -39,6 +42,36 @@ namespace MixERP.Net.Api.HRM
         public int UserId { get; private set; }
         public int OfficeId { get; private set; }
         public string Catalog { get; }
+
+        /// <summary>
+        ///     Creates meta information of "employee wage" entity.
+        /// </summary>
+        /// <returns>Returns the "employee wage" meta information to perform CRUD operation.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("meta")]
+        [Route("~/api/hrm/employee-wage/meta")]
+        public EntityView GetEntityView()
+        {
+            return new EntityView
+            {
+                PrimaryKey = "employee_wage_id",
+                Columns = new List<EntityColumn>()
+                                {
+                                        new EntityColumn { ColumnName = "employee_wage_id",  PropertyName = "EmployeeWageId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "employee_id",  PropertyName = "EmployeeId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "wages_setup_id",  PropertyName = "WagesSetupId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "currency_code",  PropertyName = "CurrencyCode",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 12 },
+                                        new EntityColumn { ColumnName = "max_week_hours",  PropertyName = "MaxWeekHours",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "hourly_rate",  PropertyName = "HourlyRate",  DataType = "decimal",  DbDataType = "money_strict",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "overtime_applicable",  PropertyName = "OvertimeApplicable",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "overtime_hourly_rate",  PropertyName = "OvertimeHourlyRate",  DataType = "decimal",  DbDataType = "money_strict2",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "valid_till",  PropertyName = "ValidTill",  DataType = "DateTime",  DbDataType = "date",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "is_active",  PropertyName = "IsActive",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
+                                }
+            };
+        }
 
         /// <summary>
         ///     Counts the number of employee wages.
@@ -52,6 +85,29 @@ namespace MixERP.Net.Api.HRM
             try
             {
                 return this.EmployeeWageContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns collection of employee wage for export.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("export")]
+        [Route("~/api/hrm/employee-wage/export")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeWage> Get()
+        {
+            try
+            {
+                return this.EmployeeWageContext.Get();
             }
             catch (UnauthorizedException)
             {
@@ -154,6 +210,31 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
+        ///     Counts the number of employee wages using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered employee wages.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/hrm/employee-wage/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.EmployeeWageContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 employee wages on each page, sorted by the property EmployeeWageId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -168,6 +249,55 @@ namespace MixERP.Net.Api.HRM
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.EmployeeWageContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of employee wages using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered employee wages.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/hrm/employee-wage/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.EmployeeWageContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 employee wages on each page, sorted by the property EmployeeWageId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/hrm/employee-wage/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.HRM.EmployeeWage> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.EmployeeWageContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {
@@ -230,7 +360,7 @@ namespace MixERP.Net.Api.HRM
         /// </summary>
         /// <returns>Returns an enumerable custom field collection of employee wages.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("custom-fields")]
+        [Route("custom-fields/{resourceId}")]
         [Route("~/api/hrm/employee-wage/custom-fields/{resourceId}")]
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -255,8 +385,11 @@ namespace MixERP.Net.Api.HRM
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/hrm/employee-wage/add-or-edit")]
-        public void AddOrEdit([FromBody]MixERP.Net.Entities.HRM.EmployeeWage employeeWage)
+        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
+            MixERP.Net.Entities.HRM.EmployeeWage employeeWage = form[0].ToObject<MixERP.Net.Entities.HRM.EmployeeWage>(JsonHelper.GetJsonSerializer());
+            List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
+
             if (employeeWage == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -264,7 +397,7 @@ namespace MixERP.Net.Api.HRM
 
             try
             {
-                this.EmployeeWageContext.AddOrEdit(employeeWage);
+                this.EmployeeWageContext.AddOrEdit(employeeWage, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -326,6 +459,47 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        private List<MixERP.Net.Entities.HRM.EmployeeWage> ParseCollection(dynamic collection)
+        {
+            return JsonConvert.DeserializeObject<List<MixERP.Net.Entities.HRM.EmployeeWage>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Adds or edits multiple instances of EmployeeWage class.
+        /// </summary>
+        /// <param name="collection">Your collection of EmployeeWage class to bulk import.</param>
+        /// <returns>Returns list of imported employeeWageIds.</returns>
+        /// <exception cref="MixERPException">Thrown when your any EmployeeWage class in the collection is invalid or malformed.</exception>
+        [AcceptVerbs("PUT")]
+        [Route("bulk-import")]
+        [Route("~/api/hrm/employee-wage/bulk-import")]
+        public List<object> BulkImport([FromBody]dynamic collection)
+        {
+            List<MixERP.Net.Entities.HRM.EmployeeWage> employeeWageCollection = this.ParseCollection(collection);
+
+            if (employeeWageCollection == null || employeeWageCollection.Count.Equals(0))
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.EmployeeWageContext.BulkImport(employeeWageCollection);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException)
+            {
+                throw;
             }
             catch
             {

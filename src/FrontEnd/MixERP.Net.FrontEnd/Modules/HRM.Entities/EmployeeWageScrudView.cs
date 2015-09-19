@@ -22,49 +22,49 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("", autoIncrement=false)]
+    [PrimaryKey("", autoIncrement = false)]
     [TableName("hrm.employee_wage_scrud_view")]
     [ExplicitColumns]
     public sealed class EmployeeWageScrudView : PetaPocoDB.Record<EmployeeWageScrudView>, IPoco
     {
         [Column("employee_wage_id")]
-        [ColumnDbType("int8", 0, true, "")] 
+        [ColumnDbType("int8", 0, true, "")]
         public long? EmployeeWageId { get; set; }
-    
+
         [Column("employee_name")]
-        [ColumnDbType("varchar", 160, true, "")] 
+        [ColumnDbType("varchar", 160, true, "")]
         public string EmployeeName { get; set; }
-    
+
         [Column("wages_setup")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string WagesSetup { get; set; }
-    
+
         [Column("currency_code")]
-        [ColumnDbType("varchar", 12, true, "")] 
+        [ColumnDbType("varchar", 12, true, "")]
         public string CurrencyCode { get; set; }
-    
+
         [Column("max_week_hours")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? MaxWeekHours { get; set; }
-    
+
         [Column("hourly_rate")]
-        [ColumnDbType("money_strict", 0, true, "")] 
+        [ColumnDbType("money_strict", 0, true, "")]
         public decimal? HourlyRate { get; set; }
-    
+
         [Column("overtime_applicable")]
-        [ColumnDbType("bool", 0, true, "")] 
+        [ColumnDbType("bool", 0, true, "")]
         public bool? OvertimeApplicable { get; set; }
-    
+
         [Column("overtime_hourly_rate")]
-        [ColumnDbType("money_strict2", 0, true, "")] 
+        [ColumnDbType("money_strict2", 0, true, "")]
         public decimal? OvertimeHourlyRate { get; set; }
-    
+
         [Column("valid_till")]
-        [ColumnDbType("date", 0, true, "")] 
+        [ColumnDbType("date", 0, true, "")]
         public DateTime? ValidTill { get; set; }
-    
+
         [Column("is_active")]
-        [ColumnDbType("bool", 0, true, "")] 
+        [ColumnDbType("bool", 0, true, "")]
         public bool? IsActive { get; set; }
     }
 }

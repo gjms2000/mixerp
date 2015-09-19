@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MixERP.Net.Api.Framework;
 using MixERP.Net.ApplicationState.Cache;
 using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
+using MixERP.Net.Framework;
 using Newtonsoft.Json;
 using PetaPoco;
 
@@ -31,7 +33,8 @@ namespace MixERP.Net.Api.Office
             this.DepartmentContext = new MixERP.Net.Schemas.Office.Data.Department
             {
                 Catalog = this.Catalog,
-                LoginId = this.LoginId
+                LoginId = this.LoginId,
+                UserId = this.UserId
             };
         }
 
@@ -39,6 +42,29 @@ namespace MixERP.Net.Api.Office
         public int UserId { get; private set; }
         public int OfficeId { get; private set; }
         public string Catalog { get; }
+
+        /// <summary>
+        ///     Creates meta information of "department" entity.
+        /// </summary>
+        /// <returns>Returns the "department" meta information to perform CRUD operation.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("meta")]
+        [Route("~/api/office/department/meta")]
+        public EntityView GetEntityView()
+        {
+            return new EntityView
+            {
+                PrimaryKey = "department_id",
+                Columns = new List<EntityColumn>()
+                                {
+                                        new EntityColumn { ColumnName = "department_id",  PropertyName = "DepartmentId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "department_code",  PropertyName = "DepartmentCode",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 12 },
+                                        new EntityColumn { ColumnName = "department_name",  PropertyName = "DepartmentName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
+                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
+                                }
+            };
+        }
 
         /// <summary>
         ///     Counts the number of departments.
@@ -52,6 +78,29 @@ namespace MixERP.Net.Api.Office
             try
             {
                 return this.DepartmentContext.Count();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Returns collection of department for export.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("export")]
+        [Route("~/api/office/department/export")]
+        public IEnumerable<MixERP.Net.Entities.Office.Department> Get()
+        {
+            try
+            {
+                return this.DepartmentContext.Get();
             }
             catch (UnauthorizedException)
             {
@@ -154,6 +203,31 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
+        ///     Counts the number of departments using the supplied filter(s).
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns the count of filtered departments.</returns>
+        [AcceptVerbs("POST")]
+        [Route("count-where")]
+        [Route("~/api/office/department/count-where")]
+        public long CountWhere([FromBody]dynamic filters)
+        {
+            try
+            {
+                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                return this.DepartmentContext.CountWhere(f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
         ///     Creates a filtered and paginated collection containing 25 departments on each page, sorted by the property DepartmentId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
@@ -168,6 +242,55 @@ namespace MixERP.Net.Api.Office
             {
                 List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
                 return this.DepartmentContext.GetWhere(pageNumber, f);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Counts the number of departments using the supplied filter name.
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the count of filtered departments.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("count-filtered/{filterName}")]
+        [Route("~/api/office/department/count-filtered/{filterName}")]
+        public long CountFiltered(string filterName)
+        {
+            try
+            {
+                return this.DepartmentContext.CountFiltered(filterName);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        /// <summary>
+        ///     Creates a filtered and paginated collection containing 25 departments on each page, sorted by the property DepartmentId.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/office/department/get-filtered/{pageNumber}/{filterName}")]
+        public IEnumerable<MixERP.Net.Entities.Office.Department> GetFiltered(long pageNumber, string filterName)
+        {
+            try
+            {
+                return this.DepartmentContext.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
             {
@@ -230,7 +353,7 @@ namespace MixERP.Net.Api.Office
         /// </summary>
         /// <returns>Returns an enumerable custom field collection of departments.</returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("custom-fields")]
+        [Route("custom-fields/{resourceId}")]
         [Route("~/api/office/department/custom-fields/{resourceId}")]
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
@@ -255,8 +378,11 @@ namespace MixERP.Net.Api.Office
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/office/department/add-or-edit")]
-        public void AddOrEdit([FromBody]MixERP.Net.Entities.Office.Department department)
+        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
+            MixERP.Net.Entities.Office.Department department = form[0].ToObject<MixERP.Net.Entities.Office.Department>(JsonHelper.GetJsonSerializer());
+            List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
+
             if (department == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
@@ -264,7 +390,7 @@ namespace MixERP.Net.Api.Office
 
             try
             {
-                this.DepartmentContext.AddOrEdit(department);
+                this.DepartmentContext.AddOrEdit(department, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -326,6 +452,47 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        }
+
+        private List<MixERP.Net.Entities.Office.Department> ParseCollection(dynamic collection)
+        {
+            return JsonConvert.DeserializeObject<List<MixERP.Net.Entities.Office.Department>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Adds or edits multiple instances of Department class.
+        /// </summary>
+        /// <param name="collection">Your collection of Department class to bulk import.</param>
+        /// <returns>Returns list of imported departmentIds.</returns>
+        /// <exception cref="MixERPException">Thrown when your any Department class in the collection is invalid or malformed.</exception>
+        [AcceptVerbs("PUT")]
+        [Route("bulk-import")]
+        [Route("~/api/office/department/bulk-import")]
+        public List<object> BulkImport([FromBody]dynamic collection)
+        {
+            List<MixERP.Net.Entities.Office.Department> departmentCollection = this.ParseCollection(collection);
+
+            if (departmentCollection == null || departmentCollection.Count.Equals(0))
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.DepartmentContext.BulkImport(departmentCollection);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException)
+            {
+                throw;
             }
             catch
             {

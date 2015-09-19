@@ -4,13 +4,15 @@
 	var scrudFactory = new Object();
     scrudFactory.title = "Employee Types";
 
-    scrudFactory.viewPocoName = "EmployeeType";
-    scrudFactory.formPocoName = "EmployeeType";
+    scrudFactory.viewAPI = "/api/hrm/employee-type-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_type_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-type";
     scrudFactory.formTableName = "hrm.employee_types";
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.live = "EmployeeTypeName";
 </script>

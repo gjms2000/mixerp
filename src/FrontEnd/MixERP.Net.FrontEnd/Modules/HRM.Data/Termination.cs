@@ -36,34 +36,39 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <summary>
         /// The schema of this table. Returns literal "hrm".
         /// </summary>
-	    public override string ObjectNamespace => "hrm";
+        public override string ObjectNamespace => "hrm";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "terminations".
         /// </summary>
-	    public override string ObjectName => "terminations";
+        public override string ObjectName => "terminations";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-		public long LoginId { get; set; }
+        public long LoginId { get; set; }
+
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Performs SQL count on the table "hrm.terminations".
-		/// </summary>
-		/// <returns>Returns the number of rows of the table "hrm.terminations".</returns>
+        /// <summary>
+        /// Performs SQL count on the table "hrm.terminations".
+        /// </summary>
+        /// <returns>Returns the number of rows of the table "hrm.terminations".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public long Count()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return 0;
-			}
+        public long Count()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
 
             if (!this.SkipValidation)
             {
@@ -77,23 +82,52 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT COUNT(*) FROM hrm.terminations;";
-			return Factory.Scalar<long>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Executes a select query on the table "hrm.terminations" with a where filter on the column "termination_id" to return a single instance of the "Termination" class. 
-		/// </summary>
-		/// <param name="terminationId">The column "termination_id" parameter used on where filter.</param>
-		/// <returns>Returns a non-live, non-mapped instance of "Termination" class mapped to the database row.</returns>
+            const string sql = "SELECT COUNT(*) FROM hrm.terminations;";
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "hrm.terminations" to return a all instances of the "Termination" class to export. 
+        /// </summary>
+        /// <returns>Returns a non-live, non-mapped instances of "Termination" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public MixERP.Net.Entities.HRM.Termination Get(int terminationId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.HRM.Termination> Get()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the export entity \"Termination\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM hrm.terminations ORDER BY termination_id;";
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "hrm.terminations" with a where filter on the column "termination_id" to return a single instance of the "Termination" class. 
+        /// </summary>
+        /// <param name="terminationId">The column "termination_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped instance of "Termination" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public MixERP.Net.Entities.HRM.Termination Get(int terminationId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -107,10 +141,41 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM hrm.terminations WHERE termination_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, terminationId).FirstOrDefault();
-		}
+
+            const string sql = "SELECT * FROM hrm.terminations WHERE termination_id=@0;";
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, terminationId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "hrm.terminations" with a where filter on the column "termination_id" to return a multiple instances of the "Termination" class. 
+        /// </summary>
+        /// <param name="terminationIds">Array of column "termination_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped collection of "Termination" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.HRM.Termination> Get(int[] terminationIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"Termination\" was denied to the user with Login ID {LoginId}. terminationIds: {terminationIds}.", this.LoginId, terminationIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM hrm.terminations WHERE termination_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, terminationIds);
+        }
 
         /// <summary>
         /// Custom fields are user defined form elements for hrm.terminations.
@@ -119,10 +184,10 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -138,14 +203,14 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             }
 
             string sql;
-			if (string.IsNullOrWhiteSpace(resourceId))
+            if (string.IsNullOrWhiteSpace(resourceId))
             {
-				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.terminations' ORDER BY field_order;";
-				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.terminations' ORDER BY field_order;";
+                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('hrm.terminations'::text, @0::text) ORDER BY field_order;";
-			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -153,14 +218,14 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table hrm.terminations</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<DisplayField> GetDisplayFields()
-		{
-			List<DisplayField> displayFields = new List<DisplayField>();
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            List<DisplayField> displayFields = new List<DisplayField>();
 
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return displayFields;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return displayFields;
+            }
 
             if (!this.SkipValidation)
             {
@@ -174,67 +239,94 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT termination_id AS key, termination_id as value FROM hrm.terminations;";
-			using (NpgsqlCommand command = new NpgsqlCommand(sql))
-			{
-				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
-				{
-					if (table?.Rows == null || table.Rows.Count == 0)
-					{
-						return displayFields;
-					}
 
-					foreach (DataRow row in table.Rows)
-					{
-						if (row != null)
-						{
-							DisplayField displayField = new DisplayField
-							{
-								Key = row["key"].ToString(),
-								Value = row["value"].ToString()
-							};
+            const string sql = "SELECT termination_id AS key, termination_id as value FROM hrm.terminations;";
+            using (NpgsqlCommand command = new NpgsqlCommand(sql))
+            {
+                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                {
+                    if (table?.Rows == null || table.Rows.Count == 0)
+                    {
+                        return displayFields;
+                    }
 
-							displayFields.Add(displayField);
-						}
-					}
-				}
-			}
+                    foreach (DataRow row in table.Rows)
+                    {
+                        if (row != null)
+                        {
+                            DisplayField displayField = new DisplayField
+                            {
+                                Key = row["key"].ToString(),
+                                Value = row["value"].ToString()
+                            };
 
-			return displayFields;
-		}
+                            displayFields.Add(displayField);
+                        }
+                    }
+                }
+            }
 
-		/// <summary>
-		/// Inserts or updates the instance of Termination class on the database table "hrm.terminations".
-		/// </summary>
-		/// <param name="termination">The instance of "Termination" class to insert or update.</param>
+            return displayFields;
+        }
+
+        /// <summary>
+        /// Inserts or updates the instance of Termination class on the database table "hrm.terminations".
+        /// </summary>
+        /// <param name="termination">The instance of "Termination" class to insert or update.</param>
+        /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void AddOrEdit(MixERP.Net.Entities.HRM.Termination termination)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void AddOrEdit(MixERP.Net.Entities.HRM.Termination termination, List<EntityParser.CustomField> customFields)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
-			if(termination.TerminationId > 0){
-				this.Update(termination, termination.TerminationId);
-				return;
-			}
-	
-			this.Add(termination);
-		}
+            object primaryKeyValue;
 
-		/// <summary>
-		/// Inserts the instance of Termination class on the database table "hrm.terminations".
-		/// </summary>
-		/// <param name="termination">The instance of "Termination" class to insert.</param>
+            termination.AuditUserId = this.UserId;
+            termination.EnteredBy = this.UserId;
+            termination.AuditTs = System.DateTime.UtcNow;
+
+            if (termination.TerminationId > 0)
+            {
+                primaryKeyValue = termination.TerminationId;
+                this.Update(termination, termination.TerminationId);
+            }
+            else
+            {
+                primaryKeyValue = this.Add(termination);
+            }
+
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name('hrm.terminations')" +
+                         ");";
+
+            Factory.NonQuery(this.Catalog, sql);
+
+            foreach (var field in customFields)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name('hrm.terminations', @0::character varying(100)), " +
+                      "@1, @2;";
+
+                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+            }
+        }
+
+        /// <summary>
+        /// Inserts the instance of Termination class on the database table "hrm.terminations".
+        /// </summary>
+        /// <param name="termination">The instance of "Termination" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Add(MixERP.Net.Entities.HRM.Termination termination)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public object Add(MixERP.Net.Entities.HRM.Termination termination)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -248,22 +340,97 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Insert(this.Catalog, termination);
-		}
 
-		/// <summary>
-		/// Updates the row of the table "hrm.terminations" with an instance of "Termination" class against the primary key value.
-		/// </summary>
-		/// <param name="termination">The instance of "Termination" class to update.</param>
-		/// <param name="terminationId">The value of the column "termination_id" which will be updated.</param>
+            return Factory.Insert(this.Catalog, termination);
+        }
+
+        /// <summary>
+        /// Inserts or updates multiple instances of Termination class on the database table "hrm.terminations";
+        /// </summary>
+        /// <param name="terminations">List of "Termination" class to import.</param>
+        /// <returns></returns>
+        public List<object> BulkImport(List<MixERP.Net.Entities.HRM.Termination> terminations)
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                }
+
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to import entity \"Termination\" was denied to the user with Login ID {LoginId}. {terminations}", this.LoginId, terminations);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var result = new List<object>();
+            int line = 0;
+            try
+            {
+                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                {
+                    using (Transaction transaction = db.GetTransaction())
+                    {
+                        foreach (var termination in terminations)
+                        {
+                            line++;
+
+                            termination.AuditUserId = this.UserId;
+                            termination.EnteredBy = this.UserId;
+                            termination.AuditTs = System.DateTime.UtcNow;
+
+                            if (termination.TerminationId > 0)
+                            {
+                                result.Add(termination.TerminationId);
+                                db.Update(termination, termination.TerminationId);
+                            }
+                            else
+                            {
+                                result.Add(db.Insert(termination));
+                            }
+                        }
+
+                        transaction.Complete();
+                    }
+
+                    return result;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+
+                if (ex.Code.StartsWith("P"))
+                {
+                    errorMessage += Factory.GetDBErrorResource(ex);
+
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                errorMessage += ex.Message;
+                throw new MixERPException(errorMessage, ex);
+            }
+            catch (System.Exception ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+                throw new MixERPException(errorMessage, ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the row of the table "hrm.terminations" with an instance of "Termination" class against the primary key value.
+        /// </summary>
+        /// <param name="termination">The instance of "Termination" class to update.</param>
+        /// <param name="terminationId">The value of the column "termination_id" which will be updated.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Update(MixERP.Net.Entities.HRM.Termination termination, int terminationId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Update(MixERP.Net.Entities.HRM.Termination termination, int terminationId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -277,21 +444,21 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Update(this.Catalog, termination, terminationId);
-		}
 
-		/// <summary>
-		/// Deletes the row of the table "hrm.terminations" against the primary key value.
-		/// </summary>
-		/// <param name="terminationId">The value of the column "termination_id" which will be deleted.</param>
+            Factory.Update(this.Catalog, termination, terminationId);
+        }
+
+        /// <summary>
+        /// Deletes the row of the table "hrm.terminations" against the primary key value.
+        /// </summary>
+        /// <param name="terminationId">The value of the column "termination_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Delete(int terminationId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Delete(int terminationId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -305,22 +472,22 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "DELETE FROM hrm.terminations WHERE termination_id=@0;";
-			Factory.NonQuery(this.Catalog, sql, terminationId);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "hrm.terminations" producing a paged result of 25.
-		/// </summary>
-		/// <returns>Returns the first page of collection of "Termination" class.</returns>
+            const string sql = "DELETE FROM hrm.terminations WHERE termination_id=@0;";
+            Factory.NonQuery(this.Catalog, sql, terminationId);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "hrm.terminations" producing a paged result of 25.
+        /// </summary>
+        /// <returns>Returns the first page of collection of "Termination" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -334,23 +501,23 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM hrm.terminations ORDER BY termination_id LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "hrm.terminations" producing a paged result of 25.
-		/// </summary>
-		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
-		/// <returns>Returns collection of "Termination" class.</returns>
+            const string sql = "SELECT * FROM hrm.terminations ORDER BY termination_id LIMIT 25 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "hrm.terminations" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <returns>Returns collection of "Termination" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult(long pageNumber)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetPagedResult(long pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -364,19 +531,57 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM hrm.terminations ORDER BY termination_id LIMIT 25 OFFSET @0;";
-				
-			return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, offset);
-		}
+
+            long offset = (pageNumber - 1) * 25;
+            const string sql = "SELECT * FROM hrm.terminations ORDER BY termination_id LIMIT 25 OFFSET @0;";
+
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, offset);
+        }
+
+        private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
+        {
+            const string sql = "SELECT * FROM core.filters WHERE object_name='hrm.terminations' AND lower(filter_name)=lower(@0);";
+            return Factory.Get<EntityParser.Filter>(catalog, sql, filterName).ToList();
+        }
 
         /// <summary>
-		/// Performs a filtered select statement on table "hrm.terminations" producing a paged result of 25.
+        /// Performs a filtered count on table "hrm.terminations".
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns number of rows of "Termination" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountWhere(List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"Termination\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM hrm.terminations WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Termination(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "hrm.terminations" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
-		/// <returns>Returns collection of "Termination" class.</returns>
+        /// <returns>Returns collection of "Termination" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
@@ -410,7 +615,47 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql);
         }
 
-        public IEnumerable<MixERP.Net.Entities.HRM.Termination> Get(int[] terminationIds)
+        /// <summary>
+        /// Performs a filtered count on table "hrm.terminations".
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns number of rows of "Termination" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountFiltered(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"Termination\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM hrm.terminations WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Termination(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "hrm.terminations" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns collection of "Termination" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.HRM.Termination> GetFiltered(long pageNumber, string filterName)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
@@ -425,15 +670,24 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"Termination\" was denied to the user with Login ID {LoginId}. terminationIds: {terminationIds}.", this.LoginId, terminationIds);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Termination\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-			const string sql = "SELECT * FROM hrm.terminations WHERE termination_id IN (@0);";
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
 
-            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql, terminationIds);
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM hrm.terminations WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Termination(), filters);
+
+            sql.OrderBy("termination_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.HRM.Termination>(this.Catalog, sql);
         }
 
-	}
+    }
 }

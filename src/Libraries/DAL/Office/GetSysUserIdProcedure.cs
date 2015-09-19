@@ -24,54 +24,58 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.get_sys_user_id()" on the database.
-	/// </summary>
-	public class GetSysUserIdProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.get_sys_user_id()" on the database.
+    /// </summary>
+    public class GetSysUserIdProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_sys_user_id";
+        public override string ObjectName => "get_sys_user_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_sys_user_id()" on the database.
-		/// </summary>
-		public GetSysUserIdProcedure()
-		{
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.get_sys_user_id".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetSysUserIdProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.get_sys_user_id();";
-			return Factory.Scalar<int>(this.Catalog, query);
-		} 
-	}
+
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_sys_user_id()" on the database.
+        /// </summary>
+        public GetSysUserIdProcedure()
+        {
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.get_sys_user_id".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetSysUserIdProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.get_sys_user_id();";
+            return Factory.Scalar<int>(this.Catalog, query);
+        }
+    }
 }

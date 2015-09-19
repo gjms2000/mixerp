@@ -73,6 +73,7 @@
     <Compile Include="EmployeeSocialNetworkDetail.cs" />
     <Compile Include="EmployeeSocialNetworkDetailScrudView.cs" />
     <Compile Include="EmployeeType.cs" />
+    <Compile Include="EmployeeTypeScrudView.cs" />
     <Compile Include="EmployeeView.cs" />
     <Compile Include="EmployeeWage.cs" />
     <Compile Include="EmployeeWageScrudView.cs" />

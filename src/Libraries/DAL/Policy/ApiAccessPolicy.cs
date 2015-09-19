@@ -36,34 +36,39 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The schema of this table. Returns literal "policy".
         /// </summary>
-	    public override string ObjectNamespace => "policy";
+        public override string ObjectNamespace => "policy";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "api_access_policy".
         /// </summary>
-	    public override string ObjectName => "api_access_policy";
+        public override string ObjectName => "api_access_policy";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-		public long LoginId { get; set; }
+        public long LoginId { get; set; }
+
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Performs SQL count on the table "policy.api_access_policy".
-		/// </summary>
-		/// <returns>Returns the number of rows of the table "policy.api_access_policy".</returns>
+        /// <summary>
+        /// Performs SQL count on the table "policy.api_access_policy".
+        /// </summary>
+        /// <returns>Returns the number of rows of the table "policy.api_access_policy".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public long Count()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return 0;
-			}
+        public long Count()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
 
             if (!this.SkipValidation)
             {
@@ -77,23 +82,52 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT COUNT(*) FROM policy.api_access_policy;";
-			return Factory.Scalar<long>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Executes a select query on the table "policy.api_access_policy" with a where filter on the column "api_access_policy_id" to return a single instance of the "ApiAccessPolicy" class. 
-		/// </summary>
-		/// <param name="apiAccessPolicyId">The column "api_access_policy_id" parameter used on where filter.</param>
-		/// <returns>Returns a non-live, non-mapped instance of "ApiAccessPolicy" class mapped to the database row.</returns>
+            const string sql = "SELECT COUNT(*) FROM policy.api_access_policy;";
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "policy.api_access_policy" to return a all instances of the "ApiAccessPolicy" class to export. 
+        /// </summary>
+        /// <returns>Returns a non-live, non-mapped instances of "ApiAccessPolicy" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public MixERP.Net.Entities.Policy.ApiAccessPolicy Get(long apiAccessPolicyId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> Get()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the export entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM policy.api_access_policy ORDER BY api_access_policy_id;";
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "policy.api_access_policy" with a where filter on the column "api_access_policy_id" to return a single instance of the "ApiAccessPolicy" class. 
+        /// </summary>
+        /// <param name="apiAccessPolicyId">The column "api_access_policy_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped instance of "ApiAccessPolicy" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public MixERP.Net.Entities.Policy.ApiAccessPolicy Get(long apiAccessPolicyId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -107,10 +141,41 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM policy.api_access_policy WHERE api_access_policy_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, apiAccessPolicyId).FirstOrDefault();
-		}
+
+            const string sql = "SELECT * FROM policy.api_access_policy WHERE api_access_policy_id=@0;";
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, apiAccessPolicyId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "policy.api_access_policy" with a where filter on the column "api_access_policy_id" to return a multiple instances of the "ApiAccessPolicy" class. 
+        /// </summary>
+        /// <param name="apiAccessPolicyIds">Array of column "api_access_policy_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped collection of "ApiAccessPolicy" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> Get(long[] apiAccessPolicyIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. apiAccessPolicyIds: {apiAccessPolicyIds}.", this.LoginId, apiAccessPolicyIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM policy.api_access_policy WHERE api_access_policy_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, apiAccessPolicyIds);
+        }
 
         /// <summary>
         /// Custom fields are user defined form elements for policy.api_access_policy.
@@ -119,10 +184,10 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -138,14 +203,14 @@ namespace MixERP.Net.Schemas.Policy.Data
             }
 
             string sql;
-			if (string.IsNullOrWhiteSpace(resourceId))
+            if (string.IsNullOrWhiteSpace(resourceId))
             {
-				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='policy.api_access_policy' ORDER BY field_order;";
-				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='policy.api_access_policy' ORDER BY field_order;";
+                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('policy.api_access_policy'::text, @0::text) ORDER BY field_order;";
-			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -153,14 +218,14 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table policy.api_access_policy</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<DisplayField> GetDisplayFields()
-		{
-			List<DisplayField> displayFields = new List<DisplayField>();
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            List<DisplayField> displayFields = new List<DisplayField>();
 
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return displayFields;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return displayFields;
+            }
 
             if (!this.SkipValidation)
             {
@@ -174,67 +239,93 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT api_access_policy_id AS key, poco_type_name as value FROM policy.api_access_policy;";
-			using (NpgsqlCommand command = new NpgsqlCommand(sql))
-			{
-				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
-				{
-					if (table?.Rows == null || table.Rows.Count == 0)
-					{
-						return displayFields;
-					}
 
-					foreach (DataRow row in table.Rows)
-					{
-						if (row != null)
-						{
-							DisplayField displayField = new DisplayField
-							{
-								Key = row["key"].ToString(),
-								Value = row["value"].ToString()
-							};
+            const string sql = "SELECT api_access_policy_id AS key, poco_type_name as value FROM policy.api_access_policy;";
+            using (NpgsqlCommand command = new NpgsqlCommand(sql))
+            {
+                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                {
+                    if (table?.Rows == null || table.Rows.Count == 0)
+                    {
+                        return displayFields;
+                    }
 
-							displayFields.Add(displayField);
-						}
-					}
-				}
-			}
+                    foreach (DataRow row in table.Rows)
+                    {
+                        if (row != null)
+                        {
+                            DisplayField displayField = new DisplayField
+                            {
+                                Key = row["key"].ToString(),
+                                Value = row["value"].ToString()
+                            };
 
-			return displayFields;
-		}
+                            displayFields.Add(displayField);
+                        }
+                    }
+                }
+            }
 
-		/// <summary>
-		/// Inserts or updates the instance of ApiAccessPolicy class on the database table "policy.api_access_policy".
-		/// </summary>
-		/// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to insert or update.</param>
+            return displayFields;
+        }
+
+        /// <summary>
+        /// Inserts or updates the instance of ApiAccessPolicy class on the database table "policy.api_access_policy".
+        /// </summary>
+        /// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to insert or update.</param>
+        /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void AddOrEdit(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void AddOrEdit(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy, List<EntityParser.CustomField> customFields)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
-			if(apiAccessPolicy.ApiAccessPolicyId > 0){
-				this.Update(apiAccessPolicy, apiAccessPolicy.ApiAccessPolicyId);
-				return;
-			}
-	
-			this.Add(apiAccessPolicy);
-		}
+            object primaryKeyValue;
 
-		/// <summary>
-		/// Inserts the instance of ApiAccessPolicy class on the database table "policy.api_access_policy".
-		/// </summary>
-		/// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to insert.</param>
+            apiAccessPolicy.AuditUserId = this.UserId;
+            apiAccessPolicy.AuditTs = System.DateTime.UtcNow;
+
+            if (apiAccessPolicy.ApiAccessPolicyId > 0)
+            {
+                primaryKeyValue = apiAccessPolicy.ApiAccessPolicyId;
+                this.Update(apiAccessPolicy, apiAccessPolicy.ApiAccessPolicyId);
+            }
+            else
+            {
+                primaryKeyValue = this.Add(apiAccessPolicy);
+            }
+
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name('policy.api_access_policy')" +
+                         ");";
+
+            Factory.NonQuery(this.Catalog, sql);
+
+            foreach (var field in customFields)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name('policy.api_access_policy', @0::character varying(100)), " +
+                      "@1, @2;";
+
+                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+            }
+        }
+
+        /// <summary>
+        /// Inserts the instance of ApiAccessPolicy class on the database table "policy.api_access_policy".
+        /// </summary>
+        /// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Add(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public object Add(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -248,22 +339,96 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Insert(this.Catalog, apiAccessPolicy);
-		}
 
-		/// <summary>
-		/// Updates the row of the table "policy.api_access_policy" with an instance of "ApiAccessPolicy" class against the primary key value.
-		/// </summary>
-		/// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to update.</param>
-		/// <param name="apiAccessPolicyId">The value of the column "api_access_policy_id" which will be updated.</param>
+            return Factory.Insert(this.Catalog, apiAccessPolicy);
+        }
+
+        /// <summary>
+        /// Inserts or updates multiple instances of ApiAccessPolicy class on the database table "policy.api_access_policy";
+        /// </summary>
+        /// <param name="apiAccessPolicies">List of "ApiAccessPolicy" class to import.</param>
+        /// <returns></returns>
+        public List<object> BulkImport(List<MixERP.Net.Entities.Policy.ApiAccessPolicy> apiAccessPolicies)
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                }
+
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to import entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. {apiAccessPolicies}", this.LoginId, apiAccessPolicies);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var result = new List<object>();
+            int line = 0;
+            try
+            {
+                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                {
+                    using (Transaction transaction = db.GetTransaction())
+                    {
+                        foreach (var apiAccessPolicy in apiAccessPolicies)
+                        {
+                            line++;
+
+                            apiAccessPolicy.AuditUserId = this.UserId;
+                            apiAccessPolicy.AuditTs = System.DateTime.UtcNow;
+
+                            if (apiAccessPolicy.ApiAccessPolicyId > 0)
+                            {
+                                result.Add(apiAccessPolicy.ApiAccessPolicyId);
+                                db.Update(apiAccessPolicy, apiAccessPolicy.ApiAccessPolicyId);
+                            }
+                            else
+                            {
+                                result.Add(db.Insert(apiAccessPolicy));
+                            }
+                        }
+
+                        transaction.Complete();
+                    }
+
+                    return result;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+
+                if (ex.Code.StartsWith("P"))
+                {
+                    errorMessage += Factory.GetDBErrorResource(ex);
+
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                errorMessage += ex.Message;
+                throw new MixERPException(errorMessage, ex);
+            }
+            catch (System.Exception ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+                throw new MixERPException(errorMessage, ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the row of the table "policy.api_access_policy" with an instance of "ApiAccessPolicy" class against the primary key value.
+        /// </summary>
+        /// <param name="apiAccessPolicy">The instance of "ApiAccessPolicy" class to update.</param>
+        /// <param name="apiAccessPolicyId">The value of the column "api_access_policy_id" which will be updated.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Update(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy, long apiAccessPolicyId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Update(MixERP.Net.Entities.Policy.ApiAccessPolicy apiAccessPolicy, long apiAccessPolicyId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -277,21 +442,21 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Update(this.Catalog, apiAccessPolicy, apiAccessPolicyId);
-		}
 
-		/// <summary>
-		/// Deletes the row of the table "policy.api_access_policy" against the primary key value.
-		/// </summary>
-		/// <param name="apiAccessPolicyId">The value of the column "api_access_policy_id" which will be deleted.</param>
+            Factory.Update(this.Catalog, apiAccessPolicy, apiAccessPolicyId);
+        }
+
+        /// <summary>
+        /// Deletes the row of the table "policy.api_access_policy" against the primary key value.
+        /// </summary>
+        /// <param name="apiAccessPolicyId">The value of the column "api_access_policy_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Delete(long apiAccessPolicyId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Delete(long apiAccessPolicyId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -305,22 +470,22 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "DELETE FROM policy.api_access_policy WHERE api_access_policy_id=@0;";
-			Factory.NonQuery(this.Catalog, sql, apiAccessPolicyId);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "policy.api_access_policy" producing a paged result of 25.
-		/// </summary>
-		/// <returns>Returns the first page of collection of "ApiAccessPolicy" class.</returns>
+            const string sql = "DELETE FROM policy.api_access_policy WHERE api_access_policy_id=@0;";
+            Factory.NonQuery(this.Catalog, sql, apiAccessPolicyId);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "policy.api_access_policy" producing a paged result of 25.
+        /// </summary>
+        /// <returns>Returns the first page of collection of "ApiAccessPolicy" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetPagedResult()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetPagedResult()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -334,23 +499,23 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM policy.api_access_policy ORDER BY api_access_policy_id LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "policy.api_access_policy" producing a paged result of 25.
-		/// </summary>
-		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
-		/// <returns>Returns collection of "ApiAccessPolicy" class.</returns>
+            const string sql = "SELECT * FROM policy.api_access_policy ORDER BY api_access_policy_id LIMIT 25 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "policy.api_access_policy" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <returns>Returns collection of "ApiAccessPolicy" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetPagedResult(long pageNumber)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetPagedResult(long pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -364,19 +529,57 @@ namespace MixERP.Net.Schemas.Policy.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM policy.api_access_policy ORDER BY api_access_policy_id LIMIT 25 OFFSET @0;";
-				
-			return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, offset);
-		}
+
+            long offset = (pageNumber - 1) * 25;
+            const string sql = "SELECT * FROM policy.api_access_policy ORDER BY api_access_policy_id LIMIT 25 OFFSET @0;";
+
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, offset);
+        }
+
+        private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
+        {
+            const string sql = "SELECT * FROM core.filters WHERE object_name='policy.api_access_policy' AND lower(filter_name)=lower(@0);";
+            return Factory.Get<EntityParser.Filter>(catalog, sql, filterName).ToList();
+        }
 
         /// <summary>
-		/// Performs a filtered select statement on table "policy.api_access_policy" producing a paged result of 25.
+        /// Performs a filtered count on table "policy.api_access_policy".
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns number of rows of "ApiAccessPolicy" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountWhere(List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM policy.api_access_policy WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.ApiAccessPolicy(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "policy.api_access_policy" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
-		/// <returns>Returns collection of "ApiAccessPolicy" class.</returns>
+        /// <returns>Returns collection of "ApiAccessPolicy" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
@@ -410,7 +613,47 @@ namespace MixERP.Net.Schemas.Policy.Data
             return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql);
         }
 
-        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> Get(long[] apiAccessPolicyIds)
+        /// <summary>
+        /// Performs a filtered count on table "policy.api_access_policy".
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns number of rows of "ApiAccessPolicy" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountFiltered(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM policy.api_access_policy WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.ApiAccessPolicy(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "policy.api_access_policy" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns collection of "ApiAccessPolicy" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Policy.ApiAccessPolicy> GetFiltered(long pageNumber, string filterName)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
@@ -425,15 +668,24 @@ namespace MixERP.Net.Schemas.Policy.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. apiAccessPolicyIds: {apiAccessPolicyIds}.", this.LoginId, apiAccessPolicyIds);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"ApiAccessPolicy\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-			const string sql = "SELECT * FROM policy.api_access_policy WHERE api_access_policy_id IN (@0);";
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
 
-            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql, apiAccessPolicyIds);
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM policy.api_access_policy WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.ApiAccessPolicy(), filters);
+
+            sql.OrderBy("api_access_policy_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Policy.ApiAccessPolicy>(this.Catalog, sql);
         }
 
-	}
+    }
 }

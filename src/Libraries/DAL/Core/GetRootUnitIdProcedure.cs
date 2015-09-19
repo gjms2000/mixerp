@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
-	/// </summary>
-	public class GetRootUnitIdProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
+    /// </summary>
+    public class GetRootUnitIdProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_root_unit_id";
+        public override string ObjectName => "get_root_unit_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "pg_arg0" argument of the function "core.get_root_unit_id".
-		/// </summary>
-		public int PgArg0 { get; set; }
+        /// <summary>
+        /// Maps to "pg_arg0" argument of the function "core.get_root_unit_id".
+        /// </summary>
+        public int PgArg0 { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
-		/// </summary>
-		public GetRootUnitIdProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
+        /// </summary>
+        public GetRootUnitIdProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
-		/// </summary>
-		/// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "core.get_root_unit_id".</param>
-		public GetRootUnitIdProcedure(int pgArg0)
-		{
-			this.PgArg0 = pgArg0;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_root_unit_id".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetRootUnitIdProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_root_unit_id(@0::integer);";
-			return Factory.Scalar<int>(this.Catalog, query, this.PgArg0);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_root_unit_id(pg_arg0 integer)" on the database.
+        /// </summary>
+        /// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "core.get_root_unit_id".</param>
+        public GetRootUnitIdProcedure(int pgArg0)
+        {
+            this.PgArg0 = pgArg0;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_root_unit_id".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetRootUnitIdProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_root_unit_id(@0::integer);";
+            return Factory.Scalar<int>(this.Catalog, query, this.PgArg0);
+        }
+    }
 }

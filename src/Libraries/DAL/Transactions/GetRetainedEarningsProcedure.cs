@@ -24,79 +24,83 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
-	/// </summary>
-	public class GetRetainedEarningsProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
+    /// </summary>
+    public class GetRetainedEarningsProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_retained_earnings";
+        public override string ObjectName => "get_retained_earnings";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_date_to" argument of the function "transactions.get_retained_earnings".
-		/// </summary>
-		public DateTime DateTo { get; set; }
-		/// <summary>
-		/// Maps to "_office_id" argument of the function "transactions.get_retained_earnings".
-		/// </summary>
-		public int OfficeId { get; set; }
-		/// <summary>
-		/// Maps to "_factor" argument of the function "transactions.get_retained_earnings".
-		/// </summary>
-		public int Factor { get; set; }
+        /// <summary>
+        /// Maps to "_date_to" argument of the function "transactions.get_retained_earnings".
+        /// </summary>
+        public DateTime DateTo { get; set; }
+        /// <summary>
+        /// Maps to "_office_id" argument of the function "transactions.get_retained_earnings".
+        /// </summary>
+        public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "_factor" argument of the function "transactions.get_retained_earnings".
+        /// </summary>
+        public int Factor { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
-		/// </summary>
-		public GetRetainedEarningsProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
+        /// </summary>
+        public GetRetainedEarningsProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
-		/// </summary>
-		/// <param name="dateTo">Enter argument value for "_date_to" parameter of the function "transactions.get_retained_earnings".</param>
-		/// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.get_retained_earnings".</param>
-		/// <param name="factor">Enter argument value for "_factor" parameter of the function "transactions.get_retained_earnings".</param>
-		public GetRetainedEarningsProcedure(DateTime dateTo,int officeId,int factor)
-		{
-			this.DateTo = dateTo;
-			this.OfficeId = officeId;
-			this.Factor = factor;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.get_retained_earnings".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetRetainedEarningsProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.get_retained_earnings(@0::date, @1::integer, @2::integer);";
-			return Factory.Scalar<decimal>(this.Catalog, query, this.DateTo, this.OfficeId, this.Factor);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_retained_earnings(_date_to date, _office_id integer, _factor integer)" on the database.
+        /// </summary>
+        /// <param name="dateTo">Enter argument value for "_date_to" parameter of the function "transactions.get_retained_earnings".</param>
+        /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.get_retained_earnings".</param>
+        /// <param name="factor">Enter argument value for "_factor" parameter of the function "transactions.get_retained_earnings".</param>
+        public GetRetainedEarningsProcedure(DateTime dateTo, int officeId, int factor)
+        {
+            this.DateTo = dateTo;
+            this.OfficeId = officeId;
+            this.Factor = factor;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.get_retained_earnings".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetRetainedEarningsProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.get_retained_earnings(@0::date, @1::integer, @2::integer);";
+            return Factory.Scalar<decimal>(this.Catalog, query, this.DateTo, this.OfficeId, this.Factor);
+        }
+    }
 }

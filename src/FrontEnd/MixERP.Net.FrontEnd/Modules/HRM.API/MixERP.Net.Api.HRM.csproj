@@ -36,6 +36,10 @@
     <AssemblyOriginatorKeyFile>Mix Open Foundation.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MixERP.Net.Api.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.Api.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="MixERP.Net.ApplicationState">
       <HintPath>..\..\bin\MixERP.Net.ApplicationState.dll</HintPath>
     </Reference>
@@ -45,6 +49,14 @@
     <Reference Include="MixERP.Net.EntityParser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\MixERP.Net.EntityParser.dll</HintPath>
+    </Reference>
+    <Reference Include="MixERP.Net.Framework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MixERP.Net.i18n, Version=1.4.0.0, Culture=neutral, PublicKeyToken=a724a47a0879d02f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MixERP.Net.i18n.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\HRM\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -89,6 +101,7 @@
     <Compile Include="EmployeeSocialNetworkDetailController.cs" />
     <Compile Include="EmployeeSocialNetworkDetailScrudViewController.cs" />
     <Compile Include="EmployeeTypeController.cs" />
+    <Compile Include="EmployeeTypeScrudViewController.cs" />
     <Compile Include="EmployeeViewController.cs" />
     <Compile Include="EmployeeWageController.cs" />
     <Compile Include="EmployeeWageScrudViewController.cs" />

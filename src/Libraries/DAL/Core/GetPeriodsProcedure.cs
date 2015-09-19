@@ -24,73 +24,77 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
-	/// </summary>
-	public class GetPeriodsProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
+    /// </summary>
+    public class GetPeriodsProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_periods";
+        public override string ObjectName => "get_periods";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_date_from" argument of the function "core.get_periods".
-		/// </summary>
-		public DateTime DateFrom { get; set; }
-		/// <summary>
-		/// Maps to "_date_to" argument of the function "core.get_periods".
-		/// </summary>
-		public DateTime DateTo { get; set; }
+        /// <summary>
+        /// Maps to "_date_from" argument of the function "core.get_periods".
+        /// </summary>
+        public DateTime DateFrom { get; set; }
+        /// <summary>
+        /// Maps to "_date_to" argument of the function "core.get_periods".
+        /// </summary>
+        public DateTime DateTo { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
-		/// </summary>
-		public GetPeriodsProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
+        /// </summary>
+        public GetPeriodsProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
-		/// </summary>
-		/// <param name="dateFrom">Enter argument value for "_date_from" parameter of the function "core.get_periods".</param>
-		/// <param name="dateTo">Enter argument value for "_date_to" parameter of the function "core.get_periods".</param>
-		public GetPeriodsProcedure(DateTime dateFrom,DateTime dateTo)
-		{
-			this.DateFrom = dateFrom;
-			this.DateTo = dateTo;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_periods".
-		/// </summary>
-		public IEnumerable<MixERP.Net.Entities.Core.Period[]> Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetPeriodsProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_periods(@0::date, @1::date);";
-			return Factory.Get<MixERP.Net.Entities.Core.Period[]>(this.Catalog, query, this.DateFrom, this.DateTo);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_periods(_date_from date, _date_to date)" on the database.
+        /// </summary>
+        /// <param name="dateFrom">Enter argument value for "_date_from" parameter of the function "core.get_periods".</param>
+        /// <param name="dateTo">Enter argument value for "_date_to" parameter of the function "core.get_periods".</param>
+        public GetPeriodsProcedure(DateTime dateFrom, DateTime dateTo)
+        {
+            this.DateFrom = dateFrom;
+            this.DateTo = dateTo;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_periods".
+        /// </summary>
+        public IEnumerable<MixERP.Net.Entities.Core.Period[]> Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetPeriodsProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_periods(@0::date, @1::date);";
+            return Factory.Get<MixERP.Net.Entities.Core.Period[]>(this.Catalog, query, this.DateFrom, this.DateTo);
+        }
+    }
 }

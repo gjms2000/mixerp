@@ -6,11 +6,16 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = "Employee";
-    scrudFactory.formPocoName = "Employee";
+
+    //scrudFactory.viewAPI = "/api/hrm/employee";
+    //scrudFactory.viewTableName = "hrm.employees";
+
+    scrudFactory.formAPI = "/api/hrm/employee";
     scrudFactory.formTableName = "hrm.employees";
 
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
     scrudFactory.readonlyColumns = ["EmployeeName"];
+
     scrudFactory.live = "EmployeeName";
     scrudFactory.layout = [
         ["Photo", ""],

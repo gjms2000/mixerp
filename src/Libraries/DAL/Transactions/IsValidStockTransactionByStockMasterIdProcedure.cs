@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
-	/// </summary>
-	public class IsValidStockTransactionByStockMasterIdProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
+    /// </summary>
+    public class IsValidStockTransactionByStockMasterIdProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "is_valid_stock_transaction_by_stock_master_id";
+        public override string ObjectName => "is_valid_stock_transaction_by_stock_master_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_stock_master_id" argument of the function "transactions.is_valid_stock_transaction_by_stock_master_id".
-		/// </summary>
-		public long StockMasterId { get; set; }
+        /// <summary>
+        /// Maps to "_stock_master_id" argument of the function "transactions.is_valid_stock_transaction_by_stock_master_id".
+        /// </summary>
+        public long StockMasterId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
-		/// </summary>
-		public IsValidStockTransactionByStockMasterIdProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
+        /// </summary>
+        public IsValidStockTransactionByStockMasterIdProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
-		/// </summary>
-		/// <param name="stockMasterId">Enter argument value for "_stock_master_id" parameter of the function "transactions.is_valid_stock_transaction_by_stock_master_id".</param>
-		public IsValidStockTransactionByStockMasterIdProcedure(long stockMasterId)
-		{
-			this.StockMasterId = stockMasterId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"IsValidStockTransactionByStockMasterIdProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.is_valid_stock_transaction_by_stock_master_id(@0::bigint);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.StockMasterId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id(_stock_master_id bigint)" on the database.
+        /// </summary>
+        /// <param name="stockMasterId">Enter argument value for "_stock_master_id" parameter of the function "transactions.is_valid_stock_transaction_by_stock_master_id".</param>
+        public IsValidStockTransactionByStockMasterIdProcedure(long stockMasterId)
+        {
+            this.StockMasterId = stockMasterId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.is_valid_stock_transaction_by_stock_master_id".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"IsValidStockTransactionByStockMasterIdProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.is_valid_stock_transaction_by_stock_master_id(@0::bigint);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.StockMasterId);
+        }
+    }
 }

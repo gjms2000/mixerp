@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
-	/// </summary>
-	public class GetCountyIdByCountyCodeProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
+    /// </summary>
+    public class GetCountyIdByCountyCodeProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_county_id_by_county_code";
+        public override string ObjectName => "get_county_id_by_county_code";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_county_code" argument of the function "core.get_county_id_by_county_code".
-		/// </summary>
-		public string CountyCode { get; set; }
+        /// <summary>
+        /// Maps to "_county_code" argument of the function "core.get_county_id_by_county_code".
+        /// </summary>
+        public string CountyCode { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
-		/// </summary>
-		public GetCountyIdByCountyCodeProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
+        /// </summary>
+        public GetCountyIdByCountyCodeProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
-		/// </summary>
-		/// <param name="countyCode">Enter argument value for "_county_code" parameter of the function "core.get_county_id_by_county_code".</param>
-		public GetCountyIdByCountyCodeProcedure(string countyCode)
-		{
-			this.CountyCode = countyCode;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_county_id_by_county_code".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetCountyIdByCountyCodeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_county_id_by_county_code(@0::character varying);";
-			return Factory.Scalar<int>(this.Catalog, query, this.CountyCode);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_county_id_by_county_code(_county_code character varying)" on the database.
+        /// </summary>
+        /// <param name="countyCode">Enter argument value for "_county_code" parameter of the function "core.get_county_id_by_county_code".</param>
+        public GetCountyIdByCountyCodeProcedure(string countyCode)
+        {
+            this.CountyCode = countyCode;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_county_id_by_county_code".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetCountyIdByCountyCodeProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_county_id_by_county_code(@0::character varying);";
+            return Factory.Scalar<int>(this.Catalog, query, this.CountyCode);
+        }
+    }
 }

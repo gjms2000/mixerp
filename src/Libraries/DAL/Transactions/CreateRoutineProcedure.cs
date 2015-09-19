@@ -24,79 +24,83 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
-	/// </summary>
-	public class CreateRoutineProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
+    /// </summary>
+    public class CreateRoutineProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "create_routine";
+        public override string ObjectName => "create_routine";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_routine_code" argument of the function "transactions.create_routine".
-		/// </summary>
-		public string RoutineCode { get; set; }
-		/// <summary>
-		/// Maps to "_routine" argument of the function "transactions.create_routine".
-		/// </summary>
-		public string Routine { get; set; }
-		/// <summary>
-		/// Maps to "_order" argument of the function "transactions.create_routine".
-		/// </summary>
-		public int Order { get; set; }
+        /// <summary>
+        /// Maps to "_routine_code" argument of the function "transactions.create_routine".
+        /// </summary>
+        public string RoutineCode { get; set; }
+        /// <summary>
+        /// Maps to "_routine" argument of the function "transactions.create_routine".
+        /// </summary>
+        public string Routine { get; set; }
+        /// <summary>
+        /// Maps to "_order" argument of the function "transactions.create_routine".
+        /// </summary>
+        public int Order { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
-		/// </summary>
-		public CreateRoutineProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
+        /// </summary>
+        public CreateRoutineProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
-		/// </summary>
-		/// <param name="routineCode">Enter argument value for "_routine_code" parameter of the function "transactions.create_routine".</param>
-		/// <param name="routine">Enter argument value for "_routine" parameter of the function "transactions.create_routine".</param>
-		/// <param name="order">Enter argument value for "_order" parameter of the function "transactions.create_routine".</param>
-		public CreateRoutineProcedure(string routineCode,string routine,int order)
-		{
-			this.RoutineCode = routineCode;
-			this.Routine = routine;
-			this.Order = order;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.create_routine".
-		/// </summary>
-		public void Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CreateRoutineProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.create_routine(@0::character varying, @1::regproc, @2::integer);";
-			Factory.NonQuery(this.Catalog, query, this.RoutineCode, this.Routine, this.Order);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.create_routine(_routine_code character varying, _routine regproc, _order integer)" on the database.
+        /// </summary>
+        /// <param name="routineCode">Enter argument value for "_routine_code" parameter of the function "transactions.create_routine".</param>
+        /// <param name="routine">Enter argument value for "_routine" parameter of the function "transactions.create_routine".</param>
+        /// <param name="order">Enter argument value for "_order" parameter of the function "transactions.create_routine".</param>
+        public CreateRoutineProcedure(string routineCode, string routine, int order)
+        {
+            this.RoutineCode = routineCode;
+            this.Routine = routine;
+            this.Order = order;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.create_routine".
+        /// </summary>
+        public void Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CreateRoutineProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.create_routine(@0::character varying, @1::regproc, @2::integer);";
+            Factory.NonQuery(this.Catalog, query, this.RoutineCode, this.Routine, this.Order);
+        }
+    }
 }

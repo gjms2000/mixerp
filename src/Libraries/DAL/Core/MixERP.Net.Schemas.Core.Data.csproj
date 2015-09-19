@@ -140,6 +140,7 @@
     <Compile Include="ExchangeRateDetail.cs" />
     <Compile Include="ExpensesAccountSelectorView.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="FilterNameView.cs" />
     <Compile Include="FiscalYear.cs" />
     <Compile Include="FiscalYearScrudView.cs" />
     <Compile Include="FiscalYearSelectorView.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="GetCurrencyCodeByPartyIdProcedure.cs" />
     <Compile Include="GetCurrentFiscalYearCodeProcedure.cs" />
     <Compile Include="GetCurrentYearProcedure.cs" />
+    <Compile Include="GetCustomFieldDefinitionProcedure.cs" />
     <Compile Include="GetCustomFieldFormNameProcedure.cs" />
     <Compile Include="GetCustomFieldSetupIdByTableNameProcedure.cs" />
     <Compile Include="GetDateProcedure.cs" />

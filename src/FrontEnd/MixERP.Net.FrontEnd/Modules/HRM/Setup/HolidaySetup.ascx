@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Holiday Setup";
 
-    scrudFactory.viewPocoName = "Holiday";
-    scrudFactory.formPocoName = "Holiday";
+    scrudFactory.viewAPI = "/api/hrm/holiday";
+    scrudFactory.viewTableName = "hrm.holidays";
+
+    scrudFactory.formAPI = "/api/hrm/holiday";
     scrudFactory.formTableName = "hrm.holidays";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "HolidayName";
 

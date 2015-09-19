@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
-	/// </summary>
-	public class ArePurchaseOrdersAlreadyMergedProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
+    /// </summary>
+    public class ArePurchaseOrdersAlreadyMergedProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "are_purchase_orders_already_merged";
+        public override string ObjectName => "are_purchase_orders_already_merged";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "arr" argument of the function "transactions.are_purchase_orders_already_merged".
-		/// </summary>
-		public long[] Arr { get; set; }
+        /// <summary>
+        /// Maps to "arr" argument of the function "transactions.are_purchase_orders_already_merged".
+        /// </summary>
+        public long[] Arr { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
-		/// </summary>
-		public ArePurchaseOrdersAlreadyMergedProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
+        /// </summary>
+        public ArePurchaseOrdersAlreadyMergedProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
-		/// </summary>
-		/// <param name="arr">Enter argument value for "arr" parameter of the function "transactions.are_purchase_orders_already_merged".</param>
-		public ArePurchaseOrdersAlreadyMergedProcedure(long[] arr)
-		{
-			this.Arr = arr;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.are_purchase_orders_already_merged".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"ArePurchaseOrdersAlreadyMergedProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.are_purchase_orders_already_merged(@0::bigint[]);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.Arr);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.are_purchase_orders_already_merged(arr bigint[])" on the database.
+        /// </summary>
+        /// <param name="arr">Enter argument value for "arr" parameter of the function "transactions.are_purchase_orders_already_merged".</param>
+        public ArePurchaseOrdersAlreadyMergedProcedure(long[] arr)
+        {
+            this.Arr = arr;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.are_purchase_orders_already_merged".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"ArePurchaseOrdersAlreadyMergedProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.are_purchase_orders_already_merged(@0::bigint[]);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.Arr);
+        }
+    }
 }

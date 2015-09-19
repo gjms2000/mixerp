@@ -22,41 +22,41 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("", autoIncrement=false)]
+    [PrimaryKey("", autoIncrement = false)]
     [TableName("hrm.termination_scrud_view")]
     [ExplicitColumns]
     public sealed class TerminationScrudView : PetaPocoDB.Record<TerminationScrudView>, IPoco
     {
         [Column("termination_id")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? TerminationId { get; set; }
-    
+
         [Column("entered_by")]
-        [ColumnDbType("varchar", 50, true, "")] 
+        [ColumnDbType("varchar", 50, true, "")]
         public string EnteredBy { get; set; }
-    
+
         [Column("employee_name")]
-        [ColumnDbType("varchar", 160, true, "")] 
+        [ColumnDbType("varchar", 160, true, "")]
         public string EmployeeName { get; set; }
-    
+
         [Column("notice_date")]
-        [ColumnDbType("date", 0, true, "")] 
+        [ColumnDbType("date", 0, true, "")]
         public DateTime? NoticeDate { get; set; }
-    
+
         [Column("effective_termination_date")]
-        [ColumnDbType("date", 0, true, "")] 
+        [ColumnDbType("date", 0, true, "")]
         public DateTime? EffectiveTerminationDate { get; set; }
-    
+
         [Column("forward_to")]
-        [ColumnDbType("varchar", 160, true, "")] 
+        [ColumnDbType("varchar", 160, true, "")]
         public string ForwardTo { get; set; }
-    
+
         [Column("reason")]
-        [ColumnDbType("varchar", 128, true, "")] 
+        [ColumnDbType("varchar", 128, true, "")]
         public string Reason { get; set; }
-    
+
         [Column("details")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string Details { get; set; }
     }
 }

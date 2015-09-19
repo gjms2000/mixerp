@@ -1,4 +1,4 @@
-<div class="poco view factory">
+<div class="view factory">
     <div id="FlagPopUnder" class="ui initially hidden form segment" style="width:400px;z-index:3; position: absolute;">
         <h3 class="panel-title">Flag This Transaction</h3>
         <div>You can mark this transaction with a flag, however you will not be able to see the flags created by other users.</div>
@@ -208,9 +208,9 @@
 
     <br />
     <script>
-        var form = $(".poco.form.factory");
-        var view = $(".poco.view.factory");
-        var pocoDefinition;
+        var form = $(".form.factory");
+        var view = $(".view.factory");
+        var metaDefinition;
 
         $("#AddNewButton").click(function () {
             if (form.length) {
@@ -250,13 +250,15 @@
             return text;
         };
 
+        function toUnderscoreCase(str) {
+            return str.replace(/(?:^|\.?)([A-Z])/g, function (x, y) { return "_" + y.toLowerCase() }).replace(/^_/, "");
+        };
 
         function localizeHeaders(el) {
             el.find("thead tr th").each(function () {
                 var cell = $(this);
 
-                var name = cell.text();
-
+                var name = toUnderscoreCase(cell.text());
                 var text = tryParseLocalizedResource(name);
                 cell.text(text);
 
@@ -317,7 +319,7 @@
                             val = Resources.Titles.Yes();
                         };
 
-                        var column = _.findWhere(pocoDefinition.Columns, { ColumnName: key });
+                        var column = _.findWhere(metaDefinition.Columns, { ColumnName: key });
 
                         if (column) {
                             var dataType = column.DbDataType;
@@ -392,9 +394,9 @@
             $("[data-tab=view]").addClass("loading");
             var filterName = getFilter();
 
-            var ajaxGetTotalPages = getTotalPages(scrudFactory.viewPocoName, filterName, false);
+            var getTotalPagesAjax = getTotalPages(filterName, false);
 
-            ajaxGetTotalPages.success(function (msg) {
+            getTotalPagesAjax.success(function (msg) {
                 var pages = parseInt(msg.d || 1);
 
                 $("#TotalPagesAnchor").text(pages);
@@ -404,48 +406,45 @@
                 };
             });
 
-            ajaxGetTotalPages.fail(function (xhr) {
+            getTotalPagesAjax.fail(function (xhr) {
                 logAjaxErrorMessage(xhr);
             });
 
         };
 
-        function getTotalPages(pocoName, filterName, byOffice) {
+        function getTotalPages(filterName) {
             var qs = getQueryStrings();
 
             if (qs.length) {
-                return getFilteredTotalPages(pocoName, qs, byOffice);
+                return getFilteredTotalPages(qs);
             };
 
-            var url = "/Services/Modules/PocoService.asmx/GetTotalPages";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "filterName", filterName);
-            data = appendParameter(data, "byOffice", byOffice);
+            var url = scrudFactory.viewAPI + "/count";
 
-            data = getData(data);
-            return getAjax(url, data);
+            if (filterName) {
+                url = scrudFactory.viewAPI + "/count-filtered/" + filterName;
+            }
+
+            return getAjaxRequest(url);
         };
 
         function getAjaxFilters(queryStrings) {
             var filters = [];
 
             $.each(queryStrings, function (index, value) {
-                filters.push(getAjaxPropertyFilter(value.key, 0, value.value));
+                filters.push(getAjaxColumnFilter(toUnderscoreCase(value.key), 0, value.value));
             });
 
             return filters;
         };
 
-        function getFilteredTotalPages(pocoName, queryStrings, byOffice) {
+        function getFilteredTotalPages(queryStrings) {
             var filters = getAjaxFilters(queryStrings);
 
-            var url = "/Services/Modules/PocoService.asmx/GetFilteredTotalPages";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "filters", filters);
-            data = appendParameter(data, "byOffice", byOffice);
+            var url = scrudFactory.viewAPI + "/count-where";
+            var data = JSON.stringify(filters);
 
-            data = getData(data);
-            return getAjax(url, data);
+            return postAjaxRequest(url, data);
         };
 
 
@@ -472,49 +471,53 @@
             var filterName = $("#FilterSelect").getSelectedText();
             $("#FilterName").html(filterName);
             $("#FilterNameInputText").val(filterName);
-            var ajaxGetFilters = getFilters(scrudFactory.viewPocoName, filterName);
+            var getFiltersAjax = getFilters(filterName);
 
-            ajaxGetFilters.success(function (msg) {
-                createFilters(msg.d);
+            getFiltersAjax.success(function (msg) {
+                createFilters(msg);
             });
 
-            ajaxGetFilters.fail(function (xhr) {
+            getFiltersAjax.fail(function (xhr) {
                 logAjaxErrorMessage(xhr);
             });
         };
 
-        function getFilters(pocoName, filterName) {
-            var url = "/Services/Modules/PocoService.asmx/GetFilters";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "filterName", filterName);
-            data = getData(data);
-            return getAjax(url, data);
+        function getFilters(filterName) {
+            var url = "/api/core/filter/get-where/1";
+            var where = [];
+
+            where.push(getAjaxColumnFilter("object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+            where.push(getAjaxColumnFilter("filter_name", FilterConditions.IsEqualTo, filterName));
+
+            var data = JSON.stringify(where);
+
+            return postAjaxRequest(url, data);
         };
     </script>
     <script>
         function loadFilterNames() {
-            var ajaxGetFilterNames = getFilterNames(scrudFactory.viewPocoName);
-            ajaxGetFilterNames.success(function (msg) {
-                var data = msg.d;
+            var getFilterNamesAjax = getFilterNames();
+
+            getFilterNamesAjax.success(function (data) {
                 var selected = "";
 
                 var option = "<option value=''>Select a Filter</option>";
 
                 $.each(data, function () {
-                    var isDefault = this[1].Value;
+                    var isDefault = this.IsDefault;
 
                     if (isDefault) {
-                        selected = this[0].Value;
+                        selected = this.FilterName;
                     };
 
-                    option += stringFormat("<option value='{0}'>{0}</option>", this[0].Value);
+                    option += stringFormat("<option value='{0}'>{0}</option>", this.FilterName);
                 });
 
 
                 $("#DefaultFilterSelect").html(option);
 
                 if (selected) {
-                    $("#DefaultFilterSelect").dropdown("set selected", selected).dropdown({ placeholder: false });
+                    $("#DefaultFilterSelect").dropdown({ placeholder: false }).dropdown("set selected", selected);
                     loadPageCount(loadGrid);
                 } else {
                     $("#DefaultFilterSelect").dropdown({ placeholder: false });
@@ -528,25 +531,24 @@
                     loadPageCount(loadGrid);
                 });
             });
-
-            ajaxGetFilterNames.fail(function (xhr) {
-                logAjaxErrorMessage(xhr);
-            });
         };
 
-        function getFilterNames(pocoName) {
-            var url = "/Services/Modules/PocoService.asmx/GetFilterNames";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = getData(data);
-            return getAjax(url, data);
+        function getFilterNames() {
+            var url = "/api/core/filter-name-view/get-where/1";
+            var where = [];
+
+            where.push(getAjaxColumnFilter("object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+            var data = JSON.stringify(where);
+
+            return postAjaxRequest(url, data);
         };
     </script>
     <script>
     </script>
     <script>
         $(document).ready(function () {
-            var form = $(".poco.form.factory");
-            var view = $(".poco.view.factory");
+            var form = $(".form.factory");
+            var view = $(".view.factory");
 
             var defaultView = window.getQueryStringByName("View");
 
@@ -558,7 +560,7 @@
             };
 
 
-            loadPoco(loadFilterNames);
+            loadMeta(loadFilterNames);
             loadFilterConditions();
             $("#ExportDropDown").dropdown();
 
@@ -585,11 +587,12 @@
             };
         });
 
-        function loadPoco(callback) {
-            var ajaxgetPoco = getPoco(scrudFactory.formPocoName);
+        function loadMeta(callback) {
+            var getMetaAjax = getMeta();
 
-            ajaxgetPoco.success(function (msg) {
-                pocoDefinition = msg.d;
+            getMetaAjax.success(function (msg) {
+                metaDefinition = msg;
+
                 if (typeof (callback) === "function") {
                     callback();
                 }
@@ -600,14 +603,12 @@
         function loadGrid() {
             var pageNumber = getPageNumber();
             var filterName = getFilter();
-
             $("#CurrentPageAnchor").text(pageNumber);
 
-            var ajaxGetPocoView = getPocoView(scrudFactory.viewPocoName, pageNumber, filterName, false);
+            var getViewAjax = getView(pageNumber, filterName, false);
 
-            ajaxGetPocoView.success(function (msg) {
+            getViewAjax.success(function (json) {
                 var el = $("#json");
-                var json = JSON.parse(msg.d);
                 createGridView(el, json);
                 localizeHeaders(el);
                 loadColumns();
@@ -616,45 +617,36 @@
                 $("[data-tab=view]").removeClass("loading");
             });
 
-            ajaxGetPocoView.fail(function (xhr) {
+            getViewAjax.fail(function (xhr) {
                 logAjaxErrorMessage(xhr);
             });
         };
 
-        function getPocoView(pocoName, pageNumber, filterName, byOffice) {
+        function getView(pageNumber, filterName, byOffice) {
             var qs = getQueryStrings();
 
             if (qs.length) {
-                return getFilteredPocoView(pocoName, pageNumber, qs, byOffice);
+                return getFilteredView(pageNumber, qs, byOffice);
             };
 
-            var url = "/Services/Modules/PocoService.asmx/GetPocoView";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "pageNumber", pageNumber);
-            data = appendParameter(data, "filterName", filterName);
-            data = appendParameter(data, "byOffice", byOffice);
+            var url = scrudFactory.viewAPI + "/page/" + pageNumber;
 
-            data = getData(data);
-            return getAjax(url, data);
+            if (filterName) {
+                url = scrudFactory.viewAPI + "/get-filtered/" + pageNumber + "/" + filterName;
+            };
+
+            return getAjaxRequest(url);
         };
 
-        function getFilteredPocoView(pocoName, pageNumber, queryStrings, byOffice) {
-            var url = "/Services/Modules/PocoService.asmx/GetFilteredPocoView";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "pageNumber", pageNumber);
-            data = appendParameter(data, "filters", getAjaxFilters(queryStrings));
-            data = appendParameter(data, "byOffice", byOffice);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function getFilteredView(pageNumber, queryStrings) {
+            var url = scrudFactory.viewAPI + "/get-where/" + pageNumber;
+            data = JSON.stringify(getAjaxFilters(queryStrings));
+            return postAjaxRequest(url, data);
         };
 
-        function getPoco(pocoName) {
-            var url = "/Services/Modules/PocoService.asmx/GetFormView";
-            var data = appendParameter("", "pocoName", pocoName);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function getMeta() {
+            var url = scrudFactory.formAPI + "/meta";
+            return getAjaxRequest(url);
         };
     </script>
     <script>
@@ -796,6 +788,8 @@
 
                 var filter = new Object();
 
+                filter.FilterId = window.filterId;
+                filter.ObjectName = scrudFactory.viewTableName;
                 filter.FilterName = filterNameInputText.val();
                 filter.ColumnName = _.findWhere(columns, { text: columnName }).name;
                 filter.FilterCondition = parseInt(_.findWhere(filterConditions, { text: condition }).value || 0);
@@ -804,24 +798,23 @@
                 filters.push(filter);
             });
 
-            var ajaxSaveFilter = saveFilter(scrudFactory.viewPocoName, filters);
+            var saveFilterAjax = saveFilter(filterNameInputText.val(), filters);
 
-            ajaxSaveFilter.success(function () {
+            saveFilterAjax.success(function () {
+                window.filterId = 0;
                 displayMessage(Resources.Titles.TaskCompletedSuccessfully(), "success");
             });
 
-            ajaxSaveFilter.fail(function (xhr) {
+            saveFilterAjax.fail(function (xhr) {
                 logAjaxErrorMessage(xhr);
             });
         });
 
-        function saveFilter(pocoName, filters) {
-            var url = "/Services/Modules/PocoService.asmx/SaveFilter";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "filters", filters);
+        function saveFilter(filterName, filters) {
+            var url = "/api/core/filter/recreate/" + scrudFactory.viewTableName + "/" + filterName;
+            var data = JSON.stringify(filters);
 
-            data = getData(data);
-            return getAjax(url, data);
+            return getAjaxRequest(url, "PUT", data);
         };
 
 
@@ -860,26 +853,22 @@
     <script>
         $("#MakeUserDefaultFilterButton").click(function () {
             var filterName = $("#FilterSelect").getSelectedText();
-            var ajaxMakeDefaultFilter = makeDefaultFilter(scrudFactory.viewPocoName, filterName);
+            var makeDefaultFilterAjax = makeDefaultFilter(filterName);
 
-            ajaxMakeDefaultFilter.success(function () {
+            makeDefaultFilterAjax.success(function () {
                 displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
 
                 $(".filter.modal").modal("close");
             });
 
-            ajaxMakeDefaultFilter.fail(function (xhr) {
+            makeDefaultFilterAjax.fail(function (xhr) {
                 logAjaxErrorMessage(xhr);
             });
         });
 
-        function makeDefaultFilter(pocoName, filterName) {
-            var url = "/Services/Modules/PocoService.asmx/MakeDefaultFilter";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "filterName", filterName);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function makeDefaultFilter(filterName) {
+            var url = "/api/core/filter/make-default/" + scrudFactory.viewTableName + "/" + filterName;
+            return getAjaxRequest(url, "PUT");
         };
 
     </script>
@@ -928,14 +917,13 @@
     </script>
     <script>
         $("#DownloadTemplateButton").click(function () {
-            var ajaxDownloadTemplate = downloadTemplate(scrudFactory.formPocoName, false, true);
+            var downloadTemplateAjax = downloadTemplate();
             var el = this;
 
             if (!el.href) {
                 $(el).addClass("loading");
 
-                ajaxDownloadTemplate.success(function (msg) {
-                    var json = JSON.parse(msg.d);
+                downloadTemplateAjax.success(function (json) {
                     var csv = jsonToCsv(json);
                     var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
                     el.href = uri;
@@ -947,7 +935,7 @@
                     el.click();
                 });
 
-                ajaxDownloadTemplate.fail(function () {
+                downloadTemplateAjax.fail(function () {
                     $(el).removeClass("loading");
                 });
             };
@@ -999,23 +987,16 @@
         };
 
 
-        function downloadTemplate(pocoName, byOffice, withData) {
-            var url = "/Services/Modules/PocoService.asmx/DownloadTemplate";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "byOffice", byOffice);
-            data = appendParameter(data, "withData", withData);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function downloadTemplate() {
+            var url = scrudFactory.formAPI + "/export";
+            alert(url)
+            return getAjaxRequest(url);
         };
 
-        function importPocos(pocoName, entities) {
-            var url = "/Services/Modules/PocoService.asmx/Import";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "entities", entities);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function bulkImport(entities) {
+            var url = scrudFactory.formAPI + "/bulk-import";
+            var data = JSON.stringify(entities);
+            return getAjaxRequest(url, "PUT", data);
         };
     </script>
     <script>
@@ -1042,25 +1023,25 @@
 
             var reader = new FileReader();
 
-            reader.onload = function (e) {
+            reader.onload = function () {
                 var result = reader.result;
                 showProgress(progress, 50, "Successfully processed your file.");
-                var entities = Papa.parse(result, { "header": true }).data;
+                var entities = Papa.parse(result, { "header": true, skipEmptyLines: true }).data;
 
                 showProgress(progress, 50, "Requesting import. This may take several minutes to complete.");
 
                 el.closest(".segment").find(".button").addClass("loading");
 
-                var ajaxImportPocos = importPocos(scrudFactory.formPocoName, entities);
+                var bulkImportAjax = bulkImport(entities);
 
-                ajaxImportPocos.success(function (msg) {
+                bulkImportAjax.success(function () {
                     var message = stringFormat("Successfully imported {0} items.", entities.length);
                     showProgress(progress, 100, message);
                     el.closest(".segment").find(".button").removeClass("loading");
                 });
 
-                ajaxImportPocos.fail(function (xhr) {
-                    $(".big.error").addClass("vpad8").html(JSON.parse(xhr.responseText).Message);
+                bulkImportAjax.fail(function (xhr) {
+                    $(".big.error").addClass("vpad8").html(getAjaxErrorMessage(xhr));
                     el.closest(".segment").find(".button").removeClass("loading");
                     showProgress(progress, 0, "Rolling back changes.");
                     $("#ProgressBar").fadeOut(2000);
@@ -1145,9 +1126,9 @@
             var selector = "td:nth-child(" + keyColumnPosition + ")";
             var primaryKey = el.parent().parent().find(selector).text();
 
-            var ajaxDeleteEntity = deleteEntity(scrudFactory.formPocoName, primaryKey);
+            var deleteAjax = deleteEntity(primaryKey);
 
-            ajaxDeleteEntity.success(function (msg) {
+            deleteAjax.success(function () {
                 var confirmed = confirm("Task completed successfully. Refresh view?");
 
                 if (confirmed) {
@@ -1178,10 +1159,9 @@
             var primaryKeyValue = el.parent().parent().find(selector).text();
             var tableName = scrudFactory.formTableName;
 
-            var ajaxGetViewForEdit = getViewForEdit(scrudFactory.formPocoName, primaryKeyValue);
+            var getViewForEditAjax = getViewForEdit(primaryKeyValue);
 
-            ajaxGetViewForEdit.success(function (msg) {
-                var data = JSON.parse(msg.d);
+            getViewForEditAjax.success(function (data) {
                 displayEdit(data, false);
 
                 getCustomFieldsForEdit(tableName, primaryKeyValue).success(function (msg) {
@@ -1197,7 +1177,7 @@
         function displayEdit(items) {
             for (var id in items) {
                 var value = items[id];
-                editFormElement(id, value);
+                editFormElement(toUnderscoreCase(id), value);
             };
         };
 
@@ -1240,24 +1220,14 @@
     </script>
     <script>
 
-        function deleteEntity(pocoName, primaryKeyValue) {
-            var url = "/Services/Modules/PocoService.asmx/DeleteEntity";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
-
-            data = getData(data);
-
-            return getAjax(url, data);
+        function deleteEntity(primaryKeyValue) {
+            var url = scrudFactory.formAPI + "/delete/" + primaryKeyValue;
+            return getAjaxRequest(url, "DELETE");
         };
 
-        function getViewForEdit(pocoName, primaryKeyValue) {
-            var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
-
-            data = getData(data);
-
-            return getAjax(url, data);
+        function getViewForEdit(primaryKeyValue) {
+            var url = scrudFactory.formAPI + "/" + primaryKeyValue;
+            return getAjaxRequest(url);
         };
 
         function getCustomFieldsForEdit(tableName, primaryKeyValue) {
@@ -1440,7 +1410,7 @@
                 flag.FlagId = (row.attr("data-flag-id") || 0);
                 flag.ResourceId = row.find("td:nth-child(3)").text();
                 flag.FlagTypeId = parseInt(flagSelect.val());
-                flag.Resource = scrudFactory.viewPocoName;
+                flag.Resource = scrudFactory.viewTableName;
                 flag.ResourceKey = "";
 
                 var flagAjax;
@@ -1493,7 +1463,7 @@
         function displayFlaggedRows() {
             var ids = getIds();
 
-            var getFlagViewAjax = getFlagView(scrudFactory.viewPocoName, userId, ids);
+            var getFlagViewAjax = getFlagView(scrudFactory.viewTableName, userId, ids);
 
             getFlagViewAjax.success(function (msg) {
                 $("#ScrudView").find("tbody tr").each(function () {

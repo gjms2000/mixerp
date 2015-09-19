@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Salary Types";
     
-    scrudFactory.viewPocoName = "SalaryType";
-    scrudFactory.formPocoName = "SalaryType";
+    scrudFactory.viewAPI = "/api/hrm/salary-type";
+    scrudFactory.viewTableName = "hrm.salary_types";
+
+    scrudFactory.formAPI = "/api/hrm/salary-type";
     scrudFactory.formTableName = "hrm.salary_types";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
     	["SalaryTypeId", ""],

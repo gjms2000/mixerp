@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
-	/// </summary>
-	public class GetFrequenciesProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
+    /// </summary>
+    public class GetFrequenciesProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_frequencies";
+        public override string ObjectName => "get_frequencies";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_frequency_id" argument of the function "core.get_frequencies".
-		/// </summary>
-		public int FrequencyId { get; set; }
+        /// <summary>
+        /// Maps to "_frequency_id" argument of the function "core.get_frequencies".
+        /// </summary>
+        public int FrequencyId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
-		/// </summary>
-		public GetFrequenciesProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
+        /// </summary>
+        public GetFrequenciesProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
-		/// </summary>
-		/// <param name="frequencyId">Enter argument value for "_frequency_id" parameter of the function "core.get_frequencies".</param>
-		public GetFrequenciesProcedure(int frequencyId)
-		{
-			this.FrequencyId = frequencyId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_frequencies".
-		/// </summary>
-		public IEnumerable<int> Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetFrequenciesProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_frequencies(@0::integer);";
-			return Factory.Get<int>(this.Catalog, query, this.FrequencyId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_frequencies(_frequency_id integer)" on the database.
+        /// </summary>
+        /// <param name="frequencyId">Enter argument value for "_frequency_id" parameter of the function "core.get_frequencies".</param>
+        public GetFrequenciesProcedure(int frequencyId)
+        {
+            this.FrequencyId = frequencyId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_frequencies".
+        /// </summary>
+        public IEnumerable<int> Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetFrequenciesProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_frequencies(@0::integer);";
+            return Factory.Get<int>(this.Catalog, query, this.FrequencyId);
+        }
+    }
 }

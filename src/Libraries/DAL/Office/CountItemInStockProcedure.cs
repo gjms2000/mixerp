@@ -24,79 +24,83 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
-	/// </summary>
-	public class CountItemInStockProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
+    /// </summary>
+    public class CountItemInStockProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "count_item_in_stock";
+        public override string ObjectName => "count_item_in_stock";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "item_id_" argument of the function "office.count_item_in_stock".
-		/// </summary>
-		public int ItemId { get; set; }
-		/// <summary>
-		/// Maps to "unit_id_" argument of the function "office.count_item_in_stock".
-		/// </summary>
-		public int UnitId { get; set; }
-		/// <summary>
-		/// Maps to "office_id_" argument of the function "office.count_item_in_stock".
-		/// </summary>
-		public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "item_id_" argument of the function "office.count_item_in_stock".
+        /// </summary>
+        public int ItemId { get; set; }
+        /// <summary>
+        /// Maps to "unit_id_" argument of the function "office.count_item_in_stock".
+        /// </summary>
+        public int UnitId { get; set; }
+        /// <summary>
+        /// Maps to "office_id_" argument of the function "office.count_item_in_stock".
+        /// </summary>
+        public int OfficeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
-		/// </summary>
-		public CountItemInStockProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
+        /// </summary>
+        public CountItemInStockProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
-		/// </summary>
-		/// <param name="itemId">Enter argument value for "item_id_" parameter of the function "office.count_item_in_stock".</param>
-		/// <param name="unitId">Enter argument value for "unit_id_" parameter of the function "office.count_item_in_stock".</param>
-		/// <param name="officeId">Enter argument value for "office_id_" parameter of the function "office.count_item_in_stock".</param>
-		public CountItemInStockProcedure(int itemId,int unitId,int officeId)
-		{
-			this.ItemId = itemId;
-			this.UnitId = unitId;
-			this.OfficeId = officeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.count_item_in_stock".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CountItemInStockProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.count_item_in_stock(@0::integer, @1::integer, @2::integer);";
-			return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.OfficeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.count_item_in_stock(item_id_ integer, unit_id_ integer, office_id_ integer)" on the database.
+        /// </summary>
+        /// <param name="itemId">Enter argument value for "item_id_" parameter of the function "office.count_item_in_stock".</param>
+        /// <param name="unitId">Enter argument value for "unit_id_" parameter of the function "office.count_item_in_stock".</param>
+        /// <param name="officeId">Enter argument value for "office_id_" parameter of the function "office.count_item_in_stock".</param>
+        public CountItemInStockProcedure(int itemId, int unitId, int officeId)
+        {
+            this.ItemId = itemId;
+            this.UnitId = unitId;
+            this.OfficeId = officeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.count_item_in_stock".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CountItemInStockProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.count_item_in_stock(@0::integer, @1::integer, @2::integer);";
+            return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.OfficeId);
+        }
+    }
 }

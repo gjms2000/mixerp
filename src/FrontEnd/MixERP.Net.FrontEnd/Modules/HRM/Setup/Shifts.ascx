@@ -3,13 +3,17 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = "Shifts";
-    scrudFactory.viewPocoName = "Shift";
-    scrudFactory.formPocoName = "Shift";
+
+    scrudFactory.viewAPI = "/api/hrm/shift";
+    scrudFactory.viewTableName = "hrm.shifts";
+
+    scrudFactory.formAPI = "/api/hrm/shift";
     scrudFactory.formTableName = "hrm.shifts";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
         ["ShiftId", ""],

@@ -4,13 +4,19 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = window.Resources.Titles.Experiences();
-    scrudFactory.viewPocoName = "EmployeeExperienceScrudView";
-    scrudFactory.formPocoName = "EmployeeExperience";
+
+    scrudFactory.viewAPI = "/api/hrm/employee-experience-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_experience_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-experience";
     scrudFactory.formTableName = "hrm.employee_experiences";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
     scrudFactory.back = {
         Title: "Employee",
         Url: "/Modules/HRM/Tasks/EmployeeInfo.mix?EmployeeId=" + getQueryStringByName("EmployeeId")

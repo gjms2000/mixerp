@@ -302,10 +302,6 @@
       <DependentUpon>Menu.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Services\Modules\PocoService.asmx.cs">
-      <DependentUpon>PocoService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Services\Office.asmx.cs">
       <DependentUpon>Office.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -782,7 +778,6 @@
     <Content Include="Services\Checklists.asmx" />
     <Content Include="Services\CreateDocument.asmx" />
     <Content Include="Services\Menu.asmx" />
-    <Content Include="Services\Modules\PocoService.asmx" />
     <Content Include="Services\WidgetManager.asmx" />
     <Content Include="Static\Icons\bottom-16.png" />
     <Content Include="Static\Icons\calendar-16.png" />

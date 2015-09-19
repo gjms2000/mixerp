@@ -3,13 +3,17 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = "Leave Types";
-    scrudFactory.viewPocoName = "LeaveType";
-    scrudFactory.formPocoName = "LeaveType";
+
+    scrudFactory.viewAPI = "/api/hrm/leave-type";
+    scrudFactory.viewTableName = "hrm.leave_types";
+
+    scrudFactory.formAPI = "/api/hrm/leave-type";
     scrudFactory.formTableName = "hrm.leave_types";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
     	["LeaveTypeId", ""],

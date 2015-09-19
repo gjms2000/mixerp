@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Office Hours";
     
-    scrudFactory.viewPocoName = "OfficeHourScrudView";
-    scrudFactory.formPocoName = "OfficeHour";
+    scrudFactory.viewAPI = "/api/hrm/office-hour-scrud-view";
+    scrudFactory.viewTableName = "hrm.office_hour_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/office-hour";
     scrudFactory.formTableName = "hrm.office_hours";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "OfficeHourName";
 

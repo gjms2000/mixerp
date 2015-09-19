@@ -4,13 +4,16 @@
     
     scrudFactory.title = "Leave Benefits";
     
-    scrudFactory.viewPocoName = "LeaveBenefit";
-    scrudFactory.formPocoName = "LeaveBenefit";
+    scrudFactory.viewAPI = "/api/hrm/leave-benefit";
+    scrudFactory.viewTableName = "hrm.leave_benefits";
+
+    scrudFactory.formAPI = "/api/hrm/leave-benefit";
     scrudFactory.formTableName = "hrm.leave_benefits";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "LeaveBenefitName";
 </script>

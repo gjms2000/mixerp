@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
-	/// </summary>
-	public class GetFlagBackgroundColorProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
+    /// </summary>
+    public class GetFlagBackgroundColorProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_flag_background_color";
+        public override string ObjectName => "get_flag_background_color";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "flag_type_id_" argument of the function "core.get_flag_background_color".
-		/// </summary>
-		public int FlagTypeId { get; set; }
+        /// <summary>
+        /// Maps to "flag_type_id_" argument of the function "core.get_flag_background_color".
+        /// </summary>
+        public int FlagTypeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
-		/// </summary>
-		public GetFlagBackgroundColorProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
+        /// </summary>
+        public GetFlagBackgroundColorProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
-		/// </summary>
-		/// <param name="flagTypeId">Enter argument value for "flag_type_id_" parameter of the function "core.get_flag_background_color".</param>
-		public GetFlagBackgroundColorProcedure(int flagTypeId)
-		{
-			this.FlagTypeId = flagTypeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_flag_background_color".
-		/// </summary>
-		public string Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetFlagBackgroundColorProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_flag_background_color(@0::integer);";
-			return Factory.Scalar<string>(this.Catalog, query, this.FlagTypeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_flag_background_color(flag_type_id_ integer)" on the database.
+        /// </summary>
+        /// <param name="flagTypeId">Enter argument value for "flag_type_id_" parameter of the function "core.get_flag_background_color".</param>
+        public GetFlagBackgroundColorProcedure(int flagTypeId)
+        {
+            this.FlagTypeId = flagTypeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_flag_background_color".
+        /// </summary>
+        public string Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetFlagBackgroundColorProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_flag_background_color(@0::integer);";
+            return Factory.Scalar<string>(this.Catalog, query, this.FlagTypeId);
+        }
+    }
 }

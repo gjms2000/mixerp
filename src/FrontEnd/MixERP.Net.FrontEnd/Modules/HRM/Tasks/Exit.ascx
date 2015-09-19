@@ -3,13 +3,17 @@
     var scrudFactory = new Object();
     
     scrudFactory.title = "Exits";
-    scrudFactory.viewPocoName = "ExitScrudView";
-    scrudFactory.formPocoName = "Exit";
+
+    scrudFactory.viewAPI = "/api/hrm/exit-scrud-view";
+    scrudFactory.viewTableName = "hrm.exit_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/exit";
     scrudFactory.formTableName = "hrm.exits";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "entered_by"];
 
     scrudFactory.live = "EmployeeId";
 

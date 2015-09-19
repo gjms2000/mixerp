@@ -4,13 +4,17 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = window.Resources.Titles.Qualifications();
-    scrudFactory.viewPocoName = "EmployeeQualificationScrudView";
-    scrudFactory.formPocoName = "EmployeeQualification";
+
+    scrudFactory.viewAPI = "/api/hrm/employee-qualification-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_qualification_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-qualification";
     scrudFactory.formTableName = "hrm.employee_qualifications";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
     
     scrudFactory.back = {
         Title: "Employee",

@@ -24,79 +24,83 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
-	/// </summary>
-	public class CreatePaymentCardProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
+    /// </summary>
+    public class CreatePaymentCardProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "create_payment_card";
+        public override string ObjectName => "create_payment_card";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_payment_card_code" argument of the function "core.create_payment_card".
-		/// </summary>
-		public string PaymentCardCode { get; set; }
-		/// <summary>
-		/// Maps to "_payment_card_name" argument of the function "core.create_payment_card".
-		/// </summary>
-		public string PaymentCardName { get; set; }
-		/// <summary>
-		/// Maps to "_card_type_id" argument of the function "core.create_payment_card".
-		/// </summary>
-		public int CardTypeId { get; set; }
+        /// <summary>
+        /// Maps to "_payment_card_code" argument of the function "core.create_payment_card".
+        /// </summary>
+        public string PaymentCardCode { get; set; }
+        /// <summary>
+        /// Maps to "_payment_card_name" argument of the function "core.create_payment_card".
+        /// </summary>
+        public string PaymentCardName { get; set; }
+        /// <summary>
+        /// Maps to "_card_type_id" argument of the function "core.create_payment_card".
+        /// </summary>
+        public int CardTypeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
-		/// </summary>
-		public CreatePaymentCardProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
+        /// </summary>
+        public CreatePaymentCardProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
-		/// </summary>
-		/// <param name="paymentCardCode">Enter argument value for "_payment_card_code" parameter of the function "core.create_payment_card".</param>
-		/// <param name="paymentCardName">Enter argument value for "_payment_card_name" parameter of the function "core.create_payment_card".</param>
-		/// <param name="cardTypeId">Enter argument value for "_card_type_id" parameter of the function "core.create_payment_card".</param>
-		public CreatePaymentCardProcedure(string paymentCardCode,string paymentCardName,int cardTypeId)
-		{
-			this.PaymentCardCode = paymentCardCode;
-			this.PaymentCardName = paymentCardName;
-			this.CardTypeId = cardTypeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.create_payment_card".
-		/// </summary>
-		public void Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CreatePaymentCardProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.create_payment_card(@0::character varying, @1::character varying, @2::integer);";
-			Factory.NonQuery(this.Catalog, query, this.PaymentCardCode, this.PaymentCardName, this.CardTypeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.create_payment_card(_payment_card_code character varying, _payment_card_name character varying, _card_type_id integer)" on the database.
+        /// </summary>
+        /// <param name="paymentCardCode">Enter argument value for "_payment_card_code" parameter of the function "core.create_payment_card".</param>
+        /// <param name="paymentCardName">Enter argument value for "_payment_card_name" parameter of the function "core.create_payment_card".</param>
+        /// <param name="cardTypeId">Enter argument value for "_card_type_id" parameter of the function "core.create_payment_card".</param>
+        public CreatePaymentCardProcedure(string paymentCardCode, string paymentCardName, int cardTypeId)
+        {
+            this.PaymentCardCode = paymentCardCode;
+            this.PaymentCardName = paymentCardName;
+            this.CardTypeId = cardTypeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.create_payment_card".
+        /// </summary>
+        public void Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CreatePaymentCardProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.create_payment_card(@0::character varying, @1::character varying, @2::integer);";
+            Factory.NonQuery(this.Catalog, query, this.PaymentCardCode, this.PaymentCardName, this.CardTypeId);
+        }
+    }
 }

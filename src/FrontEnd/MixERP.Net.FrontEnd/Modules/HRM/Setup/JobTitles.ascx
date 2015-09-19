@@ -4,13 +4,16 @@
     
     scrudFactory.title = "Job Titles";
 
-    scrudFactory.viewPocoName = "JobTitle";
-    scrudFactory.formPocoName = "JobTitle";
+    scrudFactory.viewAPI = "/api/hrm/job-title";
+    scrudFactory.viewTableName = "hrm.job_titles";
+
+    scrudFactory.formAPI = "/api/hrm/job-title";
     scrudFactory.formTableName = "hrm.job_titles";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
     	["JobTitleId", ""],

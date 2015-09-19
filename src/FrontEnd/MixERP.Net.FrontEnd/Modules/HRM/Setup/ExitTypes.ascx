@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Exit Types";
 
-    scrudFactory.viewPocoName = "ExitType";
-    scrudFactory.formPocoName = "ExitType";
+    scrudFactory.viewAPI = "/api/hrm/exit-type";
+    scrudFactory.viewTableName = "hrm.exit_types";
+
+    scrudFactory.formAPI = "/api/hrm/exit-type";
     scrudFactory.formTableName = "hrm.exit_types";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "ExitTypeName";
 </script>

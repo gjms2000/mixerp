@@ -36,34 +36,39 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this table. Returns literal "core".
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "payment_terms".
         /// </summary>
-	    public override string ObjectName => "payment_terms";
+        public override string ObjectName => "payment_terms";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-		public long LoginId { get; set; }
+        public long LoginId { get; set; }
+
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Performs SQL count on the table "core.payment_terms".
-		/// </summary>
-		/// <returns>Returns the number of rows of the table "core.payment_terms".</returns>
+        /// <summary>
+        /// Performs SQL count on the table "core.payment_terms".
+        /// </summary>
+        /// <returns>Returns the number of rows of the table "core.payment_terms".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public long Count()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return 0;
-			}
+        public long Count()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
 
             if (!this.SkipValidation)
             {
@@ -77,23 +82,52 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT COUNT(*) FROM core.payment_terms;";
-			return Factory.Scalar<long>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Executes a select query on the table "core.payment_terms" with a where filter on the column "payment_term_id" to return a single instance of the "PaymentTerm" class. 
-		/// </summary>
-		/// <param name="paymentTermId">The column "payment_term_id" parameter used on where filter.</param>
-		/// <returns>Returns a non-live, non-mapped instance of "PaymentTerm" class mapped to the database row.</returns>
+            const string sql = "SELECT COUNT(*) FROM core.payment_terms;";
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "core.payment_terms" to return a all instances of the "PaymentTerm" class to export. 
+        /// </summary>
+        /// <returns>Returns a non-live, non-mapped instances of "PaymentTerm" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public MixERP.Net.Entities.Core.PaymentTerm Get(int paymentTermId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> Get()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the export entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM core.payment_terms ORDER BY payment_term_id;";
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "core.payment_terms" with a where filter on the column "payment_term_id" to return a single instance of the "PaymentTerm" class. 
+        /// </summary>
+        /// <param name="paymentTermId">The column "payment_term_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped instance of "PaymentTerm" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public MixERP.Net.Entities.Core.PaymentTerm Get(int paymentTermId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -107,10 +141,41 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM core.payment_terms WHERE payment_term_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, paymentTermId).FirstOrDefault();
-		}
+
+            const string sql = "SELECT * FROM core.payment_terms WHERE payment_term_id=@0;";
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, paymentTermId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "core.payment_terms" with a where filter on the column "payment_term_id" to return a multiple instances of the "PaymentTerm" class. 
+        /// </summary>
+        /// <param name="paymentTermIds">Array of column "payment_term_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped collection of "PaymentTerm" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> Get(int[] paymentTermIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. paymentTermIds: {paymentTermIds}.", this.LoginId, paymentTermIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM core.payment_terms WHERE payment_term_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, paymentTermIds);
+        }
 
         /// <summary>
         /// Custom fields are user defined form elements for core.payment_terms.
@@ -119,10 +184,10 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -138,14 +203,14 @@ namespace MixERP.Net.Schemas.Core.Data
             }
 
             string sql;
-			if (string.IsNullOrWhiteSpace(resourceId))
+            if (string.IsNullOrWhiteSpace(resourceId))
             {
-				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.payment_terms' ORDER BY field_order;";
-				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.payment_terms' ORDER BY field_order;";
+                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('core.payment_terms'::text, @0::text) ORDER BY field_order;";
-			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -153,14 +218,14 @@ namespace MixERP.Net.Schemas.Core.Data
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table core.payment_terms</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<DisplayField> GetDisplayFields()
-		{
-			List<DisplayField> displayFields = new List<DisplayField>();
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            List<DisplayField> displayFields = new List<DisplayField>();
 
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return displayFields;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return displayFields;
+            }
 
             if (!this.SkipValidation)
             {
@@ -174,67 +239,93 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT payment_term_id AS key, payment_term_code || ' (' || payment_term_name || ')' as value FROM core.payment_terms;";
-			using (NpgsqlCommand command = new NpgsqlCommand(sql))
-			{
-				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
-				{
-					if (table?.Rows == null || table.Rows.Count == 0)
-					{
-						return displayFields;
-					}
 
-					foreach (DataRow row in table.Rows)
-					{
-						if (row != null)
-						{
-							DisplayField displayField = new DisplayField
-							{
-								Key = row["key"].ToString(),
-								Value = row["value"].ToString()
-							};
+            const string sql = "SELECT payment_term_id AS key, payment_term_code || ' (' || payment_term_name || ')' as value FROM core.payment_terms;";
+            using (NpgsqlCommand command = new NpgsqlCommand(sql))
+            {
+                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                {
+                    if (table?.Rows == null || table.Rows.Count == 0)
+                    {
+                        return displayFields;
+                    }
 
-							displayFields.Add(displayField);
-						}
-					}
-				}
-			}
+                    foreach (DataRow row in table.Rows)
+                    {
+                        if (row != null)
+                        {
+                            DisplayField displayField = new DisplayField
+                            {
+                                Key = row["key"].ToString(),
+                                Value = row["value"].ToString()
+                            };
 
-			return displayFields;
-		}
+                            displayFields.Add(displayField);
+                        }
+                    }
+                }
+            }
 
-		/// <summary>
-		/// Inserts or updates the instance of PaymentTerm class on the database table "core.payment_terms".
-		/// </summary>
-		/// <param name="paymentTerm">The instance of "PaymentTerm" class to insert or update.</param>
+            return displayFields;
+        }
+
+        /// <summary>
+        /// Inserts or updates the instance of PaymentTerm class on the database table "core.payment_terms".
+        /// </summary>
+        /// <param name="paymentTerm">The instance of "PaymentTerm" class to insert or update.</param>
+        /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void AddOrEdit(MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void AddOrEdit(MixERP.Net.Entities.Core.PaymentTerm paymentTerm, List<EntityParser.CustomField> customFields)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
-			if(paymentTerm.PaymentTermId > 0){
-				this.Update(paymentTerm, paymentTerm.PaymentTermId);
-				return;
-			}
-	
-			this.Add(paymentTerm);
-		}
+            object primaryKeyValue;
 
-		/// <summary>
-		/// Inserts the instance of PaymentTerm class on the database table "core.payment_terms".
-		/// </summary>
-		/// <param name="paymentTerm">The instance of "PaymentTerm" class to insert.</param>
+            paymentTerm.AuditUserId = this.UserId;
+            paymentTerm.AuditTs = System.DateTime.UtcNow;
+
+            if (paymentTerm.PaymentTermId > 0)
+            {
+                primaryKeyValue = paymentTerm.PaymentTermId;
+                this.Update(paymentTerm, paymentTerm.PaymentTermId);
+            }
+            else
+            {
+                primaryKeyValue = this.Add(paymentTerm);
+            }
+
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name('core.payment_terms')" +
+                         ");";
+
+            Factory.NonQuery(this.Catalog, sql);
+
+            foreach (var field in customFields)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name('core.payment_terms', @0::character varying(100)), " +
+                      "@1, @2;";
+
+                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+            }
+        }
+
+        /// <summary>
+        /// Inserts the instance of PaymentTerm class on the database table "core.payment_terms".
+        /// </summary>
+        /// <param name="paymentTerm">The instance of "PaymentTerm" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Add(MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public object Add(MixERP.Net.Entities.Core.PaymentTerm paymentTerm)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -248,22 +339,96 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Insert(this.Catalog, paymentTerm);
-		}
 
-		/// <summary>
-		/// Updates the row of the table "core.payment_terms" with an instance of "PaymentTerm" class against the primary key value.
-		/// </summary>
-		/// <param name="paymentTerm">The instance of "PaymentTerm" class to update.</param>
-		/// <param name="paymentTermId">The value of the column "payment_term_id" which will be updated.</param>
+            return Factory.Insert(this.Catalog, paymentTerm);
+        }
+
+        /// <summary>
+        /// Inserts or updates multiple instances of PaymentTerm class on the database table "core.payment_terms";
+        /// </summary>
+        /// <param name="paymentTerms">List of "PaymentTerm" class to import.</param>
+        /// <returns></returns>
+        public List<object> BulkImport(List<MixERP.Net.Entities.Core.PaymentTerm> paymentTerms)
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                }
+
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to import entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. {paymentTerms}", this.LoginId, paymentTerms);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var result = new List<object>();
+            int line = 0;
+            try
+            {
+                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                {
+                    using (Transaction transaction = db.GetTransaction())
+                    {
+                        foreach (var paymentTerm in paymentTerms)
+                        {
+                            line++;
+
+                            paymentTerm.AuditUserId = this.UserId;
+                            paymentTerm.AuditTs = System.DateTime.UtcNow;
+
+                            if (paymentTerm.PaymentTermId > 0)
+                            {
+                                result.Add(paymentTerm.PaymentTermId);
+                                db.Update(paymentTerm, paymentTerm.PaymentTermId);
+                            }
+                            else
+                            {
+                                result.Add(db.Insert(paymentTerm));
+                            }
+                        }
+
+                        transaction.Complete();
+                    }
+
+                    return result;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+
+                if (ex.Code.StartsWith("P"))
+                {
+                    errorMessage += Factory.GetDBErrorResource(ex);
+
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                errorMessage += ex.Message;
+                throw new MixERPException(errorMessage, ex);
+            }
+            catch (System.Exception ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+                throw new MixERPException(errorMessage, ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the row of the table "core.payment_terms" with an instance of "PaymentTerm" class against the primary key value.
+        /// </summary>
+        /// <param name="paymentTerm">The instance of "PaymentTerm" class to update.</param>
+        /// <param name="paymentTermId">The value of the column "payment_term_id" which will be updated.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Update(MixERP.Net.Entities.Core.PaymentTerm paymentTerm, int paymentTermId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Update(MixERP.Net.Entities.Core.PaymentTerm paymentTerm, int paymentTermId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -277,21 +442,21 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Update(this.Catalog, paymentTerm, paymentTermId);
-		}
 
-		/// <summary>
-		/// Deletes the row of the table "core.payment_terms" against the primary key value.
-		/// </summary>
-		/// <param name="paymentTermId">The value of the column "payment_term_id" which will be deleted.</param>
+            Factory.Update(this.Catalog, paymentTerm, paymentTermId);
+        }
+
+        /// <summary>
+        /// Deletes the row of the table "core.payment_terms" against the primary key value.
+        /// </summary>
+        /// <param name="paymentTermId">The value of the column "payment_term_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Delete(int paymentTermId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Delete(int paymentTermId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -305,22 +470,22 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "DELETE FROM core.payment_terms WHERE payment_term_id=@0;";
-			Factory.NonQuery(this.Catalog, sql, paymentTermId);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "core.payment_terms" producing a paged result of 25.
-		/// </summary>
-		/// <returns>Returns the first page of collection of "PaymentTerm" class.</returns>
+            const string sql = "DELETE FROM core.payment_terms WHERE payment_term_id=@0;";
+            Factory.NonQuery(this.Catalog, sql, paymentTermId);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "core.payment_terms" producing a paged result of 25.
+        /// </summary>
+        /// <returns>Returns the first page of collection of "PaymentTerm" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetPagedResult()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetPagedResult()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -334,23 +499,23 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM core.payment_terms ORDER BY payment_term_id LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "core.payment_terms" producing a paged result of 25.
-		/// </summary>
-		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
-		/// <returns>Returns collection of "PaymentTerm" class.</returns>
+            const string sql = "SELECT * FROM core.payment_terms ORDER BY payment_term_id LIMIT 25 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "core.payment_terms" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <returns>Returns collection of "PaymentTerm" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetPagedResult(long pageNumber)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetPagedResult(long pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -364,19 +529,57 @@ namespace MixERP.Net.Schemas.Core.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM core.payment_terms ORDER BY payment_term_id LIMIT 25 OFFSET @0;";
-				
-			return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, offset);
-		}
+
+            long offset = (pageNumber - 1) * 25;
+            const string sql = "SELECT * FROM core.payment_terms ORDER BY payment_term_id LIMIT 25 OFFSET @0;";
+
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, offset);
+        }
+
+        private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
+        {
+            const string sql = "SELECT * FROM core.filters WHERE object_name='core.payment_terms' AND lower(filter_name)=lower(@0);";
+            return Factory.Get<EntityParser.Filter>(catalog, sql, filterName).ToList();
+        }
 
         /// <summary>
-		/// Performs a filtered select statement on table "core.payment_terms" producing a paged result of 25.
+        /// Performs a filtered count on table "core.payment_terms".
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns number of rows of "PaymentTerm" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountWhere(List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.payment_terms WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.PaymentTerm(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "core.payment_terms" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
-		/// <returns>Returns collection of "PaymentTerm" class.</returns>
+        /// <returns>Returns collection of "PaymentTerm" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
@@ -410,7 +613,47 @@ namespace MixERP.Net.Schemas.Core.Data
             return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql);
         }
 
-        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> Get(int[] paymentTermIds)
+        /// <summary>
+        /// Performs a filtered count on table "core.payment_terms".
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns number of rows of "PaymentTerm" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountFiltered(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.payment_terms WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.PaymentTerm(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "core.payment_terms" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns collection of "PaymentTerm" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Core.PaymentTerm> GetFiltered(long pageNumber, string filterName)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
@@ -425,15 +668,24 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. paymentTermIds: {paymentTermIds}.", this.LoginId, paymentTermIds);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"PaymentTerm\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-			const string sql = "SELECT * FROM core.payment_terms WHERE payment_term_id IN (@0);";
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
 
-            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql, paymentTermIds);
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM core.payment_terms WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.PaymentTerm(), filters);
+
+            sql.OrderBy("payment_term_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Core.PaymentTerm>(this.Catalog, sql);
         }
 
-	}
+    }
 }

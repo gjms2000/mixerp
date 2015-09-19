@@ -108,6 +108,7 @@
     <Compile Include="DbGetAssociatedUnitsFromItemIdResult.cs" />
     <Compile Include="DbGetAssociatedUnitsResult.cs" />
     <Compile Include="DbGetCompoundItemDetailsResult.cs" />
+    <Compile Include="DbGetCustomFieldDefinitionResult.cs" />
     <Compile Include="DbGetWorkflowModelResult.cs" />
     <Compile Include="DefaultWidgetSetupView.cs" />
     <Compile Include="DiscountReceivedAccountSelectorView.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="ExchangeRateDetail.cs" />
     <Compile Include="ExpensesAccountSelectorView.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="FilterNameView.cs" />
     <Compile Include="FiscalYear.cs" />
     <Compile Include="FiscalYearScrudView.cs" />
     <Compile Include="FiscalYearSelectorView.cs" />

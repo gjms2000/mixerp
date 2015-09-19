@@ -4,13 +4,17 @@
     var scrudFactory = new Object();
     
     scrudFactory.title = "Employment Statuses";
-    scrudFactory.viewPocoName = "EmploymentStatus";
-    scrudFactory.formPocoName = "EmploymentStatus";
+
+    scrudFactory.viewAPI = "/api/hrm/employment-status";
+    scrudFactory.viewTableName = "hrm.employment_statuses";
+
+    scrudFactory.formAPI = "/api/hrm/employment-status";
     scrudFactory.formTableName = "hrm.employment_statuses";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "EmploymentStatusName";
 

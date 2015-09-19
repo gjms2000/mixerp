@@ -36,34 +36,39 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <summary>
         /// The schema of this view. Returns literal "config".
         /// </summary>
-	    public override string ObjectNamespace => "config";
+        public override string ObjectNamespace => "config";
 
         /// <summary>
         /// The schema unqualified name of this view. Returns literal "attachment_factory_scrud_view".
         /// </summary>
-	    public override string ObjectName => "attachment_factory_scrud_view";
+        public override string ObjectName => "attachment_factory_scrud_view";
 
         /// <summary>
         /// Login id of application user accessing this view.
         /// </summary>
-		public long LoginId { get; set; }
+        public long LoginId { get; set; }
+
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Performs SQL count on the view "config.attachment_factory_scrud_view".
-		/// </summary>
-		/// <returns>Returns the number of rows of the view "config.attachment_factory_scrud_view".</returns>
+        /// <summary>
+        /// Performs SQL count on the view "config.attachment_factory_scrud_view".
+        /// </summary>
+        /// <returns>Returns the number of rows of the view "config.attachment_factory_scrud_view".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public long Count()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return 0;
-			}
+        public long Count()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
 
             if (!this.SkipValidation)
             {
@@ -77,24 +82,24 @@ namespace MixERP.Net.Schemas.Config.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT COUNT(*) FROM config.attachment_factory_scrud_view;";
-			return Factory.Scalar<long>(this.Catalog, sql);
-		}
+
+            const string sql = "SELECT COUNT(*) FROM config.attachment_factory_scrud_view;";
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
 
 
 
-		/// <summary>
-		/// Performs a select statement on the view "config.attachment_factory_scrud_view" producing a paged result of 25.
-		/// </summary>
-		/// <returns>Returns the first page of collection of "AttachmentFactoryScrudView" class.</returns>
+        /// <summary>
+        /// Performs a select statement on the view "config.attachment_factory_scrud_view" producing a paged result of 25.
+        /// </summary>
+        /// <returns>Returns the first page of collection of "AttachmentFactoryScrudView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetPagedResult()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetPagedResult()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -108,23 +113,23 @@ namespace MixERP.Net.Schemas.Config.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM config.attachment_factory_scrud_view ORDER BY 1 LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Performs a select statement on the view "config.attachment_factory_scrud_view" producing a paged result of 25.
-		/// </summary>
-		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
-		/// <returns>Returns collection of "AttachmentFactoryScrudView" class.</returns>
+            const string sql = "SELECT * FROM config.attachment_factory_scrud_view ORDER BY 1 LIMIT 25 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a select statement on the view "config.attachment_factory_scrud_view" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <returns>Returns collection of "AttachmentFactoryScrudView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetPagedResult(long pageNumber)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetPagedResult(long pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -138,19 +143,57 @@ namespace MixERP.Net.Schemas.Config.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM config.attachment_factory_scrud_view ORDER BY 1 LIMIT 25 OFFSET @0;";
-				
-			return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql, offset);
-		}
+
+            long offset = (pageNumber - 1) * 25;
+            const string sql = "SELECT * FROM config.attachment_factory_scrud_view ORDER BY 1 LIMIT 25 OFFSET @0;";
+
+            return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql, offset);
+        }
+
+        private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
+        {
+            const string sql = "SELECT * FROM core.filters WHERE object_name='config.attachment_factory_scrud_view' AND lower(filter_name)=lower(@0);";
+            return Factory.Get<EntityParser.Filter>(catalog, sql, filterName).ToList();
+        }
 
         /// <summary>
-		/// Performs a filtered select statement on view "config.attachment_factory_scrud_view" producing a paged result of 25.
+        /// Performs a filtered count on view "config.attachment_factory_scrud_view".
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns number of rows of "AttachmentFactoryScrudView" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountWhere(List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"AttachmentFactoryScrudView\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.attachment_factory_scrud_view WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.AttachmentFactoryScrudView(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on view "config.attachment_factory_scrud_view" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
-		/// <returns>Returns collection of "AttachmentFactoryScrudView" class.</returns>
+        /// <returns>Returns collection of "AttachmentFactoryScrudView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
@@ -184,5 +227,79 @@ namespace MixERP.Net.Schemas.Config.Data
             return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql);
         }
 
-	}
+        /// <summary>
+        /// Performs a filtered count on view "config.attachment_factory_scrud_view".
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns number of rows of "AttachmentFactoryScrudView" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountFiltered(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"AttachmentFactoryScrudView\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.attachment_factory_scrud_view WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.AttachmentFactoryScrudView(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on view "config.attachment_factory_scrud_view" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns collection of "AttachmentFactoryScrudView" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Config.AttachmentFactoryScrudView> GetFiltered(long pageNumber, string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to Page #{Page} of the filtered entity \"AttachmentFactoryScrudView\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM config.attachment_factory_scrud_view WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.AttachmentFactoryScrudView(), filters);
+
+            sql.OrderBy("1");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Config.AttachmentFactoryScrudView>(this.Catalog, sql);
+        }
+
+    }
 }

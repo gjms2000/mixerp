@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
-	/// </summary>
-	public class CreateRecurringInvoicesProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
+    /// </summary>
+    public class CreateRecurringInvoicesProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "create_recurring_invoices";
+        public override string ObjectName => "create_recurring_invoices";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "pg_arg0" argument of the function "transactions.create_recurring_invoices".
-		/// </summary>
-		public long PgArg0 { get; set; }
+        /// <summary>
+        /// Maps to "pg_arg0" argument of the function "transactions.create_recurring_invoices".
+        /// </summary>
+        public long PgArg0 { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
-		/// </summary>
-		public CreateRecurringInvoicesProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
+        /// </summary>
+        public CreateRecurringInvoicesProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
-		/// </summary>
-		/// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "transactions.create_recurring_invoices".</param>
-		public CreateRecurringInvoicesProcedure(long pgArg0)
-		{
-			this.PgArg0 = pgArg0;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.create_recurring_invoices".
-		/// </summary>
-		public void Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CreateRecurringInvoicesProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.create_recurring_invoices(@0::bigint);";
-			Factory.NonQuery(this.Catalog, query, this.PgArg0);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.create_recurring_invoices(pg_arg0 bigint)" on the database.
+        /// </summary>
+        /// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "transactions.create_recurring_invoices".</param>
+        public CreateRecurringInvoicesProcedure(long pgArg0)
+        {
+            this.PgArg0 = pgArg0;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.create_recurring_invoices".
+        /// </summary>
+        public void Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CreateRecurringInvoicesProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.create_recurring_invoices(@0::bigint);";
+            Factory.NonQuery(this.Catalog, query, this.PgArg0);
+        }
+    }
 }

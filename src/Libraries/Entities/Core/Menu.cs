@@ -22,41 +22,41 @@ using System;
 
 namespace MixERP.Net.Entities.Core
 {
-    [PrimaryKey("menu_id", autoIncrement=true)]
+    [PrimaryKey("menu_id", autoIncrement = true)]
     [TableName("core.menus")]
     [ExplicitColumns]
     public sealed class Menu : PetaPocoDB.Record<Menu>, IPoco
     {
         [Column("menu_id")]
-        [ColumnDbType("int4", 0, false, "nextval('core.menus_menu_id_seq'::regclass)")] 
+        [ColumnDbType("int4", 0, false, "nextval('core.menus_menu_id_seq'::regclass)")]
         public int MenuId { get; set; }
-    
+
         [Column("menu_text")]
-        [ColumnDbType("varchar", 250, false, "")] 
+        [ColumnDbType("varchar", 250, false, "")]
         public string MenuText { get; set; }
-    
+
         [Column("url")]
-        [ColumnDbType("varchar", 250, true, "")] 
+        [ColumnDbType("varchar", 250, true, "")]
         public string Url { get; set; }
-    
+
         [Column("menu_code")]
-        [ColumnDbType("varchar", 12, false, "")] 
+        [ColumnDbType("varchar", 12, false, "")]
         public string MenuCode { get; set; }
-    
+
         [Column("level")]
-        [ColumnDbType("int2", 0, false, "")] 
+        [ColumnDbType("int2", 0, false, "")]
         public short Level { get; set; }
-    
+
         [Column("parent_menu_id")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? ParentMenuId { get; set; }
-    
+
         [Column("audit_user_id")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? AuditUserId { get; set; }
-    
+
         [Column("audit_ts")]
-        [ColumnDbType("timestamptz", 0, true, "")] 
+        [ColumnDbType("timestamptz", 0, true, "")]
         public DateTime? AuditTs { get; set; }
     }
 }

@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
-	/// </summary>
-	public class IsCashEquivalentProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
+    /// </summary>
+    public class IsCashEquivalentProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "is_cash_equivalent";
+        public override string ObjectName => "is_cash_equivalent";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_account_id" argument of the function "core.is_cash_equivalent".
-		/// </summary>
-		public long AccountId { get; set; }
+        /// <summary>
+        /// Maps to "_account_id" argument of the function "core.is_cash_equivalent".
+        /// </summary>
+        public long AccountId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
-		/// </summary>
-		public IsCashEquivalentProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
+        /// </summary>
+        public IsCashEquivalentProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
-		/// </summary>
-		/// <param name="accountId">Enter argument value for "_account_id" parameter of the function "core.is_cash_equivalent".</param>
-		public IsCashEquivalentProcedure(long accountId)
-		{
-			this.AccountId = accountId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.is_cash_equivalent".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"IsCashEquivalentProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.is_cash_equivalent(@0::bigint);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.AccountId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.is_cash_equivalent(_account_id bigint)" on the database.
+        /// </summary>
+        /// <param name="accountId">Enter argument value for "_account_id" parameter of the function "core.is_cash_equivalent".</param>
+        public IsCashEquivalentProcedure(long accountId)
+        {
+            this.AccountId = accountId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.is_cash_equivalent".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"IsCashEquivalentProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.is_cash_equivalent(@0::bigint);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.AccountId);
+        }
+    }
 }

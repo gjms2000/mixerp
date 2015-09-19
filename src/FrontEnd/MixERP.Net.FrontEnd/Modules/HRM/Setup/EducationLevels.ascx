@@ -4,13 +4,17 @@
 	var scrudFactory = new Object();
 
     scrudFactory.title = "Education Levels";
-    scrudFactory.viewPocoName = "EducationLevel";
-    scrudFactory.formPocoName = "EducationLevel";
+
+    scrudFactory.viewAPI = "/api/hrm/education-level";
+    scrudFactory.viewTableName = "hrm.education_levels";
+
+    scrudFactory.formAPI = "/api/hrm/education-level";
     scrudFactory.formTableName = "hrm.education_levels";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "EducationLevelName";
 </script>

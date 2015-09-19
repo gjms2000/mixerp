@@ -4,13 +4,17 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = window.Resources.Titles.EmployeeIdentificationDetails();
-    scrudFactory.viewPocoName = "EmployeeIdentificationDetailScrudView";
-    scrudFactory.formPocoName = "EmployeeIdentificationDetail";
+
+    scrudFactory.viewAPI = "/api/hrm/employee-identification-detail-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_identification_detail_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/employee-identification-detail";
     scrudFactory.formTableName = "hrm.employee_identification_details";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.back = {
         Title: "Employee",

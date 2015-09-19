@@ -24,73 +24,77 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
-	/// </summary>
-	public class GetTopSellingProductsByOfficeProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
+    /// </summary>
+    public class GetTopSellingProductsByOfficeProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_top_selling_products_by_office";
+        public override string ObjectName => "get_top_selling_products_by_office";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_office_id" argument of the function "transactions.get_top_selling_products_by_office".
-		/// </summary>
-		public int OfficeId { get; set; }
-		/// <summary>
-		/// Maps to "top" argument of the function "transactions.get_top_selling_products_by_office".
-		/// </summary>
-		public int Top { get; set; }
+        /// <summary>
+        /// Maps to "_office_id" argument of the function "transactions.get_top_selling_products_by_office".
+        /// </summary>
+        public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "top" argument of the function "transactions.get_top_selling_products_by_office".
+        /// </summary>
+        public int Top { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
-		/// </summary>
-		public GetTopSellingProductsByOfficeProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
+        /// </summary>
+        public GetTopSellingProductsByOfficeProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
-		/// </summary>
-		/// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.get_top_selling_products_by_office".</param>
-		/// <param name="top">Enter argument value for "top" parameter of the function "transactions.get_top_selling_products_by_office".</param>
-		public GetTopSellingProductsByOfficeProcedure(int officeId,int top)
-		{
-			this.OfficeId = officeId;
-			this.Top = top;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.get_top_selling_products_by_office".
-		/// </summary>
-		public IEnumerable<DbGetTopSellingProductsByOfficeResult> Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetTopSellingProductsByOfficeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.get_top_selling_products_by_office(@0::integer, @1::integer);";
-			return Factory.Get<DbGetTopSellingProductsByOfficeResult>(this.Catalog, query, this.OfficeId, this.Top);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_top_selling_products_by_office(_office_id integer, top integer)" on the database.
+        /// </summary>
+        /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.get_top_selling_products_by_office".</param>
+        /// <param name="top">Enter argument value for "top" parameter of the function "transactions.get_top_selling_products_by_office".</param>
+        public GetTopSellingProductsByOfficeProcedure(int officeId, int top)
+        {
+            this.OfficeId = officeId;
+            this.Top = top;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.get_top_selling_products_by_office".
+        /// </summary>
+        public IEnumerable<DbGetTopSellingProductsByOfficeResult> Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetTopSellingProductsByOfficeProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.get_top_selling_products_by_office(@0::integer, @1::integer);";
+            return Factory.Get<DbGetTopSellingProductsByOfficeResult>(this.Catalog, query, this.OfficeId, this.Top);
+        }
+    }
 }

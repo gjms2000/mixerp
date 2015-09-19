@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
-	/// </summary>
-	public class GetSalesTaxIdBySalesTaxCodeProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
+    /// </summary>
+    public class GetSalesTaxIdBySalesTaxCodeProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_sales_tax_id_by_sales_tax_code";
+        public override string ObjectName => "get_sales_tax_id_by_sales_tax_code";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_sales_tax_code" argument of the function "core.get_sales_tax_id_by_sales_tax_code".
-		/// </summary>
-		public string SalesTaxCode { get; set; }
+        /// <summary>
+        /// Maps to "_sales_tax_code" argument of the function "core.get_sales_tax_id_by_sales_tax_code".
+        /// </summary>
+        public string SalesTaxCode { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
-		/// </summary>
-		public GetSalesTaxIdBySalesTaxCodeProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
+        /// </summary>
+        public GetSalesTaxIdBySalesTaxCodeProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
-		/// </summary>
-		/// <param name="salesTaxCode">Enter argument value for "_sales_tax_code" parameter of the function "core.get_sales_tax_id_by_sales_tax_code".</param>
-		public GetSalesTaxIdBySalesTaxCodeProcedure(string salesTaxCode)
-		{
-			this.SalesTaxCode = salesTaxCode;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_sales_tax_id_by_sales_tax_code".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetSalesTaxIdBySalesTaxCodeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_sales_tax_id_by_sales_tax_code(@0::character varying);";
-			return Factory.Scalar<int>(this.Catalog, query, this.SalesTaxCode);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_sales_tax_id_by_sales_tax_code(_sales_tax_code character varying)" on the database.
+        /// </summary>
+        /// <param name="salesTaxCode">Enter argument value for "_sales_tax_code" parameter of the function "core.get_sales_tax_id_by_sales_tax_code".</param>
+        public GetSalesTaxIdBySalesTaxCodeProcedure(string salesTaxCode)
+        {
+            this.SalesTaxCode = salesTaxCode;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_sales_tax_id_by_sales_tax_code".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetSalesTaxIdBySalesTaxCodeProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_sales_tax_id_by_sales_tax_code(@0::character varying);";
+            return Factory.Scalar<int>(this.Catalog, query, this.SalesTaxCode);
+        }
+    }
 }

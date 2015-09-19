@@ -36,34 +36,39 @@ namespace MixERP.Net.Schemas.Office.Data
         /// <summary>
         /// The schema of this table. Returns literal "office".
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "counters".
         /// </summary>
-	    public override string ObjectName => "counters";
+        public override string ObjectName => "counters";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-		public long LoginId { get; set; }
+        public long LoginId { get; set; }
+
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Performs SQL count on the table "office.counters".
-		/// </summary>
-		/// <returns>Returns the number of rows of the table "office.counters".</returns>
+        /// <summary>
+        /// Performs SQL count on the table "office.counters".
+        /// </summary>
+        /// <returns>Returns the number of rows of the table "office.counters".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public long Count()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return 0;
-			}
+        public long Count()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
 
             if (!this.SkipValidation)
             {
@@ -77,23 +82,52 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT COUNT(*) FROM office.counters;";
-			return Factory.Scalar<long>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Executes a select query on the table "office.counters" with a where filter on the column "counter_id" to return a single instance of the "Counter" class. 
-		/// </summary>
-		/// <param name="counterId">The column "counter_id" parameter used on where filter.</param>
-		/// <returns>Returns a non-live, non-mapped instance of "Counter" class mapped to the database row.</returns>
+            const string sql = "SELECT COUNT(*) FROM office.counters;";
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "office.counters" to return a all instances of the "Counter" class to export. 
+        /// </summary>
+        /// <returns>Returns a non-live, non-mapped instances of "Counter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public MixERP.Net.Entities.Office.Counter Get(int counterId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> Get()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the export entity \"Counter\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM office.counters ORDER BY counter_id;";
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "office.counters" with a where filter on the column "counter_id" to return a single instance of the "Counter" class. 
+        /// </summary>
+        /// <param name="counterId">The column "counter_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped instance of "Counter" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public MixERP.Net.Entities.Office.Counter Get(int counterId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -107,10 +141,41 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM office.counters WHERE counter_id=@0;";
-			return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, counterId).FirstOrDefault();
-		}
+
+            const string sql = "SELECT * FROM office.counters WHERE counter_id=@0;";
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, counterId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Executes a select query on the table "office.counters" with a where filter on the column "counter_id" to return a multiple instances of the "Counter" class. 
+        /// </summary>
+        /// <param name="counterIds">Array of column "counter_id" parameter used on where filter.</param>
+        /// <returns>Returns a non-live, non-mapped collection of "Counter" class mapped to the database row.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> Get(int[] counterIds)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to entity \"Counter\" was denied to the user with Login ID {LoginId}. counterIds: {counterIds}.", this.LoginId, counterIds);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            const string sql = "SELECT * FROM office.counters WHERE counter_id IN (@0);";
+
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, counterIds);
+        }
 
         /// <summary>
         /// Custom fields are user defined form elements for office.counters.
@@ -119,10 +184,10 @@ namespace MixERP.Net.Schemas.Office.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -138,14 +203,14 @@ namespace MixERP.Net.Schemas.Office.Data
             }
 
             string sql;
-			if (string.IsNullOrWhiteSpace(resourceId))
+            if (string.IsNullOrWhiteSpace(resourceId))
             {
-				sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='office.counters' ORDER BY field_order;";
-				return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='office.counters' ORDER BY field_order;";
+                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('office.counters'::text, @0::text) ORDER BY field_order;";
-			return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -153,14 +218,14 @@ namespace MixERP.Net.Schemas.Office.Data
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table office.counters</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<DisplayField> GetDisplayFields()
-		{
-			List<DisplayField> displayFields = new List<DisplayField>();
+        public IEnumerable<DisplayField> GetDisplayFields()
+        {
+            List<DisplayField> displayFields = new List<DisplayField>();
 
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return displayFields;
-			}
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return displayFields;
+            }
 
             if (!this.SkipValidation)
             {
@@ -174,67 +239,93 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT counter_id AS key, counter_code || ' (' || counter_name || ')' as value FROM office.counters;";
-			using (NpgsqlCommand command = new NpgsqlCommand(sql))
-			{
-				using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
-				{
-					if (table?.Rows == null || table.Rows.Count == 0)
-					{
-						return displayFields;
-					}
 
-					foreach (DataRow row in table.Rows)
-					{
-						if (row != null)
-						{
-							DisplayField displayField = new DisplayField
-							{
-								Key = row["key"].ToString(),
-								Value = row["value"].ToString()
-							};
+            const string sql = "SELECT counter_id AS key, counter_code || ' (' || counter_name || ')' as value FROM office.counters;";
+            using (NpgsqlCommand command = new NpgsqlCommand(sql))
+            {
+                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                {
+                    if (table?.Rows == null || table.Rows.Count == 0)
+                    {
+                        return displayFields;
+                    }
 
-							displayFields.Add(displayField);
-						}
-					}
-				}
-			}
+                    foreach (DataRow row in table.Rows)
+                    {
+                        if (row != null)
+                        {
+                            DisplayField displayField = new DisplayField
+                            {
+                                Key = row["key"].ToString(),
+                                Value = row["value"].ToString()
+                            };
 
-			return displayFields;
-		}
+                            displayFields.Add(displayField);
+                        }
+                    }
+                }
+            }
 
-		/// <summary>
-		/// Inserts or updates the instance of Counter class on the database table "office.counters".
-		/// </summary>
-		/// <param name="counter">The instance of "Counter" class to insert or update.</param>
+            return displayFields;
+        }
+
+        /// <summary>
+        /// Inserts or updates the instance of Counter class on the database table "office.counters".
+        /// </summary>
+        /// <param name="counter">The instance of "Counter" class to insert or update.</param>
+        /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void AddOrEdit(MixERP.Net.Entities.Office.Counter counter)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void AddOrEdit(MixERP.Net.Entities.Office.Counter counter, List<EntityParser.CustomField> customFields)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
-			if(counter.CounterId > 0){
-				this.Update(counter, counter.CounterId);
-				return;
-			}
-	
-			this.Add(counter);
-		}
+            object primaryKeyValue;
 
-		/// <summary>
-		/// Inserts the instance of Counter class on the database table "office.counters".
-		/// </summary>
-		/// <param name="counter">The instance of "Counter" class to insert.</param>
+            counter.AuditUserId = this.UserId;
+            counter.AuditTs = System.DateTime.UtcNow;
+
+            if (counter.CounterId > 0)
+            {
+                primaryKeyValue = counter.CounterId;
+                this.Update(counter, counter.CounterId);
+            }
+            else
+            {
+                primaryKeyValue = this.Add(counter);
+            }
+
+            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM core.custom_field_setup " +
+                         "WHERE form_name=core.get_custom_field_form_name('office.counters')" +
+                         ");";
+
+            Factory.NonQuery(this.Catalog, sql);
+
+            foreach (var field in customFields)
+            {
+                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT core.get_custom_field_setup_id_by_table_name('office.counters', @0::character varying(100)), " +
+                      "@1, @2;";
+
+                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+            }
+        }
+
+        /// <summary>
+        /// Inserts the instance of Counter class on the database table "office.counters".
+        /// </summary>
+        /// <param name="counter">The instance of "Counter" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Add(MixERP.Net.Entities.Office.Counter counter)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public object Add(MixERP.Net.Entities.Office.Counter counter)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -248,22 +339,96 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Insert(this.Catalog, counter);
-		}
 
-		/// <summary>
-		/// Updates the row of the table "office.counters" with an instance of "Counter" class against the primary key value.
-		/// </summary>
-		/// <param name="counter">The instance of "Counter" class to update.</param>
-		/// <param name="counterId">The value of the column "counter_id" which will be updated.</param>
+            return Factory.Insert(this.Catalog, counter);
+        }
+
+        /// <summary>
+        /// Inserts or updates multiple instances of Counter class on the database table "office.counters";
+        /// </summary>
+        /// <param name="counters">List of "Counter" class to import.</param>
+        /// <returns></returns>
+        public List<object> BulkImport(List<MixERP.Net.Entities.Office.Counter> counters)
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                }
+
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to import entity \"Counter\" was denied to the user with Login ID {LoginId}. {counters}", this.LoginId, counters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var result = new List<object>();
+            int line = 0;
+            try
+            {
+                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                {
+                    using (Transaction transaction = db.GetTransaction())
+                    {
+                        foreach (var counter in counters)
+                        {
+                            line++;
+
+                            counter.AuditUserId = this.UserId;
+                            counter.AuditTs = System.DateTime.UtcNow;
+
+                            if (counter.CounterId > 0)
+                            {
+                                result.Add(counter.CounterId);
+                                db.Update(counter, counter.CounterId);
+                            }
+                            else
+                            {
+                                result.Add(db.Insert(counter));
+                            }
+                        }
+
+                        transaction.Complete();
+                    }
+
+                    return result;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+
+                if (ex.Code.StartsWith("P"))
+                {
+                    errorMessage += Factory.GetDBErrorResource(ex);
+
+                    throw new MixERPException(errorMessage, ex);
+                }
+
+                errorMessage += ex.Message;
+                throw new MixERPException(errorMessage, ex);
+            }
+            catch (System.Exception ex)
+            {
+                string errorMessage = $"Error on line {line} ";
+                throw new MixERPException(errorMessage, ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the row of the table "office.counters" with an instance of "Counter" class against the primary key value.
+        /// </summary>
+        /// <param name="counter">The instance of "Counter" class to update.</param>
+        /// <param name="counterId">The value of the column "counter_id" which will be updated.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Update(MixERP.Net.Entities.Office.Counter counter, int counterId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Update(MixERP.Net.Entities.Office.Counter counter, int counterId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -277,21 +442,21 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			Factory.Update(this.Catalog, counter, counterId);
-		}
 
-		/// <summary>
-		/// Deletes the row of the table "office.counters" against the primary key value.
-		/// </summary>
-		/// <param name="counterId">The value of the column "counter_id" which will be deleted.</param>
+            Factory.Update(this.Catalog, counter, counterId);
+        }
+
+        /// <summary>
+        /// Deletes the row of the table "office.counters" against the primary key value.
+        /// </summary>
+        /// <param name="counterId">The value of the column "counter_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public void Delete(int counterId)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return;
-			}
+        public void Delete(int counterId)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return;
+            }
 
             if (!this.SkipValidation)
             {
@@ -305,22 +470,22 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "DELETE FROM office.counters WHERE counter_id=@0;";
-			Factory.NonQuery(this.Catalog, sql, counterId);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "office.counters" producing a paged result of 25.
-		/// </summary>
-		/// <returns>Returns the first page of collection of "Counter" class.</returns>
+            const string sql = "DELETE FROM office.counters WHERE counter_id=@0;";
+            Factory.NonQuery(this.Catalog, sql, counterId);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "office.counters" producing a paged result of 25.
+        /// </summary>
+        /// <returns>Returns the first page of collection of "Counter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Office.Counter> GetPagedResult()
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> GetPagedResult()
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -334,23 +499,23 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			const string sql = "SELECT * FROM office.counters ORDER BY counter_id LIMIT 25 OFFSET 0;";
-			return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql);
-		}
 
-		/// <summary>
-		/// Performs a select statement on table "office.counters" producing a paged result of 25.
-		/// </summary>
-		/// <param name="pageNumber">Enter the page number to produce the paged result.</param>
-		/// <returns>Returns collection of "Counter" class.</returns>
+            const string sql = "SELECT * FROM office.counters ORDER BY counter_id LIMIT 25 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a select statement on table "office.counters" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <returns>Returns collection of "Counter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-		public IEnumerable<MixERP.Net.Entities.Office.Counter> GetPagedResult(long pageNumber)
-		{
-			if(string.IsNullOrWhiteSpace(this.Catalog))
-			{
-				return null;
-			}
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> GetPagedResult(long pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return null;
+            }
 
             if (!this.SkipValidation)
             {
@@ -364,19 +529,57 @@ namespace MixERP.Net.Schemas.Office.Data
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-	
-			long offset = (pageNumber -1) * 25;
-			const string sql = "SELECT * FROM office.counters ORDER BY counter_id LIMIT 25 OFFSET @0;";
-				
-			return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, offset);
-		}
+
+            long offset = (pageNumber - 1) * 25;
+            const string sql = "SELECT * FROM office.counters ORDER BY counter_id LIMIT 25 OFFSET @0;";
+
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, offset);
+        }
+
+        private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
+        {
+            const string sql = "SELECT * FROM core.filters WHERE object_name='office.counters' AND lower(filter_name)=lower(@0);";
+            return Factory.Get<EntityParser.Filter>(catalog, sql, filterName).ToList();
+        }
 
         /// <summary>
-		/// Performs a filtered select statement on table "office.counters" producing a paged result of 25.
+        /// Performs a filtered count on table "office.counters".
+        /// </summary>
+        /// <param name="filters">The list of filter conditions.</param>
+        /// <returns>Returns number of rows of "Counter" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountWhere(List<EntityParser.Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"Counter\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM office.counters WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Office.Counter(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "office.counters" producing a paged result of 25.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
-		/// <returns>Returns collection of "Counter" class.</returns>
+        /// <returns>Returns collection of "Counter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Office.Counter> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
@@ -410,7 +613,47 @@ namespace MixERP.Net.Schemas.Office.Data
             return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql);
         }
 
-        public IEnumerable<MixERP.Net.Entities.Office.Counter> Get(int[] counterIds)
+        /// <summary>
+        /// Performs a filtered count on table "office.counters".
+        /// </summary>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns number of rows of "Counter" class using the filter.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public long CountFiltered(string filterName)
+        {
+            if (string.IsNullOrWhiteSpace(this.Catalog))
+            {
+                return 0;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to count entity \"Counter\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM office.counters WHERE 1 = 1");
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Office.Counter(), filters);
+
+            return Factory.Scalar<long>(this.Catalog, sql);
+        }
+
+        /// <summary>
+        /// Performs a filtered select statement on table "office.counters" producing a paged result of 25.
+        /// </summary>
+        /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
+        /// <param name="filterName">The named filter.</param>
+        /// <returns>Returns collection of "Counter" class.</returns>
+        /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
+        public IEnumerable<MixERP.Net.Entities.Office.Counter> GetFiltered(long pageNumber, string filterName)
         {
             if (string.IsNullOrWhiteSpace(this.Catalog))
             {
@@ -425,15 +668,24 @@ namespace MixERP.Net.Schemas.Office.Data
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"Counter\" was denied to the user with Login ID {LoginId}. counterIds: {counterIds}.", this.LoginId, counterIds);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Counter\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-			const string sql = "SELECT * FROM office.counters WHERE counter_id IN (@0);";
+            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
 
-            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql, counterIds);
+            long offset = (pageNumber - 1) * 25;
+            Sql sql = Sql.Builder.Append("SELECT * FROM office.counters WHERE 1 = 1");
+
+            MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Office.Counter(), filters);
+
+            sql.OrderBy("counter_id");
+            sql.Append("LIMIT @0", 25);
+            sql.Append("OFFSET @0", offset);
+
+            return Factory.Get<MixERP.Net.Entities.Office.Counter>(this.Catalog, sql);
         }
 
-	}
+    }
 }

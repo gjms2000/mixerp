@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
-	/// </summary>
-	public class HasChildOfficesProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
+    /// </summary>
+    public class HasChildOfficesProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "has_child_offices";
+        public override string ObjectName => "has_child_offices";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_office_id" argument of the function "office.has_child_offices".
-		/// </summary>
-		public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "_office_id" argument of the function "office.has_child_offices".
+        /// </summary>
+        public int OfficeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
-		/// </summary>
-		public HasChildOfficesProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
+        /// </summary>
+        public HasChildOfficesProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
-		/// </summary>
-		/// <param name="officeId">Enter argument value for "_office_id" parameter of the function "office.has_child_offices".</param>
-		public HasChildOfficesProcedure(int officeId)
-		{
-			this.OfficeId = officeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.has_child_offices".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"HasChildOfficesProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.has_child_offices(@0::integer);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.OfficeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.has_child_offices(_office_id integer)" on the database.
+        /// </summary>
+        /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "office.has_child_offices".</param>
+        public HasChildOfficesProcedure(int officeId)
+        {
+            this.OfficeId = officeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.has_child_offices".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"HasChildOfficesProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.has_child_offices(@0::integer);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.OfficeId);
+        }
+    }
 }

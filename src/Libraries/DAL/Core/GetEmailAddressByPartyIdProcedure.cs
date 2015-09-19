@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
-	/// </summary>
-	public class GetEmailAddressByPartyIdProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
+    /// </summary>
+    public class GetEmailAddressByPartyIdProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_email_address_by_party_id";
+        public override string ObjectName => "get_email_address_by_party_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "pg_arg0" argument of the function "core.get_email_address_by_party_id".
-		/// </summary>
-		public long PgArg0 { get; set; }
+        /// <summary>
+        /// Maps to "pg_arg0" argument of the function "core.get_email_address_by_party_id".
+        /// </summary>
+        public long PgArg0 { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
-		/// </summary>
-		public GetEmailAddressByPartyIdProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
+        /// </summary>
+        public GetEmailAddressByPartyIdProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
-		/// </summary>
-		/// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "core.get_email_address_by_party_id".</param>
-		public GetEmailAddressByPartyIdProcedure(long pgArg0)
-		{
-			this.PgArg0 = pgArg0;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_email_address_by_party_id".
-		/// </summary>
-		public string Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetEmailAddressByPartyIdProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_email_address_by_party_id(@0::bigint);";
-			return Factory.Scalar<string>(this.Catalog, query, this.PgArg0);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_email_address_by_party_id(pg_arg0 bigint)" on the database.
+        /// </summary>
+        /// <param name="pgArg0">Enter argument value for "pg_arg0" parameter of the function "core.get_email_address_by_party_id".</param>
+        public GetEmailAddressByPartyIdProcedure(long pgArg0)
+        {
+            this.PgArg0 = pgArg0;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_email_address_by_party_id".
+        /// </summary>
+        public string Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetEmailAddressByPartyIdProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_email_address_by_party_id(@0::bigint);";
+            return Factory.Scalar<string>(this.Catalog, query, this.PgArg0);
+        }
+    }
 }

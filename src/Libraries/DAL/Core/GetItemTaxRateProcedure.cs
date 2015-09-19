@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
-	/// </summary>
-	public class GetItemTaxRateProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
+    /// </summary>
+    public class GetItemTaxRateProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_item_tax_rate";
+        public override string ObjectName => "get_item_tax_rate";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_item_id" argument of the function "core.get_item_tax_rate".
-		/// </summary>
-		public int ItemId { get; set; }
+        /// <summary>
+        /// Maps to "_item_id" argument of the function "core.get_item_tax_rate".
+        /// </summary>
+        public int ItemId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
-		/// </summary>
-		public GetItemTaxRateProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
+        /// </summary>
+        public GetItemTaxRateProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
-		/// </summary>
-		/// <param name="itemId">Enter argument value for "_item_id" parameter of the function "core.get_item_tax_rate".</param>
-		public GetItemTaxRateProcedure(int itemId)
-		{
-			this.ItemId = itemId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_item_tax_rate".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetItemTaxRateProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_item_tax_rate(@0::integer);";
-			return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_item_tax_rate(_item_id integer)" on the database.
+        /// </summary>
+        /// <param name="itemId">Enter argument value for "_item_id" parameter of the function "core.get_item_tax_rate".</param>
+        public GetItemTaxRateProcedure(int itemId)
+        {
+            this.ItemId = itemId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_item_tax_rate".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetItemTaxRateProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_item_tax_rate(@0::integer);";
+            return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId);
+        }
+    }
 }

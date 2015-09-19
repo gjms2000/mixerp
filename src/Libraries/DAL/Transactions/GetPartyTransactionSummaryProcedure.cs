@@ -24,73 +24,77 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
-	/// </summary>
-	public class GetPartyTransactionSummaryProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
+    /// </summary>
+    public class GetPartyTransactionSummaryProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_party_transaction_summary";
+        public override string ObjectName => "get_party_transaction_summary";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "office_id" argument of the function "transactions.get_party_transaction_summary".
-		/// </summary>
-		public int OfficeId { get; set; }
-		/// <summary>
-		/// Maps to "party_id" argument of the function "transactions.get_party_transaction_summary".
-		/// </summary>
-		public long PartyId { get; set; }
+        /// <summary>
+        /// Maps to "office_id" argument of the function "transactions.get_party_transaction_summary".
+        /// </summary>
+        public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "party_id" argument of the function "transactions.get_party_transaction_summary".
+        /// </summary>
+        public long PartyId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
-		/// </summary>
-		public GetPartyTransactionSummaryProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
+        /// </summary>
+        public GetPartyTransactionSummaryProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
-		/// </summary>
-		/// <param name="officeId">Enter argument value for "office_id" parameter of the function "transactions.get_party_transaction_summary".</param>
-		/// <param name="partyId">Enter argument value for "party_id" parameter of the function "transactions.get_party_transaction_summary".</param>
-		public GetPartyTransactionSummaryProcedure(int officeId,long partyId)
-		{
-			this.OfficeId = officeId;
-			this.PartyId = partyId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.get_party_transaction_summary".
-		/// </summary>
-		public IEnumerable<DbGetPartyTransactionSummaryResult> Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetPartyTransactionSummaryProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.get_party_transaction_summary(@0::integer, @1::bigint);";
-			return Factory.Get<DbGetPartyTransactionSummaryResult>(this.Catalog, query, this.OfficeId, this.PartyId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.get_party_transaction_summary(office_id integer, party_id bigint)" on the database.
+        /// </summary>
+        /// <param name="officeId">Enter argument value for "office_id" parameter of the function "transactions.get_party_transaction_summary".</param>
+        /// <param name="partyId">Enter argument value for "party_id" parameter of the function "transactions.get_party_transaction_summary".</param>
+        public GetPartyTransactionSummaryProcedure(int officeId, long partyId)
+        {
+            this.OfficeId = officeId;
+            this.PartyId = partyId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.get_party_transaction_summary".
+        /// </summary>
+        public IEnumerable<DbGetPartyTransactionSummaryResult> Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetPartyTransactionSummaryProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.get_party_transaction_summary(@0::integer, @1::bigint);";
+            return Factory.Get<DbGetPartyTransactionSummaryResult>(this.Catalog, query, this.OfficeId, this.PartyId);
+        }
+    }
 }

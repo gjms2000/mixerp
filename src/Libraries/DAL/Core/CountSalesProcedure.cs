@@ -24,79 +24,83 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
-	/// </summary>
-	public class CountSalesProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
+    /// </summary>
+    public class CountSalesProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "count_sales";
+        public override string ObjectName => "count_sales";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_item_id" argument of the function "core.count_sales".
-		/// </summary>
-		public int ItemId { get; set; }
-		/// <summary>
-		/// Maps to "_unit_id" argument of the function "core.count_sales".
-		/// </summary>
-		public int UnitId { get; set; }
-		/// <summary>
-		/// Maps to "_store_id" argument of the function "core.count_sales".
-		/// </summary>
-		public int StoreId { get; set; }
+        /// <summary>
+        /// Maps to "_item_id" argument of the function "core.count_sales".
+        /// </summary>
+        public int ItemId { get; set; }
+        /// <summary>
+        /// Maps to "_unit_id" argument of the function "core.count_sales".
+        /// </summary>
+        public int UnitId { get; set; }
+        /// <summary>
+        /// Maps to "_store_id" argument of the function "core.count_sales".
+        /// </summary>
+        public int StoreId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
-		/// </summary>
-		public CountSalesProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
+        /// </summary>
+        public CountSalesProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
-		/// </summary>
-		/// <param name="itemId">Enter argument value for "_item_id" parameter of the function "core.count_sales".</param>
-		/// <param name="unitId">Enter argument value for "_unit_id" parameter of the function "core.count_sales".</param>
-		/// <param name="storeId">Enter argument value for "_store_id" parameter of the function "core.count_sales".</param>
-		public CountSalesProcedure(int itemId,int unitId,int storeId)
-		{
-			this.ItemId = itemId;
-			this.UnitId = unitId;
-			this.StoreId = storeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.count_sales".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CountSalesProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.count_sales(@0::integer, @1::integer, @2::integer);";
-			return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.StoreId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.count_sales(_item_id integer, _unit_id integer, _store_id integer)" on the database.
+        /// </summary>
+        /// <param name="itemId">Enter argument value for "_item_id" parameter of the function "core.count_sales".</param>
+        /// <param name="unitId">Enter argument value for "_unit_id" parameter of the function "core.count_sales".</param>
+        /// <param name="storeId">Enter argument value for "_store_id" parameter of the function "core.count_sales".</param>
+        public CountSalesProcedure(int itemId, int unitId, int storeId)
+        {
+            this.ItemId = itemId;
+            this.UnitId = unitId;
+            this.StoreId = storeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.count_sales".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CountSalesProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.count_sales(@0::integer, @1::integer, @2::integer);";
+            return Factory.Scalar<decimal>(this.Catalog, query, this.ItemId, this.UnitId, this.StoreId);
+        }
+    }
 }

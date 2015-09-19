@@ -22,11 +22,14 @@
     var scrudFactory = new Object();
 
     scrudFactory.title = "My Leave Applications";
-    scrudFactory.viewPocoName = "LeaveApplicationScrudView";
-    scrudFactory.formPocoName = "LeaveApplication";
+
+    scrudFactory.viewAPI = "/api/hrm/leave-application-scrud-view";
+    scrudFactory.viewTableName = "hrm.leave_application_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/leave-application";
     scrudFactory.formTableName = "hrm.leave_applications";
 
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
     scrudFactory.hiddenColumns = ["EnteredBy", "AppliedOn", "EmployeeId"];
 
     scrudFactory.live = "EmployeeId";

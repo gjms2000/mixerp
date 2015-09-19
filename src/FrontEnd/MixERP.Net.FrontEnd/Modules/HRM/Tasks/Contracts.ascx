@@ -3,13 +3,17 @@
     var scrudFactory = new Object();
     
     scrudFactory.title = "Contracts";
-    scrudFactory.viewPocoName = "ContractScrudView";
-    scrudFactory.formPocoName = "Contract";
+
+    scrudFactory.viewAPI = "/api/hrm/contract-scrud-view";
+    scrudFactory.viewTableName = "hrm.contract_scrud_view";
+
+    scrudFactory.formAPI = "/api/hrm/contract";
     scrudFactory.formTableName = "hrm.contracts";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "EmployeeId";
 

@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
-	/// </summary>
-	public class GetCountySalesTaxRateProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
+    /// </summary>
+    public class GetCountySalesTaxRateProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_county_sales_tax_rate";
+        public override string ObjectName => "get_county_sales_tax_rate";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_county_sales_tax_id" argument of the function "core.get_county_sales_tax_rate".
-		/// </summary>
-		public int CountySalesTaxId { get; set; }
+        /// <summary>
+        /// Maps to "_county_sales_tax_id" argument of the function "core.get_county_sales_tax_rate".
+        /// </summary>
+        public int CountySalesTaxId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
-		/// </summary>
-		public GetCountySalesTaxRateProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
+        /// </summary>
+        public GetCountySalesTaxRateProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
-		/// </summary>
-		/// <param name="countySalesTaxId">Enter argument value for "_county_sales_tax_id" parameter of the function "core.get_county_sales_tax_rate".</param>
-		public GetCountySalesTaxRateProcedure(int countySalesTaxId)
-		{
-			this.CountySalesTaxId = countySalesTaxId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.get_county_sales_tax_rate".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetCountySalesTaxRateProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.get_county_sales_tax_rate(@0::integer);";
-			return Factory.Get<decimal>(this.Catalog, query, this.CountySalesTaxId).FirstOrDefault();
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.get_county_sales_tax_rate(_county_sales_tax_id integer)" on the database.
+        /// </summary>
+        /// <param name="countySalesTaxId">Enter argument value for "_county_sales_tax_id" parameter of the function "core.get_county_sales_tax_rate".</param>
+        public GetCountySalesTaxRateProcedure(int countySalesTaxId)
+        {
+            this.CountySalesTaxId = countySalesTaxId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.get_county_sales_tax_rate".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetCountySalesTaxRateProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.get_county_sales_tax_rate(@0::integer);";
+            return Factory.Get<decimal>(this.Catalog, query, this.CountySalesTaxId).FirstOrDefault();
+        }
+    }
 }

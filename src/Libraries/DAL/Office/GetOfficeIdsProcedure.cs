@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
-	/// </summary>
-	public class GetOfficeIdsProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
+    /// </summary>
+    public class GetOfficeIdsProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_office_ids";
+        public override string ObjectName => "get_office_ids";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "root_office_id" argument of the function "office.get_office_ids".
-		/// </summary>
-		public int RootOfficeId { get; set; }
+        /// <summary>
+        /// Maps to "root_office_id" argument of the function "office.get_office_ids".
+        /// </summary>
+        public int RootOfficeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
-		/// </summary>
-		public GetOfficeIdsProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
+        /// </summary>
+        public GetOfficeIdsProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
-		/// </summary>
-		/// <param name="rootOfficeId">Enter argument value for "root_office_id" parameter of the function "office.get_office_ids".</param>
-		public GetOfficeIdsProcedure(int rootOfficeId)
-		{
-			this.RootOfficeId = rootOfficeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.get_office_ids".
-		/// </summary>
-		public IEnumerable<int> Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetOfficeIdsProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.get_office_ids(@0::integer);";
-			return Factory.Get<int>(this.Catalog, query, this.RootOfficeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_office_ids(root_office_id integer)" on the database.
+        /// </summary>
+        /// <param name="rootOfficeId">Enter argument value for "root_office_id" parameter of the function "office.get_office_ids".</param>
+        public GetOfficeIdsProcedure(int rootOfficeId)
+        {
+            this.RootOfficeId = rootOfficeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.get_office_ids".
+        /// </summary>
+        public IEnumerable<int> Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetOfficeIdsProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.get_office_ids(@0::integer);";
+            return Factory.Get<int>(this.Catalog, query, this.RootOfficeId);
+        }
+    }
 }

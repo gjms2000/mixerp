@@ -10,7 +10,7 @@ namespace MixERP.Net.Framework
         CreateFilter = 5,
         DeleteFilter = 6,
         Export = 7,
-        ExportData = 9,
+        ExportData = 8,
         ImportData = 9,
         Execute = 10
     }

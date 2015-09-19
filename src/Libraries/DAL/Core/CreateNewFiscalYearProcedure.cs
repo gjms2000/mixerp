@@ -24,85 +24,89 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
-	/// </summary>
-	public class CreateNewFiscalYearProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
+    /// </summary>
+    public class CreateNewFiscalYearProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "create_new_fiscal_year";
+        public override string ObjectName => "create_new_fiscal_year";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_office_id" argument of the function "core.create_new_fiscal_year".
-		/// </summary>
-		public int OfficeId { get; set; }
-		/// <summary>
-		/// Maps to "_user_id" argument of the function "core.create_new_fiscal_year".
-		/// </summary>
-		public int UserId { get; set; }
-		/// <summary>
-		/// Maps to "_fiscal_year_code" argument of the function "core.create_new_fiscal_year".
-		/// </summary>
-		public string FiscalYearCode { get; set; }
-		/// <summary>
-		/// Maps to "_fiscal_year_name" argument of the function "core.create_new_fiscal_year".
-		/// </summary>
-		public string FiscalYearName { get; set; }
+        /// <summary>
+        /// Maps to "_office_id" argument of the function "core.create_new_fiscal_year".
+        /// </summary>
+        public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "_user_id" argument of the function "core.create_new_fiscal_year".
+        /// </summary>
+        public int UserId { get; set; }
+        /// <summary>
+        /// Maps to "_fiscal_year_code" argument of the function "core.create_new_fiscal_year".
+        /// </summary>
+        public string FiscalYearCode { get; set; }
+        /// <summary>
+        /// Maps to "_fiscal_year_name" argument of the function "core.create_new_fiscal_year".
+        /// </summary>
+        public string FiscalYearName { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
-		/// </summary>
-		public CreateNewFiscalYearProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
+        /// </summary>
+        public CreateNewFiscalYearProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
-		/// </summary>
-		/// <param name="officeId">Enter argument value for "_office_id" parameter of the function "core.create_new_fiscal_year".</param>
-		/// <param name="userId">Enter argument value for "_user_id" parameter of the function "core.create_new_fiscal_year".</param>
-		/// <param name="fiscalYearCode">Enter argument value for "_fiscal_year_code" parameter of the function "core.create_new_fiscal_year".</param>
-		/// <param name="fiscalYearName">Enter argument value for "_fiscal_year_name" parameter of the function "core.create_new_fiscal_year".</param>
-		public CreateNewFiscalYearProcedure(int officeId,int userId,string fiscalYearCode,string fiscalYearName)
-		{
-			this.OfficeId = officeId;
-			this.UserId = userId;
-			this.FiscalYearCode = fiscalYearCode;
-			this.FiscalYearName = fiscalYearName;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.create_new_fiscal_year".
-		/// </summary>
-		public void Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"CreateNewFiscalYearProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.create_new_fiscal_year(@0::integer, @1::integer, @2::character varying, @3::character varying);";
-			Factory.NonQuery(this.Catalog, query, this.OfficeId, this.UserId, this.FiscalYearCode, this.FiscalYearName);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.create_new_fiscal_year(_office_id integer, _user_id integer, _fiscal_year_code character varying, _fiscal_year_name character varying)" on the database.
+        /// </summary>
+        /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "core.create_new_fiscal_year".</param>
+        /// <param name="userId">Enter argument value for "_user_id" parameter of the function "core.create_new_fiscal_year".</param>
+        /// <param name="fiscalYearCode">Enter argument value for "_fiscal_year_code" parameter of the function "core.create_new_fiscal_year".</param>
+        /// <param name="fiscalYearName">Enter argument value for "_fiscal_year_name" parameter of the function "core.create_new_fiscal_year".</param>
+        public CreateNewFiscalYearProcedure(int officeId, int userId, string fiscalYearCode, string fiscalYearName)
+        {
+            this.OfficeId = officeId;
+            this.UserId = userId;
+            this.FiscalYearCode = fiscalYearCode;
+            this.FiscalYearName = fiscalYearName;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.create_new_fiscal_year".
+        /// </summary>
+        public void Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"CreateNewFiscalYearProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.create_new_fiscal_year(@0::integer, @1::integer, @2::character varying, @3::character varying);";
+            Factory.NonQuery(this.Catalog, query, this.OfficeId, this.UserId, this.FiscalYearCode, this.FiscalYearName);
+        }
+    }
 }

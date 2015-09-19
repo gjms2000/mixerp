@@ -24,73 +24,77 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Core.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
-	/// </summary>
-	public class ConvertUnitProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
+    /// </summary>
+    public class ConvertUnitProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "core";
+        public override string ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "convert_unit";
+        public override string ObjectName => "convert_unit";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "from_unit" argument of the function "core.convert_unit".
-		/// </summary>
-		public int FromUnit { get; set; }
-		/// <summary>
-		/// Maps to "to_unit" argument of the function "core.convert_unit".
-		/// </summary>
-		public int ToUnit { get; set; }
+        /// <summary>
+        /// Maps to "from_unit" argument of the function "core.convert_unit".
+        /// </summary>
+        public int FromUnit { get; set; }
+        /// <summary>
+        /// Maps to "to_unit" argument of the function "core.convert_unit".
+        /// </summary>
+        public int ToUnit { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
-		/// </summary>
-		public ConvertUnitProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
+        /// </summary>
+        public ConvertUnitProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
-		/// </summary>
-		/// <param name="fromUnit">Enter argument value for "from_unit" parameter of the function "core.convert_unit".</param>
-		/// <param name="toUnit">Enter argument value for "to_unit" parameter of the function "core.convert_unit".</param>
-		public ConvertUnitProcedure(int fromUnit,int toUnit)
-		{
-			this.FromUnit = fromUnit;
-			this.ToUnit = toUnit;
-		}
-		/// <summary>
-		/// Prepares and executes the function "core.convert_unit".
-		/// </summary>
-		public decimal Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"ConvertUnitProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM core.convert_unit(@0::integer, @1::integer);";
-			return Factory.Scalar<decimal>(this.Catalog, query, this.FromUnit, this.ToUnit);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "core.convert_unit(from_unit integer, to_unit integer)" on the database.
+        /// </summary>
+        /// <param name="fromUnit">Enter argument value for "from_unit" parameter of the function "core.convert_unit".</param>
+        /// <param name="toUnit">Enter argument value for "to_unit" parameter of the function "core.convert_unit".</param>
+        public ConvertUnitProcedure(int fromUnit, int toUnit)
+        {
+            this.FromUnit = fromUnit;
+            this.ToUnit = toUnit;
+        }
+        /// <summary>
+        /// Prepares and executes the function "core.convert_unit".
+        /// </summary>
+        public decimal Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"ConvertUnitProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM core.convert_unit(@0::integer, @1::integer);";
+            return Factory.Scalar<decimal>(this.Catalog, query, this.FromUnit, this.ToUnit);
+        }
+    }
 }

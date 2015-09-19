@@ -24,73 +24,77 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Transactions.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
-	/// </summary>
-	public class IsValidPartyByTransactionMasterIdProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
+    /// </summary>
+    public class IsValidPartyByTransactionMasterIdProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "transactions";
+        public override string ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "is_valid_party_by_transaction_master_id";
+        public override string ObjectName => "is_valid_party_by_transaction_master_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_transaction_master_id" argument of the function "transactions.is_valid_party_by_transaction_master_id".
-		/// </summary>
-		public long TransactionMasterId { get; set; }
-		/// <summary>
-		/// Maps to "_party_id" argument of the function "transactions.is_valid_party_by_transaction_master_id".
-		/// </summary>
-		public long PartyId { get; set; }
+        /// <summary>
+        /// Maps to "_transaction_master_id" argument of the function "transactions.is_valid_party_by_transaction_master_id".
+        /// </summary>
+        public long TransactionMasterId { get; set; }
+        /// <summary>
+        /// Maps to "_party_id" argument of the function "transactions.is_valid_party_by_transaction_master_id".
+        /// </summary>
+        public long PartyId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
-		/// </summary>
-		public IsValidPartyByTransactionMasterIdProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
+        /// </summary>
+        public IsValidPartyByTransactionMasterIdProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
-		/// </summary>
-		/// <param name="transactionMasterId">Enter argument value for "_transaction_master_id" parameter of the function "transactions.is_valid_party_by_transaction_master_id".</param>
-		/// <param name="partyId">Enter argument value for "_party_id" parameter of the function "transactions.is_valid_party_by_transaction_master_id".</param>
-		public IsValidPartyByTransactionMasterIdProcedure(long transactionMasterId,long partyId)
-		{
-			this.TransactionMasterId = transactionMasterId;
-			this.PartyId = partyId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "transactions.is_valid_party_by_transaction_master_id".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"IsValidPartyByTransactionMasterIdProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM transactions.is_valid_party_by_transaction_master_id(@0::bigint, @1::bigint);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.TransactionMasterId, this.PartyId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "transactions.is_valid_party_by_transaction_master_id(_transaction_master_id bigint, _party_id bigint)" on the database.
+        /// </summary>
+        /// <param name="transactionMasterId">Enter argument value for "_transaction_master_id" parameter of the function "transactions.is_valid_party_by_transaction_master_id".</param>
+        /// <param name="partyId">Enter argument value for "_party_id" parameter of the function "transactions.is_valid_party_by_transaction_master_id".</param>
+        public IsValidPartyByTransactionMasterIdProcedure(long transactionMasterId, long partyId)
+        {
+            this.TransactionMasterId = transactionMasterId;
+            this.PartyId = partyId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "transactions.is_valid_party_by_transaction_master_id".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"IsValidPartyByTransactionMasterIdProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM transactions.is_valid_party_by_transaction_master_id(@0::bigint, @1::bigint);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.TransactionMasterId, this.PartyId);
+        }
+    }
 }

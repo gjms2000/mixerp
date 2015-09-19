@@ -22,21 +22,21 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("salary_frequency_id", autoIncrement=false)]
+    [PrimaryKey("salary_frequency_id", autoIncrement = false)]
     [TableName("hrm.salary_frequencies")]
     [ExplicitColumns]
     public sealed class SalaryFrequency : PetaPocoDB.Record<SalaryFrequency>, IPoco
     {
         [Column("salary_frequency_id")]
-        [ColumnDbType("int4", 0, false, "")] 
+        [ColumnDbType("int4", 0, false, "")]
         public int SalaryFrequencyId { get; set; }
-    
+
         [Column("salary_frequency_name")]
-        [ColumnDbType("varchar", 128, false, "")] 
+        [ColumnDbType("varchar", 128, false, "")]
         public string SalaryFrequencyName { get; set; }
-    
+
         [Column("frequency_id")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? FrequencyId { get; set; }
     }
 }

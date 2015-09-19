@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Policy.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
-	/// </summary>
-	public class IsTransactionRestrictedProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
+    /// </summary>
+    public class IsTransactionRestrictedProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "policy";
+        public override string ObjectNamespace => "policy";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "is_transaction_restricted";
+        public override string ObjectName => "is_transaction_restricted";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_office_id" argument of the function "policy.is_transaction_restricted".
-		/// </summary>
-		public int OfficeId { get; set; }
+        /// <summary>
+        /// Maps to "_office_id" argument of the function "policy.is_transaction_restricted".
+        /// </summary>
+        public int OfficeId { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
-		/// </summary>
-		public IsTransactionRestrictedProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
+        /// </summary>
+        public IsTransactionRestrictedProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
-		/// </summary>
-		/// <param name="officeId">Enter argument value for "_office_id" parameter of the function "policy.is_transaction_restricted".</param>
-		public IsTransactionRestrictedProcedure(int officeId)
-		{
-			this.OfficeId = officeId;
-		}
-		/// <summary>
-		/// Prepares and executes the function "policy.is_transaction_restricted".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"IsTransactionRestrictedProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM policy.is_transaction_restricted(@0::integer);";
-			return Factory.Scalar<bool>(this.Catalog, query, this.OfficeId);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "policy.is_transaction_restricted(_office_id integer)" on the database.
+        /// </summary>
+        /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "policy.is_transaction_restricted".</param>
+        public IsTransactionRestrictedProcedure(int officeId)
+        {
+            this.OfficeId = officeId;
+        }
+        /// <summary>
+        /// Prepares and executes the function "policy.is_transaction_restricted".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"IsTransactionRestrictedProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM policy.is_transaction_restricted(@0::integer);";
+            return Factory.Scalar<bool>(this.Catalog, query, this.OfficeId);
+        }
+    }
 }

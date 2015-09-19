@@ -1,4 +1,4 @@
-﻿<div class="poco form factory" style="display: none;">
+﻿<div class="form factory" style="display: none;">
     <div class="ui stackable attached segment">
         <div class="ui grey huge header">
             <span class="title initial value"></span>
@@ -27,7 +27,7 @@
                     var selectedValue = "";
 
                     if (window.editData) {
-                        selectedValue = window.editData[el.attr("id")];
+                        selectedValue = window.editData[el.attr("data-property")];
                     };
 
                     if (this.url) {
@@ -40,13 +40,13 @@
     </script>
 
     <script>
-        var poco;
-        var cf;//custom fields
+        var metaInfo;
+        var metaCustomFields;//custom fields
         var saveButton = $("#SaveButton");
         var scrud = $("#scrud");
         var cancelButton = $("#CancelButton");
-        var form = $(".poco.form.factory");
-        var view = $(".poco.view.factory");
+        var form = $(".form.factory");
+        var view = $(".view.factory");
         var grid = [undefined, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
         var editData;
         var dropdownsLoaded = false;
@@ -156,17 +156,14 @@
                 return val;
             };
 
-            $.each(poco.Columns, function (i, v) {
-                var columnName = v.ColumnName;
-                var dataType = v.DataType;
-                var isSerial = v.IsSerial;
-                var value = getFormValue(columnName, dataType, isSerial);
+            $.each(metaInfo.Columns, function (i, v) {
+                var value = getFormValue(v.ColumnName, v.DataType, v.IsSerial);
 
-                entity[columnName] = value;
+                entity[v.PropertyName] = value;
             });
 
-            if (window.cf) {
-                $.each(window.cf, function (i, v) {
+            if (window.metaCustomFields) {
+                $.each(window.metaCustomFields, function (i, v) {
                     var dataType = getCustomFieldDataType(v);
                     var value = getFormValue(v.FieldName, dataType, false);
 
@@ -180,11 +177,10 @@
             };
 
 
+            var ajaxAddOrEdit = addOrEdit(entity, customFields);
 
-            var ajaxSaveOrUpdate = saveOrUpdate(scrudFactory.formPocoName, entity, customFields);
 
-
-            ajaxSaveOrUpdate.success(function (msg) {
+            ajaxAddOrEdit.success(function () {
                 saveButton.removeClass("loading");
                 var confirmed = confirm("Task completed successfully. Return to view?");
 
@@ -204,7 +200,7 @@
                 };
             });
 
-            ajaxSaveOrUpdate.fail(function (xhr) {
+            ajaxAddOrEdit.fail(function (xhr) {
                 var error = getAjaxErrorMessage(xhr);
 
                 saveButton.removeClass("loading");
@@ -241,7 +237,7 @@
         };
 
         function validate() {
-            var required = $(".poco.form.factory [required]:not(:disabled):not([readonly])");
+            var required = $(".form.factory [required]:not(:disabled):not([readonly])");
             required.trigger("blur");
 
             return form.find(".error").length === 1;
@@ -251,10 +247,8 @@
             return scrudFactory.formTableName.split(".")[0];
         };
 
-        function getCustomFields(pocoName) {
-            var apiName = pocoName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-
-            var url = "/api/" + getSchema() + "/" + apiName + "/custom-fields";
+        function getCustomFields() {            
+            var url = scrudFactory.formAPI + "/custom-fields";
             var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
 
             if (queryString) {
@@ -262,24 +256,34 @@
             };
 
             return getAjaxRequest(url);
+
+            //Todo: to remove
+            //var apiName = pocoName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
+            //var url = "/api/" + getSchema() + "/" + apiName + "/custom-fields";
+            //var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
+
+            //if (queryString) {
+            //    url += "/" + queryString;
+            //};
+
+            //return getAjaxRequest(url);
         };
 
-        function getFormView(pocoName) {
-            var url = "/Services/Modules/PocoService.asmx/GetFormView";
-            var data = appendParameter("", "pocoName", pocoName);
-
-            data = getData(data);
-            return getAjax(url, data);
+        function getFormView() {
+            var url = scrudFactory.formAPI + "/meta";
+            return getAjaxRequest(url);
         };
 
-        function saveOrUpdate(pocoName, pocoEntity, customFields) {
-            var url = "/Services/Modules/PocoService.asmx/SaveOrUpdate";
-            var data = appendParameter("", "pocoName", pocoName);
-            data = appendParameter(data, "pocoEntity", pocoEntity);
-            data = appendParameter(data, "customFields", customFields);
+        function addOrEdit(entity, customFields) {
+            var url = scrudFactory.formAPI + "/add-or-edit";
+            var form = [];
 
-            data = getData(data);
-            return getAjax(url, data);
+            form.push(entity);
+            form.push(customFields);
+
+            var data = JSON.stringify(form);
+            return getAjaxRequest(url, "PUT", data);
         };
 
     </script>
@@ -287,8 +291,8 @@
     <script>
 
         function showForm() {
-            var form = $(".poco.form.factory");
-            var view = $(".poco.view.factory");
+            var form = $(".form.factory");
+            var view = $(".view.factory");
 
             var defaultView = window.getQueryStringByName("View");
 
@@ -360,7 +364,7 @@
 
         function loadDropdowns() {
             if (!dropdownsLoaded) {
-                var dropdowns = $(".poco.form.factory select");
+                var dropdowns = $(".form.factory select");
 
                 dropdowns.each(function (i, v) {
                     var dropdown = $(v);
@@ -382,19 +386,18 @@
             };
         };
 
-        function createForm(pocoName) {
-            var ajaxGetFormView = getFormView(pocoName);
+        function createForm() {
+            var ajaxGetFormView = getFormView();
 
             ajaxGetFormView.success(function (msg) {
-                poco = msg.d;
-
-                createLayout(poco.Columns);
+                window.metaInfo = msg;
+                createLayout(msg.Columns);
 
                 if (getSchema()) {
-                    var ajaxGetCustomFields = getCustomFields(pocoName);
+                    var ajaxGetCustomFields = getCustomFields();
                     ajaxGetCustomFields.success(function (msg) {
-                        cf = msg;
-                        createCustomFields(cf);
+                        metaCustomFields = msg;
+                        createCustomFields(metaCustomFields);
                     });
                 };
             });
@@ -554,25 +557,20 @@
             var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
 
             if (!queryString) {
-                createForm(scrudFactory.formPocoName);
+                createForm();
                 return;
             };
 
-            function getViewForEdit(pocoName, primaryKeyValue) {
-                var url = "/Services/Modules/PocoService.asmx/GetViewForEdit";
-                var data = appendParameter("", "pocoName", pocoName);
-                data = appendParameter(data, "primaryKeyValue", primaryKeyValue);
-
-                data = getData(data);
-
-                return getAjax(url, data);
+            function getViewForEdit(primaryKeyValue) {
+                var url = scrudFactory.formAPI + "/" + primaryKeyValue;
+                return getAjaxRequest(url);
             };
 
-            var ajaxGetViewForEdit = getViewForEdit(scrudFactory.formPocoName, queryString);
+            var ajaxGetViewForEdit = getViewForEdit(queryString);
 
             ajaxGetViewForEdit.success(function (msg) {
-                editData = JSON.parse(msg.d);
-                createForm(scrudFactory.formPocoName);
+                editData = msg;
+                createForm();
             });
         };
 
@@ -582,7 +580,7 @@
                 $(this).parent().find("select").trigger("blur");
             });
 
-            $(".poco.form.factory [required]:not(:disabled):not([readonly])").blur(function () {
+            $(".form.factory [required]:not(:disabled):not([readonly])").blur(function () {
                 var el = $(this);
 
                 var val = el.val();
@@ -693,8 +691,8 @@
             var value = column.Value;
 
             if (window.editData) {
-                if (window.editData.hasOwnProperty(column.ColumnName)) {
-                    value = window.editData[column.ColumnName];
+                if (window.editData.hasOwnProperty(column.PropertyName)) {
+                    value = window.editData[column.PropertyName];
                 };
             };
 

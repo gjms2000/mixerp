@@ -24,67 +24,71 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Office.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
-	/// </summary>
-	public class GetDepartmentIdByDepartmentCodeProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
+    /// </summary>
+    public class GetDepartmentIdByDepartmentCodeProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "office";
+        public override string ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "get_department_id_by_department_code";
+        public override string ObjectName => "get_department_id_by_department_code";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		/// <summary>
-		/// Maps to "_department_code" argument of the function "office.get_department_id_by_department_code".
-		/// </summary>
-		public string DepartmentCode { get; set; }
+        /// <summary>
+        /// Maps to "_department_code" argument of the function "office.get_department_id_by_department_code".
+        /// </summary>
+        public string DepartmentCode { get; set; }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
-		/// </summary>
-		public GetDepartmentIdByDepartmentCodeProcedure()
-		{
-		}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
+        /// </summary>
+        public GetDepartmentIdByDepartmentCodeProcedure()
+        {
+        }
 
-		/// <summary>
-		/// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
-		/// </summary>
-		/// <param name="departmentCode">Enter argument value for "_department_code" parameter of the function "office.get_department_id_by_department_code".</param>
-		public GetDepartmentIdByDepartmentCodeProcedure(string departmentCode)
-		{
-			this.DepartmentCode = departmentCode;
-		}
-		/// <summary>
-		/// Prepares and executes the function "office.get_department_id_by_department_code".
-		/// </summary>
-		public int Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"GetDepartmentIdByDepartmentCodeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM office.get_department_id_by_department_code(@0::text);";
-			return Factory.Scalar<int>(this.Catalog, query, this.DepartmentCode);
-		} 
-	}
+        /// <summary>
+        /// Prepares, validates, and executes the function "office.get_department_id_by_department_code(_department_code text)" on the database.
+        /// </summary>
+        /// <param name="departmentCode">Enter argument value for "_department_code" parameter of the function "office.get_department_id_by_department_code".</param>
+        public GetDepartmentIdByDepartmentCodeProcedure(string departmentCode)
+        {
+            this.DepartmentCode = departmentCode;
+        }
+        /// <summary>
+        /// Prepares and executes the function "office.get_department_id_by_department_code".
+        /// </summary>
+        public int Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"GetDepartmentIdByDepartmentCodeProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM office.get_department_id_by_department_code(@0::text);";
+            return Factory.Scalar<int>(this.Catalog, query, this.DepartmentCode);
+        }
+    }
 }

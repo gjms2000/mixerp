@@ -4,13 +4,16 @@
 
     scrudFactory.title = "Wages Setups";
     
-    scrudFactory.viewPocoName = "WagesSetup";
-    scrudFactory.formPocoName = "WagesSetup";
+    scrudFactory.viewAPI = "/api/hrm/wages-setup";
+    scrudFactory.viewTableName = "hrm.wages_setup";
+
+    scrudFactory.formAPI = "/api/hrm/wages-setup";
     scrudFactory.formTableName = "hrm.wages_setup";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "WagesSetupName";
 

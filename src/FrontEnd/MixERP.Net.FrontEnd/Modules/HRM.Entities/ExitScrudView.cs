@@ -22,41 +22,41 @@ using System;
 
 namespace MixERP.Net.Entities.HRM
 {
-    [PrimaryKey("", autoIncrement=false)]
+    [PrimaryKey("", autoIncrement = false)]
     [TableName("hrm.exit_scrud_view")]
     [ExplicitColumns]
     public sealed class ExitScrudView : PetaPocoDB.Record<ExitScrudView>, IPoco
     {
         [Column("exit_id")]
-        [ColumnDbType("int8", 0, true, "")] 
+        [ColumnDbType("int8", 0, true, "")]
         public long? ExitId { get; set; }
-    
+
         [Column("employee_id")]
-        [ColumnDbType("int4", 0, true, "")] 
+        [ColumnDbType("int4", 0, true, "")]
         public int? EmployeeId { get; set; }
-    
+
         [Column("employee_name")]
-        [ColumnDbType("varchar", 160, true, "")] 
+        [ColumnDbType("varchar", 160, true, "")]
         public string EmployeeName { get; set; }
-    
+
         [Column("reason")]
-        [ColumnDbType("varchar", 128, true, "")] 
+        [ColumnDbType("varchar", 128, true, "")]
         public string Reason { get; set; }
-    
+
         [Column("employment_status_code")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string EmploymentStatusCode { get; set; }
-    
+
         [Column("exit_type")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string ExitType { get; set; }
-    
+
         [Column("details")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string Details { get; set; }
-    
+
         [Column("exit_interview_details")]
-        [ColumnDbType("text", 0, true, "")] 
+        [ColumnDbType("text", 0, true, "")]
         public string ExitInterviewDetails { get; set; }
     }
 }

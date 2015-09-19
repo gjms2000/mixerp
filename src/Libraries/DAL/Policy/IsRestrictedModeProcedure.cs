@@ -24,54 +24,58 @@ using System.Collections.Generic;
 using System.Linq;
 namespace MixERP.Net.Schemas.Policy.Data
 {
-	/// <summary>
-	/// Prepares, validates, and executes the function "policy.is_restricted_mode()" on the database.
-	/// </summary>
-	public class IsRestrictedModeProcedure: DbAccess
-	{
+    /// <summary>
+    /// Prepares, validates, and executes the function "policy.is_restricted_mode()" on the database.
+    /// </summary>
+    public class IsRestrictedModeProcedure : DbAccess
+    {
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectNamespace => "policy";
+        public override string ObjectNamespace => "policy";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-	    public override string ObjectName => "is_restricted_mode";
+        public override string ObjectName => "is_restricted_mode";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
-		public long LoginId { get; set; }
+        public long _LoginId { get; set; }
+        /// <summary>
+        /// User id of application user accessing this table.
+        /// </summary>
+        public int _UserId { get; set; }
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
         public string Catalog { get; set; }
 
-		
-		/// <summary>
-		/// Prepares, validates, and executes the function "policy.is_restricted_mode()" on the database.
-		/// </summary>
-		public IsRestrictedModeProcedure()
-		{
-		}
-		/// <summary>
-		/// Prepares and executes the function "policy.is_restricted_mode".
-		/// </summary>
-		public bool Execute()
-		{
-			if (!this.SkipValidation)
-			{
-				if (!this.Validated)
-				{
-					this.Validate(AccessTypeEnum.Execute, this.LoginId, false);
-				}
-				if (!this.HasAccess)
-				{
-                    Log.Information("Access to the function \"IsRestrictedModeProcedure\" was denied to the user with Login ID {LoginId}.", this.LoginId);
-					throw new UnauthorizedException("Access is denied.");
-				}
-			}
-			const string query = "SELECT * FROM policy.is_restricted_mode();";
-			return Factory.Scalar<bool>(this.Catalog, query);
-		} 
-	}
+
+        /// <summary>
+        /// Prepares, validates, and executes the function "policy.is_restricted_mode()" on the database.
+        /// </summary>
+        public IsRestrictedModeProcedure()
+        {
+        }
+        /// <summary>
+        /// Prepares and executes the function "policy.is_restricted_mode".
+        /// </summary>
+        public bool Execute()
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Execute, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to the function \"IsRestrictedModeProcedure\" was denied to the user with Login ID {LoginId}.", this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+            const string query = "SELECT * FROM policy.is_restricted_mode();";
+            return Factory.Scalar<bool>(this.Catalog, query);
+        }
+    }
 }

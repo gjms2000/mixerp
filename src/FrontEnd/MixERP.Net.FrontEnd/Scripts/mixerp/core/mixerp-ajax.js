@@ -244,7 +244,24 @@ var getAjaxErrorMessage = function (xhr) {
         var err;
 
         try {
-            err = JSON.parse(xhr.responseText).Message;
+            if (xhr.statusText) {
+                err = xhr.statusText;
+            };
+
+            if (xhr.responseText) {
+                var response = JSON.parse(xhr.responseText);
+
+                if (response) {
+                    if (response.Message) {
+                        err = response.Message;
+                    };
+
+                    if (response.ExceptionMessage) {
+                        err = response.ExceptionMessage;
+                    };
+
+                };
+            };
         } catch (e) {
             err = xhr.responseText.Message;
         }
