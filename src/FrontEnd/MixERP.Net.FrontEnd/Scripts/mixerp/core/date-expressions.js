@@ -53,7 +53,7 @@ function loadDatepicker() {
     if (typeof (datepickerNumberOfMonths) === "undefined") { datepickerNumberOfMonths = ""; }
     if (typeof (language) === "undefined") { language = ""; }
 
-    $(".date:not([readonly]), input[type=date]:not([readonly])").datepicker(
+    $("input.date:not([readonly]), input[type=date]:not([readonly])").datepicker(
     {
         dateFormat: datepickerFormat,
         showWeek: datepickerShowWeekNumber,

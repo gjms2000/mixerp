@@ -5,8 +5,8 @@
 
     scrudFactory.title = "Setup Wages";
 
-    scrudFactory.viewAPI = "/api/hrm/employee-wages-scrud-view";
-    scrudFactory.viewTableName = "hrm.employee_wages_scrud_view";
+    scrudFactory.viewAPI = "/api/hrm/employee-wage-scrud-view";
+    scrudFactory.viewTableName = "hrm.employee_wage_scrud_view";
 
     scrudFactory.formAPI = "/api/hrm/employee-wage";
     scrudFactory.formTableName = "hrm.employee_wages";

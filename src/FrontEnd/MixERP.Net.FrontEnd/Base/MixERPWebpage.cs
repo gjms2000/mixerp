@@ -179,7 +179,9 @@ namespace MixERP.Net.FrontEnd.Base
             {
                 if (!string.IsNullOrWhiteSpace(menu?.Url))
                 {
-                    if (menu.Url.Replace("~", "").ToUpperInvariant().Equals(this.currentPage.ToUpperInvariant()))
+                    var menuUrl = this.ResolveUrl(menu.Url).Split('?')[0];
+
+                    if (menuUrl.ToUpperInvariant().Equals(this.currentPage.ToUpperInvariant()))
                     {
                         policyExists = true;
                         break;

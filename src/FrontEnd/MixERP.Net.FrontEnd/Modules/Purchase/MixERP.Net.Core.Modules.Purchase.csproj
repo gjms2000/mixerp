@@ -127,8 +127,6 @@
     <Content Include="Scripts\Entry\Return.js" />
     <Content Include="Services\Entry\Return.asmx" />
     <Content Include="Services\Entry\Reorder.asmx" />
-    <Content Include="SQL\Menu.sql" />
-    <Content Include="SQL\Module.sql" />
     <Content Include="Services\Entry\DirectPurchase.asmx" />
     <Content Include="Services\Entry\GRN.asmx" />
     <Content Include="Services\Entry\Order.asmx" />

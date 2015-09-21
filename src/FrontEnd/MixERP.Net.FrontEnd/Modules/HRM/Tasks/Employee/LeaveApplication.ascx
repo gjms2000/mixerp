@@ -16,6 +16,11 @@
 
     scrudFactory.live = "EmployeeId";
 
+    scrudFactory.back = {
+        Title: "Employee",
+        Url: "/Modules/HRM/Tasks/EmployeeInfo.mix?EmployeeId=" + getQueryStringByName("EmployeeId")
+    };
+
     scrudFactory.layout = [
         ["LeaveApplicationId", "LeaveTypeId", "", ""],
         ["StartDate", "EndDate", "", ""],

@@ -24,19 +24,19 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
     scrudFactory.title = window.Resources.Titles.CostCenters();
 
-    scrudFactory.viewPocoName = "CostCenterScrudView";
-    scrudFactory.formPocoName = "CostCenter";
+    scrudFactory.viewAPI = "/api/office/cost-center-scrud-view";
+    scrudFactory.viewTableName = "office.cost_center_scrud_view";
 
+    scrudFactory.formAPI = "/api/office/cost-center";
     scrudFactory.formTableName = "office.cost_centers";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
 
     scrudFactory.live = "CostCenterName";
     scrudFactory.queryStringKey = "AccountId";
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
-
-
 </script>
 
 <div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>

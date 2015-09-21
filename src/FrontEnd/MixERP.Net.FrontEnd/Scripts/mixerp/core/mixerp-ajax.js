@@ -276,8 +276,10 @@ var getAjaxErrorMessage = function (xhr) {
     return "";
 };
 
-function getAjaxColumnFilter(columnName, filterCondition, filtervalue, andValue) {
+function getAjaxColumnFilter(statement, columnName, filterCondition, filtervalue, andValue) {
     var filter = new Object();
+
+    filter.FilterStatement = (statement || "WHERE");
     filter.ColumnName = columnName;
     filter.FilterCondition = filterCondition;
     filter.FilterValue = filtervalue;
@@ -286,8 +288,10 @@ function getAjaxColumnFilter(columnName, filterCondition, filtervalue, andValue)
     return filter;
 };
 
-function getAjaxPropertyFilter(propertyName, filterCondition, filtervalue, andValue) {
+function getAjaxPropertyFilter(statement, propertyName, filterCondition, filtervalue, andValue) {
     var filter = new Object();
+
+    filter.FilterStatement = (statement || "WHERE");
     filter.PropertyName = propertyName;
     filter.FilterCondition = filterCondition;
     filter.FilterValue = filtervalue;

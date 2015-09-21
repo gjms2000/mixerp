@@ -112,39 +112,47 @@ namespace MixERP.Net.EntityParser.Data
                     continue;
                 }
 
+                var statement = filter.FilterStatement;
+
+                if (statement == null || statement.ToUpperInvariant() != "OR")
+                {
+                    statement = "AND";
+                }
+
+                statement += " ";
 
                 switch ((FilterCondition) filter.FilterCondition)
                 {
                     case FilterCondition.IsEqualTo:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " = @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " = @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsNotEqualTo:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " != @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " != @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsLessThan:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " < @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " < @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsLessThanEqualTo:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " <= @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " <= @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsGreaterThan:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " > @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " > @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsGreaterThanEqualTo:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " >= @0", filter.FilterValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " >= @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsBetween:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
                         break;
                     case FilterCondition.IsNotBetween:
-                        sql.Append("AND " + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
                         break;
                     case FilterCondition.IsLike:
-                        sql.Append("AND lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0",
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0",
                             "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                     case FilterCondition.IsNotLike:
-                        sql.Append("AND lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0",
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0",
                             "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                 }

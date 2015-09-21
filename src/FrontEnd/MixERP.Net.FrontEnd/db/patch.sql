@@ -21,7 +21,7 @@ LANGUAGE plpgsql;
 
 DO
 $$
-BEGIN
+BEGIN    
     IF NOT EXISTS (
         SELECT 1 
         FROM   pg_catalog.pg_class c
@@ -37,6 +37,7 @@ BEGIN
             filter_name                     text NOT NULL,
             is_default                      boolean NOT NULL DEFAULT(false),
             is_default_admin                boolean NOT NULL DEFAULT(false),
+            filter_statement                national character varying(12) NOT NULL DEFAULT('WHERE'),
             column_name                     text NOT NULL,
             filter_condition                integer NOT NULL,
             filter_value                    text,
@@ -316,6 +317,123 @@ $$
 LANGUAGE plpgsql;
 
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'kanbans'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.kanbans
+        (
+            kanban_id                               BIGSERIAL NOT NULL PRIMARY KEY,
+            object_name                             national character varying(128) NOT NULL,
+            user_id                                 integer NOT NULL REFERENCES office.users(user_id),
+            kanban_name                             national character varying(128) NOT NULL,
+            description                             text,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'kanban_details'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.kanban_details
+        (
+            kanban_detail_id                        BIGSERIAL NOT NULL PRIMARY KEY,
+            kanban_id                               bigint NOT NULL REFERENCES core.kanbans(kanban_id),
+            rating                                  smallint CHECK(rating>=0 AND rating<=5),
+            resource_id                             national character varying(128) NOT NULL,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+        
+        CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
+        ON core.kanban_details(kanban_id, resource_id);
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.filters'::regclass
+        AND    attname = 'filter_statement'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.filters
+        ADD COLUMN filter_statement national character varying(12) NOT NULL DEFAULT('WHERE');    
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_kanban.sql --<--<--
+DROP FUNCTION IF EXISTS core.create_kanban
+(
+    _object_name                        national character varying(128),
+    _user_id                            integer,
+    _kanban_name                        national character varying(128),
+    _description                        text
+);
+
+CREATE FUNCTION core.create_kanban
+(
+    _object_name                        national character varying(128),
+    _user_id                            integer,
+    _kanban_name                        national character varying(128),
+    _description                        text = ''
+)
+RETURNS void
+AS
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT 1 FROM core.kanbans
+        WHERE object_name = _object_name
+        AND user_id = _user_id
+        AND kanban_name = _kanban_name
+    ) THEN
+        UPDATE core.kanbans
+        SET description = _description
+        WHERE object_name = _object_name
+        AND user_id = _user_id
+        AND _kanban_name = _kanban_name;
+
+        RETURN;
+    END IF;
+
+    INSERT INTO core.kanbans(object_name, user_id, kanban_name, description)
+    SELECT _object_name, _user_id, _kanban_name, _description;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_menu_locale.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu_locale
@@ -21527,6 +21645,18 @@ INNER JOIN core.custom_fields
 ON core.custom_fields.custom_field_setup_id = core.custom_field_setup.custom_field_setup_id
 ORDER BY field_order;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.filter_name_view.sql --<--<--
+DROP VIEW IF EXISTS core.filter_name_view;
+
+CREATE VIEW core.filter_name_view
+AS
+SELECT
+    DISTINCT
+    object_name,
+    filter_name,
+    is_default
+FROM core.filters;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/05.views/core/core.flag_view.sql --<--<--
 DROP VIEW IF EXISTS core.flag_view;

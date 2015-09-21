@@ -606,3 +606,20 @@ select optgroup {
 .ng-hide {
   display: none !important;
 }
+.kanban.container {
+  overflow: auto;
+}
+.kanban.segments .ui.segment {
+  width: 300px !important;
+  min-height: 700px;
+  padding: 8px;
+}
+.kanban .card {
+  cursor: pointer;
+}
+.kanban.segments .ui.segment:nth-child(odd) {
+  background-color: #F5F5ED !important;
+}
+.kanban.segments .ui.segment:nth-child(even) {
+  background-color: #F2F2DC !important;
+}

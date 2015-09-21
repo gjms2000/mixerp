@@ -22,15 +22,16 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     var scrudFactory = new Object();
     scrudFactory.title = window.Resources.Titles.MerchantFeeSetup();
 
-    scrudFactory.viewPocoName = "MerchantFeeSetupScrudView";
-    scrudFactory.formPocoName = "MerchantFeeSetup";
+    scrudFactory.viewAPI = "/api/core/merchant-fee-setup-scrud-view";
+    scrudFactory.viewTableName = "core.merchant_fee_setup_scrud_view";
 
+    scrudFactory.formAPI = "/api/core/merchant-fee-setup";
     scrudFactory.formTableName = "core.merchant_fee_setup";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.keys = [
         {

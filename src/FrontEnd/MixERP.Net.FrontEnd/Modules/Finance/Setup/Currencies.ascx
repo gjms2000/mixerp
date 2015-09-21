@@ -23,13 +23,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
 
     scrudFactory.title = Resources.Titles.Currencies();
-    scrudFactory.viewPocoName = "CurrencyScrudView";
-    scrudFactory.formPocoName = "Currency";
+
+    scrudFactory.viewAPI = "/api/core/currency-scrud-view";
+    scrudFactory.viewTableName = "core.currency_scrud_view";
+
+    scrudFactory.formAPI = "/api/core/currency";
     scrudFactory.formTableName = "core.currencies";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "CurrencyName";
 </script>

@@ -2,7 +2,7 @@
 SELECT * FROM core.recreate_menu('HRM', '~/Modules/HRM/Index.mix', 'HRM', 0, NULL);
 SELECT * FROM core.recreate_menu('Tasks', NULL, 'HRMTA', 1, core.get_menu_id('HRM'));
 SELECT * FROM core.recreate_menu('Attendance', '~/Modules/HRM/Tasks/Attendance.mix', 'ATTNDCE', 2, core.get_menu_id('HRMTA'));
-SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix', 'EMPL', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix?View=kanban', 'EMPL', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Contracts', '~/Modules/HRM/Tasks/Contracts.mix', 'CTRCT', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Leave Application', '~/Modules/HRM/Tasks/LeaveApplication.mix', 'LEVAPP', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Resignation', '~/Modules/HRM/Tasks/Resignation.mix', 'RESIGN', 2, core.get_menu_id('HRMTA'));

@@ -305,6 +305,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
 
             Factory.NonQuery(this.Catalog, sql);
 
+            if (customFields == null)
+            {
+                return;
+            }
+
             foreach (var field in customFields)
             {
                 sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +

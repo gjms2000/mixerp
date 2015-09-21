@@ -59,7 +59,7 @@
         };
 
         var filters = [];
-        filters.push(window.getAjaxColumnFilter("identification_type_code", window.FilterConditions.IsEqualTo, value));
+        filters.push(window.getAjaxColumnFilter("WHERE", "identification_type_code", window.FilterConditions.IsEqualTo, value));
 
         var ajaxIdentificationTypeExpires = identificationTypeExpires(filters);
 
@@ -92,8 +92,8 @@
     };
 
     var filters = [];
-    filters.push(window.getAjaxColumnFilter("first_name", window.FilterConditions.IsLike, "s"));
-    filters.push(window.getAjaxColumnFilter("party_type", window.FilterConditions.IsLike, "Customer"));
+    filters.push(window.getAjaxColumnFilter("WHERE", "first_name", window.FilterConditions.IsLike, "s"));
+    filters.push(window.getAjaxColumnFilter("AND", "party_type", window.FilterConditions.IsLike, "Customer"));
 
 
     var getPartiesAjax = getParties(filters);

@@ -314,6 +314,8 @@
     <Compile Include="ItemType.cs" />
     <Compile Include="ItemTypeScrudView.cs" />
     <Compile Include="ItemView.cs" />
+    <Compile Include="Kanban.cs" />
+    <Compile Include="KanbanDetail.cs" />
     <Compile Include="LateFee.cs" />
     <Compile Include="LateFeeAccountSelectorView.cs" />
     <Compile Include="LateFeeScrudView.cs" />

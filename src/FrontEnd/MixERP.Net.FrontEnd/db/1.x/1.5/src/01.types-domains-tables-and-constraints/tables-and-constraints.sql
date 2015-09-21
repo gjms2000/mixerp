@@ -20,7 +20,7 @@ LANGUAGE plpgsql;
 
 DO
 $$
-BEGIN
+BEGIN    
     IF NOT EXISTS (
         SELECT 1 
         FROM   pg_catalog.pg_class c
@@ -36,6 +36,7 @@ BEGIN
             filter_name                     text NOT NULL,
             is_default                      boolean NOT NULL DEFAULT(false),
             is_default_admin                boolean NOT NULL DEFAULT(false),
+            filter_statement                national character varying(12) NOT NULL DEFAULT('WHERE'),
             column_name                     text NOT NULL,
             filter_condition                integer NOT NULL,
             filter_value                    text,
@@ -314,3 +315,78 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'kanbans'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.kanbans
+        (
+            kanban_id                               BIGSERIAL NOT NULL PRIMARY KEY,
+            object_name                             national character varying(128) NOT NULL,
+            user_id                                 integer NOT NULL REFERENCES office.users(user_id),
+            kanban_name                             national character varying(128) NOT NULL,
+            description                             text,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM   pg_catalog.pg_class c
+        JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        WHERE  n.nspname = 'core'
+        AND    c.relname = 'kanban_details'
+        AND    c.relkind = 'r'
+    ) THEN
+        CREATE TABLE core.kanban_details
+        (
+            kanban_detail_id                        BIGSERIAL NOT NULL PRIMARY KEY,
+            kanban_id                               bigint NOT NULL REFERENCES core.kanbans(kanban_id),
+            rating                                  smallint CHECK(rating>=0 AND rating<=5),
+            resource_id                             national character varying(128) NOT NULL,
+            audit_user_id                           integer NULL REFERENCES office.users(user_id),
+            audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                                    DEFAULT(NOW())    
+        );
+        
+        CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
+        ON core.kanban_details(kanban_id, resource_id);
+    END IF;    
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.filters'::regclass
+        AND    attname = 'filter_statement'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.filters
+        ADD COLUMN filter_statement national character varying(12) NOT NULL DEFAULT('WHERE');    
+    END IF;
+END
+$$
+LANGUAGE plpgsql;

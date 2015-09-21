@@ -22,13 +22,18 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
 
     scrudFactory.title = Resources.Titles.AgeingSlabs();
-    scrudFactory.viewPocoName = "AgeingSlabScrudView";
-    scrudFactory.formPocoName = "AgeingSlab";
+
+    scrudFactory.viewAPI = "/api/core/ageing-slab-scrud-view";
+    scrudFactory.viewTableName = "core.ageing_slab_scrud_view";
+
+    scrudFactory.formAPI = "/api/core/ageing-slab";
     scrudFactory.formTableName = "core.ageing_slabs";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
 
     scrudFactory.live = "AgeingSlabName";

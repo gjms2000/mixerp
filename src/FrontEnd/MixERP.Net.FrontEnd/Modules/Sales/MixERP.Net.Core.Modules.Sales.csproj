@@ -178,8 +178,6 @@
     <Content Include="Services\Receipt\Accounts.asmx" />
     <Content Include="Services\Receipt\Currencies.asmx" />
     <Content Include="Services\Receipt\TransactionPosting.asmx" />
-    <Content Include="SQL\Menu.sql" />
-    <Content Include="SQL\Module.sql" />
     <Content Include="Setup\BonusSlabDetails.ascx" />
     <Content Include="Setup\BonusSlabs.ascx" />
     <Content Include="Setup\Salespersons.ascx" />

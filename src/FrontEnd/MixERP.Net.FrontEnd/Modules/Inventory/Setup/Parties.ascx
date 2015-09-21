@@ -18,5 +18,128 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 --%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PartiesPopup.ascx.designer.cs"
     Inherits="MixERP.Net.Core.Modules.Inventory.Setup.PartiesPopup" %>
-<script src="https://raw.githubusercontent.com/davidjbradshaw/iframe-resizer/master/js/iframeResizer.min.js"></script>
-<iframe src="PartiesPopup.mix" style="border: 0; width: 100%; height: 100%;" scrolling="no" seamless="seamless"></iframe>
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = Resources.Titles.Parties();
+
+    scrudFactory.viewAPI = "/api/core/party-view";
+    scrudFactory.viewTableName = "core.party_scrud_view";
+
+    scrudFactory.formAPI = "/api/core/party";
+    scrudFactory.formTableName = "core.parties";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.readonlyColumns = ["PartyName"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+    scrudFactory.viewUrl = "EmployeeInfo.mix?EmployeeId={Key}";
+
+    scrudFactory.live = "EmployeeName";
+    scrudFactory.layout = [
+        ["Photo", ""],
+        ["EmployeeId", "EmployeeName", "", ""],
+        ["FirstName", "MiddleName", "LastName", "GenderCode", "", "", "", ""]
+    ];
+
+    scrudFactory.returnUrl = "../Employees.mix";
+    scrudFactory.queryStringKey = "EmployeeId";
+    scrudFactory.keys = [
+        {
+            property: "GenderCode",
+            url: '/api/core/gender/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "OfficeId",
+            url: '/api/office/office/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "UserId",
+            url: '/api/office/user/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "EmployeeTypeId",
+            url: '/api/hrm/employee-type/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentDepartmentId",
+            url: '/api/office/department/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentRoleId",
+            url: '/api/office/role/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentEmploymentStatusId",
+            url: '/api/hrm/employment-status/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentJobTitleId",
+            url: '/api/hrm/job-title/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentPayGradeId",
+            url: '/api/hrm/pay-grade/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CurrentShiftId",
+            url: '/api/hrm/shift/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "NationalityCode",
+            url: '/api/core/nationality/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "CountryId",
+            url: '/api/core/country/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "StateId",
+            url: '/api/core/state/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+</script>
+
+<div data-ng-include="'/Views/Modules/ViewFactory.html'"></div>
+<div data-ng-include="'/Views/Modules/FormFactory.html'"></div>

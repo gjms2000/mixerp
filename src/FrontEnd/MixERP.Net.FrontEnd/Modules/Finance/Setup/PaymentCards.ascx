@@ -22,17 +22,19 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
     var scrudFactory = new Object();
     scrudFactory.title = window.Resources.Titles.PaymentCards();
 
-    scrudFactory.viewPocoName = "PaymentCardScrudView";
-    scrudFactory.formPocoName = "PaymentCard";
+    scrudFactory.viewAPI = "/api/core/payment-card-scrud-view";
+    scrudFactory.viewTableName = "core.payment_card_scrud_view";
 
+    scrudFactory.formAPI = "/api/core/payment-card";
     scrudFactory.formTableName = "core.payment_cards";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
 
     scrudFactory.live = "PaymentCardName";
     scrudFactory.queryStringKey = "AccountId";
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.layout = [
         ["PaymentCardId", ""],

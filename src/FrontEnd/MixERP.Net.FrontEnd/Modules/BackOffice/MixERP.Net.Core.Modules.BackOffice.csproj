@@ -187,8 +187,6 @@
     <Content Include="Roles.ascx" />
     <Content Include="Services\Attachments.asmx" />
     <Content Include="Services\TaxData.asmx" />
-    <Content Include="SQL\Module.sql" />
-    <Content Include="SQL\Menu.sql" />
     <Content Include="States.ascx" />
     <Content Include="Tax\CountySalesTaxes.ascx" />
     <Content Include="Tax\SalesTaxDetails.ascx" />

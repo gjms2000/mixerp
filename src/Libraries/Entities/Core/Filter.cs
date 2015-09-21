@@ -47,6 +47,10 @@ namespace MixERP.Net.Entities.Core
         [ColumnDbType("bool", 0, false, "false")]
         public bool IsDefaultAdmin { get; set; }
 
+        [Column("filter_statement")]
+        [ColumnDbType("varchar", 12, false, "WHERE")]
+        public string FilterStatement { get; set; }
+
         [Column("column_name")]
         [ColumnDbType("text", 0, false, "")]
         public string ColumnName { get; set; }

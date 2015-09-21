@@ -1,199 +1,298 @@
+<script src="/Scripts/JSLINQ.js"></script>
+<script src="/Scripts/inflection-js/inflection.js"></script>
+<style>
+    .kanban.container {
+        overflow: scroll;
+    }
+
+    .kanban.segments .ui.segment {
+        max-width: 300px !important;
+        min-height: 700px;
+        padding: 8px;
+    }
+
+    .kanban .card {
+        cursor: pointer;
+    }
+
+    .kanban.segments .ui.segment:nth-child(odd) {
+        background-color: #FAFAFA !important;
+    }
+
+    .kanban.segments .ui.segment:nth-child(even) {
+        background-color: #F9F9F9 !important;
+    }
+
+    .kanban.holder {
+        height: 100%;
+    }
+</style>
+
 <div class="view factory">
-    <div id="FlagPopUnder" class="ui initially hidden form segment" style="width:400px;z-index:3; position: absolute;">
-        <h3 class="panel-title">Flag This Transaction</h3>
-        <div>You can mark this transaction with a flag, however you will not be able to see the flags created by other users.</div>
+
+    <div id="FlagPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
+        <div class="ui grey header">Flag This Transaction</div>
+        <div>You can mark this item with a flag, however you will not be able to see the flags created by other users.</div>
         <p>Select a flag.</p>
 
         <select id="FlagSelect" class="ui fluid search dropdown selection"></select>
 
         <p class="ui buttons tpad8">
             <input id="UpdateButton" value="Update" class="green small ui button" type="button" />
-            <input onclick="$('#FlagPopUnder').fadeOut(1000);" class="red small ui button" value="Close" type="button">
+            <input onclick="$('#FlagPopUnder').fadeOut(500);" class="red small ui button" value="Close" type="button">
         </p>
     </div>
 
-    <div class="ui stackable attached segment">
-        <div class="title ui huge grey header"></div>
-        <div class="ui info description message" style="display: none;"></div>
+    <div id="FilterPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
+        <div class="ui grey header">Select a Filter</div>
+        <select class="ui fluid filter" id="DefaultFilterSelect"></select>
+        <p class="ui action buttons tpad8">
+            <a href="javascript:void(0);" onclick="$('#FilterPopUnder').fadeOut(500);" class="green small ui button" data-target="filter">Create New</a>
+            <input onclick="$('#FilterPopUnder').fadeOut(500);" class="red small ui button" value="Close" type="button">
+        </p>
     </div>
 
-    <div class="ui stackable attached segment">
-        <script src="/Scripts/underscore/underscore-min.js"></script>
 
 
-        <div class="ui stackable grid">
-            <div class="twelve wide column">
-                <div class="ui basic buttons">
-                    <a id="AddNewButton" class="ui basic button">Add New</a>
-                    <a id="FlagButton" class="ui basic button">Flag</a>
-                    <div class="ui icon top left pointing dropdown basic button" id="ExportDropDown">
-                        <span>Export This Document</span>
-                        <div class="menu">
-                            <div class="header">
-                                Export This Document
-                            </div>
-                            <a class="item" href="javascript:void(0);" onclick="createDoc();">
-                                <i class="file word outline blue icon"></i>
-                                To Word Document
-                            </a>
-                            <a class="item" href="javascript:void(0);" onclick="createXls();">
-                                <i class="file excel outline green icon"></i>
-                                To Excel Document
-                            </a>
-                            <a class="item" href="javascript:void(0);" onclick="createPDF();">
-                                <i class="file pdf outline red icon"></i>
-                                To PDF Document
-                            </a>
-                        </div>
-                    </div>
-                    <a id="PrintButton" href="javascript:void(0);" onclick="print()" class="ui basic button">Print</a>
-
-
-                </div>
-            </div>
-            <div class="right aligned four wide column">
-                <select class="ui fluid filter" id="DefaultFilterSelect"></select>
-            </div>
+    <div class="ui stackable grid">
+        <div class="ui left floated ten wide column">
+            <div class="title ui huge grey header"></div>
+            <div id="description" style="display: none;"></div>
+        </div>
+        <div class="ui right floated six wide column">
         </div>
     </div>
 
-    <div class="ui stackable attached segment">
-        <div class="ui top attached tabular menu">
-            <a class="active item" data-tab="view" onclick="changeTab(this)">View</a>
-            <a class="item" data-tab="filter" onclick="changeTab(this)">Saved Filters</a>
-            <a class="item" data-tab="import" onclick="changeTab(this)">Data Import</a>
+
+
+
+    <script src="/Scripts/underscore/underscore-min.js"></script>
+
+    <div id="KanbanForm" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="ui grey header">
+            Add a Kanban List
         </div>
-
-        <div class="ui active bottom attached tab loading segment" data-tab="view">
-            <div id="json" class="vpad8" style="width: 100%; overflow: auto;">
-            </div>
-            <div class="ui divider"></div>
-            <div class="ui stackable grid">
-                <div class="left aligned six wide column">
-                    <div class="ui breadcrumb">
-                        <a class="section" id="CurrentPageAnchor"></a>
-                        <div class="divider">/ </div>
-                        <a class="section" id="TotalPagesAnchor"></a>
-                    </div>
-                </div>
-                <div class="right aligned ten wide column">
-                    <a class="ui left attached labeled icon button" id="PreviousButton"><i class="left arrow icon"></i>Previous</a>
-                    <a class="ui right attached right labeled icon button" id="NextButton">Next<i class="right arrow icon"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui bottom attached hidden tab segment" data-tab="filter">
-            <div class="ui huge header">
-                Filter:
-                <span id="FilterName">
-                </span>
-            </div>
-            <div class="ui divider"></div>
-
-            <div class="ui stackable form" id="FilterForm">
-                <div class="five fields">
-                    <div class="field">
-                        <label>Select a Column</label>
-                        <select class="ui search dropdown" id="ColumnSelect" required></select>
-                    </div>
-                    <div class="field">
-                        <label>Filter Condition</label>
-                        <select class="ui search dropdown" id="FilterConditionSelect" required></select>
-                    </div>
-                    <div class="field">
-                        <label>Value</label>
-                        <input id="ValueInputText" required />
-                    </div>
-                    <div class="field">
-                        <label>And</label>
-                        <input id="AndInputText" readonly="readonly" />
-                    </div>
-                    <div class="field">
-                        <label>&nbsp;</label>
-                        <input class="ui button" id="AddFilterButton" type="button" value="Add">
-                    </div>
-                </div>
-            </div>
-
-            <table class="ui striped table" id="FilterTable">
-                <thead>
-                    <tr>
-                        <th style="width: 100px;">Actions</th>
-                        <th>Column Name</th>
-                        <th>Condition</th>
-                        <th>Value</th>
-                        <th>And</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div class="ui large header">Save this Filter</div>
-            <div class="ui divider"></div>
+        <div class="content">
             <div class="ui form">
-                <div class="fields">
-                    <div class="four wide field">
-                        <label>Filter Name</label>
-                        <input id="FilterNameInputText" />
-                    </div>
+                <div class="field">
+                    <label>Kanban Id</label>
+                    <input type="text" readonly id="KanbanIdInputText" />
                 </div>
-                <div class="ui basic buttons">
-                    <div class="ui basic button" id="SaveFilterButton">Save</div>
-                    <div class="ui basic button" id="ManageFiltersButton">Manage Filters</div>
-                    <div class="ui basic button">Cancel</div>
+                <div class="field">
+                    <label>Kanban Name</label>
+                    <input type="text" id="KanbanNameInputText" />
                 </div>
-            </div>
-
-            <div class="ui filter small modal">
-                <i class="close icon"></i>
-                <div class="ui huge header">
-                    Manage Filters
-                </div>
-                <div class="content">
-                    <div class="ui form" style="max-width: 400px;">
-                        <div class="field">
-                            <label>Select a Filter</label>
-                            <select class="ui search dropdown filter" id="FilterSelect"></select>
-                        </div>
-                        <div class="ui basic buttons">
-                            <a class="ui close button" onclick="loadFilter();">Edit</a>
-                            <a class="ui close button" onclick="loadFilter();">Delete</a>
-                            <a class="ui close button">Close</a>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="actions">
-                    <div class="ui basic buttons">
-                        <a class="ui basic close button">Remove User Defaults</a>
-                        <a class="ui basic button" id="MakeUserDefaultFilterButton">Default (For Users)</a>
-                    </div>
+                <div class="field">
+                    <label>Description</label>
+                    <textarea id="KanbanDescriptionTextArea"></textarea>
                 </div>
             </div>
         </div>
-
-        <div class="ui bottom attached hidden tab segment" data-tab="import">
-            <div class="ui huge header">Data Import</div>
-
+        <div class="actions">
             <div class="ui basic buttons">
-                <a class="ui basic button" id="DownloadTemplateButton">Export Data</a>
-                <div class="ui basic button">
-                    <label for="file">Import Data</label>
-                    <input type="file" id="file" style="display:none;">
+                <div class="ui cancel button">Cancel</div>
+                <a href="javascript:void(0);" class="ui button" onclick="saveOrUpdateKanban();">OK</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui stackable grid">
+        <div class="twelve wide column">
+            <div class="ui basic buttons">
+                <a id="AddNewButton" class="ui basic button">
+                    Add New
+                </a>
+                <a id="FlagButton" class="ui basic button">
+                    Flag
+                </a>
+                <a class="ui basic button" id="FilterButton">
+                    Filter
+                </a>
+                <div class="ui icon top left pointing dropdown basic button" id="ExportDropDown">
+                    <span>Export</span>
+                    <div class="menu">
+                        <div class="header">
+                            Export This Document
+                        </div>
+                        <a class="item" href="javascript:void(0);" onclick="createDoc();">
+                            <i class="file word outline blue icon"></i>
+                            To Word Document
+                        </a>
+                        <a class="item" href="javascript:void(0);" onclick="createXls();">
+                            <i class="file excel outline green icon"></i>
+                            To Excel Document
+                        </a>
+                        <a class="item" href="javascript:void(0);" onclick="createPDF();">
+                            <i class="file pdf outline red icon"></i>
+                            To PDF Document
+                        </a>
+                    </div>
+                </div>
+                <a id="PrintButton" href="javascript:void(0);" onclick="print()" class="ui basic button">
+                    Print
+                </a>
+            </div>
+        </div>
+        <div class="right aligned four wide column">
+            <div class="ui small basic icon action buttons">
+                <a class="ui basic button" data-target="import" title="Import">
+                    <i class="upload layout icon"></i>
+                </a>
+                <a class="ui basic button" data-target="filter" title="Manage Filters">
+                    <i class="icons">
+                        <i class="filter layout icon"></i>
+                        <i class="corner add icon"></i>
+                    </i>
+                </a>
+                <a class="ui basic button" data-target="kanban" title="Kanban View">
+                    <i class="block layout icon"></i>
+                </a>
+                <a class="ui active basic button" data-target="view" title="Grid View">
+                    <i class="grid layout icon"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="ui segment" data-target="view">
+        <div id="json" class="vpad8" style="width: 100%; overflow: auto;">
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui stackable grid">
+            <div class="left aligned six wide column">
+                <div class="ui breadcrumb">
+                    <a class="section" id="CurrentPageAnchor"></a>
+                    <div class="divider">/ </div>
+                    <a class="section" id="TotalPagesAnchor"></a>
                 </div>
             </div>
+            <div class="right aligned ten wide column">
+                <a class="ui left attached labeled icon button" id="PreviousButton"><i class="left arrow icon"></i>Previous</a>
+                <a class="ui right attached right labeled icon button" id="NextButton">Next<i class="right arrow icon"></i></a>
+            </div>
+        </div>
+    </div>
 
-            <div class="big error"></div>
+    <div data-target="kanban" style="display: none;">
+        <div class="kanban container">
+            <div class="ui horizontal kanban segments" id="kanban" style="display: none;">
 
-            <div id="ProgressBar" class="vpad16" style="display:none;">
-                <div data-percent="0" class="ui indicating progress active">
-                    <div style="transition-duration: 300ms; width: 0%;" class="bar"></div>
-                    <div class="label"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui bottom hidden segment" data-target="filter">
+        <div class="ui huge header">
+            Filter:
+            <span id="FilterName">
+            </span>
+        </div>
+        <div class="ui divider"></div>
+
+        <div class="ui stackable form" id="FilterForm">
+            <div class="five fields">
+                <div class="field">
+                    <label>Select a Column</label>
+                    <select class="ui search dropdown" id="ColumnSelect" required></select>
+                </div>
+                <div class="field">
+                    <label>Filter Condition</label>
+                    <select class="ui search dropdown" id="FilterConditionSelect" required></select>
+                </div>
+                <div class="field">
+                    <label>Value</label>
+                    <input id="ValueInputText" required />
+                </div>
+                <div class="field">
+                    <label>And</label>
+                    <input id="AndInputText" readonly="readonly" />
+                </div>
+                <div class="field">
+                    <label>&nbsp;</label>
+                    <input class="ui button" id="AddFilterButton" type="button" value="Add">
                 </div>
             </div>
         </div>
 
+        <table class="ui striped table" id="FilterTable">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Actions</th>
+                    <th>Column Name</th>
+                    <th>Condition</th>
+                    <th>Value</th>
+                    <th>And</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="ui large header">Save this Filter</div>
+        <div class="ui divider"></div>
+        <div class="ui form">
+            <div class="fields">
+                <div class="four wide field">
+                    <label>Filter Name</label>
+                    <input id="FilterNameInputText" />
+                </div>
+            </div>
+            <div class="ui basic buttons">
+                <div class="ui basic button" id="SaveFilterButton">Save</div>
+                <div class="ui basic button" id="ManageFiltersButton">Manage Filters</div>
+                <div class="ui basic button">Cancel</div>
+            </div>
+        </div>
+
+        <div class="ui filter small modal">
+            <i class="close icon"></i>
+            <div class="ui huge header">
+                Manage Filters
+            </div>
+            <div class="content">
+                <div class="ui form" style="max-width: 400px;">
+                    <div class="field">
+                        <label>Select a Filter</label>
+                        <select class="ui search dropdown filter" id="FilterSelect"></select>
+                    </div>
+                    <div class="ui basic buttons">
+                        <a class="ui close button" onclick="loadFilter();">Edit</a>
+                        <a class="ui close button" onclick="loadFilter();">Delete</a>
+                        <a class="ui close button">Close</a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui basic buttons">
+                    <a class="ui basic close button">Remove User Defaults</a>
+                    <a class="ui basic button" id="MakeUserDefaultFilterButton">Default (For Users)</a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="ui hidden segment" data-target="import">
+        <div class="ui huge header">Data Import</div>
+
+        <div class="ui basic buttons">
+            <a class="ui basic button" id="DownloadTemplateButton">Export Data</a>
+            <div class="ui basic button">
+                <label for="file">Import Data</label>
+                <input type="file" id="file" style="display:none;">
+            </div>
+        </div>
+
+        <div class="big error"></div>
+
+        <div id="ProgressBar" class="vpad16" style="display:none;">
+            <div data-percent="0" class="ui indicating progress active">
+                <div style="transition-duration: 300ms; width: 0%;" class="bar"></div>
+                <div class="label"></div>
+            </div>
+        </div>
+    </div>
+
+
+
 
 
 
@@ -208,16 +307,23 @@
 
     <br />
     <script>
+        var json;
+        var kanbans;
         var form = $(".form.factory");
         var view = $(".view.factory");
         var metaDefinition;
+        var falgDefinition;
+        var $linq = JSLINQ;
 
         $("#AddNewButton").click(function () {
             if (form.length) {
                 view.hide();
-                form.fadeIn(1000);
+                form.fadeIn(500);
             };
         });
+        if (!scrudFactory.card) {
+            scrudFactory.card = new Object();
+        };
     </script>
 
     <script>
@@ -319,7 +425,8 @@
                             val = Resources.Titles.Yes();
                         };
 
-                        var column = _.findWhere(metaDefinition.Columns, { ColumnName: key });
+                        var column = $linq(metaDefinition.Columns)
+                            .Where(function (x) { return x.PropertyName === key }).items[0];
 
                         if (column) {
                             var dataType = column.DbDataType;
@@ -391,7 +498,7 @@
     </script>
     <script>
         function loadPageCount(callback) {
-            $("[data-tab=view]").addClass("loading");
+            $("div[data-target=view]").append('<div class="ui active large inline loader"></div>');
             var filterName = getFilter();
 
             var getTotalPagesAjax = getTotalPages(filterName, false);
@@ -432,7 +539,7 @@
             var filters = [];
 
             $.each(queryStrings, function (index, value) {
-                filters.push(getAjaxColumnFilter(toUnderscoreCase(value.key), 0, value.value));
+                filters.push(getAjaxColumnFilter("WHERE", toUnderscoreCase(value.key), 0, value.value));
             });
 
             return filters;
@@ -475,6 +582,7 @@
 
             getFiltersAjax.success(function (msg) {
                 createFilters(msg);
+                $('.filter.modal').modal('hide');
             });
 
             getFiltersAjax.fail(function (xhr) {
@@ -486,8 +594,8 @@
             var url = "/api/core/filter/get-where/1";
             var where = [];
 
-            where.push(getAjaxColumnFilter("object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
-            where.push(getAjaxColumnFilter("filter_name", FilterConditions.IsEqualTo, filterName));
+            where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+            where.push(getAjaxColumnFilter("AND", "filter_name", FilterConditions.IsEqualTo, filterName));
 
             var data = JSON.stringify(where);
 
@@ -524,7 +632,7 @@
                     loadPageCount(loadGrid);
                 };
 
-                $("#FilterSelect").html(option);
+                $("#FilterSelect").html(option).dropdown();
 
 
                 $("#DefaultFilterSelect").change(function () {
@@ -537,7 +645,7 @@
             var url = "/api/core/filter-name-view/get-where/1";
             var where = [];
 
-            where.push(getAjaxColumnFilter("object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+            where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
             var data = JSON.stringify(where);
 
             return postAjaxRequest(url, data);
@@ -554,7 +662,7 @@
 
             if ((defaultView || "") === "FormView") {
                 view.hide();
-                form.fadeIn(1000);
+                form.fadeIn(500);
             } else {
                 form.hide();
             };
@@ -568,9 +676,9 @@
                 $(".title").html(scrudFactory.title);
             };
             if (scrudFactory.description) {
-                $(".description").html(scrudFactory.description).show();
+                $("#description").html(scrudFactory.description).show();
             } else {
-                $(".description").remove();
+                $("#description").remove();
             };
 
             if (typeof (scrudFactory.back) === "object") {
@@ -605,16 +713,19 @@
             var filterName = getFilter();
             $("#CurrentPageAnchor").text(pageNumber);
 
+
             var getViewAjax = getView(pageNumber, filterName, false);
 
-            getViewAjax.success(function (json) {
+            getViewAjax.success(function (response) {
+                window.json = response;
                 var el = $("#json");
-                createGridView(el, json);
+                createGridView(el, window.json);
                 localizeHeaders(el);
                 loadColumns();
                 loadActions();
                 $(document).trigger("viewready");
-                $("[data-tab=view]").removeClass("loading");
+                $("[data-target=view] .loader").remove();
+                createCards();
             });
 
             getViewAjax.fail(function (xhr) {
@@ -622,10 +733,14 @@
             });
         };
 
+
         function getView(pageNumber, filterName, byOffice) {
             var qs = getQueryStrings();
+            var ignoredQueryStrings = ["View"];
 
-            if (qs.length) {
+            var count = $linq(qs).Where(function (s) { return ignoredQueryStrings.indexOf(s.key) === -1; }).items.length;
+
+            if (count) {
                 return getFilteredView(pageNumber, qs, byOffice);
             };
 
@@ -688,6 +803,7 @@
             return isValid;
         };
 
+
         $("#AddFilterButton").click(function () {
             var grid = $("#FilterTable");
 
@@ -698,6 +814,7 @@
 
             var selectedColumn = columnSelect.getSelectedText();
             var filterCondition = filterConditionSelect.getSelectedText();
+
             var value = valueInputText.val();
             var and = andInputText.val();
 
@@ -789,10 +906,19 @@
                 var filter = new Object();
 
                 filter.FilterId = window.filterId;
+                filter.FilterStatement = "AND";
                 filter.ObjectName = scrudFactory.viewTableName;
                 filter.FilterName = filterNameInputText.val();
-                filter.ColumnName = _.findWhere(columns, { text: columnName }).name;
-                filter.FilterCondition = parseInt(_.findWhere(filterConditions, { text: condition }).value || 0);
+
+                filter.ColumnName = $linq(columns)
+                    .Where(function (x) { return x.text === columnName }).items[0].name;
+
+                filter.FilterCondition = parseInt(
+                                            $linq(filterConditions)
+                                            .Where(function (x) { return x.text === condition })
+                                             .items[0].value
+                                         || 0);
+
                 filter.FilterValue = el.find("td:nth-child(4)").text();
                 filter.FilterAndValue = el.find("td:nth-child(5)").text();
                 filters.push(filter);
@@ -828,8 +954,13 @@
                 var and = (filter.FilterAndValue || "");
 
                 var css = "";
-                filterCondition = _.findWhere(filterConditions, { value: filterCondition.toString() }).text;
-                var column = _.findWhere(columns, { name: selectedColumn });
+
+                filterCondition = $linq(filterConditions)
+                    .Where(function (x) { return x.value === filterCondition.toString() })
+                    .Select(function (x) { return x.text }).items[0];
+
+                column = $linq(columns)
+                    .Where(function (x) { return x.name === selectedColumn }).items[0];
 
                 if (column) {
                     selectedColumn = column.text;
@@ -876,7 +1007,7 @@
     <script>
         function changeTab(el) {
             el = $(el);
-            var tab = el.attr("data-tab");
+            var tab = el.attr("data-target");
 
             $.tab('change tab', tab);
 
@@ -989,7 +1120,6 @@
 
         function downloadTemplate() {
             var url = scrudFactory.formAPI + "/export";
-            alert(url)
             return getAjaxRequest(url);
         };
 
@@ -1167,7 +1297,7 @@
                 getCustomFieldsForEdit(tableName, primaryKeyValue).success(function (msg) {
                     displayCustomFields(msg);
                     view.hide();
-                    form.fadeIn(1000);
+                    form.fadeIn(500);
                 });
             });
         };
@@ -1235,8 +1365,8 @@
 
             var filters = [];
 
-            filters.push(window.getAjaxColumnFilter("table_name", FilterConditions.IsEqualTo, tableName));
-            filters.push(window.getAjaxColumnFilter("resource_id", FilterConditions.IsEqualTo, primaryKeyValue));
+            filters.push(window.getAjaxColumnFilter("WHERE", "table_name", FilterConditions.IsEqualTo, tableName));
+            filters.push(window.getAjaxColumnFilter("AND", "resource_id", FilterConditions.IsEqualTo, primaryKeyValue));
 
             var data = JSON.stringify(filters);
 
@@ -1344,27 +1474,84 @@
 
 
 <script>
+    var filterPopUnder = $("#FilterPopUnder");
+    var flagPopUnder = $("#FlagPopUnder");
+    var flagButton = $("#FlagButton");
+    var filterButton = $("#FilterButton");
+    var flagSelect = $("#FlagSelect");
+    var updateButton = $("#UpdateButton");
+
     $(document).on("viewready", function () {
         initializeFlag();
+        initializePopUnders();
     });
 
-
-    function initializeFlag() {
-        var flagPopUnder = $("#FlagPopUnder");
-        var flagButton = $("#FlagButton");
-        var flagSelect = $("#FlagSelect");
-        var updateButton = $("#UpdateButton");
-
-
+    function initializePopUnders() {
         function popUnder(div, button) {
+            $(".popunder").hide();
             div.removeClass("initially hidden");
-            div.fadeIn(1000).position({
+            div.fadeIn(500).position({
                 my: "left top",
                 at: "left bottom",
                 of: button
             });
         };
 
+        flagButton.click(function () {
+            popUnder(flagPopUnder, flagButton);
+        });
+
+
+        filterButton.click(function () {
+            popUnder(filterPopUnder, filterButton);
+        });
+    };
+
+
+
+    function displayFlaggedCards() {
+        if (!window.flagDefinition) {
+            return;
+        };
+
+        if (!window.kanbans) {
+            return;
+        };
+
+
+        $.each(window.flagDefinition, function (i, v) {
+            var card = $('.card[data-key="' + v.ResourceId + '"]');
+
+            if (card.length) {
+                var flag = $('<a class="ui red top right attached label" />');
+                flag.text(v.FlagTypeName);
+
+                card.find(".content .header").append(flag);
+
+                card.css("background-color", v.BackgroundColor);
+                card.css("color", v.ForegroundColor);
+            };
+        });
+    };
+
+    function displayFlaggedRows() {
+        $("#ScrudView").find("tbody tr").each(function () {
+            var row = $(this);
+            var resourceId = row.find("td:nth-child(3)").text();
+
+            var data = $linq(window.flagDefinition)
+                .Where(function (x) { return x.ResourceId === resourceId }).items[0];
+
+            if (data) {
+                row.css("background-color", data.BackgroundColor);
+                row.css("color", data.ForegroundColor);
+                row.attr("data-flag", data.FlagTypeName);
+                row.attr("data-flag-id", data.FlagId);
+            };
+        });
+    };
+
+    function initializeFlag() {
         function getFlagTypes() {
             var url = "/api/core/flag-type/display-fields";
             return getAjaxRequest(url);
@@ -1393,10 +1580,6 @@
             });
         };
 
-        flagButton.click(function () {
-            popUnder(flagPopUnder, flagButton);
-        });
-
         updateButton.unbind("click").click(function () {
             var selecteRows = $("input:checkbox:checked").closest("tr");
             if (selecteRows.length === 0) {
@@ -1406,6 +1589,7 @@
             selecteRows.each(function (i) {
                 var row = $(this);
                 var flag = new Object();
+
 
                 flag.FlagId = (row.attr("data-flag-id") || 0);
                 flag.ResourceId = row.find("td:nth-child(3)").text();
@@ -1460,31 +1644,517 @@
             return getAjaxRequest(url);
         };
 
-        function displayFlaggedRows() {
+        function displayFlags() {
             var ids = getIds();
 
             var getFlagViewAjax = getFlagView(scrudFactory.viewTableName, userId, ids);
 
             getFlagViewAjax.success(function (msg) {
-                $("#ScrudView").find("tbody tr").each(function () {
-                    var row = $(this);
-                    var resourceId = row.find("td:nth-child(3)").text();
+                window.flagDefinition = msg;
 
-                    var data = _.findWhere(msg, { ResourceId: resourceId });
-
-                    if (data) {
-                        row.css("background-color", data.BackgroundColor);
-                        row.css("color", data.ForegroundColor);
-                        row.attr("data-flag", data.FlagTypeName);
-                        row.attr("data-flag-id", data.FlagId);
-                    };
-
-                });
+                displayFlaggedRows();
+                displayFlaggedCards();
             });
         };
 
-        displayFlaggedRows();
+        displayFlags();
     };
 
 
+</script>
+
+<script>
+    $(".action.buttons .button").click(function () {
+        $(".action.buttons .button").removeClass("active");
+        var el = $(this);
+        var target = el.attr("data-target");
+
+        if (target) {
+            showTarget(target);
+        };
+
+        var url = updateQueryString("View", target);
+        window.history.pushState({ path: url }, '', url);
+    });
+
+    function showTarget(target) {
+        $("div[data-target]").hide();
+        var targetEl = $('div[data-target="' + target + '"]');
+        targetEl.removeClass("hidden").fadeIn(500);
+
+        $('a[data-target]').removeClass("active");
+        $('a[data-target="' + target + '"]').addClass("active");
+    };
+
+    $(document).ready(function () {
+        var view = getQueryStringByName("View");
+        if (view) {
+            showTarget(view);
+        };
+    });
+</script>
+
+<script>
+    $(function () {
+        $(".kanban.segments").css("width", (($(".segment").length - 1) * 300) + "px").fadeIn(500);
+    });
+
+    var kanbanTemplate = '<div id="kanban{KanbanId}" class="ui segment">\
+                    <span class="ui teal left large label" data-kanban-id="{KanbanId}" title="{Description}">{KanbanName}</span>\
+                    <div class="ui right floated tiny basic icon buttons">\
+                        <a title="{AddNewCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="addKanban();"><i class="add icon"></i></a>\
+                        <a title="{EditThisCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="editKanban(this);"><i class="edit icon"></i></a>\
+                        <a title="{DeleteThisCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="deleteKanban(this);"><i class="delete icon"></i></a>\
+                    </div>\
+                    <div class="ui clearing padded divider"></div> \
+                    <div class="kanban holder"></div> \
+                </div>';
+
+    function createKanbanSegment(kanban) {
+        var local = kanbanTemplate;
+        local = local.replace(/{KanbanId}/g, kanban.KanbanId);
+        local = local.replace(/{KanbanName}/g, kanban.KanbanName);
+        local = local.replace(/{Description}/g, kanban.Description);
+        local = local.replace("{AddNewCheckListLocalized}", "Add New Checlist");
+        local = local.replace("{EditThisCheckListLocalized}", "Edit This Checklsit");
+        local = local.replace("{DeleteThisCheckListLocalized}", "Delete This Checklist");
+
+        var el = $(local);
+
+        $("#kanban").append(el);
+    };
+
+    function createKanbans(kanbans) {
+        $("#kanban").html("");
+
+        var kanban = new Object();
+        kanban.KanbanId = "0";
+        kanban.KanbanName = "Default";
+        createKanbanSegment(kanban);
+
+        $.each(kanbans, function (i, kanban) {
+            createKanbanSegment(kanban);
+        });
+
+        createCards();
+    };
+
+    function getKanbans() {
+        var url = "/api/core/kanban/get-where/1";
+
+        var filters = [];
+        filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+        filters.push(getAjaxColumnFilter("WHERE", "user_id", FilterConditions.IsEqualTo, window.userId));
+
+        var data = JSON.stringify(filters);
+
+        return postAjaxRequest(url, data);
+    };
+
+    $(document).ready(function () {
+        refreshKanbans();
+    });
+
+    function refreshKanbans() {
+        var getKanbansAjax = getKanbans();
+
+        getKanbansAjax.success(function (msg) {
+            window.kanbans = msg;
+            createKanbans(msg);
+        });
+    };
+
+    function addKanban() {
+        $("#KanbanForm").modal("show");
+    };
+
+    function deleteKanban(el) {
+        function ajax(kanbanId) {
+            var url = "/api/core/kanban/delete/" + kanbanId;
+            return getAjaxRequest(url, "DELETE");
+        };
+
+        el = $(el);
+        var label = el.parent().parent().find(".label");
+        var kanbanId = parseInt(label.attr("data-kanban-id"));
+
+        if (kanbanId) {
+            var confirmed = confirmAction();
+
+            if (!confirmed) {
+                return;
+            };
+
+            var ajaxRequst = ajax(kanbanId);
+
+            ajaxRequst.success(function () {
+                refreshKanbans();
+            });
+        };
+    };
+
+    function editKanban(el) {
+        el = $(el);
+        var label = el.parent().parent().find(".left.label");
+
+        var kanbanId = parseInt(label.attr("data-kanban-id"));
+        var kanbanName = label.text();
+        var description = label.attr("title");
+
+
+        if (kanbanId) {
+            $("#KanbanIdInputText").val(kanbanId);
+            $("#KanbanNameInputText").val(kanbanName);
+            $("#KanbanDescriptionTextArea").val(description);
+
+            $("#KanbanForm").modal("show");
+        };
+    };
+
+    function saveOrUpdateKanban() {
+        function addOrEditKanban(k) {
+            var url = "/api/core/kanban/add-or-edit";
+
+            var form = [];
+            form.push(k);
+            form.push(null);
+
+            var data = JSON.stringify(form);
+            return getAjaxRequest(url, "PUT", data);
+        };
+
+        var kanbanIdInputText = $("#KanbanIdInputText");
+        var kanbanNameInputText = $("#KanbanNameInputText");
+        var kanbanDescriptionTextArea = $("#KanbanDescriptionTextArea");
+
+        if (isNullOrWhiteSpace(kanbanNameInputText.val())) {
+            makeDirty(kanbanNameInputText);
+            return;
+        };
+
+        removeDirty(kanbanNameInputText);
+
+        var kanban = new Object();
+        kanban.KanbanId = (kanbanIdInputText.val() || 0);
+        kanban.ObjectName = scrudFactory.viewTableName;
+        kanban.UserId = window.userId;
+        kanban.KanbanName = kanbanNameInputText.val();
+        kanban.Description = kanbanDescriptionTextArea.val();
+
+        var addOrEditKanbanAjax = addOrEditKanban(kanban);
+
+        addOrEditKanbanAjax.success(function () {
+            $("#KanbanForm").modal("hide");
+            refreshKanbans();
+        });
+    };
+
+
+</script>
+
+<script>
+    function createCards() {
+        function getKanbanDetails(kanbanIds, resourceIds) {
+            var url = "/api/core/kanban-detail/get-by-resources/";
+            url += "?kanbanIds=";
+            url += kanbanIds.join("&kanbanIds=");
+
+            url += "&resourceIds=";
+            url += resourceIds.join("&resourceIds=");
+
+            return getAjaxRequest(url);
+        };
+
+        if (!window.json) {
+            return;
+        };
+
+        if (!window.kanbans) {
+            return;
+        };
+
+        var keyField = (scrudFactory.card.keyField || getIdField());
+        var resourceIds = $linq(window.json).Select(function (employee) { return employee[keyField]; }).items;
+        var kanbanIds = $linq(window.kanbans).Select(function (kanbans) { return kanbans.KanbanId; }).items;
+
+        var getKanbanDetailsAjax = getKanbanDetails(kanbanIds, resourceIds);
+
+        getKanbanDetailsAjax.success(function (msg) {
+            $(".kanban.holder").html("");
+
+            $.each(window.json, function (i, v) {
+                var key = getCardKey(v);
+                var kanbanDetail = ($linq(msg).Where(function (detail) { return detail.ResourceId.toString() === key.toString() }).items[0] || new Object());
+                createCard(v, key, kanbanDetail);
+            });
+
+            makeSortable();
+            makeRatable();
+            displayFlaggedCards();
+        });
+
+    };
+
+    function makeSortable() {
+        $(function () {
+            $("#kanban .segment .kanban.holder").sortable({
+                connectWith: "#kanban .segment .kanban.holder",
+                receive: function (event, ui) {
+                    var card = $(ui.item[0]);
+
+                    var kanbanDetail = new Object();
+                    kanbanDetail.KanbanDetailId = (card.attr("data-kanban-detail-id") || 0);
+                    kanbanDetail.KanbanId = parseInt(card.parent().parent().attr("id").replace("kanban", "") || 0);
+                    kanbanDetail.Rating = card.find(".rating .active.icon").length;
+                    kanbanDetail.ResourceId = card.attr("data-key");
+
+                    if (kanbanDetail.KanbanId) {
+                        addOrEditKanbanDetail(kanbanDetail);
+                    } else {
+                        if (kanbanDetail.KanbanDetailId) {
+                            deleteKanbanDetail(kanbanDetail.KanbanDetailId);
+                        };
+                    };
+
+                }
+            }).disableSelection();
+        });
+    };
+
+    function makeRatable() {
+        $('.ui.rating').rating();
+
+        function updateRating(kanbanDetail) {
+            var url = "/api/core/kanban-detail/add-or-edit";
+
+            var form = [];
+            form.push(kanbanDetail);
+            form.push(null);
+
+            var data = JSON.stringify(form);
+
+            return getAjaxRequest(url, "PUT", data);
+        };
+
+        $('.ui.rating i').dblclick(function () {
+            var el = $(this);
+            var card = el.parent().parent().parent();
+            var kanbanDetailId = card.attr("data-kanban-detail-id");
+
+            if (kanbanDetailId) {
+
+                var kanbanDetail = new Object();
+                kanbanDetail.KanbanDetailId = kanbanDetailId;
+                kanbanDetail.KanbanId = card.closest(".segment").attr("id").replace("kanban", "");
+                kanbanDetail.ResourceId = card.attr("data-key");
+                kanbanDetail.Rating = el.parent().find("i.active").length;
+
+                updateRating(kanbanDetail);
+            };
+        });
+    };
+
+    function deleteKanbanDetail(kanbanDetailId) {
+        var url = "/api/core/kanban-detail/delete/" + kanbanDetailId;
+
+        return getAjaxRequest(url, "DELETE");
+    };
+
+    function addOrEditKanbanDetail(kanbanDetail) {
+        function ajax(kanbanDetail) {
+            var url = "/api/core/kanban-detail/add-or-edit";
+
+            var form = [];
+            form.push(kanbanDetail);
+            form.push(null);
+
+            var data = JSON.stringify(form);
+
+            return getAjaxRequest(url, "PUT", data);
+        };
+
+        ajax(kanbanDetail);
+    };
+
+    function getExtraContent(key) {
+        var extraContent = $('<div class="extra center content" />');
+        var buttons = $('<div class="ui small basic buttons" />');
+
+        if (scrudFactory.viewUrl) {
+            var url = scrudFactory.viewUrl.replace("{Key}", key);
+            var viewButton = $('<a class="ui basic button" />');
+            viewButton.attr("href", url);
+            viewButton.text("View");
+            buttons.append(viewButton);
+        };
+
+        if (scrudFactory.allowEdit) {
+            var editButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="editRow(this);" />');
+            editButton.text("Edit");
+            buttons.append(editButton);
+        }
+
+        if (scrudFactory.allowDelete) {
+            var deleteButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="deleteRow(this);" />');
+            deleteButton.text("Delete");
+            buttons.append(deleteButton);
+        };
+
+
+        extraContent.append(buttons);
+
+        return extraContent;
+    };
+
+    function getExtra(kanbanDetail) {
+        var extra = $('<div class="extra" />');
+
+        var text = $("<span />");
+        text.text("Rating");
+        extra.append(text);
+
+        var dataRating = (kanbanDetail.Rating || 0);
+
+        var rating = $('<div class="ui star rating" data-max-rating="5" />');
+        rating.attr("data-rating", dataRating);
+
+        extra.append(rating);
+
+        return extra;
+    };
+
+    function getClassName() {
+        var table = scrudFactory.formTableName;
+
+        if (!table) {
+            table = scrudFactory.viewTableName;
+        }
+
+        var plural = toProperCase(table.split(".")[1]);
+        return plural.singularize();
+    };
+
+    function getHeaderField() {
+        var className = getClassName();
+        return className + "Code";
+    };
+
+    function getMetaField() {
+        var className = getClassName();
+        return className + "Name";
+    };
+
+    function getIdField() {
+        var className = getClassName();
+        return className + "Id";
+    };
+
+    function getCardKey(dynamic) {
+        var keyField = (scrudFactory.card.keyField || getIdField());
+        return dynamic[keyField];
+    };
+
+    function getImageField(entity) {
+        var imageField;
+
+        $.each(entity, function (i) {
+            if (!imageField) {
+                if (i.toLowerCase().indexOf("image") !== -1) {
+                    imageField = i;
+                };
+            };
+
+            if (!imageField) {
+                if (i.toLowerCase().indexOf("photo") !== -1) {
+                    imageField = i;
+                };
+            };
+        });
+
+        return imageField;
+    };
+
+    function getDescriptionField(entity) {
+        var desc;
+        var candidates = ["Email", "Url", "City", "Phone", "CompanyName"];
+
+        $.each(candidates, function (index, candidate) {
+            $.each(entity, function (i) {
+                if (!desc) {
+                    if (i.toString() === candidate.toString()) {
+                        desc = i;
+                        return false;
+                    };
+                };
+                return true;
+            });
+        });
+
+        return desc;
+    };
+
+    function createCard(dynamic, key, kanbanDetail) {
+
+        var kanbanId = (kanbanDetail.KanbanId || 0);
+
+        var text;
+        var imageField = (scrudFactory.card.image || getImageField(dynamic));
+        var headerField = (scrudFactory.card.header || getHeaderField());
+        var metaField = (scrudFactory.card.meta || getMetaField());
+        var descriptionField = (scrudFactory.card.description || getDescriptionField(dynamic));
+
+        var card = $('<div class="ui card" />');
+        card.attr("data-kanban-detail-id", kanbanDetail.KanbanDetailId);
+        card.attr("data-key", key);
+
+        if (imageField) {
+            var src = dynamic[imageField];
+            if (src) {
+                var div = $('<div class="image" />');
+                var img = $("<img />");
+                img.attr("src", "/api/core/attachment/document/500/300/" + src);
+
+                div.append(img);
+                card.append(div);
+            };
+        };
+
+        var content = $('<div class="content" />');
+
+        if (headerField) {
+            text = dynamic[headerField];
+            if (text) {
+                var header = $('<div class="header" />');
+
+                header.text(text);
+                content.append(header);
+            };
+        };
+
+        if (metaField) {
+            text = dynamic[metaField];
+            if (text) {
+                var meta = $('<div class="meta" />');
+
+                meta.text(text);
+                content.append(meta);
+            };
+        };
+
+        if (descriptionField) {
+            text = dynamic[descriptionField];
+            if (text) {
+                var description = $('<div class="meta" />');
+
+                description.text(text);
+                content.append(description);
+            };
+        };
+
+        card.append(content);
+        card.append(getExtraContent(key));
+        card.append(getExtra(kanbanDetail));
+
+        $("#kanban" + kanbanId + " .kanban.holder").append(card);
+    };
 </script>

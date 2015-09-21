@@ -21,13 +21,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
 
     scrudFactory.title = Resources.Titles.CashFlowSetup();
-    scrudFactory.viewPocoName = "CashFlowSetupScrudView";
-    scrudFactory.formPocoName = "CashFlowSetup";
+
+    scrudFactory.viewAPI = "/api/core/cash-flow-setup-scrud-view";
+    scrudFactory.viewTableName = "core.cash_flow_setup_scrud_view";
+
+    scrudFactory.formAPI = "/api/core/cash-flow-setup";
     scrudFactory.formTableName = "core.cash_flow_setups";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.keys = [
         {

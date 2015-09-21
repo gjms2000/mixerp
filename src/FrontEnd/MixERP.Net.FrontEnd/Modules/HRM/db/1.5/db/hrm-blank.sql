@@ -416,7 +416,7 @@ CREATE TABLE hrm.exits
 SELECT * FROM core.recreate_menu('HRM', '~/Modules/HRM/Index.mix', 'HRM', 0, NULL);
 SELECT * FROM core.recreate_menu('Tasks', NULL, 'HRMTA', 1, core.get_menu_id('HRM'));
 SELECT * FROM core.recreate_menu('Attendance', '~/Modules/HRM/Tasks/Attendance.mix', 'ATTNDCE', 2, core.get_menu_id('HRMTA'));
-SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix', 'EMPL', 2, core.get_menu_id('HRMTA'));
+SELECT * FROM core.recreate_menu('Employees', '~/Modules/HRM/Tasks/Employees.mix?View=kanban', 'EMPL', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Contracts', '~/Modules/HRM/Tasks/Contracts.mix', 'CTRCT', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Leave Application', '~/Modules/HRM/Tasks/LeaveApplication.mix', 'LEVAPP', 2, core.get_menu_id('HRMTA'));
 SELECT * FROM core.recreate_menu('Resignation', '~/Modules/HRM/Tasks/Resignation.mix', 'RESIGN', 2, core.get_menu_id('HRMTA'));
@@ -580,6 +580,17 @@ INNER JOIN core.social_networks
 ON core.social_networks.social_network_name = hrm.employee_social_network_details.social_network_name;
 
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_type_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS hrm.employee_type_scrud_view;
+
+CREATE VIEW hrm.employee_type_scrud_view
+AS
+SELECT
+    employee_type_id,
+    employee_type_code,
+    employee_type_name
+FROM hrm.employee_types;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.employee_wage_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.employee_wage_scrud_view;
@@ -877,6 +888,59 @@ BEGIN
     AND         n.nspname NOT IN ('pg_catalog', 'information_schema')
     LOOP
         EXECUTE this.sql;
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/99.sample/kanban.sql --<--<--
+DO
+$$
+    DECLARE objects text[];
+    DECLARE users int[];
+    DECLARE _user_id int;
+    DECLARE _obj text;
+BEGIN
+    SELECT array_agg(user_id)
+        INTO users
+    FROM office.users INNER JOIN office.roles ON office.users.role_id = office.roles.role_id AND NOT is_system;
+
+    objects := array[
+        'hrm.employees', 
+        'hrm.employment_statuses',
+        'hrm.salaries',
+        'hrm.wages_setup',
+        'hrm.employee_type_scrud_view',
+        'hrm.employee_identification_detail_scrud_view',
+        'hrm.employee_social_network_detail_scrud_view',
+        'hrm.employee_experience_scrud_view',
+        'hrm.employee_qualification_scrud_view',
+        'hrm.employee_wage_scrud_view',
+        'hrm.leave_application_scrud_view',
+        'hrm.contract_scrud_view',
+        'hrm.exit_scrud_view',
+        'hrm.education_levels',
+        'hrm.job_titles',
+        'hrm.pay_grades',
+        'hrm.salary_types',
+        'hrm.shifts',
+        'hrm.office_hour_scrud_view',
+        'hrm.leave_types',
+        'hrm.leave_benefits',
+        'hrm.exit_types',
+        ''
+        
+        
+        ];
+
+    FOREACH _user_id IN ARRAY users
+    LOOP
+        FOREACH _obj IN ARRAY objects
+        LOOP
+            PERFORM core.create_kanban(_obj, _user_id, 'Checklist');
+            PERFORM core.create_kanban(_obj, _user_id, 'High Priority');
+            PERFORM core.create_kanban(_obj, _user_id, 'Done');
+        END LOOP;
     END LOOP;
 END
 $$

@@ -88,8 +88,6 @@
     <Content Include="AssignCashier.ascx" />
     <Content Include="Index.ascx" />
     <Content Include="Package.xml" />
-    <Content Include="SQL\Menu.sql" />
-    <Content Include="SQL\Module.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

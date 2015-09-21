@@ -160,6 +160,8 @@
     <Compile Include="ItemTypeController.cs" />
     <Compile Include="ItemTypeScrudViewController.cs" />
     <Compile Include="ItemViewController.cs" />
+    <Compile Include="KanbanController.cs" />
+    <Compile Include="KanbanDetailController.cs" />
     <Compile Include="LateFeeAccountSelectorViewController.cs" />
     <Compile Include="LateFeeController.cs" />
     <Compile Include="LateFeeScrudViewController.cs" />

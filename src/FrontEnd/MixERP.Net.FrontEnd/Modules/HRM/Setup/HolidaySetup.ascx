@@ -6,6 +6,7 @@
 
     scrudFactory.viewAPI = "/api/hrm/holiday";
     scrudFactory.viewTableName = "hrm.holidays";
+    scrudFactory.description = "test";
 
     scrudFactory.formAPI = "/api/hrm/holiday";
     scrudFactory.formTableName = "hrm.holidays";

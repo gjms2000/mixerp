@@ -7,5 +7,4 @@ SELECT
     object_name,
     filter_name,
     is_default
-FROM core.filters
-
+FROM core.filters;

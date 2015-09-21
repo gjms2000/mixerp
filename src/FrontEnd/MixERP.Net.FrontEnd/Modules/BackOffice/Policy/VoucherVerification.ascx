@@ -23,13 +23,17 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
 
     scrudFactory.title = Resources.Titles.VoucherVerificationPolicy();
-    scrudFactory.viewPocoName = "VoucherVerificationPolicyScrudView";
-    scrudFactory.formPocoName = "VoucherVerificationPolicy";
-    scrudFactory.formTableName = "policy.voucher_verification";
+
+    scrudFactory.viewAPI = "/api/policy/voucher-verification-policy-scrud-view";
+    scrudFactory.viewTableName = "policy.voucher_verification_policy_scrud_view";
+
+    scrudFactory.formAPI = "/api/policy/voucher-verification-policy";
+    scrudFactory.formTableName = "policy.voucher_verification_policy";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.live = "ShiftName";
 

@@ -23,17 +23,19 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
     var scrudFactory = new Object();
     scrudFactory.title = window.Resources.Titles.ChartOfAccounts();
 
-    scrudFactory.viewPocoName = "AccountScrudView";
-    scrudFactory.formPocoName = "Account";
+    scrudFactory.viewAPI = "/api/core/account-scrud-view";
+    scrudFactory.viewTableName = "core.account_scrud_view";
 
+    scrudFactory.formAPI = "/api/core/account";
     scrudFactory.formTableName = "core.accounts";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
 
     scrudFactory.live = "AccountName";
     scrudFactory.queryStringKey = "AccountId";
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.keys = [
         {

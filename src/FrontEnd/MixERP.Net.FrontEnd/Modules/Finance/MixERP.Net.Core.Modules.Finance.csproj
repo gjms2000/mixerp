@@ -170,8 +170,6 @@
     <Content Include="Services\CurrencyData.asmx" />
     <Content Include="Setup\CashFlowHeadings.ascx" />
     <Content Include="Setup\CashFlowSetup.ascx" />
-    <Content Include="SQL\Menu.sql" />
-    <Content Include="SQL\Module.sql" />
     <Content Include="Services\AccountData.asmx" />
     <Content Include="Services\Entry\JournalVoucher.asmx" />
     <Content Include="Setup\AgeingSlabs.ascx" />

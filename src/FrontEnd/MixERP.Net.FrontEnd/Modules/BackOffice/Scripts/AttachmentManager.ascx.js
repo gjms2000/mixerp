@@ -13,8 +13,8 @@ function getAttachments(book, id) {
 
     var filters = [];
 
-    filters.push(window.getAjaxColumnFilter("book", window.FilterConditions.IsEqualTo, book));
-    filters.push(window.getAjaxColumnFilter("resource_id", window.FilterConditions.IsEqualTo, id));
+    filters.push(window.getAjaxColumnFilter("WHERE", "book", window.FilterConditions.IsEqualTo, book));
+    filters.push(window.getAjaxColumnFilter("AND", "resource_id", window.FilterConditions.IsEqualTo, id));
 
     var data = JSON.stringify(filters);
 
