@@ -257,8 +257,7 @@ SELECT 'ZW', 'زيمبابوي';
 
 
 /*****************************************************************************************************
-Egyptian Governrates and cities
-@nubiancc
+Egyptian Governrates and cities by nubiancc
 *****************************************************************************************************/  
 
       SELECT country_id INTO _country_id

@@ -258,7 +258,7 @@ SELECT 'ZW', 'زيمبابوي';
 
 
 /*****************************************************************************************************
-Saudi Arabian Kingdum Cities and cities@nubiancc
+Saudi Arabian Kingdum Cities and cities by nubiancc
 *****************************************************************************************************/  
 
       SELECT country_id INTO _country_id
