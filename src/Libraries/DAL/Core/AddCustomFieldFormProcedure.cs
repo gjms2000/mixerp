@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "add_custom_field_form";
+        public override string _ObjectName => "add_custom_field_form";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_form_name" argument of the function "core.add_custom_field_form".
@@ -100,7 +100,7 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
             const string query = "SELECT * FROM core.add_custom_field_form(@0::character varying, @1::character varying, @2::character varying);";
-            Factory.NonQuery(this.Catalog, query, this.FormName, this.TableName, this.KeyName);
+            Factory.NonQuery(this._Catalog, query, this.FormName, this.TableName, this.KeyName);
         }
     }
 }

@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -64,16 +65,20 @@ namespace MixERP.Net.Entities.HRM
         public int VerificationStatusId { get; set; }
 
         [Column("verified_by_user_id")]
-        [ColumnDbType("int4", 0, false, "")]
-        public int VerifiedByUserId { get; set; }
+        [ColumnDbType("int4", 0, true, "")]
+        public int? VerifiedByUserId { get; set; }
 
         [Column("verified_on")]
-        [ColumnDbType("date", 0, false, "")]
-        public DateTime VerifiedOn { get; set; }
+        [ColumnDbType("date", 0, true, "")]
+        public DateTime? VerifiedOn { get; set; }
 
-        [Column("effective_resignation_date")]
+        [Column("verification_reason")]
+        [ColumnDbType("varchar", 128, true, "")]
+        public string VerificationReason { get; set; }
+
+        [Column("service_end_date")]
         [ColumnDbType("date", 0, false, "")]
-        public DateTime EffectiveResignationDate { get; set; }
+        public DateTime ServiceEndDate { get; set; }
 
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")]

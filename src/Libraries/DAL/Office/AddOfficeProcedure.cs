@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Office.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "office";
+        public override string _ObjectNamespace => "office";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "add_office";
+        public override string _ObjectName => "add_office";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Office.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_office_code" argument of the function "office.add_office".
@@ -232,7 +232,7 @@ namespace MixERP.Net.Schemas.Office.Data
                 }
             }
             const string query = "SELECT * FROM office.add_office(@0::character varying, @1::character varying, @2::character varying, @3::date, @4::character varying, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::date, @11::date, @12::boolean, @13::boolean, @14::boolean, @15::integer, @16::numeric, @17::integer, @18::date, @19::boolean, @20::character varying, @21::text, @22::character varying, @23::character varying, @24::character varying);";
-            Factory.NonQuery(this.Catalog, query, this.OfficeCode, this.OfficeName, this.NickName, this.RegistrationDate, this.CurrencyCode, this.CurrencySymbol, this.CurrencyName, this.HundredthName, this.FiscalYearCode, this.FiscalYearName, this.StartsFrom, this.EndsOn, this.SalesTaxIsVat, this.HasStateSalesTax, this.HasCountySalesTax, this.QuotationValidDays, this.IncomeTaxRate, this.WeekStartDay, this.TransactionStartDate, this.IsPerpetual, this.InvValuationMethod, this.LogoFile, this.AdminName, this.UserName, this.Password);
+            Factory.NonQuery(this._Catalog, query, this.OfficeCode, this.OfficeName, this.NickName, this.RegistrationDate, this.CurrencyCode, this.CurrencySymbol, this.CurrencyName, this.HundredthName, this.FiscalYearCode, this.FiscalYearName, this.StartsFrom, this.EndsOn, this.SalesTaxIsVat, this.HasStateSalesTax, this.HasCountySalesTax, this.QuotationValidDays, this.IncomeTaxRate, this.WeekStartDay, this.TransactionStartDate, this.IsPerpetual, this.InvValuationMethod, this.LogoFile, this.AdminName, this.UserName, this.Password);
         }
     }
 }

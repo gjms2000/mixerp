@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -31,25 +32,29 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("int4", 0, true, "")]
         public int? TerminationId { get; set; }
 
-        [Column("entered_by")]
-        [ColumnDbType("varchar", 50, true, "")]
-        public string EnteredBy { get; set; }
+        [Column("employee")]
+        [ColumnDbType("text", 0, true, "")]
+        public string Employee { get; set; }
 
-        [Column("employee_name")]
-        [ColumnDbType("varchar", 160, true, "")]
-        public string EmployeeName { get; set; }
+        [Column("photo")]
+        [ColumnDbType("image", 0, true, "")]
+        public string Photo { get; set; }
 
         [Column("notice_date")]
         [ColumnDbType("date", 0, true, "")]
         public DateTime? NoticeDate { get; set; }
 
-        [Column("effective_termination_date")]
+        [Column("service_end_date")]
         [ColumnDbType("date", 0, true, "")]
-        public DateTime? EffectiveTerminationDate { get; set; }
+        public DateTime? ServiceEndDate { get; set; }
 
         [Column("forward_to")]
-        [ColumnDbType("varchar", 160, true, "")]
+        [ColumnDbType("text", 0, true, "")]
         public string ForwardTo { get; set; }
+
+        [Column("employment_status")]
+        [ColumnDbType("text", 0, true, "")]
+        public string EmploymentStatus { get; set; }
 
         [Column("reason")]
         [ColumnDbType("varchar", 128, true, "")]

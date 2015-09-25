@@ -10,7 +10,7 @@
     scrudFactory.formAPI = "/api/hrm/contract";
     scrudFactory.formTableName = "hrm.contracts";
 
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["Photo"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -23,7 +23,7 @@
     scrudFactory.keys = [
         {
             property: "EmployeeId",
-            url: '/api/hrm/employee/display-fields',
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

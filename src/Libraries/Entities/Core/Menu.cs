@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -58,5 +59,13 @@ namespace MixERP.Net.Entities.Core
         [Column("audit_ts")]
         [ColumnDbType("timestamptz", 0, true, "")]
         public DateTime? AuditTs { get; set; }
+
+        [Column("sort")]
+        [ColumnDbType("int4", 0, false, "0")]
+        public int Sort { get; set; }
+
+        [Column("icon")]
+        [ColumnDbType("varchar", 48, false, "")]
+        public string Icon { get; set; }
     }
 }

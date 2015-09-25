@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_state_id_by_shipping_address_code";
+        public override string _ObjectName => "get_state_id_by_shipping_address_code";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "pg_arg0" argument of the function "core.get_state_id_by_shipping_address_code".
@@ -94,7 +94,7 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
             const string query = "SELECT * FROM core.get_state_id_by_shipping_address_code(@0::text, @1::bigint);";
-            return Factory.Scalar<int>(this.Catalog, query, this.PgArg0, this.PgArg1);
+            return Factory.Scalar<int>(this._Catalog, query, this.PgArg0, this.PgArg1);
         }
     }
 }

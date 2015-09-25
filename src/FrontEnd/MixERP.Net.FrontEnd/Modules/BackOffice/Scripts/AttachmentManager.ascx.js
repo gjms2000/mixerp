@@ -18,7 +18,7 @@ function getAttachments(book, id) {
 
     var data = JSON.stringify(filters);
 
-    return postAjaxRequest(url, data);
+    return getAjaxRequest(url, "POST", data);
 };
 
 function deleteAttachment(id) {

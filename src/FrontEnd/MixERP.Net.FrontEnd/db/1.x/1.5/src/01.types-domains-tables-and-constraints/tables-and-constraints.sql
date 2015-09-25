@@ -390,3 +390,41 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.menus'::regclass
+        AND    attname = 'sort'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.menus
+        ADD COLUMN sort integer NOT NULL DEFAULT(0);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.menus'::regclass
+        AND    attname = 'icon'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.menus
+        ADD COLUMN icon national character varying(48) NOT NULL DEFAULT('');
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP TABLE IF EXISTS office.holiday;

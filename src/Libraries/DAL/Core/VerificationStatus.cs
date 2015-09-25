@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -36,27 +37,27 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this table. Returns literal "core".
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "verification_statuses".
         /// </summary>
-        public override string ObjectName => "verification_statuses";
+        public override string _ObjectName => "verification_statuses";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-        public long LoginId { get; set; }
+        public long _LoginId { get; set; }
 
         /// <summary>
         /// User id of application user accessing this table.
         /// </summary>
-        public int UserId { get; set; }
+        public int _UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Performs SQL count on the table "core.verification_statuses".
@@ -65,7 +66,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -74,17 +75,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT COUNT(*) FROM core.verification_statuses;";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> Get()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -103,17 +104,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ExportData, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the export entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to the export entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.verification_statuses ORDER BY verification_status_id;";
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public MixERP.Net.Entities.Core.VerificationStatus Get(short verificationStatusId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -133,17 +134,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"VerificationStatus\" filtered by \"VerificationStatusId\" with value {VerificationStatusId} was denied to the user with Login ID {LoginId}", verificationStatusId, this.LoginId);
+                    Log.Information("Access to the get entity \"VerificationStatus\" filtered by \"VerificationStatusId\" with value {VerificationStatusId} was denied to the user with Login ID {_LoginId}", verificationStatusId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.verification_statuses WHERE verification_status_id=@0;";
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql, verificationStatusId).FirstOrDefault();
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql, verificationStatusId).FirstOrDefault();
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> Get(short[] verificationStatusIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -163,18 +164,18 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. verificationStatusIds: {verificationStatusIds}.", this.LoginId, verificationStatusIds);
+                    Log.Information("Access to entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. verificationStatusIds: {verificationStatusIds}.", this._LoginId, verificationStatusIds);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.verification_statuses WHERE verification_status_id IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql, verificationStatusIds);
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql, verificationStatusIds);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -193,11 +194,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get custom fields for entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get custom fields for entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -206,11 +207,11 @@ namespace MixERP.Net.Schemas.Core.Data
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.verification_statuses' ORDER BY field_order;";
-                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('core.verification_statuses'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace MixERP.Net.Schemas.Core.Data
         {
             List<DisplayField> displayFields = new List<DisplayField>();
 
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return displayFields;
             }
@@ -231,11 +232,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get display field for entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get display field for entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -243,7 +244,7 @@ namespace MixERP.Net.Schemas.Core.Data
             const string sql = "SELECT verification_status_id AS key, verification_status_name as value FROM core.verification_statuses;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
-                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
                 {
                     if (table?.Rows == null || table.Rows.Count == 0)
                     {
@@ -275,11 +276,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <param name="verificationStatus">The instance of "VerificationStatus" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public void AddOrEdit(MixERP.Net.Entities.Core.VerificationStatus verificationStatus, List<EntityParser.CustomField> customFields)
+        public object AddOrEdit(MixERP.Net.Entities.Core.VerificationStatus verificationStatus, List<EntityParser.CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
-                return;
+                return null;
             }
 
             object primaryKeyValue;
@@ -302,11 +303,11 @@ namespace MixERP.Net.Schemas.Core.Data
                          "WHERE form_name=core.get_custom_field_form_name('core.verification_statuses')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this._Catalog, sql);
 
             if (customFields == null)
             {
-                return;
+                return primaryKeyValue;
             }
 
             foreach (var field in customFields)
@@ -315,8 +316,10 @@ namespace MixERP.Net.Schemas.Core.Data
                       "SELECT core.get_custom_field_setup_id_by_table_name('core.verification_statuses', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
             }
+
+            return primaryKeyValue;
         }
 
         /// <summary>
@@ -326,7 +329,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public object Add(MixERP.Net.Entities.Core.VerificationStatus verificationStatus)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -335,16 +338,16 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Create, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to add entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. {VerificationStatus}", this.LoginId, verificationStatus);
+                    Log.Information("Access to add entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. {VerificationStatus}", this._LoginId, verificationStatus);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            return Factory.Insert(this.Catalog, verificationStatus);
+            return Factory.Insert(this._Catalog, verificationStatus);
         }
 
         /// <summary>
@@ -358,12 +361,12 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ImportData, this._LoginId, false);
                 }
 
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to import entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. {verificationStatuses}", this.LoginId, verificationStatuses);
+                    Log.Information("Access to import entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. {verificationStatuses}", this._LoginId, verificationStatuses);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -372,7 +375,7 @@ namespace MixERP.Net.Schemas.Core.Data
             int line = 0;
             try
             {
-                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (Database db = new Database(Factory.GetConnectionString(this._Catalog), Factory.ProviderName))
                 {
                     using (Transaction transaction = db.GetTransaction())
                     {
@@ -428,7 +431,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Update(MixERP.Net.Entities.Core.VerificationStatus verificationStatus, short verificationStatusId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -437,16 +440,16 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Edit, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"VerificationStatus\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {VerificationStatus}", verificationStatusId, this.LoginId, verificationStatus);
+                    Log.Information("Access to edit entity \"VerificationStatus\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {VerificationStatus}", verificationStatusId, this._LoginId, verificationStatus);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            Factory.Update(this.Catalog, verificationStatus, verificationStatusId);
+            Factory.Update(this._Catalog, verificationStatus, verificationStatusId);
         }
 
         /// <summary>
@@ -456,7 +459,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(short verificationStatusId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -465,27 +468,27 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Delete, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"VerificationStatus\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", verificationStatusId, this.LoginId);
+                    Log.Information("Access to delete entity \"VerificationStatus\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", verificationStatusId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "DELETE FROM core.verification_statuses WHERE verification_status_id=@0;";
-            Factory.NonQuery(this.Catalog, sql, verificationStatusId);
+            Factory.NonQuery(this._Catalog, sql, verificationStatusId);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.verification_statuses" producing a paged result of 25.
+        /// Performs a select statement on table "core.verification_statuses" producing a paged result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "VerificationStatus" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> GetPagedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -494,28 +497,28 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the first page of the entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    Log.Information("Access to the first page of the entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}.", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            const string sql = "SELECT * FROM core.verification_statuses ORDER BY verification_status_id LIMIT 25 OFFSET 0;";
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql);
+            const string sql = "SELECT * FROM core.verification_statuses ORDER BY verification_status_id LIMIT 10 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.verification_statuses" producing a paged result of 25.
+        /// Performs a select statement on table "core.verification_statuses" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <returns>Returns collection of "VerificationStatus" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> GetPagedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -524,19 +527,19 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    Log.Information("Access to Page #{Page} of the entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}.", pageNumber, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
-            const string sql = "SELECT * FROM core.verification_statuses ORDER BY verification_status_id LIMIT 25 OFFSET @0;";
+            long offset = (pageNumber - 1) * 10;
+            const string sql = "SELECT * FROM core.verification_statuses ORDER BY verification_status_id LIMIT 10 OFFSET @0;";
 
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql, offset);
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql, offset);
         }
 
         private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
@@ -553,7 +556,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountWhere(List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -562,11 +565,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -574,11 +577,11 @@ namespace MixERP.Net.Schemas.Core.Data
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.verification_statuses WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.VerificationStatus(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.verification_statuses" producing a paged result of 25.
+        /// Performs a filtered select statement on table "core.verification_statuses" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -586,7 +589,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -595,25 +598,25 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM core.verification_statuses WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.VerificationStatus(), filters);
 
             sql.OrderBy("verification_status_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -624,7 +627,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -633,24 +636,24 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    Log.Information("Access to count entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.verification_statuses WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.VerificationStatus(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.verification_statuses" producing a paged result of 25.
+        /// Performs a filtered select statement on table "core.verification_statuses" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filterName">The named filter.</param>
@@ -658,7 +661,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.VerificationStatus> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -667,28 +670,29 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"VerificationStatus\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM core.verification_statuses WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.VerificationStatus(), filters);
 
             sql.OrderBy("verification_status_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.VerificationStatus>(this._Catalog, sql);
         }
+
 
     }
 }

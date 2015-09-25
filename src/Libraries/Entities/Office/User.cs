@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -57,6 +58,8 @@ namespace MixERP.Net.Entities.Office
 
         [Column("password")]
         [ColumnDbType("text", 0, false, "")]
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Runtime.Serialization.IgnoreDataMember]
         public string Password { get; set; }
 
         [Column("elevated")]

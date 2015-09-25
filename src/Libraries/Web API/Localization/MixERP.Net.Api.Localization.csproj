@@ -62,7 +62,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddLocalizedResourceController.cs" />
+    <Compile Include="AddResourceController.cs" />
+    <Compile Include="CreateCultureController.cs" />
     <Compile Include="CultureController.cs" />
+    <Compile Include="GetLocalizationTableController.cs" />
+    <Compile Include="GetMenuTableController.cs" />
+    <Compile Include="GetOutputForController.cs" />
     <Compile Include="LocalizedResourceController.cs" />
     <Compile Include="LocalizedResourceViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

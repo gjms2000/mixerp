@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "create_kanban";
+        public override string _ObjectName => "create_kanban";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_object_name" argument of the function "core.create_kanban".
@@ -106,7 +106,7 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
             const string query = "SELECT * FROM core.create_kanban(@0::character varying, @1::integer, @2::character varying, @3::text);";
-            Factory.NonQuery(this.Catalog, query, this.ObjectName, this.UserId, this.KanbanName, this.Description);
+            Factory.NonQuery(this._Catalog, query, this.ObjectName, this.UserId, this.KanbanName, this.Description);
         }
     }
 }

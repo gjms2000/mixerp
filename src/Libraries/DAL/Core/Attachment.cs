@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -36,27 +37,27 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this table. Returns literal "core".
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "attachments".
         /// </summary>
-        public override string ObjectName => "attachments";
+        public override string _ObjectName => "attachments";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-        public long LoginId { get; set; }
+        public long _LoginId { get; set; }
 
         /// <summary>
         /// User id of application user accessing this table.
         /// </summary>
-        public int UserId { get; set; }
+        public int _UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Performs SQL count on the table "core.attachments".
@@ -65,7 +66,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -74,17 +75,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT COUNT(*) FROM core.attachments;";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> Get()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -103,17 +104,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ExportData, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the export entity \"Attachment\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to the export entity \"Attachment\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.attachments ORDER BY attachment_id;";
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public MixERP.Net.Entities.Core.Attachment Get(long attachmentId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -133,17 +134,17 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"Attachment\" filtered by \"AttachmentId\" with value {AttachmentId} was denied to the user with Login ID {LoginId}", attachmentId, this.LoginId);
+                    Log.Information("Access to the get entity \"Attachment\" filtered by \"AttachmentId\" with value {AttachmentId} was denied to the user with Login ID {_LoginId}", attachmentId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.attachments WHERE attachment_id=@0;";
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql, attachmentId).FirstOrDefault();
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql, attachmentId).FirstOrDefault();
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> Get(long[] attachmentIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -163,18 +164,18 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"Attachment\" was denied to the user with Login ID {LoginId}. attachmentIds: {attachmentIds}.", this.LoginId, attachmentIds);
+                    Log.Information("Access to entity \"Attachment\" was denied to the user with Login ID {LoginId}. attachmentIds: {attachmentIds}.", this._LoginId, attachmentIds);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM core.attachments WHERE attachment_id IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql, attachmentIds);
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql, attachmentIds);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -193,11 +194,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get custom fields for entity \"Attachment\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get custom fields for entity \"Attachment\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -206,11 +207,11 @@ namespace MixERP.Net.Schemas.Core.Data
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.attachments' ORDER BY field_order;";
-                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('core.attachments'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace MixERP.Net.Schemas.Core.Data
         {
             List<DisplayField> displayFields = new List<DisplayField>();
 
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return displayFields;
             }
@@ -231,11 +232,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get display field for entity \"Attachment\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get display field for entity \"Attachment\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -243,7 +244,7 @@ namespace MixERP.Net.Schemas.Core.Data
             const string sql = "SELECT attachment_id AS key, original_file_name as value FROM core.attachments;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
-                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
                 {
                     if (table?.Rows == null || table.Rows.Count == 0)
                     {
@@ -275,11 +276,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <param name="attachment">The instance of "Attachment" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public void AddOrEdit(MixERP.Net.Entities.Core.Attachment attachment, List<EntityParser.CustomField> customFields)
+        public object AddOrEdit(MixERP.Net.Entities.Core.Attachment attachment, List<EntityParser.CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
-                return;
+                return null;
             }
 
             object primaryKeyValue;
@@ -302,11 +303,11 @@ namespace MixERP.Net.Schemas.Core.Data
                          "WHERE form_name=core.get_custom_field_form_name('core.attachments')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this._Catalog, sql);
 
             if (customFields == null)
             {
-                return;
+                return primaryKeyValue;
             }
 
             foreach (var field in customFields)
@@ -315,8 +316,10 @@ namespace MixERP.Net.Schemas.Core.Data
                       "SELECT core.get_custom_field_setup_id_by_table_name('core.attachments', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
             }
+
+            return primaryKeyValue;
         }
 
         /// <summary>
@@ -326,7 +329,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public object Add(MixERP.Net.Entities.Core.Attachment attachment)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -335,16 +338,16 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Create, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to add entity \"Attachment\" was denied to the user with Login ID {LoginId}. {Attachment}", this.LoginId, attachment);
+                    Log.Information("Access to add entity \"Attachment\" was denied to the user with Login ID {LoginId}. {Attachment}", this._LoginId, attachment);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            return Factory.Insert(this.Catalog, attachment);
+            return Factory.Insert(this._Catalog, attachment);
         }
 
         /// <summary>
@@ -358,12 +361,12 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ImportData, this._LoginId, false);
                 }
 
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to import entity \"Attachment\" was denied to the user with Login ID {LoginId}. {attachments}", this.LoginId, attachments);
+                    Log.Information("Access to import entity \"Attachment\" was denied to the user with Login ID {LoginId}. {attachments}", this._LoginId, attachments);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -372,7 +375,7 @@ namespace MixERP.Net.Schemas.Core.Data
             int line = 0;
             try
             {
-                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (Database db = new Database(Factory.GetConnectionString(this._Catalog), Factory.ProviderName))
                 {
                     using (Transaction transaction = db.GetTransaction())
                     {
@@ -428,7 +431,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Update(MixERP.Net.Entities.Core.Attachment attachment, long attachmentId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -437,16 +440,16 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Edit, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"Attachment\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {Attachment}", attachmentId, this.LoginId, attachment);
+                    Log.Information("Access to edit entity \"Attachment\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {Attachment}", attachmentId, this._LoginId, attachment);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            Factory.Update(this.Catalog, attachment, attachmentId);
+            Factory.Update(this._Catalog, attachment, attachmentId);
         }
 
         /// <summary>
@@ -456,7 +459,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(long attachmentId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -465,27 +468,27 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Delete, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"Attachment\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", attachmentId, this.LoginId);
+                    Log.Information("Access to delete entity \"Attachment\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", attachmentId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "DELETE FROM core.attachments WHERE attachment_id=@0;";
-            Factory.NonQuery(this.Catalog, sql, attachmentId);
+            Factory.NonQuery(this._Catalog, sql, attachmentId);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.attachments" producing a paged result of 25.
+        /// Performs a select statement on table "core.attachments" producing a paged result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "Attachment" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetPagedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -494,28 +497,28 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the first page of the entity \"Attachment\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    Log.Information("Access to the first page of the entity \"Attachment\" was denied to the user with Login ID {LoginId}.", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            const string sql = "SELECT * FROM core.attachments ORDER BY attachment_id LIMIT 25 OFFSET 0;";
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql);
+            const string sql = "SELECT * FROM core.attachments ORDER BY attachment_id LIMIT 10 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.attachments" producing a paged result of 25.
+        /// Performs a select statement on table "core.attachments" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <returns>Returns collection of "Attachment" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetPagedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -524,19 +527,19 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the entity \"Attachment\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    Log.Information("Access to Page #{Page} of the entity \"Attachment\" was denied to the user with Login ID {LoginId}.", pageNumber, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
-            const string sql = "SELECT * FROM core.attachments ORDER BY attachment_id LIMIT 25 OFFSET @0;";
+            long offset = (pageNumber - 1) * 10;
+            const string sql = "SELECT * FROM core.attachments ORDER BY attachment_id LIMIT 10 OFFSET @0;";
 
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql, offset);
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql, offset);
         }
 
         private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
@@ -553,7 +556,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountWhere(List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -562,11 +565,11 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -574,11 +577,11 @@ namespace MixERP.Net.Schemas.Core.Data
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.attachments WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.Attachment(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.attachments" producing a paged result of 25.
+        /// Performs a filtered select statement on table "core.attachments" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -586,7 +589,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -595,25 +598,25 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM core.attachments WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.Attachment(), filters);
 
             sql.OrderBy("attachment_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -624,7 +627,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -633,24 +636,24 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    Log.Information("Access to count entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.attachments WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.Attachment(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.attachments" producing a paged result of 25.
+        /// Performs a filtered select statement on table "core.attachments" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filterName">The named filter.</param>
@@ -658,7 +661,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Core.Attachment> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -667,28 +670,29 @@ namespace MixERP.Net.Schemas.Core.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Attachment\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM core.attachments WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Core.Attachment(), filters);
 
             sql.OrderBy("attachment_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Core.Attachment>(this._Catalog, sql);
         }
+
 
     }
 }

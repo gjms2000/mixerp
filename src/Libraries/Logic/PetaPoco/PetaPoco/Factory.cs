@@ -28,7 +28,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -49,7 +49,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -75,7 +75,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -101,7 +101,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -122,7 +122,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -143,7 +143,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 
@@ -164,7 +164,7 @@ namespace PetaPoco
                     throw new MixERPException(errorMessage, ex);
                 }
 
-                throw;
+                throw new MixERPException(ex.Message, ex);
             }
         }
 

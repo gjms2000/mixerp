@@ -4,7 +4,8 @@ CREATE VIEW hrm.leave_application_scrud_view
 AS
 SELECT
     hrm.leave_applications.leave_application_id,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.leave_types.leave_type_code || ' (' || hrm.leave_types.leave_type_name || ')' AS leave_type,
     office.users.user_name AS entered_by,
     hrm.leave_applications.applied_on,

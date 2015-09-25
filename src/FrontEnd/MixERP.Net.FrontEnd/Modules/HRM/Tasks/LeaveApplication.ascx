@@ -8,7 +8,7 @@
     var url = "/api/hrm/employee/get-where/1";
     var data = JSON.stringify(filters);
 
-    var getEmployees = window.postAjaxRequest(url, data);
+    var getEmployees = window.getAjaxRequest(url, "POST", data);
 
     getEmployees.success(function (msg) {
         if (employeeId !== msg[0].EmployeeId) {
@@ -50,7 +50,7 @@
         },
         {
             property: "EmployeeId",
-            url: '/api/hrm/employee/display-fields',
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

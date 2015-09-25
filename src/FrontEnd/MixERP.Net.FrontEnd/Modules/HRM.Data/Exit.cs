@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -36,27 +37,27 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <summary>
         /// The schema of this table. Returns literal "hrm".
         /// </summary>
-        public override string ObjectNamespace => "hrm";
+        public override string _ObjectNamespace => "hrm";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "exits".
         /// </summary>
-        public override string ObjectName => "exits";
+        public override string _ObjectName => "exits";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-        public long LoginId { get; set; }
+        public long _LoginId { get; set; }
 
         /// <summary>
         /// User id of application user accessing this table.
         /// </summary>
-        public int UserId { get; set; }
+        public int _UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Performs SQL count on the table "hrm.exits".
@@ -65,7 +66,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -74,17 +75,17 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT COUNT(*) FROM hrm.exits;";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> Get()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -103,17 +104,17 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ExportData, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the export entity \"Exit\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to the export entity \"Exit\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM hrm.exits ORDER BY exit_id;";
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public MixERP.Net.Entities.HRM.Exit Get(long exitId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -133,17 +134,17 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"Exit\" filtered by \"ExitId\" with value {ExitId} was denied to the user with Login ID {LoginId}", exitId, this.LoginId);
+                    Log.Information("Access to the get entity \"Exit\" filtered by \"ExitId\" with value {ExitId} was denied to the user with Login ID {_LoginId}", exitId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM hrm.exits WHERE exit_id=@0;";
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql, exitId).FirstOrDefault();
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql, exitId).FirstOrDefault();
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> Get(long[] exitIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -163,18 +164,18 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"Exit\" was denied to the user with Login ID {LoginId}. exitIds: {exitIds}.", this.LoginId, exitIds);
+                    Log.Information("Access to entity \"Exit\" was denied to the user with Login ID {LoginId}. exitIds: {exitIds}.", this._LoginId, exitIds);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM hrm.exits WHERE exit_id IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql, exitIds);
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql, exitIds);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -193,11 +194,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get custom fields for entity \"Exit\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get custom fields for entity \"Exit\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -206,11 +207,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='hrm.exits' ORDER BY field_order;";
-                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('hrm.exits'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         {
             List<DisplayField> displayFields = new List<DisplayField>();
 
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return displayFields;
             }
@@ -231,11 +232,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get display field for entity \"Exit\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get display field for entity \"Exit\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -243,7 +244,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             const string sql = "SELECT exit_id AS key, exit_id as value FROM hrm.exits;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
-                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
                 {
                     if (table?.Rows == null || table.Rows.Count == 0)
                     {
@@ -275,16 +276,16 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <param name="exit">The instance of "Exit" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public void AddOrEdit(MixERP.Net.Entities.HRM.Exit exit, List<EntityParser.CustomField> customFields)
+        public object AddOrEdit(MixERP.Net.Entities.HRM.Exit exit, List<EntityParser.CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
-                return;
+                return null;
             }
 
             object primaryKeyValue;
 
-            exit.AuditUserId = this.UserId;
+            exit.AuditUserId = this._UserId;
             exit.AuditTs = System.DateTime.UtcNow;
 
             if (exit.ExitId > 0)
@@ -303,11 +304,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                          "WHERE form_name=core.get_custom_field_form_name('hrm.exits')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this._Catalog, sql);
 
             if (customFields == null)
             {
-                return;
+                return primaryKeyValue;
             }
 
             foreach (var field in customFields)
@@ -316,8 +317,10 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                       "SELECT core.get_custom_field_setup_id_by_table_name('hrm.exits', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
             }
+
+            return primaryKeyValue;
         }
 
         /// <summary>
@@ -327,7 +330,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public object Add(MixERP.Net.Entities.HRM.Exit exit)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -336,16 +339,16 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Create, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to add entity \"Exit\" was denied to the user with Login ID {LoginId}. {Exit}", this.LoginId, exit);
+                    Log.Information("Access to add entity \"Exit\" was denied to the user with Login ID {LoginId}. {Exit}", this._LoginId, exit);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            return Factory.Insert(this.Catalog, exit);
+            return Factory.Insert(this._Catalog, exit);
         }
 
         /// <summary>
@@ -359,12 +362,12 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ImportData, this._LoginId, false);
                 }
 
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to import entity \"Exit\" was denied to the user with Login ID {LoginId}. {exits}", this.LoginId, exits);
+                    Log.Information("Access to import entity \"Exit\" was denied to the user with Login ID {LoginId}. {exits}", this._LoginId, exits);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -373,7 +376,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             int line = 0;
             try
             {
-                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (Database db = new Database(Factory.GetConnectionString(this._Catalog), Factory.ProviderName))
                 {
                     using (Transaction transaction = db.GetTransaction())
                     {
@@ -381,7 +384,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
                         {
                             line++;
 
-                            exit.AuditUserId = this.UserId;
+                            exit.AuditUserId = this._UserId;
                             exit.AuditTs = System.DateTime.UtcNow;
 
                             if (exit.ExitId > 0)
@@ -430,7 +433,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Update(MixERP.Net.Entities.HRM.Exit exit, long exitId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -439,16 +442,16 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Edit, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"Exit\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {Exit}", exitId, this.LoginId, exit);
+                    Log.Information("Access to edit entity \"Exit\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {Exit}", exitId, this._LoginId, exit);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            Factory.Update(this.Catalog, exit, exitId);
+            Factory.Update(this._Catalog, exit, exitId);
         }
 
         /// <summary>
@@ -458,7 +461,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(long exitId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -467,27 +470,27 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Delete, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"Exit\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", exitId, this.LoginId);
+                    Log.Information("Access to delete entity \"Exit\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", exitId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "DELETE FROM hrm.exits WHERE exit_id=@0;";
-            Factory.NonQuery(this.Catalog, sql, exitId);
+            Factory.NonQuery(this._Catalog, sql, exitId);
         }
 
         /// <summary>
-        /// Performs a select statement on table "hrm.exits" producing a paged result of 25.
+        /// Performs a select statement on table "hrm.exits" producing a paged result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "Exit" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> GetPagedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -496,28 +499,28 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the first page of the entity \"Exit\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    Log.Information("Access to the first page of the entity \"Exit\" was denied to the user with Login ID {LoginId}.", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            const string sql = "SELECT * FROM hrm.exits ORDER BY exit_id LIMIT 25 OFFSET 0;";
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql);
+            const string sql = "SELECT * FROM hrm.exits ORDER BY exit_id LIMIT 10 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "hrm.exits" producing a paged result of 25.
+        /// Performs a select statement on table "hrm.exits" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <returns>Returns collection of "Exit" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> GetPagedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -526,19 +529,19 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the entity \"Exit\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    Log.Information("Access to Page #{Page} of the entity \"Exit\" was denied to the user with Login ID {LoginId}.", pageNumber, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
-            const string sql = "SELECT * FROM hrm.exits ORDER BY exit_id LIMIT 25 OFFSET @0;";
+            long offset = (pageNumber - 1) * 10;
+            const string sql = "SELECT * FROM hrm.exits ORDER BY exit_id LIMIT 10 OFFSET @0;";
 
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql, offset);
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql, offset);
         }
 
         private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
@@ -555,7 +558,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountWhere(List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -564,11 +567,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -576,11 +579,11 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM hrm.exits WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Exit(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "hrm.exits" producing a paged result of 25.
+        /// Performs a filtered select statement on table "hrm.exits" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -588,7 +591,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -597,25 +600,25 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"Exit\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Exit\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM hrm.exits WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Exit(), filters);
 
             sql.OrderBy("exit_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -626,7 +629,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -635,24 +638,24 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    Log.Information("Access to count entity \"Exit\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM hrm.exits WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Exit(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "hrm.exits" producing a paged result of 25.
+        /// Performs a filtered select statement on table "hrm.exits" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filterName">The named filter.</param>
@@ -660,7 +663,7 @@ namespace MixERP.Net.Core.Modules.HRM.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.HRM.Exit> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -669,27 +672,56 @@ namespace MixERP.Net.Core.Modules.HRM.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"Exit\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"Exit\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM hrm.exits WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.HRM.Exit(), filters);
 
             sql.OrderBy("exit_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.HRM.Exit>(this._Catalog, sql);
+        }
+
+        public void Verify(long exitId, short verificationStatusId, string reason)
+        {
+            if (string.IsNullOrWhiteSpace(this._Catalog))
+            {
+                return;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Verify, this._LoginId, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information("Access to verify entity \"Exit\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", exitId, this._LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            if (exitId > 0)
+            {
+                const string sql =
+                    "UPDATE hrm.exits SET verification_status_id=@0, verified_by_user_id=@1, verified_on=NOW(), verification_reason=@2 WHERE exit_id = @3;";
+
+                Factory.NonQuery(this._Catalog, sql, verificationStatusId, this._UserId, reason, exitId);
+            }
         }
 
     }

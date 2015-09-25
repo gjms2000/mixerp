@@ -1,3 +1,4 @@
+// ReSharper disable All
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PetaPoco;
 
 namespace MixERP.Net.Api.HRM
@@ -25,23 +27,23 @@ namespace MixERP.Net.Api.HRM
 
         public ContractController()
         {
-            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
-            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
-            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
-            this.Catalog = AppUsers.GetCurrentUserDB();
+            this._LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this._UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this._Catalog = AppUsers.GetCurrentUserDB();
 
             this.ContractContext = new MixERP.Net.Core.Modules.HRM.Data.Contract
             {
-                Catalog = this.Catalog,
-                LoginId = this.LoginId,
-                UserId = this.UserId
+                _Catalog = this._Catalog,
+                _LoginId = this._LoginId,
+                _UserId = this._UserId
             };
         }
 
-        public long LoginId { get; }
-        public int UserId { get; private set; }
-        public int OfficeId { get; private set; }
-        public string Catalog { get; }
+        public long _LoginId { get; }
+        public int _UserId { get; private set; }
+        public int _OfficeId { get; private set; }
+        public string _Catalog { get; }
 
         /// <summary>
         ///     Creates meta information of "contract" entity.
@@ -89,6 +91,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -111,6 +121,14 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -136,6 +154,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -155,6 +181,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -162,7 +196,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 contracts on each page, sorted by the property ContractId.
+        ///     Creates a paginated collection containing 10 contracts on each page, sorted by the property ContractId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -178,6 +212,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -185,7 +227,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 contracts on each page, sorted by the property ContractId.
+        ///     Creates a paginated collection containing 10 contracts on each page, sorted by the property ContractId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -202,6 +244,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -216,16 +266,24 @@ namespace MixERP.Net.Api.HRM
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/hrm/contract/count-where")]
-        public long CountWhere([FromBody]dynamic filters)
+        public long CountWhere([FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.ContractContext.CountWhere(f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -234,7 +292,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 contracts on each page, sorted by the property ContractId.
+        ///     Creates a filtered and paginated collection containing 10 contracts on each page, sorted by the property ContractId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -242,16 +300,24 @@ namespace MixERP.Net.Api.HRM
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/hrm/contract/get-where/{pageNumber}")]
-        public IEnumerable<MixERP.Net.Entities.HRM.Contract> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        public IEnumerable<MixERP.Net.Entities.HRM.Contract> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.ContractContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -277,6 +343,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -284,7 +358,7 @@ namespace MixERP.Net.Api.HRM
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 contracts on each page, sorted by the property ContractId.
+        ///     Creates a filtered and paginated collection containing 10 contracts on each page, sorted by the property ContractId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filterName">The named filter.</param>
@@ -301,6 +375,14 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -325,6 +407,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -347,6 +437,14 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -371,6 +469,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -384,7 +490,7 @@ namespace MixERP.Net.Api.HRM
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/hrm/contract/add-or-edit")]
-        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
+        public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             MixERP.Net.Entities.HRM.Contract contract = form[0].ToObject<MixERP.Net.Entities.HRM.Contract>(JsonHelper.GetJsonSerializer());
             List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
@@ -396,11 +502,19 @@ namespace MixERP.Net.Api.HRM
 
             try
             {
-                this.ContractContext.AddOrEdit(contract, customFields);
+                return this.ContractContext.AddOrEdit(contract, customFields);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -430,6 +544,14 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -458,6 +580,14 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -496,9 +626,13 @@ namespace MixERP.Net.Api.HRM
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (MixERPException)
+            catch (MixERPException ex)
             {
-                throw;
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -522,6 +656,14 @@ namespace MixERP.Net.Api.HRM
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {

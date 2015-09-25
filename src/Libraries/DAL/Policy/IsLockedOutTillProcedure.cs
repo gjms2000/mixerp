@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "policy";
+        public override string _ObjectNamespace => "policy";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "is_locked_out_till";
+        public override string _ObjectName => "is_locked_out_till";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "user_id" argument of the function "policy.is_locked_out_till".
@@ -88,7 +88,7 @@ namespace MixERP.Net.Schemas.Policy.Data
                 }
             }
             const string query = "SELECT * FROM policy.is_locked_out_till(@0::integer_strict);";
-            return Factory.Scalar<DateTime>(this.Catalog, query, this.UserId);
+            return Factory.Scalar<DateTime>(this._Catalog, query, this.UserId);
         }
     }
 }

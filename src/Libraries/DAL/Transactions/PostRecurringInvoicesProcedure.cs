@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "post_recurring_invoices";
+        public override string _ObjectName => "post_recurring_invoices";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_user_id" argument of the function "transactions.post_recurring_invoices".
@@ -57,7 +57,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// Maps to "_login_id" argument of the function "transactions.post_recurring_invoices".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_office_id" argument of the function "transactions.post_recurring_invoices".
         /// </summary>
@@ -78,13 +78,13 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// Prepares, validates, and executes the function "transactions.post_recurring_invoices(_user_id integer, _login_id bigint, _office_id integer, _value_date date)" on the database.
         /// </summary>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "transactions.post_recurring_invoices".</param>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "transactions.post_recurring_invoices".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "transactions.post_recurring_invoices".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.post_recurring_invoices".</param>
         /// <param name="valueDate">Enter argument value for "_value_date" parameter of the function "transactions.post_recurring_invoices".</param>
-        public PostRecurringInvoicesProcedure(int userId, long loginIdParameter, int officeId, DateTime valueDate)
+        public PostRecurringInvoicesProcedure(int userId, long loginId, int officeId, DateTime valueDate)
         {
             this.UserId = userId;
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.OfficeId = officeId;
             this.ValueDate = valueDate;
         }
@@ -106,7 +106,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.post_recurring_invoices(@0::integer, @1::bigint, @2::integer, @3::date);";
-            Factory.NonQuery(this.Catalog, query, this.UserId, this.LoginIdParameter, this.OfficeId, this.ValueDate);
+            Factory.NonQuery(this._Catalog, query, this.UserId, this.LoginId, this.OfficeId, this.ValueDate);
         }
     }
 }

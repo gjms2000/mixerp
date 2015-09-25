@@ -7,6 +7,7 @@ SELECT
     hrm.employees.first_name,
     hrm.employees.middle_name,
     hrm.employees.last_name,
+    hrm.employees.employee_code,
     hrm.employees.employee_name,
     hrm.employees.gender_code,
     core.genders.gender_name,
@@ -73,4 +74,5 @@ ON hrm.employees.current_role_id = office.roles.role_id
 LEFT JOIN core.nationalities
 ON hrm.employees.nationality_code = core.nationalities.nationality_code
 LEFT JOIN core.countries
-ON hrm.employees.country_id = core.countries.country_id;
+ON hrm.employees.country_id = core.countries.country_id
+WHERE COALESCE(service_ended_on, 'infinity') >= NOW();

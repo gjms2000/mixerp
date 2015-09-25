@@ -25,17 +25,26 @@
     <asp:ContentPlaceHolder ID="StyleSheetContentPlaceholder" runat="server">
     </asp:ContentPlaceHolder>
     <meta name="description" content="MixERP" />
+    <style>
+        @media only screen and (min-width: 768px) {
+            .cellphone.only {
+                display: none!important;
+            }
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server" enctype="multipart/form-data" method="post" submitdisabledcontrols="true" defaultbutton="SwallowSubmit">
         <script src="/Resources.js?Culture=<%= CultureManager.GetCurrent().TwoLetterISOLanguageName %>"></script>
         <script src="/bundles/master-page.js"></script>
 
+        <script src="/Scripts/mixerp/master-page/menu.js"></script>
+
         <asp:Button runat="server" ID="SwallowSubmit" OnClientClick=" return false; " Style="display: none;" />
         <asp:ScriptManager runat="server" ID="ScriptManager1" />
 
 
-        <div class="ui stackable doubling grid">
+        <div class="ui stackable grid">
             <div class="sixteen wide brand column" id="Top">
                 <div class="ui stackable grid">
                     <div class="four wide column">
@@ -45,7 +54,7 @@
                     </div>
                     <div class="twelve wide column">
                         <div id="RightMenu">
-                            <div class="ui inverted attached contrast theme stackable menu">
+                            <div class="ui inverted purple attached stackable menu">
                                 <a class="item" href="http://mixerp.org/" target="_blank">
                                     <i class="anchor icon"></i>
                                     MixERP
@@ -98,7 +107,8 @@
                     </div>
                 </div>
             </div>
-            <div class="sixteen wide column" id="MainMenu">
+
+            <div class="sixteen wide column computer only" id="MainMenu">
                 <div id="top-menu" class="ui attached stackable menu">
                     <a class="item" onclick=" toggleSidebar(this); ">
                         <i class="options icon"></i>
@@ -108,7 +118,7 @@
                     </a>
                 </div>
             </div>
-            <div class="three wide column sidebar" id="Sidebar">
+            <div class="three wide column computer only sidebar" id="Sidebar">
                 <div id="search" style="width: 100%;">
                     <div class="ui icon input" style="width: 100%;">
                         <input type="text" id="SearchInput" autocomplete="off">
@@ -119,8 +129,19 @@
                     <ul id='treeData'></ul>
                 </div>
             </div>
-            <div class="twelve wide column" id="Content">
+            <div class="thirteen wide column" id="Content">
                 <div id="MainContent">
+
+                    <div class="ui mobile only grid">
+                        <div id="PhoneMenu" style="max-width: 500px; padding-bottom: 24px;">
+                            <div class="ui grid">
+                                <div class="ui four column doubling row" id="menu-cols">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <asp:ContentPlaceHolder ID="BodyContentPlaceholder" runat="server">
                     </asp:ContentPlaceHolder>
                     <script src="/Scripts/mixerp/utitlities/localizable.js"></script>
@@ -212,6 +233,7 @@
                 });
             });
         </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
     </form>
 </body>
 </html>

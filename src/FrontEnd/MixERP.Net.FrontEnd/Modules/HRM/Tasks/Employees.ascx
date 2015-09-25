@@ -4,14 +4,15 @@
 
     scrudFactory.title = "Employee";
 
-    scrudFactory.viewAPI = "/api/hrm/employee";
-    scrudFactory.viewTableName = "hrm.employees";
+    scrudFactory.viewAPI = "/api/hrm/employee-view";
+    scrudFactory.viewTableName = "hrm.employee_view";
 
     scrudFactory.formAPI = "/api/hrm/employee";
     scrudFactory.formTableName = "hrm.employees";
 
     scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
     scrudFactory.readonlyColumns = ["EmployeeName"];
+    scrudFactory.hiddenColumns = ["Status", "ServiceEndedOn"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -20,7 +21,8 @@
     scrudFactory.live = "EmployeeName";
     scrudFactory.layout = [
         ["Photo", ""],
-        ["EmployeeId", "EmployeeName", "", ""],
+        ["EmployeeId", ""],
+        ["EmployeeName", "EmployeeCode", "", ""],
         ["FirstName", "MiddleName", "LastName", "GenderCode", "", "", "", ""]
     ];
 
@@ -131,6 +133,7 @@
 
 
     function initialize() {
+        $("#status").dropdown("set selected", "yes");
         var firstName = $("#first_name");
         var middleName = $("#middle_name");
         var lastName = $("#last_name");

@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -30,6 +31,10 @@ namespace MixERP.Net.Entities.HRM
         [Column("employee_id")]
         [ColumnDbType("int4", 0, false, "nextval('hrm.employees_employee_id_seq'::regclass)")]
         public int EmployeeId { get; set; }
+
+        [Column("employee_code")]
+        [ColumnDbType("varchar", 12, false, "")]
+        public string EmployeeCode { get; set; }
 
         [Column("first_name")]
         [ColumnDbType("varchar", 50, false, "")]
@@ -162,6 +167,10 @@ namespace MixERP.Net.Entities.HRM
         [Column("blog")]
         [ColumnDbType("varchar", 128, true, "")]
         public string Blog { get; set; }
+
+        [Column("service_ended_on")]
+        [ColumnDbType("date", 0, true, "")]
+        public DateTime? ServiceEndedOn { get; set; }
 
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")]

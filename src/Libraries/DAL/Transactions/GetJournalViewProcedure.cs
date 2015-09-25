@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_journal_view";
+        public override string _ObjectName => "get_journal_view";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_user_id" argument of the function "transactions.get_journal_view".
@@ -166,7 +166,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.get_journal_view(@0::integer, @1::integer, @2::date, @3::date, @4::bigint, @5::character varying, @6::character varying, @7::character varying, @8::character varying, @9::character varying, @10::character varying, @11::character varying, @12::character varying, @13::character varying);";
-            return Factory.Get<DbGetJournalViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.From, this.To, this.TranId, this.TranCode, this.Book, this.ReferenceNumber, this.StatementReference, this.PostedBy, this.Office, this.Status, this.VerifiedBy, this.Reason);
+            return Factory.Get<DbGetJournalViewResult>(this._Catalog, query, this.UserId, this.OfficeId, this.From, this.To, this.TranId, this.TranCode, this.Book, this.ReferenceNumber, this.StatementReference, this.PostedBy, this.Office, this.Status, this.VerifiedBy, this.Reason);
         }
     }
 }

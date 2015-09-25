@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -36,27 +37,27 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The schema of this table. Returns literal "policy".
         /// </summary>
-        public override string ObjectNamespace => "policy";
+        public override string _ObjectNamespace => "policy";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "store_policy_details".
         /// </summary>
-        public override string ObjectName => "store_policy_details";
+        public override string _ObjectName => "store_policy_details";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-        public long LoginId { get; set; }
+        public long _LoginId { get; set; }
 
         /// <summary>
         /// User id of application user accessing this table.
         /// </summary>
-        public int UserId { get; set; }
+        public int _UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Performs SQL count on the table "policy.store_policy_details".
@@ -65,7 +66,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -74,17 +75,17 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT COUNT(*) FROM policy.store_policy_details;";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> Get()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -103,17 +104,17 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ExportData, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the export entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to the export entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM policy.store_policy_details ORDER BY store_policy_detail_id;";
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public MixERP.Net.Entities.Policy.StorePolicyDetail Get(long storePolicyDetailId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -133,17 +134,17 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"StorePolicyDetail\" filtered by \"StorePolicyDetailId\" with value {StorePolicyDetailId} was denied to the user with Login ID {LoginId}", storePolicyDetailId, this.LoginId);
+                    Log.Information("Access to the get entity \"StorePolicyDetail\" filtered by \"StorePolicyDetailId\" with value {StorePolicyDetailId} was denied to the user with Login ID {_LoginId}", storePolicyDetailId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM policy.store_policy_details WHERE store_policy_detail_id=@0;";
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql, storePolicyDetailId).FirstOrDefault();
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql, storePolicyDetailId).FirstOrDefault();
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> Get(long[] storePolicyDetailIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -163,18 +164,18 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. storePolicyDetailIds: {storePolicyDetailIds}.", this.LoginId, storePolicyDetailIds);
+                    Log.Information("Access to entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. storePolicyDetailIds: {storePolicyDetailIds}.", this._LoginId, storePolicyDetailIds);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM policy.store_policy_details WHERE store_policy_detail_id IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql, storePolicyDetailIds);
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql, storePolicyDetailIds);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -193,11 +194,11 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get custom fields for entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get custom fields for entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -206,11 +207,11 @@ namespace MixERP.Net.Schemas.Policy.Data
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='policy.store_policy_details' ORDER BY field_order;";
-                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('policy.store_policy_details'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         {
             List<DisplayField> displayFields = new List<DisplayField>();
 
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return displayFields;
             }
@@ -231,11 +232,11 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get display field for entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get display field for entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -243,7 +244,7 @@ namespace MixERP.Net.Schemas.Policy.Data
             const string sql = "SELECT store_policy_detail_id AS key, store_policy_detail_id as value FROM policy.store_policy_details;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
-                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
                 {
                     if (table?.Rows == null || table.Rows.Count == 0)
                     {
@@ -275,16 +276,16 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <param name="storePolicyDetail">The instance of "StorePolicyDetail" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public void AddOrEdit(MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail, List<EntityParser.CustomField> customFields)
+        public object AddOrEdit(MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail, List<EntityParser.CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
-                return;
+                return null;
             }
 
             object primaryKeyValue;
 
-            storePolicyDetail.AuditUserId = this.UserId;
+            storePolicyDetail.AuditUserId = this._UserId;
             storePolicyDetail.AuditTs = System.DateTime.UtcNow;
 
             if (storePolicyDetail.StorePolicyDetailId > 0)
@@ -303,11 +304,11 @@ namespace MixERP.Net.Schemas.Policy.Data
                          "WHERE form_name=core.get_custom_field_form_name('policy.store_policy_details')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this._Catalog, sql);
 
             if (customFields == null)
             {
-                return;
+                return primaryKeyValue;
             }
 
             foreach (var field in customFields)
@@ -316,8 +317,10 @@ namespace MixERP.Net.Schemas.Policy.Data
                       "SELECT core.get_custom_field_setup_id_by_table_name('policy.store_policy_details', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
             }
+
+            return primaryKeyValue;
         }
 
         /// <summary>
@@ -327,7 +330,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public object Add(MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -336,16 +339,16 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Create, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to add entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. {StorePolicyDetail}", this.LoginId, storePolicyDetail);
+                    Log.Information("Access to add entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. {StorePolicyDetail}", this._LoginId, storePolicyDetail);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            return Factory.Insert(this.Catalog, storePolicyDetail);
+            return Factory.Insert(this._Catalog, storePolicyDetail);
         }
 
         /// <summary>
@@ -359,12 +362,12 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ImportData, this._LoginId, false);
                 }
 
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to import entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. {storePolicyDetails}", this.LoginId, storePolicyDetails);
+                    Log.Information("Access to import entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. {storePolicyDetails}", this._LoginId, storePolicyDetails);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -373,7 +376,7 @@ namespace MixERP.Net.Schemas.Policy.Data
             int line = 0;
             try
             {
-                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (Database db = new Database(Factory.GetConnectionString(this._Catalog), Factory.ProviderName))
                 {
                     using (Transaction transaction = db.GetTransaction())
                     {
@@ -381,7 +384,7 @@ namespace MixERP.Net.Schemas.Policy.Data
                         {
                             line++;
 
-                            storePolicyDetail.AuditUserId = this.UserId;
+                            storePolicyDetail.AuditUserId = this._UserId;
                             storePolicyDetail.AuditTs = System.DateTime.UtcNow;
 
                             if (storePolicyDetail.StorePolicyDetailId > 0)
@@ -430,7 +433,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Update(MixERP.Net.Entities.Policy.StorePolicyDetail storePolicyDetail, long storePolicyDetailId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -439,16 +442,16 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Edit, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"StorePolicyDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {StorePolicyDetail}", storePolicyDetailId, this.LoginId, storePolicyDetail);
+                    Log.Information("Access to edit entity \"StorePolicyDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {StorePolicyDetail}", storePolicyDetailId, this._LoginId, storePolicyDetail);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            Factory.Update(this.Catalog, storePolicyDetail, storePolicyDetailId);
+            Factory.Update(this._Catalog, storePolicyDetail, storePolicyDetailId);
         }
 
         /// <summary>
@@ -458,7 +461,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(long storePolicyDetailId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -467,27 +470,27 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Delete, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"StorePolicyDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", storePolicyDetailId, this.LoginId);
+                    Log.Information("Access to delete entity \"StorePolicyDetail\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", storePolicyDetailId, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "DELETE FROM policy.store_policy_details WHERE store_policy_detail_id=@0;";
-            Factory.NonQuery(this.Catalog, sql, storePolicyDetailId);
+            Factory.NonQuery(this._Catalog, sql, storePolicyDetailId);
         }
 
         /// <summary>
-        /// Performs a select statement on table "policy.store_policy_details" producing a paged result of 25.
+        /// Performs a select statement on table "policy.store_policy_details" producing a paged result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "StorePolicyDetail" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetPagedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -496,28 +499,28 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the first page of the entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    Log.Information("Access to the first page of the entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}.", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            const string sql = "SELECT * FROM policy.store_policy_details ORDER BY store_policy_detail_id LIMIT 25 OFFSET 0;";
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql);
+            const string sql = "SELECT * FROM policy.store_policy_details ORDER BY store_policy_detail_id LIMIT 10 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "policy.store_policy_details" producing a paged result of 25.
+        /// Performs a select statement on table "policy.store_policy_details" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <returns>Returns collection of "StorePolicyDetail" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetPagedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -526,19 +529,19 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    Log.Information("Access to Page #{Page} of the entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}.", pageNumber, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
-            const string sql = "SELECT * FROM policy.store_policy_details ORDER BY store_policy_detail_id LIMIT 25 OFFSET @0;";
+            long offset = (pageNumber - 1) * 10;
+            const string sql = "SELECT * FROM policy.store_policy_details ORDER BY store_policy_detail_id LIMIT 10 OFFSET @0;";
 
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql, offset);
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql, offset);
         }
 
         private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
@@ -555,7 +558,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountWhere(List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -564,11 +567,11 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -576,11 +579,11 @@ namespace MixERP.Net.Schemas.Policy.Data
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM policy.store_policy_details WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.StorePolicyDetail(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "policy.store_policy_details" producing a paged result of 25.
+        /// Performs a filtered select statement on table "policy.store_policy_details" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -588,7 +591,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -597,25 +600,25 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM policy.store_policy_details WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.StorePolicyDetail(), filters);
 
             sql.OrderBy("store_policy_detail_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -626,7 +629,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -635,24 +638,24 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    Log.Information("Access to count entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM policy.store_policy_details WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.StorePolicyDetail(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "policy.store_policy_details" producing a paged result of 25.
+        /// Performs a filtered select statement on table "policy.store_policy_details" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filterName">The named filter.</param>
@@ -660,7 +663,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Policy.StorePolicyDetail> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -669,28 +672,29 @@ namespace MixERP.Net.Schemas.Policy.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"StorePolicyDetail\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM policy.store_policy_details WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Policy.StorePolicyDetail(), filters);
 
             sql.OrderBy("store_policy_detail_id");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Policy.StorePolicyDetail>(this._Catalog, sql);
         }
+
 
     }
 }

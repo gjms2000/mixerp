@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "core";
+        public override string _ObjectNamespace => "core";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_compound_item_details";
+        public override string _ObjectName => "get_compound_item_details";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Core.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_compound_item_code" argument of the function "core.get_compound_item_details".
@@ -118,7 +118,7 @@ namespace MixERP.Net.Schemas.Core.Data
                 }
             }
             const string query = "SELECT * FROM core.get_compound_item_details(@0::character varying, @1::character varying, @2::character varying, @3::integer, @4::character varying, @5::integer);";
-            return Factory.Get<DbGetCompoundItemDetailsResult>(this.Catalog, query, this.CompoundItemCode, this.SalesTaxCode, this.TranBook, this.StoreId, this.PartyCode, this.PriceTypeId);
+            return Factory.Get<DbGetCompoundItemDetailsResult>(this._Catalog, query, this.CompoundItemCode, this.SalesTaxCode, this.TranBook, this.StoreId, this.PartyCode, this.PriceTypeId);
         }
     }
 }

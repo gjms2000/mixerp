@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -42,6 +43,14 @@ namespace MixERP.Net.Entities.Policy
         [Column("menu_code")]
         [ColumnDbType("character varying", 0, false, "")]
         public string MenuCode { get; set; }
+
+        [Column("sort")]
+        [ColumnDbType("integer", 0, false, "")]
+        public int Sort { get; set; }
+
+        [Column("icon")]
+        [ColumnDbType("character varying", 0, false, "")]
+        public string Icon { get; set; }
 
         [Column("level")]
         [ColumnDbType("smallint", 0, false, "")]

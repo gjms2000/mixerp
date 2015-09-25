@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -36,27 +37,27 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <summary>
         /// The schema of this table. Returns literal "config".
         /// </summary>
-        public override string ObjectNamespace => "config";
+        public override string _ObjectNamespace => "config";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "currency_layer".
         /// </summary>
-        public override string ObjectName => "currency_layer";
+        public override string _ObjectName => "currency_layer";
 
         /// <summary>
         /// Login id of application user accessing this table.
         /// </summary>
-        public long LoginId { get; set; }
+        public long _LoginId { get; set; }
 
         /// <summary>
         /// User id of application user accessing this table.
         /// </summary>
-        public int UserId { get; set; }
+        public int _UserId { get; set; }
 
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Performs SQL count on the table "config.currency_layer".
@@ -65,7 +66,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -74,17 +75,17 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT COUNT(*) FROM config.currency_layer;";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> Get()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -103,17 +104,17 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ExportData, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the export entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to the export entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM config.currency_layer ORDER BY key;";
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public MixERP.Net.Entities.Config.CurrencyLayer Get(string key)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -133,17 +134,17 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the get entity \"CurrencyLayer\" filtered by \"Key\" with value {Key} was denied to the user with Login ID {LoginId}", key, this.LoginId);
+                    Log.Information("Access to the get entity \"CurrencyLayer\" filtered by \"Key\" with value {Key} was denied to the user with Login ID {_LoginId}", key, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM config.currency_layer WHERE key=@0;";
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql, key).FirstOrDefault();
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql, key).FirstOrDefault();
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> Get(string[] keys)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -163,18 +164,18 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. keys: {keys}.", this.LoginId, keys);
+                    Log.Information("Access to entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. keys: {keys}.", this._LoginId, keys);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "SELECT * FROM config.currency_layer WHERE key IN (@0);";
 
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql, keys);
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql, keys);
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<PetaPoco.CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -193,11 +194,11 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get custom fields for entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get custom fields for entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -206,11 +207,11 @@ namespace MixERP.Net.Schemas.Config.Data
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='config.currency_layer' ORDER BY field_order;";
-                return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql);
+                return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from core.get_custom_field_definition('config.currency_layer'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<PetaPoco.CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<PetaPoco.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace MixERP.Net.Schemas.Config.Data
         {
             List<DisplayField> displayFields = new List<DisplayField>();
 
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return displayFields;
             }
@@ -231,11 +232,11 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to get display field for entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this.LoginId);
+                    Log.Information("Access to get display field for entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -243,7 +244,7 @@ namespace MixERP.Net.Schemas.Config.Data
             const string sql = "SELECT key AS key, key as value FROM config.currency_layer;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
-                using (DataTable table = DbOperation.GetDataTable(this.Catalog, command))
+                using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
                 {
                     if (table?.Rows == null || table.Rows.Count == 0)
                     {
@@ -275,16 +276,16 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <param name="currencyLayer">The instance of "CurrencyLayer" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public void AddOrEdit(MixERP.Net.Entities.Config.CurrencyLayer currencyLayer, List<EntityParser.CustomField> customFields)
+        public object AddOrEdit(MixERP.Net.Entities.Config.CurrencyLayer currencyLayer, List<EntityParser.CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
-                return;
+                return null;
             }
 
             object primaryKeyValue;
 
-            currencyLayer.AuditUserId = this.UserId;
+            currencyLayer.AuditUserId = this._UserId;
             currencyLayer.AuditTs = System.DateTime.UtcNow;
 
             if (!string.IsNullOrWhiteSpace(currencyLayer.Key))
@@ -303,11 +304,11 @@ namespace MixERP.Net.Schemas.Config.Data
                          "WHERE form_name=core.get_custom_field_form_name('config.currency_layer')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this._Catalog, sql);
 
             if (customFields == null)
             {
-                return;
+                return primaryKeyValue;
             }
 
             foreach (var field in customFields)
@@ -316,8 +317,10 @@ namespace MixERP.Net.Schemas.Config.Data
                       "SELECT core.get_custom_field_setup_id_by_table_name('config.currency_layer', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
             }
+
+            return primaryKeyValue;
         }
 
         /// <summary>
@@ -327,7 +330,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public object Add(MixERP.Net.Entities.Config.CurrencyLayer currencyLayer)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -336,16 +339,16 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Create, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to add entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. {CurrencyLayer}", this.LoginId, currencyLayer);
+                    Log.Information("Access to add entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. {CurrencyLayer}", this._LoginId, currencyLayer);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            return Factory.Insert(this.Catalog, currencyLayer);
+            return Factory.Insert(this._Catalog, currencyLayer);
         }
 
         /// <summary>
@@ -359,12 +362,12 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.ImportData, this._LoginId, false);
                 }
 
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to import entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. {currencyLayers}", this.LoginId, currencyLayers);
+                    Log.Information("Access to import entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. {currencyLayers}", this._LoginId, currencyLayers);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -373,7 +376,7 @@ namespace MixERP.Net.Schemas.Config.Data
             int line = 0;
             try
             {
-                using (Database db = new Database(Factory.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (Database db = new Database(Factory.GetConnectionString(this._Catalog), Factory.ProviderName))
                 {
                     using (Transaction transaction = db.GetTransaction())
                     {
@@ -381,7 +384,7 @@ namespace MixERP.Net.Schemas.Config.Data
                         {
                             line++;
 
-                            currencyLayer.AuditUserId = this.UserId;
+                            currencyLayer.AuditUserId = this._UserId;
                             currencyLayer.AuditTs = System.DateTime.UtcNow;
 
                             if (!string.IsNullOrWhiteSpace(currencyLayer.Key))
@@ -430,7 +433,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Update(MixERP.Net.Entities.Config.CurrencyLayer currencyLayer, string key)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -439,16 +442,16 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Edit, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to edit entity \"CurrencyLayer\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {CurrencyLayer}", key, this.LoginId, currencyLayer);
+                    Log.Information("Access to edit entity \"CurrencyLayer\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}. {CurrencyLayer}", key, this._LoginId, currencyLayer);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            Factory.Update(this.Catalog, currencyLayer, key);
+            Factory.Update(this._Catalog, currencyLayer, key);
         }
 
         /// <summary>
@@ -458,7 +461,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(string key)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return;
             }
@@ -467,27 +470,27 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Delete, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to delete entity \"CurrencyLayer\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", key, this.LoginId);
+                    Log.Information("Access to delete entity \"CurrencyLayer\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", key, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             const string sql = "DELETE FROM config.currency_layer WHERE key=@0;";
-            Factory.NonQuery(this.Catalog, sql, key);
+            Factory.NonQuery(this._Catalog, sql, key);
         }
 
         /// <summary>
-        /// Performs a select statement on table "config.currency_layer" producing a paged result of 25.
+        /// Performs a select statement on table "config.currency_layer" producing a paged result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "CurrencyLayer" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetPagedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -496,28 +499,28 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to the first page of the entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}.", this.LoginId);
+                    Log.Information("Access to the first page of the entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}.", this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            const string sql = "SELECT * FROM config.currency_layer ORDER BY key LIMIT 25 OFFSET 0;";
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql);
+            const string sql = "SELECT * FROM config.currency_layer ORDER BY key LIMIT 10 OFFSET 0;";
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "config.currency_layer" producing a paged result of 25.
+        /// Performs a select statement on table "config.currency_layer" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <returns>Returns collection of "CurrencyLayer" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetPagedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -526,19 +529,19 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}.", pageNumber, this.LoginId);
+                    Log.Information("Access to Page #{Page} of the entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}.", pageNumber, this._LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
-            const string sql = "SELECT * FROM config.currency_layer ORDER BY key LIMIT 25 OFFSET @0;";
+            long offset = (pageNumber - 1) * 10;
+            const string sql = "SELECT * FROM config.currency_layer ORDER BY key LIMIT 10 OFFSET @0;";
 
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql, offset);
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql, offset);
         }
 
         private List<EntityParser.Filter> GetFilters(string catalog, string filterName)
@@ -555,7 +558,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountWhere(List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -564,11 +567,11 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this.LoginId, filters);
+                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -576,11 +579,11 @@ namespace MixERP.Net.Schemas.Config.Data
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.currency_layer WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.CurrencyLayer(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "config.currency_layer" producing a paged result of 25.
+        /// Performs a filtered select statement on table "config.currency_layer" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -588,7 +591,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetWhere(long pageNumber, List<EntityParser.Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -597,25 +600,25 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this._LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.currency_layer WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.CurrencyLayer(), filters);
 
             sql.OrderBy("key");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql);
         }
 
         /// <summary>
@@ -626,7 +629,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return 0;
             }
@@ -635,24 +638,24 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this.LoginId, filterName);
+                    Log.Information("Access to count entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.currency_layer WHERE 1 = 1");
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.CurrencyLayer(), filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "config.currency_layer" producing a paged result of 25.
+        /// Performs a filtered select statement on table "config.currency_layer" producing a paged result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paged result.</param>
         /// <param name="filterName">The named filter.</param>
@@ -660,7 +663,7 @@ namespace MixERP.Net.Schemas.Config.Data
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public IEnumerable<MixERP.Net.Entities.Config.CurrencyLayer> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this._Catalog))
             {
                 return null;
             }
@@ -669,28 +672,29 @@ namespace MixERP.Net.Schemas.Config.Data
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, false);
+                    this.Validate(AccessTypeEnum.Read, this._LoginId, false);
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information("Access to Page #{Page} of the filtered entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this.LoginId, filterName);
+                    Log.Information("Access to Page #{Page} of the filtered entity \"CurrencyLayer\" was denied to the user with Login ID {LoginId}. Filter: {Filter}.", pageNumber, this._LoginId, filterName);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            List<EntityParser.Filter> filters = this.GetFilters(this.Catalog, filterName);
+            List<EntityParser.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 25;
+            long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.currency_layer WHERE 1 = 1");
 
             MixERP.Net.EntityParser.Data.Service.AddFilters(ref sql, new MixERP.Net.Entities.Config.CurrencyLayer(), filters);
 
             sql.OrderBy("key");
-            sql.Append("LIMIT @0", 25);
+            sql.Append("LIMIT @0", 10);
             sql.Append("OFFSET @0", offset);
 
-            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this.Catalog, sql);
+            return Factory.Get<MixERP.Net.Entities.Config.CurrencyLayer>(this._Catalog, sql);
         }
+
 
     }
 }

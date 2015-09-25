@@ -118,6 +118,7 @@
     <Compile Include="CountyScrudView.cs" />
     <Compile Include="CreateCardTypeProcedure.cs" />
     <Compile Include="CreateFlagProcedure.cs" />
+    <Compile Include="CreateKanbanProcedure.cs" />
     <Compile Include="CreateMenuLocaleProcedure.cs" />
     <Compile Include="CreateMenuProcedure.cs" />
     <Compile Include="CreateNewFiscalYearProcedure.cs" />

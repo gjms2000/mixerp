@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "post_purchase";
+        public override string _ObjectName => "post_purchase";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_book_name" argument of the function "transactions.post_purchase".
@@ -65,7 +65,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// Maps to "_login_id" argument of the function "transactions.post_purchase".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_value_date" argument of the function "transactions.post_purchase".
         /// </summary>
@@ -128,7 +128,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="bookName">Enter argument value for "_book_name" parameter of the function "transactions.post_purchase".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.post_purchase".</param>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "transactions.post_purchase".</param>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "transactions.post_purchase".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "transactions.post_purchase".</param>
         /// <param name="valueDate">Enter argument value for "_value_date" parameter of the function "transactions.post_purchase".</param>
         /// <param name="costCenterId">Enter argument value for "_cost_center_id" parameter of the function "transactions.post_purchase".</param>
         /// <param name="referenceNumber">Enter argument value for "_reference_number" parameter of the function "transactions.post_purchase".</param>
@@ -141,12 +141,12 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="tranIds">Enter argument value for "_tran_ids" parameter of the function "transactions.post_purchase".</param>
         /// <param name="details">Enter argument value for "_details" parameter of the function "transactions.post_purchase".</param>
         /// <param name="attachments">Enter argument value for "_attachments" parameter of the function "transactions.post_purchase".</param>
-        public PostPurchaseProcedure(string bookName, int officeId, int userId, long loginIdParameter, DateTime valueDate, int costCenterId, string referenceNumber, string statementReference, bool isCredit, string partyCode, int priceTypeId, int shipperId, int storeId, long[] tranIds, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments)
+        public PostPurchaseProcedure(string bookName, int officeId, int userId, long loginId, DateTime valueDate, int costCenterId, string referenceNumber, string statementReference, bool isCredit, string partyCode, int priceTypeId, int shipperId, int storeId, long[] tranIds, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments)
         {
             this.BookName = bookName;
             this.OfficeId = officeId;
             this.UserId = userId;
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.ValueDate = valueDate;
             this.CostCenterId = costCenterId;
             this.ReferenceNumber = referenceNumber;
@@ -178,7 +178,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.post_purchase(@0::character varying, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::text, @8::boolean, @9::character varying, @10::integer, @11::integer, @12::integer, @13::bigint[], @14::transactions.stock_detail_type[], @15::core.attachment_type[]);";
-            return Factory.Scalar<long>(this.Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PartyCode, this.PriceTypeId, this.ShipperId, this.StoreId, this.TranIds, this.Details, this.Attachments);
+            return Factory.Scalar<long>(this._Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginId, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PartyCode, this.PriceTypeId, this.ShipperId, this.StoreId, this.TranIds, this.Details, this.Attachments);
         }
     }
 }

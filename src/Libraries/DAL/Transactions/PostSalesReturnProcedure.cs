@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "post_sales_return";
+        public override string _ObjectName => "post_sales_return";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_transaction_master_id" argument of the function "transactions.post_sales_return".
@@ -65,7 +65,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// Maps to "_login_id" argument of the function "transactions.post_sales_return".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_value_date" argument of the function "transactions.post_sales_return".
         /// </summary>
@@ -112,7 +112,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="transactionMasterId">Enter argument value for "_transaction_master_id" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "transactions.post_sales_return".</param>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "transactions.post_sales_return".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="valueDate">Enter argument value for "_value_date" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="storeId">Enter argument value for "_store_id" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="partyCode">Enter argument value for "_party_code" parameter of the function "transactions.post_sales_return".</param>
@@ -121,12 +121,12 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="statementReference">Enter argument value for "_statement_reference" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="details">Enter argument value for "_details" parameter of the function "transactions.post_sales_return".</param>
         /// <param name="attachments">Enter argument value for "_attachments" parameter of the function "transactions.post_sales_return".</param>
-        public PostSalesReturnProcedure(long transactionMasterId, int officeId, int userId, long loginIdParameter, DateTime valueDate, int storeId, string partyCode, int priceTypeId, string referenceNumber, string statementReference, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments)
+        public PostSalesReturnProcedure(long transactionMasterId, int officeId, int userId, long loginId, DateTime valueDate, int storeId, string partyCode, int priceTypeId, string referenceNumber, string statementReference, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments)
         {
             this.TransactionMasterId = transactionMasterId;
             this.OfficeId = officeId;
             this.UserId = userId;
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.ValueDate = valueDate;
             this.StoreId = storeId;
             this.PartyCode = partyCode;
@@ -154,7 +154,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.post_sales_return(@0::bigint, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::integer, @8::character varying, @9::text, @10::transactions.stock_detail_type[], @11::core.attachment_type[]);";
-            return Factory.Scalar<long>(this.Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.StoreId, this.PartyCode, this.PriceTypeId, this.ReferenceNumber, this.StatementReference, this.Details, this.Attachments);
+            return Factory.Scalar<long>(this._Catalog, query, this.TransactionMasterId, this.OfficeId, this.UserId, this.LoginId, this.ValueDate, this.StoreId, this.PartyCode, this.PriceTypeId, this.ReferenceNumber, this.StatementReference, this.Details, this.Attachments);
         }
     }
 }

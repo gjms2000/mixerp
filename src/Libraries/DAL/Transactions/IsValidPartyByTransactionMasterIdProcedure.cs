@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "is_valid_party_by_transaction_master_id";
+        public override string _ObjectName => "is_valid_party_by_transaction_master_id";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_transaction_master_id" argument of the function "transactions.is_valid_party_by_transaction_master_id".
@@ -94,7 +94,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.is_valid_party_by_transaction_master_id(@0::bigint, @1::bigint);";
-            return Factory.Scalar<bool>(this.Catalog, query, this.TransactionMasterId, this.PartyId);
+            return Factory.Scalar<bool>(this._Catalog, query, this.TransactionMasterId, this.PartyId);
         }
     }
 }

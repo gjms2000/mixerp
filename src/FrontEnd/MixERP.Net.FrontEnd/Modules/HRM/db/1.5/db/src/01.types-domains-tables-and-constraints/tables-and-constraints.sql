@@ -133,6 +133,7 @@ CREATE TABLE hrm.employee_types
 CREATE TABLE hrm.employees
 (
     employee_id                             SERIAL NOT NULL PRIMARY KEY,
+    employee_code                           national character varying(12) NOT NULL,
     first_name                              national character varying(50) NOT NULL,
     middle_name                             national character varying(50) DEFAULT(''),
     last_name                               national character varying(50) DEFAULT(''),
@@ -167,6 +168,7 @@ CREATE TABLE hrm.employees
     email_address                           national character varying(128) DEFAULT(''),
     website                                 national character varying(128) DEFAULT(''),
     blog                                    national character varying(128) DEFAULT(''),
+    service_ended_on                        date NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -359,9 +361,10 @@ CREATE TABLE hrm.resignations
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
     verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
-    verified_by_user_id                     integer NOT NULL REFERENCES office.users(user_id),
-    verified_on                             date NOT NULL,
-    effective_resignation_date              date NOT NULL,
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
+    service_end_date                        date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -370,13 +373,17 @@ CREATE TABLE hrm.resignations
 CREATE TABLE hrm.terminations
 (
     termination_id                          SERIAL NOT NULL PRIMARY KEY,
-    entered_by                              integer NOT NULL REFERENCES office.users(user_id),
     notice_date                             date NOT NULL,
-    effective_termination_date              date NOT NULL,
-    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
+    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id) UNIQUE,
     forward_to                              integer REFERENCES hrm.employees(employee_id),
+    change_status_to                        integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
+    service_end_date                        date NOT NULL,
+    verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -397,11 +404,17 @@ CREATE TABLE hrm.exits
 (
     exit_id                                 BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
-    change_status_code_to                   integer NOT NULL REFERENCES hrm.employment_status_codes(employment_status_code_id),
+    forward_to                              integer REFERENCES hrm.employees(employee_id),
+    change_status_to                        integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     exit_type_id                            integer NOT NULL REFERENCES hrm.exit_types(exit_type_id),
     exit_interview_details                  text,
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
+    verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
+    service_end_date                        date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    

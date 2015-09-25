@@ -706,24 +706,49 @@ select option, select optgroup {
     display: none !important;
 }
 
-.kanban.container {
-    overflow: auto;
+#PhoneMenu a {
+    display: block !important;
+    text-align: center !important;
+    padding: 8px 0;
+    font-weight: bold;
 }
 
-.kanban.segments .ui.segment {
-    width: 300px !important;
-    min-height: 700px;
-    padding: 8px;
+#PhoneMenu a:hover {
+    color: #A333C8;
 }
 
-.kanban .card {
-    cursor: pointer;
+.large.icon {
+    font-size: 34px !important;
+    text-align: center !important;
 }
 
-.kanban.segments .ui.segment:nth-child(odd) {
-    background-color: #F5F5ED !important;
+
+.ui.link span.text {
+    padding: 8px 0 !important;
+    display: block !important;
+    text-align: center !important;
 }
 
-.kanban.segments .ui.segment:nth-child(even) {
-    background-color: #F2F2DC !important;
+@media only screen and (min-width : 768px) {
+    .large.icon {
+        -webkit-transition: all 15s ease-out;
+        -moz-transition: all 15s ease-out;
+        -ms-transition: all 15s ease-out;
+        -o-transition: all 15s ease-out;
+        transition: all 15s ease-out;
+    }
+
+    .large.icon:hover {
+        -webkit-transform: rotate(360deg) scale(1.5);
+        -moz-transform: rotate(360deg) scale(1.5);
+        -ms-transform: rotate(360deg) scale(1.5);
+        -o-transform: rotate(360deg) scale(1.5);
+        transform: rotate(360deg) scale(1.5);
+    }
+}
+
+@media only screen and (max-width : 768px) {
+    .ui.mobile.divider {
+        padding-bottom: 24px!important;
+    }
 }

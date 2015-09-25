@@ -1,24 +1,18 @@
-﻿<script src="/Scripts/JSLINQ.js"></script>
-<div class="form factory" style="display: none;">
-    <div class="ui stackable attached segment">
-        <div class="ui grey huge header">
-            <span class="title initial value"></span>
-            <span class="live"></span>
-            <div class="ui sub header"></div>
-        </div>
-        <div class="ui info description message" style="display: none;"></div>
+﻿<div class="form factory ui segment" style="display: none;">
+    <div class="ui grey huge header">
+        <span class="title initial value"></span>
+        <span class="live"></span>
+        <div class="ui sub header"></div>
+    </div>
+    <div class="ui info description message" style="display: none;"></div>
+
+    <div class="ui stackable form" id="scrud" style="display: none;">
     </div>
 
-    <div class="ui attached loading segment" style="min-height: 100px;">
-        <div class="ui stackable form" id="scrud" style="display: none;">
-        </div>
-    </div>
+    <div class="big error"></div>
+    <input type="button" id="SaveButton" value="Save" class="ui green button" />
+    <input type="button" id="CancelButton" value="Cancel" class="ui red button" />
 
-    <div class="ui stackable attached segment">
-        <div class="big error"></div>
-        <input type="button" id="SaveButton" value="Save" class="ui green button" />
-        <input type="button" id="CancelButton" value="Cancel" class="ui red button" />
-    </div>
     <script>
         function initializeAjaxRequest() {
             $.each(scrudFactory.keys, function () {
@@ -52,7 +46,7 @@
         var editData;
         var dropdownsLoaded = false;
         var defaultValuesLoaded = false;
-        var $linq = JSLINQ;
+        var formReady = false;
     </script>
 
     <script>
@@ -196,6 +190,9 @@
                     };
 
                     if (view.length) {
+                        var url = updateQueryString("View", "View");
+                        window.history.pushState({ path: url }, '', url);
+
                         view.fadeIn(500);
                         loadPageCount(loadGrid);
                     };
@@ -239,17 +236,25 @@
         };
 
         function validate() {
-            var required = $(".form.factory [required]:not(:disabled):not([readonly])");
+            var required = $(".form.factory #scrud [required]:not(:disabled):not([readonly])");
             required.trigger("blur");
 
-            return form.find(".error").length === 1;
+            var errorFields = form.find(".error:not(.big.error)");
+
+            $.each(errorFields, function (i, v) {
+                var label = $(v).find("label");
+                console.log(label.html() + " is required");
+            });
+
+
+            return errorFields.length === 0;
         };
 
         function getSchema() {
             return scrudFactory.formTableName.split(".")[0];
         };
 
-        function getCustomFields() {            
+        function getCustomFields() {
             var url = scrudFactory.formAPI + "/custom-fields";
             var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
 
@@ -333,7 +338,10 @@
         });
 
         function triggerReadyEvent() {
-            $(document).trigger("formready");
+            if (!formReady) {
+                formReady = true;
+                $(document).trigger("formready");
+            };
         };
 
         function loadDefaultValues() {
@@ -434,7 +442,7 @@
 
             return type;
         };
-        
+
         function mapColumnFrom(customField) {
             var column = new Object();
             column.ColumnName = customField.FieldName;
@@ -736,8 +744,8 @@
                 scrudFactory.keys = [];
             };
 
-            var hasKey = $linq(scrudFactory.keys)
-                .Where(function(x) { return x.property === propertyName }).items[0];
+            var hasKey = Enumerable.From(scrudFactory.keys)
+                .Where(function (x) { return x.property === propertyName }).ToArray()[0];
 
             if (hasKey) {
                 return $("<select class='ui search fluid dropdown' />");

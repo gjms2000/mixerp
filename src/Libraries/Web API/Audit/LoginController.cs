@@ -1,3 +1,4 @@
+// ReSharper disable All
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Audit
@@ -25,23 +27,23 @@ namespace MixERP.Net.Api.Audit
 
         public LoginController()
         {
-            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
-            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
-            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
-            this.Catalog = AppUsers.GetCurrentUserDB();
+            this._LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this._UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this._Catalog = AppUsers.GetCurrentUserDB();
 
             this.LoginContext = new MixERP.Net.Schemas.Audit.Data.Login
             {
-                Catalog = this.Catalog,
-                LoginId = this.LoginId,
-                UserId = this.UserId
+                _Catalog = this._Catalog,
+                _LoginId = this._LoginId,
+                _UserId = this._UserId
             };
         }
 
-        public long LoginId { get; }
-        public int UserId { get; private set; }
-        public int OfficeId { get; private set; }
-        public string Catalog { get; }
+        public long _LoginId { get; }
+        public int _UserId { get; private set; }
+        public int _OfficeId { get; private set; }
+        public string _Catalog { get; }
 
         /// <summary>
         ///     Creates meta information of "login" entity.
@@ -86,6 +88,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -109,6 +119,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -118,20 +136,28 @@ namespace MixERP.Net.Api.Audit
         /// <summary>
         ///     Returns an instance of login.
         /// </summary>
-        /// <param name="loginIdParameter">Enter LoginIdParameter to search for.</param>
+        /// <param name="loginId">Enter LoginId to search for.</param>
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
-        [Route("{loginIdParameter}")]
-        [Route("~/api/audit/login/{loginIdParameter}")]
-        public MixERP.Net.Entities.Audit.Login Get(long loginIdParameter)
+        [Route("{loginId}")]
+        [Route("~/api/audit/login/{loginId}")]
+        public MixERP.Net.Entities.Audit.Login Get(long loginId)
         {
             try
             {
-                return this.LoginContext.Get(loginIdParameter);
+                return this.LoginContext.Get(loginId);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -152,6 +178,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -159,7 +193,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 logins on each page, sorted by the property LoginIdParameter.
+        ///     Creates a paginated collection containing 10 logins on each page, sorted by the property LoginId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -175,6 +209,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -182,7 +224,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 logins on each page, sorted by the property LoginIdParameter.
+        ///     Creates a paginated collection containing 10 logins on each page, sorted by the property LoginId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -199,6 +241,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -213,16 +263,24 @@ namespace MixERP.Net.Api.Audit
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/audit/login/count-where")]
-        public long CountWhere([FromBody]dynamic filters)
+        public long CountWhere([FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.LoginContext.CountWhere(f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -231,7 +289,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 logins on each page, sorted by the property LoginIdParameter.
+        ///     Creates a filtered and paginated collection containing 10 logins on each page, sorted by the property LoginId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -239,16 +297,24 @@ namespace MixERP.Net.Api.Audit
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/audit/login/get-where/{pageNumber}")]
-        public IEnumerable<MixERP.Net.Entities.Audit.Login> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        public IEnumerable<MixERP.Net.Entities.Audit.Login> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.LoginContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -274,6 +340,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -281,7 +355,7 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 logins on each page, sorted by the property LoginIdParameter.
+        ///     Creates a filtered and paginated collection containing 10 logins on each page, sorted by the property LoginId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filterName">The named filter.</param>
@@ -298,6 +372,14 @@ namespace MixERP.Net.Api.Audit
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -322,6 +404,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -344,6 +434,14 @@ namespace MixERP.Net.Api.Audit
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -368,6 +466,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -381,7 +487,7 @@ namespace MixERP.Net.Api.Audit
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/audit/login/add-or-edit")]
-        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
+        public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             MixERP.Net.Entities.Audit.Login login = form[0].ToObject<MixERP.Net.Entities.Audit.Login>(JsonHelper.GetJsonSerializer());
             List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
@@ -393,11 +499,19 @@ namespace MixERP.Net.Api.Audit
 
             try
             {
-                this.LoginContext.AddOrEdit(login, customFields);
+                return this.LoginContext.AddOrEdit(login, customFields);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -427,6 +541,14 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -437,11 +559,11 @@ namespace MixERP.Net.Api.Audit
         ///     Edits existing record with your instance of Login class.
         /// </summary>
         /// <param name="login">Your instance of Login class to edit.</param>
-        /// <param name="loginIdParameter">Enter the value for LoginIdParameter in order to find and edit the existing record.</param>
+        /// <param name="loginId">Enter the value for LoginId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
-        [Route("edit/{loginIdParameter}")]
-        [Route("~/api/audit/login/edit/{loginIdParameter}")]
-        public void Edit(long loginIdParameter, [FromBody] MixERP.Net.Entities.Audit.Login login)
+        [Route("edit/{loginId}")]
+        [Route("~/api/audit/login/edit/{loginId}")]
+        public void Edit(long loginId, [FromBody] MixERP.Net.Entities.Audit.Login login)
         {
             if (login == null)
             {
@@ -450,11 +572,19 @@ namespace MixERP.Net.Api.Audit
 
             try
             {
-                this.LoginContext.Update(login, loginIdParameter);
+                this.LoginContext.Update(login, loginId);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -493,9 +623,13 @@ namespace MixERP.Net.Api.Audit
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (MixERPException)
+            catch (MixERPException ex)
             {
-                throw;
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -504,21 +638,29 @@ namespace MixERP.Net.Api.Audit
         }
 
         /// <summary>
-        ///     Deletes an existing instance of Login class via LoginIdParameter.
+        ///     Deletes an existing instance of Login class via LoginId.
         /// </summary>
-        /// <param name="loginIdParameter">Enter the value for LoginIdParameter in order to find and delete the existing record.</param>
+        /// <param name="loginId">Enter the value for LoginId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
-        [Route("delete/{loginIdParameter}")]
-        [Route("~/api/audit/login/delete/{loginIdParameter}")]
-        public void Delete(long loginIdParameter)
+        [Route("delete/{loginId}")]
+        [Route("~/api/audit/login/delete/{loginId}")]
+        public void Delete(long loginId)
         {
             try
             {
-                this.LoginContext.Delete(loginIdParameter);
+                this.LoginContext.Delete(loginId);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {

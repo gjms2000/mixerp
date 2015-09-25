@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_sales_tax";
+        public override string _ObjectName => "get_sales_tax";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_tran_book" argument of the function "transactions.get_sales_tax".
@@ -148,7 +148,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.get_sales_tax(@0::character varying, @1::integer, @2::character varying, @3::character varying, @4::integer, @5::character varying, @6::money_strict2, @7::integer_strict2, @8::money_strict2, @9::money_strict2, @10::integer);";
-            return Factory.Get<DbGetSalesTaxResult>(this.Catalog, query, this.TranBook, this.StoreId, this.PartyCode, this.ShippingAddressCode, this.PriceTypeId, this.ItemCode, this.Price, this.Quantity, this.Discount, this.ShippingCharge, this.SalesTaxId);
+            return Factory.Get<DbGetSalesTaxResult>(this._Catalog, query, this.TranBook, this.StoreId, this.PartyCode, this.ShippingAddressCode, this.PriceTypeId, this.ItemCode, this.Price, this.Quantity, this.Discount, this.ShippingCharge, this.SalesTaxId);
         }
     }
 }

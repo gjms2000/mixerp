@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "policy";
+        public override string _ObjectNamespace => "policy";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "can_post_transaction";
+        public override string _ObjectName => "can_post_transaction";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,12 +48,12 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_login_id" argument of the function "policy.can_post_transaction".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_user_id" argument of the function "policy.can_post_transaction".
         /// </summary>
@@ -81,14 +81,14 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// Prepares, validates, and executes the function "policy.can_post_transaction(_login_id bigint, _user_id integer, _office_id integer, transaction_book text, _value_date date)" on the database.
         /// </summary>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "policy.can_post_transaction".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "policy.can_post_transaction".</param>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "policy.can_post_transaction".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "policy.can_post_transaction".</param>
         /// <param name="transactionBook">Enter argument value for "transaction_book" parameter of the function "policy.can_post_transaction".</param>
         /// <param name="valueDate">Enter argument value for "_value_date" parameter of the function "policy.can_post_transaction".</param>
-        public CanPostTransactionProcedure(long loginIdParameter, int userId, int officeId, string transactionBook, DateTime valueDate)
+        public CanPostTransactionProcedure(long loginId, int userId, int officeId, string transactionBook, DateTime valueDate)
         {
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.UserId = userId;
             this.OfficeId = officeId;
             this.TransactionBook = transactionBook;
@@ -112,7 +112,7 @@ namespace MixERP.Net.Schemas.Policy.Data
                 }
             }
             const string query = "SELECT * FROM policy.can_post_transaction(@0::bigint, @1::integer, @2::integer, @3::text, @4::date);";
-            return Factory.Scalar<bool>(this.Catalog, query, this.LoginIdParameter, this.UserId, this.OfficeId, this.TransactionBook, this.ValueDate);
+            return Factory.Scalar<bool>(this._Catalog, query, this.LoginId, this.UserId, this.OfficeId, this.TransactionBook, this.ValueDate);
         }
     }
 }

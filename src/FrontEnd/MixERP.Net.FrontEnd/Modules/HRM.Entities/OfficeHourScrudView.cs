@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -34,6 +35,10 @@ namespace MixERP.Net.Entities.HRM
         [Column("office")]
         [ColumnDbType("text", 0, true, "")]
         public string Office { get; set; }
+
+        [Column("photo")]
+        [ColumnDbType("image", 0, true, "")]
+        public string Photo { get; set; }
 
         [Column("shift")]
         [ColumnDbType("text", 0, true, "")]

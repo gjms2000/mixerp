@@ -386,7 +386,7 @@
         var data = JSON.stringify(filters);
 
         var url = "/api/hrm/employee-view/get-where/1/";
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data);
     };
 
     function getIdentificationDetails() {
@@ -403,7 +403,7 @@
         var data = JSON.stringify(filters);
 
         var url = "/api/hrm/employee-identification-detail-scrud-view/get-where/1/";
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data);
     };
 
     function getSocialNetworkDetails() {
@@ -420,7 +420,7 @@
         var data = JSON.stringify(filters);
 
         var url = "/api/hrm/employee-social-network-detail-scrud-view/get-where/1/";
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data);
     };
 
     function getExperiences() {
@@ -437,7 +437,7 @@
         var data = JSON.stringify(filters);
 
         var url = "/api/hrm/employee-experience-scrud-view/get-where/1/";
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data);
     };
 
     function getQualifications() {
@@ -454,7 +454,7 @@
         var data = JSON.stringify(filters);
 
         var url = "/api/hrm/employee-qualification-scrud-view/get-where/1/";
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data);
     };
 
 

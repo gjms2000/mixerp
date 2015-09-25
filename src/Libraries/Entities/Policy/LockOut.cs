@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -40,7 +41,7 @@ namespace MixERP.Net.Entities.Policy
         public DateTime LockOutTime { get; set; }
 
         [Column("lock_out_till")]
-        [ColumnDbType("timestamptz", 0, false, "2015-09-21 18:47:11.516+00")]
+        [ColumnDbType("timestamptz", 0, false, "2015-09-25 10:08:36.968+00")]
         public DateTime LockOutTill { get; set; }
     }
 }

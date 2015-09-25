@@ -62,38 +62,125 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArePurchaseOrdersAlreadyMergedController.cs" />
+    <Compile Include="AreSalesOrdersAlreadyMergedController.cs" />
+    <Compile Include="AreSalesQuotationsAlreadyMergedController.cs" />
+    <Compile Include="AutoVerifyController.cs" />
+    <Compile Include="ContainsIncompatibleTaxesController.cs" />
+    <Compile Include="CreateRecurringInvoicesController.cs" />
+    <Compile Include="CreateRoutineController.cs" />
     <Compile Include="CustomerReceiptController.cs" />
     <Compile Include="DayOperationController.cs" />
     <Compile Include="DayOperationRoutineController.cs" />
+    <Compile Include="GetAccountStatementController.cs" />
+    <Compile Include="GetAveragePartyTransactionController.cs" />
+    <Compile Include="GetBalanceSheetController.cs" />
+    <Compile Include="GetCashFlowStatementController.cs" />
+    <Compile Include="GetCashRepositoryBalanceController.cs" />
+    <Compile Include="GetClosingStockController.cs" />
+    <Compile Include="GetCostOfGoodsSoldController.cs" />
+    <Compile Include="GetDefaultCurrencyCodeByOfficeIdController.cs" />
+    <Compile Include="GetDefaultCurrencyCodeController.cs" />
+    <Compile Include="GetDueDateController.cs" />
+    <Compile Include="GetEoyProfitSummaryController.cs" />
+    <Compile Include="GetExchangeRateController.cs" />
+    <Compile Include="GetIncomeExpenditureStatementController.cs" />
+    <Compile Include="GetInventoryTransferRequestViewController.cs" />
+    <Compile Include="GetInvoiceAmountController.cs" />
+    <Compile Include="GetJournalViewController.cs" />
+    <Compile Include="GetLastReceiptDateController.cs" />
+    <Compile Include="GetMavcogsController.cs" />
+    <Compile Include="GetNetProfitController.cs" />
+    <Compile Include="GetNewTransactionCounterController.cs" />
+    <Compile Include="GetNonGlProductViewController.cs" />
+    <Compile Include="GetPartyTransactionSummaryController.cs" />
+    <Compile Include="GetPlAppropriationDataController.cs" />
+    <Compile Include="GetProductViewController.cs" />
+    <Compile Include="GetProfitAndLossStatementController.cs" />
+    <Compile Include="GetPurchaseController.cs" />
+    <Compile Include="GetReceiptViewController.cs" />
+    <Compile Include="GetReorderViewFunctionController.cs" />
+    <Compile Include="GetRetainedEarningsController.cs" />
+    <Compile Include="GetRetainedEarningsStatementController.cs" />
+    <Compile Include="GetSalesByOfficesController.cs" />
+    <Compile Include="GetSalespersonReportController.cs" />
+    <Compile Include="GetSalesTaxController.cs" />
+    <Compile Include="GetSalesTaxIdController.cs" />
+    <Compile Include="GetStockAccountStatementController.cs" />
+    <Compile Include="GetStockMasterIdByTransactionMasterIdController.cs" />
+    <Compile Include="GetTopSellingProductsByOfficeController.cs" />
+    <Compile Include="GetTopSellingProductsOfAllTimeController.cs" />
+    <Compile Include="GetTotalDueController.cs" />
+    <Compile Include="GetTotalSalesByOfficeController.cs" />
+    <Compile Include="GetTransactionCodeController.cs" />
+    <Compile Include="GetTransactionMasterIdByStockMasterIdController.cs" />
+    <Compile Include="GetTrialBalanceController.cs" />
+    <Compile Include="GetValueDateController.cs" />
+    <Compile Include="GetVerificationStatusController.cs" />
+    <Compile Include="GetWriteOffCostOfGoodsSoldController.cs" />
+    <Compile Include="HasNexusController.cs" />
+    <Compile Include="InitializeEodOperationController.cs" />
     <Compile Include="InventoryTransferDeliveryController.cs" />
     <Compile Include="InventoryTransferDeliveryDetailController.cs" />
     <Compile Include="InventoryTransferRequestController.cs" />
     <Compile Include="InventoryTransferRequestDetailController.cs" />
+    <Compile Include="IsEodInitializedController.cs" />
+    <Compile Include="IsNormallyDebitController.cs" />
+    <Compile Include="IsPurchaseController.cs" />
+    <Compile Include="IsValidPartyByStockMasterIdController.cs" />
+    <Compile Include="IsValidPartyByTransactionMasterIdController.cs" />
+    <Compile Include="IsValidStockTransactionByStockMasterIdController.cs" />
+    <Compile Include="IsValidStockTransactionByTransactionMasterIdController.cs" />
     <Compile Include="LateFeeController.cs" />
+    <Compile Include="ListClosingStockController.cs" />
     <Compile Include="NonGlStockDetailController.cs" />
     <Compile Include="NonGlStockMasterController.cs" />
     <Compile Include="NonGlStockMasterRelationController.cs" />
     <Compile Include="NonGlStockTaxDetailController.cs" />
+    <Compile Include="OpeningInventoryExistsController.cs" />
     <Compile Include="PartyItemChartViewController.cs" />
     <Compile Include="PartyPurchaseChartViewController.cs" />
     <Compile Include="PartySalesChartViewController.cs" />
+    <Compile Include="PerformEodOperationController.cs" />
+    <Compile Include="PostBonusController.cs" />
+    <Compile Include="PostErFluctuationController.cs" />
+    <Compile Include="PostInventoryTransferDeliveryController.cs" />
+    <Compile Include="PostInventoryTransferRequestController.cs" />
+    <Compile Include="PostLateFeeController.cs" />
+    <Compile Include="PostNonGlTransactionController.cs" />
+    <Compile Include="PostOpeningInventoryController.cs" />
+    <Compile Include="PostPurchaseController.cs" />
+    <Compile Include="PostPurchaseReturnController.cs" />
+    <Compile Include="PostPurhcaseReorderController.cs" />
+    <Compile Include="PostReceiptController.cs" />
+    <Compile Include="PostRecurringInvoicesController.cs" />
+    <Compile Include="PostSalesController.cs" />
+    <Compile Include="PostSalesReturnController.cs" />
+    <Compile Include="PostStockAdjustmentController.cs" />
+    <Compile Include="PostStockJournalController.cs" />
+    <Compile Include="PostStockTransferAcknowledgementController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiptViewController.cs" />
+    <Compile Include="RefreshMaterializedViewsController.cs" />
     <Compile Include="RoutineController.cs" />
     <Compile Include="SalesByCountryViewController.cs" />
     <Compile Include="SalesDeliveryViewController.cs" />
     <Compile Include="SalesOrderViewController.cs" />
     <Compile Include="SalesQuotationViewController.cs" />
+    <Compile Include="SettlePartyDueController.cs" />
     <Compile Include="StockDetailController.cs" />
     <Compile Include="StockMasterController.cs" />
     <Compile Include="StockMasterNonGlRelationController.cs" />
     <Compile Include="StockReturnController.cs" />
     <Compile Include="StockTaxDetailController.cs" />
+    <Compile Include="StockTransactionViewController.cs" />
     <Compile Include="TransactionDetailController.cs" />
     <Compile Include="TransactionMasterController.cs" />
     <Compile Include="TransactionViewController.cs" />
+    <Compile Include="ValidateItemsForReturnController.cs" />
     <Compile Include="VerifiedStockDetailsViewController.cs" />
     <Compile Include="VerifiedTransactionViewController.cs" />
+    <Compile Include="VerifyTransactionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mix Open Foundation.snk" />
@@ -103,6 +190,10 @@
     <ProjectReference Include="..\..\DAL\Transactions\MixERP.Net.Schemas.Transactions.Data.csproj">
       <Project>{c59ef4ce-7cd4-46e1-9182-5a62deeff86f}</Project>
       <Name>MixERP.Net.Schemas.Transactions.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Entities\Core\MixERP.Net.Entities.Core.csproj">
+      <Project>{0F0490A5-8065-4B0A-9844-905E32A05DC4}</Project>
+      <Name>MixERP.Net.Entities.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Entities\Transactions\MixERP.Net.Entities.Transactions.csproj">
       <Project>{665e96ee-d5d0-426e-a8cd-22e3a9981349}</Project>

@@ -18,7 +18,7 @@ namespace MixERP.Net.Core.Modules.HRM.FirstSteps
             Icon = "university icon";
             NavigateUrl = "/Modules/HRM/Setup/EducationLevels.mix";
 
-            long count = CountFrequencySetups();
+            long count = CountEducationLevels();
 
             if (count > 0)
             {
@@ -30,12 +30,12 @@ namespace MixERP.Net.Core.Modules.HRM.FirstSteps
             Message = "No education level defined.";
         }
 
-        private long CountFrequencySetups()
+        private long CountEducationLevels()
         {
             Data.EducationLevel educationLevel = new Data.EducationLevel
             {
-                Catalog = AppUsers.GetCurrentUserDB(),
-                LoginId = AppUsers.GetCurrent().View.LoginId.ToLong(),
+                _Catalog = AppUsers.GetCurrentUserDB(),
+                _LoginId = AppUsers.GetCurrent().View.LoginId.ToLong(),
                 SkipValidation = true
             };
 

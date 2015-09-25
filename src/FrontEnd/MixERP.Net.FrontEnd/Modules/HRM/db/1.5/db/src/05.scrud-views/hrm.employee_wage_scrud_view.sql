@@ -4,7 +4,8 @@ CREATE VIEW hrm.employee_wage_scrud_view
 AS
 SELECT
     hrm.employee_wages.employee_wage_id,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.wages_setup.wages_setup_code || ' (' || hrm.wages_setup.wages_setup_name || ')' AS wages_setup,
     hrm.employee_wages.currency_code,
     hrm.employee_wages.max_week_hours,

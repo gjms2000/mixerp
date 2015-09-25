@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "post_sales";
+        public override string _ObjectName => "post_sales";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_book_name" argument of the function "transactions.post_sales".
@@ -65,7 +65,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// Maps to "_login_id" argument of the function "transactions.post_sales".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_value_date" argument of the function "transactions.post_sales".
         /// </summary>
@@ -144,7 +144,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="bookName">Enter argument value for "_book_name" parameter of the function "transactions.post_sales".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.post_sales".</param>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "transactions.post_sales".</param>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "transactions.post_sales".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "transactions.post_sales".</param>
         /// <param name="valueDate">Enter argument value for "_value_date" parameter of the function "transactions.post_sales".</param>
         /// <param name="costCenterId">Enter argument value for "_cost_center_id" parameter of the function "transactions.post_sales".</param>
         /// <param name="referenceNumber">Enter argument value for "_reference_number" parameter of the function "transactions.post_sales".</param>
@@ -161,12 +161,12 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="details">Enter argument value for "_details" parameter of the function "transactions.post_sales".</param>
         /// <param name="attachments">Enter argument value for "_attachments" parameter of the function "transactions.post_sales".</param>
         /// <param name="nonGlTranIds">Enter argument value for "_non_gl_tran_ids" parameter of the function "transactions.post_sales".</param>
-        public PostSalesProcedure(string bookName, int officeId, int userId, long loginIdParameter, DateTime valueDate, int costCenterId, string referenceNumber, string statementReference, bool isCredit, int paymentTermId, string partyCode, int priceTypeId, int salespersonId, int shipperId, string shippingAddressCode, int storeId, bool isNonTaxableSales, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments, long[] nonGlTranIds)
+        public PostSalesProcedure(string bookName, int officeId, int userId, long loginId, DateTime valueDate, int costCenterId, string referenceNumber, string statementReference, bool isCredit, int paymentTermId, string partyCode, int priceTypeId, int salespersonId, int shipperId, string shippingAddressCode, int storeId, bool isNonTaxableSales, MixERP.Net.Entities.Transactions.StockDetailType[][] details, MixERP.Net.Entities.Core.AttachmentType[][] attachments, long[] nonGlTranIds)
         {
             this.BookName = bookName;
             this.OfficeId = officeId;
             this.UserId = userId;
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.ValueDate = valueDate;
             this.CostCenterId = costCenterId;
             this.ReferenceNumber = referenceNumber;
@@ -202,7 +202,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.post_sales(@0::character varying, @1::integer, @2::integer, @3::bigint, @4::date, @5::integer, @6::character varying, @7::text, @8::boolean, @9::integer, @10::character varying, @11::integer, @12::integer, @13::integer, @14::character varying, @15::integer, @16::boolean, @17::transactions.stock_detail_type[], @18::core.attachment_type[], @19::bigint[]);";
-            return Factory.Scalar<long>(this.Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginIdParameter, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PaymentTermId, this.PartyCode, this.PriceTypeId, this.SalespersonId, this.ShipperId, this.ShippingAddressCode, this.StoreId, this.IsNonTaxableSales, this.Details, this.Attachments, this.NonGlTranIds);
+            return Factory.Scalar<long>(this._Catalog, query, this.BookName, this.OfficeId, this.UserId, this.LoginId, this.ValueDate, this.CostCenterId, this.ReferenceNumber, this.StatementReference, this.IsCredit, this.PaymentTermId, this.PartyCode, this.PriceTypeId, this.SalespersonId, this.ShipperId, this.ShippingAddressCode, this.StoreId, this.IsNonTaxableSales, this.Details, this.Attachments, this.NonGlTranIds);
         }
     }
 }

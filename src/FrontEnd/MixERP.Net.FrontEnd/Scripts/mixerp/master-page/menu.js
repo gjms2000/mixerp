@@ -1,8 +1,14 @@
 ﻿var menus;
 var depth = 2;
 
-$(document).ready(function () {
-    adjustSidebar();
+
+function getPath() {
+    return window.overridePath || window.location.pathname;
+};
+
+
+$(document).ready(function() {
+    loadSidebarState();
     var topMenu = $("#top-menu");
     var resetMenu = $("#reset-menu");
     var menuId = 0;
@@ -13,24 +19,32 @@ $(document).ready(function () {
 
     var ajaxMenu = getAjaxMenu();
 
-    ajaxMenu.success(function (msg) {
+    ajaxMenu.success(function(msg) {
         menus = JSON.parse(msg.d);
         loadMenu(topMenu);
         loadTree(menuId, createTree);
     });
 
-    resetMenu.click(function () {
-        $(this).addClass('initially hidden');
+    resetMenu.click(function() {
+        $(this).addClass("initially hidden");
         window.depth = 2;
         loadTree(0, createTree);
     });
 });
 
+function getSidebarState() {
+    if (window.supportsBrowserStorage()) {
+        return localStorage["sidebar"];
+    };
+
+    return "";
+};
+
 
 function loadMenu(appendTo) {
     var anchors = "";
 
-    $.each(menus, function (i, v) {
+    $.each(menus, function(i, v) {
         var anchor = "<a class='item' href='javascript:void(0);' onclick='javascript:loadTree(%s, createTree);'>%s</a>";
         anchor = sprintf(anchor, v.Menu.MenuId, v.Menu.MenuText);
 
@@ -63,16 +77,16 @@ function createTree() {
             "case_insensitive": true,
             "show_only_matches": true
         }
-    }).bind("select_node.jstree", function (e, data) {
+    }).bind("select_node.jstree", function(e, data) {
         var href = data.node.a_attr.href;
         document.location.href = href;
-    }).bind("hover_node.jstree", function (e, data) {
+    }).bind("hover_node.jstree", function(e, data) {
         if (data.node.data) {
             var menuCode = data.node.data.menucode;
             searchInput.val(menuCode);
         }
-    }).bind("ready.jstree", function (e, data) {
-        $.each(data.instance._model.data, function (i, v) {
+    }).bind("ready.jstree", function(e, data) {
+        $.each(data.instance._model.data, function(i, v) {
             var liClass;
             var dataSelected = false;
 
@@ -108,13 +122,13 @@ function createTree() {
     });
 
     var to = false;
-    searchInput.keyup(function (e) {
+    searchInput.keyup(function(e) {
         if (to) {
             clearTimeout(to);
         }
-        to = setTimeout(function () {
+        to = setTimeout(function() {
             var v = searchInput.val();
-            $('#tree').jstree(true).search(v);
+            $("#tree").jstree(true).search(v);
             var result = $(".jstree-search");
             result.prevAll(".jstree-wholerow").addClass("jstree-clicked");
 
@@ -142,7 +156,7 @@ function loadTree(menuId, callback) {
     };
 
 
-    $.each(menus, function () {
+    $.each(menus, function() {
         var items;
         var li;
 
@@ -184,7 +198,7 @@ function loadTree(menuId, callback) {
 function getItems(nav) {
 
     var menu = "";
-    $.each(nav, function (i, v) {
+    $.each(nav, function(i, v) {
         if (i === 0) {
             menu += "<ul>";
         }
@@ -205,7 +219,7 @@ function getItems(nav) {
             dataJsTree = "data-jstree='{\"type\":\"file\"}'";
         }
 
-        if (url === location.pathname) {
+        if (url === getPath()) {
             dataSelected = "data-selected='true'";
             cssClass = "class='expanded'";
             dataJsTree = "data-jstree='{\"type\":\"active\"}'";
@@ -234,28 +248,212 @@ function getAjaxMenu() {
     return getAjax(url);
 };
 
+
+function loadSidebarState() {
+    var state = getSidebarState();
+
+    if (state === "hidden") {
+        toggleSidebar();
+    };
+};
+
 function toggleSidebar(el) {
-    if ($('.sidebar').is(":visible")) {
-        $('#Content').removeClass("twelve wide column").addClass("sixteen wide column");
+    var state = "visible";
+
+    if ($(".sidebar").is(":visible")) {
+        $("#Content").removeClass("twelve wide column").addClass("sixteen wide column");
+        state = "hidden";
     } else {
-        $('#Content').removeClass("sixteen wide column").addClass("twelve wide column");
+        $("#Content").removeClass("sixteen wide column").addClass("twelve wide column");
     };
 
-    $('.sidebar').toggle(100);
-};
-
-function adjustSidebar(){
-    if ($(document).width() < 800) {
-        $('#page-wrapper').css('margin-left', '0');
-        $('.sidebar').hide(100);
-        return;
+    if (window.supportsBrowserStorage()) {
+        localStorage["sidebar"] = state;
     };
 
-    $('#page-wrapper').css('margin-left', '250px');
-    $('.sidebar').show(100);
-    return;
+    $(".sidebar").toggle(100);
+};
+
+var menuPolicy;
+var menuColors = ["red", "purple", "green", "orange", "black", "violet", "yellow", "olive", "pink", "teal", "blue", "grey"];
+var columnTemplate = "<div class=\"column\">\
+                        <a class=\"ui link icons\" data-menu-id=\"{Id}\" href=\"javascript:void(0);\" onclick=\"showMenu({Id});\">\
+                            <i class=\"ui {Icon} inverted circular {Color} large icon\"></i>\
+                            <span class=\"text\">{Text}</span>\
+                        </a>\
+                    </div>";
+
+function cleanUrl(url) {
+    if (!url) {
+        return "";
+    };
+
+    url = url.replace("~", "");
+    url = url.split("?")[0];
+
+    return url;
+};
+
+function getCurrentPageMenu() {
+    var currentPage = Enumerable.From(menuPolicy)
+        .Where(function(x) { return cleanUrl(x.Url) === getPath(); }).ToArray();
+
+    if (currentPage.length) {
+        return currentPage[0];
+    };
+
+    return null;
+};
+
+function getMenuPolicy() {
+    var url = "/api/policy/procedures/get-menu/execute";
+
+    var annotation = new Object();
+    annotation.UserId = window.metaView.UserId;
+    annotation.OfficeId = window.metaView.OfficeId;
+    annotation.Culture = window.metaView.Culture;
+
+    var data = JSON.stringify(annotation);
+
+    return window.getAjaxRequest(url, "POST", data, false);
 };
 
 
-window.onresize = function (event) {
+function showMenu(menuId) {
+    if (isParentMenu(menuId)) {
+        if (typeof (window.loadTree) === "function") {
+            window.loadTree(menuId, window.createTree);
+        };
+    };
+
+    var children = Enumerable.From(menuPolicy)
+        .Where(function(x) { return x.ParentMenuId === menuId })
+        .OrderBy(function(x) { return x.MenuId })
+        .OrderBy(function(x) { return x.Sort }).ToArray();
+
+    if (children.length) {
+        window.createMenus(children, menuId);
+    };
 };
+
+function getParentMenu(menu) {
+    var parent = Enumerable.From(menuPolicy)
+        .Where(function(x) { return x.MenuId === menu.ParentMenuId; }).ToArray();
+
+
+    if (parent.length) {
+        return parent[0];
+    };
+
+    return null;
+};
+
+function isParentMenu(menuId) {
+    var result = Enumerable.From(menuPolicy)
+        .Where(function(x) { return x.MenuId === menuId }).ToArray();
+
+    if (result.length) {
+        if (!result[0].ParentMenuId) {
+            return true;
+        };
+    };
+
+    return false;
+};
+
+function hasChildren(menuId) {
+    var children = Enumerable.From(menuPolicy)
+        .Where(function(x) { return x.ParentMenuId === menuId }).ToArray();
+
+    return children.length > 0;
+};
+
+function createMenus(items, menuId) {
+    $("#menu-cols").html("").hide();
+
+    $.each(items, function(i, v) {
+        createMenu(i, v);
+    });
+
+    var parent = Enumerable.From(menuPolicy).Where(function(x) { return x.MenuId === menuId }).ToArray();
+
+    if (parent.length) {
+        createMenu(items.length + 1, { MenuId: parent[0].ParentMenuId || 0, MenuText: "Back", Icon: "chevron left" });
+    };
+
+    $("#PhoneMenu").show();
+    $("#menu-cols").fadeIn(600);
+};
+
+function createMenu(index, menu) {
+    var column = columnTemplate;
+    column = column.replace(/{Id}/g, menu.MenuId || 0);
+    column = column.replace(/{Icon}/g, menu.Icon || "user");
+    column = column.replace(/{Color}/g, menuColors[index % menuColors.length]);
+    column = column.replace(/{Text}/g, menu.MenuText);
+
+    column = $(column);
+
+    if (!hasChildren(menu.MenuId)) {
+        column.find("a").attr("href", (menu.Url || "").replace("~", ""));
+    };
+
+    $("#menu-cols").append($(column));
+};
+
+function addSection(el, menu, active, divide) {
+    var section = $("<a class='section' href='javascript:void(0);' />");
+    section.html(menu.MenuText);
+    section.attr("onclick", "showMenu(" + menu.MenuId + ");");
+
+    if (active) {
+        section.addClass("active");
+    };
+
+    if (divide) {
+        var divider = $("<i class=\"right chevron icon divider\"></i>");
+        el.prepend(divider);
+    };
+
+    el.prepend(section);
+};
+
+function showBreadcrumb() {
+    var menu = getCurrentPageMenu();
+    if (menu) {
+        $("#PhoneMenu").hide();
+    };
+
+    var container = $("<div class='cellphone only' />");
+
+    var breadcrumb = $("<div class='ui large breadcrumb'/>");
+
+    addSection(breadcrumb, menu, true);
+
+    do {
+        menu = getParentMenu(menu);
+
+        if (menu) {
+            addSection(breadcrumb, menu, false, true);
+        };
+    } while (menu != null);
+
+    container.append(breadcrumb);
+    container.append($("<div class=\"ui mobile divider\" />"));
+
+    $("#MainContent").prepend(container);
+};
+
+$(document).ready(function() {
+    var ajaxMenu = getMenuPolicy();
+
+    ajaxMenu.success(function(msg) {
+        menuPolicy = msg;
+        showMenu(0);
+        showBreadcrumb();
+    });
+
+    ajaxMenu.fail(function(xhr) {
+        alert(JSON.stringify(xhr));
+    });
+});

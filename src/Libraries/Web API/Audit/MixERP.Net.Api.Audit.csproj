@@ -63,6 +63,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FailedLoginController.cs" />
+    <Compile Include="GetOfficeIdByLoginIdController.cs" />
+    <Compile Include="GetOfficeInformationModelController.cs" />
+    <Compile Include="GetUserIdByLoginIdController.cs" />
+    <Compile Include="IsValidLoginIdController.cs" />
     <Compile Include="LoggedActionController.cs" />
     <Compile Include="LoginController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

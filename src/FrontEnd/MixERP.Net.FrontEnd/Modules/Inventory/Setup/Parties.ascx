@@ -24,7 +24,7 @@ along with MixERP.  If not, see <http://www.gnu.org/licenses />.
 
     scrudFactory.title = Resources.Titles.Parties();
 
-    scrudFactory.viewAPI = "/api/core/party-view";
+    scrudFactory.viewAPI = "/api/core/party-scrud-view";
     scrudFactory.viewTableName = "core.party_scrud_view";
 
     scrudFactory.formAPI = "/api/core/party";

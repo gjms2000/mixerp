@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddOfficeController.cs" />
+    <Compile Include="CanLoginController.cs" />
     <Compile Include="CashierController.cs" />
     <Compile Include="CashRepositoryController.cs" />
     <Compile Include="CashRepositoryScrudViewController.cs" />
@@ -71,8 +73,46 @@
     <Compile Include="CostCenterScrudViewController.cs" />
     <Compile Include="CounterController.cs" />
     <Compile Include="CounterScrudViewController.cs" />
+    <Compile Include="CountItemInStockController.cs" />
+    <Compile Include="CreateUserController.cs" />
     <Compile Include="DepartmentController.cs" />
     <Compile Include="DepartmentScrudViewController.cs" />
+    <Compile Include="GetCashRepositoryIdByCashRepositoryCodeController.cs" />
+    <Compile Include="GetCashRepositoryIdByCashRepositoryNameController.cs" />
+    <Compile Include="GetCostCenterIdByCostCenterCodeController.cs" />
+    <Compile Include="GetCostOfGoodMethodController.cs" />
+    <Compile Include="GetDepartmentIdByDepartmentCodeController.cs" />
+    <Compile Include="GetIncomeTaxRateController.cs" />
+    <Compile Include="GetLoggedInCultureController.cs" />
+    <Compile Include="GetLoggedInOfficeIdController.cs" />
+    <Compile Include="GetLoginIdController.cs" />
+    <Compile Include="GetOfficeCodeByIdController.cs" />
+    <Compile Include="GetOfficeIdByCashRepositoryIdController.cs" />
+    <Compile Include="GetOfficeIdByOfficeCodeController.cs" />
+    <Compile Include="GetOfficeIdByStoreIdController.cs" />
+    <Compile Include="GetOfficeIdByUserIdController.cs" />
+    <Compile Include="GetOfficeIdsController.cs" />
+    <Compile Include="GetOfficeNameByIdController.cs" />
+    <Compile Include="GetOfficesController.cs" />
+    <Compile Include="GetRoleCodeByUserNameController.cs" />
+    <Compile Include="GetRoleIdByRoleCodeController.cs" />
+    <Compile Include="GetRoleIdByRoleNameController.cs" />
+    <Compile Include="GetRoleIdByUseIdController.cs" />
+    <Compile Include="GetStoreIdByStoreCodeController.cs" />
+    <Compile Include="GetStoreIdByStoreNameController.cs" />
+    <Compile Include="GetStoreNameByStoreIdController.cs" />
+    <Compile Include="GetStoresController.cs" />
+    <Compile Include="GetStoreTypeIdByStoreTypeCodeController.cs" />
+    <Compile Include="GetSysUserIdController.cs" />
+    <Compile Include="GetUserIdByUserNameController.cs" />
+    <Compile Include="GetUserNameByUserIdController.cs" />
+    <Compile Include="HasChildOfficesController.cs" />
+    <Compile Include="IsAdminController.cs" />
+    <Compile Include="IsParentOfficeController.cs" />
+    <Compile Include="IsPeriodicInventoryController.cs" />
+    <Compile Include="IsSysController.cs" />
+    <Compile Include="IsSysUserController.cs" />
+    <Compile Include="IsValidOfficeIdController.cs" />
     <Compile Include="OfficeController.cs" />
     <Compile Include="OfficeScrudViewController.cs" />
     <Compile Include="OfficeSelectorViewController.cs" />
@@ -81,6 +121,7 @@
     <Compile Include="RoleController.cs" />
     <Compile Include="RoleScrudViewController.cs" />
     <Compile Include="RoleViewController.cs" />
+    <Compile Include="SignInController.cs" />
     <Compile Include="SignInViewController.cs" />
     <Compile Include="StoreController.cs" />
     <Compile Include="StoreScrudViewController.cs" />
@@ -92,6 +133,7 @@
     <Compile Include="UserController.cs" />
     <Compile Include="UserSelectorViewController.cs" />
     <Compile Include="UserViewController.cs" />
+    <Compile Include="ValidateLoginController.cs" />
     <Compile Include="WorkCenterController.cs" />
     <Compile Include="WorkCenterViewController.cs" />
   </ItemGroup>

@@ -1,3 +1,4 @@
+// ReSharper disable All
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Core
@@ -25,23 +27,23 @@ namespace MixERP.Net.Api.Core
 
         public SalesTaxDetailController()
         {
-            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
-            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
-            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
-            this.Catalog = AppUsers.GetCurrentUserDB();
+            this._LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this._UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this._Catalog = AppUsers.GetCurrentUserDB();
 
             this.SalesTaxDetailContext = new MixERP.Net.Schemas.Core.Data.SalesTaxDetail
             {
-                Catalog = this.Catalog,
-                LoginId = this.LoginId,
-                UserId = this.UserId
+                _Catalog = this._Catalog,
+                _LoginId = this._LoginId,
+                _UserId = this._UserId
             };
         }
 
-        public long LoginId { get; }
-        public int UserId { get; private set; }
-        public int OfficeId { get; private set; }
-        public string Catalog { get; }
+        public long _LoginId { get; }
+        public int _UserId { get; private set; }
+        public int _OfficeId { get; private set; }
+        public string _Catalog { get; }
 
         /// <summary>
         ///     Creates meta information of "sales tax detail" entity.
@@ -99,6 +101,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -121,6 +131,14 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -146,6 +164,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -165,6 +191,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -172,7 +206,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 sales tax details on each page, sorted by the property SalesTaxDetailId.
+        ///     Creates a paginated collection containing 10 sales tax details on each page, sorted by the property SalesTaxDetailId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -188,6 +222,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -195,7 +237,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 sales tax details on each page, sorted by the property SalesTaxDetailId.
+        ///     Creates a paginated collection containing 10 sales tax details on each page, sorted by the property SalesTaxDetailId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -212,6 +254,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -226,16 +276,24 @@ namespace MixERP.Net.Api.Core
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/core/sales-tax-detail/count-where")]
-        public long CountWhere([FromBody]dynamic filters)
+        public long CountWhere([FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.SalesTaxDetailContext.CountWhere(f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -244,7 +302,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 sales tax details on each page, sorted by the property SalesTaxDetailId.
+        ///     Creates a filtered and paginated collection containing 10 sales tax details on each page, sorted by the property SalesTaxDetailId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -252,16 +310,24 @@ namespace MixERP.Net.Api.Core
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/core/sales-tax-detail/get-where/{pageNumber}")]
-        public IEnumerable<MixERP.Net.Entities.Core.SalesTaxDetail> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        public IEnumerable<MixERP.Net.Entities.Core.SalesTaxDetail> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.SalesTaxDetailContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -287,6 +353,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -294,7 +368,7 @@ namespace MixERP.Net.Api.Core
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 sales tax details on each page, sorted by the property SalesTaxDetailId.
+        ///     Creates a filtered and paginated collection containing 10 sales tax details on each page, sorted by the property SalesTaxDetailId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filterName">The named filter.</param>
@@ -311,6 +385,14 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -335,6 +417,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -357,6 +447,14 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -381,6 +479,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -394,7 +500,7 @@ namespace MixERP.Net.Api.Core
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/core/sales-tax-detail/add-or-edit")]
-        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
+        public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             MixERP.Net.Entities.Core.SalesTaxDetail salesTaxDetail = form[0].ToObject<MixERP.Net.Entities.Core.SalesTaxDetail>(JsonHelper.GetJsonSerializer());
             List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
@@ -406,11 +512,19 @@ namespace MixERP.Net.Api.Core
 
             try
             {
-                this.SalesTaxDetailContext.AddOrEdit(salesTaxDetail, customFields);
+                return this.SalesTaxDetailContext.AddOrEdit(salesTaxDetail, customFields);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -440,6 +554,14 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -468,6 +590,14 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -506,9 +636,13 @@ namespace MixERP.Net.Api.Core
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (MixERPException)
+            catch (MixERPException ex)
             {
-                throw;
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -532,6 +666,14 @@ namespace MixERP.Net.Api.Core
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {

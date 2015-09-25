@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_product_view";
+        public override string _ObjectName => "get_product_view";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "user_id_" argument of the function "transactions.get_product_view".
@@ -148,7 +148,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.get_product_view(@0::integer, @1::text, @2::integer, @3::date, @4::date, @5::character varying, @6::text, @7::text, @8::character varying, @9::character varying, @10::text);";
-            return Factory.Get<DbGetProductViewResult>(this.Catalog, query, this.UserId, this.Book, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.PriceType, this.User, this.ReferenceNumber, this.StatementReference);
+            return Factory.Get<DbGetProductViewResult>(this._Catalog, query, this.UserId, this.Book, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.PriceType, this.User, this.ReferenceNumber, this.StatementReference);
         }
     }
 }

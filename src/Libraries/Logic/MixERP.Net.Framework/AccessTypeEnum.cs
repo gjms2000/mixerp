@@ -12,6 +12,7 @@ namespace MixERP.Net.Framework
         Export = 7,
         ExportData = 8,
         ImportData = 9,
-        Execute = 10
+        Execute = 10,
+        Verify = 11
     }
 }

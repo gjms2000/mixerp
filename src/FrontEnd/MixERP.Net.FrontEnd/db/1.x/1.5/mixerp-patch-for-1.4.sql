@@ -392,6 +392,43 @@ END
 $$
 LANGUAGE plpgsql;
 
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.menus'::regclass
+        AND    attname = 'sort'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.menus
+        ADD COLUMN sort integer NOT NULL DEFAULT(0);
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM   pg_attribute 
+        WHERE  attrelid = 'core.menus'::regclass
+        AND    attname = 'icon'
+        AND    NOT attisdropped
+    ) THEN
+        ALTER TABLE core.menus
+        ADD COLUMN icon national character varying(48) NOT NULL DEFAULT('');
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP TABLE IF EXISTS office.holiday;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/core/core.create_kanban.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_kanban
@@ -817,6 +854,94 @@ LANGUAGE plpgsql;
 
 
 --SELECT * FROM office.sign_in(2, 'binod', '4e99cb7523794ad53b4da66c91f56d0143a679e1c6d396cda9ad0c9b41ed53e90bd5c59bf98255a4f1946b216b3ba539074a8a86cedd4af8bb208a8fad748e82', 'Firefox', '0.0.0.0', 'N/A', 'en-US', 'cd0ad7446ab64801837bfd43197d19c1');
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/policy/policy.get_menu.sql --<--<--
+DROP FUNCTION IF EXISTS policy.get_menu
+(
+    _user_id    integer, 
+    _office_id  integer, 
+    _culture_   text
+);
+
+CREATE FUNCTION policy.get_menu
+(
+    _user_id    integer, 
+    _office_id  integer, 
+    _culture_   text
+)
+RETURNS TABLE
+(
+    menu_id         integer,
+    menu_text       national character varying(250),
+    url             national character varying(250),
+    menu_code       character varying(12),
+    sort            integer,
+    icon            national character varying(48),
+    level           smallint,
+    parent_menu_id  integer
+)
+AS
+$$
+    DECLARE culture_exists boolean = false;
+BEGIN    
+    IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=$3) THEN
+        culture_exists := true;
+    END IF;
+
+    IF(NOT culture_exists) THEN
+        IF EXISTS(SELECT * FROM core.menu_locale WHERE culture=split_part($3,'-', 1)) THEN
+            $3 := split_part($3,'-', 1);
+            culture_exists := true;
+        END IF;
+    END IF;
+
+    IF culture_exists THEN
+        RETURN QUERY 
+        SELECT
+            core.menus.menu_id,
+            CASE 
+                WHEN core.menu_locale.menu_text IS NOT NULL THEN core.menu_locale.menu_text
+                ELSE core.menus.menu_text
+            END AS menu_text,
+            core.menus.url,
+            core.menus.menu_code,
+            core.menus.sort,
+            core.menus.icon,
+            core.menus.level,
+            core.menus.parent_menu_id   
+        FROM core.menus        
+        LEFT JOIN core.menu_locale
+        ON core.menus.menu_id = core.menu_locale.menu_id
+        AND core.menu_locale.culture=$3
+        WHERE core.menus.menu_id IN
+        (
+            SELECT policy.menu_access.menu_id
+            FROM policy.menu_access
+            WHERE policy.menu_access.user_id=$1
+            AND policy.menu_access.office_id=$2           
+        );
+    ELSE
+        RETURN QUERY 
+        SELECT
+            core.menus.menu_id,
+            core.menus.menu_text,
+            core.menus.url,
+            core.menus.menu_code,
+            core.menus.sort,
+            core.menus.icon,
+            core.menus.level,
+            core.menus.parent_menu_id   
+        FROM core.menus
+        INNER JOIN policy.menu_access
+        ON core.menus.menu_id = policy.menu_access.menu_id
+        WHERE policy.menu_access.user_id=$1
+        AND policy.menu_access.office_id=$2;
+    END IF;
+
+END
+$$
+LANGUAGE plpgsql;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/db/1.x/1.5/src/02.functions-and-logic/functions/logic/public/public.parse_default.sql --<--<--

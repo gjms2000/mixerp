@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "get_receipt_view";
+        public override string _ObjectName => "get_receipt_view";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_user_id" argument of the function "transactions.get_receipt_view".
@@ -136,7 +136,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.get_receipt_view(@0::integer, @1::integer, @2::date, @3::date, @4::character varying, @5::text, @6::character varying, @7::character varying, @8::text);";
-            return Factory.Get<DbGetReceiptViewResult>(this.Catalog, query, this.UserId, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.User, this.ReferenceNumber, this.StatementReference);
+            return Factory.Get<DbGetReceiptViewResult>(this._Catalog, query, this.UserId, this.OfficeId, this.DateFrom, this.DateTo, this.Office, this.Party, this.User, this.ReferenceNumber, this.StatementReference);
         }
     }
 }

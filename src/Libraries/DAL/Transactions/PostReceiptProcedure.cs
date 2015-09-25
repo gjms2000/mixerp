@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "transactions";
+        public override string _ObjectNamespace => "transactions";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "post_receipt";
+        public override string _ObjectName => "post_receipt";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_user_id" argument of the function "transactions.post_receipt".
@@ -61,7 +61,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <summary>
         /// Maps to "_login_id" argument of the function "transactions.post_receipt".
         /// </summary>
-        public long LoginIdParameter { get; set; }
+        public long LoginId { get; set; }
         /// <summary>
         /// Maps to "_party_code" argument of the function "transactions.post_receipt".
         /// </summary>
@@ -135,7 +135,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// </summary>
         /// <param name="userId">Enter argument value for "_user_id" parameter of the function "transactions.post_receipt".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "transactions.post_receipt".</param>
-        /// <param name="loginIdParameter">Enter argument value for "_login_id" parameter of the function "transactions.post_receipt".</param>
+        /// <param name="loginId">Enter argument value for "_login_id" parameter of the function "transactions.post_receipt".</param>
         /// <param name="partyCode">Enter argument value for "_party_code" parameter of the function "transactions.post_receipt".</param>
         /// <param name="currencyCode">Enter argument value for "_currency_code" parameter of the function "transactions.post_receipt".</param>
         /// <param name="amount">Enter argument value for "_amount" parameter of the function "transactions.post_receipt".</param>
@@ -151,11 +151,11 @@ namespace MixERP.Net.Schemas.Transactions.Data
         /// <param name="bankInstrumentCode">Enter argument value for "_bank_instrument_code" parameter of the function "transactions.post_receipt".</param>
         /// <param name="bankTranCode">Enter argument value for "_bank_tran_code" parameter of the function "transactions.post_receipt".</param>
         /// <param name="cascadingTranId">Enter argument value for "_cascading_tran_id" parameter of the function "transactions.post_receipt".</param>
-        public PostReceiptProcedure(int userId, int officeId, long loginIdParameter, string partyCode, string currencyCode, decimal amount, decimal exchangeRateDebit, decimal exchangeRateCredit, string referenceNumber, string statementReference, int costCenterId, int cashRepositoryId, DateTime postedDate, long bankAccountId, int paymentCardId, string bankInstrumentCode, string bankTranCode, long cascadingTranId)
+        public PostReceiptProcedure(int userId, int officeId, long loginId, string partyCode, string currencyCode, decimal amount, decimal exchangeRateDebit, decimal exchangeRateCredit, string referenceNumber, string statementReference, int costCenterId, int cashRepositoryId, DateTime postedDate, long bankAccountId, int paymentCardId, string bankInstrumentCode, string bankTranCode, long cascadingTranId)
         {
             this.UserId = userId;
             this.OfficeId = officeId;
-            this.LoginIdParameter = loginIdParameter;
+            this.LoginId = loginId;
             this.PartyCode = partyCode;
             this.CurrencyCode = currencyCode;
             this.Amount = amount;
@@ -190,7 +190,7 @@ namespace MixERP.Net.Schemas.Transactions.Data
                 }
             }
             const string query = "SELECT * FROM transactions.post_receipt(@0::integer, @1::integer, @2::bigint, @3::character varying, @4::character varying, @5::money_strict, @6::decimal_strict, @7::decimal_strict, @8::character varying, @9::character varying, @10::integer, @11::integer, @12::date, @13::bigint, @14::integer, @15::character varying, @16::character varying, @17::bigint);";
-            return Factory.Scalar<long>(this.Catalog, query, this.UserId, this.OfficeId, this.LoginIdParameter, this.PartyCode, this.CurrencyCode, this.Amount, this.ExchangeRateDebit, this.ExchangeRateCredit, this.ReferenceNumber, this.StatementReference, this.CostCenterId, this.CashRepositoryId, this.PostedDate, this.BankAccountId, this.PaymentCardId, this.BankInstrumentCode, this.BankTranCode, this.CascadingTranId);
+            return Factory.Scalar<long>(this._Catalog, query, this.UserId, this.OfficeId, this.LoginId, this.PartyCode, this.CurrencyCode, this.Amount, this.ExchangeRateDebit, this.ExchangeRateCredit, this.ReferenceNumber, this.StatementReference, this.CostCenterId, this.CashRepositoryId, this.PostedDate, this.BankAccountId, this.PaymentCardId, this.BankInstrumentCode, this.BankTranCode, this.CascadingTranId);
         }
     }
 }

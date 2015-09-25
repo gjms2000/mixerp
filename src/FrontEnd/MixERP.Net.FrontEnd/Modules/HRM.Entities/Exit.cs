@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 
@@ -35,9 +36,13 @@ namespace MixERP.Net.Entities.HRM
         [ColumnDbType("int4", 0, false, "")]
         public int EmployeeId { get; set; }
 
-        [Column("change_status_code_to")]
+        [Column("forward_to")]
+        [ColumnDbType("int4", 0, true, "")]
+        public int? ForwardTo { get; set; }
+
+        [Column("change_status_to")]
         [ColumnDbType("int4", 0, false, "")]
-        public int ChangeStatusCodeTo { get; set; }
+        public int ChangeStatusTo { get; set; }
 
         [Column("exit_type_id")]
         [ColumnDbType("int4", 0, false, "")]
@@ -54,6 +59,26 @@ namespace MixERP.Net.Entities.HRM
         [Column("details")]
         [ColumnDbType("text", 0, true, "")]
         public string Details { get; set; }
+
+        [Column("verification_status_id")]
+        [ColumnDbType("int4", 0, false, "")]
+        public int VerificationStatusId { get; set; }
+
+        [Column("verified_by_user_id")]
+        [ColumnDbType("int4", 0, true, "")]
+        public int? VerifiedByUserId { get; set; }
+
+        [Column("verified_on")]
+        [ColumnDbType("date", 0, true, "")]
+        public DateTime? VerifiedOn { get; set; }
+
+        [Column("verification_reason")]
+        [ColumnDbType("varchar", 128, true, "")]
+        public string VerificationReason { get; set; }
+
+        [Column("service_end_date")]
+        [ColumnDbType("date", 0, false, "")]
+        public DateTime ServiceEndDate { get; set; }
 
         [Column("audit_user_id")]
         [ColumnDbType("int4", 0, true, "")]

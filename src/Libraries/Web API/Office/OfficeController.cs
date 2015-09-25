@@ -1,3 +1,4 @@
+// ReSharper disable All
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using MixERP.Net.Common.Extensions;
 using MixERP.Net.EntityParser;
 using MixERP.Net.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PetaPoco;
 
 namespace MixERP.Net.Api.Office
@@ -25,23 +27,23 @@ namespace MixERP.Net.Api.Office
 
         public OfficeController()
         {
-            this.LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
-            this.UserId = AppUsers.GetCurrent().View.UserId.ToInt();
-            this.OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
-            this.Catalog = AppUsers.GetCurrentUserDB();
+            this._LoginId = AppUsers.GetCurrent().View.LoginId.ToLong();
+            this._UserId = AppUsers.GetCurrent().View.UserId.ToInt();
+            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.ToInt();
+            this._Catalog = AppUsers.GetCurrentUserDB();
 
             this.OfficeContext = new MixERP.Net.Schemas.Office.Data.Office
             {
-                Catalog = this.Catalog,
-                LoginId = this.LoginId,
-                UserId = this.UserId
+                _Catalog = this._Catalog,
+                _LoginId = this._LoginId,
+                _UserId = this._UserId
             };
         }
 
-        public long LoginId { get; }
-        public int UserId { get; private set; }
-        public int OfficeId { get; private set; }
-        public string Catalog { get; }
+        public long _LoginId { get; }
+        public int _UserId { get; private set; }
+        public int _OfficeId { get; private set; }
+        public string _Catalog { get; }
 
         /// <summary>
         ///     Creates meta information of "office" entity.
@@ -109,6 +111,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -131,6 +141,14 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -156,6 +174,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -175,6 +201,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -182,7 +216,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 offices on each page, sorted by the property OfficeId.
+        ///     Creates a paginated collection containing 10 offices on each page, sorted by the property OfficeId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -198,6 +232,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -205,7 +247,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 25 offices on each page, sorted by the property OfficeId.
+        ///     Creates a paginated collection containing 10 offices on each page, sorted by the property OfficeId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -222,6 +264,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -236,16 +286,24 @@ namespace MixERP.Net.Api.Office
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/office/office/count-where")]
-        public long CountWhere([FromBody]dynamic filters)
+        public long CountWhere([FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.OfficeContext.CountWhere(f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -254,7 +312,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 offices on each page, sorted by the property OfficeId.
+        ///     Creates a filtered and paginated collection containing 10 offices on each page, sorted by the property OfficeId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -262,16 +320,24 @@ namespace MixERP.Net.Api.Office
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/office/office/get-where/{pageNumber}")]
-        public IEnumerable<MixERP.Net.Entities.Office.Office> GetWhere(long pageNumber, [FromBody]dynamic filters)
+        public IEnumerable<MixERP.Net.Entities.Office.Office> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
             {
-                List<EntityParser.Filter> f = JsonConvert.DeserializeObject<List<EntityParser.Filter>>(filters);
+                List<EntityParser.Filter> f = filters.ToObject<List<EntityParser.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.OfficeContext.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -297,6 +363,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -304,7 +378,7 @@ namespace MixERP.Net.Api.Office
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 25 offices on each page, sorted by the property OfficeId.
+        ///     Creates a filtered and paginated collection containing 10 offices on each page, sorted by the property OfficeId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filterName">The named filter.</param>
@@ -321,6 +395,14 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -345,6 +427,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -367,6 +457,14 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -391,6 +489,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -404,7 +510,7 @@ namespace MixERP.Net.Api.Office
         [AcceptVerbs("PUT")]
         [Route("add-or-edit")]
         [Route("~/api/office/office/add-or-edit")]
-        public void AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
+        public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             MixERP.Net.Entities.Office.Office office = form[0].ToObject<MixERP.Net.Entities.Office.Office>(JsonHelper.GetJsonSerializer());
             List<EntityParser.CustomField> customFields = form[1].ToObject<List<EntityParser.CustomField>>(JsonHelper.GetJsonSerializer());
@@ -416,11 +522,19 @@ namespace MixERP.Net.Api.Office
 
             try
             {
-                this.OfficeContext.AddOrEdit(office, customFields);
+                return this.OfficeContext.AddOrEdit(office, customFields);
             }
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -450,6 +564,14 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
@@ -478,6 +600,14 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -516,9 +646,13 @@ namespace MixERP.Net.Api.Office
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (MixERPException)
+            catch (MixERPException ex)
             {
-                throw;
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {
@@ -542,6 +676,14 @@ namespace MixERP.Net.Api.Office
             catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (MixERPException ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage
+                {
+                    Content = new StringContent(ex.Message),
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
             }
             catch
             {

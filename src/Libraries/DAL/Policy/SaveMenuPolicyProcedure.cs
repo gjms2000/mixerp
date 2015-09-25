@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "policy";
+        public override string _ObjectNamespace => "policy";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "save_menu_policy";
+        public override string _ObjectName => "save_menu_policy";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Policy.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "_user_id" argument of the function "policy.save_menu_policy".
@@ -100,7 +100,7 @@ namespace MixERP.Net.Schemas.Policy.Data
                 }
             }
             const string query = "SELECT * FROM policy.save_menu_policy(@0::integer, @1::integer, @2::integer[]);";
-            Factory.NonQuery(this.Catalog, query, this.UserId, this.OfficeId, this.MenuIds);
+            Factory.NonQuery(this._Catalog, query, this.UserId, this.OfficeId, this.MenuIds);
         }
     }
 }

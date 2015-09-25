@@ -5,8 +5,8 @@ namespace PetaPoco
 {
     public abstract class DbAccess : IDBAccess
     {
-        public abstract string ObjectNamespace { get; }
-        public abstract string ObjectName { get; }
+        public abstract string _ObjectNamespace { get; }
+        public abstract string _ObjectName { get; }
         public bool HasAccess { get; private set; }
         public bool Validated { get; private set; }
         public bool SkipValidation { get; set; }
@@ -24,8 +24,8 @@ namespace PetaPoco
         {
             PolicyValidator policy = new PolicyValidator
             {
-                ObjectNamespace = this.ObjectNamespace,
-                ObjectName = this.ObjectName,
+                ObjectNamespace = this._ObjectNamespace,
+                ObjectName = this._ObjectName,
                 LoginId = loginId
             };
 

@@ -11,6 +11,8 @@
     scrudFactory.formTableName = "hrm.exits";
 
     scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.hiddenColumns = ["VerificationStatusId", "VerifiedByUserId", "VerifiedOn", "VerificationReason"];
+    scrudFactory.excludedColumns = ["Photo"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -20,7 +22,8 @@
     scrudFactory.layout = [
         ["ExitId", ""],
         ["EmployeeId", "Reason", "", ""],
-        ["ChangeStatusCodeTo", "ExitTypeId", "", ""],
+        ["ChangeStatusTo", "ExitTypeId", "", ""],
+        ["ForwardTo", "ServiceEndDate", "", ""],
         ["Details", ""],
         ["ExitInterviewDetails", ""]
     ];
@@ -28,7 +31,7 @@
     scrudFactory.keys = [
         {
             property: "EmployeeId",
-            url: '/api/hrm/employee/display-fields',
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
@@ -41,8 +44,15 @@
             textField: "Value"
         },
         {
-            property: "ChangeStatusCodeTo",
-            url: '/api/hrm/employment-status-code/display-fields',
+            property: "ChangeStatusTo",
+            url: '/api/hrm/employment-status/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "ForwardTo",
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
@@ -56,6 +66,6 @@
 
 <script>
     $(document).on("formready", function() {
-        $("#entered_by").val(window.userId);
+        $("#verification_status_id").val("0");
     });
 </script>

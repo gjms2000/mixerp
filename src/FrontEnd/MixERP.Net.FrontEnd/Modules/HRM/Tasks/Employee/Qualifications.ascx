@@ -34,7 +34,7 @@
     scrudFactory.keys = [
         {
             property: "EmployeeId",
-            url: '/api/hrm/employee/display-fields',
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

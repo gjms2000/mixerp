@@ -1,3 +1,4 @@
+// ReSharper disable All
 /********************************************************************************
 Copyright (C) MixERP Inc. (http://mixof.org).
 This file is part of MixERP.
@@ -12,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MixERP.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************************/
-//Resharper disable All
 using MixERP.Net.DbFactory;
 using MixERP.Net.Framework;
 using PetaPoco;
@@ -32,11 +32,11 @@ namespace MixERP.Net.Schemas.Localization.Data
         /// <summary>
         /// The schema of this PostgreSQL function.
         /// </summary>
-        public override string ObjectNamespace => "localization";
+        public override string _ObjectNamespace => "localization";
         /// <summary>
         /// The schema unqualified name of this PostgreSQL function.
         /// </summary>
-        public override string ObjectName => "add_resource";
+        public override string _ObjectName => "add_resource";
         /// <summary>
         /// Login id of application user accessing this PostgreSQL function.
         /// </summary>
@@ -48,7 +48,7 @@ namespace MixERP.Net.Schemas.Localization.Data
         /// <summary>
         /// The name of the database on which queries are being executed to.
         /// </summary>
-        public string Catalog { get; set; }
+        public string _Catalog { get; set; }
 
         /// <summary>
         /// Maps to "resource_class" argument of the function "localization.add_resource".
@@ -100,7 +100,7 @@ namespace MixERP.Net.Schemas.Localization.Data
                 }
             }
             const string query = "SELECT * FROM localization.add_resource(@0::text, @1::text, @2::text);";
-            Factory.NonQuery(this.Catalog, query, this.ResourceClass, this.Key, this.Value);
+            Factory.NonQuery(this._Catalog, query, this.ResourceClass, this.Key, this.Value);
         }
     }
 }

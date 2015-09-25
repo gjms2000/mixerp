@@ -134,6 +134,7 @@ CREATE TABLE hrm.employee_types
 CREATE TABLE hrm.employees
 (
     employee_id                             SERIAL NOT NULL PRIMARY KEY,
+    employee_code                           national character varying(12) NOT NULL,
     first_name                              national character varying(50) NOT NULL,
     middle_name                             national character varying(50) DEFAULT(''),
     last_name                               national character varying(50) DEFAULT(''),
@@ -168,6 +169,7 @@ CREATE TABLE hrm.employees
     email_address                           national character varying(128) DEFAULT(''),
     website                                 national character varying(128) DEFAULT(''),
     blog                                    national character varying(128) DEFAULT(''),
+    service_ended_on                        date NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -360,9 +362,10 @@ CREATE TABLE hrm.resignations
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
     verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
-    verified_by_user_id                     integer NOT NULL REFERENCES office.users(user_id),
-    verified_on                             date NOT NULL,
-    effective_resignation_date              date NOT NULL,
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
+    service_end_date                        date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -371,13 +374,17 @@ CREATE TABLE hrm.resignations
 CREATE TABLE hrm.terminations
 (
     termination_id                          SERIAL NOT NULL PRIMARY KEY,
-    entered_by                              integer NOT NULL REFERENCES office.users(user_id),
     notice_date                             date NOT NULL,
-    effective_termination_date              date NOT NULL,
-    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
+    employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id) UNIQUE,
     forward_to                              integer REFERENCES hrm.employees(employee_id),
+    change_status_to                        integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
+    service_end_date                        date NOT NULL,
+    verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -398,11 +405,17 @@ CREATE TABLE hrm.exits
 (
     exit_id                                 BIGSERIAL NOT NULL PRIMARY KEY,
     employee_id                             integer NOT NULL REFERENCES hrm.employees(employee_id),
-    change_status_code_to                   integer NOT NULL REFERENCES hrm.employment_status_codes(employment_status_code_id),
+    forward_to                              integer REFERENCES hrm.employees(employee_id),
+    change_status_to                        integer NOT NULL REFERENCES hrm.employment_statuses(employment_status_id),
     exit_type_id                            integer NOT NULL REFERENCES hrm.exit_types(exit_type_id),
     exit_interview_details                  text,
     reason                                  national character varying(128) NOT NULL,
     details                                 text,
+    verification_status_id                  integer NOT NULL REFERENCES core.verification_statuses(verification_status_id),
+    verified_by_user_id                     integer REFERENCES office.users(user_id),
+    verified_on                             date,
+    verification_reason                     national character varying(128) NULL,
+    service_end_date                        date NOT NULL,
     audit_user_id                           integer NULL REFERENCES office.users(user_id),    
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -410,6 +423,64 @@ CREATE TABLE hrm.exits
 
 
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/02.functions-and-logic/triggers/employee_dismissal.sql --<--<--
+DROP FUNCTION IF EXISTS hrm.dismiss_employee() CASCADE;
+
+CREATE FUNCTION hrm.dismiss_employee()
+RETURNS trigger
+AS
+$$
+    DECLARE _service_end        date;
+    DECLARE _new_status_id      integer;
+BEGIN
+    IF(hstore(NEW) ? 'change_status_to') THEN
+        _new_status_id := NEW.change_status_to;
+    END IF;
+    
+    IF(NEW.verification_status_id > 0) THEN        
+        UPDATE hrm.employees
+        SET
+            service_ended_on = NEW.service_end_date
+        WHERE employee_id = NEW.employee_id;
+
+        IF(_new_status_id IS NOT NULL) THEN
+            UPDATE hrm.employees
+            SET
+                current_employment_status_id = _new_status_id
+            WHERE employee_id = NEW.employee_id;
+        END IF;        
+    END IF;
+
+    RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS hrm.undismiss_employee() CASCADE;
+
+CREATE FUNCTION hrm.undismiss_employee()
+RETURNS trigger
+AS
+$$
+BEGIN
+    UPDATE hrm.employees
+    SET
+        service_ended_on = NULL
+    WHERE employee_id = OLD.employee_id;
+
+    RETURN OLD;    
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER dismiss_employee_trigger BEFORE INSERT OR UPDATE ON hrm.resignations FOR EACH ROW EXECUTE PROCEDURE hrm.dismiss_employee();
+CREATE TRIGGER dismiss_employee_trigger BEFORE INSERT OR UPDATE ON hrm.terminations FOR EACH ROW EXECUTE PROCEDURE hrm.dismiss_employee();
+CREATE TRIGGER dismiss_employee_trigger BEFORE INSERT OR UPDATE ON hrm.exits FOR EACH ROW EXECUTE PROCEDURE hrm.dismiss_employee();
+
+CREATE TRIGGER undismiss_employee_trigger BEFORE DELETE ON hrm.resignations FOR EACH ROW EXECUTE PROCEDURE hrm.undismiss_employee();
+CREATE TRIGGER undismiss_employee_trigger BEFORE DELETE ON hrm.terminations FOR EACH ROW EXECUTE PROCEDURE hrm.undismiss_employee();
+CREATE TRIGGER undismiss_employee_trigger BEFORE DELETE ON hrm.exits FOR EACH ROW EXECUTE PROCEDURE hrm.undismiss_employee();
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/03.menus/0.menus.sql --<--<--
 --This table should not be localized.
@@ -475,6 +546,8 @@ AS
 SELECT
     hrm.contracts.contract_id,
     hrm.employees.employee_id,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
     office.departments.department_code || ' (' || office.departments.department_name || ')' AS department,
     office.roles.role_code || ' (' || office.roles.role_name || ')' AS role,
@@ -599,7 +672,8 @@ CREATE VIEW hrm.employee_wage_scrud_view
 AS
 SELECT
     hrm.employee_wages.employee_wage_id,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.wages_setup.wages_setup_code || ' (' || hrm.wages_setup.wages_setup_name || ')' AS wages_setup,
     hrm.employee_wages.currency_code,
     hrm.employee_wages.max_week_hours,
@@ -622,22 +696,24 @@ AS
 SELECT
     hrm.exits.exit_id,
     hrm.exits.employee_id,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.exits.reason,
-    hrm.employment_status_codes.status_code || ' (' || hrm.employment_status_codes.status_code_name || ')' AS employment_status_code,
+    forwarded_to.employee_code || ' (' || forwarded_to.employee_name || ' )' AS forward_to,
+    hrm.employment_statuses.employment_status_code || ' (' || hrm.employment_statuses.employment_status_name || ')' AS employment_status,
     hrm.exit_types.exit_type_code || ' (' || hrm.exit_types.exit_type_name || ')' AS exit_type,
     hrm.exits.details,
     hrm.exits.exit_interview_details
 FROM hrm.exits
 INNER JOIN hrm.employees
 ON hrm.employees.employee_id = hrm.exits.employee_id
-INNER JOIN hrm.employment_status_codes
-ON hrm.employment_status_codes.employment_status_code_id = hrm.exits.change_status_code_to
+INNER JOIN hrm.employment_statuses
+ON hrm.employment_statuses.employment_status_id = hrm.exits.change_status_to
 INNER JOIN hrm.exit_types
-ON hrm.exit_types.exit_type_id = hrm.exits.exit_type_id;
-
-
-
+ON hrm.exit_types.exit_type_id = hrm.exits.exit_type_id
+INNER JOIN hrm.employees AS forwarded_to
+ON forwarded_to.employee_id = hrm.exits.forward_to
+WHERE verification_status_id = 0;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.leave_application_scrud_view.sql --<--<--
@@ -647,7 +723,8 @@ CREATE VIEW hrm.leave_application_scrud_view
 AS
 SELECT
     hrm.leave_applications.leave_application_id,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.leave_types.leave_type_code || ' (' || hrm.leave_types.leave_type_name || ')' AS leave_type,
     office.users.user_name AS entered_by,
     hrm.leave_applications.applied_on,
@@ -670,6 +747,7 @@ AS
 SELECT
     hrm.office_hours.office_hour_id,
     office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
+    office.offices.logo_file as photo,
     hrm.shifts.shift_code || ' (' || hrm.shifts.shift_name || ')' AS shift,
     core.week_days.week_day_code || ' (' || core.week_days.week_day_name || ')' AS week_day,
     hrm.office_hours.begins_from,
@@ -682,9 +760,6 @@ ON hrm.shifts.shift_id = hrm.office_hours.shift_id
 INNER JOIN core.week_days
 ON core.week_days.week_day_id = hrm.office_hours.week_day_id;
 
-
-
-
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.scrud-views/hrm.termination_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.termination_scrud_view;
 
@@ -692,20 +767,22 @@ CREATE VIEW hrm.termination_scrud_view
 AS
 SELECT
     hrm.terminations.termination_id,
-    office.users.user_name AS entered_by,
-    hrm.employees.employee_name,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     hrm.terminations.notice_date,
-    hrm.terminations.effective_termination_date,
-    forwarded_to.employee_name AS forward_to,
+    hrm.terminations.service_end_date,
+    forwarded_to.employee_code || ' (' || forwarded_to.employee_name || ' )' AS forward_to,
+    hrm.employment_statuses.employment_status_code || ' (' || hrm.employment_statuses.employment_status_name || ')' AS employment_status,
     hrm.terminations.reason,
     hrm.terminations.details
 FROM hrm.terminations
 INNER JOIN hrm.employees
 ON hrm.employees.employee_id = hrm.terminations.employee_id
+INNER JOIN hrm.employment_statuses
+ON hrm.employment_statuses.employment_status_id = hrm.terminations.change_status_to
 INNER JOIN hrm.employees AS forwarded_to
 ON forwarded_to.employee_id = hrm.terminations.forward_to
-INNER JOIN office.users
-ON office.users.user_id = hrm.terminations.entered_by;
+WHERE verification_status_id = 0;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/05.views/hrm.employee_view.sql --<--<--
 DROP VIEW IF EXISTS hrm.employee_view;
@@ -717,6 +794,7 @@ SELECT
     hrm.employees.first_name,
     hrm.employees.middle_name,
     hrm.employees.last_name,
+    hrm.employees.employee_code,
     hrm.employees.employee_name,
     hrm.employees.gender_code,
     core.genders.gender_name,
@@ -783,7 +861,8 @@ ON hrm.employees.current_role_id = office.roles.role_id
 LEFT JOIN core.nationalities
 ON hrm.employees.nationality_code = core.nationalities.nationality_code
 LEFT JOIN core.countries
-ON hrm.employees.country_id = core.countries.country_id;
+ON hrm.employees.country_id = core.countries.country_id
+WHERE COALESCE(service_ended_on, 'infinity') >= NOW();
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/0. GitHub/src/FrontEnd/MixERP.Net.FrontEnd/Modules/HRM/db/1.5/db/src/99.ownership.sql --<--<--
 DO

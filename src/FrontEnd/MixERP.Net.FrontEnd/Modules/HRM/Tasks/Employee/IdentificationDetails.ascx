@@ -24,7 +24,7 @@
     scrudFactory.keys = [
         {
             property: "EmployeeId",
-            url: '/api/hrm/employee/display-fields',
+            url: '/api/hrm/employee-view/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
@@ -48,7 +48,7 @@
     function identificationTypeExpires(filters) {
         var url = "/api/core/identification-type/get-where/1";
         var data = JSON.stringify(filters);
-        return window.postAjaxRequest(url, data);
+        return window.getAjaxRequest(url, "POST", data, false);
     };
 
     function checkIfExpires() {
@@ -82,24 +82,4 @@
             checkIfExpires();
         });;
     });
-
-
-    var getParties = function(filters) {
-        var url = "/api/core/party-scrud-view/get-where/1";
-        var data = JSON.stringify(filters);
-
-        return window.postAjaxRequest(url, data);
-    };
-
-    var filters = [];
-    filters.push(window.getAjaxColumnFilter("WHERE", "first_name", window.FilterConditions.IsLike, "s"));
-    filters.push(window.getAjaxColumnFilter("AND", "party_type", window.FilterConditions.IsLike, "Customer"));
-
-
-    var getPartiesAjax = getParties(filters);
-
-    getPartiesAjax.success(function(msg) {
-        console.table(msg);
-    });
-
 </script>

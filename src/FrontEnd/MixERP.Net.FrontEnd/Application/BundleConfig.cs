@@ -94,7 +94,8 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/vakata-jstree/dist/jstree.min.js",
               "~/Scripts/momentjs/moment-with-locales.js",
               "~/Scripts/underscore/underscore-min.js",
-              "~/Scripts/angular/angular.min.js"
+              "~/Scripts/angular/angular.min.js",
+              "~/Scripts/linq.js/linq.js"
             };
 
             libraries = libraries.Concat(GetMixERPCoreScript()).ToArray();
@@ -124,7 +125,8 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/vakata-jstree/dist/jstree.min.js",
               "~/Scripts/momentjs/moment-with-locales.js",
               "~/Scripts/underscore/underscore-min.js",
-              "~/Scripts/sprintf/sprintf.min.js"
+              "~/Scripts/sprintf/sprintf.min.js",
+              "~/Scripts/linq.js/linq.js"
             };
 
             script.AddRange(GetMixERPCoreScript());
@@ -141,7 +143,7 @@ namespace MixERP.Net.FrontEnd.Application
               "~/Scripts/mixerp/master-page/scrud.js",
               "~/Scripts/mixerp/master-page/sortable.js",
               "~/Scripts/mixerp/master-page/semantic.js",
-              "~/Scripts/mixerp/master-page/menu.js",
+              //"~/Scripts/mixerp/master-page/menu.js",
               "~/Scripts/mixerp/master-page/notification.js"
             });
 

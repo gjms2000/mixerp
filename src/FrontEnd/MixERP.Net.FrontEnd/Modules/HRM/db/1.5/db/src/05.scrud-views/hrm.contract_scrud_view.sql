@@ -5,6 +5,8 @@ AS
 SELECT
     hrm.contracts.contract_id,
     hrm.employees.employee_id,
+    hrm.employees.employee_code || ' (' || hrm.employees.employee_name || ')' AS employee,
+    hrm.employees.photo,
     office.offices.office_code || ' (' || office.offices.office_name || ')' AS office,
     office.departments.department_code || ' (' || office.departments.department_name || ')' AS department,
     office.roles.role_code || ' (' || office.roles.role_name || ')' AS role,
